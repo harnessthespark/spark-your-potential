@@ -1,0 +1,25 @@
+{
+  "name": "spark-your-potential",
+  "version": "1.0.0",
+  "description": "Ability recognition tool from Harness the Spark",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "keywords": [
+    "coaching",
+    "abilities",
+    "ai",
+    "harness-the-spark"
+  ],
+  "author": "Lisa Gills - Harness the Spark",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.18.2",
+    "node-fetch": "^3.3.2"
+  },
+  "engines": {
+    "node": ">=18.x"
+  }
+}
