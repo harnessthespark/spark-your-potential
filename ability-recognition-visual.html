@@ -476,62 +476,73 @@
         }
         
         .instinct-radar {
-            width: 300px;
-            height: 300px;
-            margin: 20px auto;
+            width: 400px;
+            height: 400px;
+            margin: 40px auto;
             position: relative;
-            border: 2px solid #3498db;
+            border: 3px solid #3498db;
             border-radius: 50%;
-            background: radial-gradient(circle, rgba(52,152,219,0.1) 0%, rgba(52,152,219,0.05) 100%);
+            background: radial-gradient(circle, rgba(52,152,219,0.15) 0%, rgba(255,255,255,0.95) 100%);
+            box-shadow: 0 4px 20px rgba(52, 152, 219, 0.2);
         }
 
         .instinct-point {
             position: absolute;
-            width: 12px;
-            height: 12px;
+            width: 20px;
+            height: 20px;
             background: #e74c3c;
+            border: 3px solid white;
             border-radius: 50%;
             opacity: 0;
             transition: all 0.5s ease;
-            box-shadow: 0 0 10px rgba(231, 76, 60, 0.5);
+            box-shadow: 0 0 15px rgba(231, 76, 60, 0.6), 0 2px 8px rgba(0,0,0,0.3);
+            z-index: 10;
         }
 
         .instinct-label {
             position: absolute;
-            font-size: 0.8em;
+            font-size: 1em;
             color: #2c3e50;
             font-weight: bold;
             opacity: 0;
             transition: all 0.5s ease;
             white-space: nowrap;
+            background: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+            z-index: 5;
         }
 
         .radar-line {
             position: absolute;
             width: 50%;
-            height: 2px;
-            background: #3498db;
+            height: 3px;
+            background: linear-gradient(to right, #3498db, rgba(52, 152, 219, 0.2));
             top: 50%;
             left: 50%;
             transform-origin: left centre;
-            opacity: 0.3;
+            opacity: 0.5;
         }
 
-        .radar-line:nth-child(1) { transform: rotate(0deg) translateY(-1px); }
-        .radar-line:nth-child(2) { transform: rotate(45deg) translateY(-1px); }
-        .radar-line:nth-child(3) { transform: rotate(90deg) translateY(-1px); }
-        .radar-line:nth-child(4) { transform: rotate(135deg) translateY(-1px); }
+        .radar-line:nth-child(1) { transform: rotate(0deg) translateY(-1.5px); }
+        .radar-line:nth-child(2) { transform: rotate(45deg) translateY(-1.5px); }
+        .radar-line:nth-child(3) { transform: rotate(90deg) translateY(-1.5px); }
+        .radar-line:nth-child(4) { transform: rotate(135deg) translateY(-1.5px); }
 
         .radar-center {
             position: absolute;
             top: 50%;
             left: 50%;
-            width: 20px;
-            height: 20px;
-            background: #e74c3c;
+            width: 16px;
+            height: 16px;
+            background: #667eea;
+            border: 3px solid white;
             border-radius: 50%;
             transform: translate(-50%, -50%);
             animation: pulse 2s infinite;
+            box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.2);
+            z-index: 8;
         }
         
         @keyframes pulse {
