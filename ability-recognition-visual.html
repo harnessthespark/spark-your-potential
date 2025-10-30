@@ -1123,6 +1123,18 @@
                         transition: all 0.3s ease;
                     ">Email My Results</button>
 
+                    <button id="openCoachPanel" style="
+                        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                        color: white;
+                        border: none;
+                        padding: 15px 30px;
+                        font-size: 1.1em;
+                        border-radius: 10px;
+                        cursor: pointer;
+                        margin: 0 10px;
+                        transition: all 0.3s ease;
+                    ">🔐 Coach Panel</button>
+
                     <button id="clearAll" style="
                         background: transparent;
                         color: rgba(255,255,255,0.6);
@@ -2539,6 +2551,15 @@
         // ============================================
 
         let clientsData = [];
+
+        // Button to open coach panel
+        document.getElementById('openCoachPanel').addEventListener('click', function() {
+            const panel = document.getElementById('coachPanel');
+            panel.style.display = 'block';
+            // Scroll to top to see the panel
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            console.log('🔐 Coach Panel opened');
+        });
 
         // Keyboard shortcut to toggle coach panel (Ctrl+Shift+C)
         document.addEventListener('keydown', function(e) {
