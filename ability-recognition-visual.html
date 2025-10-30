@@ -1074,20 +1074,6 @@
                         transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
                         box-shadow: 0 4px 6px -1px rgba(124, 58, 237, 0.3);
                     " onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 10px 15px -3px rgba(124, 58, 237, 0.4)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 6px -1px rgba(124, 58, 237, 0.3)'">Submit Answers</button>
-                    
-                    <button id="generateReport" style="
-                        background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-                        color: white;
-                        border: none;
-                        padding: 16px 32px;
-                        font-size: 1.1em;
-                        font-weight: 600;
-                        border-radius: 12px;
-                        cursor: pointer;
-                        margin: 0 10px;
-                        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-                        box-shadow: 0 4px 6px -1px rgba(240, 147, 251, 0.3);
-                    " onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 10px 15px -3px rgba(240, 147, 251, 0.4)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 6px -1px rgba(240, 147, 251, 0.3)'">📄 Generate Beautiful Report</button>
 
                     <button id="saveResults" style="
                         background: rgba(255,255,255,0.2);
@@ -1823,8 +1809,9 @@
             }
         });
 
-        // Generate Beautiful Report button handler
-        document.getElementById('generateReport').addEventListener('click', function() {
+        // Generate Beautiful Report function (available via console for coach use)
+        // Coach can call: window.generateAndDownloadReport() from browser console
+        window.generateAndDownloadReport = function() {
             const htmlReport = generateBeautifulReport();
             const clientName = document.getElementById('clientName').value || 'Client';
             const fileName = `${clientName.replace(/\s+/g, '_')}_Transformation_Blueprint.html`;
@@ -1843,14 +1830,9 @@
             newWindow.document.write(htmlReport);
             newWindow.document.close();
 
-            // Button feedback
-            this.style.background = 'linear-gradient(135deg, #4CAF50 0%, #45a049 100%)';
-            this.textContent = '✓ Report Generated!';
-            setTimeout(() => {
-                this.style.background = 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)';
-                this.textContent = '📄 Generate Beautiful Report';
-            }, 3000);
-        });
+            console.log('✅ Beautiful report generated and downloaded!');
+            return 'Report generated successfully';
+        };
 
         document.getElementById('saveResults').addEventListener('click', function() {
             const responses = formatResponses();
