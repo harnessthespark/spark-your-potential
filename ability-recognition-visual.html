@@ -1303,6 +1303,28 @@
                 responses[title] = content;
             });
 
+            // ✨ NEW: Collect AI-generated pattern analysis
+            const aiAnalysisDiv = document.getElementById('aiAnalysis');
+            if (aiAnalysisDiv && aiAnalysisDiv.textContent.trim() &&
+                !aiAnalysisDiv.textContent.includes('Claude AI is analyzing')) {
+                // Get the text content, removing any "Unable to analyze" messages
+                const analysisText = aiAnalysisDiv.innerText || aiAnalysisDiv.textContent;
+                if (analysisText && !analysisText.includes('Unable to analyze')) {
+                    responses['AI Pattern Analysis'] = analysisText.trim();
+                }
+            }
+
+            // ✨ NEW: Collect AI-generated unlock pattern
+            const aiUnlockDiv = document.getElementById('aiUnlockAnalysis');
+            if (aiUnlockDiv && aiUnlockDiv.textContent.trim() &&
+                !aiUnlockDiv.textContent.includes('Claude AI is analyzing')) {
+                // Get the text content, removing any "Unable to analyze" messages
+                const unlockText = aiUnlockDiv.innerText || aiUnlockDiv.textContent;
+                if (unlockText && !unlockText.includes('Unable to analyze')) {
+                    responses['AI Unlock Pattern'] = unlockText.trim();
+                }
+            }
+
             return responses;
         }
 
@@ -1359,12 +1381,29 @@
             const pattern = responses['The pattern I now see:'] || '';
             const transformation = responses['The transformation I enable:'] || '';
             const permission = responses['The permission I\'m giving myself:'] || '';
-            
+
             if (ability) formatted += `Underestimated Ability:\n${ability}\n\n`;
             if (pattern) formatted += `Pattern Recognised:\n${pattern}\n\n`;
             if (transformation) formatted += `Transformation I Enable:\n${transformation}\n\n`;
             if (permission) formatted += `Permission I'm Giving Myself:\n${permission}\n\n`;
-            
+
+            // ✨ NEW: Add AI-generated insights to report
+            const aiPatternAnalysis = responses['AI Pattern Analysis'] || '';
+            const aiUnlockPattern = responses['AI Unlock Pattern'] || '';
+
+            if (aiPatternAnalysis || aiUnlockPattern) {
+                formatted += `AI-GENERATED INSIGHTS\n`;
+                formatted += `${'-'.repeat(22)}\n`;
+
+                if (aiPatternAnalysis) {
+                    formatted += `🔮 AI Pattern Analysis:\n${aiPatternAnalysis}\n\n`;
+                }
+
+                if (aiUnlockPattern) {
+                    formatted += `🔓 AI Unlock Pattern:\n${aiUnlockPattern}\n\n`;
+                }
+            }
+
             return formatted;
         }
 
