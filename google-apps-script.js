@@ -15,6 +15,55 @@
  * 10. Paste that URL into the HTML file where it says YOUR_SCRIPT_ID_HERE
  */
 
+// Handle GET requests - retrieve client data
+function doGet(e) {
+  try {
+    const sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
+    const lastRow = sheet.getLastRow();
+
+    if (lastRow <= 1) {
+      return ContentService.createTextOutput(JSON.stringify({
+        'result': 'error',
+        'error': 'No client data found in sheet'
+      })).setMimeType(ContentService.MimeType.JSON);
+    }
+
+    // Get all data including headers
+    const range = sheet.getRange(1, 1, lastRow, sheet.getLastColumn());
+    const values = range.getValues();
+    const headers = values[0];
+
+    // Convert rows to objects
+    const clients = [];
+    for (let i = 1; i < values.length; i++) {
+      const row = values[i];
+      const clientData = {
+        rowNumber: i + 1
+      };
+
+      // Map each column to its header
+      for (let j = 0; j < headers.length; j++) {
+        clientData[headers[j]] = row[j];
+      }
+
+      clients.push(clientData);
+    }
+
+    // Return the list of clients
+    return ContentService.createTextOutput(JSON.stringify({
+      'result': 'success',
+      'clients': clients,
+      'count': clients.length
+    })).setMimeType(ContentService.MimeType.JSON);
+
+  } catch (error) {
+    return ContentService.createTextOutput(JSON.stringify({
+      'result': 'error',
+      'error': error.toString()
+    })).setMimeType(ContentService.MimeType.JSON);
+  }
+}
+
 // Main function that handles POST requests from the HTML form
 function doPost(e) {
   try {

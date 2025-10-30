@@ -753,6 +753,30 @@
     </style>
 </head>
 <body>
+    <!-- Coach-Only Panel (Hidden by default - press Ctrl+Shift+C to toggle) -->
+    <div id="coachPanel" style="display: none; position: fixed; top: 0; left: 0; right: 0; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 20px; z-index: 10000; box-shadow: 0 4px 12px rgba(0,0,0,0.3);">
+        <div style="max-width: 1200px; margin: 0 auto;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                <h3 style="margin: 0; font-size: 1.3em;">🔐 Coach Panel - Load Client Data</h3>
+                <button onclick="document.getElementById('coachPanel').style.display='none'" style="background: rgba(255,255,255,0.2); border: none; color: white; padding: 8px 16px; border-radius: 6px; cursor: pointer;">Close</button>
+            </div>
+            <div style="display: flex; gap: 15px; align-items: flex-start;">
+                <div style="flex: 1;">
+                    <button id="loadClientsBtn" style="background: white; color: #667eea; border: none; padding: 12px 24px; border-radius: 8px; font-weight: 600; cursor: pointer; width: 100%;">📥 Load Client Submissions</button>
+                </div>
+                <div style="flex: 2;">
+                    <select id="clientSelector" style="width: 100%; padding: 12px; border-radius: 8px; border: none; font-size: 1em;" disabled>
+                        <option>First, click "Load Client Submissions"</option>
+                    </select>
+                </div>
+                <div style="flex: 1;">
+                    <button id="populateClientBtn" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); color: white; border: none; padding: 12px 24px; border-radius: 8px; font-weight: 600; cursor: pointer; width: 100%;" disabled>✨ Load Into Form</button>
+                </div>
+            </div>
+            <div id="coachStatus" style="margin-top: 12px; font-size: 0.9em; opacity: 0.9;"></div>
+        </div>
+    </div>
+
     <div class="container">
         <div class="header">
             <div style="display: flex; align-items: center; justify-content: center; margin-bottom: 20px;">
@@ -2509,6 +2533,185 @@
                 this.style.transform = 'scale(1)';
             });
         }
+
+        // ============================================
+        // COACH PANEL - Load Client Data from Google Sheets
+        // ============================================
+
+        let clientsData = [];
+
+        // Keyboard shortcut to toggle coach panel (Ctrl+Shift+C)
+        document.addEventListener('keydown', function(e) {
+            if (e.ctrlKey && e.shiftKey && e.key === 'C') {
+                const panel = document.getElementById('coachPanel');
+                panel.style.display = panel.style.display === 'none' ? 'block' : 'none';
+                console.log('🔐 Coach Panel toggled');
+            }
+        });
+
+        // Load clients button
+        document.getElementById('loadClientsBtn').addEventListener('click', async function() {
+            const button = this;
+            const selector = document.getElementById('clientSelector');
+            const status = document.getElementById('coachStatus');
+
+            button.disabled = true;
+            button.textContent = '⏳ Loading...';
+            status.textContent = 'Fetching client submissions from Google Sheets...';
+
+            try {
+                const response = await fetch(GOOGLE_SHEETS_URL, {
+                    method: 'GET',
+                    mode: 'cors'
+                });
+
+                const data = await response.json();
+
+                if (data.result === 'success' && data.clients && data.clients.length > 0) {
+                    clientsData = data.clients;
+
+                    // Populate dropdown
+                    selector.innerHTML = '<option value="">Select a client...</option>';
+                    data.clients.forEach((client, index) => {
+                        const clientName = client['Client Name'] || 'Anonymous';
+                        const timestamp = client['Timestamp'] || 'No date';
+                        const option = document.createElement('option');
+                        option.value = index;
+                        option.textContent = `${clientName} - ${timestamp}`;
+                        selector.appendChild(option);
+                    });
+
+                    selector.disabled = false;
+                    document.getElementById('populateClientBtn').disabled = false;
+
+                    status.textContent = `✅ Loaded ${data.clients.length} client submission(s)`;
+                    button.style.background = '#4CAF50';
+                    button.textContent = '✓ Loaded!';
+
+                    setTimeout(() => {
+                        button.style.background = 'white';
+                        button.textContent = '📥 Load Client Submissions';
+                        button.disabled = false;
+                    }, 2000);
+                } else {
+                    throw new Error('No client data found in Google Sheets');
+                }
+            } catch (error) {
+                console.error('Error loading clients:', error);
+                status.textContent = '❌ Error: ' + error.message;
+                button.disabled = false;
+                button.textContent = '📥 Load Client Submissions';
+            }
+        });
+
+        // Populate client button
+        document.getElementById('populateClientBtn').addEventListener('click', function() {
+            const selector = document.getElementById('clientSelector');
+            const status = document.getElementById('coachStatus');
+            const selectedIndex = selector.value;
+
+            if (!selectedIndex || selectedIndex === '') {
+                status.textContent = '⚠️ Please select a client first';
+                return;
+            }
+
+            const client = clientsData[selectedIndex];
+
+            // Map Google Sheets columns back to form fields
+            const fieldMapping = {
+                'Outcome #1': 'Outcome #1',
+                'Outcome #2': 'Outcome #2',
+                'Outcome #3': 'Outcome #3',
+                'Outcome #4': 'Outcome #4',
+                'Outcome #5': 'Outcome #5',
+                'When You Knew Before You Knew': 'When You Knew Before You Knew',
+                'Questions Only You Ask': 'The Questions Only You Ask',
+                'What You Notice First': 'What You Notice First',
+                'What Feels Easy': 'What Feels Easy to You',
+                '"Of Course" Moments': 'The "Of Course" Moments',
+                'Client Before': 'Before',
+                'Client After': 'After',
+                'Problem Magnet': 'The Problem Magnet',
+                'How Others See You': 'How Others See You',
+                'AI Pattern Analysis': 'AI Pattern Analysis',
+                'AI Unlock Pattern': 'AI Unlock Pattern',
+                'Underestimated Ability': "The ability I've been underestimating:",
+                'Pattern Recognised': 'The pattern I now see:',
+                'Transformation I Enable': 'The transformation I enable:',
+                'Permission I\'m Giving Myself': "The permission I'm giving myself:"
+            };
+
+            // Fill in the client name
+            const nameInput = document.getElementById('clientName');
+            if (nameInput) {
+                nameInput.value = client['Client Name'] || '';
+            }
+
+            // Fill in all textareas and inputs
+            document.querySelectorAll('textarea').forEach(textarea => {
+                const placeholder = textarea.placeholder;
+                for (const [sheetColumn, formField] of Object.entries(fieldMapping)) {
+                    if (placeholder.includes(formField) || placeholder === formField) {
+                        const value = client[sheetColumn];
+                        if (value) {
+                            textarea.value = value;
+                            // Trigger input event to save to localStorage
+                            textarea.dispatchEvent(new Event('input'));
+                        }
+                    }
+                }
+            });
+
+            // Fill in summary input fields
+            document.querySelectorAll('.summary-item input').forEach(input => {
+                const label = input.closest('.summary-item')?.querySelector('strong')?.textContent;
+                if (label) {
+                    for (const [sheetColumn, formField] of Object.entries(fieldMapping)) {
+                        if (label.includes(formField) || label === formField) {
+                            const value = client[sheetColumn];
+                            if (value) {
+                                input.value = value;
+                                input.dispatchEvent(new Event('input'));
+                            }
+                        }
+                    }
+                }
+            });
+
+            // Display AI insights if available
+            if (client['AI Pattern Analysis']) {
+                const aiAnalysisDiv = document.getElementById('aiAnalysis');
+                if (aiAnalysisDiv) {
+                    aiAnalysisDiv.innerHTML = client['AI Pattern Analysis'].split('\n\n').map(p =>
+                        `<p style="margin-bottom: 15px;">${p}</p>`
+                    ).join('');
+                    document.getElementById('aiInsights').style.display = 'block';
+                }
+            }
+
+            if (client['AI Unlock Pattern']) {
+                const aiUnlockDiv = document.getElementById('aiUnlockAnalysis');
+                if (aiUnlockDiv) {
+                    aiUnlockDiv.innerHTML = client['AI Unlock Pattern'].split('\n\n').map(p =>
+                        `<p style="margin-bottom: 15px;">${p}</p>`
+                    ).join('');
+                    document.getElementById('unlockInsights').style.display = 'block';
+                }
+            }
+
+            status.textContent = `✅ Loaded data for ${client['Client Name'] || 'Anonymous'}`;
+
+            // Scroll to top
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+
+            // Close coach panel
+            setTimeout(() => {
+                document.getElementById('coachPanel').style.display = 'none';
+            }, 1500);
+
+            console.log('✅ Client data loaded successfully');
+        });
+
     </script>
 </body>
 </html>
