@@ -41,9 +41,10 @@ function doPost(e) {
       data['Outcome #4'] || '',
       data['Outcome #5'] || '',
 
-      // Instinct Radar
+      // Instinct Audit (3 fields)
       data['When You Knew Before You Knew'] || '',
       data['The Questions Only You Ask'] || '',
+      data['What You Notice First'] || '',
 
       // Effortless Ability
       data['What Feels Easy to You'] || '',
@@ -56,6 +57,10 @@ function doPost(e) {
       // What Finds You
       data['The Problem Magnet'] || '',
       data['How Others See You'] || '',
+
+      // AI-Generated Insights
+      data['AI Pattern Analysis'] || '',
+      data['AI Unlock Pattern'] || '',
 
       // Recognition Summary
       data["The ability I've been underestimating:"] || '',
@@ -98,9 +103,10 @@ function setupHeaders(sheet) {
     'Outcome #4',
     'Outcome #5',
 
-    // Instinct Radar
+    // Instinct Audit
     'When You Knew Before You Knew',
     'Questions Only You Ask',
+    'What You Notice First',
 
     // Effortless Ability
     'What Feels Easy',
@@ -113,6 +119,10 @@ function setupHeaders(sheet) {
     // What Finds You
     'Problem Magnet',
     'How Others See You',
+
+    // AI-Generated Insights
+    'AI Pattern Analysis',
+    'AI Unlock Pattern',
 
     // Recognition Summary
     'Underestimated Ability',
@@ -185,12 +195,15 @@ function testSetup() {
     'Outcome #5': 'Test outcome 5',
     'When You Knew Before You Knew': 'Test instinct',
     'The Questions Only You Ask': 'Test questions',
+    'What You Notice First': 'Test noticing patterns',
     'What Feels Easy to You': 'Test easy ability',
     'The "Of Course" Moments': 'Test moments',
     'Before': 'Test before state',
     'After': 'Test after state',
     'The Problem Magnet': 'Test problem',
     'How Others See You': 'Test perception',
+    'AI Pattern Analysis': 'Test AI pattern insights from Claude',
+    'AI Unlock Pattern': 'Test AI unlock pattern from Claude',
     "The ability I've been underestimating:": 'Test ability',
     'The pattern I now see:': 'Test pattern',
     'The transformation I enable:': 'Test transformation',
