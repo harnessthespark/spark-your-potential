@@ -2572,13 +2572,21 @@
 
         // Load clients button
         document.getElementById('loadClientsBtn').addEventListener('click', async function() {
+            console.log('🔥 Load button clicked!');
             const button = this;
             const selector = document.getElementById('clientSelector');
             const status = document.getElementById('coachStatus');
 
+            console.log('Button:', button);
+            console.log('Selector:', selector);
+            console.log('Status:', status);
+
             button.disabled = true;
             button.textContent = '⏳ Loading...';
-            status.textContent = 'Fetching client submissions from Google Sheets...';
+
+            if (status) {
+                status.textContent = 'Fetching client submissions from Google Sheets...';
+            }
 
             try {
                 const response = await fetch(GOOGLE_SHEETS_URL, {
