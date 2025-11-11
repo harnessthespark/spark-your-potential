@@ -1281,10 +1281,13 @@
                     // Show progress tracker
                     if (progressSection) progressSection.style.display = 'block';
 
-                    // Show first section
+                    // Show all sections
+                    document.querySelectorAll('[data-section-number]').forEach(section => {
+                        section.style.display = 'block';
+                    });
+
+                    // Scroll to first section smoothly
                     if (firstSection) {
-                        firstSection.style.display = 'block';
-                        // Scroll to first section smoothly
                         setTimeout(() => {
                             firstSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
                         }, 100);
