@@ -1749,13 +1749,13 @@
         <div class="section">
             <h2 class="section-title"><span class="section-icon">🎯</span>The Evidence Collection</h2>
             ${[1, 2, 3, 4, 5].map(i => {
-                const outcome = responses[\`Outcome #\${i}\`];
-                return outcome ? \`
+                const outcome = responses[`Outcome #${i}`];
+                return outcome ? `
                     <div class="content-box">
-                        <h3>Outcome #\${i}</h3>
-                        <p>\${outcome}</p>
+                        <h3>Outcome #${i}</h3>
+                        <p>${outcome}</p>
                     </div>
-                \` : '';
+                ` : '';
             }).join('')}
         </div>
 
