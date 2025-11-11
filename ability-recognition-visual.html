@@ -1265,20 +1265,33 @@
             const progressSection = document.getElementById('progressSection');
             const firstSection = document.querySelector('[data-section-number="1"]');
 
+            console.log('Start button found:', startBtn);
+            console.log('Welcome section found:', welcomeSection);
+            console.log('Progress section found:', progressSection);
+            console.log('First section found:', firstSection);
+
             if (startBtn) {
-                startBtn.addEventListener('click', function() {
+                startBtn.addEventListener('click', function(e) {
+                    console.log('Start button clicked!');
+                    e.preventDefault();
+
                     // Hide welcome screen
-                    welcomeSection.style.display = 'none';
+                    if (welcomeSection) welcomeSection.style.display = 'none';
 
                     // Show progress tracker
-                    progressSection.style.display = 'block';
+                    if (progressSection) progressSection.style.display = 'block';
 
                     // Show first section
-                    firstSection.style.display = 'block';
-
-                    // Scroll to first section smoothly
-                    firstSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    if (firstSection) {
+                        firstSection.style.display = 'block';
+                        // Scroll to first section smoothly
+                        setTimeout(() => {
+                            firstSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                        }, 100);
+                    }
                 });
+            } else {
+                console.error('Start button not found!');
             }
         });
 
