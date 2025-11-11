@@ -83,12 +83,13 @@ function doPost(e) {
       new Date().toLocaleString('en-GB', { timeZone: 'Europe/London' }), // Timestamp
       data['Your name (optional):'] || data.clientName || 'Anonymous',
 
-      // Evidence Collection (5 outcomes)
+      // Evidence Collection (5 outcomes + The Thread)
       data['Outcome #1'] || '',
       data['Outcome #2'] || '',
       data['Outcome #3'] || '',
       data['Outcome #4'] || '',
       data['Outcome #5'] || '',
+      data['The Thread'] || '',
 
       // Instinct Audit (3 fields)
       data['When You Knew Before You Knew'] || '',
@@ -145,12 +146,13 @@ function setupHeaders(sheet) {
     'Timestamp',
     'Client Name',
 
-    // Evidence Collection
+    // Evidence Collection (5 outcomes + The Thread)
     'Outcome #1',
     'Outcome #2',
     'Outcome #3',
     'Outcome #4',
     'Outcome #5',
+    'The Thread',
 
     // Instinct Audit
     'When You Knew Before You Knew',
@@ -242,6 +244,7 @@ function testSetup() {
     'Outcome #3': 'Test outcome 3',
     'Outcome #4': 'Test outcome 4',
     'Outcome #5': 'Test outcome 5',
+    'The Thread': 'Test common thread across outcomes',
     'When You Knew Before You Knew': 'Test instinct',
     'The Questions Only You Ask': 'Test questions',
     'What You Notice First': 'Test noticing patterns',
