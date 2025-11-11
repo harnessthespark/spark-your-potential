@@ -838,15 +838,27 @@
         </div>
 
         <!-- Progress Dots -->
-        <div id="progressSection" style="text-align: center; margin: 32px 24px; padding: 20px; background: white; border-radius: 16px; box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1); display: none;">
-            <div id="progressDots" style="display: flex; justify-content: center; align-items: center; gap: 12px;">
+        <div id="progressSection" style="text-align: center; margin: 32px 24px; padding: 24px; background: white; border-radius: 16px; box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1); display: none;">
+            <!-- Progress Bar -->
+            <div style="margin-bottom: 20px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                    <span style="font-size: 0.9em; font-weight: 600; color: #334155;">Your Progress</span>
+                    <span id="progressPercentage" style="font-size: 0.9em; font-weight: 700; color: #7c3aed;">0%</span>
+                </div>
+                <div style="width: 100%; height: 8px; background: #e2e8f0; border-radius: 999px; overflow: hidden;">
+                    <div id="progressBar" style="width: 0%; height: 100%; background: linear-gradient(90deg, #7c3aed 0%, #a855f7 100%); transition: width 0.5s ease; border-radius: 999px;"></div>
+                </div>
+            </div>
+
+            <!-- Progress Dots -->
+            <div id="progressDots" style="display: flex; justify-content: center; align-items: center; gap: 12px; margin-bottom: 12px;">
                 <div class="progress-dot" data-section="1" style="width: 12px; height: 12px; border-radius: 50%; background: #cbd5e1; transition: all 0.3s ease; cursor: pointer;"></div>
                 <div class="progress-dot" data-section="2" style="width: 12px; height: 12px; border-radius: 50%; background: #cbd5e1; transition: all 0.3s ease; cursor: pointer;"></div>
                 <div class="progress-dot" data-section="3" style="width: 12px; height: 12px; border-radius: 50%; background: #cbd5e1; transition: all 0.3s ease; cursor: pointer;"></div>
                 <div class="progress-dot" data-section="4" style="width: 12px; height: 12px; border-radius: 50%; background: #cbd5e1; transition: all 0.3s ease; cursor: pointer;"></div>
                 <div class="progress-dot" data-section="5" style="width: 12px; height: 12px; border-radius: 50%; background: #cbd5e1; transition: all 0.3s ease; cursor: pointer;"></div>
             </div>
-            <p id="progressText" style="margin-top: 12px; font-size: 0.9em; color: #64748b;">0 of 5 sections completed</p>
+            <p id="progressText" style="font-size: 0.9em; color: #64748b;">0 of 5 sections completed</p>
         </div>
 
         <div class="section" data-section-number="1" style="display: none;">
@@ -2593,6 +2605,21 @@
                     progressText.innerHTML = '🎉 All sections complete!';
                     progressText.style.color = '#7c3aed';
                     progressText.style.fontWeight = '600';
+                }
+            }
+
+            // Update progress bar and percentage
+            const progressBar = document.getElementById('progressBar');
+            const progressPercentage = document.getElementById('progressPercentage');
+            const percentage = Math.round((completedCount / 5) * 100);
+
+            if (progressBar) {
+                progressBar.style.width = `${percentage}%`;
+            }
+            if (progressPercentage) {
+                progressPercentage.textContent = `${percentage}%`;
+                if (percentage === 100) {
+                    progressPercentage.textContent = '100% ✓';
                 }
             }
         }
