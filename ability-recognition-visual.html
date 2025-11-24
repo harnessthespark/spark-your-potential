@@ -475,81 +475,9 @@
             transform: scale(1.05);
         }
         
-        .instinct-radar {
-            width: 400px;
-            height: 400px;
-            margin: 40px auto;
-            position: relative;
-            border: 3px solid #3498db;
-            border-radius: 50%;
-            background: radial-gradient(circle, rgba(52,152,219,0.15) 0%, rgba(255,255,255,0.95) 100%);
-            box-shadow: 0 4px 20px rgba(52, 152, 219, 0.2);
-        }
+        /* Radar styles removed - no longer used */
 
-        .instinct-point {
-            position: absolute;
-            width: 20px;
-            height: 20px;
-            background: #e74c3c;
-            border: 3px solid white;
-            border-radius: 50%;
-            opacity: 0;
-            transition: all 0.5s ease;
-            box-shadow: 0 0 15px rgba(231, 76, 60, 0.6), 0 2px 8px rgba(0,0,0,0.3);
-            z-index: 10;
-        }
-
-        .instinct-label {
-            position: absolute;
-            font-size: 1em;
-            color: #2c3e50;
-            font-weight: bold;
-            opacity: 0;
-            transition: all 0.5s ease;
-            white-space: nowrap;
-            background: white;
-            padding: 4px 8px;
-            border-radius: 4px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
-            z-index: 5;
-        }
-
-        .radar-line {
-            position: absolute;
-            width: 50%;
-            height: 3px;
-            background: linear-gradient(to right, #3498db, rgba(52, 152, 219, 0.2));
-            top: 50%;
-            left: 50%;
-            transform-origin: left centre;
-            opacity: 0.5;
-        }
-
-        .radar-line:nth-child(1) { transform: rotate(0deg) translateY(-1.5px); }
-        .radar-line:nth-child(2) { transform: rotate(45deg) translateY(-1.5px); }
-        .radar-line:nth-child(3) { transform: rotate(90deg) translateY(-1.5px); }
-        .radar-line:nth-child(4) { transform: rotate(135deg) translateY(-1.5px); }
-
-        .radar-center {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 16px;
-            height: 16px;
-            background: #667eea;
-            border: 3px solid white;
-            border-radius: 50%;
-            transform: translate(-50%, -50%);
-            animation: pulse 2s infinite;
-            box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.2);
-            z-index: 8;
-        }
-        
-        @keyframes pulse {
-            0% { transform: translate(-50%, -50%) scale(1); }
-            50% { transform: translate(-50%, -50%) scale(1.2); }
-            100% { transform: translate(-50%, -50%) scale(1); }
-        }
+        /* Additional radar styles removed - no longer used */
         
         .transformation-flow {
             display: flex;
@@ -745,9 +673,24 @@
                 transform: rotate(90deg);
                 margin: 20px 0;
             }
-            .instinct-radar {
-                width: 250px;
-                height: 250px;
+            /* Mobile responsive improvements */
+            .section {
+                padding: 32px 20px;
+                margin: 16px;
+            }
+            .header {
+                padding: 32px 20px;
+                margin: 16px;
+            }
+            body {
+                padding: 10px;
+            }
+            .evidence-box {
+                padding: 1rem;
+                min-height: 140px;
+            }
+            .section-title {
+                font-size: 1.5em;
             }
         }
     </style>
@@ -803,16 +746,20 @@
                     </ol>
                 </div>
 
-                <div style="background: #fffbeb; border-left: 4px solid #f59e0b; padding: 24px; border-radius: 12px; margin: 32px 0;">
-                    <h3 style="color: #f59e0b; font-size: 1.4em; margin-bottom: 16px;">💡 Tips for Getting the Most Value</h3>
-                    <ul style="font-size: 1.05em; line-height: 2; color: #334155; padding-left: 24px;">
-                        <li>Take your time – there's no rush</li>
-                        <li>Be specific with examples – details reveal patterns</li>
-                        <li>Don't overthink it – your first thoughts are often the most revealing</li>
-                        <li>You can save your progress and come back anytime</li>
-                        <li>AI analysis is available to help spot patterns you might miss</li>
-                    </ul>
-                </div>
+                <details style="background: #fffbeb; border-left: 4px solid #f59e0b; border-radius: 12px; margin: 32px 0;">
+                    <summary style="padding: 16px 24px; cursor: pointer; color: #f59e0b; font-size: 1.2em; font-weight: 600; list-style: none; display: flex; align-items: center; gap: 8px;">
+                        <span style="transition: transform 0.2s;">▶</span> 💡 Tips for Getting the Most Value (click to expand)
+                    </summary>
+                    <div style="padding: 0 24px 24px 24px;">
+                        <ul style="font-size: 1.05em; line-height: 2; color: #334155; padding-left: 24px; margin: 0;">
+                            <li>Take your time – there's no rush</li>
+                            <li>Be specific with examples – details reveal patterns</li>
+                            <li>Don't overthink it – your first thoughts are often the most revealing</li>
+                            <li>Your progress saves automatically</li>
+                            <li>AI analysis helps spot patterns you might miss</li>
+                        </ul>
+                    </div>
+                </details>
 
                 <div style="text-align: center; margin-top: 40px;">
                     <button id="startBtn" style="
@@ -831,7 +778,7 @@
                         Let's Begin Your Discovery →
                     </button>
                     <p style="color: #64748b; font-size: 0.95em; margin-top: 16px; font-style: italic;">
-                        This usually takes 20-30 minutes
+                        ✓ Your progress saves automatically • Complete at your own pace
                     </p>
                 </div>
             </div>
@@ -882,29 +829,54 @@
             
             <div class="visual-exercise">
                 <div class="evidence-box">
-                    <h3>Outcome #1</h3>
+                    <div style="text-align: center; margin-bottom: 12px;">
+                        <span style="font-size: 2em;">1️⃣</span>
+                    </div>
+                    <h3 style="text-align: center;">Outcome #1</h3>
                     <textarea placeholder="What changed for them? What did you notice they couldn't see? What came naturally to you?"></textarea>
                 </div>
                 <div class="evidence-box">
-                    <h3>Outcome #2</h3>
+                    <div style="text-align: center; margin-bottom: 12px;">
+                        <span style="font-size: 2em;">2️⃣</span>
+                    </div>
+                    <h3 style="text-align: center;">Outcome #2</h3>
                     <textarea placeholder="What changed for them? What did you notice they couldn't see? What came naturally to you?"></textarea>
                 </div>
                 <div class="evidence-box">
-                    <h3>Outcome #3</h3>
+                    <div style="text-align: center; margin-bottom: 12px;">
+                        <span style="font-size: 2em;">3️⃣</span>
+                    </div>
+                    <h3 style="text-align: center;">Outcome #3</h3>
                     <textarea placeholder="What changed for them? What did you notice they couldn't see? What came naturally to you?"></textarea>
                 </div>
                 <div class="evidence-box">
-                    <h3>Outcome #4</h3>
+                    <div style="text-align: center; margin-bottom: 12px;">
+                        <span style="font-size: 2em;">4️⃣</span>
+                    </div>
+                    <h3 style="text-align: center;">Outcome #4</h3>
                     <textarea placeholder="What changed for them? What did you notice they couldn't see? What came naturally to you?"></textarea>
                 </div>
                 <div class="evidence-box">
-                    <h3>Outcome #5</h3>
+                    <div style="text-align: center; margin-bottom: 12px;">
+                        <span style="font-size: 2em;">5️⃣</span>
+                    </div>
+                    <h3 style="text-align: center;">Outcome #5</h3>
                     <textarea placeholder="What changed for them? What did you notice they couldn't see? What came naturally to you?"></textarea>
                 </div>
-                <div class="evidence-box thread-box">
-                    <h3>The Thread</h3>
+                <div class="evidence-box thread-box" id="threadBox" style="display: none;">
+                    <div style="text-align: center; margin-bottom: 12px;">
+                        <span style="font-size: 2em;">🧵</span>
+                    </div>
+                    <h3 style="text-align: center;">The Thread</h3>
                     <textarea id="threadText" placeholder="Looking across these outcomes, what's the common thread? What ability keeps showing up, even when you don't consciously plan it?"></textarea>
                 </div>
+            </div>
+
+            <!-- Thread reveal message (shown until 2+ outcomes filled) -->
+            <div id="threadRevealHint" style="text-align: center; padding: 20px; background: linear-gradient(135deg, rgba(124, 58, 237, 0.05), rgba(168, 85, 247, 0.05)); border-radius: 12px; margin: 20px 0;">
+                <p style="color: #7c3aed; font-size: 1em; margin: 0;">
+                    📝 Fill in at least 2 outcomes above to reveal "The Thread" question
+                </p>
             </div>
 
             <div style="text-align: center; margin: 30px 0;">
@@ -964,17 +936,6 @@
                 </div>
             </div>
             
-            <div class="instinct-radar" id="instinctRadar">
-                <div class="radar-line"></div>
-                <div class="radar-line"></div>
-                <div class="radar-line"></div>
-                <div class="radar-line"></div>
-                <div class="radar-center"></div>
-                <!-- Insight points will be added dynamically -->
-            </div>
-            
-            <button onclick="analyseInstincts()" style="display: block; margin: 20px auto; padding: 10px 20px; background: #3498db; color: white; border: none; border-radius: 5px; cursor: pointer;">Analyse My Instincts</button>
-            
             <div class="visual-exercise instinct-radar-grid">
                 <div class="evidence-box radar-question-box">
                     <div style="text-align: center; margin-bottom: 20px;">
@@ -997,6 +958,43 @@
                     <h3>What You Notice First</h3>
                     <textarea placeholder="What do you notice about people or situations that others seem to miss completely?"></textarea>
                 </div>
+            </div>
+
+            <div style="text-align: center; margin: 30px 0;">
+                <button id="aiInstinctBtn" onclick="analyseInstincts()" style="
+                    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                    color: white;
+                    border: none;
+                    padding: 15px 40px;
+                    font-size: 1.1em;
+                    border-radius: 25px;
+                    cursor: pointer;
+                    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+                    transition: all 0.3s ease;
+                    font-weight: 600;
+                ">✨ Analyse My Instincts with AI</button>
+                <p style="color: #64748b; font-size: 0.9em; margin-top: 10px;">
+                    AI will reveal your unique pattern recognition abilities
+                </p>
+            </div>
+
+            <div id="aiInstinctInsights" style="
+                background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.1));
+                border-radius: 20px;
+                padding: 30px;
+                margin: 20px 0;
+                display: none;
+                border-left: 5px solid #667eea;
+                box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            ">
+                <h3 style="color: #667eea; margin-bottom: 20px; font-size: 1.5em;">
+                    🎯 Your Instinct Profile
+                </h3>
+                <div id="aiInstinctAnalysis" style="
+                    color: #2c3e50;
+                    line-height: 1.8;
+                    font-size: 1.05em;
+                "></div>
             </div>
         </div>
 
@@ -1208,7 +1206,16 @@
                     <input type="text" placeholder="What are you now willing to claim about what you can do?">
                 </div>
                 
-                <div style="text-align: center; margin-top: 30px;">
+                <!-- Button descriptions for clarity -->
+                <div style="text-align: center; margin-bottom: 20px; padding: 16px; background: rgba(255,255,255,0.1); border-radius: 12px;">
+                    <p style="color: rgba(255,255,255,0.9); font-size: 0.95em; margin: 0;">
+                        <strong>Submit</strong> = Send to Lisa for your career report &nbsp;|&nbsp;
+                        <strong>Download</strong> = Save a copy to your device &nbsp;|&nbsp;
+                        <strong>Email</strong> = Send yourself a copy
+                    </p>
+                </div>
+
+                <div style="text-align: center; margin-top: 20px; display: flex; flex-wrap: wrap; justify-content: center; gap: 12px;">
                     <button id="saveToSheets" style="
                         background: linear-gradient(135deg, #7c3aed 0%, #a855f7 100%);
                         color: white;
@@ -1218,10 +1225,9 @@
                         font-weight: 600;
                         border-radius: 12px;
                         cursor: pointer;
-                        margin: 0 10px;
                         transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
                         box-shadow: 0 4px 6px -1px rgba(124, 58, 237, 0.3);
-                    " onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 10px 15px -3px rgba(124, 58, 237, 0.4)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 6px -1px rgba(124, 58, 237, 0.3)'">Submit Answers</button>
+                    " onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 10px 15px -3px rgba(124, 58, 237, 0.4)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 6px -1px rgba(124, 58, 237, 0.3)'">📤 Submit to Lisa</button>
 
                     <button id="saveResults" style="
                         background: rgba(255,255,255,0.2);
@@ -1231,9 +1237,8 @@
                         font-size: 1.1em;
                         border-radius: 10px;
                         cursor: pointer;
-                        margin: 0 10px;
                         transition: all 0.3s ease;
-                    ">Save My Results</button>
+                    ">💾 Download Copy</button>
 
                     <button id="emailResults" style="
                         background: rgba(255,255,255,0.9);
@@ -1243,9 +1248,8 @@
                         font-size: 1.1em;
                         border-radius: 10px;
                         cursor: pointer;
-                        margin: 0 10px;
                         transition: all 0.3s ease;
-                    ">Email My Results</button>
+                    ">📧 Email Myself</button>
 
                     <button id="clearAll" style="
                         background: transparent;
@@ -1270,12 +1274,49 @@
 
 
     <script>
+        // Thread reveal logic - show Thread box when 2+ outcomes are filled
+        function checkOutcomesAndRevealThread() {
+            const section1 = document.querySelector('[data-section-number="1"]');
+            if (!section1) return;
+
+            const outcomeTextareas = section1.querySelectorAll('.evidence-box:not(.thread-box) textarea');
+            let filledCount = 0;
+
+            outcomeTextareas.forEach(textarea => {
+                if (textarea.value.trim().length > 10) { // At least 10 chars = meaningful input
+                    filledCount++;
+                }
+            });
+
+            const threadBox = document.getElementById('threadBox');
+            const threadHint = document.getElementById('threadRevealHint');
+
+            if (filledCount >= 2) {
+                if (threadBox) threadBox.style.display = 'block';
+                if (threadHint) threadHint.style.display = 'none';
+            } else {
+                if (threadBox) threadBox.style.display = 'none';
+                if (threadHint) threadHint.style.display = 'block';
+            }
+        }
+
         // Welcome Screen - Start Button Handler
         document.addEventListener('DOMContentLoaded', function() {
             const startBtn = document.getElementById('startBtn');
             const welcomeSection = document.getElementById('welcomeSection');
             const progressSection = document.getElementById('progressSection');
             const firstSection = document.querySelector('[data-section-number="1"]');
+
+            // Attach outcome checking to section 1 textareas
+            const section1 = document.querySelector('[data-section-number="1"]');
+            if (section1) {
+                section1.querySelectorAll('.evidence-box:not(.thread-box) textarea').forEach(textarea => {
+                    textarea.addEventListener('input', checkOutcomesAndRevealThread);
+                    textarea.addEventListener('blur', checkOutcomesAndRevealThread);
+                });
+            }
+            // Initial check in case of restored data
+            setTimeout(checkOutcomesAndRevealThread, 500);
 
             console.log('Start button found:', startBtn);
             console.log('Welcome section found:', welcomeSection);
@@ -1319,100 +1360,91 @@
             });
         });
 
-        // Instinct Radar Analysis
+        // Instinct Analysis - Display results in insights panel
         function analyseInstincts() {
-            const radar = document.getElementById('instinctRadar');
-            const intuition = document.querySelector('textarea[placeholder*="gut feeling"]').value;
-            const questions = document.querySelector('textarea[placeholder*="questions do you find"]').value;
-            const noticing = document.querySelector('textarea[placeholder*="notice about people"]').value;
+            const intuitionEl = document.querySelector('textarea[placeholder*="gut feeling"]');
+            const questionsEl = document.querySelector('textarea[placeholder*="questions do you find"]');
+            const noticingEl = document.querySelector('textarea[placeholder*="notice about people"]');
 
-            // Clear existing points
-            radar.querySelectorAll('.instinct-point, .instinct-label').forEach(el => el.remove());
+            const intuition = intuitionEl ? intuitionEl.value : '';
+            const questions = questionsEl ? questionsEl.value : '';
+            const noticing = noticingEl ? noticingEl.value : '';
+
+            // Check minimum input
+            const filledCount = [intuition, questions, noticing].filter(t => t.trim().length > 10).length;
+            if (filledCount < 2) {
+                alert('📝 Please fill in at least 2 instinct questions before analysing.');
+                return;
+            }
 
             const insights = [];
 
             // Analyse intuition speed
-            if (intuition.toLowerCase().includes('quick') || intuition.toLowerCase().includes('immediate') || intuition.toLowerCase().includes('instant')) {
-                insights.push({ label: 'Rapid Pattern Recognition', angle: 45, distance: 80 });
+            if (intuition.toLowerCase().includes('quick') || intuition.toLowerCase().includes('immediate') || intuition.toLowerCase().includes('instant') || intuition.toLowerCase().includes('fast')) {
+                insights.push({ icon: '⚡', label: 'Rapid Pattern Recognition', desc: 'You process information quickly and spot patterns before others do.' });
             }
 
             // Analyse intuition accuracy
-            if (intuition.toLowerCase().includes('right') || intuition.toLowerCase().includes('correct') || intuition.toLowerCase().includes('accurate')) {
-                insights.push({ label: 'High Intuitive Accuracy', angle: 135, distance: 90 });
+            if (intuition.toLowerCase().includes('right') || intuition.toLowerCase().includes('correct') || intuition.toLowerCase().includes('accurate') || intuition.toLowerCase().includes('turned out')) {
+                insights.push({ icon: '🎯', label: 'High Intuitive Accuracy', desc: 'Your gut feelings consistently prove correct - trust them more.' });
             }
 
             // Analyse question depth
-            if (questions.toLowerCase().includes('why') || questions.toLowerCase().includes('deeper') || questions.toLowerCase().includes('root')) {
-                insights.push({ label: 'Deep Inquiry Mind', angle: 225, distance: 85 });
+            if (questions.toLowerCase().includes('why') || questions.toLowerCase().includes('deeper') || questions.toLowerCase().includes('root') || questions.toLowerCase().includes('behind')) {
+                insights.push({ icon: '🔍', label: 'Deep Inquiry Mind', desc: 'You naturally dig beneath the surface to find root causes.' });
             }
 
             // Analyse unique perspective
-            if (questions.toLowerCase().includes('different') || questions.toLowerCase().includes('unique') || questions.toLowerCase().includes('others don')) {
-                insights.push({ label: 'Unique Perspective', angle: 315, distance: 75 });
+            if (questions.toLowerCase().includes('different') || questions.toLowerCase().includes('unique') || questions.toLowerCase().includes('others don') || questions.toLowerCase().includes('nobody')) {
+                insights.push({ icon: '💎', label: 'Unique Perspective', desc: 'You see angles and possibilities that others consistently miss.' });
             }
 
-            // Analyse observational skills (NEW - 3rd question)
-            if (noticing.toLowerCase().includes('body language') || noticing.toLowerCase().includes('energy') || noticing.toLowerCase().includes('feeling') || noticing.toLowerCase().includes('vibe')) {
-                insights.push({ label: 'Empathic Sensing', angle: 180, distance: 85 });
+            // Analyse observational skills
+            if (noticing.toLowerCase().includes('body language') || noticing.toLowerCase().includes('energy') || noticing.toLowerCase().includes('feeling') || noticing.toLowerCase().includes('vibe') || noticing.toLowerCase().includes('mood')) {
+                insights.push({ icon: '💫', label: 'Empathic Sensing', desc: 'You read emotional states and energy shifts intuitively.' });
             }
 
-            // Analyse detail detection (NEW - 3rd question)
-            if (noticing.toLowerCase().includes('detail') || noticing.toLowerCase().includes('subtle') || noticing.toLowerCase().includes('small') || noticing.toLowerCase().includes('notice')) {
-                insights.push({ label: 'Detail Detection', angle: 270, distance: 80 });
+            // Analyse detail detection
+            if (noticing.toLowerCase().includes('detail') || noticing.toLowerCase().includes('subtle') || noticing.toLowerCase().includes('small') || noticing.toLowerCase().includes('notice') || noticing.toLowerCase().includes('pick up')) {
+                insights.push({ icon: '🔬', label: 'Detail Detection', desc: 'Small details that others overlook are obvious to you.' });
             }
 
-            // Analyse pattern spotting (NEW - 3rd question)
-            if (noticing.toLowerCase().includes('pattern') || noticing.toLowerCase().includes('always') || noticing.toLowerCase().includes('tend') || noticing.toLowerCase().includes('usually')) {
-                insights.push({ label: 'Pattern Spotting', angle: 90, distance: 75 });
+            // Analyse pattern spotting
+            if (noticing.toLowerCase().includes('pattern') || noticing.toLowerCase().includes('always') || noticing.toLowerCase().includes('tend') || noticing.toLowerCase().includes('usually') || noticing.toLowerCase().includes('connect')) {
+                insights.push({ icon: '🧩', label: 'Pattern Spotting', desc: 'You naturally connect dots and see recurring themes.' });
             }
 
-            // Add any text length insights
+            // Rich awareness from depth of responses
             if (intuition.length > 100 || questions.length > 100 || noticing.length > 100) {
-                insights.push({ label: 'Rich Awareness', angle: 0, distance: 70 });
+                insights.push({ icon: '🌟', label: 'Rich Self-Awareness', desc: 'Your detailed reflection shows deep understanding of your abilities.' });
             }
-            
-            // Display insights on radar
-            insights.forEach((insight, index) => {
-                setTimeout(() => {
-                    const point = document.createElement('div');
-                    point.className = 'instinct-point';
-                    const label = document.createElement('div');
-                    label.className = 'instinct-label';
-                    label.textContent = insight.label;
-                    
-                    // Calculate position
-                    const centerX = 150;
-                    const centerY = 150;
-                    const radians = (insight.angle - 90) * Math.PI / 180;
-                    const x = centerX + Math.cos(radians) * insight.distance;
-                    const y = centerY + Math.sin(radians) * insight.distance;
-                    
-                    point.style.left = (x - 6) + 'px';
-                    point.style.top = (y - 6) + 'px';
-                    
-                    // Position label
-                    label.style.left = (x + 10) + 'px';
-                    label.style.top = (y - 10) + 'px';
-                    
-                    radar.appendChild(point);
-                    radar.appendChild(label);
-                    
-                    // Animate in
-                    setTimeout(() => {
-                        point.style.opacity = '1';
-                        label.style.opacity = '1';
-                    }, 50);
-                }, index * 300);
+
+            // Display insights in panel
+            const insightsDiv = document.getElementById('aiInstinctInsights');
+            const analysisDiv = document.getElementById('aiInstinctAnalysis');
+
+            if (insights.length === 0) {
+                insights.push({ icon: '✨', label: 'Developing Instincts', desc: 'Try adding more specific examples to reveal your unique patterns.' });
+            }
+
+            let html = '<div style="display: grid; gap: 16px;">';
+            insights.forEach(insight => {
+                html += `
+                    <div style="background: white; padding: 16px; border-radius: 12px; border-left: 4px solid #667eea;">
+                        <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 8px;">
+                            <span style="font-size: 1.5em;">${insight.icon}</span>
+                            <strong style="color: #667eea; font-size: 1.1em;">${insight.label}</strong>
+                        </div>
+                        <p style="margin: 0; color: #64748b;">${insight.desc}</p>
+                    </div>
+                `;
             });
-        }
-        
-        // Trigger analysis when instinct textareas change
-        const instinctSection = document.querySelectorAll('.section')[1]; // Second section
-        if (instinctSection) {
-            instinctSection.querySelectorAll('textarea').forEach(textarea => {
-                textarea.addEventListener('blur', analyseInstincts);
-                textarea.addEventListener('change', analyseInstincts);
-            });
+            html += '</div>';
+            html += `<p style="margin-top: 20px; font-style: italic; color: #64748b;">Found ${insights.length} instinct pattern${insights.length !== 1 ? 's' : ''} in your responses.</p>`;
+
+            analysisDiv.innerHTML = html;
+            insightsDiv.style.display = 'block';
+            insightsDiv.scrollIntoView({ behavior: 'smooth', block: 'center' });
         }
 
         // Create save indicator
