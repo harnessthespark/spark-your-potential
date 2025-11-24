@@ -746,21 +746,6 @@
                     </ol>
                 </div>
 
-                <details style="background: #fffbeb; border-left: 4px solid #f59e0b; border-radius: 12px; margin: 32px 0;">
-                    <summary style="padding: 16px 24px; cursor: pointer; color: #f59e0b; font-size: 1.2em; font-weight: 600; list-style: none; display: flex; align-items: center; gap: 8px;">
-                        <span style="transition: transform 0.2s;">▶</span> 💡 Tips for Getting the Most Value (click to expand)
-                    </summary>
-                    <div style="padding: 0 24px 24px 24px;">
-                        <ul style="font-size: 1.05em; line-height: 2; color: #334155; padding-left: 24px; margin: 0;">
-                            <li>Take your time – there's no rush</li>
-                            <li>Be specific with examples – details reveal patterns</li>
-                            <li>Don't overthink it – your first thoughts are often the most revealing</li>
-                            <li>Your progress saves automatically</li>
-                            <li>AI analysis helps spot patterns you might miss</li>
-                        </ul>
-                    </div>
-                </details>
-
                 <div style="text-align: center; margin-top: 40px;">
                     <button id="startBtn" style="
                         background: linear-gradient(135deg, #7c3aed 0%, #a855f7 100%);
@@ -1272,8 +1257,90 @@
         </div>
     </div>
 
+    <!-- Tips Popup Modal - Shows on first textarea focus -->
+    <div id="tipsModal" style="
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0,0,0,0.5);
+        z-index: 9999;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+    ">
+        <div style="
+            background: white;
+            border-radius: 20px;
+            max-width: 480px;
+            width: 100%;
+            padding: 32px;
+            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25);
+            animation: slideIn 0.3s ease;
+        ">
+            <div style="text-align: center; margin-bottom: 24px;">
+                <span style="font-size: 3em;">💡</span>
+                <h3 style="color: #f59e0b; font-size: 1.5em; margin: 16px 0 8px 0;">Quick Tips</h3>
+                <p style="color: #64748b; margin: 0;">To get the most from this exercise</p>
+            </div>
+            <ul style="font-size: 1.05em; line-height: 2; color: #334155; padding-left: 24px; margin: 0 0 24px 0;">
+                <li><strong>Be specific</strong> – details reveal patterns</li>
+                <li><strong>Don't overthink</strong> – first thoughts are often best</li>
+                <li><strong>Take your time</strong> – progress saves automatically</li>
+            </ul>
+            <button id="closeTipsBtn" style="
+                width: 100%;
+                background: linear-gradient(135deg, #f59e0b 0%, #ea580c 100%);
+                color: white;
+                border: none;
+                padding: 14px 24px;
+                font-size: 1.1em;
+                font-weight: 600;
+                border-radius: 12px;
+                cursor: pointer;
+                transition: all 0.2s ease;
+            ">Got it, let's go! →</button>
+        </div>
+    </div>
+
+    <style>
+        @keyframes slideIn {
+            from { opacity: 0; transform: scale(0.95) translateY(-10px); }
+            to { opacity: 1; transform: scale(1) translateY(0); }
+        }
+    </style>
+
 
     <script>
+        // Tips Modal Logic - Show once on first textarea focus
+        let tipsShown = false;
+
+        function showTipsModal() {
+            if (tipsShown) return; // Only show once
+
+            const modal = document.getElementById('tipsModal');
+            if (modal) {
+                modal.style.display = 'flex';
+                tipsShown = true;
+
+                // Save that tips were shown
+                try {
+                    localStorage.setItem('spark_tips_shown', 'true');
+                } catch (e) {
+                    console.error('Failed to save tips state:', e);
+                }
+            }
+        }
+
+        function closeTipsModal() {
+            const modal = document.getElementById('tipsModal');
+            if (modal) {
+                modal.style.display = 'none';
+            }
+        }
+
         // Thread reveal logic - show Thread box when 2+ outcomes are filled
         function checkOutcomesAndRevealThread() {
             const section1 = document.querySelector('[data-section-number="1"]');
@@ -1306,6 +1373,26 @@
             const welcomeSection = document.getElementById('welcomeSection');
             const progressSection = document.getElementById('progressSection');
             const firstSection = document.querySelector('[data-section-number="1"]');
+
+            // Check if tips were already shown previously
+            try {
+                if (localStorage.getItem('spark_tips_shown') === 'true') {
+                    tipsShown = true;
+                }
+            } catch (e) {
+                console.error('Failed to check tips state:', e);
+            }
+
+            // Close tips modal button
+            const closeTipsBtn = document.getElementById('closeTipsBtn');
+            if (closeTipsBtn) {
+                closeTipsBtn.addEventListener('click', closeTipsModal);
+            }
+
+            // Show tips modal on first textarea focus (any section)
+            document.querySelectorAll('textarea').forEach(textarea => {
+                textarea.addEventListener('focus', showTipsModal, { once: true });
+            });
 
             // Attach outcome checking to section 1 textareas
             const section1 = document.querySelector('[data-section-number="1"]');
