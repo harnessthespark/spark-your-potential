@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Prompt Library - Career Booster</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; padding: 40px; }
+        .container { max-width: 1000px; margin: 0 auto; }
+        
+        .header { text-align: center; margin-bottom: 40px; color: white; }
+        .header h1 { font-size: 2.5em; font-weight: 800; margin-bottom: 10px; }
+        .header p { font-size: 1.2em; opacity: 0.9; }
+        
+        .section { background: white; border-radius: 20px; padding: 35px; margin-bottom: 25px; box-shadow: 0 10px 40px rgba(0,0,0,0.15); }
+        .section-title { font-size: 1.4em; font-weight: 700; color: #667eea; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; }
+        
+        .intro-box { background: linear-gradient(135deg, #f3e7ff 0%, #e8d5ff 100%); border-left: 5px solid #667eea; padding: 25px; border-radius: 0 15px 15px 0; margin-bottom: 25px; }
+        .intro-box p { line-height: 1.7; color: #555; }
+        
+        .prompt-card { background: #f8f9fa; border-radius: 15px; padding: 25px; margin-bottom: 20px; border: 2px solid #e0e0e0; position: relative; }
+        .prompt-card:hover { border-color: #667eea; }
+        .prompt-label { font-size: 0.8em; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: #667eea; margin-bottom: 10px; }
+        .prompt-title { font-size: 1.1em; font-weight: 600; color: #2c3e50; margin-bottom: 15px; }
+        .prompt-text { background: #1a1a2e; color: #e0e0e0; padding: 20px; border-radius: 10px; font-family: 'Monaco', 'Consolas', monospace; font-size: 0.9em; line-height: 1.7; white-space: pre-wrap; }
+        .prompt-text .variable { color: #FFB627; font-weight: 600; }
+        
+        .copy-btn { position: absolute; top: 20px; right: 20px; background: #667eea; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 0.85em; font-weight: 600; }
+        .copy-btn:hover { background: #5a6fd6; }
+        .copy-btn.copied { background: #4CAF50; }
+        
+        .tip-box { background: #fff9e6; border-left: 4px solid #FFB627; padding: 15px 20px; border-radius: 0 10px 10px 0; margin-top: 15px; }
+        .tip-box p { color: #856404; font-size: 0.9em; line-height: 1.6; }
+        
+        .category-tabs { display: flex; gap: 10px; margin-bottom: 25px; flex-wrap: wrap; }
+        .tab { padding: 10px 20px; background: #f0f0f0; border-radius: 25px; cursor: pointer; font-size: 0.9em; font-weight: 500; border: 2px solid transparent; }
+        .tab:hover { background: #e0e0e0; }
+        .tab.active { background: #667eea; color: white; }
+        
+        .footer { text-align: center; color: white; opacity: 0.8; margin-top: 40px; font-size: 0.9em; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🤖 AI Prompt Library</h1>
+            <p>Ready-to-use prompts for your career journey</p>
+        </div>
+
+        <div class="section">
+            <div class="section-title">📝 How to Use These Prompts</div>
+            <div class="intro-box">
+                <p>These prompts are designed to work with ChatGPT, Claude, or any AI assistant. Replace the <span style="color: #FFB627; font-weight: 600;">[VARIABLES]</span> with your own information from your Career Blueprint.</p>
+                <p style="margin-top: 10px;"><strong>Pro tip:</strong> The more specific you are with the variables, the better the output.</p>
+            </div>
+        </div>
+
+        <!-- CV & LinkedIn Section -->
+        <div class="section">
+            <div class="section-title">📄 CV & LinkedIn</div>
+            
+            <div class="prompt-card">
+                <button class="copy-btn" onclick="copyPrompt(this)">Copy</button>
+                <div class="prompt-label">Profile Statement Generator</div>
+                <div class="prompt-title">Create a compelling profile/summary</div>
+                <div class="prompt-text">I need help writing a professional profile for my CV/LinkedIn.
+
+Here's my core information:
+- Core Pattern: <span class="variable">[YOUR CORE PATTERN]</span>
+- Thread: <span class="variable">[YOUR THREAD]</span>
+- Key evidence: <span class="variable">[3 KEY ACHIEVEMENTS WITH NUMBERS]</span>
+- What I'm seeking: <span class="variable">[TYPE OF ROLE/ENVIRONMENT]</span>
+
+Write a 3-4 sentence profile that:
+1. Opens with what I actually do (not my job title)
+2. Includes my thread as the connecting narrative
+3. References evidence without being a list
+4. Ends with what I'm looking for
+
+Tone: Confident but not arrogant. First person.</div>
+                <div class="tip-box">
+                    <p>💡 Use this after completing your Blueprint — pull the exact language from your Core Pattern and Thread sections.</p>
+                </div>
+            </div>
+
+            <div class="prompt-card">
+                <button class="copy-btn" onclick="copyPrompt(this)">Copy</button>
+                <div class="prompt-label">Achievement Bullet Transformer</div>
+                <div class="prompt-title">Turn tasks into achievements</div>
+                <div class="prompt-text">Transform these job responsibilities into achievement-focused bullets.
+
+Current bullets:
+<span class="variable">[PASTE YOUR CURRENT BULLET POINTS]</span>
+
+For each one:
+1. Start with an action verb
+2. Add context (what was the situation/challenge?)
+3. Include a result or impact (numbers if possible)
+4. Keep under 2 lines
+
+Format: [Action] + [Context] + [Result]
+
+Example transformation:
+Before: "Responsible for brand strategy"
+After: "Led brand repositioning for Barclays across 12 markets — first unified campaign in 5 years"</div>
+            </div>
+
+            <div class="prompt-card">
+                <button class="copy-btn" onclick="copyPrompt(this)">Copy</button>
+                <div class="prompt-label">LinkedIn Headline Generator</div>
+                <div class="prompt-title">Create a headline that stands out</div>
+                <div class="prompt-text">Create 5 LinkedIn headline options for me.
+
+My information:
+- Core Pattern: <span class="variable">[YOUR CORE PATTERN]</span>
+- Current/most recent role: <span class="variable">[JOB TITLE]</span>
+- Industry: <span class="variable">[YOUR INDUSTRY]</span>
+- Key clients/brands: <span class="variable">[NOTABLE NAMES]</span>
+
+Requirements:
+- Lead with what I do, not just my title
+- Max 120 characters
+- Include at least one specific (brand, number, or outcome)
+- Make someone want to click to learn more
+
+Give me 5 options ranging from conventional to bold.</div>
+            </div>
+        </div>
+
+        <!-- Interview Prep Section -->
+        <div class="section">
+            <div class="section-title">🎯 Interview Prep</div>
+            
+            <div class="prompt-card">
+                <button class="copy-btn" onclick="copyPrompt(this)">Copy</button>
+                <div class="prompt-label">Story Structurer (STAR Method)</div>
+                <div class="prompt-title">Structure your evidence into interview stories</div>
+                <div class="prompt-text">Help me structure this achievement into a compelling interview story.
+
+The achievement: <span class="variable">[ONE OF YOUR BELIEF MOMENTS OR KEY EVIDENCE]</span>
+
+Structure it using STAR format:
+- Situation: What was the context? (2-3 sentences)
+- Task: What was I specifically asked to do?
+- Action: What did I actually do? (This should be the longest part)
+- Result: What happened? Include numbers if possible.
+
+Also give me:
+- A punchy opening line to hook the interviewer
+- The key "so what" — why this matters
+- A bridge sentence to connect it to what I'm seeking now</div>
+            </div>
+
+            <div class="prompt-card">
+                <button class="copy-btn" onclick="copyPrompt(this)">Copy</button>
+                <div class="prompt-label">Question Preparer</div>
+                <div class="prompt-title">Prepare questions to ask them</div>
+                <div class="prompt-text">Generate 10 insightful questions I should ask in an interview.
+
+Context:
+- Role I'm interviewing for: <span class="variable">[JOB TITLE & COMPANY]</span>
+- My green flags (what I'm looking for): <span class="variable">[YOUR GREEN FLAGS]</span>
+- My red flags (what I want to avoid): <span class="variable">[YOUR RED FLAGS]</span>
+
+Create questions that:
+1. Subtly probe for my red flags without being negative
+2. Signal that I'm looking for my green flags
+3. Show I've done my research
+4. Reveal company culture and ways of working
+
+Mix of: culture questions, role-specific questions, growth questions, and "tell me honestly" questions.</div>
+            </div>
+        </div>
+
+        <!-- Networking Section -->
+        <div class="section">
+            <div class="section-title">🤝 Networking & Outreach</div>
+            
+            <div class="prompt-card">
+                <button class="copy-btn" onclick="copyPrompt(this)">Copy</button>
+                <div class="prompt-label">LinkedIn Connection Message</div>
+                <div class="prompt-title">Write a connection request that gets accepted</div>
+                <div class="prompt-text">Write a LinkedIn connection request message.
+
+Context:
+- Who I'm reaching out to: <span class="variable">[THEIR NAME, ROLE, COMPANY]</span>
+- Why I want to connect: <span class="variable">[GENUINE REASON]</span>
+- What we have in common: <span class="variable">[SHARED CONNECTION, INTEREST, OR BACKGROUND]</span>
+- My core pattern: <span class="variable">[YOUR CORE PATTERN - for context]</span>
+
+Requirements:
+- Under 300 characters (LinkedIn limit)
+- No "I'd love to pick your brain"
+- Specific, not generic
+- Clear but not pushy about why I'm reaching out
+- End with easy yes/no or low-effort response</div>
+            </div>
+
+            <div class="prompt-card">
+                <button class="copy-btn" onclick="copyPrompt(this)">Copy</button>
+                <div class="prompt-label">Coffee Chat Opener</div>
+                <div class="prompt-title">Email requesting an informal conversation</div>
+                <div class="prompt-text">Write an email requesting an informal conversation.
+
+Context:
+- Who: <span class="variable">[THEIR NAME, ROLE, COMPANY]</span>
+- How I found them: <span class="variable">[MUTUAL CONNECTION / ARTICLE / EVENT]</span>
+- What I'm exploring: <span class="variable">[WHAT YOU'RE TRYING TO LEARN]</span>
+- Why them specifically: <span class="variable">[WHAT ABOUT THEIR EXPERIENCE IS RELEVANT]</span>
+
+Requirements:
+- Subject line that gets opened
+- Max 150 words in body
+- Specific ask (15-20 min call, coffee, etc.)
+- Make it easy to say yes
+- Show I've done my homework
+- No desperation or over-flattery</div>
+            </div>
+        </div>
+
+        <!-- Decision Making Section -->
+        <div class="section">
+            <div class="section-title">⚖️ Decision Making</div>
+            
+            <div class="prompt-card">
+                <button class="copy-btn" onclick="copyPrompt(this)">Copy</button>
+                <div class="prompt-label">Opportunity Evaluator</div>
+                <div class="prompt-title">Get a second opinion on an opportunity</div>
+                <div class="prompt-text">Help me evaluate this career opportunity.
+
+The opportunity:
+<span class="variable">[DESCRIBE THE ROLE, COMPANY, WHAT YOU KNOW]</span>
+
+My criteria (from my Decision Framework):
+- My core pattern: <span class="variable">[YOUR CORE PATTERN]</span>
+- My green flags: <span class="variable">[YOUR GREEN FLAGS]</span>
+- My red flags: <span class="variable">[YOUR RED FLAGS]</span>
+- What I'm seeking: <span class="variable">[WHAT YOU WANT NEXT]</span>
+
+Based on what I've shared:
+1. What looks promising about this opportunity for me specifically?
+2. What potential concerns should I probe further?
+3. What questions should I ask to test for my red flags?
+4. What's the biggest unknown I should try to uncover?
+5. Gut check: does this seem like a pattern match or a compromise?</div>
+            </div>
+        </div>
+
+        <div class="footer">
+            AI Prompt Library by Harness the Spark | harnessthespark.co.uk
+        </div>
+    </div>
+    
+    <script>
+        function copyPrompt(btn) {
+            const promptText = btn.parentElement.querySelector('.prompt-text').innerText;
+            navigator.clipboard.writeText(promptText).then(() => {
+                btn.textContent = 'Copied!';
+                btn.classList.add('copied');
+                setTimeout(() => {
+                    btn.textContent = 'Copy';
+                    btn.classList.remove('copied');
+                }, 2000);
+            });
+        }
+    </script>
+</body>
+</html>

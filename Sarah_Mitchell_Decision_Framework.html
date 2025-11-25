@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Decision-Making Framework - Sarah Mitchell</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            line-height: 1.6;
+            color: #2c3e50;
+            background: linear-gradient(135deg, #E63946 0%, #D81B60 50%, #7B2CBF 100%);
+            padding: 40px 20px;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+        .header {
+            background: linear-gradient(135deg, #E63946 0%, #D81B60 50%, #7B2CBF 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+        .header h1 { font-size: 2.2em; margin-bottom: 10px; }
+        .header .subtitle { font-size: 1.1em; opacity: 0.9; }
+        .content { padding: 50px 40px; }
+        
+        .intro {
+            background: linear-gradient(135deg, #FF6B6B15 0%, #FF149315 100%);
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 40px;
+            border-left: 5px solid #FF1493;
+        }
+        
+        .section { margin-bottom: 40px; }
+        .section-title {
+            font-size: 1.5em;
+            font-weight: 700;
+            color: #E63946;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #E63946;
+        }
+        
+        .framework-box {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 15px;
+            margin: 20px 0;
+            border: 2px solid #E63946;
+        }
+        .framework-box h3 { color: #E63946; margin-bottom: 15px; }
+        
+        .question-list { margin-left: 20px; margin-top: 10px; }
+        .question-list li { margin-bottom: 12px; }
+        
+        table { width: 100%; border-collapse: collapse; margin: 20px 0; }
+        th {
+            background: linear-gradient(135deg, #E63946 0%, #D81B60 100%);
+            color: white;
+            padding: 15px;
+            text-align: left;
+        }
+        td { padding: 15px; border: 1px solid #e0e0e0; }
+        tr:nth-child(even) { background: #f8f9fa; }
+        
+        .score-input {
+            width: 70px;
+            padding: 10px;
+            border: 2px solid #E63946;
+            border-radius: 5px;
+            text-align: center;
+            font-size: 1.1em;
+        }
+        
+        .total-row { background: #FF149315 !important; font-weight: 700; }
+        .weight-indicator { font-size: 0.9em; color: #7f8c8d; font-style: italic; }
+        
+        .note-box {
+            background: #fff3cd;
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 4px solid #ffc107;
+            margin: 20px 0;
+        }
+        
+        .insight-box {
+            background: linear-gradient(135deg, #667eea15 0%, #764ba215 100%);
+            padding: 25px;
+            border-radius: 15px;
+            border-left: 5px solid #667eea;
+            margin: 20px 0;
+        }
+        
+        .deal-breakers {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-top: 20px;
+        }
+        .red-box {
+            background: #ffe5e5;
+            padding: 20px;
+            border-radius: 12px;
+            border: 2px solid #E63946;
+        }
+        .green-box {
+            background: #e5ffe5;
+            padding: 20px;
+            border-radius: 12px;
+            border: 2px solid #4CAF50;
+        }
+        .red-box h4 { color: #E63946; margin-bottom: 15px; }
+        .green-box h4 { color: #4CAF50; margin-bottom: 15px; }
+        .deal-item { padding: 8px 0; border-bottom: 1px solid rgba(0,0,0,0.1); }
+        .deal-item:last-child { border-bottom: none; }
+        
+        .footer {
+            text-align: center;
+            padding: 30px;
+            background: #f8f9fa;
+            color: #666;
+            font-size: 0.9em;
+        }
+        
+        @media print {
+            body { background: white; padding: 0; }
+            .container { box-shadow: none; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>⚖️ Decision-Making Framework</h1>
+            <div class="subtitle">Evaluating Career Opportunities Against Your Patterns</div>
+        </div>
+        
+        <div class="content">
+            <div class="intro">
+                <p>This framework helps you evaluate ANY opportunity — not just the two you're currently considering. It's built directly from your patterns, superpowers, and what you've learned about what works (and doesn't) for you.</p>
+            </div>
+            
+            <div class="section">
+                <h2 class="section-title">The Four Core Tests</h2>
+                <p>Any opportunity should pass these tests to be worth your energy:</p>
+                
+                <div class="framework-box">
+                    <h3>1. Pattern Fit</h3>
+                    <p>Does this role allow you to do what you do best?</p>
+                    <ul class="question-list">
+                        <li>Can I unlock creative potential here?</li>
+                        <li>Is there a team or client that needs what I do?</li>
+                        <li>Will I be connecting creativity with commercial reality?</li>
+                    </ul>
+                </div>
+                
+                <div class="framework-box">
+                    <h3>2. Transformation Scope</h3>
+                    <p>Will you have the time and permission to create real change?</p>
+                    <ul class="question-list">
+                        <li>Can I stay until transformation is embedded?</li>
+                        <li>Is this "execution only" or real change?</li>
+                        <li>Will I have direct access to stakeholders?</li>
+                    </ul>
+                </div>
+                
+                <div class="framework-box">
+                    <h3>3. Creative Ambition</h3>
+                    <p>Is there something worth unlocking?</p>
+                    <ul class="question-list">
+                        <li>Is this a stuck team that needs a catalyst?</li>
+                        <li>Brand platform or "ad factory"?</li>
+                        <li>Is there appetite for transformation?</li>
+                    </ul>
+                </div>
+                
+                <div class="framework-box">
+                    <h3>4. Authentic Fit</h3>
+                    <p>Can you be yourself and thrive?</p>
+                    <ul class="question-list">
+                        <li>Will I have to mask to succeed here?</li>
+                        <li>Does the culture value what I bring?</li>
+                        <li>Can I sustain this long-term?</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="section">
+                <h2 class="section-title">Opportunity Evaluation Scorecard</h2>
+                <p>Score each opportunity out of 10 for each criterion. Be honest — this is for you, not them.</p>
+                
+                <div class="note-box">
+                    <strong>💡 How to complete this scorecard:</strong><br>
+                    Simply click in each box and type a number from 0-10. The totals will calculate automatically as you type. Your scores will stay in the document when you save it (File → Save or Cmd/Ctrl+S).
+                </div>
+                
+                <table>
+                    <tr>
+                        <th>Criterion</th>
+                        <th>Weight</th>
+                        <th>Agency A<br><small>/10</small></th>
+                        <th>Startup B<br><small>/10</small></th>
+                    </tr>
+                    <tr>
+                        <td><strong>Can I unlock creative potential here?</strong><br><span class="weight-indicator">Pattern fit</span></td>
+                        <td>High</td>
+                        <td><input type="number" class="score-input" min="0" max="10" value="8"></td>
+                        <td><input type="number" class="score-input" min="0" max="10" value="6"></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Will I stay until transformation is embedded?</strong><br><span class="weight-indicator">Not just advise and leave</span></td>
+                        <td>High</td>
+                        <td><input type="number" class="score-input" min="0" max="10" value="7"></td>
+                        <td><input type="number" class="score-input" min="0" max="10" value="9"></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Brand platform or "ad factory"?</strong><br><span class="weight-indicator">Depth of work</span></td>
+                        <td>High</td>
+                        <td><input type="number" class="score-input" min="0" max="10" value="4"></td>
+                        <td><input type="number" class="score-input" min="0" max="10" value="8"></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Direct client/stakeholder access?</strong><br><span class="weight-indicator">Where magic happens</span></td>
+                        <td>Med</td>
+                        <td><input type="number" class="score-input" min="0" max="10" value="6"></td>
+                        <td><input type="number" class="score-input" min="0" max="10" value="9"></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Can I be authentic and thrive?</strong><br><span class="weight-indicator">No masking required</span></td>
+                        <td>High</td>
+                        <td><input type="number" class="score-input" min="0" max="10" value="8"></td>
+                        <td><input type="number" class="score-input" min="0" max="10" value="8"></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Long-term commitment valued?</strong><br><span class="weight-indicator">Belief takes time</span></td>
+                        <td>Med</td>
+                        <td><input type="number" class="score-input" min="0" max="10" value="5"></td>
+                        <td><input type="number" class="score-input" min="0" max="10" value="7"></td>
+                    </tr>
+                </table>
+                
+                <div class="insight-box">
+                    <h3 style="color: #667eea; margin-bottom: 10px;">Scoring Guide</h3>
+                    <p><strong>8-10:</strong> This is a clear strength / excellent fit</p>
+                    <p><strong>5-7:</strong> This is acceptable / neutral</p>
+                    <p><strong>3-4:</strong> This is a concern / potential problem</p>
+                    <p><strong>0-2:</strong> This is a deal-breaker / major red flag</p>
+                    <p style="margin-top: 15px;"><strong>⚠️ Any score below 4 on a High Weight criterion should be taken seriously.</strong></p>
+                </div>
+            </div>
+            
+            <div class="section">
+                <h2 class="section-title">Your Deal-Breakers</h2>
+                <p>Based on your patterns and what you've learned, these should be non-negotiable:</p>
+                
+                <div class="deal-breakers">
+                    <div class="red-box">
+                        <h4>🚩 Red Flags to Avoid</h4>
+                        <div class="deal-item"><strong>"Execution only" briefs:</strong> No room to unlock potential</div>
+                        <div class="deal-item"><strong>Revolving door culture:</strong> Can't build belief in 3 months</div>
+                        <div class="deal-item"><strong>Politics over craft:</strong> Energy goes to wrong places</div>
+                        <div class="deal-item"><strong>"Safe" as a compliment:</strong> Creative potential dies here</div>
+                        <div class="deal-item"><strong>No client access:</strong> Can't catalyse through layers</div>
+                    </div>
+                    <div class="green-box">
+                        <h4>✅ Green Flags to Pursue</h4>
+                        <div class="deal-item"><strong>Stuck teams:</strong> Your superpower zone</div>
+                        <div class="deal-item"><strong>Transformation briefs:</strong> Real change, not polish</div>
+                        <div class="deal-item"><strong>Direct relationships:</strong> Where magic happens</div>
+                        <div class="deal-item"><strong>Long-term commitment:</strong> Belief takes time</div>
+                        <div class="deal-item"><strong>Creative ambition:</strong> Something to unlock</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="footer">
+            Decision-Making Framework by Harness the Spark | harnessthespark.co.uk
+        </div>
+    </div>
+</body>
+</html>

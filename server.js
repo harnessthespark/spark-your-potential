@@ -29,8 +29,13 @@ app.use((req, res, next) => {
 // PAGES
 // ============================================
 
-// Home - Questionnaire
+// Home - Redirect to Dashboard (login required)
 app.get('/', (req, res) => {
+    res.redirect('/dashboard');
+});
+
+// Questionnaire (accessed from dashboard after login)
+app.get('/questionnaire', (req, res) => {
     res.sendFile(path.join(__dirname, 'ability-recognition-visual.html'));
 });
 

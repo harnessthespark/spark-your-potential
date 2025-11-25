@@ -15,55 +15,6 @@
  * 10. Paste that URL into the HTML file where it says YOUR_SCRIPT_ID_HERE
  */
 
-// Handle GET requests - retrieve client data
-function doGet(e) {
-  try {
-    const sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
-    const lastRow = sheet.getLastRow();
-
-    if (lastRow <= 1) {
-      return ContentService.createTextOutput(JSON.stringify({
-        'result': 'error',
-        'error': 'No client data found in sheet'
-      })).setMimeType(ContentService.MimeType.JSON);
-    }
-
-    // Get all data including headers
-    const range = sheet.getRange(1, 1, lastRow, sheet.getLastColumn());
-    const values = range.getValues();
-    const headers = values[0];
-
-    // Convert rows to objects
-    const clients = [];
-    for (let i = 1; i < values.length; i++) {
-      const row = values[i];
-      const clientData = {
-        rowNumber: i + 1
-      };
-
-      // Map each column to its header
-      for (let j = 0; j < headers.length; j++) {
-        clientData[headers[j]] = row[j];
-      }
-
-      clients.push(clientData);
-    }
-
-    // Return the list of clients
-    return ContentService.createTextOutput(JSON.stringify({
-      'result': 'success',
-      'clients': clients,
-      'count': clients.length
-    })).setMimeType(ContentService.MimeType.JSON);
-
-  } catch (error) {
-    return ContentService.createTextOutput(JSON.stringify({
-      'result': 'error',
-      'error': error.toString()
-    })).setMimeType(ContentService.MimeType.JSON);
-  }
-}
-
 // Main function that handles POST requests from the HTML form
 function doPost(e) {
   try {
@@ -83,18 +34,16 @@ function doPost(e) {
       new Date().toLocaleString('en-GB', { timeZone: 'Europe/London' }), // Timestamp
       data['Your name (optional):'] || data.clientName || 'Anonymous',
 
-      // Evidence Collection (5 outcomes + The Thread)
+      // Evidence Collection (5 outcomes)
       data['Outcome #1'] || '',
       data['Outcome #2'] || '',
       data['Outcome #3'] || '',
       data['Outcome #4'] || '',
       data['Outcome #5'] || '',
-      data['The Thread'] || '',
 
-      // Instinct Audit (3 fields)
+      // Instinct Radar
       data['When You Knew Before You Knew'] || '',
       data['The Questions Only You Ask'] || '',
-      data['What You Notice First'] || '',
 
       // Effortless Ability
       data['What Feels Easy to You'] || '',
@@ -107,10 +56,6 @@ function doPost(e) {
       // What Finds You
       data['The Problem Magnet'] || '',
       data['How Others See You'] || '',
-
-      // AI-Generated Insights
-      data['AI Pattern Analysis'] || '',
-      data['AI Unlock Pattern'] || '',
 
       // Recognition Summary
       data["The ability I've been underestimating:"] || '',
@@ -146,18 +91,16 @@ function setupHeaders(sheet) {
     'Timestamp',
     'Client Name',
 
-    // Evidence Collection (5 outcomes + The Thread)
+    // Evidence Collection
     'Outcome #1',
     'Outcome #2',
     'Outcome #3',
     'Outcome #4',
     'Outcome #5',
-    'The Thread',
 
-    // Instinct Audit
+    // Instinct Radar
     'When You Knew Before You Knew',
     'Questions Only You Ask',
-    'What You Notice First',
 
     // Effortless Ability
     'What Feels Easy',
@@ -170,10 +113,6 @@ function setupHeaders(sheet) {
     // What Finds You
     'Problem Magnet',
     'How Others See You',
-
-    // AI-Generated Insights
-    'AI Pattern Analysis',
-    'AI Unlock Pattern',
 
     // Recognition Summary
     'Underestimated Ability',
@@ -244,18 +183,14 @@ function testSetup() {
     'Outcome #3': 'Test outcome 3',
     'Outcome #4': 'Test outcome 4',
     'Outcome #5': 'Test outcome 5',
-    'The Thread': 'Test common thread across outcomes',
     'When You Knew Before You Knew': 'Test instinct',
     'The Questions Only You Ask': 'Test questions',
-    'What You Notice First': 'Test noticing patterns',
     'What Feels Easy to You': 'Test easy ability',
     'The "Of Course" Moments': 'Test moments',
     'Before': 'Test before state',
     'After': 'Test after state',
     'The Problem Magnet': 'Test problem',
     'How Others See You': 'Test perception',
-    'AI Pattern Analysis': 'Test AI pattern insights from Claude',
-    'AI Unlock Pattern': 'Test AI unlock pattern from Claude',
     "The ability I've been underestimating:": 'Test ability',
     'The pattern I now see:': 'Test pattern',
     'The transformation I enable:': 'Test transformation',
