@@ -1,0 +1,724 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CV Builder - Spark Your Potential</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background: #f5f5f5; min-height: 100vh; }
+
+        .app-container { display: flex; min-height: 100vh; }
+
+        /* Sidebar */
+        .sidebar {
+            width: 400px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 30px;
+            color: white;
+            overflow-y: auto;
+            position: fixed;
+            height: 100vh;
+        }
+        .sidebar-header { margin-bottom: 30px; }
+        .sidebar-header h1 { font-size: 1.5em; margin-bottom: 5px; }
+        .sidebar-header p { opacity: 0.8; font-size: 0.9em; }
+        .back-link {
+            color: #FFB627;
+            text-decoration: none;
+            font-size: 0.9em;
+            display: inline-block;
+            margin-bottom: 20px;
+        }
+        .back-link:hover { text-decoration: underline; }
+
+        .proposition-section { margin-bottom: 30px; }
+        .proposition-title {
+            font-size: 0.85em;
+            font-weight: 700;
+            color: #FFB627;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .field-group { margin-bottom: 15px; }
+        .field-label {
+            font-size: 0.75em;
+            text-transform: uppercase;
+            opacity: 0.8;
+            margin-bottom: 5px;
+        }
+        .field-input {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            font-size: 0.95em;
+            font-family: inherit;
+        }
+        .field-input:focus { outline: 2px solid #FFB627; }
+
+        .blueprint-reference {
+            background: rgba(255,255,255,0.15);
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 20px;
+            font-size: 0.9em;
+            line-height: 1.6;
+        }
+        .blueprint-reference-label {
+            font-size: 0.75em;
+            color: #FFB627;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        .preview-box {
+            background: rgba(255,255,255,0.1);
+            border-radius: 10px;
+            padding: 15px;
+            margin-top: 20px;
+            font-style: italic;
+            line-height: 1.6;
+        }
+
+        .action-button {
+            width: 100%;
+            padding: 12px;
+            background: #FFB627;
+            color: #333;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 15px;
+            font-size: 0.95em;
+            transition: all 0.2s;
+        }
+        .action-button:hover { background: #ffc84d; transform: translateY(-2px); }
+
+        .export-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        .export-btn {
+            flex: 1;
+            padding: 12px;
+            border: 2px solid white;
+            background: transparent;
+            color: white;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .export-btn:hover {
+            background: white;
+            color: #667eea;
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            padding: 40px;
+            margin-left: 400px;
+            overflow-y: auto;
+        }
+
+        .cv-preview {
+            background: white;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 50px;
+            box-shadow: 0 5px 30px rgba(0,0,0,0.1);
+            border-radius: 10px;
+        }
+
+        .cv-name {
+            font-size: 2.2em;
+            font-weight: 700;
+            color: #2c3e50;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .cv-headline {
+            color: #667eea;
+            font-style: italic;
+            margin: 10px 0 25px 0;
+            font-size: 1.1em;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #e0e0e0;
+        }
+
+        .cv-section { margin-bottom: 30px; }
+        .cv-section-title {
+            font-size: 0.8em;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: #888;
+            margin-bottom: 15px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .cv-profile { line-height: 1.8; color: #444; font-size: 1em; }
+
+        .cv-skills { display: flex; flex-wrap: wrap; gap: 8px; }
+        .cv-skill {
+            background: #f0f0f0;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            color: #555;
+        }
+
+        .cv-highlights li { margin-bottom: 12px; line-height: 1.6; color: #444; }
+
+        .cv-contact {
+            display: flex;
+            gap: 20px;
+            font-size: 0.9em;
+            color: #666;
+            margin-top: 10px;
+            flex-wrap: wrap;
+        }
+
+        /* Loading State */
+        .loading {
+            text-align: center;
+            padding: 60px;
+            color: #666;
+        }
+        .loading-spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid #e0e0e0;
+            border-top-color: #667eea;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* Upload Section */
+        .upload-section {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255,255,255,0.2);
+        }
+        .upload-area {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 25px;
+            border: 2px dashed rgba(255,255,255,0.4);
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+        }
+        .upload-area:hover {
+            border-color: #FFB627;
+            background: rgba(255,255,255,0.1);
+        }
+        .upload-icon { font-size: 2em; margin-bottom: 10px; }
+        .upload-text { font-weight: 600; margin-bottom: 5px; }
+        .upload-hint { font-size: 0.8em; opacity: 0.7; }
+        .upload-status {
+            margin-top: 15px;
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 0.9em;
+            display: none;
+        }
+        .upload-status.success {
+            display: block;
+            background: rgba(76, 175, 80, 0.2);
+            color: #90EE90;
+        }
+        .upload-status.error {
+            display: block;
+            background: rgba(244, 67, 54, 0.2);
+            color: #ff8a80;
+        }
+        .upload-status.processing {
+            display: block;
+            background: rgba(255, 182, 39, 0.2);
+            color: #FFB627;
+        }
+
+        /* Print Styles */
+        @media print {
+            .sidebar { display: none; }
+            .main-content { margin-left: 0; padding: 0; }
+            .cv-preview { box-shadow: none; }
+        }
+
+        /* Responsive */
+        @media (max-width: 900px) {
+            .app-container { flex-direction: column; }
+            .sidebar { position: relative; width: 100%; height: auto; }
+            .main-content { margin-left: 0; }
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                <a href="/dashboard" class="back-link" style="margin: 0;">← Dashboard</a>
+                <button onclick="logout()" style="background: rgba(255,255,255,0.2); color: white; border: 1px solid rgba(255,255,255,0.3); padding: 6px 12px; border-radius: 6px; font-size: 0.8em; cursor: pointer;">Log out</button>
+            </div>
+
+            <div class="sidebar-header">
+                <h1>📝 CV Builder</h1>
+                <p id="sidebarSubtitle">Loading Blueprint data...</p>
+            </div>
+
+            <div class="proposition-section">
+                <div class="proposition-title">✏️ YOUR PROPOSITION</div>
+
+                <div class="field-group">
+                    <div class="field-label">I'M A... [ROLE IDENTITY]</div>
+                    <input type="text" class="field-input" id="roleIdentity" placeholder="e.g., Creative Catalyst">
+                </div>
+
+                <div class="field-group">
+                    <div class="field-label">WHO... [WHAT YOU DO]</div>
+                    <input type="text" class="field-input" id="whatYouDo" placeholder="e.g., unlocks creative potential">
+                </div>
+
+                <div class="field-group">
+                    <div class="field-label">FOR... [WHO YOU SERVE]</div>
+                    <input type="text" class="field-input" id="whoYouServe" placeholder="e.g., clients and teams that need transformation">
+                </div>
+
+                <div class="field-group">
+                    <div class="field-label">I... [UNIQUE APPROACH]</div>
+                    <input type="text" class="field-input" id="uniqueApproach" placeholder="e.g., connect creativity with commercial reality">
+                </div>
+
+                <div class="field-group">
+                    <div class="field-label">AFTER... [BACKGROUND]</div>
+                    <input type="text" class="field-input" id="background" placeholder="e.g., 15 years helping brands like Nike">
+                </div>
+
+                <div class="field-group">
+                    <div class="field-label">I'M NOW... [WHERE HEADING]</div>
+                    <input type="text" class="field-input" id="whereHeading" placeholder="e.g., seeking roles where I can transform teams">
+                </div>
+
+                <div class="blueprint-reference" id="blueprintReference">
+                    <span class="blueprint-reference-label">📘 From Your Blueprint</span>
+                    <span id="blueprintHint">Loading your Blueprint data...</span>
+                </div>
+
+                <div class="preview-box" id="propositionPreview">
+                    Your proposition preview will appear here...
+                </div>
+
+                <button class="action-button" onclick="useAsProfile()">↓ Update CV Profile</button>
+
+                <div class="export-buttons">
+                    <button class="export-btn" onclick="exportPDF()">📄 Export PDF</button>
+                    <button class="export-btn" onclick="saveCV()">💾 Save</button>
+                </div>
+
+                <!-- File Upload Section -->
+                <div class="upload-section">
+                    <div class="proposition-title" style="margin-top: 30px;">📤 UPLOAD EXISTING CV</div>
+                    <p style="font-size: 0.85em; opacity: 0.8; margin-bottom: 15px;">
+                        Upload your current CV to extract experience data
+                    </p>
+                    <label class="upload-area" for="cvUpload">
+                        <input type="file" id="cvUpload" accept=".pdf,.doc,.docx,.txt" onchange="handleFileUpload(event)" style="display: none;">
+                        <span class="upload-icon">📁</span>
+                        <span class="upload-text">Click to upload CV</span>
+                        <span class="upload-hint">PDF, DOC, DOCX, or TXT</span>
+                    </label>
+                    <div id="uploadStatus" class="upload-status"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <div id="loadingState" class="loading">
+                <div class="loading-spinner"></div>
+                <p>Loading your Blueprint data...</p>
+            </div>
+
+            <div class="cv-preview" id="cvPreview" style="display: none;">
+                <div class="cv-name" id="cvName">Your Name</div>
+                <div class="cv-headline" id="cvHeadline">Your Role | Your Proposition</div>
+
+                <div class="cv-contact" id="cvContact">
+                    <span>📧 your@email.com</span>
+                    <span>📱 +44 7XXX XXX XXX</span>
+                    <span>🔗 linkedin.com/in/yourprofile</span>
+                </div>
+
+                <div class="cv-section">
+                    <div class="cv-section-title">Profile</div>
+                    <p class="cv-profile" id="cvProfile">
+                        Your professional profile will be generated from your Blueprint data.
+                    </p>
+                </div>
+
+                <div class="cv-section">
+                    <div class="cv-section-title">Key Skills</div>
+                    <div class="cv-skills" id="cvSkills">
+                        <!-- Skills will be populated -->
+                    </div>
+                </div>
+
+                <div class="cv-section">
+                    <div class="cv-section-title">Key Highlights</div>
+                    <ul class="cv-highlights" id="cvHighlights">
+                        <!-- Highlights from evidence -->
+                    </ul>
+                </div>
+
+                <div class="cv-section" id="experienceSection" style="display: none;">
+                    <div class="cv-section-title">Experience</div>
+                    <div id="cvExperience">
+                        <!-- Experience from uploaded CV -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // State
+        let currentUser = null;
+        let currentBlueprint = null;
+        const fields = ['roleIdentity', 'whatYouDo', 'whoYouServe', 'uniqueApproach', 'background', 'whereHeading'];
+
+        // Initialise
+        window.onload = async function() {
+            // Get user from localStorage
+            const savedUser = localStorage.getItem('syp_user');
+            if (!savedUser) {
+                window.location.href = '/dashboard';
+                return;
+            }
+            currentUser = JSON.parse(savedUser);
+
+            // Get blueprint ID from URL or fetch latest
+            const urlParams = new URLSearchParams(window.location.search);
+            const blueprintId = urlParams.get('blueprint');
+
+            await loadBlueprint(blueprintId);
+
+            // Set up live preview updates
+            fields.forEach(field => {
+                document.getElementById(field).addEventListener('input', updatePreview);
+            });
+        };
+
+        // Load blueprint data
+        async function loadBlueprint(blueprintId) {
+            try {
+                // Check if this is a demo user
+                const isDemo = currentUser.id === 'demo-user' || blueprintId === 'demo-sarah-mitchell';
+
+                let url;
+                if (isDemo) {
+                    url = '/api/demo/blueprint';
+                } else if (blueprintId) {
+                    url = `/api/blueprint/id/${blueprintId}`;
+                } else {
+                    url = `/api/blueprint/${currentUser.id}`;
+                }
+
+                const response = await fetch(url);
+                const data = await response.json();
+
+                if (data.success && data.blueprint) {
+                    currentBlueprint = data.blueprint;
+                    populateFromBlueprint(currentBlueprint);
+                } else {
+                    showNoBlueprint();
+                }
+            } catch (error) {
+                console.error('Error loading blueprint:', error);
+                showNoBlueprint();
+            }
+        }
+
+        // Populate fields from Blueprint
+        function populateFromBlueprint(blueprint) {
+            // Update sidebar subtitle
+            document.getElementById('sidebarSubtitle').textContent =
+                `Blueprint → CV Tool for ${blueprint.name || currentUser.name || 'You'}`;
+
+            // Populate input fields
+            document.getElementById('roleIdentity').value = blueprint.role_identity || '';
+            document.getElementById('whatYouDo').value = blueprint.what_you_do || '';
+            document.getElementById('whoYouServe').value = blueprint.who_you_serve || '';
+            document.getElementById('uniqueApproach').value = blueprint.unique_approach || '';
+            document.getElementById('background').value = blueprint.background || '';
+            document.getElementById('whereHeading').value = blueprint.where_heading || '';
+
+            // Blueprint reference hint
+            document.getElementById('blueprintHint').innerHTML = `
+                <strong>Core Pattern:</strong> ${blueprint.core_pattern || 'Not set'}<br>
+                <strong>Thread:</strong> ${blueprint.thread || 'Not set'}
+            `;
+
+            // Update CV preview
+            document.getElementById('cvName').textContent = blueprint.name || currentUser.name || 'Your Name';
+            document.getElementById('cvContact').innerHTML = `
+                <span>📧 ${currentUser.email}</span>
+            `;
+
+            // Generate skills from evidence
+            const skills = generateSkills(blueprint);
+            document.getElementById('cvSkills').innerHTML = skills.map(s =>
+                `<span class="cv-skill">${s}</span>`
+            ).join('');
+
+            // Generate highlights from evidence
+            const evidence = Array.isArray(blueprint.evidence) ? blueprint.evidence : [];
+            if (evidence.length > 0) {
+                document.getElementById('cvHighlights').innerHTML = evidence.map(e =>
+                    `<li><strong>${e.company}:</strong> ${e.description}${e.result ? ` — ${e.result}` : ''}</li>`
+                ).join('');
+            }
+
+            // Update preview
+            updatePreview();
+
+            // Show CV
+            document.getElementById('loadingState').style.display = 'none';
+            document.getElementById('cvPreview').style.display = 'block';
+        }
+
+        // Generate skills from blueprint
+        function generateSkills(blueprint) {
+            const skills = [];
+
+            // Extract from core pattern and thread
+            if (blueprint.role_identity) skills.push(blueprint.role_identity);
+            if (blueprint.thread) {
+                const threadWords = blueprint.thread.split(' ').slice(0, 3).join(' ');
+                if (threadWords.length > 5) skills.push(threadWords);
+            }
+
+            // Add generic skills based on evidence
+            const evidence = Array.isArray(blueprint.evidence) ? blueprint.evidence : [];
+            evidence.forEach(e => {
+                if (e.company) skills.push(e.company + ' Experience');
+            });
+
+            // Default skills if none found
+            if (skills.length < 3) {
+                skills.push('Strategic Thinking', 'Team Leadership', 'Client Relations');
+            }
+
+            return [...new Set(skills)].slice(0, 8);
+        }
+
+        // Update proposition preview
+        function updatePreview() {
+            const role = document.getElementById('roleIdentity').value;
+            const what = document.getElementById('whatYouDo').value;
+            const who = document.getElementById('whoYouServe').value;
+            const approach = document.getElementById('uniqueApproach').value;
+            const bg = document.getElementById('background').value;
+            const heading = document.getElementById('whereHeading').value;
+
+            const preview = `"I'm a ${role || '[role]'} who ${what || '[what you do]'} for ${who || '[who you serve]'}. I ${approach || '[your approach]'}. After ${bg || '[background]'}, I'm now ${heading || '[where heading]'}."`;
+            document.getElementById('propositionPreview').textContent = preview;
+
+            // Update CV headline
+            document.getElementById('cvHeadline').textContent =
+                `${role || 'Professional'} | ${what || 'Making an impact'}`;
+        }
+
+        // Use proposition as CV profile
+        function useAsProfile() {
+            const role = document.getElementById('roleIdentity').value;
+            const what = document.getElementById('whatYouDo').value;
+            const who = document.getElementById('whoYouServe').value;
+            const approach = document.getElementById('uniqueApproach').value;
+            const bg = document.getElementById('background').value;
+            const heading = document.getElementById('whereHeading').value;
+
+            const thread = currentBlueprint?.thread || approach;
+
+            const profile = `I'm a ${role} who ${what} for ${who}. I ${approach} — finding ${thread.toLowerCase()}. After ${bg}, I'm now ${heading}.`;
+
+            document.getElementById('cvProfile').textContent = profile;
+        }
+
+        // Show no blueprint message
+        function showNoBlueprint() {
+            document.getElementById('loadingState').innerHTML = `
+                <p>No Blueprint found. Complete the questionnaire first.</p>
+                <br>
+                <a href="/" style="color: #667eea;">→ Start Questionnaire</a>
+            `;
+        }
+
+        // Save CV data
+        async function saveCV() {
+            const cvData = {
+                headline: document.getElementById('cvHeadline').textContent,
+                profile_summary: document.getElementById('cvProfile').textContent,
+                skills: Array.from(document.querySelectorAll('.cv-skill')).map(s => s.textContent),
+                highlights: Array.from(document.querySelectorAll('.cv-highlights li')).map(h => h.textContent)
+            };
+
+            try {
+                const response = await fetch('/api/cv', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        user_id: currentUser.id,
+                        blueprint_id: currentBlueprint?.id,
+                        cv_data: cvData
+                    })
+                });
+
+                const data = await response.json();
+                if (data.success) {
+                    alert('CV saved successfully!');
+                } else {
+                    alert('Error saving: ' + data.error);
+                }
+            } catch (error) {
+                console.error('Save error:', error);
+                alert('Could not save. Please try again.');
+            }
+        }
+
+        // Export as PDF
+        function exportPDF() {
+            // Hide sidebar for print
+            document.querySelector('.sidebar').style.display = 'none';
+            document.querySelector('.main-content').style.marginLeft = '0';
+
+            window.print();
+
+            // Restore sidebar
+            setTimeout(() => {
+                document.querySelector('.sidebar').style.display = 'block';
+                document.querySelector('.main-content').style.marginLeft = '400px';
+            }, 100);
+        }
+
+        // Handle file upload
+        async function handleFileUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const status = document.getElementById('uploadStatus');
+            status.className = 'upload-status processing';
+            status.textContent = '⏳ Processing your CV...';
+
+            try {
+                // Read file content
+                const content = await readFileContent(file);
+
+                // Send to AI for extraction
+                const response = await fetch('/api/analyze', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        outcomes: [content],
+                        type: 'cv_extract',
+                        name: currentUser?.name || 'User'
+                    })
+                });
+
+                const data = await response.json();
+
+                if (data.success && data.experience) {
+                    // Populate experience section
+                    displayExperience(data.experience);
+                    status.className = 'upload-status success';
+                    status.textContent = '✓ CV processed! Experience extracted below.';
+                } else {
+                    // Fallback: just show raw content was received
+                    status.className = 'upload-status success';
+                    status.textContent = '✓ File uploaded. Add experience manually or try again.';
+                }
+            } catch (error) {
+                console.error('Upload error:', error);
+                status.className = 'upload-status error';
+                status.textContent = '✗ Error processing file. Try a different format.';
+            }
+        }
+
+        // Read file content based on type
+        function readFileContent(file) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+
+                reader.onload = function(e) {
+                    resolve(e.target.result);
+                };
+
+                reader.onerror = function() {
+                    reject(new Error('Failed to read file'));
+                };
+
+                // Read as text for txt files, otherwise try text
+                if (file.type === 'application/pdf') {
+                    // For PDF, we'll send the file name and let server handle it
+                    // For now, inform user about PDF limitation
+                    resolve(`[PDF file: ${file.name}] - PDF text extraction requires server-side processing. Please copy/paste your CV content or use a TXT/DOCX file.`);
+                } else {
+                    reader.readAsText(file);
+                }
+            });
+        }
+
+        // Display extracted experience
+        function displayExperience(experience) {
+            const expSection = document.getElementById('experienceSection');
+            const expContainer = document.getElementById('cvExperience');
+
+            if (!experience || experience.length === 0) {
+                return;
+            }
+
+            expSection.style.display = 'block';
+
+            const html = experience.map(exp => `
+                <div class="cv-experience-item" style="margin-bottom: 25px;">
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                        <span style="font-weight: 600; color: #2c3e50;">${exp.title || 'Role'}</span>
+                        <span style="color: #888; font-size: 0.9em;">${exp.dates || ''}</span>
+                    </div>
+                    <div style="color: #667eea; margin-bottom: 10px;">${exp.company || ''}</div>
+                    ${exp.bullets ? `
+                        <ul style="padding-left: 20px; color: #555;">
+                            ${exp.bullets.map(b => `<li style="margin-bottom: 8px; line-height: 1.6;">${b}</li>`).join('')}
+                        </ul>
+                    ` : ''}
+                </div>
+            `).join('');
+
+            expContainer.innerHTML = html;
+        }
+
+        // Logout
+        function logout() {
+            if (confirm('Are you sure you want to log out?')) {
+                localStorage.removeItem('syp_user');
+                window.location.href = '/dashboard';
+            }
+        }
+    </script>
+</body>
+</html>

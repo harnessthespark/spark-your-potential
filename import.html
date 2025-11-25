@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Import Responses - Spark Your Potential</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            min-height: 100vh;
+            padding: 40px;
+            color: #333;
+        }
+        .container { max-width: 800px; margin: 0 auto; }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            color: white;
+        }
+        .header h1 {
+            font-size: 2.5em;
+            font-weight: 800;
+            margin-bottom: 10px;
+        }
+        .header .subtitle {
+            font-size: 1.2em;
+            opacity: 0.8;
+        }
+
+        .card {
+            background: white;
+            border-radius: 20px;
+            padding: 35px;
+            margin-bottom: 25px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+        }
+
+        .upload-zone {
+            border: 3px dashed #667eea;
+            border-radius: 15px;
+            padding: 60px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .upload-zone:hover {
+            background: #667eea10;
+            border-color: #764ba2;
+        }
+        .upload-zone.dragging {
+            background: #667eea20;
+            border-color: #764ba2;
+        }
+        .upload-zone input {
+            display: none;
+        }
+        .upload-icon {
+            font-size: 3em;
+            margin-bottom: 15px;
+        }
+        .upload-text {
+            font-size: 1.1em;
+            color: #555;
+        }
+        .upload-text span {
+            color: #667eea;
+            font-weight: 600;
+        }
+
+        .section-title {
+            font-size: 1.3em;
+            font-weight: 700;
+            color: #667eea;
+            margin-bottom: 20px;
+        }
+
+        .response-preview {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 15px;
+        }
+        .response-label {
+            font-weight: 600;
+            color: #667eea;
+            font-size: 0.85em;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 5px;
+        }
+        .response-value {
+            color: #333;
+            line-height: 1.6;
+            white-space: pre-wrap;
+        }
+
+        .email-section {
+            margin-top: 30px;
+            padding-top: 30px;
+            border-top: 2px solid #e0e0e0;
+        }
+        .email-input {
+            width: 100%;
+            padding: 15px;
+            font-size: 1em;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            margin-bottom: 15px;
+        }
+        .email-input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .btn {
+            padding: 15px 30px;
+            border-radius: 10px;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            transition: all 0.2s;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+        }
+        .btn-primary:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .status-message {
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 20px;
+            display: none;
+        }
+        .status-message.success {
+            background: #d4edda;
+            color: #155724;
+            display: block;
+        }
+        .status-message.error {
+            background: #f8d7da;
+            color: #721c24;
+            display: block;
+        }
+
+        .nav-bar {
+            margin-bottom: 30px;
+        }
+        .back-link {
+            color: #FFB627;
+            text-decoration: none;
+            font-size: 0.95em;
+        }
+        .back-link:hover { text-decoration: underline; }
+
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 20px;
+        }
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid #e0e0e0;
+            border-top-color: #667eea;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 15px;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="nav-bar">
+            <a href="/dashboard" class="back-link">← Back to Dashboard</a>
+        </div>
+
+        <div class="header">
+            <h1>📥 Import Responses</h1>
+            <div class="subtitle">Import existing questionnaire responses from Excel</div>
+        </div>
+
+        <!-- Upload Section -->
+        <div class="card" id="uploadCard">
+            <div class="section-title">Upload Excel File</div>
+            <div class="upload-zone" id="uploadZone">
+                <input type="file" id="fileInput" accept=".xlsx,.xls">
+                <div class="upload-icon">📊</div>
+                <div class="upload-text">
+                    Drop your Excel file here or <span>browse</span>
+                </div>
+                <p style="margin-top: 10px; font-size: 0.9em; color: #888;">
+                    Supports .xlsx files from Google Sheets export
+                </p>
+            </div>
+
+            <div class="loading" id="loadingState">
+                <div class="spinner"></div>
+                <p>Processing file...</p>
+            </div>
+
+            <div class="status-message" id="statusMessage"></div>
+        </div>
+
+        <!-- Preview Section (hidden until file is imported) -->
+        <div class="card" id="previewCard" style="display: none;">
+            <div class="section-title">Imported Responses</div>
+            <div id="responsesPreview"></div>
+
+            <div class="email-section">
+                <div class="section-title">Generate Blueprint</div>
+                <p style="margin-bottom: 15px; color: #666;">Enter the client's email to generate their Blueprint:</p>
+                <input type="email" id="emailInput" class="email-input" placeholder="client@email.com">
+                <button class="btn btn-primary" id="generateBtn" disabled>Generate Blueprint</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let importedData = null;
+
+        // Upload zone functionality
+        const uploadZone = document.getElementById('uploadZone');
+        const fileInput = document.getElementById('fileInput');
+
+        uploadZone.addEventListener('click', () => fileInput.click());
+        uploadZone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            uploadZone.classList.add('dragging');
+        });
+        uploadZone.addEventListener('dragleave', () => {
+            uploadZone.classList.remove('dragging');
+        });
+        uploadZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadZone.classList.remove('dragging');
+            if (e.dataTransfer.files.length > 0) {
+                handleFile(e.dataTransfer.files[0]);
+            }
+        });
+        fileInput.addEventListener('change', (e) => {
+            if (e.target.files.length > 0) {
+                handleFile(e.target.files[0]);
+            }
+        });
+
+        async function handleFile(file) {
+            document.getElementById('loadingState').style.display = 'block';
+            document.getElementById('statusMessage').className = 'status-message';
+
+            const formData = new FormData();
+            formData.append('file', file);
+
+            try {
+                const response = await fetch('/api/import-excel', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    importedData = result.imported;
+                    showPreview(importedData);
+                    showStatus('success', result.message);
+                } else {
+                    showStatus('error', 'Import failed: ' + result.error);
+                }
+            } catch (error) {
+                showStatus('error', 'Error: ' + error.message);
+            }
+
+            document.getElementById('loadingState').style.display = 'none';
+        }
+
+        function showStatus(type, message) {
+            const statusEl = document.getElementById('statusMessage');
+            statusEl.textContent = message;
+            statusEl.className = 'status-message ' + type;
+        }
+
+        function showPreview(data) {
+            document.getElementById('previewCard').style.display = 'block';
+
+            const fields = [
+                { key: 'name', label: 'Client Name' },
+                { key: 'outcomes', label: 'Client Outcomes', isArray: true },
+                { key: 'thread', label: 'The Thread' },
+                { key: 'intuition', label: 'When You Knew Before You Knew' },
+                { key: 'questions', label: 'Questions Only You Ask' },
+                { key: 'whatFeelsEasy', label: 'What Feels Easy' },
+                { key: 'ofCourseMoments', label: '"Of Course" Moments' },
+                { key: 'clientBefore', label: 'Client Before' },
+                { key: 'clientAfter', label: 'Client After' },
+                { key: 'problemMagnet', label: 'Problem Magnet' },
+                { key: 'howOthersSeeYou', label: 'How Others See You' },
+                { key: 'underestimatedAbility', label: 'Underestimated Ability' },
+                { key: 'patternRecognised', label: 'Pattern Recognised' },
+                { key: 'transformationEnabled', label: 'Transformation I Enable' },
+                { key: 'permission', label: 'Permission I\'m Giving Myself' }
+            ];
+
+            let html = '';
+            for (const field of fields) {
+                const value = data[field.key];
+                if (value && (Array.isArray(value) ? value.length > 0 : true)) {
+                    html += `
+                        <div class="response-preview">
+                            <div class="response-label">${field.label}</div>
+                            <div class="response-value">${
+                                field.isArray
+                                    ? value.map((v, i) => `${i + 1}. ${v}`).join('\n')
+                                    : value
+                            }</div>
+                        </div>
+                    `;
+                }
+            }
+
+            document.getElementById('responsesPreview').innerHTML = html;
+            document.getElementById('generateBtn').disabled = false;
+        }
+
+        // Email input validation
+        document.getElementById('emailInput').addEventListener('input', (e) => {
+            document.getElementById('generateBtn').disabled = !e.target.value.includes('@');
+        });
+
+        // Generate Blueprint
+        document.getElementById('generateBtn').addEventListener('click', async () => {
+            const email = document.getElementById('emailInput').value;
+            if (!email || !importedData) return;
+
+            document.getElementById('generateBtn').disabled = true;
+            document.getElementById('generateBtn').textContent = 'Generating...';
+
+            try {
+                // 1. Create user
+                const userResponse = await fetch('/api/user', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email: email, name: importedData.name })
+                });
+                const userData = await userResponse.json();
+
+                if (!userData.success) {
+                    alert('Error creating user: ' + userData.error);
+                    return;
+                }
+
+                // 2. Generate Blueprint via AI
+                const blueprintResponse = await fetch('/api/analyze', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        type: 'blueprint',
+                        name: importedData.name,
+                        outcomes: importedData.outcomes,
+                        questionnaire_responses: {
+                            thread: importedData.thread,
+                            intuition: importedData.intuition,
+                            questions: importedData.questions,
+                            noticing: importedData.noticing,
+                            what_feels_easy: importedData.whatFeelsEasy,
+                            of_course_moments: importedData.ofCourseMoments,
+                            client_before: importedData.clientBefore,
+                            client_after: importedData.clientAfter,
+                            problem_magnet: importedData.problemMagnet,
+                            how_others_see_you: importedData.howOthersSeeYou,
+                            underestimated_ability: importedData.underestimatedAbility,
+                            pattern_recognised: importedData.patternRecognised,
+                            transformation_enabled: importedData.transformationEnabled,
+                            permission: importedData.permission
+                        }
+                    })
+                });
+                const blueprintData = await blueprintResponse.json();
+
+                if (!blueprintData.success || !blueprintData.blueprint) {
+                    alert('Error generating Blueprint. AI may not be configured.');
+                    return;
+                }
+
+                // 3. Save Blueprint to database
+                const saveResponse = await fetch('/api/blueprint', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        user_id: userData.user.id,
+                        blueprint_data: {
+                            name: importedData.name,
+                            ...blueprintData.blueprint,
+                            questionnaire_responses: importedData
+                        }
+                    })
+                });
+                const saveData = await saveResponse.json();
+
+                if (saveData.success) {
+                    // Store user in localStorage and redirect
+                    localStorage.setItem('syp_user', JSON.stringify(userData.user));
+                    window.location.href = '/blueprint?id=' + saveData.blueprint.id;
+                } else {
+                    alert('Error saving Blueprint: ' + saveData.error);
+                }
+            } catch (error) {
+                alert('Error: ' + error.message);
+            }
+
+            document.getElementById('generateBtn').disabled = false;
+            document.getElementById('generateBtn').textContent = 'Generate Blueprint';
+        });
+    </script>
+</body>
+</html>

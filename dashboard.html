@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Spark Your Potential</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            min-height: 100vh;
+            padding: 40px;
+            color: #333;
+        }
+        .container { max-width: 1000px; margin: 0 auto; }
+
+        /* Header */
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            color: white;
+        }
+        .header h1 {
+            font-size: 2.5em;
+            font-weight: 800;
+            margin-bottom: 10px;
+        }
+        .header .subtitle {
+            font-size: 1.2em;
+            opacity: 0.8;
+        }
+        .user-name {
+            font-size: 1.3em;
+            color: #FFB627;
+            margin-top: 15px;
+            font-weight: 600;
+        }
+
+        /* User Menu */
+        .user-menu {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        .user-email {
+            color: white;
+            opacity: 0.8;
+            font-size: 0.9em;
+        }
+        .logout-btn {
+            background: rgba(255,255,255,0.2);
+            color: white;
+            border: 1px solid rgba(255,255,255,0.3);
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 0.85em;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .logout-btn:hover {
+            background: rgba(255,255,255,0.3);
+        }
+
+        /* Login Section */
+        .login-section {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 30px;
+            text-align: center;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+        }
+        .login-section h2 {
+            color: #667eea;
+            margin-bottom: 20px;
+        }
+        .login-section p {
+            color: #666;
+            margin-bottom: 25px;
+        }
+        .email-input {
+            width: 100%;
+            max-width: 400px;
+            padding: 15px 20px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 1em;
+            margin-bottom: 15px;
+        }
+        .email-input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        .login-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            border-radius: 10px;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .login-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        /* Dashboard Content */
+        .dashboard-content { display: none; }
+        .dashboard-content.visible { display: block; }
+
+        /* Tool Cards Grid */
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 25px;
+            margin-top: 30px;
+        }
+
+        .tool-card {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .tool-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 50px rgba(0,0,0,0.3);
+        }
+
+        .tool-icon {
+            font-size: 2.5em;
+            margin-bottom: 15px;
+        }
+        .tool-title {
+            font-size: 1.3em;
+            font-weight: 700;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+        .tool-description {
+            color: #666;
+            font-size: 0.95em;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+        .tool-status {
+            font-size: 0.85em;
+            padding: 6px 12px;
+            border-radius: 20px;
+            display: inline-block;
+            margin-bottom: 15px;
+        }
+        .status-complete {
+            background: #e5ffe5;
+            color: #4CAF50;
+        }
+        .status-pending {
+            background: #fff3e0;
+            color: #FF9800;
+        }
+        .status-locked {
+            background: #f5f5f5;
+            color: #999;
+        }
+
+        .tool-actions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        .tool-btn {
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-size: 0.9em;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            transition: all 0.2s;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+        .btn-secondary {
+            background: #f0f0f0;
+            color: #555;
+        }
+        .btn-secondary:hover {
+            background: #e0e0e0;
+        }
+        .btn-disabled {
+            background: #e0e0e0;
+            color: #999;
+            cursor: not-allowed;
+        }
+
+        /* Quick Stats */
+        .stats-bar {
+            background: rgba(255,255,255,0.1);
+            border-radius: 15px;
+            padding: 20px 30px;
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 30px;
+            color: white;
+        }
+        .stat-item {
+            text-align: center;
+        }
+        .stat-value {
+            font-size: 2em;
+            font-weight: 700;
+            color: #FFB627;
+        }
+        .stat-label {
+            font-size: 0.85em;
+            opacity: 0.8;
+            margin-top: 5px;
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            color: white;
+            opacity: 0.6;
+            margin-top: 40px;
+            font-size: 0.9em;
+        }
+
+        /* Responsive */
+        @media (max-width: 600px) {
+            body { padding: 20px; }
+            .header h1 { font-size: 1.8em; }
+            .stats-bar { flex-direction: column; gap: 20px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- User Menu (shown when logged in) -->
+        <div class="user-menu" id="userMenu" style="display: none;">
+            <span class="user-email" id="userEmail"></span>
+            <button class="logout-btn" onclick="logout()">Log out</button>
+        </div>
+
+        <div class="header">
+            <h1>⚡ Your Career Toolkit</h1>
+            <div class="subtitle">Spark Your Potential</div>
+            <div class="user-name" id="userName"></div>
+        </div>
+
+        <!-- Login Section -->
+        <div class="login-section" id="loginSection">
+            <h2>Welcome Back</h2>
+            <p>Enter your email to access your career toolkit</p>
+            <input type="email" class="email-input" id="emailInput" placeholder="your@email.com">
+            <br>
+            <button class="login-btn" onclick="login()">Continue</button>
+            <div style="margin-top: 30px; padding-top: 30px; border-top: 1px solid #e0e0e0;">
+                <p style="color: #888; margin-bottom: 15px;">Want to see how it works first?</p>
+                <button class="login-btn" style="background: linear-gradient(135deg, #FF6B35 0%, #FFB627 100%);" onclick="loadDemo()">
+                    Try Demo (Sarah Mitchell)
+                </button>
+            </div>
+        </div>
+
+        <!-- Dashboard Content -->
+        <div class="dashboard-content" id="dashboardContent">
+            <!-- Stats Bar -->
+            <div class="stats-bar">
+                <div class="stat-item">
+                    <div class="stat-value" id="blueprintCount">0</div>
+                    <div class="stat-label">Blueprints</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="toolsComplete">0/5</div>
+                    <div class="stat-label">Tools Used</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="lastUpdated">-</div>
+                    <div class="stat-label">Last Updated</div>
+                </div>
+            </div>
+
+            <!-- Tools Grid -->
+            <div class="tools-grid">
+                <!-- Career Blueprint -->
+                <div class="tool-card" id="blueprintCard">
+                    <div class="tool-icon">📘</div>
+                    <div class="tool-title">Career Blueprint</div>
+                    <div class="tool-status status-pending" id="blueprintStatus">Not started</div>
+                    <div class="tool-description">
+                        Discover your core pattern, thread, and unique positioning through guided self-reflection.
+                    </div>
+                    <div class="tool-actions">
+                        <button class="tool-btn btn-primary" onclick="openBlueprint()">Start Questionnaire</button>
+                        <button class="tool-btn btn-secondary btn-disabled" id="viewBlueprintBtn" onclick="viewBlueprint()" disabled>View</button>
+                    </div>
+                </div>
+
+                <!-- CV Builder -->
+                <div class="tool-card" id="cvCard">
+                    <div class="tool-icon">📝</div>
+                    <div class="tool-title">CV Builder</div>
+                    <div class="tool-status status-locked" id="cvStatus">Requires Blueprint</div>
+                    <div class="tool-description">
+                        Build your CV with fields pre-filled from your Blueprint. Edit and refine your positioning.
+                    </div>
+                    <div class="tool-actions">
+                        <button class="tool-btn btn-disabled" id="openCvBtn" onclick="openCVBuilder()" disabled>Open Builder</button>
+                        <button class="tool-btn btn-secondary btn-disabled" id="exportCvBtn" onclick="exportCV()" disabled>Export PDF</button>
+                    </div>
+                </div>
+
+                <!-- Mapping Guide -->
+                <div class="tool-card">
+                    <div class="tool-icon">🗺️</div>
+                    <div class="tool-title">Mapping Guide</div>
+                    <div class="tool-status status-pending">Reference</div>
+                    <div class="tool-description">
+                        A visual guide showing where your Blueprint content goes across LinkedIn, CV, and interviews.
+                    </div>
+                    <div class="tool-actions">
+                        <button class="tool-btn btn-primary" onclick="openMappingGuide()">View Guide</button>
+                    </div>
+                </div>
+
+                <!-- Decision Framework -->
+                <div class="tool-card">
+                    <div class="tool-icon">⚖️</div>
+                    <div class="tool-title">Decision Framework</div>
+                    <div class="tool-status status-locked" id="decisionStatus">Requires Blueprint</div>
+                    <div class="tool-description">
+                        Evaluate opportunities against your red flags and green flags. Score roles objectively.
+                    </div>
+                    <div class="tool-actions">
+                        <button class="tool-btn btn-disabled" id="openDecisionBtn" onclick="openDecisionFramework()" disabled>Open Scorecard</button>
+                    </div>
+                </div>
+
+                <!-- AI Prompt Library -->
+                <div class="tool-card">
+                    <div class="tool-icon">🤖</div>
+                    <div class="tool-title">AI Prompt Library</div>
+                    <div class="tool-status status-pending">Ready</div>
+                    <div class="tool-description">
+                        Ready-to-use AI prompts for cover letters, LinkedIn posts, interview prep, and more.
+                    </div>
+                    <div class="tool-actions">
+                        <button class="tool-btn btn-primary" onclick="openPromptLibrary()">Browse Prompts</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            Spark Your Potential by Harness the Spark | harnessthespark.co.uk
+        </div>
+    </div>
+
+    <script>
+        // State
+        let currentUser = null;
+        let currentBlueprint = null;
+
+        // Check for existing session
+        window.onload = function() {
+            const savedUser = localStorage.getItem('syp_user');
+            if (savedUser) {
+                currentUser = JSON.parse(savedUser);
+                showDashboard();
+            }
+        };
+
+        // Login
+        async function login() {
+            const email = document.getElementById('emailInput').value.trim();
+            if (!email || !email.includes('@')) {
+                alert('Please enter a valid email address');
+                return;
+            }
+
+            try {
+                const response = await fetch('/api/user', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, name: email.split('@')[0] })
+                });
+
+                const data = await response.json();
+                if (data.success) {
+                    currentUser = data.user;
+                    localStorage.setItem('syp_user', JSON.stringify(currentUser));
+                    showDashboard();
+                } else {
+                    alert('Error: ' + data.error);
+                }
+            } catch (error) {
+                console.error('Login error:', error);
+                alert('Could not connect to server. Please try again.');
+            }
+        }
+
+        // Show dashboard after login
+        async function showDashboard() {
+            document.getElementById('loginSection').style.display = 'none';
+            document.getElementById('dashboardContent').classList.add('visible');
+            document.getElementById('userName').textContent = `Welcome, ${currentUser.name || currentUser.email}`;
+
+            // Show user menu
+            document.getElementById('userMenu').style.display = 'flex';
+            document.getElementById('userEmail').textContent = currentUser.email;
+
+            // Fetch user's blueprint
+            await loadBlueprint();
+        }
+
+        // Load blueprint data
+        async function loadBlueprint() {
+            try {
+                const response = await fetch(`/api/blueprint/${currentUser.id}`);
+                const data = await response.json();
+
+                if (data.success && data.blueprint) {
+                    currentBlueprint = data.blueprint;
+                    updateDashboardState(true);
+                } else {
+                    updateDashboardState(false);
+                }
+            } catch (error) {
+                console.error('Error loading blueprint:', error);
+                updateDashboardState(false);
+            }
+        }
+
+        // Update dashboard based on blueprint status
+        function updateDashboardState(hasBlueprint) {
+            const blueprintStatus = document.getElementById('blueprintStatus');
+            const viewBlueprintBtn = document.getElementById('viewBlueprintBtn');
+            const cvStatus = document.getElementById('cvStatus');
+            const openCvBtn = document.getElementById('openCvBtn');
+            const exportCvBtn = document.getElementById('exportCvBtn');
+            const decisionStatus = document.getElementById('decisionStatus');
+            const openDecisionBtn = document.getElementById('openDecisionBtn');
+
+            if (hasBlueprint) {
+                // Blueprint complete
+                blueprintStatus.textContent = '✓ Completed';
+                blueprintStatus.className = 'tool-status status-complete';
+                viewBlueprintBtn.disabled = false;
+                viewBlueprintBtn.classList.remove('btn-disabled');
+
+                // Unlock CV Builder
+                cvStatus.textContent = 'Ready';
+                cvStatus.className = 'tool-status status-pending';
+                openCvBtn.disabled = false;
+                openCvBtn.classList.remove('btn-disabled');
+                openCvBtn.classList.add('btn-primary');
+                exportCvBtn.disabled = false;
+                exportCvBtn.classList.remove('btn-disabled');
+
+                // Unlock Decision Framework
+                decisionStatus.textContent = 'Ready';
+                decisionStatus.className = 'tool-status status-pending';
+                openDecisionBtn.disabled = false;
+                openDecisionBtn.classList.remove('btn-disabled');
+                openDecisionBtn.classList.add('btn-primary');
+
+                // Update stats
+                document.getElementById('blueprintCount').textContent = '1';
+                document.getElementById('toolsComplete').textContent = '1/5';
+
+                const date = new Date(currentBlueprint.updated_at || currentBlueprint.created_at);
+                document.getElementById('lastUpdated').textContent = date.toLocaleDateString('en-GB');
+            } else {
+                // No blueprint yet
+                blueprintStatus.textContent = 'Not started';
+                blueprintStatus.className = 'tool-status status-pending';
+            }
+        }
+
+        // Navigation functions
+        function openBlueprint() {
+            window.location.href = '/';
+        }
+
+        function viewBlueprint() {
+            if (currentBlueprint) {
+                window.location.href = `/blueprint?id=${currentBlueprint.id}`;
+            }
+        }
+
+        function openCVBuilder() {
+            if (currentBlueprint) {
+                window.location.href = `/cv-builder?blueprint=${currentBlueprint.id}`;
+            }
+        }
+
+        function openMappingGuide() {
+            window.open('SparkYourPotential_Templates 2/Sarah_Mitchell_Mapping_Guide.html', '_blank');
+        }
+
+        function openDecisionFramework() {
+            window.open('SparkYourPotential_Templates 2/Sarah_Mitchell_Decision_Framework.html', '_blank');
+        }
+
+        function openPromptLibrary() {
+            window.open('SparkYourPotential_Templates 2/AI_Prompt_Library.html', '_blank');
+        }
+
+        function exportCV() {
+            alert('PDF export coming soon! For now, use your browser\'s Print function (Ctrl/Cmd + P) to save as PDF.');
+        }
+
+        // Logout
+        function logout() {
+            if (confirm('Are you sure you want to log out?')) {
+                localStorage.removeItem('syp_user');
+                currentUser = null;
+                currentBlueprint = null;
+                window.location.reload();
+            }
+        }
+
+        // Load demo (Sarah Mitchell)
+        async function loadDemo() {
+            try {
+                const response = await fetch('/api/demo/load');
+                const data = await response.json();
+
+                if (data.success) {
+                    currentUser = data.user;
+                    currentBlueprint = data.blueprint;
+                    localStorage.setItem('syp_user', JSON.stringify(currentUser));
+
+                    // Show dashboard with demo data
+                    document.getElementById('loginSection').style.display = 'none';
+                    document.getElementById('dashboardContent').classList.add('visible');
+                    document.getElementById('userName').textContent = `Demo: ${currentUser.name}`;
+
+                    // Show user menu
+                    document.getElementById('userMenu').style.display = 'flex';
+                    document.getElementById('userEmail').textContent = currentUser.email + ' (demo)';
+
+                    // Update state to show blueprint is complete
+                    updateDashboardState(true);
+                } else {
+                    alert('Error loading demo: ' + data.error);
+                }
+            } catch (error) {
+                console.error('Demo load error:', error);
+                alert('Could not load demo data.');
+            }
+        }
+    </script>
+</body>
+</html>

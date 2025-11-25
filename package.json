@@ -16,8 +16,12 @@
   "author": "Lisa Gills - Harness the Spark",
   "license": "ISC",
   "dependencies": {
+    "dotenv": "^17.2.3",
     "express": "^4.18.2",
-    "node-fetch": "^3.3.2"
+    "multer": "^2.0.2",
+    "node-fetch": "^3.3.2",
+    "pg": "^8.16.3",
+    "xlsx": "^0.18.5"
   },
   "engines": {
     "node": ">=18.x"
