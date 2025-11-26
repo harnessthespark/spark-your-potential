@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sarah Mitchell - Career Insights Report</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            line-height: 1.6;
+            color: #2c3e50;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 40px 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 60px 40px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .header .subtitle {
+            font-size: 1.2em;
+            opacity: 0.9;
+            font-weight: 300;
+        }
+
+        .content {
+            padding: 50px 40px;
+        }
+
+        .section {
+            margin-bottom: 50px;
+            page-break-inside: avoid;
+        }
+
+        .section-title {
+            font-size: 1.8em;
+            font-weight: 700;
+            color: #667eea;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #667eea;
+        }
+
+        .subsection-title {
+            font-size: 1.3em;
+            font-weight: 600;
+            color: #764ba2;
+            margin: 25px 0 15px 0;
+        }
+
+        .insight-box {
+            background: linear-gradient(135deg, #667eea15 0%, #764ba215 100%);
+            padding: 30px;
+            border-radius: 15px;
+            border-left: 5px solid #667eea;
+            margin: 20px 0;
+        }
+
+        .insight-box h4 {
+            color: #667eea;
+            font-size: 1.2em;
+            margin-bottom: 15px;
+        }
+
+        .insight-box p {
+            line-height: 1.8;
+        }
+
+        .highlight {
+            background: #fff3cd;
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 4px solid #ffc107;
+            margin: 20px 0;
+        }
+
+        .highlight strong {
+            color: #856404;
+        }
+
+        .connection-box {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border: 2px solid #667eea;
+        }
+
+        .connection-box h4 {
+            color: #667eea;
+            margin-bottom: 12px;
+        }
+
+        .two-column {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .column-box {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+        }
+
+        .column-box h4 {
+            color: #764ba2;
+            margin-bottom: 12px;
+            font-size: 1.1em;
+        }
+
+        ul, ol {
+            margin-left: 20px;
+            margin-top: 10px;
+        }
+
+        li {
+            margin-bottom: 8px;
+        }
+
+        .key-question {
+            background: linear-gradient(to right, #f093fb15, #f5576c15);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 15px 0;
+            border-left: 4px solid #f5576c;
+        }
+
+        .key-question strong {
+            color: #f5576c;
+            font-size: 1.1em;
+        }
+
+        .evidence-card {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 15px 0;
+            border-left: 4px solid #667eea;
+        }
+
+        .evidence-card h4 {
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+
+        @media print {
+            body {
+                background: white;
+                padding: 0;
+            }
+            .container {
+                box-shadow: none;
+                max-width: 100%;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .two-column {
+                grid-template-columns: 1fr;
+            }
+            .content {
+                padding: 30px 20px;
+            }
+            .header {
+                padding: 40px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Sarah Mitchell</h1>
+            <div class="subtitle">Career Insights Report</div>
+            <div class="subtitle" style="font-size: 0.9em; margin-top: 10px;">Pattern Analysis & Career Direction Framework</div>
+        </div>
+
+        <div class="content">
+            <!-- EXECUTIVE SUMMARY -->
+            <div class="section">
+                <h2 class="section-title">📊 Executive Summary</h2>
+                <div class="insight-box">
+                    <h4>Your Core Pattern</h4>
+                    <p style="font-size: 1.1em; font-weight: 600; margin-bottom: 15px;">You unlock creative potential in teams that have forgotten what they're capable of.</p>
+
+                    <p>Across every transformation you've led—Nike EMEA, Spotify UK, Barclays rebrand—the same sequence appears: teams arrive stuck (paralysed by process, drowning in data, unable to see beyond the brief), you find the creative spark beneath the corporate noise, you give them permission to think bigger, and they don't just deliver work—they rediscover their creative confidence.</p>
+
+                    <p style="margin-top: 15px;">This isn't project management. <strong>This is creative catalyst work.</strong></p>
+                </div>
+
+                <div class="highlight">
+                    <strong>What This Means For Your Career:</strong>
+                    <p style="margin-top: 10px;">Your restlessness in traditional strategy roles isn't about the work itself—it's about environments that treat you as a deck-deliverer instead of a creative unlocking force. You thrive when you can connect insight + ideas + people, and stay until transformation is embedded. "Execution only" briefs don't let you do that. You need "creative transformation" environments.</p>
+                </div>
+            </div>
+
+            <!-- KEY INSIGHTS FROM YOUR RESPONSES -->
+            <div class="section">
+                <h2 class="section-title">💡 Key Insights From Your Responses</h2>
+
+                <h3 class="subsection-title">1. Your Unique Thread</h3>
+                <div class="insight-box">
+                    <p><strong>"Connecting creativity with commercial reality—making ambitious ideas actually happen."</strong></p>
+
+                    <p style="margin-top: 15px;">You don't just spot creative potential—you figure out how to make it real in organisations that have forgotten how to be bold. You bridge the gap between "what if" and "here's how."</p>
+
+                    <p style="margin-top: 15px;"><strong>Your thread is: connecting creativity, commercial thinking, and people.</strong> You go deep, find the creative truth that's been buried, and then rally the team to bring it to life.</p>
+
+                    <p style="margin-top: 15px; font-style: italic; color: #7f8c8d;">"I don't stop at the idea. I stay until it's embedded, and the team believes in it as much as I do."</p>
+                </div>
+
+                <div class="connection-box">
+                    <h4>🔗 Connection to Your Current Situation:</h4>
+                    <p>Your frustration with "safe" environments is that they don't let you unlock anything. They want process, not transformation. They want predictable outputs, not creative breakthroughs.</p>
+
+                    <p style="margin-top: 10px;">What you actually want is to create <strong>"creative transformation"</strong>—helping stuck teams remember what they're capable of. That's where your thread comes alive.</p>
+                </div>
+
+                <h3 class="subsection-title">2. Your Effortless Superpowers</h3>
+                <div class="two-column">
+                    <div class="column-box">
+                        <h4>Pattern Recognition</h4>
+                        <p>"I can walk into a messy creative challenge and instinctively see the thread that connects everything. Finding the story in the chaos feels so natural I sometimes forget it's a skill."</p>
+                    </div>
+                    <div class="column-box">
+                        <h4>Connecting Creativity to Commercial Impact</h4>
+                        <p>"For me, creative ambition and business results have never been opposites—they're part of the same equation. Translating bold ideas into measurable impact feels intuitive."</p>
+                    </div>
+                </div>
+
+                <div class="two-column">
+                    <div class="column-box">
+                        <h4>Unlocking Teams</h4>
+                        <p>"I can sense when a creative team has lost its spark—and naturally find the angle or challenge that brings the energy back."</p>
+                    </div>
+                    <div class="column-box">
+                        <h4>Building Belief</h4>
+                        <p>"I find it easy to help people see what's possible—to reframe the brief until they're excited about it rather than just executing it."</p>
+                    </div>
+                </div>
+
+                <div class="connection-box">
+                    <h4>🔗 Connection to Your Current Situation:</h4>
+                    <p>These aren't "nice-to-have" skills. These are <strong>creative leadership capabilities</strong> that organisations pay premium rates for. Yet you've been positioning yourself as "a strategist" instead of "a creative catalyst who unlocks stuck teams."</p>
+
+                    <p style="margin-top: 10px;">Your next move should leverage these superpowers fully—not constrain them to "safe" deliverables.</p>
+                </div>
+
+                <h3 class="subsection-title">3. Your Evidence Collection</h3>
+                <div class="evidence-card">
+                    <h4>Nike EMEA Creative Transformation</h4>
+                    <p>Turned around a stuck regional team. Creative output went from "predictable adaptations" to "locally-led innovation." +40% engagement on campaigns. The Creative Director said: "You didn't just fix our process—you reminded us who we are."</p>
+                </div>
+
+                <div class="evidence-card">
+                    <h4>Spotify UK Brand Positioning</h4>
+                    <p>Repositioned the UK team's approach from "global adaptation" to "cultural leadership." Led to 3 Cannes Lions nominations and a shift in how the global team viewed local markets.</p>
+                </div>
+
+                <div class="evidence-card">
+                    <h4>Barclays Rebrand</h4>
+                    <p>Brought together 12 market teams who'd never collaborated before. Built a unified creative platform in 5 months. 60% retention of the creative principles 18 months later. "First time we've felt like one team."</p>
+                </div>
+
+                <div class="connection-box">
+                    <h4>🔗 The Pattern Across All Three:</h4>
+                    <p>In each case, you didn't just deliver a project—you <strong>transformed how the team saw themselves</strong>. The Nike Creative Director's comment is the key: "You reminded us who we are." That's belief transformation, not project management.</p>
+                </div>
+            </div>
+
+            <!-- YOUR UNDERESTIMATED ABILITY -->
+            <div class="section">
+                <h2 class="section-title">✨ Your Underestimated Ability</h2>
+                <div class="insight-box">
+                    <p style="font-size: 1.2em; font-weight: 600; color: #667eea; margin-bottom: 15px;">Your underestimated ability is how powerfully you can shift creative confidence—not just creative output.</p>
+
+                    <p>This is the core insight. You've been underselling this as "good team management" when it's actually your <strong>primary commercial lever</strong>.</p>
+
+                    <p style="margin-top: 15px;">Every transformation you've led—Nike remembering their creative edge, Spotify believing in local innovation, Barclays becoming one team—wasn't about better briefs. It was about <strong>helping creative teams believe a new story about themselves</strong>.</p>
+
+                    <p style="margin-top: 15px;">That belief shift <em>is</em> the strategy. It's what drives the creative breakthrough, the culture change, the sustained momentum.</p>
+                </div>
+
+                <div class="highlight">
+                    <strong>The Reframe:</strong>
+                    <p style="margin-top: 10px;">You're not "just" a strategist who's good with creative teams.<br>
+                    <strong>You're a creative catalyst who uses strategy as the delivery system.</strong></p>
+                </div>
+            </div>
+
+            <!-- WHAT DRAINS VS CHARGES YOU -->
+            <div class="section">
+                <h2 class="section-title">🔄 What Drains vs Charges You</h2>
+
+                <div class="two-column">
+                    <div class="column-box" style="background: #ffe0e0;">
+                        <h4 style="color: #c0392b;">🚩 Red Flags (What Drains You)</h4>
+                        <ul>
+                            <li>"Execution only" briefs—no room to unlock potential</li>
+                            <li>Revolving door culture—can't build belief in 3 months</li>
+                            <li>Politics over craft—energy goes to wrong places</li>
+                            <li>"Safe" as a compliment—creative potential dies here</li>
+                            <li>No client access—can't catalyse through layers</li>
+                        </ul>
+                    </div>
+                    <div class="column-box" style="background: #e0ffe0;">
+                        <h4 style="color: #27ae60;">✅ Green Flags (What Charges You)</h4>
+                        <ul>
+                            <li>Stuck teams—your superpower zone</li>
+                            <li>Transformation briefs—real change, not polish</li>
+                            <li>Direct relationships—where magic happens</li>
+                            <li>Long-term commitment—belief takes time</li>
+                            <li>Creative ambition—something to unlock</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="highlight">
+                    <strong>The Key Question:</strong>
+                    <p style="margin-top: 10px;">When evaluating any opportunity, ask: "Will I be unlocking creative potential here? Or will I just be executing briefs?"</p>
+                </div>
+            </div>
+
+            <!-- THREE BELIEF MOMENTS -->
+            <div class="section">
+                <h2 class="section-title">🌟 Your Three Belief Moments</h2>
+                <p style="margin-bottom: 20px;">These are your proof points—stories that show transformation, not just delivery:</p>
+
+                <div class="key-question">
+                    <strong>1. The Nike Creative Director Story</strong>
+                    <p style="margin-top: 10px;">"The EMEA team had been stuck for 18 months—producing work they weren't proud of, feeling disconnected from the brand's soul. After 6 months working together, their Creative Director said: 'You didn't just fix our process—you reminded us who we are.' That's when I knew my work isn't about strategy. It's about belief."</p>
+                </div>
+
+                <div class="key-question">
+                    <strong>2. The Barclays Unity Moment</strong>
+                    <p style="margin-top: 10px;">"Twelve markets, twelve different approaches, years of fragmentation. In month four, I watched a room of people who'd never collaborated before finish each other's sentences about the brand. The CMO said: 'First time we've felt like one team.' That unity didn't come from a deck—it came from making them believe they could be one."</p>
+                </div>
+
+                <div class="key-question">
+                    <strong>3. The Spotify Cannes Moment</strong>
+                    <p style="margin-top: 10px;">"The UK team had been told for years they were just an 'adaptation market.' We spent 6 months building creative confidence. When we got three Cannes nominations, the team wasn't surprised—they'd already started believing. The nominations just proved what they'd begun to feel."</p>
+                </div>
+
+                <div class="connection-box">
+                    <h4>📖 How to Use These Stories:</h4>
+                    <p>Lead with transformation, not tasks. Instead of "I managed the Nike EMEA rebrand," say "I helped Nike's EMEA creative team remember who they are—and their output showed it."</p>
+                </div>
+            </div>
+
+            <!-- YOUR POSITIONING -->
+            <div class="section">
+                <h2 class="section-title">🎯 Your Positioning Statement</h2>
+                <div class="insight-box">
+                    <p style="font-size: 1.2em; line-height: 1.8;">I'm a <strong>Creative Catalyst</strong> who unlocks potential in teams that have forgotten what they're capable of. I connect creativity with commercial reality—helping stuck teams not just produce better work, but believe in what they're creating.</p>
+
+                    <p style="margin-top: 20px;">Where others see process problems, I see belief problems. My track record—Nike, Spotify, Barclays—isn't about campaign delivery. It's about creative transformation that lasts.</p>
+                </div>
+            </div>
+
+            <!-- WHAT'S NEXT -->
+            <div class="section">
+                <h2 class="section-title">🚀 What's Next</h2>
+                <div class="connection-box">
+                    <h4>Your Career Toolkit Includes:</h4>
+                    <ol>
+                        <li><strong>Your Career Blueprint</strong> - Your complete positioning and evidence collection</li>
+                        <li><strong>CV Builder</strong> - Transform your Blueprint into a compelling CV</li>
+                        <li><strong>Mapping Guide</strong> - Know exactly where everything goes (CV, LinkedIn, interviews)</li>
+                        <li><strong>Decision Framework</strong> - Evaluate opportunities against your red/green flags</li>
+                        <li><strong>AI Prompt Library</strong> - Ready-to-use prompts for your job search</li>
+                    </ol>
+
+                    <p style="margin-top: 20px; font-weight: 600;">You now have the clarity. The toolkit helps you communicate it powerfully.</p>
+                </div>
+            </div>
+        </div>
+
+        <div style="text-align: center; padding: 30px; background: #f8f9fa; color: #7f8c8d; font-size: 0.9em;">
+            <p>Spark Your Potential Coaching Programme | Harness the Spark</p>
+            <p style="margin-top: 5px;">harnessthespark.co.uk</p>
+        </div>
+    </div>
+</body>
+</html>

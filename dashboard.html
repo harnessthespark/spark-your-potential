@@ -268,7 +268,7 @@
             <p>Enter your email to access your career toolkit</p>
             <input type="email" class="email-input" id="emailInput" placeholder="your@email.com">
             <br>
-            <button class="login-btn" onclick="login()">Continue</button>
+            <button class="login-btn" onclick="login()">Login</button>
             <div style="margin-top: 30px; padding-top: 30px; border-top: 1px solid #e0e0e0;">
                 <p style="color: #888; margin-bottom: 15px;">Want to see how it works first?</p>
                 <button class="login-btn" style="background: linear-gradient(135deg, #FF6B35 0%, #FFB627 100%);" onclick="loadDemo()">
@@ -297,17 +297,42 @@
 
             <!-- Tools Grid -->
             <div class="tools-grid">
-                <!-- Career Blueprint -->
-                <div class="tool-card" id="blueprintCard">
-                    <div class="tool-icon">📘</div>
-                    <div class="tool-title">Career Blueprint</div>
-                    <div class="tool-status status-pending" id="blueprintStatus">Not started</div>
+                <!-- Step 1: Questionnaire -->
+                <div class="tool-card" id="questionnaireCard">
+                    <div class="tool-icon">📝</div>
+                    <div class="tool-title">Discovery Questionnaire</div>
+                    <div class="tool-status status-complete" id="questionnaireStatus">✓ Completed</div>
                     <div class="tool-description">
-                        Discover your core pattern, thread, and unique positioning through guided self-reflection.
+                        Deep reflection questions about your patterns, superpowers, and career journey. Your answers fuel the analysis.
                     </div>
                     <div class="tool-actions">
-                        <button class="tool-btn btn-primary" onclick="openBlueprint()">Start Questionnaire</button>
-                        <button class="tool-btn btn-secondary btn-disabled" id="viewBlueprintBtn" onclick="viewBlueprint()" disabled>View</button>
+                        <button class="tool-btn btn-primary" onclick="openQuestionnaire()">View Responses</button>
+                    </div>
+                </div>
+
+                <!-- Step 2: Career Insights Report - £99 Deliverable -->
+                <div class="tool-card" style="border: 2px solid #667eea;">
+                    <div class="tool-icon">📊</div>
+                    <div class="tool-title">Career Insights Report</div>
+                    <div class="tool-status status-complete" id="reportStatus">✓ Completed</div>
+                    <div class="tool-description">
+                        Lisa's deep-dive analysis of your questionnaire responses. Your core pattern, unique thread, and career direction.
+                    </div>
+                    <div class="tool-actions">
+                        <button class="tool-btn btn-primary" onclick="openInsightsReport()">View Report</button>
+                    </div>
+                </div>
+
+                <!-- Step 3: Career Blueprint - Built through coaching -->
+                <div class="tool-card" id="blueprintCard">
+                    <div class="tool-icon">📘</div>
+                    <div class="tool-title">Transformation Blueprint</div>
+                    <div class="tool-status status-complete" id="blueprintStatus">✓ Completed</div>
+                    <div class="tool-description">
+                        Your complete positioning document built through coaching sessions. Evidence, belief moments, unique thread.
+                    </div>
+                    <div class="tool-actions">
+                        <button class="tool-btn btn-primary" id="openBlueprintBtn" onclick="openBlueprint()">View Blueprint</button>
                     </div>
                 </div>
 
@@ -449,7 +474,7 @@
         // Update dashboard based on blueprint status
         function updateDashboardState(hasBlueprint) {
             const blueprintStatus = document.getElementById('blueprintStatus');
-            const viewBlueprintBtn = document.getElementById('viewBlueprintBtn');
+            const openBlueprintBtn = document.getElementById('openBlueprintBtn');
             const cvStatus = document.getElementById('cvStatus');
             const openCvBtn = document.getElementById('openCvBtn');
             const exportCvBtn = document.getElementById('exportCvBtn');
@@ -457,11 +482,12 @@
             const openDecisionBtn = document.getElementById('openDecisionBtn');
 
             if (hasBlueprint) {
-                // Blueprint complete
+                // Blueprint complete - unlock everything
                 blueprintStatus.textContent = '✓ Completed';
                 blueprintStatus.className = 'tool-status status-complete';
-                viewBlueprintBtn.disabled = false;
-                viewBlueprintBtn.classList.remove('btn-disabled');
+                openBlueprintBtn.disabled = false;
+                openBlueprintBtn.classList.remove('btn-disabled');
+                openBlueprintBtn.classList.add('btn-primary');
 
                 // Unlock CV Builder
                 cvStatus.textContent = 'Ready';
@@ -481,44 +507,53 @@
 
                 // Update stats
                 document.getElementById('blueprintCount').textContent = '1';
-                document.getElementById('toolsComplete').textContent = '1/5';
+                document.getElementById('toolsComplete').textContent = '6/6';
 
                 const date = new Date(currentBlueprint.updated_at || currentBlueprint.created_at);
                 document.getElementById('lastUpdated').textContent = date.toLocaleDateString('en-GB');
             } else {
                 // No blueprint yet
-                blueprintStatus.textContent = 'Not started';
-                blueprintStatus.className = 'tool-status status-pending';
+                blueprintStatus.textContent = 'Requires Report';
+                blueprintStatus.className = 'tool-status status-locked';
             }
         }
 
-        // Navigation functions
+        // Navigation functions - Direct links to HTML files for demo
+        function openQuestionnaire() {
+            // Open the completed questionnaire responses
+            window.open('Sarah_Mitchell_Questionnaire.html', '_blank');
+        }
+
+        function openInsightsReport() {
+            // Open the Career Insights Report (£99 deliverable)
+            window.open('Sarah_Mitchell_Career_Insights_Report.html', '_blank');
+        }
+
         function openBlueprint() {
-            window.location.href = '/questionnaire';
+            // View the completed blueprint
+            window.open('Sarah_Mitchell_Blueprint.html', '_blank');
         }
 
         function viewBlueprint() {
-            if (currentBlueprint) {
-                window.location.href = `/blueprint?id=${currentBlueprint.id}`;
-            }
+            // View the completed blueprint
+            window.open('Sarah_Mitchell_Blueprint.html', '_blank');
         }
 
         function openCVBuilder() {
-            if (currentBlueprint) {
-                window.location.href = `/cv-builder?blueprint=${currentBlueprint.id}`;
-            }
+            // Open the CV Builder with Sarah's data
+            window.open('Sarah_Mitchell_CV_Builder.html', '_blank');
         }
 
         function openMappingGuide() {
-            window.open('SparkYourPotential_Templates 2/Sarah_Mitchell_Mapping_Guide.html', '_blank');
+            window.open('Sarah_Mitchell_Mapping_Guide.html', '_blank');
         }
 
         function openDecisionFramework() {
-            window.open('SparkYourPotential_Templates 2/Sarah_Mitchell_Decision_Framework.html', '_blank');
+            window.open('Sarah_Mitchell_Decision_Framework.html', '_blank');
         }
 
         function openPromptLibrary() {
-            window.open('SparkYourPotential_Templates 2/AI_Prompt_Library.html', '_blank');
+            window.open('AI_Prompt_Library.html', '_blank');
         }
 
         function exportCV() {
@@ -535,35 +570,34 @@
             }
         }
 
-        // Load demo (Sarah Mitchell)
-        async function loadDemo() {
-            try {
-                const response = await fetch('/api/demo/load');
-                const data = await response.json();
+        // Load demo (Sarah Mitchell) - Works without server!
+        function loadDemo() {
+            // Create demo user locally (no server needed)
+            currentUser = {
+                id: 'demo-sarah',
+                name: 'Sarah Mitchell',
+                email: 'sarah@demo.com'
+            };
 
-                if (data.success) {
-                    currentUser = data.user;
-                    currentBlueprint = data.blueprint;
-                    localStorage.setItem('syp_user', JSON.stringify(currentUser));
+            currentBlueprint = {
+                id: 'demo-blueprint',
+                created_at: new Date().toISOString(),
+                updated_at: new Date().toISOString()
+            };
 
-                    // Show dashboard with demo data
-                    document.getElementById('loginSection').style.display = 'none';
-                    document.getElementById('dashboardContent').classList.add('visible');
-                    document.getElementById('userName').textContent = `Demo: ${currentUser.name}`;
+            localStorage.setItem('syp_user', JSON.stringify(currentUser));
 
-                    // Show user menu
-                    document.getElementById('userMenu').style.display = 'flex';
-                    document.getElementById('userEmail').textContent = currentUser.email + ' (demo)';
+            // Show dashboard with demo data
+            document.getElementById('loginSection').style.display = 'none';
+            document.getElementById('dashboardContent').classList.add('visible');
+            document.getElementById('userName').textContent = `Demo: ${currentUser.name}`;
 
-                    // Update state to show blueprint is complete
-                    updateDashboardState(true);
-                } else {
-                    alert('Error loading demo: ' + data.error);
-                }
-            } catch (error) {
-                console.error('Demo load error:', error);
-                alert('Could not load demo data.');
-            }
+            // Show user menu
+            document.getElementById('userMenu').style.display = 'flex';
+            document.getElementById('userEmail').textContent = currentUser.email + ' (demo)';
+
+            // Update state to show blueprint is complete (all tools unlocked)
+            updateDashboardState(true);
         }
     </script>
 </body>
