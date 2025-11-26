@@ -7,19 +7,17 @@ const { Pool } = require('pg');
 const crypto = require('crypto');
 
 // Database connection pool
-// DigitalOcean managed databases require SSL with rejectUnauthorized: false
-// Also append sslmode to connection string if not present
-let connectionString = process.env.DATABASE_URL || '';
-if (connectionString && !connectionString.includes('sslmode')) {
-    connectionString += (connectionString.includes('?') ? '&' : '?') + 'sslmode=require';
-}
-
+// DigitalOcean managed databases require SSL
+// Force SSL to accept self-signed certificates
 const pool = new Pool({
-    connectionString: connectionString,
-    ssl: connectionString ? { rejectUnauthorized: false } : false
+    connectionString: process.env.DATABASE_URL,
+    ssl: process.env.DATABASE_URL ? {
+        rejectUnauthorized: false,
+        require: true
+    } : false
 });
 
-console.log('Database configured:', connectionString ? 'yes (SSL enabled)' : 'no');
+console.log('Database configured:', process.env.DATABASE_URL ? 'yes' : 'no');
 
 // Password hashing utilities
 function hashPassword(password) {
