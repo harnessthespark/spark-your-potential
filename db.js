@@ -6,15 +6,15 @@
 const { Pool } = require('pg');
 const crypto = require('crypto');
 
+// Allow self-signed certificates for DigitalOcean managed databases
+if (process.env.DATABASE_URL) {
+    process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
+}
+
 // Database connection pool
-// DigitalOcean managed databases require SSL
-// Force SSL to accept self-signed certificates
 const pool = new Pool({
     connectionString: process.env.DATABASE_URL,
-    ssl: process.env.DATABASE_URL ? {
-        rejectUnauthorized: false,
-        require: true
-    } : false
+    ssl: process.env.DATABASE_URL ? { rejectUnauthorized: false } : false
 });
 
 console.log('Database configured:', process.env.DATABASE_URL ? 'yes' : 'no');
