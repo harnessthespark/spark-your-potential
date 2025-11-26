@@ -8,16 +8,18 @@ const crypto = require('crypto');
 
 // Database connection pool
 // DigitalOcean managed databases require SSL with rejectUnauthorized: false
-const sslConfig = process.env.DATABASE_URL ? {
-    rejectUnauthorized: false
-} : false;
+// Also append sslmode to connection string if not present
+let connectionString = process.env.DATABASE_URL || '';
+if (connectionString && !connectionString.includes('sslmode')) {
+    connectionString += (connectionString.includes('?') ? '&' : '?') + 'sslmode=require';
+}
 
 const pool = new Pool({
-    connectionString: process.env.DATABASE_URL,
-    ssl: sslConfig
+    connectionString: connectionString,
+    ssl: connectionString ? { rejectUnauthorized: false } : false
 });
 
-console.log('Database SSL config:', sslConfig ? 'enabled (rejectUnauthorized: false)' : 'disabled');
+console.log('Database configured:', connectionString ? 'yes (SSL enabled)' : 'no');
 
 // Password hashing utilities
 function hashPassword(password) {
