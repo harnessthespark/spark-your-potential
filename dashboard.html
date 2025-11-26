@@ -265,10 +265,13 @@
         <!-- Login Section -->
         <div class="login-section" id="loginSection">
             <h2>Welcome Back</h2>
-            <p>Enter your email to access your career toolkit</p>
+            <p>Enter your credentials to access your career toolkit</p>
             <input type="email" class="email-input" id="emailInput" placeholder="your@email.com">
             <br>
+            <input type="password" class="email-input" id="passwordInput" placeholder="Password" style="margin-top: 10px;">
+            <br>
             <button class="login-btn" onclick="login()">Login</button>
+            <p id="loginError" style="color: #e74c3c; margin-top: 15px; display: none;"></p>
             <div style="margin-top: 30px; padding-top: 30px; border-top: 1px solid #e0e0e0;">
                 <p style="color: #888; margin-bottom: 15px;">Want to see how it works first?</p>
                 <button class="login-btn" style="background: linear-gradient(135deg, #FF6B35 0%, #FFB627 100%);" onclick="loadDemo()">
@@ -410,19 +413,31 @@
             }
         };
 
-        // Login
+        // Login with password
         async function login() {
             const email = document.getElementById('emailInput').value.trim();
+            const password = document.getElementById('passwordInput').value;
+            const errorEl = document.getElementById('loginError');
+
+            errorEl.style.display = 'none';
+
             if (!email || !email.includes('@')) {
-                alert('Please enter a valid email address');
+                errorEl.textContent = 'Please enter a valid email address';
+                errorEl.style.display = 'block';
+                return;
+            }
+
+            if (!password) {
+                errorEl.textContent = 'Please enter your password';
+                errorEl.style.display = 'block';
                 return;
             }
 
             try {
-                const response = await fetch('/api/user', {
+                const response = await fetch('/api/login', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ email, name: email.split('@')[0] })
+                    body: JSON.stringify({ email, password })
                 });
 
                 const data = await response.json();
@@ -431,11 +446,13 @@
                     localStorage.setItem('syp_user', JSON.stringify(currentUser));
                     showDashboard();
                 } else {
-                    alert('Error: ' + data.error);
+                    errorEl.textContent = data.error || 'Login failed';
+                    errorEl.style.display = 'block';
                 }
             } catch (error) {
                 console.error('Login error:', error);
-                alert('Could not connect to server. Please try again.');
+                errorEl.textContent = 'Could not connect to server. Please try again.';
+                errorEl.style.display = 'block';
             }
         }
 

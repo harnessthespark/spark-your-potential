@@ -78,7 +78,27 @@ app.get('/health', async (req, res) => {
     });
 });
 
-// Get or create user (simple email-based for now)
+// Login with email and password
+app.post('/api/login', async (req, res) => {
+    try {
+        const { email, password } = req.body;
+        if (!email || !password) {
+            return res.status(400).json({ success: false, error: 'Email and password are required' });
+        }
+
+        const result = await db.loginUser(email, password);
+        if (!result.success) {
+            return res.status(401).json(result);
+        }
+
+        res.json({ success: true, user: result.user });
+    } catch (error) {
+        console.error('Login error:', error);
+        res.status(500).json({ success: false, error: error.message });
+    }
+});
+
+// Legacy: Get or create user (simple email-based - for demo mode)
 app.post('/api/user', async (req, res) => {
     try {
         const { email, name } = req.body;
@@ -90,6 +110,56 @@ app.post('/api/user', async (req, res) => {
         res.json({ success: true, user });
     } catch (error) {
         console.error('User error:', error);
+        res.status(500).json({ success: false, error: error.message });
+    }
+});
+
+// ============================================
+// ADMIN ENDPOINTS
+// ============================================
+
+// Admin page
+app.get('/admin', (req, res) => {
+    res.sendFile(path.join(__dirname, 'admin.html'));
+});
+
+// Create client account (admin only)
+app.post('/api/admin/create-client', async (req, res) => {
+    try {
+        const { email, name, password, adminKey } = req.body;
+
+        // Simple admin key check (set in environment variable)
+        const ADMIN_KEY = process.env.ADMIN_KEY || 'spark-admin-2025';
+        if (adminKey !== ADMIN_KEY) {
+            return res.status(403).json({ success: false, error: 'Invalid admin key' });
+        }
+
+        if (!email || !name || !password) {
+            return res.status(400).json({ success: false, error: 'Email, name, and password are required' });
+        }
+
+        const user = await db.createClientAccount(email, name, password);
+        res.json({ success: true, user: { id: user.id, email: user.email, name: user.name } });
+    } catch (error) {
+        console.error('Create client error:', error);
+        res.status(500).json({ success: false, error: error.message });
+    }
+});
+
+// Get all users (admin only)
+app.post('/api/admin/users', async (req, res) => {
+    try {
+        const { adminKey } = req.body;
+
+        const ADMIN_KEY = process.env.ADMIN_KEY || 'spark-admin-2025';
+        if (adminKey !== ADMIN_KEY) {
+            return res.status(403).json({ success: false, error: 'Invalid admin key' });
+        }
+
+        const users = await db.getAllUsers();
+        res.json({ success: true, users });
+    } catch (error) {
+        console.error('Get users error:', error);
         res.status(500).json({ success: false, error: error.message });
     }
 });

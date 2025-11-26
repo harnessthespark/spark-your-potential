@@ -4,12 +4,26 @@
  */
 
 const { Pool } = require('pg');
+const crypto = require('crypto');
 
 // Database connection pool
 const pool = new Pool({
     connectionString: process.env.DATABASE_URL,
     ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : false
 });
+
+// Password hashing utilities
+function hashPassword(password) {
+    const salt = crypto.randomBytes(16).toString('hex');
+    const hash = crypto.pbkdf2Sync(password, salt, 1000, 64, 'sha512').toString('hex');
+    return `${salt}:${hash}`;
+}
+
+function verifyPassword(password, storedHash) {
+    const [salt, hash] = storedHash.split(':');
+    const verifyHash = crypto.pbkdf2Sync(password, salt, 1000, 64, 'sha512').toString('hex');
+    return hash === verifyHash;
+}
 
 // Test connection on startup
 pool.on('connect', () => {
@@ -33,12 +47,20 @@ async function initDatabase() {
                 id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
                 email VARCHAR(255) UNIQUE NOT NULL,
                 name VARCHAR(255),
+                password_hash VARCHAR(500),
+                is_admin BOOLEAN DEFAULT false,
                 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                 updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                 last_login TIMESTAMP,
                 subscription_tier VARCHAR(50) DEFAULT 'free',
                 subscription_expires_at TIMESTAMP
             )
+        `);
+
+        // Add password_hash and is_admin columns if they don't exist (migration)
+        await client.query(`
+            ALTER TABLE users ADD COLUMN IF NOT EXISTS password_hash VARCHAR(500);
+            ALTER TABLE users ADD COLUMN IF NOT EXISTS is_admin BOOLEAN DEFAULT false;
         `);
 
         // Create blueprints table
@@ -195,7 +217,7 @@ async function getBlueprintById(blueprintId) {
 }
 
 /**
- * Create or get user by email
+ * Create or get user by email (legacy - no password)
  */
 async function getOrCreateUser(email, name = null) {
     // Try to find existing user
@@ -221,6 +243,95 @@ async function getOrCreateUser(email, name = null) {
         [email, name]
     );
     return result.rows[0];
+}
+
+/**
+ * Login user with email and password
+ */
+async function loginUser(email, password) {
+    const result = await pool.query(
+        'SELECT * FROM users WHERE email = $1',
+        [email]
+    );
+
+    if (result.rows.length === 0) {
+        return { success: false, error: 'User not found' };
+    }
+
+    const user = result.rows[0];
+
+    // Check if user has a password set
+    if (!user.password_hash) {
+        return { success: false, error: 'No password set. Please contact admin.' };
+    }
+
+    // Verify password
+    if (!verifyPassword(password, user.password_hash)) {
+        return { success: false, error: 'Incorrect password' };
+    }
+
+    // Update last login
+    await pool.query(
+        'UPDATE users SET last_login = NOW() WHERE id = $1',
+        [user.id]
+    );
+
+    return { success: true, user };
+}
+
+/**
+ * Create a new client account (admin function)
+ */
+async function createClientAccount(email, name, password) {
+    // Check if user already exists
+    const existing = await pool.query(
+        'SELECT id FROM users WHERE email = $1',
+        [email]
+    );
+
+    if (existing.rows.length > 0) {
+        // Update existing user with password
+        const hashedPassword = hashPassword(password);
+        const result = await pool.query(
+            `UPDATE users SET name = $2, password_hash = $3, updated_at = NOW()
+             WHERE email = $1
+             RETURNING *`,
+            [email, name, hashedPassword]
+        );
+        return result.rows[0];
+    }
+
+    // Create new user with password
+    const hashedPassword = hashPassword(password);
+    const result = await pool.query(
+        `INSERT INTO users (email, name, password_hash, last_login)
+         VALUES ($1, $2, $3, NOW())
+         RETURNING *`,
+        [email, name, hashedPassword]
+    );
+    return result.rows[0];
+}
+
+/**
+ * Get all users (admin function)
+ */
+async function getAllUsers() {
+    const result = await pool.query(
+        `SELECT id, email, name, is_admin, created_at, last_login, subscription_tier
+         FROM users ORDER BY created_at DESC`
+    );
+    return result.rows;
+}
+
+/**
+ * Check if user is admin
+ */
+async function isAdmin(userId) {
+    const result = await pool.query(
+        'SELECT is_admin FROM users WHERE id = $1',
+        [userId]
+    );
+    return result.rows.length > 0 && result.rows[0].is_admin === true;
 }
 
 /**
@@ -286,6 +397,10 @@ module.exports = {
     getLatestBlueprint,
     getBlueprintById,
     getOrCreateUser,
+    loginUser,
+    createClientAccount,
+    getAllUsers,
+    isAdmin,
     saveCVData,
     getCVData
 };
