@@ -7,9 +7,10 @@ const { Pool } = require('pg');
 const crypto = require('crypto');
 
 // Database connection pool
+// DigitalOcean managed databases require SSL with rejectUnauthorized: false
 const pool = new Pool({
     connectionString: process.env.DATABASE_URL,
-    ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : false
+    ssl: process.env.DATABASE_URL ? { rejectUnauthorized: false } : false
 });
 
 // Password hashing utilities
