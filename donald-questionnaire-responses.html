@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Donald Pirie - Discovery Questionnaire Responses</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #1e293b;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container { max-width: 900px; margin: 0 auto; }
+
+        .header {
+            background: linear-gradient(135deg, #7c3aed 0%, #a855f7 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+            border-radius: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(124, 58, 237, 0.3);
+        }
+        .header h1 { font-size: 2em; margin-bottom: 10px; }
+        .header .subtitle { opacity: 0.9; font-size: 1.1em; }
+        .completion-badge {
+            display: inline-block;
+            background: #22c55e;
+            color: white;
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-weight: 600;
+            margin-top: 15px;
+        }
+
+        .back-link {
+            display: inline-block;
+            color: #a855f7;
+            text-decoration: none;
+            margin-bottom: 20px;
+            font-weight: 500;
+        }
+        .back-link:hover { text-decoration: underline; }
+
+        .section {
+            background: white;
+            border-radius: 16px;
+            padding: 30px;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #e2e8f0;
+        }
+        .section-icon { font-size: 1.5em; }
+        .section-title {
+            font-size: 1.3em;
+            font-weight: 700;
+            color: #1e293b;
+        }
+        .section-status {
+            margin-left: auto;
+            background: #dcfce7;
+            color: #16a34a;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 0.85em;
+            font-weight: 600;
+        }
+
+        .response-card {
+            background: #f8fafc;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 15px;
+            border-left: 4px solid #7c3aed;
+        }
+        .response-label {
+            font-size: 0.85em;
+            color: #64748b;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+        .response-text {
+            color: #1e293b;
+            line-height: 1.7;
+            font-size: 1em;
+        }
+
+        .outcome-grid {
+            display: grid;
+            gap: 15px;
+        }
+        .outcome-item {
+            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+            border-radius: 12px;
+            padding: 20px;
+            border-left: 4px solid #0ea5e9;
+        }
+        .outcome-title {
+            font-weight: 700;
+            color: #0369a1;
+            margin-bottom: 10px;
+        }
+
+        .insight-box {
+            background: linear-gradient(135deg, #faf5ff 0%, #f3e8ff 100%);
+            border-radius: 12px;
+            padding: 25px;
+            border: 2px solid #c084fc;
+            margin: 20px 0;
+        }
+        .insight-box p {
+            font-size: 1.1em;
+            line-height: 1.7;
+            color: #581c87;
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-top: 20px;
+        }
+        .green-box {
+            background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+            border: 2px solid #22c55e;
+            border-radius: 12px;
+            padding: 20px;
+        }
+        .green-box h4 { color: #16a34a; margin-bottom: 12px; }
+        .red-box {
+            background: linear-gradient(135deg, #fff7ed 0%, #ffedd5 100%);
+            border: 2px solid #f97316;
+            border-radius: 12px;
+            padding: 20px;
+        }
+        .red-box h4 { color: #ea580c; margin-bottom: 12px; }
+
+        ul { margin-left: 20px; line-height: 1.8; }
+        li { margin-bottom: 8px; }
+
+        @media (max-width: 768px) {
+            .grid-2 { grid-template-columns: 1fr; }
+            .header { padding: 25px; }
+            .section { padding: 20px; }
+        }
+
+        @media print {
+            body { background: white; padding: 0; }
+            .section { box-shadow: none; border: 1px solid #e2e8f0; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="/dashboard" class="back-link">← Back to Dashboard</a>
+
+        <div class="header">
+            <h1>Discovery Questionnaire</h1>
+            <div class="subtitle">Donald Pirie | Career Booster Programme</div>
+            <div class="completion-badge">✓ 100% Completed</div>
+        </div>
+
+        <!-- Section 1: Evidence Collection -->
+        <div class="section">
+            <div class="section-header">
+                <span class="section-icon">📊</span>
+                <span class="section-title">The Evidence Collection</span>
+                <span class="section-status">✓ Complete</span>
+            </div>
+            <p style="color: #64748b; margin-bottom: 20px;">Five transformations that reveal your unique pattern of impact:</p>
+
+            <div class="outcome-grid">
+                <div class="outcome-item">
+                    <div class="outcome-title">Outcome #1: Effies Excellence</div>
+                    <p class="response-text">Helped 3 major agencies create more effective Effies papers, drawing a clear line between comms activities and business effects. Built stronger, tighter, more compelling stories that increased their chances of winning.</p>
+                </div>
+
+                <div class="outcome-item">
+                    <div class="outcome-title">Outcome #2: UBS Digital Transformation</div>
+                    <p class="response-text">Enabled a digital brand journey, content magnets and campaign structure which increased both familiarity (brand team's goal) and leads (wealth management's goal), building new client relationships.</p>
+                </div>
+
+                <div class="outcome-item">
+                    <div class="outcome-title">Outcome #3: UBS.com Repositioning</div>
+                    <p class="response-text">Transformed UBS.com into the brand's flagship for a new generation of HNWIs. Created new purpose, audience strategy, and connected journeys. Impact: Increased leads and client revenue ($2.5m incremental revenue).</p>
+                </div>
+
+                <div class="outcome-item">
+                    <div class="outcome-title">Outcome #4: UPS "United Problem Solvers"</div>
+                    <p class="response-text">Redefined UPS as problem solvers (not just logistics). Built world-first UPS × TED platform for employees to share solutions. Impact: +20% EMEA penetration, increased consideration, employee pride for 400,000 staff worldwide.</p>
+                </div>
+
+                <div class="outcome-item">
+                    <div class="outcome-title">Outcome #5: AMD Strategic Elevation</div>
+                    <p class="response-text">Elevated AMD from specs-driven competitor to visionary leader. Shifted from promoting specs to shaping progress. Platform: AMD Together We Advance. Impact: Global repositioning, multi-audience impact.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 2: The Thread -->
+        <div class="section">
+            <div class="section-header">
+                <span class="section-icon">🧵</span>
+                <span class="section-title">Your Thread</span>
+                <span class="section-status">✓ Complete</span>
+            </div>
+
+            <div class="insight-box">
+                <p><strong>"My ability to see a bigger story than the one I've been asked to tell—to tell it, then build the teams and capabilities to make it real."</strong></p>
+                <p style="margin-top: 15px;">Your thread is: <strong>connecting insight, ideas, infrastructure and people.</strong> You go deep, find what's true but unseen, and then make it come to life.</p>
+                <p style="margin-top: 15px; font-style: italic;">"I think what makes it work is that I don't stop at the idea. I stay until it's embedded, and delivering real impact for business and people."</p>
+            </div>
+        </div>
+
+        <!-- Section 3: Instinct Radar -->
+        <div class="section">
+            <div class="section-header">
+                <span class="section-icon">🎯</span>
+                <span class="section-title">The Instinct Radar</span>
+                <span class="section-status">✓ Complete</span>
+            </div>
+
+            <div class="response-card">
+                <div class="response-label">Your Intuition</div>
+                <p class="response-text">Reading the room — sensing what's unsaid and what's needed. Knowing when to push and when to pause. Feeling when teams are stuck not because of strategy, but because of belief.</p>
+            </div>
+
+            <div class="response-card">
+                <div class="response-label">Questions You Ask</div>
+                <p class="response-text">"What's the real problem here?" "What would success actually feel like?" "Why hasn't this worked before?" "What are we not saying out loud?"</p>
+            </div>
+
+            <div class="response-card">
+                <div class="response-label">What You Notice</div>
+                <p class="response-text">Moments when energy shifts in a room. Disconnects between what people say and what they mean. Patterns that connect seemingly unrelated challenges. The human truth beneath corporate speak.</p>
+            </div>
+        </div>
+
+        <!-- Section 4: Effortless Abilities -->
+        <div class="section">
+            <div class="section-header">
+                <span class="section-icon">⚡</span>
+                <span class="section-title">The Effortless Ability</span>
+                <span class="section-status">✓ Complete</span>
+            </div>
+
+            <div class="insight-box">
+                <p><strong>The ability you've been underestimating:</strong> How powerfully you can shift belief—not just thinking. You don't just clarify; you change how people feel about the work, each other, and what's possible.</p>
+                <p style="margin-top: 15px;"><strong>The pattern you now see:</strong> Transformation through clarity—taking something complex, fragmented, or forgotten and giving it focus, humanity, and momentum.</p>
+                <p style="margin-top: 15px;"><strong>The transformation you enable:</strong> You help people move from confusion to conviction. They leave clearer, more confident, reconnected to purpose—able to see not just what to do next, but why it matters.</p>
+            </div>
+        </div>
+
+        <!-- Section 5: What Charges vs Drains -->
+        <div class="section">
+            <div class="section-header">
+                <span class="section-icon">🔄</span>
+                <span class="section-title">The Transformation Mirror</span>
+                <span class="section-status">✓ Complete</span>
+            </div>
+
+            <div class="grid-2">
+                <div class="green-box">
+                    <h4>⚡ What Charges You Up</h4>
+                    <ul>
+                        <li>Going deep with clients—asking questions, listening, discovering</li>
+                        <li>Permission to connect the dots into one coherent system</li>
+                        <li>Leading multidisciplinary teams through belief transformation</li>
+                        <li>Creative conviction + data fluency + intellectual curiosity</li>
+                        <li>Leaving meetings feeling like you moved something forward</li>
+                    </ul>
+                </div>
+                <div class="red-box">
+                    <h4>🔋 What Drains Your Energy</h4>
+                    <ul>
+                        <li>The "ad factory" environment—deck-and-done, no time for depth</li>
+                        <li>Environments where charisma is valued over intelligence</li>
+                        <li>Having to play a role; feeling inauthentic</li>
+                        <li>Surface-level work without transformation embedded</li>
+                        <li>Internal politics without genuine strategic purpose</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 6: What Finds You -->
+        <div class="section">
+            <div class="section-header">
+                <span class="section-icon">🧲</span>
+                <span class="section-title">What Finds You</span>
+                <span class="section-status">✓ Complete</span>
+            </div>
+
+            <div class="response-card">
+                <div class="response-label">People Seek You Out For</div>
+                <p class="response-text">Making sense of complexity. Finding the story that was always there but no one could articulate. Bringing calm and clarity to overwhelmed teams. Connecting commercial reality with creative ambition.</p>
+            </div>
+
+            <div class="response-card">
+                <div class="response-label">Core Pattern Discovered</div>
+                <p class="response-text"><strong>You don't fix strategies. You restore belief systems.</strong> Across every transformation you've led—UBS, UPS, AMD—you turn confusion into conviction. Teams arrive stuck and paralysed; you find the human truth beneath the noise, and they don't just get a strategy—they get belief back.</p>
+            </div>
+        </div>
+
+        <!-- Summary Box -->
+        <div class="section" style="background: linear-gradient(135deg, #7c3aed 0%, #a855f7 100%); color: white;">
+            <h3 style="margin-bottom: 20px; font-size: 1.3em;">✨ Your Core Positioning</h3>
+            <p style="font-size: 1.15em; line-height: 1.8;">
+                <strong>I'm a Transformational Strategist</strong> who helps organisations restore belief and build brand platforms that last for corporate organisations navigating complexity. I connect insight, ideas, infrastructure and people—staying until transformation is embedded. After 20+ years helping global brands like UBS, UPS and AMD rediscover what they stand for, I'm now seeking roles where I can build something meaningful and see the impact of my work.
+            </p>
+        </div>
+    </div>
+</body>
+</html>

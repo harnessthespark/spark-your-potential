@@ -59,6 +59,11 @@ app.get('/donald-blueprint', (req, res) => {
     res.sendFile(path.join(__dirname, 'donald-blueprint.html'));
 });
 
+// Donald's Questionnaire Responses (completed view)
+app.get('/donald-questionnaire', (req, res) => {
+    res.sendFile(path.join(__dirname, 'donald-questionnaire-responses.html'));
+});
+
 // ============================================
 // API ENDPOINTS
 // ============================================

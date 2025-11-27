@@ -551,8 +551,8 @@
         function openQuestionnaire() {
             const prefix = getUserPrefix();
             if (prefix.includes('Donald')) {
-                // Donald's questionnaire data is in the database - show ability recognition
-                window.open('ability-recognition-visual.html', '_blank');
+                // Donald's completed questionnaire responses
+                window.open('/donald-questionnaire', '_blank');
             } else {
                 window.open('Sarah_Mitchell_Questionnaire.html', '_blank');
             }
