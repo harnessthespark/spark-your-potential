@@ -11,109 +11,51 @@
 
         .app-container { display: flex; min-height: 100vh; }
 
-        /* Sidebar */
-        .sidebar {
-            width: 400px;
+        /* Control Panel */
+        .control-panel {
+            width: 320px;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            padding: 30px;
+            padding: 25px;
             color: white;
             overflow-y: auto;
             position: fixed;
             height: 100vh;
         }
-        .sidebar-header { margin-bottom: 30px; }
-        .sidebar-header h1 { font-size: 1.5em; margin-bottom: 5px; }
-        .sidebar-header p { opacity: 0.8; font-size: 0.9em; }
+        .control-header { margin-bottom: 20px; }
+        .control-header h1 { font-size: 1.3em; margin-bottom: 5px; }
+        .control-header p { opacity: 0.8; font-size: 0.85em; }
         .back-link {
             color: #FFB627;
             text-decoration: none;
-            font-size: 0.9em;
-            display: inline-block;
-            margin-bottom: 20px;
+            font-size: 0.85em;
         }
         .back-link:hover { text-decoration: underline; }
 
-        .proposition-section { margin-bottom: 30px; }
-        .proposition-title {
-            font-size: 0.85em;
+        .control-section { margin-bottom: 20px; }
+        .control-title {
+            font-size: 0.75em;
             font-weight: 700;
             color: #FFB627;
-            margin-bottom: 20px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .field-group { margin-bottom: 15px; }
-        .field-label {
-            font-size: 0.75em;
-            text-transform: uppercase;
-            opacity: 0.8;
-            margin-bottom: 5px;
-        }
-        .field-input {
-            width: 100%;
-            padding: 12px;
-            border: none;
-            border-radius: 8px;
-            font-size: 0.95em;
-            font-family: inherit;
-        }
-        .field-input:focus { outline: 2px solid #FFB627; }
-
-        .blueprint-reference {
-            background: rgba(255,255,255,0.15);
-            padding: 15px;
-            border-radius: 10px;
-            margin-top: 20px;
-            font-size: 0.9em;
-            line-height: 1.6;
-        }
-        .blueprint-reference-label {
-            font-size: 0.75em;
-            color: #FFB627;
             margin-bottom: 10px;
-            display: block;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
-
-        .preview-box {
-            background: rgba(255,255,255,0.1);
-            border-radius: 10px;
-            padding: 15px;
-            margin-top: 20px;
-            font-style: italic;
-            line-height: 1.6;
-        }
-
-        .action-button {
-            width: 100%;
-            padding: 12px;
-            background: #FFB627;
-            color: #333;
-            border: none;
-            border-radius: 8px;
-            font-weight: 600;
-            cursor: pointer;
-            margin-top: 15px;
-            font-size: 0.95em;
-            transition: all 0.2s;
-        }
-        .action-button:hover { background: #ffc84d; transform: translateY(-2px); }
 
         .export-buttons {
             display: flex;
-            gap: 10px;
-            margin-top: 20px;
+            gap: 8px;
+            margin-bottom: 20px;
         }
         .export-btn {
             flex: 1;
-            padding: 12px;
+            padding: 10px;
             border: 2px solid white;
             background: transparent;
             color: white;
-            border-radius: 8px;
+            border-radius: 6px;
             font-weight: 600;
             cursor: pointer;
+            font-size: 0.85em;
             transition: all 0.2s;
         }
         .export-btn:hover {
@@ -121,443 +63,557 @@
             color: #667eea;
         }
 
+        .hint-box {
+            background: rgba(255,255,255,0.15);
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 0.8em;
+            line-height: 1.5;
+            margin-top: 15px;
+        }
+
         /* Main Content */
         .main-content {
             flex: 1;
-            padding: 40px;
-            margin-left: 400px;
+            padding: 30px;
+            margin-left: 320px;
             overflow-y: auto;
         }
 
+        /* CV Preview - Two Column Layout */
         .cv-preview {
             background: white;
-            max-width: 800px;
+            max-width: 900px;
             margin: 0 auto;
-            padding: 50px;
-            box-shadow: 0 5px 30px rgba(0,0,0,0.1);
-            border-radius: 10px;
+            box-shadow: 0 5px 30px rgba(0,0,0,0.15);
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            min-height: 1200px;
+        }
+
+        /* Left Column - Dark */
+        .cv-left {
+            background: #1a1a2e;
+            color: white;
+            padding: 40px 25px;
         }
 
         .cv-name {
-            font-size: 2.2em;
-            font-weight: 700;
-            color: #2c3e50;
+            font-size: 1.8em;
+            font-weight: 800;
             text-transform: uppercase;
-            letter-spacing: 1px;
+            letter-spacing: 2px;
+            line-height: 1.2;
+            margin-bottom: 5px;
         }
-        .cv-headline {
-            color: #667eea;
-            font-style: italic;
-            margin: 10px 0 25px 0;
-            font-size: 1.1em;
-            padding-bottom: 20px;
-            border-bottom: 2px solid #e0e0e0;
+        .cv-title {
+            color: #FFB627;
+            font-size: 1em;
+            font-weight: 600;
+            margin-bottom: 25px;
         }
 
-        .cv-section { margin-bottom: 30px; }
-        .cv-section-title {
-            font-size: 0.8em;
+        .cv-contact-info {
+            font-size: 0.85em;
+            margin-bottom: 30px;
+            line-height: 1.8;
+            opacity: 0.9;
+        }
+        .cv-contact-info div { margin-bottom: 5px; }
+
+        .cv-left-section {
+            margin-bottom: 25px;
+        }
+        .cv-left-title {
+            font-size: 0.75em;
             font-weight: 700;
             text-transform: uppercase;
             letter-spacing: 2px;
-            color: #888;
-            margin-bottom: 15px;
+            color: #FFB627;
+            margin-bottom: 12px;
             padding-bottom: 8px;
-            border-bottom: 1px solid #e0e0e0;
+            border-bottom: 1px solid rgba(255,255,255,0.2);
         }
 
-        .cv-profile { line-height: 1.8; color: #444; font-size: 1em; }
+        .cv-profile-text {
+            font-size: 0.9em;
+            line-height: 1.7;
+            opacity: 0.95;
+        }
 
-        .cv-skills { display: flex; flex-wrap: wrap; gap: 8px; }
-        .cv-skill {
-            background: #f0f0f0;
-            padding: 6px 12px;
-            border-radius: 20px;
+        .cv-highlights-list {
+            list-style: none;
             font-size: 0.85em;
-            color: #555;
+            line-height: 1.6;
         }
-
-        .cv-highlights li { margin-bottom: 12px; line-height: 1.6; color: #444; }
-
-        .cv-contact {
-            display: flex;
-            gap: 20px;
-            font-size: 0.9em;
-            color: #666;
-            margin-top: 10px;
-            flex-wrap: wrap;
+        .cv-highlights-list li {
+            margin-bottom: 12px;
+            padding-left: 15px;
+            position: relative;
         }
-
-        /* Loading State */
-        .loading {
-            text-align: center;
-            padding: 60px;
-            color: #666;
-        }
-        .loading-spinner {
-            width: 40px;
-            height: 40px;
-            border: 3px solid #e0e0e0;
-            border-top-color: #667eea;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin: 0 auto 20px;
-        }
-        @keyframes spin { to { transform: rotate(360deg); } }
-
-        /* Upload Section */
-        .upload-section {
-            margin-top: 20px;
-            padding-top: 20px;
-            border-top: 1px solid rgba(255,255,255,0.2);
-        }
-        .upload-area {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 25px;
-            border: 2px dashed rgba(255,255,255,0.4);
-            border-radius: 12px;
-            cursor: pointer;
-            transition: all 0.3s;
-            text-align: center;
-        }
-        .upload-area:hover {
-            border-color: #FFB627;
-            background: rgba(255,255,255,0.1);
-        }
-        .upload-icon { font-size: 2em; margin-bottom: 10px; }
-        .upload-text { font-weight: 600; margin-bottom: 5px; }
-        .upload-hint { font-size: 0.8em; opacity: 0.7; }
-        .upload-status {
-            margin-top: 15px;
-            padding: 12px;
-            border-radius: 8px;
-            font-size: 0.9em;
-            display: none;
-        }
-        .upload-status.success {
-            display: block;
-            background: rgba(76, 175, 80, 0.2);
-            color: #90EE90;
-        }
-        .upload-status.error {
-            display: block;
-            background: rgba(244, 67, 54, 0.2);
-            color: #ff8a80;
-        }
-        .upload-status.processing {
-            display: block;
-            background: rgba(255, 182, 39, 0.2);
+        .cv-highlights-list li::before {
+            content: "→";
+            position: absolute;
+            left: 0;
             color: #FFB627;
         }
 
-        /* Editable Sections */
-        .editable-section {
+        .cv-skills-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        .cv-skill-tag {
+            background: rgba(255,182,39,0.2);
+            color: #FFB627;
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-size: 0.75em;
+            font-weight: 500;
+        }
+
+        .cv-categories-list {
+            font-size: 0.8em;
+            line-height: 1.6;
+            opacity: 0.9;
+        }
+
+        /* Right Column - Light */
+        .cv-right {
+            padding: 40px 30px;
+            background: white;
+        }
+
+        .cv-right-section {
+            margin-bottom: 30px;
+        }
+        .cv-right-title {
+            font-size: 0.7em;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: #667eea;
+            margin-bottom: 15px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #667eea;
+        }
+
+        /* Career Entry */
+        .career-entry {
+            margin-bottom: 25px;
+        }
+        .career-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            margin-bottom: 8px;
+        }
+        .career-company {
+            font-weight: 700;
+            color: #1a1a2e;
+            font-size: 1em;
+        }
+        .career-title-role {
+            color: #667eea;
+            font-weight: 600;
+            font-size: 0.9em;
+        }
+        .career-dates {
+            color: #888;
+            font-size: 0.85em;
+        }
+        .career-intro {
+            font-style: italic;
+            color: #666;
+            margin-bottom: 10px;
+            font-size: 0.9em;
+        }
+        .career-bullets {
+            list-style: none;
+            padding: 0;
+        }
+        .career-bullets li {
+            margin-bottom: 8px;
+            padding-left: 18px;
+            position: relative;
+            font-size: 0.9em;
+            line-height: 1.5;
+            color: #444;
+        }
+        .career-bullets li::before {
+            content: "•";
+            position: absolute;
+            left: 0;
+            color: #667eea;
+            font-weight: bold;
+        }
+
+        /* Brand highlights inline */
+        .brand-highlight {
+            font-weight: 600;
+            color: #1a1a2e;
+        }
+
+        /* Education & Training */
+        .education-entry {
+            margin-bottom: 15px;
+        }
+        .education-title {
+            font-weight: 600;
+            color: #1a1a2e;
+            font-size: 0.9em;
+        }
+        .education-detail {
+            color: #666;
+            font-size: 0.85em;
+        }
+
+        /* Awards */
+        .awards-list {
+            list-style: none;
+        }
+        .awards-list li {
+            margin-bottom: 10px;
+            font-size: 0.9em;
+            color: #444;
+        }
+        .award-name {
+            font-weight: 600;
+            color: #1a1a2e;
+        }
+
+        /* Testimonials */
+        .testimonial {
+            background: #f8f9fa;
+            padding: 15px;
+            border-left: 3px solid #667eea;
+            margin-bottom: 15px;
+            border-radius: 0 8px 8px 0;
+        }
+        .testimonial-quote {
+            font-style: italic;
+            color: #444;
+            font-size: 0.9em;
+            line-height: 1.6;
+            margin-bottom: 8px;
+        }
+        .testimonial-author {
+            font-size: 0.8em;
+            color: #888;
+        }
+
+        /* Cultural Interests */
+        .interests-text {
+            font-size: 0.9em;
+            color: #555;
+            line-height: 1.6;
+        }
+
+        /* Editable styling */
+        [contenteditable="true"] {
             border: 1px dashed transparent;
-            padding: 10px;
-            margin: -10px;
-            border-radius: 8px;
+            padding: 3px;
+            margin: -3px;
+            border-radius: 4px;
             transition: all 0.2s;
         }
-        .editable-section:hover {
-            border-color: #667eea;
+        [contenteditable="true"]:hover {
+            border-color: rgba(102, 126, 234, 0.4);
             background: rgba(102, 126, 234, 0.03);
         }
-        .editable-section:focus {
+        [contenteditable="true"]:focus {
             outline: none;
             border-color: #667eea;
             background: rgba(102, 126, 234, 0.05);
-            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
-        }
-
-        /* Edit hint */
-        .cv-section:hover::after {
-            content: '✏️ Click to edit';
-            position: absolute;
-            right: 10px;
-            top: 50%;
-            transform: translateY(-50%);
-            font-size: 0.75em;
-            color: #667eea;
-            opacity: 0.7;
-        }
-        .cv-section {
-            position: relative;
         }
 
         /* Print Styles */
         @media print {
-            .sidebar { display: none; }
+            .control-panel { display: none; }
             .main-content { margin-left: 0; padding: 0; }
-            .cv-preview { box-shadow: none; }
+            .cv-preview { box-shadow: none; max-width: none; }
+            [contenteditable="true"] { border: none !important; }
         }
 
         /* Responsive */
-        @media (max-width: 900px) {
+        @media (max-width: 1000px) {
             .app-container { flex-direction: column; }
-            .sidebar { position: relative; width: 100%; height: auto; }
+            .control-panel { position: relative; width: 100%; height: auto; }
             .main-content { margin-left: 0; }
+            .cv-preview { grid-template-columns: 1fr; }
         }
     </style>
 </head>
 <body>
     <div class="app-container">
-        <!-- Sidebar -->
-        <div class="sidebar">
+        <!-- Control Panel -->
+        <div class="control-panel">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
-                <a href="/dashboard" class="back-link" style="margin: 0;">← Dashboard</a>
-                <button onclick="logout()" style="background: rgba(255,255,255,0.2); color: white; border: 1px solid rgba(255,255,255,0.3); padding: 6px 12px; border-radius: 6px; font-size: 0.8em; cursor: pointer;">Log out</button>
+                <a href="/dashboard" class="back-link">← Dashboard</a>
+                <button onclick="logout()" style="background: rgba(255,255,255,0.2); color: white; border: 1px solid rgba(255,255,255,0.3); padding: 5px 10px; border-radius: 5px; font-size: 0.75em; cursor: pointer;">Log out</button>
             </div>
 
-            <div class="sidebar-header">
+            <div class="control-header">
                 <h1>📝 CV Builder</h1>
-                <p id="sidebarSubtitle">Loading Blueprint data...</p>
+                <p>Professional Strategist Template</p>
             </div>
 
-            <div class="proposition-section">
-                <div class="proposition-title">✏️ YOUR PROPOSITION</div>
+            <div class="export-buttons">
+                <button class="export-btn" onclick="exportPDF()">📄 PDF</button>
+                <button class="export-btn" onclick="saveCV()">💾 Save</button>
+            </div>
 
-                <div class="field-group">
-                    <div class="field-label">I'M A... [ROLE IDENTITY]</div>
-                    <input type="text" class="field-input" id="roleIdentity" placeholder="e.g., Creative Catalyst">
+            <div class="control-section">
+                <div class="control-title">✨ How to use</div>
+                <div class="hint-box">
+                    <strong>Click any text</strong> on the CV to edit it directly.<br><br>
+                    All sections are editable - just click and type to customise your CV.<br><br>
+                    <strong>Tip:</strong> Replace [bracketed text] with your own content.
                 </div>
+            </div>
 
-                <div class="field-group">
-                    <div class="field-label">WHO... [WHAT YOU DO]</div>
-                    <input type="text" class="field-input" id="whatYouDo" placeholder="e.g., unlocks creative potential">
-                </div>
-
-                <div class="field-group">
-                    <div class="field-label">FOR... [WHO YOU SERVE]</div>
-                    <input type="text" class="field-input" id="whoYouServe" placeholder="e.g., clients and teams that need transformation">
-                </div>
-
-                <div class="field-group">
-                    <div class="field-label">I... [UNIQUE APPROACH]</div>
-                    <input type="text" class="field-input" id="uniqueApproach" placeholder="e.g., connect creativity with commercial reality">
-                </div>
-
-                <div class="field-group">
-                    <div class="field-label">AFTER... [BACKGROUND]</div>
-                    <input type="text" class="field-input" id="background" placeholder="e.g., 15 years helping brands like Nike">
-                </div>
-
-                <div class="field-group">
-                    <div class="field-label">I'M NOW... [WHERE HEADING]</div>
-                    <input type="text" class="field-input" id="whereHeading" placeholder="e.g., seeking roles where I can transform teams">
-                </div>
-
-                <div class="blueprint-reference" id="blueprintReference">
-                    <span class="blueprint-reference-label">📘 From Your Blueprint</span>
-                    <span id="blueprintHint">Loading your Blueprint data...</span>
-                </div>
-
-                <div class="preview-box" id="propositionPreview">
-                    Your proposition preview will appear here...
-                </div>
-
-                <button class="action-button" onclick="useAsProfile()">↓ Update CV Profile</button>
-
-                <div class="export-buttons">
-                    <button class="export-btn" onclick="exportPDF()">📄 Export PDF</button>
-                    <button class="export-btn" onclick="saveCV()">💾 Save</button>
-                </div>
-
-                <!-- File Upload Section -->
-                <div class="upload-section">
-                    <div class="proposition-title" style="margin-top: 30px;">📤 UPLOAD EXISTING CV</div>
-                    <p style="font-size: 0.85em; opacity: 0.8; margin-bottom: 15px;">
-                        Upload your current CV to extract experience data
-                    </p>
-                    <label class="upload-area" for="cvUpload">
-                        <input type="file" id="cvUpload" accept=".pdf,.doc,.docx,.txt" onchange="handleFileUpload(event)" style="display: none;">
-                        <span class="upload-icon">📁</span>
-                        <span class="upload-text">Click to upload CV</span>
-                        <span class="upload-hint">PDF, DOC, DOCX, or TXT</span>
-                    </label>
-                    <div id="uploadStatus" class="upload-status"></div>
+            <div class="control-section">
+                <div class="control-title">📋 Sections included</div>
+                <div style="font-size: 0.8em; line-height: 1.8; opacity: 0.9;">
+                    ✓ Profile<br>
+                    ✓ Career Highlights<br>
+                    ✓ Skills<br>
+                    ✓ Categories/Sectors<br>
+                    ✓ Career History<br>
+                    ✓ Brand Highlights<br>
+                    ✓ Academic Leadership<br>
+                    ✓ Published Work<br>
+                    ✓ Awards<br>
+                    ✓ Training<br>
+                    ✓ Education<br>
+                    ✓ Cultural Interests<br>
+                    ✓ Testimonials
                 </div>
             </div>
         </div>
 
         <!-- Main Content -->
         <div class="main-content">
-            <div id="loadingState" class="loading">
-                <div class="loading-spinner"></div>
-                <p>Loading your Blueprint data...</p>
-            </div>
+            <div class="cv-preview" id="cvPreview">
+                <!-- LEFT COLUMN -->
+                <div class="cv-left">
+                    <div class="cv-name" contenteditable="true">YOUR<br>NAME</div>
+                    <div class="cv-title" contenteditable="true">ENTER YOUR TITLE</div>
 
-            <div class="cv-preview" id="cvPreview" style="display: none;">
-                <div class="cv-name" id="cvName">Your Name</div>
-                <div class="cv-headline" id="cvHeadline">Your Role | Your Proposition</div>
+                    <div class="cv-contact-info" contenteditable="true">
+                        <div>📞 +44 7XXX XXX XXX</div>
+                        <div>📧 your@email.com</div>
+                        <div>📍 Town, County, Post Code</div>
+                        <div>🔗 linkedin.com/in/yourprofile</div>
+                    </div>
 
-                <div class="cv-contact" id="cvContact">
-                    <span>📧 your@email.com</span>
-                    <span>📱 +44 7XXX XXX XXX</span>
-                    <span>🔗 linkedin.com/in/yourprofile</span>
-                </div>
+                    <div class="cv-left-section">
+                        <div class="cv-left-title">My Profile</div>
+                        <div class="cv-profile-text" contenteditable="true">
+                            [Write 2-3 sentences about who you are, what you do, and what makes you unique. This is your elevator pitch - make it count!]
+                        </div>
+                    </div>
 
-                <div class="cv-section">
-                    <div class="cv-section-title">Profile</div>
-                    <p class="cv-profile" id="cvProfile">
-                        Your professional profile will be generated from your Blueprint data.
-                    </p>
-                </div>
+                    <div class="cv-left-section">
+                        <div class="cv-left-title">Career Highlights</div>
+                        <ul class="cv-highlights-list" contenteditable="true">
+                            <li>Wrote 9/10 pitch winning strategies at [Agency] resulting in [£X] revenue</li>
+                            <li>Building a new type of loyalty programme for [Brand]</li>
+                            <li>Created new behavioural cues for [Brand] driving [X]% ROI</li>
+                            <li>Developed DE&I programme for emerging strategy talent</li>
+                        </ul>
+                    </div>
 
-                <div class="cv-section">
-                    <div class="cv-section-title">Key Skills</div>
-                    <div class="cv-skills" id="cvSkills">
-                        <!-- Skills will be populated -->
+                    <div class="cv-left-section">
+                        <div class="cv-left-title">Skills</div>
+                        <div class="cv-skills-list" contenteditable="true">
+                            <span class="cv-skill-tag">Brand Strategy</span>
+                            <span class="cv-skill-tag">Comms Planning</span>
+                            <span class="cv-skill-tag">Quant / Qual</span>
+                            <span class="cv-skill-tag">Team Leadership</span>
+                            <span class="cv-skill-tag">Client Relations</span>
+                            <span class="cv-skill-tag">Pitch Winning</span>
+                        </div>
+                    </div>
+
+                    <div class="cv-left-section">
+                        <div class="cv-left-title">Categories</div>
+                        <div class="cv-categories-list" contenteditable="true">
+                            FMCG • Automotive • Tech • Finance • Retail • Beauty • Drinks • Telco
+                        </div>
+                    </div>
+
+                    <div class="cv-left-section">
+                        <div class="cv-left-title">Cultural Interests</div>
+                        <div class="interests-text" contenteditable="true" style="font-size: 0.85em; opacity: 0.9;">
+                            [e.g., I'm a freshwater swimmer, have a passion for 70s folk music and run a local community hub]
+                        </div>
                     </div>
                 </div>
 
-                <div class="cv-section">
-                    <div class="cv-section-title">Key Highlights</div>
-                    <ul class="cv-highlights" id="cvHighlights">
-                        <!-- Highlights from evidence -->
-                    </ul>
-                </div>
+                <!-- RIGHT COLUMN -->
+                <div class="cv-right">
+                    <!-- CAREER -->
+                    <div class="cv-right-section">
+                        <div class="cv-right-title">Career</div>
 
-                <div class="cv-section" id="experienceSection">
-                    <div class="cv-section-title">Experience</div>
-                    <div id="cvExperience" class="editable-section" contenteditable="true">
-                        <div class="cv-experience-item" style="margin-bottom: 25px;">
-                            <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
-                                <span style="font-weight: 600; color: #2c3e50;">[Job Title]</span>
-                                <span style="color: #888; font-size: 0.9em;">[Start Date] - [End Date]</span>
+                        <div class="career-entry" contenteditable="true">
+                            <div class="career-header">
+                                <span class="career-company">[COMPANY NAME] - <span class="career-title-role">[Title]</span></span>
+                                <span class="career-dates">[Date] - Present</span>
                             </div>
-                            <div style="color: #667eea; margin-bottom: 10px;">[Company Name]</div>
-                            <ul style="padding-left: 20px; color: #555;">
-                                <li style="margin-bottom: 8px; line-height: 1.6;">[Key achievement or responsibility]</li>
-                                <li style="margin-bottom: 8px; line-height: 1.6;">[Key achievement or responsibility]</li>
-                                <li style="margin-bottom: 8px; line-height: 1.6;">[Key achievement or responsibility]</li>
+                            <div class="career-intro">An opportunity to [describe why you took this role - e.g., grow a team, go client-side, lead bigger brands]</div>
+                            <ul class="career-bullets">
+                                <li><span class="brand-highlight">[BRAND]</span> - Rebranding and developing their [campaign/strategy]</li>
+                                <li><span class="brand-highlight">[BRAND]</span> - Developed acquisition and retention strategy</li>
+                                <li><span class="brand-highlight">[BRAND]</span> - Global planning lead, catalysing disruptive new campaign across TV, digital & social</li>
+                                <li>Experience of A/B test methodologies, content curation, community management</li>
                             </ul>
                         </div>
-                        <div class="cv-experience-item" style="margin-bottom: 25px;">
-                            <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
-                                <span style="font-weight: 600; color: #2c3e50;">[Previous Job Title]</span>
-                                <span style="color: #888; font-size: 0.9em;">[Start Date] - [End Date]</span>
+
+                        <div class="career-entry" contenteditable="true">
+                            <div class="career-header">
+                                <span class="career-company">[PREVIOUS COMPANY] - <span class="career-title-role">[Title]</span></span>
+                                <span class="career-dates">[Date] - [Date]</span>
                             </div>
-                            <div style="color: #667eea; margin-bottom: 10px;">[Company Name]</div>
-                            <ul style="padding-left: 20px; color: #555;">
-                                <li style="margin-bottom: 8px; line-height: 1.6;">[Key achievement or responsibility]</li>
-                                <li style="margin-bottom: 8px; line-height: 1.6;">[Key achievement or responsibility]</li>
+                            <div class="career-intro">I was hired to lead the following accounts:</div>
+                            <ul class="career-bullets">
+                                <li><span class="brand-highlight">[BRAND]</span> - [Achievement and result]</li>
+                                <li><span class="brand-highlight">[BRAND]</span> - [Achievement and result]</li>
+                                <li><span class="brand-highlight">[BRAND]</span> - [Achievement and result]</li>
+                            </ul>
+                        </div>
+
+                        <div class="career-entry" contenteditable="true">
+                            <div class="career-header">
+                                <span class="career-company">[EARLIER COMPANY] - <span class="career-title-role">[Title]</span></span>
+                                <span class="career-dates">[Date] - [Date]</span>
+                            </div>
+                            <div class="career-intro">An opportunity to hone skills at this [type of agency/company]</div>
+                            <ul class="career-bullets">
+                                <li><span class="brand-highlight">[BRAND]</span> - My strategic involvement resulted in [X] brand growth and [£X] revenue</li>
+                                <li>Pitch winning strategy for [BRAND] - resulted in [outcome]</li>
+                            </ul>
+                        </div>
+
+                        <div class="career-entry" contenteditable="true">
+                            <div class="career-header">
+                                <span class="career-company">FREELANCE & CONTRACT</span>
+                                <span class="career-dates">[Date] - [Date]</span>
+                            </div>
+                            <div class="career-intro">I decided to freelance whilst [reason - e.g., raising my young family]</div>
+                            <ul class="career-bullets">
+                                <li><span class="brand-highlight">[AGENCY]</span> - [X] month contract helping [client] disrupt the [X] market</li>
+                                <li><span class="brand-highlight">[CLIENT]</span> - Pitch support for [X] category</li>
+                                <li><span class="brand-highlight">[START-UP]</span> - Brand and business strategy, positioning and identity</li>
+                            </ul>
+                        </div>
+
+                        <div class="career-entry" contenteditable="true">
+                            <div class="career-header">
+                                <span class="career-company">EARLY CAREER</span>
+                                <span class="career-dates">[Year] - [Year]</span>
+                            </div>
+                            <div class="career-intro">I started my career at the following agencies/companies:</div>
+                            <ul class="career-bullets">
+                                <li>[COMPANY] - [COMPANY] - [COMPANY] - [COMPANY]</li>
                             </ul>
                         </div>
                     </div>
-                </div>
 
-                <div class="cv-section" id="educationSection">
-                    <div class="cv-section-title">Education</div>
-                    <div id="cvEducation" class="editable-section" contenteditable="true">
-                        <div style="margin-bottom: 15px;">
-                            <div style="display: flex; justify-content: space-between;">
-                                <span style="font-weight: 600; color: #2c3e50;">[Degree/Qualification]</span>
-                                <span style="color: #888; font-size: 0.9em;">[Year]</span>
+                    <!-- BRAND HIGHLIGHTS -->
+                    <div class="cv-right-section">
+                        <div class="cv-right-title">Brand Highlights</div>
+                        <ul class="career-bullets" contenteditable="true">
+                            <li>Disrupting the [X] market through [approach] resulting in [outcome]</li>
+                            <li>Building a new type of loyalty programme for [Brand]</li>
+                            <li>Uncovering insight which led to breakthrough cultural change and [X]% increase in sales</li>
+                            <li>Wrote the strategy for [Brand] launch that resulted in [£X] revenue</li>
+                        </ul>
+                    </div>
+
+                    <!-- ACADEMIC LEADERSHIP -->
+                    <div class="cv-right-section">
+                        <div class="cv-right-title">Academic Leadership</div>
+                        <div contenteditable="true">
+                            <div class="education-entry">
+                                <div class="education-title">[University Name]</div>
+                                <div class="education-detail">Visiting Lecturer on [MA/MSc] degrees across [Subject Area]</div>
                             </div>
-                            <div style="color: #667eea;">[University/Institution]</div>
-                        </div>
-                        <div style="margin-bottom: 15px;">
-                            <div style="display: flex; justify-content: space-between;">
-                                <span style="font-weight: 600; color: #2c3e50;">[Degree/Qualification]</span>
-                                <span style="color: #888; font-size: 0.9em;">[Year]</span>
+                            <div class="education-entry">
+                                <div class="education-title">[University Name]</div>
+                                <div class="education-detail">Visiting Lecturer on [Degree] in [Subject]</div>
                             </div>
-                            <div style="color: #667eea;">[University/Institution]</div>
                         </div>
                     </div>
-                </div>
 
-                <div class="cv-section" id="certificationsSection">
-                    <div class="cv-section-title">Professional Certifications</div>
-                    <div id="cvCertifications" class="editable-section" contenteditable="true">
-                        <ul style="padding-left: 20px; color: #555;">
-                            <li style="margin-bottom: 8px;">[Certification Name] - [Issuing Body] ([Year])</li>
-                            <li style="margin-bottom: 8px;">[Certification Name] - [Issuing Body] ([Year])</li>
+                    <!-- PUBLISHED WORK -->
+                    <div class="cv-right-section">
+                        <div class="cv-right-title">Published Work</div>
+                        <ul class="career-bullets" contenteditable="true">
+                            <li>"[Book Title]" - [Publisher] [Year]</li>
+                            <li>[Publication]: "[Article Title]" [Month Year]</li>
+                            <li>[Publication]: "[Article Title]" [Month Year]</li>
                         </ul>
                     </div>
-                </div>
 
-                <div class="cv-section" id="projectsSection">
-                    <div class="cv-section-title">Key Projects</div>
-                    <div id="cvProjects" class="editable-section" contenteditable="true">
-                        <div style="margin-bottom: 15px;">
-                            <span style="font-weight: 600; color: #2c3e50;">[Project Name]</span>
-                            <p style="color: #555; margin-top: 5px; line-height: 1.6;">[Brief description of the project, your role, and the outcome achieved]</p>
-                        </div>
-                        <div style="margin-bottom: 15px;">
-                            <span style="font-weight: 600; color: #2c3e50;">[Project Name]</span>
-                            <p style="color: #555; margin-top: 5px; line-height: 1.6;">[Brief description of the project, your role, and the outcome achieved]</p>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="cv-section" id="awardsSection">
-                    <div class="cv-section-title">Awards & Recognition</div>
-                    <div id="cvAwards" class="editable-section" contenteditable="true">
-                        <ul style="padding-left: 20px; color: #555;">
-                            <li style="margin-bottom: 8px;">[Award Name] - [Organisation] ([Year])</li>
-                            <li style="margin-bottom: 8px;">[Recognition/Achievement] - [Context] ([Year])</li>
+                    <!-- AWARDS -->
+                    <div class="cv-right-section">
+                        <div class="cv-right-title">Awards</div>
+                        <ul class="awards-list" contenteditable="true">
+                            <li><span class="award-name">[Award Name]</span> - [Year]</li>
+                            <li><span class="award-name">Effies UK</span> - [Brand]: [Level] - [Category]</li>
+                            <li><span class="award-name">[Industry Award]</span> - [Details]</li>
                         </ul>
                     </div>
-                </div>
 
-                <div class="cv-section" id="languagesSection">
-                    <div class="cv-section-title">Languages</div>
-                    <div id="cvLanguages" class="editable-section" contenteditable="true">
-                        <div style="display: flex; flex-wrap: wrap; gap: 15px; color: #555;">
-                            <span><strong>English</strong> - Native</span>
-                            <span><strong>[Language]</strong> - [Proficiency Level]</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="cv-section" id="membershipsSection">
-                    <div class="cv-section-title">Professional Memberships</div>
-                    <div id="cvMemberships" class="editable-section" contenteditable="true">
-                        <ul style="padding-left: 20px; color: #555;">
-                            <li style="margin-bottom: 8px;">[Professional Body/Association] - [Membership Level]</li>
-                            <li style="margin-bottom: 8px;">[Professional Body/Association] - [Membership Level]</li>
-                        </ul>
-                    </div>
-                </div>
-
-                <div class="cv-section" id="volunteerSection">
-                    <div class="cv-section-title">Volunteer Work & Community</div>
-                    <div id="cvVolunteer" class="editable-section" contenteditable="true">
-                        <div style="margin-bottom: 15px;">
-                            <div style="display: flex; justify-content: space-between;">
-                                <span style="font-weight: 600; color: #2c3e50;">[Role]</span>
-                                <span style="color: #888; font-size: 0.9em;">[Dates]</span>
+                    <!-- TRAINING -->
+                    <div class="cv-right-section">
+                        <div class="cv-right-title">Training</div>
+                        <div contenteditable="true">
+                            <div class="education-entry">
+                                <div class="education-title">[Course Name]</div>
+                                <div class="education-detail">[Provider] • [Year]</div>
                             </div>
-                            <div style="color: #667eea;">[Organisation]</div>
-                            <p style="color: #555; margin-top: 5px;">[Brief description of your contribution]</p>
+                            <div class="education-entry">
+                                <div class="education-title">[Course Name]</div>
+                                <div class="education-detail">[Provider] • [Year]</div>
+                            </div>
+                            <div class="education-entry">
+                                <div class="education-title">[Course Name]</div>
+                                <div class="education-detail">[Provider] • [Year]</div>
+                            </div>
                         </div>
                     </div>
-                </div>
 
-                <div class="cv-section" id="publicationsSection">
-                    <div class="cv-section-title">Publications & Speaking</div>
-                    <div id="cvPublications" class="editable-section" contenteditable="true">
-                        <ul style="padding-left: 20px; color: #555;">
-                            <li style="margin-bottom: 8px;">"[Article/Book Title]" - [Publication/Platform] ([Year])</li>
-                            <li style="margin-bottom: 8px;">[Conference/Event] - [Topic] ([Year])</li>
-                        </ul>
+                    <!-- EDUCATION -->
+                    <div class="cv-right-section">
+                        <div class="cv-right-title">Education</div>
+                        <div contenteditable="true">
+                            <div class="education-entry">
+                                <div class="education-title">[Degree] [Subject]</div>
+                                <div class="education-detail">[University/Institution]</div>
+                            </div>
+                            <div class="education-entry">
+                                <div class="education-title">[Qualification]</div>
+                                <div class="education-detail">[Institution]</div>
+                            </div>
+                        </div>
                     </div>
-                </div>
 
-                <div class="cv-section" id="interestsSection">
-                    <div class="cv-section-title">Interests</div>
-                    <div id="cvInterests" class="editable-section" contenteditable="true">
-                        <p style="color: #555; line-height: 1.6;">[Your interests and hobbies that show personality and transferable skills - e.g., marathon running, photography, mentoring young professionals]</p>
-                    </div>
-                </div>
-
-                <div class="cv-section" id="referencesSection">
-                    <div class="cv-section-title">References</div>
-                    <div id="cvReferences" class="editable-section" contenteditable="true">
-                        <p style="color: #555; font-style: italic;">Available upon request</p>
+                    <!-- TESTIMONIALS -->
+                    <div class="cv-right-section">
+                        <div class="cv-right-title">Testimonials</div>
+                        <div contenteditable="true">
+                            <div class="testimonial">
+                                <div class="testimonial-quote">"[Name] is amazing, she led strategy on [X] which resulted in us winning [X] pitch"</div>
+                                <div class="testimonial-author">— [Name], [Title], [Company]</div>
+                            </div>
+                            <div class="testimonial">
+                                <div class="testimonial-quote">"[Quote about your work, impact, or collaboration style]"</div>
+                                <div class="testimonial-author">— [Name], [Title], [Company]</div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -565,320 +621,61 @@
     </div>
 
     <script>
-        // State
-        let currentUser = null;
-        let currentBlueprint = null;
-        const fields = ['roleIdentity', 'whatYouDo', 'whoYouServe', 'uniqueApproach', 'background', 'whereHeading'];
-
-        // Initialise
-        window.onload = async function() {
-            // Get user from localStorage
-            const savedUser = localStorage.getItem('syp_user');
-            if (!savedUser) {
-                window.location.href = '/dashboard';
-                return;
-            }
-            currentUser = JSON.parse(savedUser);
-
-            // Get blueprint ID from URL or fetch latest
-            const urlParams = new URLSearchParams(window.location.search);
-            const blueprintId = urlParams.get('blueprint');
-
-            await loadBlueprint(blueprintId);
-
-            // Set up live preview updates
-            fields.forEach(field => {
-                document.getElementById(field).addEventListener('input', updatePreview);
-            });
-        };
-
-        // Load blueprint data
-        async function loadBlueprint(blueprintId) {
-            try {
-                // Check if this is a demo user
-                const isDemo = currentUser.id === 'demo-user' || blueprintId === 'demo-sarah-mitchell';
-
-                let url;
-                if (isDemo) {
-                    url = '/api/demo/blueprint';
-                } else if (blueprintId) {
-                    url = `/api/blueprint/id/${blueprintId}`;
-                } else {
-                    url = `/api/blueprint/${currentUser.id}`;
-                }
-
-                const response = await fetch(url);
-                const data = await response.json();
-
-                if (data.success && data.blueprint) {
-                    currentBlueprint = data.blueprint;
-                    populateFromBlueprint(currentBlueprint);
-                } else {
-                    showNoBlueprint();
-                }
-            } catch (error) {
-                console.error('Error loading blueprint:', error);
-                showNoBlueprint();
-            }
-        }
-
-        // Populate fields from Blueprint
-        function populateFromBlueprint(blueprint) {
-            // Update sidebar subtitle
-            document.getElementById('sidebarSubtitle').textContent =
-                `Blueprint → CV Tool for ${blueprint.name || currentUser.name || 'You'}`;
-
-            // Populate input fields
-            document.getElementById('roleIdentity').value = blueprint.role_identity || '';
-            document.getElementById('whatYouDo').value = blueprint.what_you_do || '';
-            document.getElementById('whoYouServe').value = blueprint.who_you_serve || '';
-            document.getElementById('uniqueApproach').value = blueprint.unique_approach || '';
-            document.getElementById('background').value = blueprint.background || '';
-            document.getElementById('whereHeading').value = blueprint.where_heading || '';
-
-            // Blueprint reference hint
-            document.getElementById('blueprintHint').innerHTML = `
-                <strong>Core Pattern:</strong> ${blueprint.core_pattern || 'Not set'}<br>
-                <strong>Thread:</strong> ${blueprint.thread || 'Not set'}
-            `;
-
-            // Update CV preview
-            document.getElementById('cvName').textContent = blueprint.name || currentUser.name || 'Your Name';
-            document.getElementById('cvContact').innerHTML = `
-                <span>📧 ${currentUser.email}</span>
-            `;
-
-            // Generate skills from evidence
-            const skills = generateSkills(blueprint);
-            document.getElementById('cvSkills').innerHTML = skills.map(s =>
-                `<span class="cv-skill">${s}</span>`
-            ).join('');
-
-            // Generate highlights from evidence
-            const evidence = Array.isArray(blueprint.evidence) ? blueprint.evidence : [];
-            if (evidence.length > 0) {
-                document.getElementById('cvHighlights').innerHTML = evidence.map(e =>
-                    `<li><strong>${e.company}:</strong> ${e.description}${e.result ? ` — ${e.result}` : ''}</li>`
-                ).join('');
-            }
-
-            // Update preview
-            updatePreview();
-
-            // Show CV
-            document.getElementById('loadingState').style.display = 'none';
-            document.getElementById('cvPreview').style.display = 'block';
-        }
-
-        // Generate skills from blueprint
-        function generateSkills(blueprint) {
-            const skills = [];
-
-            // Extract from core pattern and thread
-            if (blueprint.role_identity) skills.push(blueprint.role_identity);
-            if (blueprint.thread) {
-                const threadWords = blueprint.thread.split(' ').slice(0, 3).join(' ');
-                if (threadWords.length > 5) skills.push(threadWords);
-            }
-
-            // Add generic skills based on evidence
-            const evidence = Array.isArray(blueprint.evidence) ? blueprint.evidence : [];
-            evidence.forEach(e => {
-                if (e.company) skills.push(e.company + ' Experience');
-            });
-
-            // Default skills if none found
-            if (skills.length < 3) {
-                skills.push('Strategic Thinking', 'Team Leadership', 'Client Relations');
-            }
-
-            return [...new Set(skills)].slice(0, 8);
-        }
-
-        // Update proposition preview
-        function updatePreview() {
-            const role = document.getElementById('roleIdentity').value;
-            const what = document.getElementById('whatYouDo').value;
-            const who = document.getElementById('whoYouServe').value;
-            const approach = document.getElementById('uniqueApproach').value;
-            const bg = document.getElementById('background').value;
-            const heading = document.getElementById('whereHeading').value;
-
-            const preview = `"I'm a ${role || '[role]'} who ${what || '[what you do]'} for ${who || '[who you serve]'}. I ${approach || '[your approach]'}. After ${bg || '[background]'}, I'm now ${heading || '[where heading]'}."`;
-            document.getElementById('propositionPreview').textContent = preview;
-
-            // Update CV headline
-            document.getElementById('cvHeadline').textContent =
-                `${role || 'Professional'} | ${what || 'Making an impact'}`;
-        }
-
-        // Use proposition as CV profile
-        function useAsProfile() {
-            const role = document.getElementById('roleIdentity').value;
-            const what = document.getElementById('whatYouDo').value;
-            const who = document.getElementById('whoYouServe').value;
-            const approach = document.getElementById('uniqueApproach').value;
-            const bg = document.getElementById('background').value;
-            const heading = document.getElementById('whereHeading').value;
-
-            const thread = currentBlueprint?.thread || approach;
-
-            const profile = `I'm a ${role} who ${what} for ${who}. I ${approach} — finding ${thread.toLowerCase()}. After ${bg}, I'm now ${heading}.`;
-
-            document.getElementById('cvProfile').textContent = profile;
-        }
-
-        // Show no blueprint message
-        function showNoBlueprint() {
-            document.getElementById('loadingState').innerHTML = `
-                <p>No Blueprint found. Complete the questionnaire first.</p>
-                <br>
-                <a href="/" style="color: #667eea;">→ Start Questionnaire</a>
-            `;
-        }
-
-        // Save CV data
-        async function saveCV() {
-            const cvData = {
-                headline: document.getElementById('cvHeadline').textContent,
-                profile_summary: document.getElementById('cvProfile').textContent,
-                skills: Array.from(document.querySelectorAll('.cv-skill')).map(s => s.textContent),
-                highlights: Array.from(document.querySelectorAll('.cv-highlights li')).map(h => h.textContent)
-            };
-
-            try {
-                const response = await fetch('/api/cv', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        user_id: currentUser.id,
-                        blueprint_id: currentBlueprint?.id,
-                        cv_data: cvData
-                    })
-                });
-
-                const data = await response.json();
-                if (data.success) {
-                    alert('CV saved successfully!');
-                } else {
-                    alert('Error saving: ' + data.error);
-                }
-            } catch (error) {
-                console.error('Save error:', error);
-                alert('Could not save. Please try again.');
-            }
-        }
-
         // Export as PDF
         function exportPDF() {
-            // Hide sidebar for print
-            document.querySelector('.sidebar').style.display = 'none';
+            document.querySelector('.control-panel').style.display = 'none';
             document.querySelector('.main-content').style.marginLeft = '0';
 
             window.print();
 
-            // Restore sidebar
             setTimeout(() => {
-                document.querySelector('.sidebar').style.display = 'block';
-                document.querySelector('.main-content').style.marginLeft = '400px';
+                document.querySelector('.control-panel').style.display = 'block';
+                document.querySelector('.main-content').style.marginLeft = '320px';
             }, 100);
         }
 
-        // Handle file upload
-        async function handleFileUpload(event) {
-            const file = event.target.files[0];
-            if (!file) return;
+        // Save CV data
+        async function saveCV() {
+            const cvContent = document.getElementById('cvPreview').innerHTML;
 
-            const status = document.getElementById('uploadStatus');
-            status.className = 'upload-status processing';
-            status.textContent = '⏳ Processing your CV...';
+            // Save to localStorage as backup
+            localStorage.setItem('syp_cv_draft', cvContent);
 
+            // Try to save to server
             try {
-                // Read file content
-                const content = await readFileContent(file);
+                const savedUser = localStorage.getItem('syp_user');
+                if (savedUser) {
+                    const user = JSON.parse(savedUser);
+                    const response = await fetch('/api/cv', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            user_id: user.id,
+                            cv_data: { html_content: cvContent }
+                        })
+                    });
 
-                // Send to AI for extraction
-                const response = await fetch('/api/analyze', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        outcomes: [content],
-                        type: 'cv_extract',
-                        name: currentUser?.name || 'User'
-                    })
-                });
-
-                const data = await response.json();
-
-                if (data.success && data.experience) {
-                    // Populate experience section
-                    displayExperience(data.experience);
-                    status.className = 'upload-status success';
-                    status.textContent = '✓ CV processed! Experience extracted below.';
-                } else {
-                    // Fallback: just show raw content was received
-                    status.className = 'upload-status success';
-                    status.textContent = '✓ File uploaded. Add experience manually or try again.';
+                    const data = await response.json();
+                    if (data.success) {
+                        alert('✓ CV saved successfully!');
+                        return;
+                    }
                 }
             } catch (error) {
-                console.error('Upload error:', error);
-                status.className = 'upload-status error';
-                status.textContent = '✗ Error processing file. Try a different format.';
-            }
-        }
-
-        // Read file content based on type
-        function readFileContent(file) {
-            return new Promise((resolve, reject) => {
-                const reader = new FileReader();
-
-                reader.onload = function(e) {
-                    resolve(e.target.result);
-                };
-
-                reader.onerror = function() {
-                    reject(new Error('Failed to read file'));
-                };
-
-                // Read as text for txt files, otherwise try text
-                if (file.type === 'application/pdf') {
-                    // For PDF, we'll send the file name and let server handle it
-                    // For now, inform user about PDF limitation
-                    resolve(`[PDF file: ${file.name}] - PDF text extraction requires server-side processing. Please copy/paste your CV content or use a TXT/DOCX file.`);
-                } else {
-                    reader.readAsText(file);
-                }
-            });
-        }
-
-        // Display extracted experience
-        function displayExperience(experience) {
-            const expSection = document.getElementById('experienceSection');
-            const expContainer = document.getElementById('cvExperience');
-
-            if (!experience || experience.length === 0) {
-                return;
+                console.error('Save error:', error);
             }
 
-            expSection.style.display = 'block';
-
-            const html = experience.map(exp => `
-                <div class="cv-experience-item" style="margin-bottom: 25px;">
-                    <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
-                        <span style="font-weight: 600; color: #2c3e50;">${exp.title || 'Role'}</span>
-                        <span style="color: #888; font-size: 0.9em;">${exp.dates || ''}</span>
-                    </div>
-                    <div style="color: #667eea; margin-bottom: 10px;">${exp.company || ''}</div>
-                    ${exp.bullets ? `
-                        <ul style="padding-left: 20px; color: #555;">
-                            ${exp.bullets.map(b => `<li style="margin-bottom: 8px; line-height: 1.6;">${b}</li>`).join('')}
-                        </ul>
-                    ` : ''}
-                </div>
-            `).join('');
-
-            expContainer.innerHTML = html;
+            alert('✓ CV saved to browser (local backup)');
         }
+
+        // Load saved CV on page load
+        window.onload = function() {
+            const savedCV = localStorage.getItem('syp_cv_draft');
+            if (savedCV) {
+                // Optionally restore saved content
+                // document.getElementById('cvPreview').innerHTML = savedCV;
+            }
+        };
 
         // Logout
         function logout() {
