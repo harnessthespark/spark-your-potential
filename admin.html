@@ -186,6 +186,24 @@
             </form>
         </div>
 
+        <!-- Reset Password -->
+        <div class="card">
+            <h2>🔄 Reset Client Password</h2>
+            <form id="resetPasswordForm">
+                <div class="form-group">
+                    <label>Client Email</label>
+                    <input type="email" id="resetEmail" placeholder="client@email.com" required>
+                </div>
+                <div class="form-group">
+                    <label>New Password</label>
+                    <input type="text" id="resetPassword" placeholder="New password">
+                    <small style="color: #888; display: block; margin-top: 5px;">Leave blank to auto-generate</small>
+                </div>
+                <button type="submit" class="btn">Reset Password</button>
+                <div id="resetMessage" class="message"></div>
+            </form>
+        </div>
+
         <!-- Client List -->
         <div class="card">
             <h2>👥 All Clients</h2>
@@ -249,6 +267,56 @@
                     document.getElementById('clientName').value = '';
                     document.getElementById('clientEmail').value = '';
                     document.getElementById('clientPassword').value = '';
+                } else {
+                    messageEl.textContent = 'Error: ' + data.error;
+                    messageEl.className = 'message error';
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                messageEl.textContent = 'Could not connect to server';
+                messageEl.className = 'message error';
+            }
+        });
+
+        // Reset password
+        document.getElementById('resetPasswordForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const adminKey = document.getElementById('adminKey').value;
+            const email = document.getElementById('resetEmail').value.trim();
+            let password = document.getElementById('resetPassword').value || generatePassword();
+
+            const messageEl = document.getElementById('resetMessage');
+            messageEl.className = 'message';
+            messageEl.style.display = 'none';
+
+            if (!adminKey) {
+                messageEl.textContent = 'Please enter the admin key';
+                messageEl.className = 'message error';
+                return;
+            }
+
+            try {
+                const response = await fetch('/api/admin/reset-password', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ adminKey, email, password })
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    messageEl.innerHTML = `
+                        <strong>✓ Password reset successfully!</strong><br><br>
+                        <strong>Email:</strong> ${email}<br>
+                        <strong>New Password:</strong> <code style="background: #f0f0f0; padding: 2px 8px; border-radius: 4px;">${password}</code><br><br>
+                        <em>Share the new password with your client.</em>
+                    `;
+                    messageEl.className = 'message success';
+
+                    // Clear form
+                    document.getElementById('resetEmail').value = '';
+                    document.getElementById('resetPassword').value = '';
                 } else {
                     messageEl.textContent = 'Error: ' + data.error;
                     messageEl.className = 'message error';
