@@ -344,6 +344,65 @@ async function isAdmin(userId) {
 }
 
 /**
+ * Update client details (admin function)
+ */
+async function updateClient(userId, { name, email }) {
+    const updates = [];
+    const values = [];
+    let paramCount = 1;
+
+    if (name !== undefined && name !== null) {
+        updates.push(`name = $${paramCount}`);
+        values.push(name);
+        paramCount++;
+    }
+
+    if (email !== undefined && email !== null) {
+        updates.push(`email = $${paramCount}`);
+        values.push(email);
+        paramCount++;
+    }
+
+    if (updates.length === 0) {
+        throw new Error('No fields to update');
+    }
+
+    updates.push(`updated_at = NOW()`);
+    values.push(userId);
+
+    const query = `
+        UPDATE users
+        SET ${updates.join(', ')}
+        WHERE id = $${paramCount}
+        RETURNING *
+    `;
+
+    const result = await pool.query(query, values);
+    if (result.rows.length === 0) {
+        throw new Error('User not found');
+    }
+    return result.rows[0];
+}
+
+/**
+ * Delete client and all their data (admin function)
+ */
+async function deleteClient(userId) {
+    // Due to ON DELETE CASCADE, deleting user will automatically delete:
+    // - blueprints
+    // - cv_data
+    // - decision_frameworks
+    const result = await pool.query(
+        'DELETE FROM users WHERE id = $1 RETURNING id',
+        [userId]
+    );
+    if (result.rows.length === 0) {
+        throw new Error('User not found');
+    }
+    return result.rows[0];
+}
+
+/**
  * Save CV data linked to blueprint
  */
 async function saveCVData(userId, blueprintId, cvData) {
@@ -410,6 +469,8 @@ module.exports = {
     createClientAccount,
     getAllUsers,
     isAdmin,
+    updateClient,
+    deleteClient,
     saveCVData,
     getCVData
 };

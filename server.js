@@ -187,6 +187,50 @@ app.post('/api/admin/reset-password', async (req, res) => {
     }
 });
 
+// Update client (admin only)
+app.post('/api/admin/update-client', async (req, res) => {
+    try {
+        const { userId, name, email, adminKey } = req.body;
+
+        const ADMIN_KEY = process.env.ADMIN_KEY || 'spark-admin-2025';
+        if (adminKey !== ADMIN_KEY) {
+            return res.status(403).json({ success: false, error: 'Invalid admin key' });
+        }
+
+        if (!userId) {
+            return res.status(400).json({ success: false, error: 'User ID is required' });
+        }
+
+        const user = await db.updateClient(userId, { name, email });
+        res.json({ success: true, user: { id: user.id, email: user.email, name: user.name } });
+    } catch (error) {
+        console.error('Update client error:', error);
+        res.status(500).json({ success: false, error: error.message });
+    }
+});
+
+// Delete client (admin only)
+app.post('/api/admin/delete-client', async (req, res) => {
+    try {
+        const { userId, adminKey } = req.body;
+
+        const ADMIN_KEY = process.env.ADMIN_KEY || 'spark-admin-2025';
+        if (adminKey !== ADMIN_KEY) {
+            return res.status(403).json({ success: false, error: 'Invalid admin key' });
+        }
+
+        if (!userId) {
+            return res.status(400).json({ success: false, error: 'User ID is required' });
+        }
+
+        await db.deleteClient(userId);
+        res.json({ success: true, message: 'Client deleted successfully' });
+    } catch (error) {
+        console.error('Delete client error:', error);
+        res.status(500).json({ success: false, error: error.message });
+    }
+});
+
 // Save Blueprint
 app.post('/api/blueprint', async (req, res) => {
     try {

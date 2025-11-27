@@ -144,6 +144,64 @@
             color: #e65100;
             margin-bottom: 10px;
         }
+
+        .btn-small {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 0.85em;
+            font-weight: 500;
+            cursor: pointer;
+            margin-right: 5px;
+        }
+        .btn-small:hover {
+            opacity: 0.9;
+        }
+        .btn-danger {
+            background: linear-gradient(135deg, #e53935 0%, #c62828 100%);
+        }
+        .btn-edit {
+            background: linear-gradient(135deg, #43a047 0%, #2e7d32 100%);
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        .modal.active {
+            display: flex;
+        }
+        .modal-content {
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            max-width: 500px;
+            width: 90%;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+        }
+        .modal-content h3 {
+            color: #667eea;
+            margin-bottom: 20px;
+        }
+        .modal-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        .btn-secondary {
+            background: #e0e0e0;
+            color: #333;
+        }
     </style>
 </head>
 <body>
@@ -210,6 +268,44 @@
             <button class="btn" onclick="loadUsers()" style="margin-bottom: 20px;">Load Client List</button>
             <div id="usersContainer">
                 <p style="color: #888;">Click "Load Client List" to view all registered clients.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Client Modal -->
+    <div id="editModal" class="modal">
+        <div class="modal-content">
+            <h3>✏️ Edit Client</h3>
+            <form id="editClientForm">
+                <input type="hidden" id="editUserId">
+                <div class="form-group">
+                    <label>Client Name</label>
+                    <input type="text" id="editName" required>
+                </div>
+                <div class="form-group">
+                    <label>Client Email</label>
+                    <input type="email" id="editEmail" required>
+                </div>
+                <div id="editMessage" class="message"></div>
+                <div class="modal-actions">
+                    <button type="submit" class="btn">Save Changes</button>
+                    <button type="button" class="btn btn-secondary" onclick="closeEditModal()">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Delete Confirmation Modal -->
+    <div id="deleteModal" class="modal">
+        <div class="modal-content">
+            <h3>🗑️ Delete Client</h3>
+            <p>Are you sure you want to delete <strong id="deleteClientName"></strong>?</p>
+            <p style="color: #c62828; margin-top: 10px;">This will permanently delete the client and all their data (blueprints, CV data, etc.).</p>
+            <input type="hidden" id="deleteUserId">
+            <div id="deleteMessage" class="message"></div>
+            <div class="modal-actions">
+                <button type="button" class="btn btn-danger" onclick="confirmDelete()">Delete Client</button>
+                <button type="button" class="btn btn-secondary" onclick="closeDeleteModal()">Cancel</button>
             </div>
         </div>
     </div>
@@ -363,6 +459,7 @@
                                     <th>Email</th>
                                     <th>Created</th>
                                     <th>Last Login</th>
+                                    <th>Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -371,13 +468,20 @@
                     data.users.forEach(user => {
                         const created = user.created_at ? new Date(user.created_at).toLocaleDateString('en-GB') : '-';
                         const lastLogin = user.last_login ? new Date(user.last_login).toLocaleDateString('en-GB') : 'Never';
+                        const userName = user.name || '-';
+                        const userEmail = user.email;
+                        const userId = user.id;
 
                         html += `
                             <tr>
-                                <td>${user.name || '-'}</td>
-                                <td>${user.email}</td>
+                                <td>${userName}</td>
+                                <td>${userEmail}</td>
                                 <td>${created}</td>
                                 <td>${lastLogin}</td>
+                                <td>
+                                    <button class="btn-small btn-edit" onclick="openEditModal('${userId}', '${userName}', '${userEmail}')">Edit</button>
+                                    <button class="btn-small btn-danger" onclick="openDeleteModal('${userId}', '${userName}')">Delete</button>
+                                </td>
                             </tr>
                         `;
                     });
@@ -392,6 +496,122 @@
                 container.innerHTML = '<p style="color: #c62828;">Could not connect to server</p>';
             }
         }
+
+        // Edit modal functions
+        function openEditModal(userId, name, email) {
+            document.getElementById('editUserId').value = userId;
+            document.getElementById('editName').value = name === '-' ? '' : name;
+            document.getElementById('editEmail').value = email;
+            document.getElementById('editMessage').className = 'message';
+            document.getElementById('editMessage').style.display = 'none';
+            document.getElementById('editModal').classList.add('active');
+        }
+
+        function closeEditModal() {
+            document.getElementById('editModal').classList.remove('active');
+        }
+
+        // Edit form submission
+        document.getElementById('editClientForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const adminKey = document.getElementById('adminKey').value;
+            const userId = document.getElementById('editUserId').value;
+            const name = document.getElementById('editName').value.trim();
+            const email = document.getElementById('editEmail').value.trim();
+            const messageEl = document.getElementById('editMessage');
+
+            if (!adminKey) {
+                messageEl.textContent = 'Please enter the admin key';
+                messageEl.className = 'message error';
+                return;
+            }
+
+            try {
+                const response = await fetch('/api/admin/update-client', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ adminKey, userId, name, email })
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    messageEl.textContent = '✓ Client updated successfully!';
+                    messageEl.className = 'message success';
+                    setTimeout(() => {
+                        closeEditModal();
+                        loadUsers();
+                    }, 1000);
+                } else {
+                    messageEl.textContent = 'Error: ' + data.error;
+                    messageEl.className = 'message error';
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                messageEl.textContent = 'Could not connect to server';
+                messageEl.className = 'message error';
+            }
+        });
+
+        // Delete modal functions
+        function openDeleteModal(userId, name) {
+            document.getElementById('deleteUserId').value = userId;
+            document.getElementById('deleteClientName').textContent = name === '-' ? 'this client' : name;
+            document.getElementById('deleteMessage').className = 'message';
+            document.getElementById('deleteMessage').style.display = 'none';
+            document.getElementById('deleteModal').classList.add('active');
+        }
+
+        function closeDeleteModal() {
+            document.getElementById('deleteModal').classList.remove('active');
+        }
+
+        async function confirmDelete() {
+            const adminKey = document.getElementById('adminKey').value;
+            const userId = document.getElementById('deleteUserId').value;
+            const messageEl = document.getElementById('deleteMessage');
+
+            if (!adminKey) {
+                messageEl.textContent = 'Please enter the admin key';
+                messageEl.className = 'message error';
+                return;
+            }
+
+            try {
+                const response = await fetch('/api/admin/delete-client', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ adminKey, userId })
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    messageEl.textContent = '✓ Client deleted successfully!';
+                    messageEl.className = 'message success';
+                    setTimeout(() => {
+                        closeDeleteModal();
+                        loadUsers();
+                    }, 1000);
+                } else {
+                    messageEl.textContent = 'Error: ' + data.error;
+                    messageEl.className = 'message error';
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                messageEl.textContent = 'Could not connect to server';
+                messageEl.className = 'message error';
+            }
+        }
+
+        // Close modals when clicking outside
+        document.getElementById('editModal').addEventListener('click', (e) => {
+            if (e.target.id === 'editModal') closeEditModal();
+        });
+        document.getElementById('deleteModal').addEventListener('click', (e) => {
+            if (e.target.id === 'deleteModal') closeDeleteModal();
+        });
     </script>
 </body>
 </html>

@@ -175,9 +175,48 @@ Keep it simple:
 
 ---
 
+## FIRST: Test Database Persistence
+
+Before building anything new, check if the current app saves data:
+
+### Quick Test
+
+1. Fill in the questionnaire with Sarah Mitchell's sample answers
+2. Generate the Blueprint
+3. Close the browser, reopen the dashboard
+4. Is the Blueprint still there?
+
+### Check Postgres Directly
+
+```sql
+-- See if any tables exist
+\dt
+
+-- Check for saved blueprints
+SELECT * FROM blueprints;
+
+-- Check for users
+SELECT * FROM users;
+```
+
+### If Data is NOT Persisting
+
+The current app likely generates HTML only. You'll need to:
+
+1. Create the database tables (use `database_schema.sql`)
+2. Modify Blueprint generation to ALSO save structured JSON to Postgres
+3. Add a "load saved Blueprint" function to the dashboard
+
+### If Data IS Persisting
+
+Check the schema matches what we need. Ensure the Blueprint stores structured fields (not just raw HTML) so CV Builder and Decision Framework can read specific values.
+
+---
+
 ## Priority Order
 
-1. **User auth + database connection** - Foundation
+1. **Test database persistence** - Check what currently saves
+2. **User auth + database connection** - Foundation
 2. **Blueprint data extraction** - Save structured data when generating
 3. **Dashboard** - Show all tools in one place
 4. **CV Builder connection** - Pre-fill from Blueprint
