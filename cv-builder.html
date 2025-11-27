@@ -253,6 +253,40 @@
             color: #FFB627;
         }
 
+        /* Editable Sections */
+        .editable-section {
+            border: 1px dashed transparent;
+            padding: 10px;
+            margin: -10px;
+            border-radius: 8px;
+            transition: all 0.2s;
+        }
+        .editable-section:hover {
+            border-color: #667eea;
+            background: rgba(102, 126, 234, 0.03);
+        }
+        .editable-section:focus {
+            outline: none;
+            border-color: #667eea;
+            background: rgba(102, 126, 234, 0.05);
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        /* Edit hint */
+        .cv-section:hover::after {
+            content: '✏️ Click to edit';
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 0.75em;
+            color: #667eea;
+            opacity: 0.7;
+        }
+        .cv-section {
+            position: relative;
+        }
+
         /* Print Styles */
         @media print {
             .sidebar { display: none; }
@@ -386,10 +420,144 @@
                     </ul>
                 </div>
 
-                <div class="cv-section" id="experienceSection" style="display: none;">
+                <div class="cv-section" id="experienceSection">
                     <div class="cv-section-title">Experience</div>
-                    <div id="cvExperience">
-                        <!-- Experience from uploaded CV -->
+                    <div id="cvExperience" class="editable-section" contenteditable="true">
+                        <div class="cv-experience-item" style="margin-bottom: 25px;">
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                                <span style="font-weight: 600; color: #2c3e50;">[Job Title]</span>
+                                <span style="color: #888; font-size: 0.9em;">[Start Date] - [End Date]</span>
+                            </div>
+                            <div style="color: #667eea; margin-bottom: 10px;">[Company Name]</div>
+                            <ul style="padding-left: 20px; color: #555;">
+                                <li style="margin-bottom: 8px; line-height: 1.6;">[Key achievement or responsibility]</li>
+                                <li style="margin-bottom: 8px; line-height: 1.6;">[Key achievement or responsibility]</li>
+                                <li style="margin-bottom: 8px; line-height: 1.6;">[Key achievement or responsibility]</li>
+                            </ul>
+                        </div>
+                        <div class="cv-experience-item" style="margin-bottom: 25px;">
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                                <span style="font-weight: 600; color: #2c3e50;">[Previous Job Title]</span>
+                                <span style="color: #888; font-size: 0.9em;">[Start Date] - [End Date]</span>
+                            </div>
+                            <div style="color: #667eea; margin-bottom: 10px;">[Company Name]</div>
+                            <ul style="padding-left: 20px; color: #555;">
+                                <li style="margin-bottom: 8px; line-height: 1.6;">[Key achievement or responsibility]</li>
+                                <li style="margin-bottom: 8px; line-height: 1.6;">[Key achievement or responsibility]</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="cv-section" id="educationSection">
+                    <div class="cv-section-title">Education</div>
+                    <div id="cvEducation" class="editable-section" contenteditable="true">
+                        <div style="margin-bottom: 15px;">
+                            <div style="display: flex; justify-content: space-between;">
+                                <span style="font-weight: 600; color: #2c3e50;">[Degree/Qualification]</span>
+                                <span style="color: #888; font-size: 0.9em;">[Year]</span>
+                            </div>
+                            <div style="color: #667eea;">[University/Institution]</div>
+                        </div>
+                        <div style="margin-bottom: 15px;">
+                            <div style="display: flex; justify-content: space-between;">
+                                <span style="font-weight: 600; color: #2c3e50;">[Degree/Qualification]</span>
+                                <span style="color: #888; font-size: 0.9em;">[Year]</span>
+                            </div>
+                            <div style="color: #667eea;">[University/Institution]</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="cv-section" id="certificationsSection">
+                    <div class="cv-section-title">Professional Certifications</div>
+                    <div id="cvCertifications" class="editable-section" contenteditable="true">
+                        <ul style="padding-left: 20px; color: #555;">
+                            <li style="margin-bottom: 8px;">[Certification Name] - [Issuing Body] ([Year])</li>
+                            <li style="margin-bottom: 8px;">[Certification Name] - [Issuing Body] ([Year])</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="cv-section" id="projectsSection">
+                    <div class="cv-section-title">Key Projects</div>
+                    <div id="cvProjects" class="editable-section" contenteditable="true">
+                        <div style="margin-bottom: 15px;">
+                            <span style="font-weight: 600; color: #2c3e50;">[Project Name]</span>
+                            <p style="color: #555; margin-top: 5px; line-height: 1.6;">[Brief description of the project, your role, and the outcome achieved]</p>
+                        </div>
+                        <div style="margin-bottom: 15px;">
+                            <span style="font-weight: 600; color: #2c3e50;">[Project Name]</span>
+                            <p style="color: #555; margin-top: 5px; line-height: 1.6;">[Brief description of the project, your role, and the outcome achieved]</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="cv-section" id="awardsSection">
+                    <div class="cv-section-title">Awards & Recognition</div>
+                    <div id="cvAwards" class="editable-section" contenteditable="true">
+                        <ul style="padding-left: 20px; color: #555;">
+                            <li style="margin-bottom: 8px;">[Award Name] - [Organisation] ([Year])</li>
+                            <li style="margin-bottom: 8px;">[Recognition/Achievement] - [Context] ([Year])</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="cv-section" id="languagesSection">
+                    <div class="cv-section-title">Languages</div>
+                    <div id="cvLanguages" class="editable-section" contenteditable="true">
+                        <div style="display: flex; flex-wrap: wrap; gap: 15px; color: #555;">
+                            <span><strong>English</strong> - Native</span>
+                            <span><strong>[Language]</strong> - [Proficiency Level]</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="cv-section" id="membershipsSection">
+                    <div class="cv-section-title">Professional Memberships</div>
+                    <div id="cvMemberships" class="editable-section" contenteditable="true">
+                        <ul style="padding-left: 20px; color: #555;">
+                            <li style="margin-bottom: 8px;">[Professional Body/Association] - [Membership Level]</li>
+                            <li style="margin-bottom: 8px;">[Professional Body/Association] - [Membership Level]</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="cv-section" id="volunteerSection">
+                    <div class="cv-section-title">Volunteer Work & Community</div>
+                    <div id="cvVolunteer" class="editable-section" contenteditable="true">
+                        <div style="margin-bottom: 15px;">
+                            <div style="display: flex; justify-content: space-between;">
+                                <span style="font-weight: 600; color: #2c3e50;">[Role]</span>
+                                <span style="color: #888; font-size: 0.9em;">[Dates]</span>
+                            </div>
+                            <div style="color: #667eea;">[Organisation]</div>
+                            <p style="color: #555; margin-top: 5px;">[Brief description of your contribution]</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="cv-section" id="publicationsSection">
+                    <div class="cv-section-title">Publications & Speaking</div>
+                    <div id="cvPublications" class="editable-section" contenteditable="true">
+                        <ul style="padding-left: 20px; color: #555;">
+                            <li style="margin-bottom: 8px;">"[Article/Book Title]" - [Publication/Platform] ([Year])</li>
+                            <li style="margin-bottom: 8px;">[Conference/Event] - [Topic] ([Year])</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="cv-section" id="interestsSection">
+                    <div class="cv-section-title">Interests</div>
+                    <div id="cvInterests" class="editable-section" contenteditable="true">
+                        <p style="color: #555; line-height: 1.6;">[Your interests and hobbies that show personality and transferable skills - e.g., marathon running, photography, mentoring young professionals]</p>
+                    </div>
+                </div>
+
+                <div class="cv-section" id="referencesSection">
+                    <div class="cv-section-title">References</div>
+                    <div id="cvReferences" class="editable-section" contenteditable="true">
+                        <p style="color: #555; font-style: italic;">Available upon request</p>
                     </div>
                 </div>
             </div>
