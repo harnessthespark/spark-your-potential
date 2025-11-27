@@ -535,38 +535,76 @@
             }
         }
 
-        // Navigation functions - Direct links to HTML files for demo
+        // Navigation functions - Load user-specific documents
+        function getUserPrefix() {
+            // Return document prefix based on logged-in user
+            if (!currentUser) return 'Sarah_Mitchell';
+
+            const email = currentUser.email.toLowerCase();
+            if (email.includes('donald')) {
+                return 'Donald/Donald_Pirie';
+            }
+            // Default to Sarah for demo
+            return 'Sarah_Mitchell';
+        }
+
         function openQuestionnaire() {
-            // Open the completed questionnaire responses
-            window.open('Sarah_Mitchell_Questionnaire.html', '_blank');
+            const prefix = getUserPrefix();
+            if (prefix.includes('Donald')) {
+                // Donald's questionnaire data is in the database - show ability recognition
+                window.open('ability-recognition-visual.html', '_blank');
+            } else {
+                window.open('Sarah_Mitchell_Questionnaire.html', '_blank');
+            }
         }
 
         function openInsightsReport() {
-            // Open the Career Insights Report (£99 deliverable)
-            window.open('Sarah_Mitchell_Career_Insights_Report.html', '_blank');
+            const prefix = getUserPrefix();
+            if (prefix.includes('Donald')) {
+                window.open('Donald/Donald_Pirie_Career_Insights_Report.html', '_blank');
+            } else {
+                window.open('Sarah_Mitchell_Career_Insights_Report.html', '_blank');
+            }
         }
 
         function openBlueprint() {
-            // View the completed blueprint
-            window.open('Sarah_Mitchell_Blueprint.html', '_blank');
+            const prefix = getUserPrefix();
+            if (prefix.includes('Donald')) {
+                window.open('Donald/Donald_Pirie_Transformation_Blueprint.html', '_blank');
+            } else {
+                window.open('Sarah_Mitchell_Blueprint.html', '_blank');
+            }
         }
 
         function viewBlueprint() {
-            // View the completed blueprint
-            window.open('Sarah_Mitchell_Blueprint.html', '_blank');
+            openBlueprint();
         }
 
         function openCVBuilder() {
-            // Open the CV Builder with Sarah's data
-            window.open('Sarah_Mitchell_CV_Builder.html', '_blank');
+            const prefix = getUserPrefix();
+            if (prefix.includes('Donald')) {
+                window.open('Donald/Donald_Interactive_CV_Builder.html', '_blank');
+            } else {
+                window.open('Sarah_Mitchell_CV_Builder.html', '_blank');
+            }
         }
 
         function openMappingGuide() {
-            window.open('Sarah_Mitchell_Mapping_Guide.html', '_blank');
+            const prefix = getUserPrefix();
+            if (prefix.includes('Donald')) {
+                window.open('Donald/Donald_Blueprint_CV_LinkedIn_Mapping_Guide_1.html', '_blank');
+            } else {
+                window.open('Sarah_Mitchell_Mapping_Guide.html', '_blank');
+            }
         }
 
         function openDecisionFramework() {
-            window.open('Sarah_Mitchell_Decision_Framework.html', '_blank');
+            const prefix = getUserPrefix();
+            if (prefix.includes('Donald')) {
+                window.open('Donald/Donald_Decision_Framework_Updated_1.html', '_blank');
+            } else {
+                window.open('Sarah_Mitchell_Decision_Framework.html', '_blank');
+            }
         }
 
         function openPromptLibrary() {

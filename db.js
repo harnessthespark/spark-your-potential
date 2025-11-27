@@ -12,9 +12,11 @@ if (process.env.DATABASE_URL) {
 }
 
 // Database connection pool
+// Disable SSL for localhost (local dev), enable for production
+const isLocalhost = process.env.DATABASE_URL && process.env.DATABASE_URL.includes('localhost');
 const pool = new Pool({
     connectionString: process.env.DATABASE_URL,
-    ssl: process.env.DATABASE_URL ? { rejectUnauthorized: false } : false
+    ssl: (process.env.DATABASE_URL && !isLocalhost) ? { rejectUnauthorized: false } : false
 });
 
 console.log('Database configured:', process.env.DATABASE_URL ? 'yes' : 'no');

@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Donald Pirie - Interactive CV Builder</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; background: #f5f5f5; color: #2c3e50; line-height: 1.6; }
+        .app-container { display: grid; grid-template-columns: 380px 1fr; min-height: 100vh; }
+        .sidebar { background: linear-gradient(135deg, #E63946 0%, #D81B60 50%, #7B2CBF 100%); color: white; padding: 25px 20px; overflow-y: auto; position: sticky; top: 0; height: 100vh; }
+        .sidebar h1 { font-size: 1.4em; margin-bottom: 5px; }
+        .sidebar .subtitle { font-size: 0.85em; opacity: 0.9; margin-bottom: 25px; padding-bottom: 15px; border-bottom: 1px solid rgba(255,255,255,0.2); }
+        .sidebar h2 { font-size: 0.85em; text-transform: uppercase; letter-spacing: 1px; margin: 20px 0 12px 0; opacity: 0.8; }
+        .option-group { background: rgba(255,255,255,0.1); border-radius: 10px; padding: 12px; margin-bottom: 12px; }
+        .option-group label { display: block; padding: 8px 10px; margin: 4px 0; background: rgba(255,255,255,0.1); border-radius: 6px; cursor: pointer; font-size: 0.8em; transition: all 0.2s; }
+        .option-group label:hover { background: rgba(255,255,255,0.2); }
+        .option-group input[type="radio"] { margin-right: 8px; }
+        .toggle-group { margin: 8px 0; }
+        .toggle-item { display: flex; align-items: center; justify-content: space-between; padding: 8px 10px; background: rgba(255,255,255,0.1); border-radius: 6px; margin: 4px 0; font-size: 0.8em; }
+        .toggle-switch { position: relative; width: 40px; height: 22px; }
+        .toggle-switch input { opacity: 0; width: 0; height: 0; }
+        .toggle-slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: rgba(0,0,0,0.3); transition: 0.3s; border-radius: 22px; }
+        .toggle-slider:before { position: absolute; content: ""; height: 16px; width: 16px; left: 3px; bottom: 3px; background-color: white; transition: 0.3s; border-radius: 50%; }
+        input:checked + .toggle-slider { background-color: #4CAF50; }
+        input:checked + .toggle-slider:before { transform: translateX(18px); }
+        .blueprint-source { background: rgba(255,255,255,0.15); padding: 8px 10px; border-radius: 6px; font-size: 0.7em; margin-top: 8px; border-left: 3px solid #FFD700; }
+        .blueprint-source strong { color: #FFD700; }
+        .prop-input { width: 100%; padding: 8px 10px; border: 1px solid rgba(255,255,255,0.3); border-radius: 6px; background: rgba(255,255,255,0.9); color: #2c3e50; font-size: 0.8em; font-family: 'Inter', sans-serif; margin-top: 4px; }
+        .prop-input:focus { outline: none; border-color: #FFD700; box-shadow: 0 0 0 2px rgba(255,215,0,0.3); }
+        .prop-label { display: block; padding: 0; margin: 10px 0 2px 0; background: none; font-size: 0.7em; text-transform: uppercase; letter-spacing: 0.5px; opacity: 0.9; }
+        .action-buttons { margin-top: 20px; padding-top: 15px; border-top: 1px solid rgba(255,255,255,0.2); }
+        .btn { display: block; width: 100%; padding: 10px 15px; margin: 8px 0; border: none; border-radius: 8px; font-size: 0.85em; font-weight: 600; cursor: pointer; transition: all 0.2s; }
+        .btn-primary { background: white; color: #D81B60; }
+        .btn-primary:hover { background: #f0f0f0; transform: translateY(-1px); }
+        .btn-secondary { background: rgba(255,255,255,0.2); color: white; }
+        .btn-secondary:hover { background: rgba(255,255,255,0.3); }
+        .cv-preview { padding: 40px; overflow-y: auto; }
+        .cv-document { max-width: 800px; margin: 0 auto; background: white; box-shadow: 0 5px 30px rgba(0,0,0,0.1); border-radius: 8px; overflow: hidden; padding: 40px; }
+        .cv-name { font-size: 2em; font-weight: 700; color: #2c3e50; margin-bottom: 8px; text-transform: uppercase; }
+        .cv-title { font-size: 1em; color: #555; font-weight: 400; margin-bottom: 12px; line-height: 1.5; font-style: italic; }
+        .cv-contact { font-size: 0.85em; color: #666; margin-bottom: 20px; }
+        .cv-profile { font-size: 0.9em; line-height: 1.6; color: #444; margin-bottom: 25px; }
+        .cv-section { margin-bottom: 25px; }
+        .cv-section-title { font-size: 0.95em; font-weight: 700; color: #2c3e50; margin-bottom: 10px; }
+        .cv-skills { font-size: 0.85em; color: #444; line-height: 1.6; }
+        .cv-highlights { list-style: disc; margin-left: 20px; font-size: 0.85em; color: #444; }
+        .cv-highlights li { margin-bottom: 6px; }
+        .cv-experience-block { margin-bottom: 20px; }
+        .cv-exp-header { font-weight: 600; color: #2c3e50; font-size: 0.9em; margin-bottom: 3px; }
+        .cv-exp-meta { font-size: 0.85em; color: #666; margin-bottom: 8px; }
+        .cv-exp-bullets { list-style: disc; margin-left: 20px; font-size: 0.85em; color: #555; }
+        .cv-exp-bullets li { margin-bottom: 4px; }
+        .cv-edu-section { margin-bottom: 8px; }
+        .cv-edu-title { font-weight: 600; font-size: 0.85em; color: #2c3e50; }
+        .cv-edu-list { list-style: disc; margin-left: 20px; font-size: 0.85em; color: #444; }
+        .cv-edu-list li { margin-bottom: 3px; }
+        .cv-testimonial { background: #f8f9fa; padding: 15px; border-radius: 8px; margin-bottom: 12px; border-left: 3px solid #7B2CBF; }
+        .cv-testimonial-quote { font-style: italic; font-size: 0.85em; color: #444; margin-bottom: 5px; }
+        .cv-testimonial-author { font-size: 0.8em; color: #666; }
+        .cv-case-study { background: #f8f9fa; border-radius: 8px; padding: 15px; margin-bottom: 15px; border-left: 3px solid #E63946; }
+        .cv-case-study-title { font-weight: 600; color: #E63946; margin-bottom: 10px; font-size: 0.95em; }
+        .cv-case-study-grid { display: grid; grid-template-columns: 100px 1fr; gap: 4px 10px; font-size: 0.85em; }
+        .cv-case-study-label { font-weight: 600; color: #666; }
+        .hidden { display: none !important; }
+        [contenteditable="true"] { outline: none; transition: background 0.2s; }
+        [contenteditable="true"]:hover { background: #fffde7; }
+        [contenteditable="true"]:focus { background: #fff9c4; box-shadow: inset 0 0 0 2px #ffc107; }
+        .edit-hint { font-size: 0.75em; color: rgba(255,255,255,0.7); margin-top: 5px; font-style: italic; }
+        @media print {
+            .sidebar { display: none !important; }
+            .app-container { grid-template-columns: 1fr; display: block; }
+            .cv-preview { padding: 0; }
+            .cv-document { box-shadow: none; border-radius: 0; max-width: 100%; padding: 20px; }
+            [contenteditable="true"]:hover, [contenteditable="true"]:focus { background: transparent; box-shadow: none; }
+            @page { margin: 1.5cm; size: A4; }
+        }
+        @media (max-width: 900px) { .app-container { grid-template-columns: 1fr; } .sidebar { position: relative; height: auto; } }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <div class="sidebar">
+            <h1>CV Builder</h1>
+            <div class="subtitle">Blueprint → CV Tool for Donald Pirie</div>
+
+            <h2>✍️ Draft Your Proposition</h2>
+            <div class="option-group" style="background: rgba(255,215,0,0.15); border: 1px solid rgba(255,215,0,0.3);">
+                <p style="font-size: 0.75em; margin-bottom: 10px; opacity: 0.9;">Build your proposition:</p>
+                <label class="prop-label">I'm a... [role identity]</label>
+                <input type="text" id="prop-role" class="prop-input" value="Transformational Strategist" oninput="updateProposition()">
+                <label class="prop-label">who... [what you do]</label>
+                <input type="text" id="prop-what" class="prop-input" value="helps organisations restore belief and build brand platforms that last" oninput="updateProposition()">
+                <label class="prop-label">for... [who you serve]</label>
+                <input type="text" id="prop-who" class="prop-input" value="corporate organisations navigating complexity" oninput="updateProposition()">
+                <label class="prop-label">I... [unique approach/value]</label>
+                <input type="text" id="prop-unique" class="prop-input" value="connect insight, ideas, infrastructure and people—staying until transformation is embedded" oninput="updateProposition()">
+                <label class="prop-label">After... [career background]</label>
+                <input type="text" id="prop-background" class="prop-input" value="20+ years helping global brands like UBS, UPS and AMD rediscover what they stand for" oninput="updateProposition()">
+                <label class="prop-label">I'm now... [where heading & why]</label>
+                <input type="text" id="prop-heading" class="prop-input" value="seeking roles where I can build something meaningful and see the impact of my work" oninput="updateProposition()">
+                <div class="blueprint-source"><strong>📍 From Blueprint:</strong> Core Pattern + Thread + Why Now</div>
+            </div>
+            <div style="background: rgba(255,255,255,0.1); border-radius: 8px; padding: 10px; margin-bottom: 15px;">
+                <p style="font-size: 0.7em; text-transform: uppercase; margin-bottom: 6px; opacity: 0.8;">Preview:</p>
+                <p id="proposition-preview" style="font-size: 0.8em; line-height: 1.5; font-style: italic;"></p>
+                <button class="btn btn-secondary" style="margin-top: 8px; padding: 6px 12px; font-size: 0.75em;" onclick="usePropositionAsProfile()">↓ Use as Profile</button>
+            </div>
+
+            <h2>📝 Profile Style</h2>
+            <div class="option-group">
+                <label><input type="radio" name="profile" value="original" checked onchange="updateProfile(this.value)"><span>Original CV</span></label>
+                <label><input type="radio" name="profile" value="transformation" onchange="updateProfile(this.value)"><span>Transformation Focus</span></label>
+                <label><input type="radio" name="profile" value="commercial" onchange="updateProfile(this.value)"><span>Commercial Focus</span></label>
+                <label><input type="radio" name="profile" value="custom" onchange="updateProfile(this.value)"><span>Custom Proposition</span></label>
+            </div>
+
+            <h2>🎯 Sections to Include</h2>
+            <div class="toggle-group">
+                <div class="toggle-item"><span>Title/Headline</span><label class="toggle-switch"><input type="checkbox" checked onchange="toggleSection('title', this.checked)"><span class="toggle-slider"></span></label></div>
+                <div class="toggle-item"><span>Profile Story</span><label class="toggle-switch"><input type="checkbox" checked onchange="toggleSection('profile', this.checked)"><span class="toggle-slider"></span></label></div>
+                <div class="toggle-item"><span>Key Skills</span><label class="toggle-switch"><input type="checkbox" checked onchange="toggleSection('skills', this.checked)"><span class="toggle-slider"></span></label></div>
+                <div class="toggle-item"><span>My Highlights</span><label class="toggle-switch"><input type="checkbox" checked onchange="toggleSection('highlights', this.checked)"><span class="toggle-slider"></span></label></div>
+                <div class="toggle-item"><span>Experience</span><label class="toggle-switch"><input type="checkbox" checked onchange="toggleSection('experience', this.checked)"><span class="toggle-slider"></span></label></div>
+                <div class="toggle-item"><span>Education & Training</span><label class="toggle-switch"><input type="checkbox" checked onchange="toggleSection('education', this.checked)"><span class="toggle-slider"></span></label></div>
+                <div class="toggle-item"><span>Outside Interests</span><label class="toggle-switch"><input type="checkbox" onchange="toggleSection('interests', this.checked)"><span class="toggle-slider"></span></label></div>
+                <div class="toggle-item"><span>Testimonials</span><label class="toggle-switch"><input type="checkbox" onchange="toggleSection('testimonials', this.checked)"><span class="toggle-slider"></span></label></div>
+                <div class="toggle-item"><span>Case Studies</span><label class="toggle-switch"><input type="checkbox" onchange="toggleSection('casestudies', this.checked)"><span class="toggle-slider"></span></label></div>
+            </div>
+
+            <h2>📘 Blueprint Reference</h2>
+            <div class="option-group" style="background: rgba(102,126,234,0.2); border: 1px solid rgba(102,126,234,0.4); max-height: 300px; overflow-y: auto;">
+                <p style="font-size: 0.7em; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; opacity: 0.9;">Your Core Pattern</p>
+                <p style="font-size: 0.8em; margin-bottom: 12px; line-height: 1.5;">"You don't fix strategies. You restore belief systems."</p>
+                
+                <p style="font-size: 0.7em; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; opacity: 0.9;">Your Thread</p>
+                <p style="font-size: 0.8em; margin-bottom: 12px; line-height: 1.5;">"Connecting insight, ideas, infrastructure and people — staying until transformation is embedded."</p>
+                
+                <p style="font-size: 0.7em; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; opacity: 0.9;">Key Evidence</p>
+                <ul style="font-size: 0.75em; margin-left: 15px; line-height: 1.6; margin-bottom: 12px;">
+                    <li><strong>UBS:</strong> $2.5m incremental revenue, .com transformation</li>
+                    <li><strong>UPS:</strong> +20% EMEA penetration, "United Problem Solvers"</li>
+                    <li><strong>AMD:</strong> "Together We Advance" global platform</li>
+                </ul>
+                
+                <p style="font-size: 0.7em; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; opacity: 0.9;">The Engine of Donald</p>
+                <ul style="font-size: 0.75em; margin-left: 15px; line-height: 1.6; margin-bottom: 12px;">
+                    <li>Reading the room</li>
+                    <li>Unlocking the thinking</li>
+                    <li>Connecting creativity to commercial</li>
+                </ul>
+                
+                <p style="font-size: 0.7em; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; opacity: 0.9;">Transformation Statement</p>
+                <p style="font-size: 0.8em; line-height: 1.5; font-style: italic;">"I help people move from confusion to conviction. They leave clearer, more confident, reconnected to purpose."</p>
+            </div>
+            <p class="edit-hint">👆 Scroll for more. Copy text to use in your CV.</p>
+
+            <h2>📊 Case Studies</h2>
+            <div class="toggle-group">
+                <div class="toggle-item"><span>UBS</span><label class="toggle-switch"><input type="checkbox" onchange="toggleCaseStudy('ubs', this.checked)"><span class="toggle-slider"></span></label></div>
+                <div class="toggle-item"><span>UPS</span><label class="toggle-switch"><input type="checkbox" onchange="toggleCaseStudy('ups', this.checked)"><span class="toggle-slider"></span></label></div>
+                <div class="toggle-item"><span>AMD</span><label class="toggle-switch"><input type="checkbox" onchange="toggleCaseStudy('amd', this.checked)"><span class="toggle-slider"></span></label></div>
+            </div>
+
+            <p class="edit-hint">💡 Click any text in the CV to edit directly</p>
+
+            <div class="action-buttons">
+                <button class="btn btn-primary" onclick="window.print()">🖨️ Print / Save as PDF</button>
+                <button class="btn btn-secondary" onclick="copyToClipboard()">📋 Copy Text</button>
+                <button class="btn btn-secondary" onclick="downloadAsHTML()">💾 Download HTML</button>
+            </div>
+        </div>
+
+        <div class="cv-preview">
+            <div class="cv-document" id="cv-document">
+                <!-- NAME -->
+                <div class="cv-name" contenteditable="true">Donald Pirie</div>
+                
+                <!-- TITLE/HEADLINE -->
+                <div class="cv-section" id="section-title">
+                    <div class="cv-title" id="cv-title" contenteditable="true">Senior brand transformation strategist with a passion for restoring belief and building brand platforms that drive commercial growth</div>
+                </div>
+                
+                <!-- CONTACT -->
+                <div class="cv-contact" contenteditable="true">+44 (0)7958 398 954 / <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="7c1813121d10180c150e15194d4d4d3c141308111d1510521f13520917">[email&#160;protected]</a> / linkedin.com/in/donaldpirie</div>
+                
+                <!-- PROFILE STORY -->
+                <div class="cv-section" id="section-profile">
+                    <div class="cv-profile" id="cv-profile" contenteditable="true">I'm a Senior Strategist with 20+ years experience delivering strategic thinking across financial services, B2B tech and complex global brands including UBS, AMD and UPS. I am passionate about brand transformation that results in creative work which wins awards and moves the needle. My thread is connecting insight, ideas, infrastructure and people—and staying until it's embedded.</div>
+                </div>
+
+                <!-- KEY SKILLS -->
+                <div class="cv-section" id="section-skills">
+                    <div class="cv-section-title">Key Skills</div>
+                    <div class="cv-skills" contenteditable="true">Brand strategy & architecture; Campaign development (positioning to execution); Research (quant & qual) & focus group moderation; Workshop facilitation; ATL (TV, digital, social) & BTL; Content strategy at scale; C-suite collaboration & stakeholder alignment; Team leadership & mentoring; Effectiveness measurement & ROI</div>
+                </div>
+
+                <!-- MY HIGHLIGHTS -->
+                <div class="cv-section" id="section-highlights">
+                    <div class="cv-section-title">My Highlights</div>
+                    <ul class="cv-highlights" contenteditable="true">
+                        <li>Created new revenue streams from UBS through .com transformation and brand relaunch (approx. $2.5m incremental revenue)</li>
+                        <li>Co-created UPS's brand platform "United Problem Solvers" – grew EMEA penetration +20%, enhanced employee pride through TED x UPS</li>
+                        <li>Launched AMD's disruptive brand platform "Together We Advance" across commercial, consumer and gaming</li>
+                        <li>Creative award winner at Cannes, BTAA, OneShow, DMA for McDonald's, Dell, NSPCC</li>
+                        <li>Marketing effectiveness awards – IPA, UK, US and Euro Effies (Grand Prix and Agency of the Year)</li>
+                        <li>Co-created Aramco's in-house agency and led brand launch, IPO comms, F1 sponsorship strategy</li>
+                    </ul>
+                </div>
+
+                <!-- EXPERIENCE -->
+                <div class="cv-section" id="section-experience">
+                    <div class="cv-section-title">Experience</div>
+                    
+                    <div class="cv-exp-meta" contenteditable="true"><strong>Key Clients:</strong> UBS, AMD, Aramco, UPS, EY, PepsiCo, Vype<br><strong>Agencies:</strong> Digitas, TBWA, McCann, Ogilvy, Wunderman Thompson, Leo Burnett</div>
+
+                    <div class="cv-experience-block">
+                        <div class="cv-exp-header" contenteditable="true">Consultant Strategist – The Effectiveness Partnership – Dec 2024 – ongoing</div>
+                    </div>
+
+                    <div class="cv-experience-block">
+                        <div class="cv-exp-header" contenteditable="true">Strategy Partner (freelance) – Digitas / UBS – May 2022 – Nov 2024</div>
+                        <ul class="cv-exp-bullets" contenteditable="true">
+                            <li>ubs.com transformation enabled new .com purpose, content and journey frameworks, growing leads</li>
+                            <li>Created brand campaign-driven customer journeys, growing HNW acquisition and net new money</li>
+                            <li>New global digital content strategy across platforms – grew familiarity, engagement and leads</li>
+                        </ul>
+                    </div>
+
+                    <div class="cv-experience-block">
+                        <div class="cv-exp-header" contenteditable="true">Strategy Partner – TBWA / AMD – Mar 2021 – Apr 2022</div>
+                        <ul class="cv-exp-bullets" contenteditable="true">
+                            <li>Co-created AMD's new brand platform "Together We Advance" – competitive positioning guiding internal and external narratives</li>
+                            <li>Fame campaigns across gaming, consumer and commercial divisions, maximising ROMI</li>
+                        </ul>
+                    </div>
+
+                    <div class="cv-experience-block">
+                        <div class="cv-exp-header" contenteditable="true">Global Strategy Director – McCann Worldgroup / Aramco – May 2019 – Aug 2020</div>
+                        <ul class="cv-exp-bullets" contenteditable="true">
+                            <li>Co-founded Well-7, Aramco's in-house agency</li>
+                            <li>Lead strategist on brand platform and launch, boosting awareness amongst energy influencers</li>
+                            <li>Led strategy on IPO campaign and F1 sponsorship</li>
+                        </ul>
+                    </div>
+
+                    <div class="cv-experience-block">
+                        <div class="cv-exp-header" contenteditable="true">Global Strategy Director – Wunderman Thompson / Vype – Sep 2017 – May 2019</div>
+                        <ul class="cv-exp-bullets" contenteditable="true">
+                            <li>Enabled Vype to become #1 vapour brand globally. Headed strategy team of 4</li>
+                            <li>Won IPA Effectiveness Award</li>
+                        </ul>
+                    </div>
+
+                    <div class="cv-experience-block">
+                        <div class="cv-exp-header" contenteditable="true">Strategy Director – Ogilvy Group – Aug 2010 – Feb 2017</div>
+                        <div class="cv-exp-meta" contenteditable="true">Key clients: UPS, UBS, EY, Skoda, BUPA, The Times</div>
+                        <ul class="cv-exp-bullets" contenteditable="true">
+                            <li>UPS new global brand platform "United Problem Solvers" – grew EMEA penetration +20%</li>
+                            <li>UBS x TED programme grew employee pride and enabled content programmes</li>
+                            <li>Co-developed EY's "Better Questions" brand platform</li>
+                        </ul>
+                    </div>
+
+                    <div class="cv-experience-block">
+                        <div class="cv-exp-header" contenteditable="true">Earlier Career – 1996 – 2010</div>
+                        <div class="cv-exp-meta" contenteditable="true">i-level, Rapp, Havas, BMP DDB, Leo Burnett, M&C Saatchi, PwC</div>
+                        <ul class="cv-exp-bullets" contenteditable="true">
+                            <li>Key clients: Samsung, NSPCC, Dell, McDonald's, Kellogg's, Nestlé, Specsavers</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- EDUCATION, TRAINING & AWARDS -->
+                <div class="cv-section" id="section-education">
+                    <div class="cv-section-title">Key Education, Training and Achievements</div>
+                    <div class="cv-edu-section">
+                        <div class="cv-edu-title">Education:</div>
+                        <ul class="cv-edu-list" contenteditable="true">
+                            <li>BA Hons Modern History – Oxford University (1991-1994)</li>
+                        </ul>
+                    </div>
+                    <div class="cv-edu-section">
+                        <div class="cv-edu-title">Training:</div>
+                        <ul class="cv-edu-list" contenteditable="true">
+                            <li>APG Planning and Strategy course</li>
+                            <li>IPA Effectiveness training</li>
+                        </ul>
+                    </div>
+                    <div class="cv-edu-section">
+                        <div class="cv-edu-title">Awards:</div>
+                        <ul class="cv-edu-list" contenteditable="true">
+                            <li>Cannes Lions, BTAA, OneShow, DMA Awards</li>
+                            <li>IPA Effectiveness Awards, Euro Effies Grand Prix</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- OUTSIDE INTERESTS -->
+                <div class="cv-section hidden" id="section-interests">
+                    <div class="cv-section-title">Outside Interests</div>
+                    <div class="cv-skills" contenteditable="true">[Add hobbies and interests here]</div>
+                </div>
+
+                <!-- TESTIMONIALS -->
+                <div class="cv-section hidden" id="section-testimonials">
+                    <div class="cv-section-title">Testimonials</div>
+                    <div class="cv-testimonial">
+                        <div class="cv-testimonial-quote" contenteditable="true">"Donald doesn't just deliver strategy—he transforms how teams think about their work. His ability to find the human truth and make it actionable is exceptional."</div>
+                        <div class="cv-testimonial-author" contenteditable="true">— CSO, Global Agency</div>
+                    </div>
+                    <div class="cv-testimonial">
+                        <div class="cv-testimonial-quote" contenteditable="true">"Working with Donald felt like having someone finally articulate what we'd been struggling to say. He gave us our story back."</div>
+                        <div class="cv-testimonial-author" contenteditable="true">— CMO, Financial Services</div>
+                    </div>
+                </div>
+
+                <!-- CASE STUDIES -->
+                <div class="cv-section hidden" id="section-casestudies">
+                    <div class="cv-section-title">Case Studies</div>
+                    
+                    <div class="cv-case-study hidden" id="casestudy-ubs">
+                        <div class="cv-case-study-title">Case Study: UBS – "Banking is our Craft"</div>
+                        <div class="cv-case-study-grid" contenteditable="true">
+                            <div class="cv-case-study-label">Brief:</div><div>Reposition UBS digital presence for new generation of HNWIs</div>
+                            <div class="cv-case-study-label">Research:</div><div>Audience insight work revealing disconnect between brand perception and reality</div>
+                            <div class="cv-case-study-label">Insight:</div><div>UBS had lost confidence in what made them special—the human craft behind banking</div>
+                            <div class="cv-case-study-label">Strategy:</div><div>Reconnect brand with craft narrative, elevating human intelligence and care</div>
+                            <div class="cv-case-study-label">Proposition:</div><div>"Banking is our Craft"</div>
+                            <div class="cv-case-study-label">Campaign:</div><div>Full .com transformation, content strategy, customer journey implementation</div>
+                            <div class="cv-case-study-label">Results:</div><div>$2.5m incremental revenue, increased leads, restored belief internally and externally</div>
+                        </div>
+                    </div>
+
+                    <div class="cv-case-study hidden" id="casestudy-ups">
+                        <div class="cv-case-study-title">Case Study: UPS – "United Problem Solvers"</div>
+                        <div class="cv-case-study-grid" contenteditable="true">
+                            <div class="cv-case-study-label">Brief:</div><div>Revitalise UPS brand positioning globally</div>
+                            <div class="cv-case-study-label">Research:</div><div>Employee and customer insight revealing functional logistics-speak had eroded emotional connection</div>
+                            <div class="cv-case-study-label">Insight:</div><div>UPS's real value is human ingenuity in solving business problems, not just delivery</div>
+                            <div class="cv-case-study-label">Strategy:</div><div>Reframe brand as creative problem-solving partner for business growth</div>
+                            <div class="cv-case-study-label">Proposition:</div><div>"United Problem Solvers"</div>
+                            <div class="cv-case-study-label">Campaign:</div><div>Global rebrand, TED x UPS employee programme, integrated comms</div>
+                            <div class="cv-case-study-label">Results:</div><div>+20% EMEA penetration, transformed employee pride for 400,000 staff</div>
+                        </div>
+                    </div>
+
+                    <div class="cv-case-study hidden" id="casestudy-amd">
+                        <div class="cv-case-study-title">Case Study: AMD – "Together We Advance"</div>
+                        <div class="cv-case-study-grid" contenteditable="true">
+                            <div class="cv-case-study-label">Brief:</div><div>Create new brand platform to compete beyond specs</div>
+                            <div class="cv-case-study-label">Research:</div><div>Competitive analysis showing AMD trapped in specs-driven positioning</div>
+                            <div class="cv-case-study-label">Insight:</div><div>AMD could lead on vision and progress, not just performance metrics</div>
+                            <div class="cv-case-study-label">Strategy:</div><div>Shift from promoting specs to shaping progress narrative</div>
+                            <div class="cv-case-study-label">Proposition:</div><div>"Together We Advance"</div>
+                            <div class="cv-case-study-label">Campaign:</div><div>Brand architecture and fame campaigns across commercial, consumer and gaming</div>
+                            <div class="cv-case-study-label">Results:</div><div>New competitive positioning, multi-audience impact, building market share</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const profiles = {
+            original: `I'm a Senior Strategist with 20+ years experience delivering strategic thinking across financial services, B2B tech and complex global brands including UBS, AMD and UPS. I am passionate about brand transformation that results in creative work which wins awards and moves the needle. My thread is connecting insight, ideas, infrastructure and people—and staying until it's embedded.`,
+            transformation: `I don't fix strategies. I restore belief systems. Across every transformation I've led—UBS, UPS, AMD—I turn confusion into conviction. Teams arrive stuck and paralysed; I find the human truth beneath the noise, and they don't just get a strategy—they get belief back. I connect insight, ideas, infrastructure and people—staying until transformation is embedded.`,
+            commercial: `Transformational strategist with 20+ years delivering measurable business impact through brand platforms. At UPS, I led "United Problem Solvers" growing EMEA penetration +20%. At UBS, I drove $2.5m incremental revenue through .com transformation. I specialise in connecting creativity to commercial outcomes—translating strategic vision into boardroom language.`,
+            custom: ``
+        };
+        const titles = {
+            original: `Senior brand transformation strategist with a passion for restoring belief and building brand platforms that drive commercial growth`,
+            transformation: `Transformational Strategist | Restoring belief systems and building brand platforms that last`,
+            commercial: `Strategy Director | Driving commercial growth through brand transformation | +20% at UPS, $2.5m at UBS`,
+            custom: ``
+        };
+        let customProfile = '', customTitle = '';
+        
+        function updateProfile(value) {
+            if (value === 'custom' && customProfile) { 
+                document.getElementById('cv-profile').textContent = customProfile;
+                document.getElementById('cv-title').textContent = customTitle || titles.transformation;
+            } else { 
+                document.getElementById('cv-profile').textContent = profiles[value];
+                document.getElementById('cv-title').textContent = titles[value];
+            }
+        }
+        function toggleSection(section, show) { const el = document.getElementById('section-' + section); if (el) el.classList.toggle('hidden', !show); }
+        function toggleCaseStudy(study, show) { 
+            const el = document.getElementById('casestudy-' + study); 
+            if (el) el.classList.toggle('hidden', !show);
+            const anyVisible = document.querySelectorAll('.cv-case-study:not(.hidden)').length > 0;
+            document.getElementById('section-casestudies').classList.toggle('hidden', !anyVisible);
+        }
+        function copyToClipboard() { navigator.clipboard.writeText(document.getElementById('cv-document').innerText).then(() => alert('CV text copied!')); }
+        function updateProposition() {
+            const r = document.getElementById('prop-role').value || '[role]';
+            const w = document.getElementById('prop-what').value || '[what]';
+            const wh = document.getElementById('prop-who').value || '[who]';
+            const u = document.getElementById('prop-unique').value || '[unique]';
+            const b = document.getElementById('prop-background').value || '[background]';
+            const h = document.getElementById('prop-heading').value || '[heading]';
+            document.getElementById('proposition-preview').textContent = `"I'm a ${r} who ${w} for ${wh}. I ${u}. After ${b}, I'm now ${h}."`;
+        }
+        function usePropositionAsProfile() {
+            const r = document.getElementById('prop-role').value;
+            const w = document.getElementById('prop-what').value;
+            const wh = document.getElementById('prop-who').value;
+            const u = document.getElementById('prop-unique').value;
+            const b = document.getElementById('prop-background').value;
+            const h = document.getElementById('prop-heading').value;
+            customProfile = `I'm a ${r} who ${w} for ${wh}. I ${u}. After ${b}, I'm now ${h}.`;
+            customTitle = `${r} | ${w.charAt(0).toUpperCase() + w.slice(1)}`;
+            profiles.custom = customProfile;
+            titles.custom = customTitle;
+            document.getElementById('cv-profile').textContent = customProfile;
+            document.getElementById('cv-title').textContent = customTitle;
+            document.querySelector('input[name="profile"][value="custom"]').checked = true;
+        }
+        function downloadAsHTML() {
+            const html = `<!DOCTYPE html><html lang="en-GB"><head><meta charset="UTF-8"><title>Donald Pirie CV</title><style>body{font-family:Arial,sans-serif;line-height:1.6;color:#2c3e50;max-width:800px;margin:0 auto;padding:40px}.cv-name{font-size:2em;font-weight:700;text-transform:uppercase}.cv-title{font-style:italic;color:#555;margin:8px 0}.cv-contact{color:#666;margin-bottom:20px}.cv-section{margin:25px 0}.cv-section-title{font-weight:700;margin-bottom:10px}.cv-highlights,.cv-exp-bullets,.cv-edu-list{margin-left:20px}.hidden{display:none}</style></head><body>${document.getElementById('cv-document').innerHTML}</body></html>`;
+            const blob = new Blob([html], {type:'text/html'});
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = 'Donald_Pirie_CV.html';
+            a.click();
+        }
+        document.addEventListener('DOMContentLoaded', updateProposition);
+    </script>
+</body>
+</html>
