@@ -54,6 +54,11 @@ app.get('/blueprint', (req, res) => {
     res.sendFile(path.join(__dirname, 'blueprint.html'));
 });
 
+// Donald's Blueprint (direct access)
+app.get('/donald-blueprint', (req, res) => {
+    res.sendFile(path.join(__dirname, 'donald-blueprint.html'));
+});
+
 // ============================================
 // API ENDPOINTS
 // ============================================
