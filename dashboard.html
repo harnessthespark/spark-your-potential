@@ -280,6 +280,47 @@
             </div>
         </div>
 
+        <!-- Coach Mode - Client Management (visible only to Lisa) -->
+        <div class="coach-mode" id="coachMode" style="display: none;">
+            <div style="background: linear-gradient(135deg, #FF6B35 0%, #FFB627 100%); color: white; border-radius: 15px; padding: 30px; margin-bottom: 30px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                    <div>
+                        <h2 style="font-size: 1.8em; margin-bottom: 5px;">🔥 Coach Mode</h2>
+                        <p style="opacity: 0.9;">Manage your Career Booster clients</p>
+                    </div>
+                    <button onclick="addNewClient()" style="background: white; color: #FF6B35; border: none; padding: 12px 25px; border-radius: 8px; font-weight: 600; cursor: pointer; font-size: 1em;">
+                        + Add New Client
+                    </button>
+                </div>
+
+                <!-- Client List -->
+                <div id="clientList" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 15px;">
+                    <!-- Client cards will be populated here -->
+                </div>
+            </div>
+
+            <!-- Journey View (shown when client selected) -->
+            <div id="journeyView" style="display: none; background: white; border-radius: 15px; padding: 30px; margin-bottom: 30px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px;">
+                    <div>
+                        <h3 id="journeyClientName" style="color: #667eea; font-size: 1.5em;"></h3>
+                        <p id="journeyClientStatus" style="color: #666;"></p>
+                    </div>
+                    <button onclick="closeJourneyView()" style="background: #f0f0f0; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer;">← Back</button>
+                </div>
+
+                <!-- 4-Week Journey Timeline -->
+                <div id="journeyTimeline" style="display: flex; gap: 10px; justify-content: space-between; margin-bottom: 30px;">
+                    <!-- Week cards will be populated here -->
+                </div>
+
+                <!-- Week Actions -->
+                <div id="weekActions" style="background: #f8f9fa; padding: 20px; border-radius: 10px;">
+                    <!-- Actions for current week -->
+                </div>
+            </div>
+        </div>
+
         <!-- Dashboard Content -->
         <div class="dashboard-content" id="dashboardContent">
             <!-- Stats Bar -->
@@ -404,6 +445,54 @@
         let currentUser = null;
         let currentBlueprint = null;
 
+        // Client Database (simulated - in production this would be a backend)
+        const CLIENT_DATABASE = {
+            'donald@example.com': {
+                id: 'donald-001',
+                name: 'Donald Pirie',
+                email: 'donald@example.com',
+                folder: 'Donald',
+                status: 'complete', // 'pre-programme', 'week-1', 'week-2', 'week-3', 'week-4', 'complete'
+                enrolledDate: '2024-10-20',
+                completedDate: '2024-11-24',
+                progress: {
+                    questionnaire: true,
+                    insightsReport: true,
+                    blueprint: true,
+                    decisionFramework: true,
+                    cvBuilder: true,
+                    mappingGuide: true
+                }
+            },
+            'sarah@demo.com': {
+                id: 'demo-sarah',
+                name: 'Sarah Mitchell',
+                email: 'sarah@demo.com',
+                folder: '',
+                status: 'complete',
+                enrolledDate: '2024-09-15',
+                completedDate: '2024-10-15',
+                progress: {
+                    questionnaire: true,
+                    insightsReport: true,
+                    blueprint: true,
+                    decisionFramework: true,
+                    cvBuilder: true,
+                    mappingGuide: true
+                }
+            }
+        };
+
+        // Week descriptions for journey display
+        const WEEK_INFO = {
+            'pre-programme': { label: 'Pre-Programme', icon: '📋', description: 'Welcome & Questionnaire' },
+            'week-1': { label: 'Week 1', icon: '🌱', description: 'Foundation - Patterns & Evidence' },
+            'week-2': { label: 'Week 2', icon: '🧭', description: 'Direction - Insights & Decisions' },
+            'week-3': { label: 'Week 3', icon: '🎯', description: 'Positioning - Brand & Headlines' },
+            'week-4': { label: 'Week 4', icon: '🚀', description: 'Implementation - CV & LinkedIn' },
+            'complete': { label: 'Complete', icon: '🏆', description: 'Programme Finished' }
+        };
+
         // Check for existing session
         window.onload = function() {
             const savedUser = localStorage.getItem('syp_user');
@@ -465,6 +554,11 @@
             // Show user menu
             document.getElementById('userMenu').style.display = 'flex';
             document.getElementById('userEmail').textContent = currentUser.email;
+
+            // Show Coach Mode if Lisa is logged in
+            if (isCoach()) {
+                showCoachMode();
+            }
 
             // Fetch user's blueprint
             await loadBlueprint();
@@ -668,6 +762,355 @@
 
             // Update state to show blueprint is complete (all tools unlocked)
             updateDashboardState(true);
+        }
+
+        // ============================================================
+        // COACH MODE FUNCTIONS
+        // ============================================================
+
+        // Check if current user is Lisa (coach)
+        function isCoach() {
+            if (!currentUser) return false;
+            const email = currentUser.email.toLowerCase();
+            return email.includes('lisa@') || email.includes('harnessthespark') || email === 'admin';
+        }
+
+        // Show coach mode interface
+        function showCoachMode() {
+            if (!isCoach()) return;
+            document.getElementById('coachMode').style.display = 'block';
+            renderClientList();
+        }
+
+        // Render the client list cards
+        function renderClientList() {
+            const container = document.getElementById('clientList');
+            const clients = getStoredClients();
+
+            container.innerHTML = Object.values(clients).map(client => `
+                <div style="background: rgba(255,255,255,0.95); border-radius: 12px; padding: 20px; cursor: pointer;" onclick="viewClientJourney('${client.email}')">
+                    <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px;">
+                        <h4 style="color: #333; margin: 0;">${client.name}</h4>
+                        <span style="background: ${getStatusColour(client.status)}; color: white; padding: 3px 10px; border-radius: 12px; font-size: 0.75em;">
+                            ${WEEK_INFO[client.status].label}
+                        </span>
+                    </div>
+                    <p style="color: #666; font-size: 0.85em; margin-bottom: 8px;">${client.email}</p>
+                    <p style="color: #888; font-size: 0.8em;">
+                        ${WEEK_INFO[client.status].icon} ${WEEK_INFO[client.status].description}
+                    </p>
+                    <div style="margin-top: 10px; height: 4px; background: #e0e0e0; border-radius: 2px;">
+                        <div style="height: 100%; width: ${getProgressPercentage(client.status)}%; background: ${getStatusColour(client.status)}; border-radius: 2px;"></div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Get status colour
+        function getStatusColour(status) {
+            const colours = {
+                'pre-programme': '#9b59b6',
+                'week-1': '#3498db',
+                'week-2': '#2ecc71',
+                'week-3': '#f39c12',
+                'week-4': '#e74c3c',
+                'complete': '#27ae60'
+            };
+            return colours[status] || '#667eea';
+        }
+
+        // Get progress percentage
+        function getProgressPercentage(status) {
+            const percentages = {
+                'pre-programme': 10,
+                'week-1': 30,
+                'week-2': 50,
+                'week-3': 70,
+                'week-4': 90,
+                'complete': 100
+            };
+            return percentages[status] || 0;
+        }
+
+        // View client journey
+        function viewClientJourney(email) {
+            const clients = getStoredClients();
+            const client = clients[email];
+            if (!client) return;
+
+            document.getElementById('journeyView').style.display = 'block';
+            document.getElementById('journeyClientName').textContent = client.name;
+            document.getElementById('journeyClientStatus').textContent = `Enrolled: ${client.enrolledDate} | Current: ${WEEK_INFO[client.status].label}`;
+
+            // Render timeline
+            const timeline = document.getElementById('journeyTimeline');
+            const stages = ['pre-programme', 'week-1', 'week-2', 'week-3', 'week-4', 'complete'];
+            const currentIndex = stages.indexOf(client.status);
+
+            timeline.innerHTML = stages.map((stage, index) => {
+                const info = WEEK_INFO[stage];
+                const isComplete = index < currentIndex || client.status === 'complete';
+                const isCurrent = index === currentIndex;
+                const isLocked = index > currentIndex;
+
+                return `
+                    <div style="flex: 1; text-align: center; padding: 15px 10px; border-radius: 10px;
+                         background: ${isComplete ? '#e8f5e9' : isCurrent ? '#e3f2fd' : '#f5f5f5'};
+                         border: 2px solid ${isComplete ? '#4caf50' : isCurrent ? '#2196f3' : '#e0e0e0'};
+                         opacity: ${isLocked ? '0.5' : '1'};">
+                        <div style="font-size: 1.8em; margin-bottom: 8px;">${isComplete ? '✅' : info.icon}</div>
+                        <div style="font-weight: 600; color: ${isComplete ? '#4caf50' : isCurrent ? '#2196f3' : '#666'}; font-size: 0.9em;">
+                            ${info.label}
+                        </div>
+                        <div style="font-size: 0.75em; color: #888; margin-top: 5px;">
+                            ${info.description.split(' - ')[0]}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            // Render week actions
+            renderWeekActions(client);
+        }
+
+        // Render actions for the current week (using worksheets, not automation)
+        function renderWeekActions(client) {
+            const container = document.getElementById('weekActions');
+            const status = client.status;
+
+            const actions = {
+                'pre-programme': `
+                    <h4 style="color: #9b59b6; margin-bottom: 15px;">📋 Pre-Programme Setup</h4>
+                    <div style="display: grid; gap: 10px;">
+                        <a href="ability-recognition-visual.html" target="_blank" class="action-btn">📝 Send Questionnaire Link</a>
+                        <button onclick="openClientQuestionnaire('${client.email}')" class="action-btn">👁️ View Responses</button>
+                        <button onclick="advanceClient('${client.email}', 'week-1')" class="action-btn advance">✅ Mark Questionnaire Complete → Week 1</button>
+                    </div>
+                `,
+                'week-1': `
+                    <h4 style="color: #3498db; margin-bottom: 15px;">🌱 Week 1: Foundation Session</h4>
+                    <p style="color: #666; margin-bottom: 15px;">Work through patterns, evidence collection, and thread discovery.</p>
+                    <div style="display: grid; gap: 10px;">
+                        <button onclick="openClientBlueprint('${client.email}')" class="action-btn">📘 Open Blueprint (Week 1)</button>
+                        <button onclick="advanceClient('${client.email}', 'week-2')" class="action-btn advance">✅ Complete Week 1 → Week 2</button>
+                    </div>
+                `,
+                'week-2': `
+                    <h4 style="color: #2ecc71; margin-bottom: 15px;">🧭 Week 2: Direction Session</h4>
+                    <p style="color: #666; margin-bottom: 15px;">Career insights, decision framework, charges & drains.</p>
+                    <div style="display: grid; gap: 10px;">
+                        <button onclick="openClientInsights('${client.email}')" class="action-btn">📊 Open Career Insights Report</button>
+                        <button onclick="openClientDecision('${client.email}')" class="action-btn">⚖️ Open Decision Framework</button>
+                        <button onclick="openClientBlueprint('${client.email}')" class="action-btn">📘 Update Blueprint (Week 2)</button>
+                        <button onclick="advanceClient('${client.email}', 'week-3')" class="action-btn advance">✅ Complete Week 2 → Week 3</button>
+                    </div>
+                `,
+                'week-3': `
+                    <h4 style="color: #f39c12; margin-bottom: 15px;">🎯 Week 3: Positioning Session</h4>
+                    <p style="color: #666; margin-bottom: 15px;">One-sentence intro, LinkedIn headlines, elevator pitches.</p>
+                    <div style="display: grid; gap: 10px;">
+                        <button onclick="openClientBlueprint('${client.email}')" class="action-btn">📘 Update Blueprint (Week 3)</button>
+                        <button onclick="openClientMapping('${client.email}')" class="action-btn">🗺️ Open Mapping Guide</button>
+                        <button onclick="advanceClient('${client.email}', 'week-4')" class="action-btn advance">✅ Complete Week 3 → Week 4</button>
+                    </div>
+                `,
+                'week-4': `
+                    <h4 style="color: #e74c3c; margin-bottom: 15px;">🚀 Week 4: Implementation Session</h4>
+                    <p style="color: #666; margin-bottom: 15px;">CV Builder, LinkedIn updates, AI prompts.</p>
+                    <div style="display: grid; gap: 10px;">
+                        <button onclick="openClientCV('${client.email}')" class="action-btn">📝 Open CV Builder</button>
+                        <button onclick="openClientMapping('${client.email}')" class="action-btn">🗺️ Open Mapping Guide</button>
+                        <a href="AI_Prompt_Library.html" target="_blank" class="action-btn">🤖 AI Prompt Library</a>
+                        <button onclick="advanceClient('${client.email}', 'complete')" class="action-btn advance">🏆 Mark Programme Complete</button>
+                    </div>
+                `,
+                'complete': `
+                    <h4 style="color: #27ae60; margin-bottom: 15px;">🏆 Programme Complete!</h4>
+                    <p style="color: #666; margin-bottom: 15px;">Client has completed the Career Booster programme.</p>
+                    <div style="display: grid; gap: 10px;">
+                        <button onclick="openClientBlueprint('${client.email}')" class="action-btn">📘 View Final Blueprint</button>
+                        <button onclick="openClientCV('${client.email}')" class="action-btn">📝 View CV Builder</button>
+                        <button onclick="openAllClientDocs('${client.email}')" class="action-btn">📁 View All Documents</button>
+                    </div>
+                `
+            };
+
+            container.innerHTML = `
+                <style>
+                    .action-btn {
+                        display: block;
+                        width: 100%;
+                        padding: 12px 20px;
+                        background: #f0f0f0;
+                        border: 1px solid #ddd;
+                        border-radius: 8px;
+                        text-align: left;
+                        cursor: pointer;
+                        font-size: 0.95em;
+                        color: #333;
+                        text-decoration: none;
+                        transition: all 0.2s;
+                    }
+                    .action-btn:hover { background: #e8e8e8; }
+                    .action-btn.advance {
+                        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                        color: white;
+                        border: none;
+                        font-weight: 600;
+                    }
+                    .action-btn.advance:hover { opacity: 0.9; }
+                </style>
+                ${actions[status] || '<p>No actions available for this status.</p>'}
+            `;
+        }
+
+        // Advance client to next stage (manual progression via worksheets)
+        function advanceClient(email, newStatus) {
+            const clients = getStoredClients();
+            if (clients[email]) {
+                clients[email].status = newStatus;
+                if (newStatus === 'complete') {
+                    clients[email].completedDate = new Date().toISOString().split('T')[0];
+                }
+                saveStoredClients(clients);
+                viewClientJourney(email);
+                renderClientList();
+                alert(`✅ ${clients[email].name} advanced to ${WEEK_INFO[newStatus].label}`);
+            }
+        }
+
+        // Add new client
+        function addNewClient() {
+            const name = prompt('Client Name:');
+            if (!name) return;
+
+            const email = prompt('Client Email:');
+            if (!email || !email.includes('@')) {
+                alert('Please enter a valid email address');
+                return;
+            }
+
+            const clients = getStoredClients();
+            if (clients[email]) {
+                alert('A client with this email already exists');
+                return;
+            }
+
+            // Create client folder name from name
+            const folderName = name.replace(/\s+/g, '_');
+
+            clients[email] = {
+                id: 'client-' + Date.now(),
+                name: name,
+                email: email,
+                folder: folderName,
+                status: 'pre-programme',
+                enrolledDate: new Date().toISOString().split('T')[0],
+                completedDate: null,
+                progress: {
+                    questionnaire: false,
+                    insightsReport: false,
+                    blueprint: false,
+                    decisionFramework: false,
+                    cvBuilder: false,
+                    mappingGuide: false
+                }
+            };
+
+            saveStoredClients(clients);
+            renderClientList();
+            alert(`✅ ${name} added! You can now send them the questionnaire link.`);
+        }
+
+        // Close journey view
+        function closeJourneyView() {
+            document.getElementById('journeyView').style.display = 'none';
+        }
+
+        // Storage helpers
+        function getStoredClients() {
+            const stored = localStorage.getItem('syp_clients');
+            if (stored) {
+                return JSON.parse(stored);
+            }
+            // Return default clients (Donald and Sarah)
+            return CLIENT_DATABASE;
+        }
+
+        function saveStoredClients(clients) {
+            localStorage.setItem('syp_clients', JSON.stringify(clients));
+        }
+
+        // Client document openers (based on folder structure)
+        function openClientQuestionnaire(email) {
+            const clients = getStoredClients();
+            const client = clients[email];
+            if (client.folder === 'Donald') {
+                window.open('/donald-questionnaire', '_blank');
+            } else if (client.folder) {
+                window.open(`${client.folder}/${client.folder}_Questionnaire_Responses.html`, '_blank');
+            } else {
+                window.open('ability-recognition-visual.html', '_blank');
+            }
+        }
+
+        function openClientBlueprint(email) {
+            const clients = getStoredClients();
+            const client = clients[email];
+            if (client.folder === 'Donald') {
+                window.open('Donald/Donald_Pirie_Career_Blueprint_LIVE.html', '_blank');
+            } else if (client.folder) {
+                window.open(`${client.folder}/${client.folder}_Career_Blueprint.html`, '_blank');
+            }
+        }
+
+        function openClientInsights(email) {
+            const clients = getStoredClients();
+            const client = clients[email];
+            if (client.folder === 'Donald') {
+                window.open('Donald/Donald_Pirie_Career_Insights_Report.html', '_blank');
+            } else if (client.folder) {
+                window.open(`${client.folder}/${client.folder}_Career_Insights_Report.html`, '_blank');
+            }
+        }
+
+        function openClientDecision(email) {
+            const clients = getStoredClients();
+            const client = clients[email];
+            if (client.folder === 'Donald') {
+                window.open('Donald/Donald_Decision_Framework_Updated_1.html', '_blank');
+            } else if (client.folder) {
+                window.open(`${client.folder}/${client.folder}_Decision_Framework.html`, '_blank');
+            }
+        }
+
+        function openClientCV(email) {
+            const clients = getStoredClients();
+            const client = clients[email];
+            if (client.folder === 'Donald') {
+                window.open('Donald/Donald_Interactive_CV_Builder.html', '_blank');
+            } else if (client.folder) {
+                window.open(`${client.folder}/${client.folder}_CV_Builder.html`, '_blank');
+            }
+        }
+
+        function openClientMapping(email) {
+            const clients = getStoredClients();
+            const client = clients[email];
+            if (client.folder === 'Donald') {
+                window.open('Donald/Donald_Blueprint_CV_LinkedIn_Mapping_Guide_1.html', '_blank');
+            } else if (client.folder) {
+                window.open(`${client.folder}/${client.folder}_Mapping_Guide.html`, '_blank');
+            }
+        }
+
+        function openAllClientDocs(email) {
+            const clients = getStoredClients();
+            const client = clients[email];
+            if (client.folder) {
+                // Open folder listing (in production, this would show a document list)
+                alert(`Documents for ${client.name}:\n\n- Career Blueprint\n- Career Insights Report\n- Decision Framework\n- CV Builder\n- Mapping Guide\n- AI Prompt Library`);
+            }
         }
     </script>
 </body>

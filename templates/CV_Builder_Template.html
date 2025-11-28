@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>[CLIENT_NAME] - CV Builder</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%); min-height: 100vh; padding: 20px; color: #333; }
+        .container { max-width: 1400px; margin: 0 auto; }
+        .header { text-align: center; color: white; margin-bottom: 30px; }
+        .header h1 { font-size: 2em; margin-bottom: 5px; }
+        .header p { opacity: 0.8; }
+        .builder-layout { display: grid; grid-template-columns: 300px 1fr; gap: 20px; }
+        @media (max-width: 900px) { .builder-layout { grid-template-columns: 1fr; } }
+
+        /* Sidebar */
+        .sidebar { background: white; border-radius: 15px; padding: 20px; height: fit-content; }
+        .sidebar h2 { font-size: 1.1em; color: #667eea; margin-bottom: 15px; display: flex; align-items: center; gap: 8px; }
+        .option-group { margin-bottom: 20px; }
+        .option-group label { display: flex; align-items: center; gap: 10px; padding: 10px; border-radius: 8px; cursor: pointer; transition: background 0.2s; }
+        .option-group label:hover { background: #f0f0f0; }
+        .option-group input[type="radio"], .option-group input[type="checkbox"] { accent-color: #667eea; }
+        .option-group span { font-size: 0.9em; }
+        .section-toggle { display: flex; justify-content: space-between; align-items: center; padding: 10px; border-radius: 8px; background: #f8f9fa; margin-bottom: 8px; }
+        .section-toggle span { font-size: 0.85em; }
+        .toggle-switch { position: relative; width: 40px; height: 20px; }
+        .toggle-switch input { opacity: 0; width: 0; height: 0; }
+        .toggle-slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background: #ccc; border-radius: 20px; transition: 0.3s; }
+        .toggle-slider:before { position: absolute; content: ""; height: 16px; width: 16px; left: 2px; bottom: 2px; background: white; border-radius: 50%; transition: 0.3s; }
+        .toggle-switch input:checked + .toggle-slider { background: #667eea; }
+        .toggle-switch input:checked + .toggle-slider:before { transform: translateX(20px); }
+
+        /* CV Preview */
+        .cv-preview { background: white; border-radius: 15px; padding: 40px; min-height: 800px; box-shadow: 0 10px 40px rgba(0,0,0,0.2); }
+        .cv-header { border-bottom: 3px solid #667eea; padding-bottom: 20px; margin-bottom: 30px; }
+        .cv-name { font-size: 2.2em; font-weight: 700; color: #2c3e50; margin-bottom: 5px; }
+        .cv-headline { font-size: 1.1em; color: #667eea; font-weight: 500; margin-bottom: 15px; }
+        .cv-contact { display: flex; gap: 20px; flex-wrap: wrap; font-size: 0.9em; color: #666; }
+        .cv-contact a { color: #667eea; text-decoration: none; }
+
+        .cv-section { margin-bottom: 30px; }
+        .cv-section-title { font-size: 1.2em; font-weight: 700; color: #667eea; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 15px; padding-bottom: 5px; border-bottom: 2px solid #e0e0e0; }
+        .cv-proposition { background: linear-gradient(135deg, #667eea10 0%, #764ba210 100%); padding: 20px; border-radius: 10px; border-left: 4px solid #667eea; font-size: 1em; line-height: 1.7; margin-bottom: 20px; }
+
+        .cv-experience { margin-bottom: 25px; }
+        .cv-experience-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px; }
+        .cv-role { font-weight: 600; font-size: 1.05em; color: #2c3e50; }
+        .cv-company { color: #667eea; font-weight: 500; }
+        .cv-dates { color: #999; font-size: 0.9em; }
+        .cv-bullets { margin-top: 10px; padding-left: 20px; }
+        .cv-bullets li { margin-bottom: 8px; line-height: 1.6; color: #555; }
+
+        .cv-skills { display: flex; flex-wrap: wrap; gap: 10px; }
+        .cv-skill { background: #f0f0f0; padding: 5px 15px; border-radius: 20px; font-size: 0.85em; color: #555; }
+
+        .editable { cursor: text; padding: 5px; border-radius: 4px; transition: background 0.2s; }
+        .editable:hover { background: #f8f9fa; }
+        .editable:focus { outline: 2px solid #667eea; background: white; }
+
+        /* Case Study Card */
+        .case-study { background: #f8f9fa; border-radius: 10px; padding: 20px; margin-bottom: 15px; border-left: 4px solid #667eea; }
+        .case-study-title { font-weight: 600; color: #667eea; margin-bottom: 10px; }
+        .case-study-content { color: #555; line-height: 1.6; }
+
+        /* Template Styles */
+        .template-modern .cv-header { border-bottom: 3px solid #667eea; }
+        .template-classic .cv-header { border-bottom: 2px solid #333; }
+        .template-classic .cv-section-title { color: #333; }
+        .template-creative .cv-header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 30px; margin: -40px -40px 30px -40px; border-radius: 15px 15px 0 0; border-bottom: none; }
+        .template-creative .cv-name { color: white; }
+        .template-creative .cv-headline { color: rgba(255,255,255,0.9); }
+        .template-creative .cv-contact { color: rgba(255,255,255,0.8); }
+        .template-creative .cv-contact a { color: white; }
+
+        /* Print Styles */
+        @media print {
+            body { background: white; padding: 0; }
+            .sidebar { display: none; }
+            .builder-layout { display: block; }
+            .cv-preview { box-shadow: none; padding: 20px; }
+            .header { display: none; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📝 CV Builder</h1>
+            <p>Build your CV using your Career Blueprint | Click any text to edit</p>
+        </div>
+
+        <div class="builder-layout">
+            <!-- Sidebar Controls -->
+            <div class="sidebar">
+                <h2>🎨 CV Template</h2>
+                <div class="option-group">
+                    <label><input type="radio" name="template" value="modern" checked onchange="changeTemplate(this.value)"><span>Modern (Clean)</span></label>
+                    <label><input type="radio" name="template" value="classic" onchange="changeTemplate(this.value)"><span>Classic (Traditional)</span></label>
+                    <label><input type="radio" name="template" value="creative" onchange="changeTemplate(this.value)"><span>Creative (Bold)</span></label>
+                </div>
+
+                <h2>👤 Profile Style</h2>
+                <div class="option-group">
+                    <label><input type="radio" name="profile" value="proposition" checked onchange="changeProfile(this.value)"><span>Full Proposition</span></label>
+                    <label><input type="radio" name="profile" value="summary" onchange="changeProfile(this.value)"><span>Brief Summary</span></label>
+                    <label><input type="radio" name="profile" value="none" onchange="changeProfile(this.value)"><span>No Profile</span></label>
+                </div>
+
+                <h2>📋 Sections</h2>
+                <div class="section-toggle">
+                    <span>Experience</span>
+                    <label class="toggle-switch">
+                        <input type="checkbox" checked onchange="toggleSection('experience', this.checked)">
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+                <div class="section-toggle">
+                    <span>Case Studies</span>
+                    <label class="toggle-switch">
+                        <input type="checkbox" checked onchange="toggleSection('case-studies', this.checked)">
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+                <div class="section-toggle">
+                    <span>Skills</span>
+                    <label class="toggle-switch">
+                        <input type="checkbox" checked onchange="toggleSection('skills', this.checked)">
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+                <div class="section-toggle">
+                    <span>Education</span>
+                    <label class="toggle-switch">
+                        <input type="checkbox" checked onchange="toggleSection('education', this.checked)">
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+
+                <h2 style="margin-top: 20px;">💾 Actions</h2>
+                <button onclick="saveCV()" style="width: 100%; padding: 12px; background: #667eea; color: white; border: none; border-radius: 8px; cursor: pointer; margin-bottom: 10px; font-weight: 600;">Save Progress</button>
+                <button onclick="window.print()" style="width: 100%; padding: 12px; background: #4CAF50; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 600;">Export PDF</button>
+            </div>
+
+            <!-- CV Preview -->
+            <div class="cv-preview template-modern" id="cv-preview">
+                <div class="cv-header">
+                    <div class="cv-name editable" contenteditable="true" id="cv-name">[CLIENT_NAME]</div>
+                    <div class="cv-headline editable" contenteditable="true" id="cv-headline">Your LinkedIn Headline Here</div>
+                    <div class="cv-contact">
+                        <span class="editable" contenteditable="true" id="cv-email">email@example.com</span>
+                        <span class="editable" contenteditable="true" id="cv-phone">+44 7XXX XXXXXX</span>
+                        <span class="editable" contenteditable="true" id="cv-location">Location, UK</span>
+                        <a href="#" class="editable" contenteditable="true" id="cv-linkedin">linkedin.com/in/yourprofile</a>
+                    </div>
+                </div>
+
+                <!-- Profile/Proposition -->
+                <div class="cv-section" id="profile-section">
+                    <div class="cv-section-title">Profile</div>
+                    <div class="cv-proposition editable" contenteditable="true" id="cv-proposition">
+                        Your full proposition from the Blueprint goes here. This should capture your core pattern, your thread, and the transformation you enable.
+
+                        Replace this with content from your Career Blueprint - specifically your one-sentence introduction and transformation statement.
+                    </div>
+                </div>
+
+                <!-- Experience -->
+                <div class="cv-section" id="experience-section">
+                    <div class="cv-section-title">Experience</div>
+
+                    <div class="cv-experience">
+                        <div class="cv-experience-header">
+                            <div>
+                                <div class="cv-role editable" contenteditable="true">Job Title</div>
+                                <div class="cv-company editable" contenteditable="true">Company Name</div>
+                            </div>
+                            <div class="cv-dates editable" contenteditable="true">2020 - Present</div>
+                        </div>
+                        <ul class="cv-bullets">
+                            <li class="editable" contenteditable="true">Key achievement from your Blueprint outcomes - use the STAR format from your evidence collection</li>
+                            <li class="editable" contenteditable="true">Another measurable achievement</li>
+                            <li class="editable" contenteditable="true">Impact and results</li>
+                        </ul>
+                    </div>
+
+                    <div class="cv-experience">
+                        <div class="cv-experience-header">
+                            <div>
+                                <div class="cv-role editable" contenteditable="true">Previous Role</div>
+                                <div class="cv-company editable" contenteditable="true">Previous Company</div>
+                            </div>
+                            <div class="cv-dates editable" contenteditable="true">2017 - 2020</div>
+                        </div>
+                        <ul class="cv-bullets">
+                            <li class="editable" contenteditable="true">Key achievement</li>
+                            <li class="editable" contenteditable="true">Another achievement</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Case Studies -->
+                <div class="cv-section" id="case-studies-section">
+                    <div class="cv-section-title">Key Transformations</div>
+                    <p style="color: #666; margin-bottom: 15px; font-size: 0.9em;">From your Blueprint evidence collection:</p>
+
+                    <div class="case-study" id="case-study-1">
+                        <div class="case-study-title editable" contenteditable="true">Outcome #1: Title</div>
+                        <div class="case-study-content editable" contenteditable="true">
+                            Paste your Outcome #1 from the Blueprint here. Challenge → Action → Result format works well.
+                        </div>
+                    </div>
+
+                    <div class="case-study" id="case-study-2">
+                        <div class="case-study-title editable" contenteditable="true">Outcome #2: Title</div>
+                        <div class="case-study-content editable" contenteditable="true">
+                            Paste your Outcome #2 here.
+                        </div>
+                    </div>
+
+                    <button onclick="addCaseStudy()" style="padding: 10px 20px; background: #f0f0f0; border: 2px dashed #ccc; border-radius: 8px; cursor: pointer; width: 100%; color: #666;">+ Add Case Study</button>
+                </div>
+
+                <!-- Skills -->
+                <div class="cv-section" id="skills-section">
+                    <div class="cv-section-title">Core Capabilities</div>
+                    <p style="color: #666; margin-bottom: 15px; font-size: 0.9em;">From your "Engine" in the Blueprint:</p>
+                    <div class="cv-skills" id="skills-container">
+                        <span class="cv-skill editable" contenteditable="true">Skill 1</span>
+                        <span class="cv-skill editable" contenteditable="true">Skill 2</span>
+                        <span class="cv-skill editable" contenteditable="true">Skill 3</span>
+                        <span class="cv-skill editable" contenteditable="true">Skill 4</span>
+                        <span class="cv-skill editable" contenteditable="true">Skill 5</span>
+                    </div>
+                </div>
+
+                <!-- Education -->
+                <div class="cv-section" id="education-section">
+                    <div class="cv-section-title">Education</div>
+                    <div class="cv-experience">
+                        <div class="cv-experience-header">
+                            <div>
+                                <div class="cv-role editable" contenteditable="true">Degree/Qualification</div>
+                                <div class="cv-company editable" contenteditable="true">Institution Name</div>
+                            </div>
+                            <div class="cv-dates editable" contenteditable="true">Year</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Template switching
+        function changeTemplate(template) {
+            const preview = document.getElementById('cv-preview');
+            preview.className = 'cv-preview template-' + template;
+        }
+
+        // Profile style
+        function changeProfile(style) {
+            const section = document.getElementById('profile-section');
+            section.style.display = style === 'none' ? 'none' : 'block';
+        }
+
+        // Section toggles
+        function toggleSection(sectionId, visible) {
+            const section = document.getElementById(sectionId + '-section');
+            if (section) {
+                section.style.display = visible ? 'block' : 'none';
+            }
+        }
+
+        // Add case study
+        let caseStudyCount = 2;
+        function addCaseStudy() {
+            caseStudyCount++;
+            const container = document.getElementById('case-studies-section');
+            const button = container.querySelector('button');
+            const newStudy = document.createElement('div');
+            newStudy.className = 'case-study';
+            newStudy.id = 'case-study-' + caseStudyCount;
+            newStudy.innerHTML = `
+                <div style="display: flex; justify-content: space-between; align-items: start;">
+                    <div class="case-study-title editable" contenteditable="true">Outcome #${caseStudyCount}: Title</div>
+                    <button onclick="removeCaseStudy(${caseStudyCount})" style="background: #ff5722; color: white; border: none; padding: 5px 10px; border-radius: 5px; cursor: pointer; font-size: 0.8em;">Remove</button>
+                </div>
+                <div class="case-study-content editable" contenteditable="true">
+                    Add your achievement here...
+                </div>
+            `;
+            container.insertBefore(newStudy, button);
+        }
+
+        // Remove case study
+        function removeCaseStudy(id) {
+            const study = document.getElementById('case-study-' + id);
+            if (study && confirm('Remove this case study?')) {
+                study.remove();
+            }
+        }
+
+        // Save CV
+        function saveCV() {
+            const data = {};
+            document.querySelectorAll('.editable').forEach(el => {
+                if (el.id) {
+                    data[el.id] = el.innerHTML;
+                }
+            });
+            localStorage.setItem('cv_[CLIENT_ID]', JSON.stringify(data));
+            alert('✅ CV saved!');
+        }
+
+        // Load CV
+        function loadCV() {
+            const saved = localStorage.getItem('cv_[CLIENT_ID]');
+            if (saved) {
+                const data = JSON.parse(saved);
+                Object.keys(data).forEach(id => {
+                    const el = document.getElementById(id);
+                    if (el) {
+                        el.innerHTML = data[id];
+                    }
+                });
+            }
+        }
+
+        // Auto-save on blur
+        document.querySelectorAll('.editable').forEach(el => {
+            el.addEventListener('blur', () => {
+                saveCV();
+            });
+        });
+
+        // Load on page load
+        loadCV();
+    </script>
+</body>
+</html>
