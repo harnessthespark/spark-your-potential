@@ -108,29 +108,32 @@
 
         /* Template Styles */
         /* Modern Template (Default) */
-        .cv-preview.modern .cv-name { color: #2c3e50; }
-        .cv-preview.modern .cv-headline { color: #667eea; border-bottom: 2px solid #e0e0e0; }
-        .cv-preview.modern .cv-section-title { color: #888; border-bottom: 1px solid #e0e0e0; }
-        .cv-preview.modern .cv-skill { background: #f0f0f0; color: #555; }
-        .cv-preview.modern .cv-job-company { color: #667eea; }
+        .cv-preview.modern .cv-name { color: #2c3e50 !important; }
+        .cv-preview.modern .cv-headline { color: #667eea !important; border-bottom: 2px solid #e0e0e0 !important; font-style: italic !important; }
+        .cv-preview.modern .cv-section-title { color: #888 !important; border-bottom: 1px solid #e0e0e0 !important; }
+        .cv-preview.modern .cv-skill { background: #f0f0f0 !important; color: #555 !important; border-radius: 20px !important; border: none !important; }
+        .cv-preview.modern .cv-job-company { color: #667eea !important; }
+        .cv-preview.modern { font-family: 'Inter', sans-serif !important; background: white !important; }
 
-        /* Classic Template */
-        .cv-preview.classic { font-family: 'Georgia', 'Times New Roman', serif; }
-        .cv-preview.classic .cv-name { color: #1a1a1a; font-weight: 400; letter-spacing: 3px; border-bottom: 2px solid #1a1a1a; padding-bottom: 15px; }
-        .cv-preview.classic .cv-headline { color: #444; font-style: normal; border-bottom: none; font-size: 1em; }
-        .cv-preview.classic .cv-section-title { color: #1a1a1a; font-weight: 700; letter-spacing: 3px; border-bottom: 2px solid #1a1a1a; }
-        .cv-preview.classic .cv-skill { background: transparent; border: 1px solid #333; border-radius: 0; color: #333; }
-        .cv-preview.classic .cv-job-company { color: #333; font-weight: 600; }
-        .cv-preview.classic .cv-job-title { text-transform: uppercase; letter-spacing: 1px; }
+        /* Classic Template - Traditional serif styling */
+        .cv-preview.classic { font-family: 'Georgia', 'Times New Roman', serif !important; background: #fefefe !important; }
+        .cv-preview.classic .cv-name { color: #1a1a1a !important; font-weight: 400 !important; letter-spacing: 3px !important; border-bottom: 3px double #1a1a1a !important; padding-bottom: 15px !important; margin-bottom: 15px !important; }
+        .cv-preview.classic .cv-headline { color: #444 !important; font-style: normal !important; border-bottom: none !important; font-size: 1em !important; font-weight: 400 !important; }
+        .cv-preview.classic .cv-section-title { color: #1a1a1a !important; font-weight: 700 !important; letter-spacing: 3px !important; border-bottom: 2px solid #1a1a1a !important; text-transform: uppercase !important; }
+        .cv-preview.classic .cv-skill { background: transparent !important; border: 2px solid #333 !important; border-radius: 0 !important; color: #333 !important; font-weight: 500 !important; }
+        .cv-preview.classic .cv-job-company { color: #333 !important; font-weight: 600 !important; font-style: italic !important; }
+        .cv-preview.classic .cv-job-title { text-transform: uppercase !important; letter-spacing: 1px !important; }
+        .cv-preview.classic .cv-profile { font-size: 1.05em !important; line-height: 1.9 !important; }
 
-        /* Creative Template */
-        .cv-preview.creative { background: linear-gradient(135deg, #667eea08 0%, #764ba208 100%); }
-        .cv-preview.creative .cv-name { color: #667eea; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
-        .cv-preview.creative .cv-headline { color: #764ba2; border-bottom: 3px solid; border-image: linear-gradient(135deg, #667eea 0%, #764ba2 100%) 1; }
-        .cv-preview.creative .cv-section-title { color: #667eea; border-bottom: 2px solid #667eea; }
-        .cv-preview.creative .cv-skill { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; }
-        .cv-preview.creative .cv-job-company { color: #764ba2; font-weight: 700; }
-        .cv-preview.creative .cv-contact span { background: linear-gradient(135deg, #667eea20 0%, #764ba220 100%); padding: 5px 12px; border-radius: 20px; }
+        /* Creative Template - Bold purple gradient styling */
+        .cv-preview.creative { background: linear-gradient(135deg, #f5f3ff 0%, #faf5ff 100%) !important; }
+        .cv-preview.creative .cv-name { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important; -webkit-background-clip: text !important; -webkit-text-fill-color: transparent !important; background-clip: text !important; font-weight: 800 !important; }
+        .cv-preview.creative .cv-headline { color: #764ba2 !important; border-bottom: 3px solid #764ba2 !important; font-weight: 500 !important; }
+        .cv-preview.creative .cv-section-title { color: #667eea !important; border-bottom: 2px solid #667eea !important; }
+        .cv-preview.creative .cv-skill { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important; color: white !important; border: none !important; font-weight: 600 !important; }
+        .cv-preview.creative .cv-job-company { color: #764ba2 !important; font-weight: 700 !important; }
+        .cv-preview.creative .cv-job-title { color: #667eea !important; }
+        .cv-preview.creative .cv-contact span { background: linear-gradient(135deg, #667eea20 0%, #764ba220 100%) !important; padding: 5px 12px !important; border-radius: 20px !important; }
 
         /* AI Processing Overlay */
         .ai-processing { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.8); z-index: 1000; align-items: center; justify-content: center; }
