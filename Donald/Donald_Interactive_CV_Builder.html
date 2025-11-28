@@ -88,8 +88,6 @@
             .app-container { grid-template-columns: 1fr; display: block; }
             .cv-preview { padding: 0; }
             .cv-document { box-shadow: none; border-radius: 0; max-width: 100%; padding: 20px; }
-            .hero-upload-btn { display: none !important; }
-            .cv-hero-placeholder { display: none !important; }
             [contenteditable="true"]:hover, [contenteditable="true"]:focus { background: transparent; box-shadow: none; }
             @page { margin: 1.5cm; size: A4; }
         }
@@ -200,14 +198,6 @@
 
         <div class="cv-preview">
             <div class="cv-document" id="cv-document">
-                <!-- HERO IMAGE -->
-                <div class="cv-hero" style="text-align: center; margin-bottom: 25px;">
-                    <div class="cv-hero-placeholder" id="hero-placeholder" style="width: 120px; height: 120px; border-radius: 50%; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; display: flex; align-items: center; justify-content: center; font-size: 2.5em; font-weight: 700; margin: 0 auto 15px auto;">DP</div>
-                    <img src="" alt="Profile Photo" class="cv-hero-image hidden" id="hero-image" style="width: 120px; height: 120px; border-radius: 50%; object-fit: cover; margin: 0 auto 15px auto; display: block;">
-                    <input type="file" id="hero-upload" accept="image/*" style="display: none;" onchange="handleHeroUpload(event)">
-                    <button class="hero-upload-btn" onclick="document.getElementById('hero-upload').click()" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; padding: 8px 16px; border-radius: 20px; cursor: pointer; font-size: 0.8em;">📷 Upload Photo</button>
-                </div>
-
                 <!-- NAME -->
                 <div class="cv-name" contenteditable="true">Donald Pirie</div>
                 
@@ -642,22 +632,6 @@
             const anyVisible = document.querySelectorAll('.cv-case-study').length > 0;
             if (!anyVisible) {
                 document.getElementById('section-casestudies').classList.add('hidden');
-            }
-        }
-
-        // Hero Image Upload
-        function handleHeroUpload(event) {
-            const file = event.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    const img = document.getElementById('hero-image');
-                    const placeholder = document.getElementById('hero-placeholder');
-                    img.src = e.target.result;
-                    img.classList.remove('hidden');
-                    placeholder.classList.add('hidden');
-                };
-                reader.readAsDataURL(file);
             }
         }
 
