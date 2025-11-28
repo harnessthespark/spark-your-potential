@@ -151,6 +151,23 @@
 
         /* Feature Badge */
         .feature-badge { position: absolute; top: -10px; right: -10px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 4px 10px; border-radius: 12px; font-size: 0.7em; font-weight: 600; }
+
+        /* Print Styles - Hide builder panel, show only CV */
+        @media print {
+            body { background: white !important; padding: 0 !important; }
+            .app-container { display: block !important; }
+            .sidebar { display: none !important; }
+            .main-content { padding: 0 !important; }
+            .cv-toolbar { display: none !important; }
+            .cv-preview {
+                box-shadow: none !important;
+                max-width: 100% !important;
+                margin: 0 !important;
+                border-radius: 0 !important;
+                padding: 40px !important;
+            }
+            .ai-processing { display: none !important; }
+        }
     </style>
 </head>
 <body>
