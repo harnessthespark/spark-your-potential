@@ -70,10 +70,10 @@
                     <div class="progress-label">Week 3</div>
                     <div class="progress-status">Positioning Complete</div>
                 </div>
-                <div class="progress-item in-progress">
-                    <div class="progress-icon">🔄</div>
+                <div class="progress-item complete">
+                    <div class="progress-icon">✅</div>
                     <div class="progress-label">Week 4</div>
-                    <div class="progress-status">In Progress</div>
+                    <div class="progress-status">Implementation Complete</div>
                 </div>
             </div>
         </div>
@@ -333,7 +333,7 @@
                 <div class="section-header">
                     <div class="section-title">
                         <span>Week 4: Implementation Tools</span>
-                        <span class="week-badge in-progress">In Progress</span>
+                        <span class="week-badge complete">Complete</span>
                     </div>
                 </div>
                 <div class="section-divider"></div>
@@ -458,9 +458,372 @@
             </div>
         </div>
 
+        <!-- FEEDBACK SECTION -->
+        <div style="background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); padding: 50px 40px;">
+            <div style="max-width: 800px; margin: 0 auto;">
+                <h2 style="color: #667eea; text-align: center; margin-bottom: 10px;">📝 Your Feedback</h2>
+                <p style="text-align: center; color: #6c757d; margin-bottom: 30px;">Help me improve the Career Booster Programme for future clients</p>
+
+                <!-- Two Feedback Cards -->
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 25px; margin-bottom: 30px;">
+
+                    <!-- PART 1: Programme Experience (Active Now) -->
+                    <div id="part1Card" style="background: white; border-radius: 15px; box-shadow: 0 5px 20px rgba(0,0,0,0.1); overflow: hidden; cursor: pointer; transition: transform 0.2s, box-shadow 0.2s;" onclick="showForm('part1')" onmouseover="this.style.transform='translateY(-3px)'; this.style.boxShadow='0 8px 30px rgba(102, 126, 234, 0.3)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 5px 20px rgba(0,0,0,0.1)';">
+                        <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 20px; text-align: center;">
+                            <div style="font-size: 2.5em;">🎯</div>
+                        </div>
+                        <div style="padding: 25px;">
+                            <h3 style="color: #667eea; margin-bottom: 10px;">Part 1: Programme Experience</h3>
+                            <p style="color: #6c757d; font-size: 0.95em; margin-bottom: 15px;">Feedback on our coaching journey together - the sessions, insights, and materials.</p>
+                            <div style="display: inline-block; background: #667eea; color: white; padding: 8px 20px; border-radius: 20px; font-size: 0.9em; font-weight: 600;">
+                                ✨ Complete Now
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- PART 2: Implementation Results (Later) -->
+                    <div id="part2Card" style="background: white; border-radius: 15px; box-shadow: 0 5px 20px rgba(0,0,0,0.1); overflow: hidden; cursor: pointer; transition: transform 0.2s, box-shadow 0.2s;" onclick="showForm('part2')" onmouseover="this.style.transform='translateY(-3px)'; this.style.boxShadow='0 8px 30px rgba(76, 175, 80, 0.3)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 5px 20px rgba(0,0,0,0.1)';">
+                        <div style="background: linear-gradient(135deg, #4caf50 0%, #8bc34a 100%); padding: 20px; text-align: center;">
+                            <div style="font-size: 2.5em;">🚀</div>
+                        </div>
+                        <div style="padding: 25px;">
+                            <h3 style="color: #4caf50; margin-bottom: 10px;">Part 2: Implementation Results</h3>
+                            <p style="color: #6c757d; font-size: 0.95em; margin-bottom: 15px;">Feedback on outcomes after you've applied your Blueprint - interviews, opportunities, confidence.</p>
+                            <div style="display: inline-block; background: #e8f5e9; color: #4caf50; padding: 8px 20px; border-radius: 20px; font-size: 0.9em; font-weight: 600;">
+                                📅 Complete in 4-6 Weeks
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ============================================== -->
+                <!-- PART 1 FORM: Programme Experience -->
+                <!-- ============================================== -->
+                <div id="part1Form" style="display: none;">
+                    <form id="experienceForm" style="background: white; padding: 35px; border-radius: 15px; box-shadow: 0 5px 20px rgba(0,0,0,0.1);">
+                        <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 25px; padding-bottom: 20px; border-bottom: 2px solid #f0f0f0;">
+                            <div style="font-size: 2em;">🎯</div>
+                            <div>
+                                <h3 style="color: #667eea; margin: 0;">Part 1: Programme Experience</h3>
+                                <p style="color: #7f8c8d; margin: 5px 0 0 0; font-size: 0.9em;">Your feedback on our coaching journey</p>
+                            </div>
+                            <button type="button" onclick="hideForm('part1')" style="margin-left: auto; background: none; border: none; font-size: 1.5em; cursor: pointer; color: #aaa;">×</button>
+                        </div>
+
+                        <!-- Overall Rating -->
+                        <div style="margin-bottom: 25px;">
+                            <label style="display: block; font-weight: 600; color: #2c3e50; margin-bottom: 10px;">How would you rate the overall programme experience?</label>
+                            <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                                <label style="cursor: pointer;"><input type="radio" name="exp_rating" value="5" style="margin-right: 5px;"> ⭐⭐⭐⭐⭐ Exceptional</label>
+                                <label style="cursor: pointer;"><input type="radio" name="exp_rating" value="4" style="margin-right: 5px;"> ⭐⭐⭐⭐ Very Good</label>
+                                <label style="cursor: pointer;"><input type="radio" name="exp_rating" value="3" style="margin-right: 5px;"> ⭐⭐⭐ Good</label>
+                                <label style="cursor: pointer;"><input type="radio" name="exp_rating" value="2" style="margin-right: 5px;"> ⭐⭐ Fair</label>
+                                <label style="cursor: pointer;"><input type="radio" name="exp_rating" value="1" style="margin-right: 5px;"> ⭐ Poor</label>
+                            </div>
+                        </div>
+
+                        <!-- Most Valuable -->
+                        <div style="margin-bottom: 25px;">
+                            <label style="display: block; font-weight: 600; color: #2c3e50; margin-bottom: 10px;">What was the most valuable part of the programme?</label>
+                            <textarea name="exp_most_valuable" rows="3" style="width: 100%; padding: 12px; border: 2px solid #e0e0e0; border-radius: 8px; font-family: inherit; font-size: 1em; resize: vertical;" placeholder="e.g., Discovering my core pattern, the positioning work, the tools..."></textarea>
+                        </div>
+
+                        <!-- Session Quality -->
+                        <div style="margin-bottom: 25px;">
+                            <label style="display: block; font-weight: 600; color: #2c3e50; margin-bottom: 10px;">How did you find the coaching sessions?</label>
+                            <textarea name="exp_sessions" rows="3" style="width: 100%; padding: 12px; border: 2px solid #e0e0e0; border-radius: 8px; font-family: inherit; font-size: 1em; resize: vertical;" placeholder="Pace, depth, structure, the way we worked together..."></textarea>
+                        </div>
+
+                        <!-- Materials Quality -->
+                        <div style="margin-bottom: 25px;">
+                            <label style="display: block; font-weight: 600; color: #2c3e50; margin-bottom: 10px;">How useful are the materials (Blueprint, CV Builder, guides)?</label>
+                            <textarea name="exp_materials" rows="3" style="width: 100%; padding: 12px; border: 2px solid #e0e0e0; border-radius: 8px; font-family: inherit; font-size: 1em; resize: vertical;" placeholder="What works well? What could be improved?"></textarea>
+                        </div>
+
+                        <!-- Clarity Shift -->
+                        <div style="margin-bottom: 25px;">
+                            <label style="display: block; font-weight: 600; color: #2c3e50; margin-bottom: 10px;">How has your clarity about your career direction changed?</label>
+                            <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                                <label style="cursor: pointer; padding: 10px 15px; border: 2px solid #e0e0e0; border-radius: 8px;" class="clarity-option"><input type="radio" name="exp_clarity" value="5" style="display: none;"> Much clearer</label>
+                                <label style="cursor: pointer; padding: 10px 15px; border: 2px solid #e0e0e0; border-radius: 8px;" class="clarity-option"><input type="radio" name="exp_clarity" value="4" style="display: none;"> Clearer</label>
+                                <label style="cursor: pointer; padding: 10px 15px; border: 2px solid #e0e0e0; border-radius: 8px;" class="clarity-option"><input type="radio" name="exp_clarity" value="3" style="display: none;"> Somewhat clearer</label>
+                                <label style="cursor: pointer; padding: 10px 15px; border: 2px solid #e0e0e0; border-radius: 8px;" class="clarity-option"><input type="radio" name="exp_clarity" value="2" style="display: none;"> About the same</label>
+                                <label style="cursor: pointer; padding: 10px 15px; border: 2px solid #e0e0e0; border-radius: 8px;" class="clarity-option"><input type="radio" name="exp_clarity" value="1" style="display: none;"> Less clear</label>
+                            </div>
+                        </div>
+
+                        <!-- NPS -->
+                        <div style="margin-bottom: 25px;">
+                            <label style="display: block; font-weight: 600; color: #2c3e50; margin-bottom: 10px;">How likely are you to recommend this programme? (0-10)</label>
+                            <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                                <label style="cursor: pointer; padding: 8px 12px; border: 2px solid #e0e0e0; border-radius: 8px;" class="nps-option"><input type="radio" name="exp_nps" value="0" style="display: none;"> 0</label>
+                                <label style="cursor: pointer; padding: 8px 12px; border: 2px solid #e0e0e0; border-radius: 8px;" class="nps-option"><input type="radio" name="exp_nps" value="1" style="display: none;"> 1</label>
+                                <label style="cursor: pointer; padding: 8px 12px; border: 2px solid #e0e0e0; border-radius: 8px;" class="nps-option"><input type="radio" name="exp_nps" value="2" style="display: none;"> 2</label>
+                                <label style="cursor: pointer; padding: 8px 12px; border: 2px solid #e0e0e0; border-radius: 8px;" class="nps-option"><input type="radio" name="exp_nps" value="3" style="display: none;"> 3</label>
+                                <label style="cursor: pointer; padding: 8px 12px; border: 2px solid #e0e0e0; border-radius: 8px;" class="nps-option"><input type="radio" name="exp_nps" value="4" style="display: none;"> 4</label>
+                                <label style="cursor: pointer; padding: 8px 12px; border: 2px solid #e0e0e0; border-radius: 8px;" class="nps-option"><input type="radio" name="exp_nps" value="5" style="display: none;"> 5</label>
+                                <label style="cursor: pointer; padding: 8px 12px; border: 2px solid #e0e0e0; border-radius: 8px;" class="nps-option"><input type="radio" name="exp_nps" value="6" style="display: none;"> 6</label>
+                                <label style="cursor: pointer; padding: 8px 12px; border: 2px solid #e0e0e0; border-radius: 8px;" class="nps-option"><input type="radio" name="exp_nps" value="7" style="display: none;"> 7</label>
+                                <label style="cursor: pointer; padding: 8px 12px; border: 2px solid #e0e0e0; border-radius: 8px;" class="nps-option"><input type="radio" name="exp_nps" value="8" style="display: none;"> 8</label>
+                                <label style="cursor: pointer; padding: 8px 12px; border: 2px solid #e0e0e0; border-radius: 8px;" class="nps-option"><input type="radio" name="exp_nps" value="9" style="display: none;"> 9</label>
+                                <label style="cursor: pointer; padding: 8px 12px; border: 2px solid #e0e0e0; border-radius: 8px;" class="nps-option"><input type="radio" name="exp_nps" value="10" style="display: none;"> 10</label>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; margin-top: 5px; font-size: 0.85em; color: #7f8c8d;">
+                                <span>Not likely</span>
+                                <span>Extremely likely</span>
+                            </div>
+                        </div>
+
+                        <!-- Improvements -->
+                        <div style="margin-bottom: 25px;">
+                            <label style="display: block; font-weight: 600; color: #2c3e50; margin-bottom: 10px;">What could I improve for future clients?</label>
+                            <textarea name="exp_improvements" rows="3" style="width: 100%; padding: 12px; border: 2px solid #e0e0e0; border-radius: 8px; font-family: inherit; font-size: 1em; resize: vertical;" placeholder="Any suggestions for making the programme better..."></textarea>
+                        </div>
+
+                        <!-- Initial Testimonial -->
+                        <div style="margin-bottom: 25px; background: #f8f9fa; padding: 20px; border-radius: 10px;">
+                            <label style="display: block; font-weight: 600; color: #2c3e50; margin-bottom: 10px;">Would you share a testimonial about the programme experience? (Optional)</label>
+                            <textarea name="exp_testimonial" rows="3" style="width: 100%; padding: 12px; border: 2px solid #e0e0e0; border-radius: 8px; font-family: inherit; font-size: 1em; resize: vertical; background: white;" placeholder="A few sentences I could share with future clients..."></textarea>
+                            <div style="margin-top: 10px;">
+                                <label style="cursor: pointer; font-size: 0.95em;">
+                                    <input type="checkbox" name="exp_testimonial_permission" value="yes" style="margin-right: 8px;">
+                                    Yes, you may use this with my name
+                                </label>
+                            </div>
+                        </div>
+
+                        <button type="submit" style="width: 100%; padding: 15px 30px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; border-radius: 10px; font-size: 1.1em; font-weight: 600; cursor: pointer; transition: transform 0.2s, box-shadow 0.2s;" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 5px 20px rgba(102, 126, 234, 0.4)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none';">
+                            Submit Programme Feedback
+                        </button>
+                    </form>
+                </div>
+
+                <!-- ============================================== -->
+                <!-- PART 2 FORM: Implementation Results -->
+                <!-- ============================================== -->
+                <div id="part2Form" style="display: none;">
+                    <form id="resultsForm" style="background: white; padding: 35px; border-radius: 15px; box-shadow: 0 5px 20px rgba(0,0,0,0.1);">
+                        <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 25px; padding-bottom: 20px; border-bottom: 2px solid #f0f0f0;">
+                            <div style="font-size: 2em;">🚀</div>
+                            <div>
+                                <h3 style="color: #4caf50; margin: 0;">Part 2: Implementation Results</h3>
+                                <p style="color: #7f8c8d; margin: 5px 0 0 0; font-size: 0.9em;">Your outcomes after applying your Blueprint</p>
+                            </div>
+                            <button type="button" onclick="hideForm('part2')" style="margin-left: auto; background: none; border: none; font-size: 1.5em; cursor: pointer; color: #aaa;">×</button>
+                        </div>
+
+                        <div style="background: #e8f5e9; padding: 15px 20px; border-radius: 10px; margin-bottom: 25px; border-left: 4px solid #4caf50;">
+                            <p style="margin: 0; color: #2e7d32; font-size: 0.95em;">💡 <strong>Best completed 4-6 weeks after the programme</strong> when you've had time to apply your Blueprint to real opportunities.</p>
+                        </div>
+
+                        <!-- Blueprint Usage -->
+                        <div style="margin-bottom: 25px;">
+                            <label style="display: block; font-weight: 600; color: #2c3e50; margin-bottom: 10px;">How have you used your Blueprint since we finished?</label>
+                            <div style="display: flex; flex-direction: column; gap: 8px;">
+                                <label style="cursor: pointer;"><input type="checkbox" name="impl_usage" value="cv" style="margin-right: 8px;"> Updated my CV</label>
+                                <label style="cursor: pointer;"><input type="checkbox" name="impl_usage" value="linkedin" style="margin-right: 8px;"> Updated my LinkedIn</label>
+                                <label style="cursor: pointer;"><input type="checkbox" name="impl_usage" value="interviews" style="margin-right: 8px;"> Used in interviews</label>
+                                <label style="cursor: pointer;"><input type="checkbox" name="impl_usage" value="networking" style="margin-right: 8px;"> Used in networking conversations</label>
+                                <label style="cursor: pointer;"><input type="checkbox" name="impl_usage" value="decisions" style="margin-right: 8px;"> Helped evaluate opportunities</label>
+                                <label style="cursor: pointer;"><input type="checkbox" name="impl_usage" value="confidence" style="margin-right: 8px;"> Boosted my confidence</label>
+                            </div>
+                        </div>
+
+                        <!-- Opportunities -->
+                        <div style="margin-bottom: 25px;">
+                            <label style="display: block; font-weight: 600; color: #2c3e50; margin-bottom: 10px;">What opportunities have you pursued since completing the programme?</label>
+                            <textarea name="impl_opportunities" rows="3" style="width: 100%; padding: 12px; border: 2px solid #e0e0e0; border-radius: 8px; font-family: inherit; font-size: 1em; resize: vertical;" placeholder="Interviews, applications, conversations, freelance work..."></textarea>
+                        </div>
+
+                        <!-- Outcomes -->
+                        <div style="margin-bottom: 25px;">
+                            <label style="display: block; font-weight: 600; color: #2c3e50; margin-bottom: 10px;">What outcomes have you achieved? (Any wins, big or small)</label>
+                            <textarea name="impl_outcomes" rows="3" style="width: 100%; padding: 12px; border: 2px solid #e0e0e0; border-radius: 8px; font-family: inherit; font-size: 1em; resize: vertical;" placeholder="e.g., Got an interview, received positive feedback, landed a role, felt more confident..."></textarea>
+                        </div>
+
+                        <!-- Confidence Change -->
+                        <div style="margin-bottom: 25px;">
+                            <label style="display: block; font-weight: 600; color: #2c3e50; margin-bottom: 10px;">How has your confidence in career conversations changed?</label>
+                            <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                                <label style="cursor: pointer; padding: 10px 15px; border: 2px solid #e0e0e0; border-radius: 8px;" class="confidence-option"><input type="radio" name="impl_confidence" value="5" style="display: none;"> Much more confident</label>
+                                <label style="cursor: pointer; padding: 10px 15px; border: 2px solid #e0e0e0; border-radius: 8px;" class="confidence-option"><input type="radio" name="impl_confidence" value="4" style="display: none;"> More confident</label>
+                                <label style="cursor: pointer; padding: 10px 15px; border: 2px solid #e0e0e0; border-radius: 8px;" class="confidence-option"><input type="radio" name="impl_confidence" value="3" style="display: none;"> Somewhat more confident</label>
+                                <label style="cursor: pointer; padding: 10px 15px; border: 2px solid #e0e0e0; border-radius: 8px;" class="confidence-option"><input type="radio" name="impl_confidence" value="2" style="display: none;"> About the same</label>
+                                <label style="cursor: pointer; padding: 10px 15px; border: 2px solid #e0e0e0; border-radius: 8px;" class="confidence-option"><input type="radio" name="impl_confidence" value="1" style="display: none;"> Less confident</label>
+                            </div>
+                        </div>
+
+                        <!-- Blueprint Accuracy -->
+                        <div style="margin-bottom: 25px;">
+                            <label style="display: block; font-weight: 600; color: #2c3e50; margin-bottom: 10px;">How accurate does your Blueprint feel now you've tested it in the real world?</label>
+                            <textarea name="impl_accuracy" rows="3" style="width: 100%; padding: 12px; border: 2px solid #e0e0e0; border-radius: 8px; font-family: inherit; font-size: 1em; resize: vertical;" placeholder="Does it still resonate? Anything you'd refine?"></textarea>
+                        </div>
+
+                        <!-- Best Decision -->
+                        <div style="margin-bottom: 25px;">
+                            <label style="display: block; font-weight: 600; color: #2c3e50; margin-bottom: 10px;">What's the best decision you've made using your Blueprint insights?</label>
+                            <textarea name="impl_best_decision" rows="3" style="width: 100%; padding: 12px; border: 2px solid #e0e0e0; border-radius: 8px; font-family: inherit; font-size: 1em; resize: vertical;" placeholder="An opportunity you pursued, one you declined, how you positioned yourself..."></textarea>
+                        </div>
+
+                        <!-- Results Testimonial -->
+                        <div style="margin-bottom: 25px; background: #f8f9fa; padding: 20px; border-radius: 10px;">
+                            <label style="display: block; font-weight: 600; color: #2c3e50; margin-bottom: 10px;">Would you share a results testimonial? (Optional)</label>
+                            <p style="color: #7f8c8d; font-size: 0.9em; margin-bottom: 10px;">This is gold for helping others see what's possible!</p>
+                            <textarea name="impl_testimonial" rows="3" style="width: 100%; padding: 12px; border: 2px solid #e0e0e0; border-radius: 8px; font-family: inherit; font-size: 1em; resize: vertical; background: white;" placeholder="How the programme helped you achieve a specific outcome..."></textarea>
+                            <div style="margin-top: 10px;">
+                                <label style="cursor: pointer; font-size: 0.95em;">
+                                    <input type="checkbox" name="impl_testimonial_permission" value="yes" style="margin-right: 8px;">
+                                    Yes, you may use this with my name
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- Anything Else -->
+                        <div style="margin-bottom: 25px;">
+                            <label style="display: block; font-weight: 600; color: #2c3e50; margin-bottom: 10px;">Anything else you'd like to share about your journey?</label>
+                            <textarea name="impl_additional" rows="3" style="width: 100%; padding: 12px; border: 2px solid #e0e0e0; border-radius: 8px; font-family: inherit; font-size: 1em; resize: vertical;" placeholder="Reflections, surprises, ongoing challenges..."></textarea>
+                        </div>
+
+                        <button type="submit" style="width: 100%; padding: 15px 30px; background: linear-gradient(135deg, #4caf50 0%, #8bc34a 100%); color: white; border: none; border-radius: 10px; font-size: 1.1em; font-weight: 600; cursor: pointer; transition: transform 0.2s, box-shadow 0.2s;" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 5px 20px rgba(76, 175, 80, 0.4)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none';">
+                            Submit Results Feedback
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Success Messages -->
+                <div id="successMessage1" style="display: none; background: linear-gradient(135deg, #667eea15 0%, #764ba215 100%); border: 2px solid #667eea; padding: 30px; border-radius: 15px; text-align: center;">
+                    <div style="font-size: 3em; margin-bottom: 15px;">🎉</div>
+                    <h3 style="color: #667eea; margin-bottom: 10px;">Thank You!</h3>
+                    <p style="color: #2c3e50; margin-bottom: 15px;">Your programme feedback has been submitted. I really appreciate it!</p>
+                    <p style="color: #7f8c8d; font-size: 0.9em;">Remember to come back in 4-6 weeks to share your implementation results.</p>
+                </div>
+
+                <div id="successMessage2" style="display: none; background: linear-gradient(135deg, #4caf5015 0%, #8bc34a15 100%); border: 2px solid #4caf50; padding: 30px; border-radius: 15px; text-align: center;">
+                    <div style="font-size: 3em; margin-bottom: 15px;">🚀</div>
+                    <h3 style="color: #4caf50; margin-bottom: 10px;">Brilliant!</h3>
+                    <p style="color: #2c3e50; margin-bottom: 15px;">Your results feedback has been submitted. It's fantastic to hear about your progress!</p>
+                    <p style="color: #7f8c8d; font-size: 0.9em;">Wishing you continued success on your career journey.</p>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            // Show/Hide Forms
+            function showForm(part) {
+                document.getElementById('part1Form').style.display = 'none';
+                document.getElementById('part2Form').style.display = 'none';
+                document.getElementById('successMessage1').style.display = 'none';
+                document.getElementById('successMessage2').style.display = 'none';
+                document.getElementById(part + 'Form').style.display = 'block';
+                document.getElementById(part + 'Form').scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+
+            function hideForm(part) {
+                document.getElementById(part + 'Form').style.display = 'none';
+            }
+
+            // Option Selection Styling
+            function setupOptionStyling(selector, activeColor) {
+                document.querySelectorAll(selector).forEach(label => {
+                    const input = label.querySelector('input');
+                    if (input) {
+                        input.addEventListener('change', function() {
+                            document.querySelectorAll(selector).forEach(l => {
+                                l.style.background = 'white';
+                                l.style.borderColor = '#e0e0e0';
+                                l.style.color = '#2c3e50';
+                            });
+                            label.style.background = activeColor;
+                            label.style.borderColor = activeColor.includes('667eea') ? '#667eea' : '#4caf50';
+                            label.style.color = 'white';
+                        });
+                    }
+                });
+            }
+
+            setupOptionStyling('.nps-option', 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)');
+            setupOptionStyling('.clarity-option', 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)');
+            setupOptionStyling('.confidence-option', 'linear-gradient(135deg, #4caf50 0%, #8bc34a 100%)');
+
+            // Form Submissions
+            document.getElementById('experienceForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                const formData = new FormData(this);
+                const data = {};
+                formData.forEach((value, key) => {
+                    if (data[key]) {
+                        data[key] = Array.isArray(data[key]) ? [...data[key], value] : [data[key], value];
+                    } else {
+                        data[key] = value;
+                    }
+                });
+
+                const subject = encodeURIComponent('Career Booster - Programme Experience Feedback - Donald Pirie');
+                const body = encodeURIComponent(
+                    `PROGRAMME EXPERIENCE FEEDBACK\n` +
+                    `Client: Donald Pirie\n` +
+                    `Date: ${new Date().toLocaleDateString('en-GB')}\n\n` +
+                    `═══════════════════════════════════════\n\n` +
+                    `Overall Rating: ${data.exp_rating || 'Not provided'}/5 stars\n\n` +
+                    `Most Valuable Part:\n${data.exp_most_valuable || 'Not provided'}\n\n` +
+                    `Session Feedback:\n${data.exp_sessions || 'Not provided'}\n\n` +
+                    `Materials Feedback:\n${data.exp_materials || 'Not provided'}\n\n` +
+                    `Clarity Change: ${data.exp_clarity || 'Not provided'}/5\n\n` +
+                    `NPS Score: ${data.exp_nps || 'Not provided'}/10\n\n` +
+                    `Suggested Improvements:\n${data.exp_improvements || 'Not provided'}\n\n` +
+                    `═══════════════════════════════════════\n\n` +
+                    `TESTIMONIAL:\n${data.exp_testimonial || 'Not provided'}\n` +
+                    `Permission to use with name: ${data.exp_testimonial_permission || 'No'}`
+                );
+
+                window.location.href = `mailto:lisa@harnessthespark.com?subject=${subject}&body=${body}`;
+
+                document.getElementById('part1Form').style.display = 'none';
+                document.getElementById('successMessage1').style.display = 'block';
+            });
+
+            document.getElementById('resultsForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                const formData = new FormData(this);
+                const data = {};
+                formData.forEach((value, key) => {
+                    if (data[key]) {
+                        data[key] = Array.isArray(data[key]) ? [...data[key], value] : [data[key], value];
+                    } else {
+                        data[key] = value;
+                    }
+                });
+
+                const usageArray = Array.isArray(data.impl_usage) ? data.impl_usage : (data.impl_usage ? [data.impl_usage] : []);
+
+                const subject = encodeURIComponent('Career Booster - Implementation Results Feedback - Donald Pirie');
+                const body = encodeURIComponent(
+                    `IMPLEMENTATION RESULTS FEEDBACK\n` +
+                    `Client: Donald Pirie\n` +
+                    `Date: ${new Date().toLocaleDateString('en-GB')}\n\n` +
+                    `═══════════════════════════════════════\n\n` +
+                    `Blueprint Usage:\n${usageArray.join(', ') || 'Not provided'}\n\n` +
+                    `Opportunities Pursued:\n${data.impl_opportunities || 'Not provided'}\n\n` +
+                    `Outcomes Achieved:\n${data.impl_outcomes || 'Not provided'}\n\n` +
+                    `Confidence Change: ${data.impl_confidence || 'Not provided'}/5\n\n` +
+                    `Blueprint Accuracy:\n${data.impl_accuracy || 'Not provided'}\n\n` +
+                    `Best Decision Made:\n${data.impl_best_decision || 'Not provided'}\n\n` +
+                    `Additional Comments:\n${data.impl_additional || 'Not provided'}\n\n` +
+                    `═══════════════════════════════════════\n\n` +
+                    `RESULTS TESTIMONIAL:\n${data.impl_testimonial || 'Not provided'}\n` +
+                    `Permission to use with name: ${data.impl_testimonial_permission || 'No'}`
+                );
+
+                window.location.href = `mailto:lisa@harnessthespark.com?subject=${subject}&body=${body}`;
+
+                document.getElementById('part2Form').style.display = 'none';
+                document.getElementById('successMessage2').style.display = 'block';
+            });
+        </script>
+
         <div style="text-align: center; padding: 30px; background: #f8f9fa; color: #7f8c8d; font-size: 0.9em;">
             <p>Career Booster Programme | 4-Week Journey</p>
-            <p style="margin-top: 5px;">Last Updated: After Session 3 (24 Nov 2025)</p>
+            <p style="margin-top: 5px;">Last Updated: After Session 4 - Programme Complete (28 Nov 2025)</p>
         </div>
     </div>
 </body>

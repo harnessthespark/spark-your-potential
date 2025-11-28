@@ -8,49 +8,90 @@
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: 'Inter', sans-serif; background: #f5f5f5; min-height: 100vh; }
-        
+
         .app-container { display: flex; min-height: 100vh; }
-        
+
         /* Sidebar */
-        .sidebar { width: 380px; background: linear-gradient(135deg, #E63946 0%, #D81B60 100%); padding: 30px; color: white; overflow-y: auto; }
-        .sidebar-header { margin-bottom: 30px; }
+        .sidebar { width: 420px; background: linear-gradient(135deg, #E63946 0%, #D81B60 100%); padding: 30px; color: white; overflow-y: auto; }
+        .sidebar-header { margin-bottom: 20px; }
         .sidebar-header h1 { font-size: 1.5em; margin-bottom: 5px; }
         .sidebar-header p { opacity: 0.8; font-size: 0.9em; }
-        
-        .proposition-section { margin-bottom: 30px; }
-        .proposition-title { font-size: 0.85em; font-weight: 700; color: #FFB627; margin-bottom: 20px; display: flex; align-items: center; gap: 8px; }
-        
+
+        /* NEW: Import Section */
+        .import-section { background: rgba(255,255,255,0.15); border-radius: 12px; padding: 20px; margin-bottom: 25px; }
+        .import-title { font-size: 0.9em; font-weight: 700; color: #FFB627; margin-bottom: 15px; display: flex; align-items: center; gap: 8px; }
+        .import-description { font-size: 0.85em; opacity: 0.9; margin-bottom: 15px; line-height: 1.5; }
+        .import-dropzone { border: 2px dashed rgba(255,255,255,0.5); border-radius: 10px; padding: 25px; text-align: center; cursor: pointer; transition: all 0.3s ease; margin-bottom: 15px; }
+        .import-dropzone:hover { border-color: #FFB627; background: rgba(255,255,255,0.1); }
+        .import-dropzone.drag-over { border-color: #FFB627; background: rgba(255,182,39,0.2); }
+        .import-dropzone-icon { font-size: 2.5em; margin-bottom: 10px; }
+        .import-dropzone-text { font-size: 0.9em; opacity: 0.9; }
+        .import-dropzone-subtext { font-size: 0.75em; opacity: 0.7; margin-top: 5px; }
+        .import-or { text-align: center; font-size: 0.8em; opacity: 0.7; margin: 10px 0; }
+        .import-paste { width: 100%; padding: 12px; border: none; border-radius: 8px; font-family: inherit; font-size: 0.9em; resize: none; height: 80px; }
+        .import-paste::placeholder { color: #999; }
+        .import-button { width: 100%; padding: 12px; background: #FFB627; color: #333; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; font-size: 0.9em; margin-top: 10px; display: flex; align-items: center; justify-content: center; gap: 8px; }
+        .import-button:hover { background: #ffc84d; }
+        .import-button:disabled { background: #ccc; cursor: not-allowed; }
+        .ai-badge { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 3px 8px; border-radius: 12px; font-size: 0.7em; font-weight: 600; }
+
+        /* Import Success */
+        .import-success { display: none; background: rgba(46, 204, 113, 0.2); border-radius: 10px; padding: 15px; margin-top: 15px; }
+        .import-success.show { display: block; }
+        .import-success-title { font-weight: 600; color: #2ecc71; margin-bottom: 5px; display: flex; align-items: center; gap: 8px; }
+        .import-success-text { font-size: 0.85em; opacity: 0.9; }
+
+        .proposition-section { margin-bottom: 25px; }
+        .proposition-title { font-size: 0.85em; font-weight: 700; color: #FFB627; margin-bottom: 15px; display: flex; align-items: center; gap: 8px; }
+
         .field-group { margin-bottom: 15px; }
-        .field-label { font-size: 0.75em; text-transform: uppercase; opacity: 0.8; margin-bottom: 5px; }
+        .field-label { font-size: 0.75em; text-transform: uppercase; opacity: 0.8; margin-bottom: 5px; display: flex; align-items: center; gap: 8px; }
         .field-input { width: 100%; padding: 12px; border: none; border-radius: 8px; font-size: 0.95em; font-family: inherit; }
         .field-input:focus { outline: 2px solid #FFB627; }
-        
-        .blueprint-reference { background: rgba(255,255,255,0.15); padding: 15px; border-radius: 10px; margin-top: 20px; font-size: 0.9em; line-height: 1.6; }
+        /* UK English spell checking */
+        .field-input[spellcheck="true"] {
+            text-decoration-skip-ink: none;
+        }
+        .spell-indicator { font-size: 0.65em; background: rgba(255,255,255,0.2); padding: 2px 6px; border-radius: 4px; }
+
+        .blueprint-reference { background: rgba(255,255,255,0.15); padding: 15px; border-radius: 10px; margin-top: 15px; font-size: 0.9em; line-height: 1.6; }
         .blueprint-reference-label { font-size: 0.75em; color: #FFB627; margin-bottom: 10px; display: block; }
-        
-        .preview-box { background: rgba(255,255,255,0.1); border-radius: 10px; padding: 15px; margin-top: 20px; font-style: italic; line-height: 1.6; }
-        
-        .use-button { width: 100%; padding: 12px; background: #FFB627; color: #333; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; margin-top: 15px; font-size: 0.95em; }
+
+        .preview-box { background: rgba(255,255,255,0.1); border-radius: 10px; padding: 15px; margin-top: 15px; font-style: italic; line-height: 1.6; }
+
+        .button-group { display: flex; gap: 10px; margin-top: 15px; }
+        .use-button { flex: 1; padding: 12px; background: #FFB627; color: #333; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; font-size: 0.9em; }
         .use-button:hover { background: #ffc84d; }
-        
+        .export-button { padding: 12px 20px; background: rgba(255,255,255,0.2); color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; font-size: 0.9em; }
+        .export-button:hover { background: rgba(255,255,255,0.3); }
+
         /* Main Content */
         .main-content { flex: 1; padding: 40px; overflow-y: auto; }
-        
+
+        /* Toolbar */
+        .cv-toolbar { max-width: 800px; margin: 0 auto 20px auto; display: flex; justify-content: space-between; align-items: center; }
+        .cv-toolbar-left { display: flex; gap: 10px; }
+        .cv-toolbar-right { display: flex; gap: 10px; }
+        .toolbar-button { padding: 10px 16px; background: white; border: 1px solid #ddd; border-radius: 8px; font-size: 0.85em; cursor: pointer; display: flex; align-items: center; gap: 6px; transition: all 0.2s ease; }
+        .toolbar-button:hover { background: #f0f0f0; border-color: #667eea; }
+        .toolbar-button.active { background: #667eea; color: white; border-color: #667eea; }
+
         .cv-preview { background: white; max-width: 800px; margin: 0 auto; padding: 50px; box-shadow: 0 5px 30px rgba(0,0,0,0.1); border-radius: 10px; }
-        
+
         .cv-name { font-size: 2.2em; font-weight: 700; color: #2c3e50; text-transform: uppercase; letter-spacing: 1px; }
         .cv-headline { color: #667eea; font-style: italic; margin: 10px 0 25px 0; font-size: 1.1em; padding-bottom: 20px; border-bottom: 2px solid #e0e0e0; }
-        
+
         .cv-section { margin-bottom: 30px; }
         .cv-section-title { font-size: 0.8em; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; color: #888; margin-bottom: 15px; padding-bottom: 8px; border-bottom: 1px solid #e0e0e0; }
-        
+
         .cv-profile { line-height: 1.8; color: #444; font-size: 1em; }
-        
+
         .cv-skills { display: flex; flex-wrap: wrap; gap: 8px; }
         .cv-skill { background: #f0f0f0; padding: 6px 12px; border-radius: 20px; font-size: 0.85em; color: #555; }
-        
+        .cv-skill.ai-extracted { background: linear-gradient(135deg, #667eea20 0%, #764ba220 100%); border: 1px solid #667eea40; }
+
         .cv-highlights li { margin-bottom: 12px; line-height: 1.6; color: #444; }
-        
+
         .cv-experience-item { margin-bottom: 25px; }
         .cv-job-header { display: flex; justify-content: space-between; margin-bottom: 8px; }
         .cv-job-title { font-weight: 600; color: #2c3e50; }
@@ -58,12 +99,29 @@
         .cv-job-company { color: #667eea; margin-bottom: 10px; }
         .cv-job-bullets { padding-left: 20px; color: #555; }
         .cv-job-bullets li { margin-bottom: 8px; line-height: 1.6; }
-        
+
         .cv-clients { margin-top: 15px; }
         .cv-clients-label { font-weight: 600; color: #2c3e50; font-size: 0.9em; }
         .cv-clients-list { color: #555; }
-        
+
         .cv-contact { display: flex; gap: 20px; font-size: 0.9em; color: #666; margin-top: 10px; }
+
+        /* AI Processing Overlay */
+        .ai-processing { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.8); z-index: 1000; align-items: center; justify-content: center; }
+        .ai-processing.show { display: flex; }
+        .ai-processing-content { background: white; padding: 40px; border-radius: 16px; text-align: center; max-width: 400px; }
+        .ai-processing-icon { font-size: 3em; margin-bottom: 20px; animation: pulse 1.5s ease-in-out infinite; }
+        @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.1); } }
+        .ai-processing-title { font-size: 1.3em; font-weight: 600; margin-bottom: 10px; color: #333; }
+        .ai-processing-text { color: #666; margin-bottom: 20px; }
+        .ai-processing-steps { text-align: left; font-size: 0.9em; }
+        .ai-processing-step { padding: 8px 0; display: flex; align-items: center; gap: 10px; color: #888; }
+        .ai-processing-step.active { color: #667eea; font-weight: 500; }
+        .ai-processing-step.done { color: #2ecc71; }
+        .ai-processing-step-icon { width: 20px; }
+
+        /* Feature Badge */
+        .feature-badge { position: absolute; top: -10px; right: -10px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 4px 10px; border-radius: 12px; font-size: 0.7em; font-weight: 600; }
     </style>
 </head>
 <body>
@@ -74,75 +132,150 @@
                 <h1>📝 CV Builder</h1>
                 <p>Blueprint → CV Tool for Sarah Mitchell</p>
             </div>
-            
+
+            <!-- NEW: CV Import Section -->
+            <div class="import-section">
+                <div class="import-title">
+                    📄 IMPORT EXISTING CV
+                    <span class="ai-badge">✨ AI-Powered</span>
+                </div>
+                <div class="import-description">
+                    Upload your existing CV and our AI will extract key information to populate your fields automatically.
+                </div>
+
+                <div class="import-dropzone" id="dropzone">
+                    <div class="import-dropzone-icon">📁</div>
+                    <div class="import-dropzone-text">Drop CV file here or click to browse</div>
+                    <div class="import-dropzone-subtext">Supports PDF, DOCX, TXT (max 5MB)</div>
+                </div>
+                <input type="file" id="fileInput" accept=".pdf,.docx,.doc,.txt" style="display: none;">
+
+                <div class="import-or">— or paste CV text —</div>
+
+                <textarea class="import-paste" id="pasteArea" placeholder="Paste your CV content here..."></textarea>
+
+                <button class="import-button" id="importButton" onclick="processCV()">
+                    <span>🤖</span> Extract with AI
+                </button>
+
+                <div class="import-success" id="importSuccess">
+                    <div class="import-success-title">✅ CV Imported Successfully</div>
+                    <div class="import-success-text">AI has extracted your career history, skills, and achievements. Review and edit below.</div>
+                </div>
+            </div>
+
             <div class="proposition-section">
                 <div class="proposition-title">✏️ DRAFT YOUR PROPOSITION</div>
-                
+
                 <div class="field-group">
-                    <div class="field-label">I'M A... [ROLE IDENTITY]</div>
-                    <input type="text" class="field-input" value="Creative Catalyst" id="roleIdentity">
+                    <div class="field-label">
+                        I'M A... [ROLE IDENTITY]
+                        <span class="spell-indicator">🇬🇧 UK</span>
+                    </div>
+                    <input type="text" class="field-input" value="Creative Catalyst" id="roleIdentity" spellcheck="true" lang="en-GB">
                 </div>
-                
+
                 <div class="field-group">
-                    <div class="field-label">WHO... [WHAT YOU DO]</div>
-                    <input type="text" class="field-input" value="unlocks creative potential" id="whatYouDo">
+                    <div class="field-label">
+                        WHO... [WHAT YOU DO]
+                        <span class="spell-indicator">🇬🇧 UK</span>
+                    </div>
+                    <input type="text" class="field-input" value="unlocks creative potential" id="whatYouDo" spellcheck="true" lang="en-GB">
                 </div>
-                
+
                 <div class="field-group">
-                    <div class="field-label">FOR... [WHO YOU SERVE]</div>
-                    <input type="text" class="field-input" value="clients and teams that have forgotten what they're capable of" id="whoYouServe">
+                    <div class="field-label">
+                        FOR... [WHO YOU SERVE]
+                        <span class="spell-indicator">🇬🇧 UK</span>
+                    </div>
+                    <input type="text" class="field-input" value="clients and teams that have forgotten what they're capable of" id="whoYouServe" spellcheck="true" lang="en-GB">
                 </div>
-                
+
                 <div class="field-group">
-                    <div class="field-label">I... [UNIQUE APPROACH]</div>
-                    <input type="text" class="field-input" value="connect creativity with commercial reality" id="uniqueApproach">
+                    <div class="field-label">
+                        I... [UNIQUE APPROACH]
+                        <span class="spell-indicator">🇬🇧 UK</span>
+                    </div>
+                    <input type="text" class="field-input" value="connect creativity with commercial reality" id="uniqueApproach" spellcheck="true" lang="en-GB">
                 </div>
-                
+
                 <div class="field-group">
-                    <div class="field-label">AFTER... [CAREER BACKGROUND]</div>
-                    <input type="text" class="field-input" value="15 years helping brands like Nike, Spotify and Barclays" id="background">
+                    <div class="field-label">
+                        AFTER... [CAREER BACKGROUND]
+                        <span class="spell-indicator">🇬🇧 UK</span>
+                    </div>
+                    <input type="text" class="field-input" value="15 years helping brands like Nike, Spotify and Barclays" id="background" spellcheck="true" lang="en-GB">
                 </div>
-                
+
                 <div class="field-group">
-                    <div class="field-label">I'M NOW... [WHERE HEADING & WHY]</div>
-                    <input type="text" class="field-input" value="seeking roles where I can transform teams and deliver award-winning work" id="whereHeading">
+                    <div class="field-label">
+                        I'M NOW... [WHERE HEADING & WHY]
+                        <span class="spell-indicator">🇬🇧 UK</span>
+                    </div>
+                    <input type="text" class="field-input" value="seeking roles where I can transform teams and deliver award-winning work" id="whereHeading" spellcheck="true" lang="en-GB">
                 </div>
-                
+
                 <div class="blueprint-reference">
                     <span class="blueprint-reference-label">📘 From Blueprint: Core Pattern + Thread + Why Now</span>
                     Your core pattern is unlocking creative potential. Your thread is connecting creativity with commercial reality. Use these to anchor your proposition.
                 </div>
-                
-                <div class="preview-box">
+
+                <div class="preview-box" id="propositionPreview">
                     "I'm a Creative Catalyst who unlocks creative potential for clients and teams that have forgotten what they're capable of. I connect creativity with commercial reality. After 15 years helping brands like Nike, Spotify and Barclays, I'm now seeking roles where I can transform teams and deliver award-winning work."
                 </div>
-                
-                <button class="use-button">↓ Use as Profile</button>
+
+                <div class="button-group">
+                    <button class="use-button" onclick="useAsProfile()">↓ Use as Profile</button>
+                    <button class="export-button" onclick="exportCV()">📥 Export PDF</button>
+                </div>
             </div>
         </div>
-        
+
         <!-- Main Content -->
         <div class="main-content">
-            <div class="cv-preview">
-                <div class="cv-name">Sarah Mitchell</div>
-                <div class="cv-headline">Creative Catalyst | Unlocking potential in clients and teams that have forgotten what they're capable of</div>
-                
+            <!-- Toolbar -->
+            <div class="cv-toolbar">
+                <div class="cv-toolbar-left">
+                    <button class="toolbar-button active" onclick="setTemplate('modern')">
+                        <span>🎨</span> Modern
+                    </button>
+                    <button class="toolbar-button" onclick="setTemplate('classic')">
+                        <span>📄</span> Classic
+                    </button>
+                    <button class="toolbar-button" onclick="setTemplate('creative')">
+                        <span>✨</span> Creative
+                    </button>
+                </div>
+                <div class="cv-toolbar-right">
+                    <button class="toolbar-button" onclick="previewPrint()">
+                        <span>🖨️</span> Print Preview
+                    </button>
+                    <button class="toolbar-button" onclick="downloadPDF()">
+                        <span>📥</span> Download PDF
+                    </button>
+                </div>
+            </div>
+
+            <div class="cv-preview" id="cvPreview">
+                <div class="cv-name" id="cvName">Sarah Mitchell</div>
+                <div class="cv-headline" id="cvHeadline">Creative Catalyst | Unlocking potential in clients and teams that have forgotten what they're capable of</div>
+
                 <div class="cv-contact">
-                    <span>📧 <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="4d3e2c3f2c250d28352c203d2128632e2220">[email&#160;protected]</a></span>
+                    <span>📧 sarah.mitchell@email.com</span>
                     <span>📱 +44 7XXX XXX XXX</span>
                     <span>🔗 linkedin.com/in/sarahmitchell</span>
                 </div>
-                
+
                 <div class="cv-section">
                     <div class="cv-section-title">Profile</div>
-                    <p class="cv-profile">
+                    <p class="cv-profile" id="cvProfile">
                         I'm a Creative Catalyst who unlocks creative potential for clients and teams that have forgotten what they're capable of. I connect creativity with commercial reality — finding the spark in teams others have written off and fanning it into work that actually ships. After 15 years helping brands like Nike, Spotify and Barclays rediscover their creative edge, I'm now seeking roles where I can transform teams and deliver award-winning work.
                     </p>
                 </div>
-                
+
                 <div class="cv-section">
                     <div class="cv-section-title">Key Skills</div>
-                    <div class="cv-skills">
+                    <div class="cv-skills" id="cvSkills">
                         <span class="cv-skill">Creative Strategy</span>
                         <span class="cv-skill">Team Transformation</span>
                         <span class="cv-skill">Brand Platforms</span>
@@ -153,20 +286,20 @@
                         <span class="cv-skill">In-house & Agency</span>
                     </div>
                 </div>
-                
+
                 <div class="cv-section">
                     <div class="cv-section-title">Key Highlights</div>
-                    <ul class="cv-highlights">
+                    <ul class="cv-highlights" id="cvHighlights">
                         <li>Transformed Nike EMEA's creative output — took team from "safe" regional execution to award-winning work, +40% campaign engagement</li>
                         <li>Rebuilt Spotify's in-house creative team post-restructure — new brand platform became global template, team retention up 60%</li>
                         <li>Led Barclays rebrand across 12 markets — first unified creative campaign in 5 years while respecting local nuance</li>
                         <li>Multiple creative awards including Cannes Lions, D&AD, and Creative Circle</li>
                     </ul>
                 </div>
-                
+
                 <div class="cv-section">
                     <div class="cv-section-title">Experience</div>
-                    
+
                     <div class="cv-clients">
                         <span class="cv-clients-label">Key Clients: </span>
                         <span class="cv-clients-list">Nike, Spotify, Barclays, Unilever, BBC, Diageo</span>
@@ -175,7 +308,7 @@
                         <span class="cv-clients-label">Agencies: </span>
                         <span class="cv-clients-list">Wieden+Kennedy, BBH, Mother, In-house</span>
                     </div>
-                    
+
                     <div class="cv-experience-item">
                         <div class="cv-job-header">
                             <span class="cv-job-title">Creative Strategy Director</span>
@@ -188,7 +321,7 @@
                             <li>Increased team retention by 60% through culture and process changes</li>
                         </ul>
                     </div>
-                    
+
                     <div class="cv-experience-item">
                         <div class="cv-job-header">
                             <span class="cv-job-title">Strategy Director</span>
@@ -201,7 +334,7 @@
                             <li>Won Cannes Lions and D&AD for Nike "Nothing Beats a Londoner" follow-up</li>
                         </ul>
                     </div>
-                    
+
                     <div class="cv-experience-item">
                         <div class="cv-job-header">
                             <span class="cv-job-title">Senior Strategist</span>
@@ -218,15 +351,43 @@
             </div>
         </div>
     </div>
-    
-    <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
-        // Simple interactivity - update preview when fields change
+
+    <!-- AI Processing Overlay -->
+    <div class="ai-processing" id="aiProcessing">
+        <div class="ai-processing-content">
+            <div class="ai-processing-icon">🤖</div>
+            <div class="ai-processing-title">AI is analysing your CV</div>
+            <div class="ai-processing-text">This usually takes 10-15 seconds</div>
+            <div class="ai-processing-steps">
+                <div class="ai-processing-step active" id="step1">
+                    <span class="ai-processing-step-icon">⏳</span>
+                    <span>Reading document structure...</span>
+                </div>
+                <div class="ai-processing-step" id="step2">
+                    <span class="ai-processing-step-icon">⏳</span>
+                    <span>Extracting work history...</span>
+                </div>
+                <div class="ai-processing-step" id="step3">
+                    <span class="ai-processing-step-icon">⏳</span>
+                    <span>Identifying key skills...</span>
+                </div>
+                <div class="ai-processing-step" id="step4">
+                    <span class="ai-processing-step-icon">⏳</span>
+                    <span>Generating proposition...</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Field references
         const fields = ['roleIdentity', 'whatYouDo', 'whoYouServe', 'uniqueApproach', 'background', 'whereHeading'];
-        
+
+        // Update preview when fields change
         fields.forEach(field => {
             document.getElementById(field).addEventListener('input', updatePreview);
         });
-        
+
         function updatePreview() {
             const role = document.getElementById('roleIdentity').value;
             const what = document.getElementById('whatYouDo').value;
@@ -234,5 +395,150 @@
             const approach = document.getElementById('uniqueApproach').value;
             const bg = document.getElementById('background').value;
             const heading = document.getElementById('whereHeading').value;
-            
-     
+
+            // Update proposition preview
+            const proposition = `"I'm a ${role} who ${what} for ${who}. I ${approach}. After ${bg}, I'm now ${heading}."`;
+            document.getElementById('propositionPreview').textContent = proposition;
+
+            // Update CV headline
+            document.getElementById('cvHeadline').textContent = `${role} | ${what.charAt(0).toUpperCase() + what.slice(1)} for ${who}`;
+        }
+
+        function useAsProfile() {
+            const role = document.getElementById('roleIdentity').value;
+            const what = document.getElementById('whatYouDo').value;
+            const who = document.getElementById('whoYouServe').value;
+            const approach = document.getElementById('uniqueApproach').value;
+            const bg = document.getElementById('background').value;
+            const heading = document.getElementById('whereHeading').value;
+
+            const profile = `I'm a ${role} who ${what} for ${who}. I ${approach} — finding the spark in teams others have written off and fanning it into work that actually ships. After ${bg}, I'm now ${heading}.`;
+            document.getElementById('cvProfile').textContent = profile;
+
+            alert('✅ Profile updated! Your proposition is now reflected in your CV.');
+        }
+
+        // Drag and drop functionality
+        const dropzone = document.getElementById('dropzone');
+        const fileInput = document.getElementById('fileInput');
+
+        dropzone.addEventListener('click', () => fileInput.click());
+
+        dropzone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            dropzone.classList.add('drag-over');
+        });
+
+        dropzone.addEventListener('dragleave', () => {
+            dropzone.classList.remove('drag-over');
+        });
+
+        dropzone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            dropzone.classList.remove('drag-over');
+            const file = e.dataTransfer.files[0];
+            if (file) handleFile(file);
+        });
+
+        fileInput.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file) handleFile(file);
+        });
+
+        function handleFile(file) {
+            // Show file name in dropzone
+            dropzone.innerHTML = `
+                <div class="import-dropzone-icon">📄</div>
+                <div class="import-dropzone-text">${file.name}</div>
+                <div class="import-dropzone-subtext">${(file.size / 1024).toFixed(1)} KB - Click "Extract with AI" to process</div>
+            `;
+        }
+
+        // AI Processing simulation
+        function processCV() {
+            const pasteContent = document.getElementById('pasteArea').value;
+            const hasFile = fileInput.files.length > 0;
+
+            if (!pasteContent && !hasFile) {
+                alert('Please upload a CV file or paste your CV content first.');
+                return;
+            }
+
+            // Show processing overlay
+            const processing = document.getElementById('aiProcessing');
+            processing.classList.add('show');
+
+            // Simulate AI processing steps
+            const steps = ['step1', 'step2', 'step3', 'step4'];
+            let currentStep = 0;
+
+            const interval = setInterval(() => {
+                if (currentStep > 0) {
+                    document.getElementById(steps[currentStep - 1]).classList.remove('active');
+                    document.getElementById(steps[currentStep - 1]).classList.add('done');
+                    document.getElementById(steps[currentStep - 1]).querySelector('.ai-processing-step-icon').textContent = '✅';
+                }
+
+                if (currentStep < steps.length) {
+                    document.getElementById(steps[currentStep]).classList.add('active');
+                    currentStep++;
+                } else {
+                    clearInterval(interval);
+
+                    // Hide processing, show success
+                    setTimeout(() => {
+                        processing.classList.remove('show');
+                        document.getElementById('importSuccess').classList.add('show');
+
+                        // Reset steps for next use
+                        steps.forEach(step => {
+                            document.getElementById(step).classList.remove('active', 'done');
+                            document.getElementById(step).querySelector('.ai-processing-step-icon').textContent = '⏳';
+                        });
+
+                        // Simulate extracted data (in real implementation, this would come from AI)
+                        simulateExtractedData();
+                    }, 500);
+                }
+            }, 1500);
+        }
+
+        function simulateExtractedData() {
+            // This simulates what AI would extract from a CV
+            // In the real implementation, this would be actual AI parsing
+
+            // Add some AI-extracted skills
+            const skillsContainer = document.getElementById('cvSkills');
+            const newSkills = ['AI-Extracted: Brand Strategy', 'AI-Extracted: Market Analysis'];
+            newSkills.forEach(skill => {
+                const span = document.createElement('span');
+                span.className = 'cv-skill ai-extracted';
+                span.textContent = skill.replace('AI-Extracted: ', '');
+                span.title = 'Extracted by AI from your CV';
+                skillsContainer.appendChild(span);
+            });
+        }
+
+        function setTemplate(template) {
+            // Update active button
+            document.querySelectorAll('.toolbar-button').forEach(btn => btn.classList.remove('active'));
+            event.target.closest('.toolbar-button').classList.add('active');
+
+            // In real implementation, this would change the CV styling
+            alert(`Template changed to "${template}". This feature will apply different visual styles to your CV.`);
+        }
+
+        function previewPrint() {
+            window.print();
+        }
+
+        function downloadPDF() {
+            alert('📥 PDF download feature would generate a professional PDF of your CV.\n\nIn the full SparkHub platform, this creates a print-ready PDF with your chosen template.');
+        }
+
+        function exportCV() {
+            downloadPDF();
+        }
+    </script>
+</body>
+</html>
