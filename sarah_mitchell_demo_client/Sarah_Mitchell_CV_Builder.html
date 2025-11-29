@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sarah Mitchell - Interactive CV Builder</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; background: #f5f5f5; color: #2c3e50; line-height: 1.6; }
+        .app-container { display: grid; grid-template-columns: 380px 1fr; min-height: 100vh; }
+        .sidebar { background: linear-gradient(135deg, #E63946 0%, #D81B60 50%, #7B2CBF 100%); color: white; padding: 25px 20px; overflow-y: auto; position: sticky; top: 0; height: 100vh; }
+        .sidebar h1 { font-size: 1.4em; margin-bottom: 5px; }
+        .sidebar .subtitle { font-size: 0.85em; opacity: 0.9; margin-bottom: 25px; padding-bottom: 15px; border-bottom: 1px solid rgba(255,255,255,0.2); }
+        .sidebar h2 { font-size: 0.85em; text-transform: uppercase; letter-spacing: 1px; margin: 20px 0 12px 0; opacity: 0.8; }
+        .option-group { background: rgba(255,255,255,0.1); border-radius: 10px; padding: 12px; margin-bottom: 12px; }
+        .option-group label { display: block; padding: 8px 10px; margin: 4px 0; background: rgba(255,255,255,0.1); border-radius: 6px; cursor: pointer; font-size: 0.8em; transition: all 0.2s; }
+        .option-group label:hover { background: rgba(255,255,255,0.2); }
+        .option-group input[type="radio"] { margin-right: 8px; }
+        .toggle-group { margin: 8px 0; }
+        .toggle-item { display: flex; align-items: center; justify-content: space-between; padding: 8px 10px; background: rgba(255,255,255,0.1); border-radius: 6px; margin: 4px 0; font-size: 0.8em; }
+        .toggle-switch { position: relative; width: 40px; height: 22px; }
+        .toggle-switch input { opacity: 0; width: 0; height: 0; }
+        .toggle-slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: rgba(0,0,0,0.3); transition: 0.3s; border-radius: 22px; }
+        .toggle-slider:before { position: absolute; content: ""; height: 16px; width: 16px; left: 3px; bottom: 3px; background-color: white; transition: 0.3s; border-radius: 50%; }
+        input:checked + .toggle-slider { background-color: #4CAF50; }
+        input:checked + .toggle-slider:before { transform: translateX(18px); }
+        .blueprint-source { background: rgba(255,255,255,0.15); padding: 8px 10px; border-radius: 6px; font-size: 0.7em; margin-top: 8px; border-left: 3px solid #FFD700; }
+        .blueprint-source strong { color: #FFD700; }
+        .prop-input { width: 100%; padding: 8px 10px; border: 1px solid rgba(255,255,255,0.3); border-radius: 6px; background: rgba(255,255,255,0.9); color: #2c3e50; font-size: 0.8em; font-family: 'Inter', sans-serif; margin-top: 4px; }
+        .prop-input:focus { outline: none; border-color: #FFD700; box-shadow: 0 0 0 2px rgba(255,215,0,0.3); }
+        .prop-label { display: block; padding: 0; margin: 10px 0 2px 0; background: none; font-size: 0.7em; text-transform: uppercase; letter-spacing: 0.5px; opacity: 0.9; }
+        .action-buttons { margin-top: 20px; padding-top: 15px; border-top: 1px solid rgba(255,255,255,0.2); }
+        .btn { display: block; width: 100%; padding: 10px 15px; margin: 8px 0; border: none; border-radius: 8px; font-size: 0.85em; font-weight: 600; cursor: pointer; transition: all 0.2s; }
+        .btn-primary { background: white; color: #D81B60; }
+        .btn-primary:hover { background: #f0f0f0; transform: translateY(-1px); }
+        .btn-secondary { background: rgba(255,255,255,0.2); color: white; }
+        .btn-secondary:hover { background: rgba(255,255,255,0.3); }
+        .cv-preview { padding: 40px; overflow-y: auto; }
+        .cv-document { max-width: 800px; margin: 0 auto; background: white; box-shadow: 0 5px 30px rgba(0,0,0,0.1); border-radius: 8px; overflow: hidden; padding: 40px; }
+
+        /* Hero Image Section */
+        .cv-hero { text-align: center; margin-bottom: 25px; }
+        .cv-hero-image { width: 120px; height: 120px; border-radius: 50%; object-fit: cover; border: 4px solid #667eea; margin-bottom: 15px; }
+        .cv-hero-placeholder { width: 120px; height: 120px; border-radius: 50%; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); display: flex; align-items: center; justify-content: center; margin: 0 auto 15px; color: white; font-size: 2.5em; font-weight: 700; }
+        .hero-upload-btn { background: #667eea; color: white; border: none; padding: 8px 16px; border-radius: 6px; font-size: 0.8em; cursor: pointer; margin-top: 8px; }
+        .hero-upload-btn:hover { background: #5a6fd6; }
+
+        .cv-name { font-size: 2em; font-weight: 700; color: #2c3e50; margin-bottom: 8px; text-transform: uppercase; }
+        .cv-title { font-size: 1em; color: #555; font-weight: 400; margin-bottom: 12px; line-height: 1.5; font-style: italic; }
+        .cv-contact { font-size: 0.85em; color: #666; margin-bottom: 20px; }
+        .cv-profile { font-size: 0.9em; line-height: 1.6; color: #444; margin-bottom: 25px; }
+        .cv-section { margin-bottom: 25px; }
+        .cv-section-title { font-size: 0.95em; font-weight: 700; color: #2c3e50; margin-bottom: 10px; }
+        .cv-skills { font-size: 0.85em; color: #444; line-height: 1.6; }
+        .cv-skill-tags { display: flex; flex-wrap: wrap; gap: 8px; }
+        .cv-skill-tag { background: #f0f0f0; padding: 6px 12px; border-radius: 20px; font-size: 0.85em; color: #555; }
+        .cv-highlights { list-style: disc; margin-left: 20px; font-size: 0.85em; color: #444; }
+        .cv-highlights li { margin-bottom: 6px; }
+        .cv-experience-block { margin-bottom: 20px; }
+        .cv-exp-header { font-weight: 600; color: #2c3e50; font-size: 0.9em; margin-bottom: 3px; }
+        .cv-exp-meta { font-size: 0.85em; color: #666; margin-bottom: 8px; }
+        .cv-exp-bullets { list-style: disc; margin-left: 20px; font-size: 0.85em; color: #555; }
+        .cv-exp-bullets li { margin-bottom: 4px; }
+        .cv-edu-section { margin-bottom: 8px; }
+        .cv-edu-title { font-weight: 600; font-size: 0.85em; color: #2c3e50; }
+        .cv-edu-list { list-style: disc; margin-left: 20px; font-size: 0.85em; color: #444; }
+        .cv-edu-list li { margin-bottom: 3px; }
+        .cv-testimonial { background: #f8f9fa; padding: 15px; border-radius: 8px; margin-bottom: 12px; border-left: 3px solid #7B2CBF; }
+        .cv-testimonial-quote { font-style: italic; font-size: 0.85em; color: #444; margin-bottom: 5px; }
+        .cv-testimonial-author { font-size: 0.8em; color: #666; }
+        .cv-case-study { background: #f8f9fa; border-radius: 8px; padding: 15px; margin-bottom: 15px; border-left: 3px solid #E63946; }
+        .cv-case-study-title { font-weight: 600; color: #E63946; margin-bottom: 10px; font-size: 0.95em; }
+        .cv-case-study-grid { display: grid; grid-template-columns: 100px 1fr; gap: 4px 10px; font-size: 0.85em; }
+        .cv-case-study-label { font-weight: 600; color: #666; }
+        .hidden { display: none !important; }
+        [contenteditable="true"] { outline: none; transition: background 0.2s; }
+        [contenteditable="true"]:hover { background: #fffde7; }
+        [contenteditable="true"]:focus { background: #fff9c4; box-shadow: inset 0 0 0 2px #ffc107; }
+        .edit-hint { font-size: 0.75em; color: rgba(255,255,255,0.7); margin-top: 5px; font-style: italic; }
+        .btn-delete { background: rgba(255,255,255,0.2); border: none; color: white; width: 22px; height: 22px; border-radius: 50%; cursor: pointer; font-size: 1em; line-height: 1; transition: all 0.2s; }
+        .btn-delete:hover { background: #E63946; }
+        .modal-overlay { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.6); z-index: 1000; align-items: center; justify-content: center; }
+        .modal-overlay.active { display: flex; }
+        .modal { background: white; border-radius: 12px; padding: 30px; max-width: 500px; width: 90%; max-height: 80vh; overflow-y: auto; }
+        .modal h3 { color: #E63946; margin-bottom: 20px; }
+        .modal-input { width: 100%; padding: 10px 12px; border: 1px solid #ddd; border-radius: 6px; font-size: 0.9em; font-family: 'Inter', sans-serif; margin-bottom: 12px; }
+        .modal-input:focus { outline: none; border-color: #E63946; }
+        .modal-label { display: block; font-size: 0.8em; font-weight: 600; color: #666; margin-bottom: 4px; }
+        .modal-buttons { display: flex; gap: 10px; margin-top: 20px; }
+        .modal-btn { flex: 1; padding: 10px 15px; border: none; border-radius: 8px; font-size: 0.9em; font-weight: 600; cursor: pointer; }
+        .modal-btn-primary { background: #E63946; color: white; }
+        .modal-btn-primary:hover { background: #d32f3f; }
+        .modal-btn-secondary { background: #f0f0f0; color: #666; }
+        .modal-btn-secondary:hover { background: #e0e0e0; }
+
+        /* Print Styles */
+        @media print {
+            .sidebar { display: none !important; }
+            .app-container { grid-template-columns: 1fr; display: block; }
+            .cv-preview { padding: 0; }
+            .cv-document { box-shadow: none; border-radius: 0; max-width: 100%; padding: 20px; }
+            [contenteditable="true"]:hover, [contenteditable="true"]:focus { background: transparent; box-shadow: none; }
+            .hero-upload-btn { display: none; }
+            @page { margin: 1.5cm; size: A4; }
+        }
+        @media (max-width: 900px) { .app-container { grid-template-columns: 1fr; } .sidebar { position: relative; height: auto; } }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <div class="sidebar">
+            <h1>CV Builder</h1>
+            <div class="subtitle">Blueprint → CV Tool for Sarah Mitchell</div>
+
+            <h2>✍️ Draft Your Proposition</h2>
+            <div class="option-group" style="background: rgba(255,215,0,0.15); border: 1px solid rgba(255,215,0,0.3);">
+                <p style="font-size: 0.75em; margin-bottom: 10px; opacity: 0.9;">Build your proposition:</p>
+                <label class="prop-label">I'm a... [role identity]</label>
+                <input type="text" id="prop-role" class="prop-input" value="Creative Catalyst" oninput="updateProposition()">
+                <label class="prop-label">who... [what you do]</label>
+                <input type="text" id="prop-what" class="prop-input" value="unlocks creative potential in clients and teams" oninput="updateProposition()">
+                <label class="prop-label">for... [who you serve]</label>
+                <input type="text" id="prop-who" class="prop-input" value="brands that have forgotten what they're capable of" oninput="updateProposition()">
+                <label class="prop-label">I... [unique approach/value]</label>
+                <input type="text" id="prop-unique" class="prop-input" value="connect creativity with commercial reality—finding the spark and fanning it into work that ships" oninput="updateProposition()">
+                <label class="prop-label">After... [career background]</label>
+                <input type="text" id="prop-background" class="prop-input" value="15 years helping brands like Nike, Spotify and Barclays rediscover their creative edge" oninput="updateProposition()">
+                <label class="prop-label">I'm now... [where heading & why]</label>
+                <input type="text" id="prop-heading" class="prop-input" value="seeking roles where I can transform teams and deliver award-winning work" oninput="updateProposition()">
+                <div class="blueprint-source"><strong>📍 From Blueprint:</strong> Core Pattern + Thread + Why Now</div>
+            </div>
+            <div style="background: rgba(255,255,255,0.1); border-radius: 8px; padding: 10px; margin-bottom: 15px;">
+                <p style="font-size: 0.7em; text-transform: uppercase; margin-bottom: 6px; opacity: 0.8;">Preview:</p>
+                <p id="proposition-preview" style="font-size: 0.8em; line-height: 1.5; font-style: italic;"></p>
+                <button class="btn btn-secondary" style="margin-top: 8px; padding: 6px 12px; font-size: 0.75em;" onclick="usePropositionAsProfile()">↓ Use as Profile</button>
+            </div>
+
+            <h2>📝 Profile Style</h2>
+            <div class="option-group">
+                <label><input type="radio" name="profile" value="original" checked onchange="updateProfile(this.value)"><span>Original CV</span></label>
+                <label><input type="radio" name="profile" value="transformation" onchange="updateProfile(this.value)"><span>Transformation Focus</span></label>
+                <label><input type="radio" name="profile" value="commercial" onchange="updateProfile(this.value)"><span>Commercial Focus</span></label>
+                <label><input type="radio" name="profile" value="custom" onchange="updateProfile(this.value)"><span>Custom Proposition</span></label>
+            </div>
+
+            <h2>🎯 Sections to Include</h2>
+            <div class="toggle-group">
+                <div class="toggle-item"><span>Hero Image</span><label class="toggle-switch"><input type="checkbox" checked onchange="toggleSection('hero', this.checked)"><span class="toggle-slider"></span></label></div>
+                <div class="toggle-item"><span>Title/Headline</span><label class="toggle-switch"><input type="checkbox" checked onchange="toggleSection('title', this.checked)"><span class="toggle-slider"></span></label></div>
+                <div class="toggle-item"><span>Profile Story</span><label class="toggle-switch"><input type="checkbox" checked onchange="toggleSection('profile', this.checked)"><span class="toggle-slider"></span></label></div>
+                <div class="toggle-item"><span>Key Skills</span><label class="toggle-switch"><input type="checkbox" checked onchange="toggleSection('skills', this.checked)"><span class="toggle-slider"></span></label></div>
+                <div class="toggle-item"><span>My Highlights</span><label class="toggle-switch"><input type="checkbox" checked onchange="toggleSection('highlights', this.checked)"><span class="toggle-slider"></span></label></div>
+                <div class="toggle-item"><span>Experience</span><label class="toggle-switch"><input type="checkbox" checked onchange="toggleSection('experience', this.checked)"><span class="toggle-slider"></span></label></div>
+                <div class="toggle-item"><span>Education & Training</span><label class="toggle-switch"><input type="checkbox" checked onchange="toggleSection('education', this.checked)"><span class="toggle-slider"></span></label></div>
+                <div class="toggle-item"><span>Outside Interests</span><label class="toggle-switch"><input type="checkbox" onchange="toggleSection('interests', this.checked)"><span class="toggle-slider"></span></label></div>
+                <div class="toggle-item"><span>Testimonials</span><label class="toggle-switch"><input type="checkbox" onchange="toggleSection('testimonials', this.checked)"><span class="toggle-slider"></span></label></div>
+                <div class="toggle-item"><span>Case Studies</span><label class="toggle-switch"><input type="checkbox" onchange="toggleSection('casestudies', this.checked)"><span class="toggle-slider"></span></label></div>
+            </div>
+
+            <h2>📘 Blueprint Reference</h2>
+            <div class="option-group" style="background: rgba(102,126,234,0.2); border: 1px solid rgba(102,126,234,0.4); max-height: 300px; overflow-y: auto;">
+                <p style="font-size: 0.7em; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; opacity: 0.9;">Your Core Pattern</p>
+                <p style="font-size: 0.8em; margin-bottom: 12px; line-height: 1.5;">"You don't just run campaigns. You unlock creative potential in clients and teams that have forgotten what they're capable of."</p>
+
+                <p style="font-size: 0.7em; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; opacity: 0.9;">Your Thread</p>
+                <p style="font-size: 0.8em; margin-bottom: 12px; line-height: 1.5;">"Connecting creativity with commercial reality — finding the spark in teams others have written off and fanning it into work that ships."</p>
+
+                <p style="font-size: 0.7em; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; opacity: 0.9;">Key Evidence</p>
+                <ul style="font-size: 0.75em; margin-left: 15px; line-height: 1.6; margin-bottom: 12px;">
+                    <li><strong>Nike EMEA:</strong> +40% campaign engagement, Cannes Lions</li>
+                    <li><strong>Spotify:</strong> Rebuilt team, +60% retention, global template</li>
+                    <li><strong>Barclays:</strong> 12-market rebrand, first unified campaign in 5 years</li>
+                </ul>
+
+                <p style="font-size: 0.7em; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; opacity: 0.9;">The Engine of Sarah</p>
+                <ul style="font-size: 0.75em; margin-left: 15px; line-height: 1.6; margin-bottom: 12px;">
+                    <li>Seeing potential others miss</li>
+                    <li>Building confidence in teams</li>
+                    <li>Connecting creativity to results</li>
+                </ul>
+
+                <p style="font-size: 0.7em; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; opacity: 0.9;">Transformation Statement</p>
+                <p style="font-size: 0.8em; line-height: 1.5; font-style: italic;">"I help teams move from stuck to flying. They leave more confident, more creative, and with work they're proud of."</p>
+            </div>
+            <p class="edit-hint">👆 Scroll for more. Copy text to use in your CV.</p>
+
+            <h2>📊 Case Studies</h2>
+            <div class="toggle-group" id="case-study-toggles">
+                <div class="toggle-item" id="toggle-nike"><span>Nike EMEA</span><div style="display:flex;align-items:center;gap:8px;"><label class="toggle-switch"><input type="checkbox" onchange="toggleCaseStudy('nike', this.checked)"><span class="toggle-slider"></span></label><button class="btn-delete" onclick="deleteCaseStudy('nike')" title="Delete">×</button></div></div>
+                <div class="toggle-item" id="toggle-spotify"><span>Spotify</span><div style="display:flex;align-items:center;gap:8px;"><label class="toggle-switch"><input type="checkbox" onchange="toggleCaseStudy('spotify', this.checked)"><span class="toggle-slider"></span></label><button class="btn-delete" onclick="deleteCaseStudy('spotify')" title="Delete">×</button></div></div>
+                <div class="toggle-item" id="toggle-barclays"><span>Barclays</span><div style="display:flex;align-items:center;gap:8px;"><label class="toggle-switch"><input type="checkbox" onchange="toggleCaseStudy('barclays', this.checked)"><span class="toggle-slider"></span></label><button class="btn-delete" onclick="deleteCaseStudy('barclays')" title="Delete">×</button></div></div>
+            </div>
+            <button class="btn btn-secondary" style="margin-top: 8px;" onclick="openAddCaseStudyModal()">+ Add New Case Study</button>
+
+            <p class="edit-hint">💡 Click any text in the CV to edit directly</p>
+
+            <div class="action-buttons">
+                <button class="btn btn-primary" onclick="window.print()">🖨️ Print / Save as PDF</button>
+                <button class="btn btn-primary" onclick="downloadAsWord()" style="background: #2b579a; color: white;">📄 Download as Word</button>
+                <button class="btn btn-secondary" onclick="copyToClipboard()">📋 Copy Text</button>
+                <button class="btn btn-secondary" onclick="downloadAsHTML()">💾 Download HTML</button>
+            </div>
+        </div>
+
+        <div class="cv-preview">
+            <div class="cv-document" id="cv-document">
+                <!-- HERO IMAGE -->
+                <div class="cv-section" id="section-hero">
+                    <div class="cv-hero">
+                        <div class="cv-hero-placeholder" id="hero-placeholder">SM</div>
+                        <img src="" alt="Profile Photo" class="cv-hero-image hidden" id="hero-image">
+                        <input type="file" id="hero-upload" accept="image/*" style="display: none;" onchange="handleHeroUpload(event)">
+                        <button class="hero-upload-btn" onclick="document.getElementById('hero-upload').click()">📷 Upload Photo</button>
+                    </div>
+                </div>
+
+                <!-- NAME -->
+                <div class="cv-name" contenteditable="true" style="text-align: center;">Sarah Mitchell</div>
+
+                <!-- TITLE/HEADLINE -->
+                <div class="cv-section" id="section-title">
+                    <div class="cv-title" id="cv-title" contenteditable="true" style="text-align: center;">Creative Catalyst | Unlocking potential in clients and teams that have forgotten what they're capable of</div>
+                </div>
+
+                <!-- CONTACT -->
+                <div class="cv-contact" contenteditable="true" style="text-align: center;">+44 (0)7XXX XXX XXX / sarah.mitchell@email.com / linkedin.com/in/sarahmitchell</div>
+
+                <!-- PROFILE STORY -->
+                <div class="cv-section" id="section-profile">
+                    <div class="cv-profile" id="cv-profile" contenteditable="true">I'm a Creative Catalyst who unlocks creative potential for clients and teams that have forgotten what they're capable of. I connect creativity with commercial reality—finding the spark in teams others have written off and fanning it into work that actually ships. After 15 years helping brands like Nike, Spotify and Barclays rediscover their creative edge, I'm now seeking roles where I can transform teams and deliver award-winning work.</div>
+                </div>
+
+                <!-- KEY SKILLS -->
+                <div class="cv-section" id="section-skills">
+                    <div class="cv-section-title">Key Skills</div>
+                    <div class="cv-skill-tags" id="skills-container">
+                        <span class="cv-skill-tag">Creative Strategy</span>
+                        <span class="cv-skill-tag">Team Transformation</span>
+                        <span class="cv-skill-tag">Brand Platforms</span>
+                        <span class="cv-skill-tag">Campaign Development</span>
+                        <span class="cv-skill-tag">Stakeholder Alignment</span>
+                        <span class="cv-skill-tag">Workshop Facilitation</span>
+                        <span class="cv-skill-tag">Global/Local Execution</span>
+                        <span class="cv-skill-tag">In-house & Agency</span>
+                    </div>
+                </div>
+
+                <!-- MY HIGHLIGHTS -->
+                <div class="cv-section" id="section-highlights">
+                    <div class="cv-section-title">My Highlights</div>
+                    <ul class="cv-highlights" contenteditable="true">
+                        <li>Transformed Nike EMEA's creative output — took team from "safe" regional execution to award-winning work, +40% campaign engagement</li>
+                        <li>Rebuilt Spotify's in-house creative team post-restructure — new brand platform became global template, team retention up 60%</li>
+                        <li>Led Barclays rebrand across 12 markets — first unified creative campaign in 5 years while respecting local nuance</li>
+                        <li>Multiple creative awards including Cannes Lions, D&AD, and Creative Circle</li>
+                    </ul>
+                </div>
+
+                <!-- EXPERIENCE -->
+                <div class="cv-section" id="section-experience">
+                    <div class="cv-section-title">Experience</div>
+
+                    <div class="cv-exp-meta" contenteditable="true"><strong>Key Clients:</strong> Nike, Spotify, Barclays, Unilever, BBC, Diageo<br><strong>Agencies:</strong> Wieden+Kennedy, BBH, Mother, In-house</div>
+
+                    <div class="cv-experience-block">
+                        <div class="cv-exp-header" contenteditable="true">Creative Strategy Director – Spotify (In-house) – 2021 – Present</div>
+                        <ul class="cv-exp-bullets" contenteditable="true">
+                            <li>Rebuilt creative team confidence after major restructure</li>
+                            <li>Created new brand platform that became template for global markets</li>
+                            <li>Increased team retention by 60% through culture and process changes</li>
+                        </ul>
+                    </div>
+
+                    <div class="cv-experience-block">
+                        <div class="cv-exp-header" contenteditable="true">Strategy Director – Wieden+Kennedy London – 2017 – 2021</div>
+                        <ul class="cv-exp-bullets" contenteditable="true">
+                            <li>Led Nike EMEA brand strategy — transformed regional team output</li>
+                            <li>Campaign engagement increased 40% year-on-year</li>
+                            <li>Won Cannes Lions and D&AD for Nike campaign work</li>
+                        </ul>
+                    </div>
+
+                    <div class="cv-experience-block">
+                        <div class="cv-exp-header" contenteditable="true">Senior Strategist – BBH London – 2013 – 2017</div>
+                        <ul class="cv-exp-bullets" contenteditable="true">
+                            <li>Led Barclays rebrand across 12 markets</li>
+                            <li>Delivered first unified campaign in 5 years</li>
+                            <li>Built framework for global/local creative alignment</li>
+                        </ul>
+                    </div>
+
+                    <div class="cv-experience-block">
+                        <div class="cv-exp-header" contenteditable="true">Earlier Career – 2008 – 2013</div>
+                        <div class="cv-exp-meta" contenteditable="true">Mother, AMV BBDO, Grey London</div>
+                        <ul class="cv-exp-bullets" contenteditable="true">
+                            <li>Key clients: Unilever, BBC, Diageo, Sainsbury's</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- EDUCATION, TRAINING & AWARDS -->
+                <div class="cv-section" id="section-education">
+                    <div class="cv-section-title">Education & Awards</div>
+                    <div class="cv-edu-section">
+                        <div class="cv-edu-title">Education:</div>
+                        <ul class="cv-edu-list" contenteditable="true">
+                            <li>BA Hons Advertising & Marketing – University of Leeds</li>
+                        </ul>
+                    </div>
+                    <div class="cv-edu-section">
+                        <div class="cv-edu-title">Awards:</div>
+                        <ul class="cv-edu-list" contenteditable="true">
+                            <li>Cannes Lions, D&AD Pencils, Creative Circle Gold</li>
+                            <li>Campaign Big Awards – Strategy of the Year nomination</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- OUTSIDE INTERESTS -->
+                <div class="cv-section hidden" id="section-interests">
+                    <div class="cv-section-title">Outside Interests</div>
+                    <div class="cv-skills" contenteditable="true">Mentoring junior creatives, marathon running, contemporary art exhibitions, podcast hosting on creative leadership</div>
+                </div>
+
+                <!-- TESTIMONIALS -->
+                <div class="cv-section hidden" id="section-testimonials">
+                    <div class="cv-section-title">Testimonials</div>
+                    <div class="cv-testimonial">
+                        <div class="cv-testimonial-quote" contenteditable="true">"Sarah has this incredible ability to see what a team could be, not just what it is. She transformed our creative output and our confidence."</div>
+                        <div class="cv-testimonial-author" contenteditable="true">— Creative Director, Global Brand</div>
+                    </div>
+                    <div class="cv-testimonial">
+                        <div class="cv-testimonial-quote" contenteditable="true">"Working with Sarah felt like having someone finally believe in what we could achieve. She didn't just give us a strategy—she gave us our mojo back."</div>
+                        <div class="cv-testimonial-author" contenteditable="true">— CMO, FTSE 100 Company</div>
+                    </div>
+                </div>
+
+                <!-- CASE STUDIES -->
+                <div class="cv-section hidden" id="section-casestudies">
+                    <div class="cv-section-title">Case Studies</div>
+
+                    <div class="cv-case-study hidden" id="casestudy-nike">
+                        <div class="cv-case-study-title">Case Study: Nike EMEA – "Nothing Beats a Londoner" Follow-up</div>
+                        <div class="cv-case-study-grid" contenteditable="true">
+                            <div class="cv-case-study-label">Brief:</div><div>Sustain momentum from viral campaign across EMEA markets</div>
+                            <div class="cv-case-study-label">Challenge:</div><div>Regional teams playing it safe, disconnected from brand's creative ambition</div>
+                            <div class="cv-case-study-label">Insight:</div><div>Teams had lost confidence in their ability to create culturally relevant work</div>
+                            <div class="cv-case-study-label">Strategy:</div><div>Empower local teams with creative frameworks, not just assets</div>
+                            <div class="cv-case-study-label">Campaign:</div><div>Regional creative toolkit + team workshops across 8 markets</div>
+                            <div class="cv-case-study-label">Results:</div><div>+40% engagement, Cannes Lions, D&AD recognition, transformed team confidence</div>
+                        </div>
+                    </div>
+
+                    <div class="cv-case-study hidden" id="casestudy-spotify">
+                        <div class="cv-case-study-title">Case Study: Spotify – In-house Team Transformation</div>
+                        <div class="cv-case-study-grid" contenteditable="true">
+                            <div class="cv-case-study-label">Brief:</div><div>Rebuild creative capability after major restructure</div>
+                            <div class="cv-case-study-label">Challenge:</div><div>Team morale at all-time low, talent leaving, output inconsistent</div>
+                            <div class="cv-case-study-label">Insight:</div><div>Team had lost belief in their purpose within the organisation</div>
+                            <div class="cv-case-study-label">Strategy:</div><div>Reconnect team with creative purpose, establish new ways of working</div>
+                            <div class="cv-case-study-label">Campaign:</div><div>New brand platform development, culture change programme</div>
+                            <div class="cv-case-study-label">Results:</div><div>+60% retention, platform became global template, team pride restored</div>
+                        </div>
+                    </div>
+
+                    <div class="cv-case-study hidden" id="casestudy-barclays">
+                        <div class="cv-case-study-title">Case Study: Barclays – 12-Market Rebrand</div>
+                        <div class="cv-case-study-grid" contenteditable="true">
+                            <div class="cv-case-study-label">Brief:</div><div>Create unified brand campaign across diverse markets</div>
+                            <div class="cv-case-study-label">Challenge:</div><div>5 years without cohesive creative direction, fragmented local execution</div>
+                            <div class="cv-case-study-label">Insight:</div><div>Markets needed creative freedom within strategic guardrails</div>
+                            <div class="cv-case-study-label">Strategy:</div><div>Global platform with local creative flexibility</div>
+                            <div class="cv-case-study-label">Campaign:</div><div>Brand architecture + creative toolkit + local team empowerment</div>
+                            <div class="cv-case-study-label">Results:</div><div>First unified campaign in 5 years, maintained local relevance</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ADD CASE STUDY MODAL -->
+    <div class="modal-overlay" id="add-casestudy-modal" onclick="if(event.target === this) closeAddCaseStudyModal()">
+        <div class="modal">
+            <h3>Add New Case Study</h3>
+            <label class="modal-label">Client/Project Name *</label>
+            <input type="text" class="modal-input" id="new-cs-name" placeholder="e.g., Unilever">
+
+            <label class="modal-label">Case Study Title</label>
+            <input type="text" class="modal-input" id="new-cs-title" placeholder="e.g., Dove Real Beauty Evolution">
+
+            <label class="modal-label">Brief</label>
+            <input type="text" class="modal-input" id="new-cs-brief" placeholder="What was the challenge?">
+
+            <label class="modal-label">Challenge</label>
+            <input type="text" class="modal-input" id="new-cs-challenge" placeholder="What obstacles did you face?">
+
+            <label class="modal-label">Insight</label>
+            <input type="text" class="modal-input" id="new-cs-insight" placeholder="The key insight">
+
+            <label class="modal-label">Strategy</label>
+            <input type="text" class="modal-input" id="new-cs-strategy" placeholder="Your strategic approach">
+
+            <label class="modal-label">Campaign</label>
+            <input type="text" class="modal-input" id="new-cs-campaign" placeholder="What was delivered?">
+
+            <label class="modal-label">Results</label>
+            <input type="text" class="modal-input" id="new-cs-results" placeholder="Measurable outcomes">
+
+            <div class="modal-buttons">
+                <button class="modal-btn modal-btn-secondary" onclick="closeAddCaseStudyModal()">Cancel</button>
+                <button class="modal-btn modal-btn-primary" onclick="addNewCaseStudy()">Add Case Study</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const profiles = {
+            original: `I'm a Creative Catalyst who unlocks creative potential for clients and teams that have forgotten what they're capable of. I connect creativity with commercial reality—finding the spark in teams others have written off and fanning it into work that actually ships. After 15 years helping brands like Nike, Spotify and Barclays rediscover their creative edge, I'm now seeking roles where I can transform teams and deliver award-winning work.`,
+            transformation: `I don't just run campaigns. I unlock creative potential. Across every team I've led—Nike, Spotify, Barclays—I turn "stuck" into "flying." Teams arrive with lost confidence; I find what makes them brilliant and help them believe in it again. My thread is connecting creativity to commercial reality—and staying until the transformation sticks.`,
+            commercial: `Creative strategist with 15+ years delivering measurable business impact through brand transformation. At Nike EMEA, I drove +40% campaign engagement through team empowerment. At Spotify, I rebuilt creative capability, achieving 60% talent retention. I specialise in turning underperforming creative teams into award-winning engines of growth.`,
+            custom: ``
+        };
+        const titles = {
+            original: `Creative Catalyst | Unlocking potential in clients and teams that have forgotten what they're capable of`,
+            transformation: `Creative Catalyst | Transforming teams from stuck to flying | Award-winning work that ships`,
+            commercial: `Creative Strategy Director | +40% at Nike, +60% retention at Spotify | Cannes Lions, D&AD`,
+            custom: ``
+        };
+        let customProfile = '', customTitle = '';
+
+        function updateProfile(value) {
+            if (value === 'custom' && customProfile) {
+                document.getElementById('cv-profile').textContent = customProfile;
+                document.getElementById('cv-title').textContent = customTitle || titles.transformation;
+            } else {
+                document.getElementById('cv-profile').textContent = profiles[value];
+                document.getElementById('cv-title').textContent = titles[value];
+            }
+        }
+
+        function toggleSection(section, show) {
+            const el = document.getElementById('section-' + section);
+            if (el) el.classList.toggle('hidden', !show);
+        }
+
+        function toggleCaseStudy(study, show) {
+            const el = document.getElementById('casestudy-' + study);
+            if (el) el.classList.toggle('hidden', !show);
+            const anyVisible = document.querySelectorAll('.cv-case-study:not(.hidden)').length > 0;
+            document.getElementById('section-casestudies').classList.toggle('hidden', !anyVisible);
+        }
+
+        function copyToClipboard() {
+            navigator.clipboard.writeText(document.getElementById('cv-document').innerText).then(() => alert('CV text copied!'));
+        }
+
+        function updateProposition() {
+            const r = document.getElementById('prop-role').value || '[role]';
+            const w = document.getElementById('prop-what').value || '[what]';
+            const wh = document.getElementById('prop-who').value || '[who]';
+            const u = document.getElementById('prop-unique').value || '[unique]';
+            const b = document.getElementById('prop-background').value || '[background]';
+            const h = document.getElementById('prop-heading').value || '[heading]';
+            document.getElementById('proposition-preview').textContent = `"I'm a ${r} who ${w} for ${wh}. I ${u}. After ${b}, I'm now ${h}."`;
+        }
+
+        function usePropositionAsProfile() {
+            const r = document.getElementById('prop-role').value;
+            const w = document.getElementById('prop-what').value;
+            const wh = document.getElementById('prop-who').value;
+            const u = document.getElementById('prop-unique').value;
+            const b = document.getElementById('prop-background').value;
+            const h = document.getElementById('prop-heading').value;
+            customProfile = `I'm a ${r} who ${w} for ${wh}. I ${u}. After ${b}, I'm now ${h}.`;
+            customTitle = `${r} | ${w.charAt(0).toUpperCase() + w.slice(1)}`;
+            profiles.custom = customProfile;
+            titles.custom = customTitle;
+            document.getElementById('cv-profile').textContent = customProfile;
+            document.getElementById('cv-title').textContent = customTitle;
+            document.querySelector('input[name="profile"][value="custom"]').checked = true;
+        }
+
+        // Hero Image Upload
+        function handleHeroUpload(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const img = document.getElementById('hero-image');
+                    const placeholder = document.getElementById('hero-placeholder');
+                    img.src = e.target.result;
+                    img.classList.remove('hidden');
+                    placeholder.classList.add('hidden');
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function downloadAsHTML() {
+            const html = `<!DOCTYPE html><html lang="en-GB"><head><meta charset="UTF-8"><title>Sarah Mitchell CV</title><style>body{font-family:Arial,sans-serif;line-height:1.6;color:#2c3e50;max-width:800px;margin:0 auto;padding:40px}.cv-name{font-size:2em;font-weight:700;text-transform:uppercase}.cv-title{font-style:italic;color:#555;margin:8px 0}.cv-contact{color:#666;margin-bottom:20px}.cv-section{margin:25px 0}.cv-section-title{font-weight:700;margin-bottom:10px}.cv-highlights,.cv-exp-bullets,.cv-edu-list{margin-left:20px}.hidden{display:none}</style></head><body>${document.getElementById('cv-document').innerHTML}</body></html>`;
+            const blob = new Blob([html], {type:'text/html'});
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = 'Sarah_Mitchell_CV.html';
+            a.click();
+        }
+
+        function downloadAsWord() {
+            const cvContent = document.getElementById('cv-document').cloneNode(true);
+            cvContent.querySelectorAll('.hidden').forEach(el => el.remove());
+            cvContent.querySelectorAll('.hero-upload-btn').forEach(el => el.remove());
+
+            const wordHtml = `
+<!DOCTYPE html>
+<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word" xmlns="http://www.w3.org/TR/REC-html40">
+<head>
+    <meta charset="UTF-8">
+    <title>Sarah Mitchell CV</title>
+    <style>
+        @page { size: A4; margin: 2.5cm; }
+        body { font-family: Calibri, Arial, sans-serif; font-size: 11pt; line-height: 1.5; color: #2c3e50; }
+        .cv-name { font-size: 24pt; font-weight: bold; text-transform: uppercase; margin-bottom: 6pt; color: #2c3e50; text-align: center; }
+        .cv-title { font-size: 12pt; font-style: italic; color: #555555; margin-bottom: 8pt; text-align: center; }
+        .cv-contact { font-size: 10pt; color: #666666; margin-bottom: 18pt; text-align: center; }
+        .cv-section { margin-bottom: 18pt; }
+        .cv-section-title { font-size: 12pt; font-weight: bold; color: #2c3e50; margin-bottom: 8pt; border-bottom: 1pt solid #2c3e50; padding-bottom: 4pt; }
+        .cv-profile { font-size: 11pt; color: #444444; margin-bottom: 18pt; }
+        .cv-skill-tag { display: inline-block; background-color: #f0f0f0; padding: 4pt 8pt; margin: 2pt; border-radius: 4pt; font-size: 10pt; }
+        .cv-highlights, .cv-exp-bullets, .cv-edu-list { margin-left: 18pt; font-size: 10pt; color: #444444; }
+        .cv-highlights li, .cv-exp-bullets li, .cv-edu-list li { margin-bottom: 4pt; }
+        .cv-experience-block { margin-bottom: 14pt; }
+        .cv-exp-header { font-size: 11pt; font-weight: bold; color: #2c3e50; margin-bottom: 2pt; }
+        .cv-exp-meta { font-size: 10pt; color: #666666; margin-bottom: 6pt; }
+        .cv-testimonial { background-color: #f8f9fa; padding: 12pt; margin-bottom: 10pt; border-left: 3pt solid #7B2CBF; }
+        .cv-testimonial-quote { font-size: 10pt; font-style: italic; color: #444444; }
+        .cv-testimonial-author { font-size: 9pt; color: #666666; margin-top: 6pt; }
+        .cv-case-study { background-color: #f8f9fa; padding: 12pt; margin-bottom: 12pt; border-left: 3pt solid #E63946; }
+        .cv-case-study-title { font-size: 11pt; font-weight: bold; color: #E63946; margin-bottom: 8pt; }
+        .cv-hero { text-align: center; margin-bottom: 18pt; }
+        .cv-hero-image { width: 100pt; height: 100pt; border-radius: 50pt; }
+        .cv-hero-placeholder { display: none; }
+    </style>
+</head>
+<body>
+    ${cvContent.innerHTML}
+</body>
+</html>`;
+
+            const blob = new Blob([wordHtml], { type: 'application/msword' });
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = 'Sarah_Mitchell_CV.doc';
+            a.click();
+        }
+
+        document.addEventListener('DOMContentLoaded', updateProposition);
+
+        // Case Study Management
+        let caseStudyCounter = 0;
+
+        function openAddCaseStudyModal() {
+            document.getElementById('add-casestudy-modal').classList.add('active');
+            document.getElementById('new-cs-name').focus();
+        }
+
+        function closeAddCaseStudyModal() {
+            document.getElementById('add-casestudy-modal').classList.remove('active');
+            ['name', 'title', 'brief', 'challenge', 'insight', 'strategy', 'campaign', 'results'].forEach(field => {
+                document.getElementById('new-cs-' + field).value = '';
+            });
+        }
+
+        function addNewCaseStudy() {
+            const name = document.getElementById('new-cs-name').value.trim();
+            if (!name) { alert('Please enter a client/project name'); return; }
+
+            const id = 'custom-' + (++caseStudyCounter);
+            const title = document.getElementById('new-cs-title').value.trim() || name;
+            const brief = document.getElementById('new-cs-brief').value.trim() || '[Add brief]';
+            const challenge = document.getElementById('new-cs-challenge').value.trim() || '[Add challenge]';
+            const insight = document.getElementById('new-cs-insight').value.trim() || '[Add insight]';
+            const strategy = document.getElementById('new-cs-strategy').value.trim() || '[Add strategy]';
+            const campaign = document.getElementById('new-cs-campaign').value.trim() || '[Add campaign details]';
+            const results = document.getElementById('new-cs-results').value.trim() || '[Add results]';
+
+            const toggleGroup = document.getElementById('case-study-toggles');
+            const toggleItem = document.createElement('div');
+            toggleItem.className = 'toggle-item';
+            toggleItem.id = 'toggle-' + id;
+            toggleItem.innerHTML = `<span>${name}</span><div style="display:flex;align-items:center;gap:8px;"><label class="toggle-switch"><input type="checkbox" checked onchange="toggleCaseStudy('${id}', this.checked)"><span class="toggle-slider"></span></label><button class="btn-delete" onclick="deleteCaseStudy('${id}')" title="Delete">×</button></div>`;
+            toggleGroup.appendChild(toggleItem);
+
+            const caseStudiesSection = document.getElementById('section-casestudies');
+            const caseStudyDiv = document.createElement('div');
+            caseStudyDiv.className = 'cv-case-study';
+            caseStudyDiv.id = 'casestudy-' + id;
+            caseStudyDiv.innerHTML = `
+                <div class="cv-case-study-title">Case Study: ${name} – "${title}"</div>
+                <div class="cv-case-study-grid" contenteditable="true">
+                    <div class="cv-case-study-label">Brief:</div><div>${brief}</div>
+                    <div class="cv-case-study-label">Challenge:</div><div>${challenge}</div>
+                    <div class="cv-case-study-label">Insight:</div><div>${insight}</div>
+                    <div class="cv-case-study-label">Strategy:</div><div>${strategy}</div>
+                    <div class="cv-case-study-label">Campaign:</div><div>${campaign}</div>
+                    <div class="cv-case-study-label">Results:</div><div>${results}</div>
+                </div>
+            `;
+            caseStudiesSection.appendChild(caseStudyDiv);
+            caseStudiesSection.classList.remove('hidden');
+
+            closeAddCaseStudyModal();
+        }
+
+        function deleteCaseStudy(id) {
+            if (!confirm('Delete this case study?')) return;
+
+            const caseStudy = document.getElementById('casestudy-' + id);
+            if (caseStudy) caseStudy.remove();
+
+            const toggle = document.getElementById('toggle-' + id);
+            if (toggle) toggle.remove();
+
+            const anyVisible = document.querySelectorAll('.cv-case-study').length > 0;
+            if (!anyVisible) {
+                document.getElementById('section-casestudies').classList.add('hidden');
+            }
+        }
+    </script>
+</body>
+</html>
