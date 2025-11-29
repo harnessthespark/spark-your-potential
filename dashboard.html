@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard - Spark Your Potential</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -257,6 +258,7 @@
         </div>
 
         <div class="header">
+            <img src="White.png" alt="Harness the Spark" style="height: 60px; margin-bottom: 20px;">
             <h1>⚡ Your Career Toolkit</h1>
             <div class="subtitle">Spark Your Potential</div>
             <div class="user-name" id="userName"></div>
@@ -266,19 +268,18 @@
         <div class="login-section" id="loginSection">
             <h2>Welcome Back</h2>
             <p>Enter your credentials to access your career toolkit</p>
-            <input type="email" class="email-input" id="emailInput" placeholder="your@email.com">
-            <br>
-            <input type="password" class="email-input" id="passwordInput" placeholder="Password" style="margin-top: 10px;">
-            <br>
-            <button class="login-btn" onclick="login()">Login</button>
+            <form onsubmit="login(); return false;" autocomplete="on">
+                <input type="text" name="username" class="email-input" id="emailInput" placeholder="Username" autocomplete="username">
+                <br>
+                <input type="password" name="password" class="email-input" id="passwordInput" placeholder="Password" style="margin-top: 10px;" autocomplete="current-password">
+                <br>
+                <button type="submit" class="login-btn">Login</button>
+            </form>
             <p id="loginError" style="color: #e74c3c; margin-top: 15px; display: none;"></p>
             <div style="margin-top: 30px; padding-top: 30px; border-top: 1px solid #e0e0e0;">
                 <p style="color: #888; margin-bottom: 15px;">Want to see how it works first?</p>
-                <button class="login-btn" style="background: linear-gradient(135deg, #FF6B35 0%, #FFB627 100%);" onclick="loadDemo()">
-                    Try Demo (Sarah Mitchell)
-                </button>
-                <button class="login-btn" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); margin-top: 10px;" onclick="loadCoach()">
-                    🔥 Coach Mode (Lisa)
+                <button type="button" class="login-btn" style="background: linear-gradient(135deg, #FF6B35 0%, #FFB627 100%);" onclick="loadDemo()">
+                    Try Demo
                 </button>
             </div>
         </div>
@@ -290,10 +291,18 @@
                     <div>
                         <h2 style="font-size: 1.8em; margin-bottom: 5px;">🔥 Coach Mode</h2>
                         <p style="opacity: 0.9;">Manage your Career Booster clients</p>
+                        <div id="dataSourceIndicator" style="margin-top: 8px; font-size: 0.85em; padding: 4px 10px; background: rgba(255,255,255,0.2); border-radius: 12px; display: inline-block;">
+                            <span id="dataSourceIcon">📦</span> <span id="dataSourceText">Loading...</span>
+                        </div>
                     </div>
-                    <button onclick="addNewClient()" style="background: white; color: #FF6B35; border: none; padding: 12px 25px; border-radius: 8px; font-weight: 600; cursor: pointer; font-size: 1em;">
-                        + Add New Client
-                    </button>
+                    <div style="display: flex; gap: 10px; align-items: center;">
+                        <button onclick="refreshClients()" style="background: rgba(255,255,255,0.3); color: white; border: none; padding: 10px 15px; border-radius: 8px; font-weight: 500; cursor: pointer; font-size: 0.9em;" title="Refresh from database">
+                            🔄 Refresh
+                        </button>
+                        <button onclick="addNewClient()" style="background: white; color: #FF6B35; border: none; padding: 12px 25px; border-radius: 8px; font-weight: 600; cursor: pointer; font-size: 1em;">
+                            + Add New Client
+                        </button>
+                    </div>
                 </div>
 
                 <!-- Client List -->
@@ -439,52 +448,44 @@
         </div>
 
         <div class="footer">
-            Spark Your Potential by Harness the Spark | harnessthespark.co.uk
+            Spark Your Potential by Harness the Spark | harnessthespark.com
         </div>
     </div>
 
     <script>
+        // =============================================================================
+        // CONFIGURATION - PostgreSQL Backend Integration
+        // =============================================================================
+        const API_BASE_URL = 'https://sparkhub-be-qtmmb.ondigitalocean.app';
+
         // State
         let currentUser = null;
         let currentBlueprint = null;
+        let authToken = null;
+        let cachedClients = null; // Cache for API data
 
-        // Client Database (simulated - in production this would be a backend)
-        const CLIENT_DATABASE = {
-            'donald@example.com': {
-                id: 'donald-001',
-                name: 'Donald Pirie',
-                email: 'donald@example.com',
-                folder: 'Donald',
-                status: 'complete', // 'pre-programme', 'week-1', 'week-2', 'week-3', 'week-4', 'complete'
-                enrolledDate: '2024-10-20',
-                completedDate: '2024-11-24',
-                progress: {
-                    questionnaire: true,
-                    insightsReport: true,
-                    blueprint: true,
-                    decisionFramework: true,
-                    cvBuilder: true,
-                    mappingGuide: true
-                }
-            },
-            'sarah@demo.com': {
-                id: 'demo-sarah',
-                name: 'Sarah Mitchell',
-                email: 'sarah@demo.com',
-                folder: '',
-                status: 'complete',
-                enrolledDate: '2024-09-15',
-                completedDate: '2024-10-15',
-                progress: {
-                    questionnaire: true,
-                    insightsReport: true,
-                    blueprint: true,
-                    decisionFramework: true,
-                    cvBuilder: true,
-                    mappingGuide: true
-                }
-            }
+        // Status mapping between backend and frontend
+        const STATUS_MAP = {
+            'discovery': 'pre-programme',
+            'enrolled': 'pre-programme',
+            'session_1': 'week-1',
+            'session_2': 'week-2',
+            'session_3': 'week-3',
+            'completed': 'complete',
+            'alumni': 'complete'
         };
+
+        const STATUS_MAP_REVERSE = {
+            'pre-programme': 'enrolled',
+            'week-1': 'session_1',
+            'week-2': 'session_2',
+            'week-3': 'session_3',
+            'week-4': 'session_3',  // week-4 maps to session_3 in backend
+            'complete': 'completed'
+        };
+
+        // No fallback demo data - Coach Mode shows only real PostgreSQL clients
+        const FALLBACK_CLIENT_DATABASE = {};
 
         // Week descriptions for journey display
         const WEEK_INFO = {
@@ -496,25 +497,65 @@
             'complete': { label: 'Complete', icon: '🏆', description: 'Programme Finished' }
         };
 
-        // Check for existing session
-        window.onload = function() {
+        // Check for existing session - validates token with server
+        window.onload = async function() {
             const savedUser = localStorage.getItem('syp_user');
-            if (savedUser) {
-                currentUser = JSON.parse(savedUser);
-                showDashboard();
+            const savedToken = localStorage.getItem('syp_token');
+
+            if (savedUser && savedToken) {
+                // Validate token with server before restoring session
+                try {
+                    const response = await fetch(`${API_BASE_URL}/api/accounts/profile/`, {
+                        method: 'GET',
+                        headers: {
+                            'Authorization': `Bearer ${savedToken}`,
+                            'Accept': 'application/json'
+                        }
+                    });
+
+                    if (response.ok) {
+                        // Token is valid - restore session
+                        currentUser = JSON.parse(savedUser);
+                        authToken = savedToken;
+                        console.log('✅ Session restored - token validated');
+                        showDashboard();
+                    } else {
+                        // Token is invalid/expired - clear session and show login
+                        console.warn('⚠️ Session expired - please log in again');
+                        localStorage.removeItem('syp_user');
+                        localStorage.removeItem('syp_token');
+                        localStorage.removeItem('syp_clients');
+                    }
+                } catch (error) {
+                    // Network error - allow offline access for non-coach users only
+                    const user = JSON.parse(savedUser);
+                    if (user.isStaff) {
+                        // Coach users must authenticate online
+                        console.warn('⚠️ Cannot verify coach session offline - please log in');
+                        localStorage.removeItem('syp_user');
+                        localStorage.removeItem('syp_token');
+                        localStorage.removeItem('syp_clients');
+                    } else {
+                        // Regular users can access their cached data offline
+                        currentUser = user;
+                        authToken = savedToken;
+                        console.log('📦 Offline mode - using cached session');
+                        showDashboard();
+                    }
+                }
             }
         };
 
-        // Login with password
+        // Login with password - connects to SparkHub PostgreSQL backend
         async function login() {
-            const email = document.getElementById('emailInput').value.trim();
+            const username = document.getElementById('emailInput').value.trim();
             const password = document.getElementById('passwordInput').value;
             const errorEl = document.getElementById('loginError');
 
             errorEl.style.display = 'none';
 
-            if (!email || !email.includes('@')) {
-                errorEl.textContent = 'Please enter a valid email address';
+            if (!username) {
+                errorEl.textContent = 'Please enter your username';
                 errorEl.style.display = 'block';
                 return;
             }
@@ -526,19 +567,40 @@
             }
 
             try {
-                const response = await fetch('/api/login', {
+                // Authenticate against SparkHub backend
+                const response = await fetch(`${API_BASE_URL}/api/accounts/login/`, {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ email, password })
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        username: username,
+                        password: password
+                    })
                 });
 
-                const data = await response.json();
-                if (data.success) {
-                    currentUser = data.user;
+                if (response.ok) {
+                    const data = await response.json();
+
+                    // Store JWT token
+                    authToken = data.token || data.access;
+                    localStorage.setItem('syp_token', authToken);
+
+                    // Create user object from response
+                    currentUser = {
+                        id: data.user?.id || data.id,
+                        name: data.user?.first_name || data.first_name || username,
+                        email: data.user?.email || data.email || '',
+                        isStaff: data.user?.is_staff || data.is_staff || false
+                    };
                     localStorage.setItem('syp_user', JSON.stringify(currentUser));
+
+                    console.log('✅ Login successful:', currentUser.name);
                     showDashboard();
                 } else {
-                    errorEl.textContent = data.error || 'Login failed';
+                    const errorData = await response.json().catch(() => ({}));
+                    errorEl.textContent = errorData.detail || errorData.error || 'Invalid credentials';
                     errorEl.style.display = 'block';
                 }
             } catch (error) {
@@ -666,7 +728,7 @@
                 // Donald's completed questionnaire responses
                 window.open('/donald-questionnaire', '_blank');
             } else {
-                window.open('Sarah_Mitchell_Questionnaire.html', '_blank');
+                window.open('sarah_mitchell_demo_client/Sarah_Mitchell_Questionnaire.html', '_blank');
             }
         }
 
@@ -675,7 +737,7 @@
             if (prefix.includes('Donald')) {
                 window.open('Donald/Donald_Pirie_Career_Insights_Report.html', '_blank');
             } else {
-                window.open('Sarah_Mitchell_Career_Insights_Report.html', '_blank');
+                window.open('sarah_mitchell_demo_client/Sarah_Mitchell_Career_Insights_Report.html', '_blank');
             }
         }
 
@@ -684,7 +746,7 @@
             if (prefix.includes('Donald')) {
                 window.open('Donald/Donald_Pirie_Career_Blueprint_LIVE.html', '_blank');
             } else {
-                window.open('Sarah_Mitchell_Blueprint.html', '_blank');
+                window.open('sarah_mitchell_demo_client/Sarah_Mitchell_Blueprint.html', '_blank');
             }
         }
 
@@ -697,7 +759,7 @@
             if (prefix.includes('Donald')) {
                 window.open('Donald/Donald_Interactive_CV_Builder.html', '_blank');
             } else {
-                window.open('Sarah_Mitchell_CV_Builder.html', '_blank');
+                window.open('sarah_mitchell_demo_client/Sarah_Mitchell_CV_Builder.html', '_blank');
             }
         }
 
@@ -706,7 +768,7 @@
             if (prefix.includes('Donald')) {
                 window.open('Donald/Donald_Blueprint_CV_LinkedIn_Mapping_Guide_1.html', '_blank');
             } else {
-                window.open('Sarah_Mitchell_Mapping_Guide.html', '_blank');
+                window.open('sarah_mitchell_demo_client/Sarah_Mitchell_Mapping_Guide.html', '_blank');
             }
         }
 
@@ -715,7 +777,7 @@
             if (prefix.includes('Donald')) {
                 window.open('Donald/Donald_Decision_Framework_Updated_1.html', '_blank');
             } else {
-                window.open('Sarah_Mitchell_Decision_Framework.html', '_blank');
+                window.open('sarah_mitchell_demo_client/Sarah_Mitchell_Decision_Framework.html', '_blank');
             }
         }
 
@@ -731,51 +793,96 @@
         function logout() {
             if (confirm('Are you sure you want to log out?')) {
                 localStorage.removeItem('syp_user');
+                localStorage.removeItem('syp_token');
+                localStorage.removeItem('syp_clients');  // Clear cached clients
                 currentUser = null;
                 currentBlueprint = null;
+                authToken = null;
+                cachedClients = null;
                 window.location.reload();
             }
         }
 
-        // Load Coach Mode (Lisa) - Works without server!
-        function loadCoach() {
-            currentUser = {
-                id: 'coach-lisa',
-                name: 'Lisa Gills',
-                email: 'lisa@harnessthespark.com'
-            };
+        // Load Coach Mode (Lisa) - Authenticates with SparkHub PostgreSQL backend
+        async function loadCoach() {
+            const errorEl = document.getElementById('loginError');
 
-            currentBlueprint = {
-                id: 'coach-blueprint',
-                created_at: new Date().toISOString(),
-                updated_at: new Date().toISOString()
-            };
+            try {
+                // Try to authenticate as admin/coach
+                const response = await fetch(`${API_BASE_URL}/api/accounts/login/`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        username: 'admin',  // Lisa's admin account
+                        password: prompt('Enter admin password:') || ''
+                    })
+                });
 
-            localStorage.setItem('syp_user', JSON.stringify(currentUser));
+                if (response.ok) {
+                    const data = await response.json();
 
-            // Show dashboard with coach mode
-            document.getElementById('loginSection').style.display = 'none';
-            document.getElementById('dashboardContent').classList.add('visible');
-            document.getElementById('userName').textContent = `Welcome, ${currentUser.name}`;
+                    // Store JWT token for API calls
+                    authToken = data.token || data.access;
+                    localStorage.setItem('syp_token', authToken);
 
-            // Show user menu
-            document.getElementById('userMenu').style.display = 'flex';
-            document.getElementById('userEmail').textContent = currentUser.email;
+                    currentUser = {
+                        id: data.user?.id || data.id || 'coach-lisa',
+                        name: data.user?.first_name || 'Lisa',
+                        email: data.user?.email || 'lisa@harnessthespark.com',
+                        isStaff: true
+                    };
+                    localStorage.setItem('syp_user', JSON.stringify(currentUser));
 
-            // Show Coach Mode panel
-            showCoachMode();
+                    currentBlueprint = {
+                        id: 'coach-blueprint',
+                        created_at: new Date().toISOString(),
+                        updated_at: new Date().toISOString()
+                    };
 
-            // Update state to show blueprint is complete (all tools unlocked)
-            updateDashboardState(true);
+                    console.log('✅ Coach mode authenticated with PostgreSQL backend');
+
+                    // Show dashboard with coach mode
+                    document.getElementById('loginSection').style.display = 'none';
+                    document.getElementById('dashboardContent').classList.add('visible');
+                    document.getElementById('userName').textContent = `Welcome, ${currentUser.name}`;
+
+                    // Show user menu
+                    document.getElementById('userMenu').style.display = 'flex';
+                    document.getElementById('userEmail').textContent = currentUser.email + ' (Coach)';
+
+                    // Show Coach Mode panel - will fetch clients from PostgreSQL
+                    showCoachMode();
+
+                    // Update state to show blueprint is complete (all tools unlocked)
+                    updateDashboardState(true);
+                } else {
+                    // Authentication failed - show error, do NOT fall back to offline mode
+                    const errorData = await response.json().catch(() => ({}));
+                    console.error('❌ Coach authentication failed:', response.status, errorData);
+                    errorEl.textContent = errorData.detail || 'Authentication failed. Please check your credentials.';
+                    errorEl.style.display = 'block';
+                }
+            } catch (error) {
+                console.error('❌ Coach auth error:', error);
+                // Show error - do NOT allow unauthenticated coach access
+                errorEl.textContent = 'Could not connect to server. Please try again later.';
+                errorEl.style.display = 'block';
+            }
         }
 
-        // Load demo (Sarah Mitchell) - Works without server!
+        // SECURITY: loadCoachOffline() REMOVED - Coach Mode requires authentication
+        // Previous version allowed unauthenticated access which was a security vulnerability
+
+        // Load demo - Works without server!
         function loadDemo() {
             // Create demo user locally (no server needed)
             currentUser = {
-                id: 'demo-sarah',
-                name: 'Sarah Mitchell',
-                email: 'sarah@demo.com'
+                id: 'demo-user',
+                name: 'Demo User',
+                email: 'demo@example.com'
             };
 
             currentBlueprint = {
@@ -803,36 +910,83 @@
         // COACH MODE FUNCTIONS
         // ============================================================
 
-        // Check if current user is Lisa (coach)
+        // Check if current user is an authenticated coach
+        // SECURITY: Must have valid auth token AND be staff user
         function isCoach() {
             if (!currentUser) return false;
-            const email = currentUser.email.toLowerCase();
-            return email.includes('lisa@') || email.includes('harnessthespark') || email === 'admin';
+            if (!authToken) return false;  // SECURITY: Require valid token
+            if (!currentUser.isStaff) return false;  // SECURITY: Require staff flag
+            return true;
         }
 
         // Show coach mode interface
+        // SECURITY: Only accessible to authenticated staff users
         function showCoachMode() {
-            if (!isCoach()) return;
+            if (!isCoach()) {
+                console.warn('⚠️ Coach mode access denied - not authenticated as staff');
+                return;
+            }
+            console.log('✅ Coach mode activated for authenticated staff user');
             document.getElementById('coachMode').style.display = 'block';
             renderClientList();
         }
 
-        // Render the client list cards
-        function renderClientList() {
-            const container = document.getElementById('clientList');
-            const clients = getStoredClients();
+        // Refresh clients from database
+        async function refreshClients() {
+            // Clear cache to force fresh fetch
+            localStorage.removeItem('syp_clients');
+            cachedClients = null;
+            await renderClientList();
+        }
 
-            container.innerHTML = Object.values(clients).map(client => `
+        // Update data source indicator
+        function updateDataSourceIndicator(isLive) {
+            const icon = document.getElementById('dataSourceIcon');
+            const text = document.getElementById('dataSourceText');
+
+            if (isLive) {
+                icon.textContent = '🟢';
+                text.textContent = 'Live (PostgreSQL)';
+            } else {
+                icon.textContent = '📦';
+                text.textContent = 'Cached (Local)';
+            }
+        }
+
+        // Render the client list cards
+        async function renderClientList() {
+            const container = document.getElementById('clientList');
+
+            // Show loading state
+            container.innerHTML = '<div style="color: white; text-align: center; padding: 20px;">Loading clients from PostgreSQL...</div>';
+
+            const clients = await getStoredClients();
+            const clientList = Object.values(clients);
+
+            // If no clients, show empty state
+            if (clientList.length === 0) {
+                container.innerHTML = `
+                    <div style="background: rgba(255,255,255,0.95); border-radius: 12px; padding: 30px; text-align: center; grid-column: 1 / -1;">
+                        <div style="font-size: 2em; margin-bottom: 15px;">👋</div>
+                        <h4 style="color: #333; margin-bottom: 10px;">No clients yet</h4>
+                        <p style="color: #666; margin-bottom: 20px;">Click "+ Add New Client" to add your first client to the programme.</p>
+                        ${!authToken ? '<p style="color: #e74c3c; font-size: 0.85em;">⚠️ Not connected to PostgreSQL. Log in with your admin credentials to sync.</p>' : ''}
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = clientList.map(client => `
                 <div style="background: rgba(255,255,255,0.95); border-radius: 12px; padding: 20px; cursor: pointer;" onclick="viewClientJourney('${client.email}')">
                     <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px;">
                         <h4 style="color: #333; margin: 0;">${client.name}</h4>
                         <span style="background: ${getStatusColour(client.status)}; color: white; padding: 3px 10px; border-radius: 12px; font-size: 0.75em;">
-                            ${WEEK_INFO[client.status].label}
+                            ${WEEK_INFO[client.status]?.label || client.status}
                         </span>
                     </div>
                     <p style="color: #666; font-size: 0.85em; margin-bottom: 8px;">${client.email}</p>
                     <p style="color: #888; font-size: 0.8em;">
-                        ${WEEK_INFO[client.status].icon} ${WEEK_INFO[client.status].description}
+                        ${WEEK_INFO[client.status]?.icon || '📋'} ${WEEK_INFO[client.status]?.description || ''}
                     </p>
                     <div style="margin-top: 10px; height: 4px; background: #e0e0e0; border-radius: 2px;">
                         <div style="height: 100%; width: ${getProgressPercentage(client.status)}%; background: ${getStatusColour(client.status)}; border-radius: 2px;"></div>
@@ -869,7 +1023,7 @@
 
         // View client journey
         function viewClientJourney(email) {
-            const clients = getStoredClients();
+            const clients = getStoredClientsSync();
             const client = clients[email];
             if (!client) return;
 
@@ -999,23 +1153,61 @@
             `;
         }
 
-        // Advance client to next stage (manual progression via worksheets)
-        function advanceClient(email, newStatus) {
-            const clients = getStoredClients();
-            if (clients[email]) {
-                clients[email].status = newStatus;
-                if (newStatus === 'complete') {
-                    clients[email].completedDate = new Date().toISOString().split('T')[0];
+        // Advance client to next stage - saves to PostgreSQL
+        async function advanceClient(email, newStatus) {
+            const clients = getStoredClientsSync();
+            const client = clients[email];
+            if (!client) return;
+
+            // Convert frontend status to backend status
+            const backendStatus = STATUS_MAP_REVERSE[newStatus] || newStatus;
+
+            // If we have auth token, update via API
+            if (authToken && client.id) {
+                try {
+                    const response = await fetch(`${API_BASE_URL}/api/crm/syp/coach/clients/${client.id}/advance-stage/`, {
+                        method: 'PATCH',
+                        headers: {
+                            'Authorization': `Bearer ${authToken}`,
+                            'Content-Type': 'application/json',
+                            'Accept': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            status: backendStatus
+                        })
+                    });
+
+                    if (response.ok) {
+                        const updatedClient = await response.json();
+                        console.log('✅ Client status updated in PostgreSQL:', updatedClient.programme_status);
+
+                        // Refresh clients from API to get latest data
+                        await renderClientList();
+                        viewClientJourney(email);
+                        alert(`✅ ${client.name} advanced to ${WEEK_INFO[newStatus].label} (saved to PostgreSQL)`);
+                        return;
+                    } else {
+                        console.error('Failed to update client status:', response.status);
+                    }
+                } catch (error) {
+                    console.error('Error updating client status:', error);
                 }
-                saveStoredClients(clients);
-                viewClientJourney(email);
-                renderClientList();
-                alert(`✅ ${clients[email].name} advanced to ${WEEK_INFO[newStatus].label}`);
             }
+
+            // Fallback to localStorage update
+            console.log('📦 Updating client status in localStorage (offline mode)');
+            clients[email].status = newStatus;
+            if (newStatus === 'complete') {
+                clients[email].completedDate = new Date().toISOString().split('T')[0];
+            }
+            saveStoredClients(clients);
+            viewClientJourney(email);
+            await renderClientList();
+            alert(`✅ ${client.name} advanced to ${WEEK_INFO[newStatus].label} (saved locally)`);
         }
 
-        // Add new client
-        function addNewClient() {
+        // Add new client - saves to PostgreSQL
+        async function addNewClient() {
             const name = prompt('Client Name:');
             if (!name) return;
 
@@ -1025,19 +1217,61 @@
                 return;
             }
 
-            const clients = getStoredClients();
+            const phone = prompt('Client Phone (optional):') || '';
+
+            const clients = getStoredClientsSync();
             if (clients[email]) {
                 alert('A client with this email already exists');
                 return;
             }
 
-            // Create client folder name from name
+            // If we have auth token, create via API
+            if (authToken) {
+                try {
+                    const response = await fetch(`${API_BASE_URL}/api/crm/syp/coach/clients/`, {
+                        method: 'POST',
+                        headers: {
+                            'Authorization': `Bearer ${authToken}`,
+                            'Content-Type': 'application/json',
+                            'Accept': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            full_name: name,
+                            email: email,
+                            phone: phone,
+                            programme_status: 'enrolled',
+                            enrolled_date: new Date().toISOString().split('T')[0]
+                        })
+                    });
+
+                    if (response.ok) {
+                        const newClient = await response.json();
+                        console.log('✅ Client created in PostgreSQL:', newClient.id);
+
+                        // Refresh clients from API
+                        await renderClientList();
+                        alert(`✅ ${name} added to PostgreSQL! You can now send them the questionnaire link.`);
+                        return;
+                    } else {
+                        const errorData = await response.json().catch(() => ({}));
+                        console.error('Failed to create client:', response.status, errorData);
+                        alert(`Failed to create client: ${errorData.detail || errorData.email || 'Unknown error'}`);
+                        return;
+                    }
+                } catch (error) {
+                    console.error('Error creating client:', error);
+                }
+            }
+
+            // Fallback to localStorage
+            console.log('📦 Creating client in localStorage (offline mode)');
             const folderName = name.replace(/\s+/g, '_');
 
             clients[email] = {
                 id: 'client-' + Date.now(),
                 name: name,
                 email: email,
+                phone: phone,
                 folder: folderName,
                 status: 'pre-programme',
                 enrolledDate: new Date().toISOString().split('T')[0],
@@ -1053,8 +1287,8 @@
             };
 
             saveStoredClients(clients);
-            renderClientList();
-            alert(`✅ ${name} added! You can now send them the questionnaire link.`);
+            await renderClientList();
+            alert(`✅ ${name} added locally! You can now send them the questionnaire link.\n\n⚠️ Note: This client is stored in your browser only. Connect to PostgreSQL to sync.`);
         }
 
         // Close journey view
@@ -1062,23 +1296,104 @@
             document.getElementById('journeyView').style.display = 'none';
         }
 
-        // Storage helpers
-        function getStoredClients() {
+        // Storage helpers - PostgreSQL-first with localStorage fallback
+        async function getStoredClients() {
+            // If we have a valid auth token, fetch from PostgreSQL
+            if (authToken) {
+                try {
+                    const response = await fetch(`${API_BASE_URL}/api/crm/syp/coach/clients/`, {
+                        method: 'GET',
+                        headers: {
+                            'Authorization': `Bearer ${authToken}`,
+                            'Accept': 'application/json'
+                        }
+                    });
+
+                    if (response.ok) {
+                        const apiClients = await response.json();
+                        console.log('✅ Fetched clients from PostgreSQL:', apiClients.length);
+
+                        // Transform API response to frontend format
+                        const clients = {};
+                        apiClients.forEach(client => {
+                            const frontendStatus = STATUS_MAP[client.programme_status] || 'pre-programme';
+                            clients[client.email] = {
+                                id: client.id,
+                                name: client.full_name,
+                                email: client.email,
+                                phone: client.phone,
+                                folder: client.full_name.replace(/\s+/g, '_'),
+                                status: frontendStatus,
+                                enrolledDate: client.enrolled_date,
+                                session1Date: client.session_1_date,
+                                session2Date: client.session_2_date,
+                                session3Date: client.session_3_date,
+                                completedDate: client.completed_date,
+                                coachNotes: client.coach_notes,
+                                progress: {
+                                    questionnaire: client.ability_recognition !== null,
+                                    insightsReport: frontendStatus !== 'pre-programme',
+                                    blueprint: client.blueprint !== null,
+                                    decisionFramework: ['week-2', 'week-3', 'week-4', 'complete'].includes(frontendStatus),
+                                    cvBuilder: ['week-4', 'complete'].includes(frontendStatus),
+                                    mappingGuide: ['week-3', 'week-4', 'complete'].includes(frontendStatus)
+                                }
+                            };
+                        });
+
+                        // Cache in localStorage for offline use
+                        localStorage.setItem('syp_clients', JSON.stringify(clients));
+                        cachedClients = clients;
+
+                        // Update data source indicator to show live
+                        updateDataSourceIndicator(true);
+
+                        return clients;
+                    } else if (response.status === 401) {
+                        console.warn('⚠️ Auth token expired, clearing session');
+                        authToken = null;
+                        localStorage.removeItem('syp_token');
+                    }
+                } catch (error) {
+                    console.error('Error fetching clients from API:', error);
+                }
+            }
+
+            // Fallback to localStorage cache
+            console.log('📦 Using cached clients from localStorage');
+            updateDataSourceIndicator(false);
+
+            const stored = localStorage.getItem('syp_clients');
+            if (stored) {
+                cachedClients = JSON.parse(stored);
+                return cachedClients;
+            }
+
+            // Return fallback demo clients
+            return FALLBACK_CLIENT_DATABASE;
+        }
+
+        // Sync version for rendering (uses cache)
+        function getStoredClientsSync() {
+            if (cachedClients) {
+                return cachedClients;
+            }
             const stored = localStorage.getItem('syp_clients');
             if (stored) {
                 return JSON.parse(stored);
             }
-            // Return default clients (Donald and Sarah)
-            return CLIENT_DATABASE;
+            return FALLBACK_CLIENT_DATABASE;
         }
 
         function saveStoredClients(clients) {
+            // Always save to localStorage as cache
             localStorage.setItem('syp_clients', JSON.stringify(clients));
+            cachedClients = clients;
         }
 
         // Client document openers (based on folder structure)
         function openClientQuestionnaire(email) {
-            const clients = getStoredClients();
+            const clients = getStoredClientsSync();
             const client = clients[email];
             if (client.folder === 'Donald') {
                 window.open('/donald-questionnaire', '_blank');
@@ -1090,7 +1405,7 @@
         }
 
         function openClientBlueprint(email) {
-            const clients = getStoredClients();
+            const clients = getStoredClientsSync();
             const client = clients[email];
             if (client.folder === 'Donald') {
                 window.open('Donald/Donald_Pirie_Career_Blueprint_LIVE.html', '_blank');
@@ -1100,7 +1415,7 @@
         }
 
         function openClientInsights(email) {
-            const clients = getStoredClients();
+            const clients = getStoredClientsSync();
             const client = clients[email];
             if (client.folder === 'Donald') {
                 window.open('Donald/Donald_Pirie_Career_Insights_Report.html', '_blank');
@@ -1110,7 +1425,7 @@
         }
 
         function openClientDecision(email) {
-            const clients = getStoredClients();
+            const clients = getStoredClientsSync();
             const client = clients[email];
             if (client.folder === 'Donald') {
                 window.open('Donald/Donald_Decision_Framework_Updated_1.html', '_blank');
@@ -1120,7 +1435,7 @@
         }
 
         function openClientCV(email) {
-            const clients = getStoredClients();
+            const clients = getStoredClientsSync();
             const client = clients[email];
             if (client.folder === 'Donald') {
                 window.open('Donald/Donald_Interactive_CV_Builder.html', '_blank');
@@ -1130,7 +1445,7 @@
         }
 
         function openClientMapping(email) {
-            const clients = getStoredClients();
+            const clients = getStoredClientsSync();
             const client = clients[email];
             if (client.folder === 'Donald') {
                 window.open('Donald/Donald_Blueprint_CV_LinkedIn_Mapping_Guide_1.html', '_blank');
@@ -1140,7 +1455,7 @@
         }
 
         function openAllClientDocs(email) {
-            const clients = getStoredClients();
+            const clients = getStoredClientsSync();
             const client = clients[email];
             if (client.folder) {
                 // Open folder listing (in production, this would show a document list)
