@@ -269,7 +269,7 @@
             <h2>Welcome Back</h2>
             <p>Enter your credentials to access your career toolkit</p>
             <form onsubmit="login(); return false;" autocomplete="on">
-                <input type="email" name="email" class="email-input" id="emailInput" placeholder="Email" autocomplete="email">
+                <input type="text" name="username" class="email-input" id="emailInput" placeholder="Username" autocomplete="username">
                 <br>
                 <input type="password" name="password" class="email-input" id="passwordInput" placeholder="Password" style="margin-top: 10px;" autocomplete="current-password">
                 <br>
@@ -454,9 +454,9 @@
 
     <script>
         // =============================================================================
-        // CONFIGURATION - Use same origin for API calls (Spark Your Potential backend)
+        // CONFIGURATION - SparkHub Backend (PostgreSQL)
         // =============================================================================
-        const API_BASE_URL = '';
+        const API_BASE_URL = 'https://sparkhub-be-qtmmb.ondigitalocean.app';
 
         // State
         let currentUser = null;
@@ -484,8 +484,27 @@
             'complete': 'completed'
         };
 
-        // No fallback demo data - Coach Mode shows only real PostgreSQL clients
-        const FALLBACK_CLIENT_DATABASE = {};
+        // Default clients - always available
+        const DEFAULT_CLIENTS = {
+            'donald.pirie@example.com': {
+                id: 'client-donald',
+                name: 'Donald Pirie',
+                email: 'donald.pirie@example.com',
+                phone: '',
+                folder: 'Donald',
+                status: 'complete',
+                enrolledDate: '2024-10-01',
+                completedDate: '2024-11-28',
+                progress: {
+                    questionnaire: true,
+                    insightsReport: true,
+                    blueprint: true,
+                    decisionFramework: true,
+                    cvBuilder: true,
+                    mappingGuide: true
+                }
+            }
+        };
 
         // Week descriptions for journey display
         const WEEK_INFO = {
@@ -511,16 +530,16 @@
             }
         };
 
-        // Login with password - connects to Spark Your Potential backend
+        // Login with password - connects to SparkHub PostgreSQL backend
         async function login() {
-            const email = document.getElementById('emailInput').value.trim().toLowerCase();
+            const username = document.getElementById('emailInput').value.trim();
             const password = document.getElementById('passwordInput').value;
             const errorEl = document.getElementById('loginError');
 
             errorEl.style.display = 'none';
 
-            if (!email) {
-                errorEl.textContent = 'Please enter your email';
+            if (!username) {
+                errorEl.textContent = 'Please enter your username';
                 errorEl.style.display = 'block';
                 return;
             }
@@ -531,36 +550,16 @@
                 return;
             }
 
-            // Coach login - works without database
-            // Lisa's admin accounts
-            const coachEmails = ['lisa@harnessthespark.com', 'lisa@wildsquirrel.co.uk', 'lisa.gills@icloud.com'];
-            const coachPassword = 'Spark2025!';  // Change this in production
-
-            if (coachEmails.includes(email) && password === coachPassword) {
-                currentUser = {
-                    id: 'coach-lisa',
-                    name: 'Lisa',
-                    email: email,
-                    isStaff: true
-                };
-                authToken = 'coach-session-' + Date.now();
-                localStorage.setItem('syp_user', JSON.stringify(currentUser));
-                localStorage.setItem('syp_token', authToken);
-                console.log('✅ Coach login successful');
-                showDashboard();
-                return;
-            }
-
-            // Client login - try database if available
             try {
-                const response = await fetch(`${API_BASE_URL}/api/login`, {
+                // Authenticate against SparkHub backend
+                const response = await fetch(`${API_BASE_URL}/api/accounts/login/`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
                         'Accept': 'application/json'
                     },
                     body: JSON.stringify({
-                        email: email,
+                        username: username,
                         password: password
                     })
                 });
@@ -568,30 +567,29 @@
                 if (response.ok) {
                     const data = await response.json();
 
-                    if (data.success && data.user) {
-                        currentUser = {
-                            id: data.user.id,
-                            name: data.user.name || email.split('@')[0],
-                            email: data.user.email,
-                            isStaff: data.user.is_admin || false
-                        };
-                        localStorage.setItem('syp_user', JSON.stringify(currentUser));
-                        authToken = 'session-' + data.user.id;
-                        localStorage.setItem('syp_token', authToken);
-                        console.log('✅ Login successful:', currentUser.name);
-                        showDashboard();
-                    } else {
-                        errorEl.textContent = data.error || 'Login failed';
-                        errorEl.style.display = 'block';
-                    }
+                    // Store JWT token
+                    authToken = data.token || data.access;
+                    localStorage.setItem('syp_token', authToken);
+
+                    // Create user object from response
+                    currentUser = {
+                        id: data.user?.id || data.id,
+                        name: data.user?.first_name || data.first_name || username,
+                        email: data.user?.email || data.email || '',
+                        isStaff: data.user?.is_staff || data.is_staff || false
+                    };
+                    localStorage.setItem('syp_user', JSON.stringify(currentUser));
+
+                    console.log('✅ Login successful:', currentUser.name);
+                    showDashboard();
                 } else {
                     const errorData = await response.json().catch(() => ({}));
-                    errorEl.textContent = errorData.error || 'Invalid credentials';
+                    errorEl.textContent = errorData.detail || errorData.error || 'Invalid credentials';
                     errorEl.style.display = 'block';
                 }
             } catch (error) {
                 console.error('Login error:', error);
-                errorEl.textContent = 'Invalid email or password';
+                errorEl.textContent = 'Could not connect to server. Please try again.';
                 errorEl.style.display = 'block';
             }
         }
@@ -928,8 +926,13 @@
             const icon = document.getElementById('dataSourceIcon');
             const text = document.getElementById('dataSourceText');
 
-            icon.textContent = '💾';
-            text.textContent = 'Browser Storage';
+            if (isLive) {
+                icon.textContent = '🟢';
+                text.textContent = 'Live (PostgreSQL)';
+            } else {
+                icon.textContent = '📦';
+                text.textContent = 'Cached (Local)';
+            }
         }
 
         // Render the client list cards
@@ -1132,12 +1135,49 @@
             `;
         }
 
-        // Advance client to next stage - saves to localStorage
+        // Advance client to next stage - saves to PostgreSQL
         async function advanceClient(email, newStatus) {
             const clients = getStoredClientsSync();
             const client = clients[email];
             if (!client) return;
 
+            // Convert frontend status to backend status
+            const backendStatus = STATUS_MAP_REVERSE[newStatus] || newStatus;
+
+            // If we have auth token and client has an ID (from PostgreSQL), update via API
+            if (authToken && client.id && !client.id.startsWith('client-')) {
+                try {
+                    const response = await fetch(`${API_BASE_URL}/api/crm/syp/coach/clients/${client.id}/advance-stage/`, {
+                        method: 'PATCH',
+                        headers: {
+                            'Authorization': `Bearer ${authToken}`,
+                            'Content-Type': 'application/json',
+                            'Accept': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            status: backendStatus
+                        })
+                    });
+
+                    if (response.ok) {
+                        const updatedClient = await response.json();
+                        console.log('✅ Client status updated in PostgreSQL:', updatedClient.programme_status);
+
+                        // Refresh clients from API to get latest data
+                        await renderClientList();
+                        viewClientJourney(email);
+                        alert(`✅ ${client.name} advanced to ${WEEK_INFO[newStatus].label}`);
+                        return;
+                    } else {
+                        console.error('Failed to update client status:', response.status);
+                    }
+                } catch (error) {
+                    console.error('Error updating client status:', error);
+                }
+            }
+
+            // Fallback to localStorage update (for default clients like Donald)
+            console.log('📦 Updating client status in localStorage');
             clients[email].status = newStatus;
             if (newStatus === 'complete') {
                 clients[email].completedDate = new Date().toISOString().split('T')[0];
@@ -1148,7 +1188,7 @@
             alert(`✅ ${client.name} advanced to ${WEEK_INFO[newStatus].label}`);
         }
 
-        // Add new client - saves to localStorage
+        // Add new client - saves to PostgreSQL
         async function addNewClient() {
             const name = prompt('Client Name:');
             if (!name) return;
@@ -1167,6 +1207,46 @@
                 return;
             }
 
+            // If we have auth token, create via API
+            if (authToken) {
+                try {
+                    const response = await fetch(`${API_BASE_URL}/api/crm/syp/coach/clients/`, {
+                        method: 'POST',
+                        headers: {
+                            'Authorization': `Bearer ${authToken}`,
+                            'Content-Type': 'application/json',
+                            'Accept': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            full_name: name,
+                            email: email,
+                            phone: phone,
+                            programme_status: 'enrolled',
+                            enrolled_date: new Date().toISOString().split('T')[0]
+                        })
+                    });
+
+                    if (response.ok) {
+                        const newClient = await response.json();
+                        console.log('✅ Client created in PostgreSQL:', newClient.id);
+
+                        // Refresh clients from API
+                        await renderClientList();
+                        alert(`✅ ${name} added to PostgreSQL! You can now send them the questionnaire link.`);
+                        return;
+                    } else {
+                        const errorData = await response.json().catch(() => ({}));
+                        console.error('Failed to create client:', response.status, errorData);
+                        alert(`Failed to create client: ${errorData.detail || errorData.email || 'Unknown error'}`);
+                        return;
+                    }
+                } catch (error) {
+                    console.error('Error creating client:', error);
+                }
+            }
+
+            // Fallback to localStorage
+            console.log('📦 Creating client in localStorage');
             const folderName = name.replace(/\s+/g, '_');
 
             clients[email] = {
@@ -1190,7 +1270,7 @@
 
             saveStoredClients(clients);
             await renderClientList();
-            alert(`✅ ${name} added! You can now send them the questionnaire link.`);
+            alert(`✅ ${name} added locally! Connect to PostgreSQL to sync.`);
         }
 
         // Close journey view
@@ -1198,19 +1278,85 @@
             document.getElementById('journeyView').style.display = 'none';
         }
 
-        // Storage helpers - localStorage based
+        // Storage helpers - PostgreSQL via SparkHub API
         async function getStoredClients() {
-            console.log('📦 Loading clients from localStorage');
-            updateDataSourceIndicator(false);
+            // If we have a valid auth token, fetch from PostgreSQL
+            if (authToken) {
+                try {
+                    const response = await fetch(`${API_BASE_URL}/api/crm/syp/coach/clients/`, {
+                        method: 'GET',
+                        headers: {
+                            'Authorization': `Bearer ${authToken}`,
+                            'Accept': 'application/json'
+                        }
+                    });
 
-            const stored = localStorage.getItem('syp_clients');
-            if (stored) {
-                cachedClients = JSON.parse(stored);
-                return cachedClients;
+                    if (response.ok) {
+                        const apiClients = await response.json();
+                        console.log('✅ Fetched clients from PostgreSQL:', apiClients.length);
+
+                        // Transform API response to frontend format
+                        const clients = {};
+                        apiClients.forEach(client => {
+                            const frontendStatus = STATUS_MAP[client.programme_status] || 'pre-programme';
+                            clients[client.email] = {
+                                id: client.id,
+                                name: client.full_name,
+                                email: client.email,
+                                phone: client.phone,
+                                folder: client.full_name.replace(/\s+/g, '_'),
+                                status: frontendStatus,
+                                enrolledDate: client.enrolled_date,
+                                session1Date: client.session_1_date,
+                                session2Date: client.session_2_date,
+                                session3Date: client.session_3_date,
+                                completedDate: client.completed_date,
+                                coachNotes: client.coach_notes,
+                                progress: {
+                                    questionnaire: client.ability_recognition !== null,
+                                    insightsReport: frontendStatus !== 'pre-programme',
+                                    blueprint: client.blueprint !== null,
+                                    decisionFramework: ['week-2', 'week-3', 'week-4', 'complete'].includes(frontendStatus),
+                                    cvBuilder: ['week-4', 'complete'].includes(frontendStatus),
+                                    mappingGuide: ['week-3', 'week-4', 'complete'].includes(frontendStatus)
+                                }
+                            };
+                        });
+
+                        // Merge with default clients (Donald etc)
+                        const mergedClients = { ...DEFAULT_CLIENTS, ...clients };
+
+                        // Cache in localStorage for offline use
+                        localStorage.setItem('syp_clients', JSON.stringify(mergedClients));
+                        cachedClients = mergedClients;
+
+                        // Update data source indicator to show live
+                        updateDataSourceIndicator(true);
+
+                        return mergedClients;
+                    } else if (response.status === 401) {
+                        console.warn('⚠️ Auth token expired, clearing session');
+                        authToken = null;
+                        localStorage.removeItem('syp_token');
+                    }
+                } catch (error) {
+                    console.error('Error fetching clients from API:', error);
+                }
             }
 
-            // Return empty object if no clients yet
-            return {};
+            // Fallback to localStorage cache + default clients
+            console.log('📦 Using cached clients from localStorage');
+            updateDataSourceIndicator(false);
+
+            let clients = { ...DEFAULT_CLIENTS };
+            const stored = localStorage.getItem('syp_clients');
+            if (stored) {
+                const storedClients = JSON.parse(stored);
+                clients = { ...clients, ...storedClients };
+            }
+
+            cachedClients = clients;
+            return clients;
         }
 
         // Sync version for rendering (uses cache)
@@ -1218,11 +1364,18 @@
             if (cachedClients) {
                 return cachedClients;
             }
+
+            // Start with default clients
+            let clients = { ...DEFAULT_CLIENTS };
+
+            // Merge with stored clients
             const stored = localStorage.getItem('syp_clients');
             if (stored) {
-                return JSON.parse(stored);
+                const storedClients = JSON.parse(stored);
+                clients = { ...clients, ...storedClients };
             }
-            return FALLBACK_CLIENT_DATABASE;
+
+            return clients;
         }
 
         function saveStoredClients(clients) {
