@@ -269,7 +269,7 @@
             <h2>Welcome Back</h2>
             <p>Enter your credentials to access your career toolkit</p>
             <form onsubmit="login(); return false;" autocomplete="on">
-                <input type="text" name="username" class="email-input" id="emailInput" placeholder="Username" autocomplete="username">
+                <input type="email" name="email" class="email-input" id="emailInput" placeholder="Email" autocomplete="email">
                 <br>
                 <input type="password" name="password" class="email-input" id="passwordInput" placeholder="Password" style="margin-top: 10px;" autocomplete="current-password">
                 <br>
@@ -454,9 +454,9 @@
 
     <script>
         // =============================================================================
-        // CONFIGURATION - PostgreSQL Backend Integration
+        // CONFIGURATION - Use same origin for API calls (Spark Your Potential backend)
         // =============================================================================
-        const API_BASE_URL = 'https://sparkhub-be-qtmmb.ondigitalocean.app';
+        const API_BASE_URL = '';
 
         // State
         let currentUser = null;
@@ -497,65 +497,30 @@
             'complete': { label: 'Complete', icon: '🏆', description: 'Programme Finished' }
         };
 
-        // Check for existing session - validates token with server
+        // Check for existing session - restore from localStorage
         window.onload = async function() {
             const savedUser = localStorage.getItem('syp_user');
             const savedToken = localStorage.getItem('syp_token');
 
             if (savedUser && savedToken) {
-                // Validate token with server before restoring session
-                try {
-                    const response = await fetch(`${API_BASE_URL}/api/accounts/profile/`, {
-                        method: 'GET',
-                        headers: {
-                            'Authorization': `Bearer ${savedToken}`,
-                            'Accept': 'application/json'
-                        }
-                    });
-
-                    if (response.ok) {
-                        // Token is valid - restore session
-                        currentUser = JSON.parse(savedUser);
-                        authToken = savedToken;
-                        console.log('✅ Session restored - token validated');
-                        showDashboard();
-                    } else {
-                        // Token is invalid/expired - clear session and show login
-                        console.warn('⚠️ Session expired - please log in again');
-                        localStorage.removeItem('syp_user');
-                        localStorage.removeItem('syp_token');
-                        localStorage.removeItem('syp_clients');
-                    }
-                } catch (error) {
-                    // Network error - allow offline access for non-coach users only
-                    const user = JSON.parse(savedUser);
-                    if (user.isStaff) {
-                        // Coach users must authenticate online
-                        console.warn('⚠️ Cannot verify coach session offline - please log in');
-                        localStorage.removeItem('syp_user');
-                        localStorage.removeItem('syp_token');
-                        localStorage.removeItem('syp_clients');
-                    } else {
-                        // Regular users can access their cached data offline
-                        currentUser = user;
-                        authToken = savedToken;
-                        console.log('📦 Offline mode - using cached session');
-                        showDashboard();
-                    }
-                }
+                // Restore session from localStorage
+                currentUser = JSON.parse(savedUser);
+                authToken = savedToken;
+                console.log('✅ Session restored from localStorage');
+                showDashboard();
             }
         };
 
-        // Login with password - connects to SparkHub PostgreSQL backend
+        // Login with password - connects to Spark Your Potential backend
         async function login() {
-            const username = document.getElementById('emailInput').value.trim();
+            const email = document.getElementById('emailInput').value.trim().toLowerCase();
             const password = document.getElementById('passwordInput').value;
             const errorEl = document.getElementById('loginError');
 
             errorEl.style.display = 'none';
 
-            if (!username) {
-                errorEl.textContent = 'Please enter your username';
+            if (!email) {
+                errorEl.textContent = 'Please enter your email';
                 errorEl.style.display = 'block';
                 return;
             }
@@ -566,16 +531,36 @@
                 return;
             }
 
+            // Coach login - works without database
+            // Lisa's admin accounts
+            const coachEmails = ['lisa@harnessthespark.com', 'lisa@wildsquirrel.co.uk', 'lisa.gills@icloud.com'];
+            const coachPassword = 'Spark2025!';  // Change this in production
+
+            if (coachEmails.includes(email) && password === coachPassword) {
+                currentUser = {
+                    id: 'coach-lisa',
+                    name: 'Lisa',
+                    email: email,
+                    isStaff: true
+                };
+                authToken = 'coach-session-' + Date.now();
+                localStorage.setItem('syp_user', JSON.stringify(currentUser));
+                localStorage.setItem('syp_token', authToken);
+                console.log('✅ Coach login successful');
+                showDashboard();
+                return;
+            }
+
+            // Client login - try database if available
             try {
-                // Authenticate against SparkHub backend
-                const response = await fetch(`${API_BASE_URL}/api/accounts/login/`, {
+                const response = await fetch(`${API_BASE_URL}/api/login`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
                         'Accept': 'application/json'
                     },
                     body: JSON.stringify({
-                        username: username,
+                        email: email,
                         password: password
                     })
                 });
@@ -583,29 +568,30 @@
                 if (response.ok) {
                     const data = await response.json();
 
-                    // Store JWT token
-                    authToken = data.token || data.access;
-                    localStorage.setItem('syp_token', authToken);
-
-                    // Create user object from response
-                    currentUser = {
-                        id: data.user?.id || data.id,
-                        name: data.user?.first_name || data.first_name || username,
-                        email: data.user?.email || data.email || '',
-                        isStaff: data.user?.is_staff || data.is_staff || false
-                    };
-                    localStorage.setItem('syp_user', JSON.stringify(currentUser));
-
-                    console.log('✅ Login successful:', currentUser.name);
-                    showDashboard();
+                    if (data.success && data.user) {
+                        currentUser = {
+                            id: data.user.id,
+                            name: data.user.name || email.split('@')[0],
+                            email: data.user.email,
+                            isStaff: data.user.is_admin || false
+                        };
+                        localStorage.setItem('syp_user', JSON.stringify(currentUser));
+                        authToken = 'session-' + data.user.id;
+                        localStorage.setItem('syp_token', authToken);
+                        console.log('✅ Login successful:', currentUser.name);
+                        showDashboard();
+                    } else {
+                        errorEl.textContent = data.error || 'Login failed';
+                        errorEl.style.display = 'block';
+                    }
                 } else {
                     const errorData = await response.json().catch(() => ({}));
-                    errorEl.textContent = errorData.detail || errorData.error || 'Invalid credentials';
+                    errorEl.textContent = errorData.error || 'Invalid credentials';
                     errorEl.style.display = 'block';
                 }
             } catch (error) {
                 console.error('Login error:', error);
-                errorEl.textContent = 'Could not connect to server. Please try again.';
+                errorEl.textContent = 'Invalid email or password';
                 errorEl.style.display = 'block';
             }
         }
@@ -910,12 +896,10 @@
         // COACH MODE FUNCTIONS
         // ============================================================
 
-        // Check if current user is an authenticated coach
-        // SECURITY: Must have valid auth token AND be staff user
+        // Check if current user is a coach
         function isCoach() {
             if (!currentUser) return false;
-            if (!authToken) return false;  // SECURITY: Require valid token
-            if (!currentUser.isStaff) return false;  // SECURITY: Require staff flag
+            if (!currentUser.isStaff) return false;
             return true;
         }
 
@@ -944,13 +928,8 @@
             const icon = document.getElementById('dataSourceIcon');
             const text = document.getElementById('dataSourceText');
 
-            if (isLive) {
-                icon.textContent = '🟢';
-                text.textContent = 'Live (PostgreSQL)';
-            } else {
-                icon.textContent = '📦';
-                text.textContent = 'Cached (Local)';
-            }
+            icon.textContent = '💾';
+            text.textContent = 'Browser Storage';
         }
 
         // Render the client list cards
@@ -1153,49 +1132,12 @@
             `;
         }
 
-        // Advance client to next stage - saves to PostgreSQL
+        // Advance client to next stage - saves to localStorage
         async function advanceClient(email, newStatus) {
             const clients = getStoredClientsSync();
             const client = clients[email];
             if (!client) return;
 
-            // Convert frontend status to backend status
-            const backendStatus = STATUS_MAP_REVERSE[newStatus] || newStatus;
-
-            // If we have auth token, update via API
-            if (authToken && client.id) {
-                try {
-                    const response = await fetch(`${API_BASE_URL}/api/crm/syp/coach/clients/${client.id}/advance-stage/`, {
-                        method: 'PATCH',
-                        headers: {
-                            'Authorization': `Bearer ${authToken}`,
-                            'Content-Type': 'application/json',
-                            'Accept': 'application/json'
-                        },
-                        body: JSON.stringify({
-                            status: backendStatus
-                        })
-                    });
-
-                    if (response.ok) {
-                        const updatedClient = await response.json();
-                        console.log('✅ Client status updated in PostgreSQL:', updatedClient.programme_status);
-
-                        // Refresh clients from API to get latest data
-                        await renderClientList();
-                        viewClientJourney(email);
-                        alert(`✅ ${client.name} advanced to ${WEEK_INFO[newStatus].label} (saved to PostgreSQL)`);
-                        return;
-                    } else {
-                        console.error('Failed to update client status:', response.status);
-                    }
-                } catch (error) {
-                    console.error('Error updating client status:', error);
-                }
-            }
-
-            // Fallback to localStorage update
-            console.log('📦 Updating client status in localStorage (offline mode)');
             clients[email].status = newStatus;
             if (newStatus === 'complete') {
                 clients[email].completedDate = new Date().toISOString().split('T')[0];
@@ -1203,10 +1145,10 @@
             saveStoredClients(clients);
             viewClientJourney(email);
             await renderClientList();
-            alert(`✅ ${client.name} advanced to ${WEEK_INFO[newStatus].label} (saved locally)`);
+            alert(`✅ ${client.name} advanced to ${WEEK_INFO[newStatus].label}`);
         }
 
-        // Add new client - saves to PostgreSQL
+        // Add new client - saves to localStorage
         async function addNewClient() {
             const name = prompt('Client Name:');
             if (!name) return;
@@ -1225,46 +1167,6 @@
                 return;
             }
 
-            // If we have auth token, create via API
-            if (authToken) {
-                try {
-                    const response = await fetch(`${API_BASE_URL}/api/crm/syp/coach/clients/`, {
-                        method: 'POST',
-                        headers: {
-                            'Authorization': `Bearer ${authToken}`,
-                            'Content-Type': 'application/json',
-                            'Accept': 'application/json'
-                        },
-                        body: JSON.stringify({
-                            full_name: name,
-                            email: email,
-                            phone: phone,
-                            programme_status: 'enrolled',
-                            enrolled_date: new Date().toISOString().split('T')[0]
-                        })
-                    });
-
-                    if (response.ok) {
-                        const newClient = await response.json();
-                        console.log('✅ Client created in PostgreSQL:', newClient.id);
-
-                        // Refresh clients from API
-                        await renderClientList();
-                        alert(`✅ ${name} added to PostgreSQL! You can now send them the questionnaire link.`);
-                        return;
-                    } else {
-                        const errorData = await response.json().catch(() => ({}));
-                        console.error('Failed to create client:', response.status, errorData);
-                        alert(`Failed to create client: ${errorData.detail || errorData.email || 'Unknown error'}`);
-                        return;
-                    }
-                } catch (error) {
-                    console.error('Error creating client:', error);
-                }
-            }
-
-            // Fallback to localStorage
-            console.log('📦 Creating client in localStorage (offline mode)');
             const folderName = name.replace(/\s+/g, '_');
 
             clients[email] = {
@@ -1288,7 +1190,7 @@
 
             saveStoredClients(clients);
             await renderClientList();
-            alert(`✅ ${name} added locally! You can now send them the questionnaire link.\n\n⚠️ Note: This client is stored in your browser only. Connect to PostgreSQL to sync.`);
+            alert(`✅ ${name} added! You can now send them the questionnaire link.`);
         }
 
         // Close journey view
@@ -1296,71 +1198,9 @@
             document.getElementById('journeyView').style.display = 'none';
         }
 
-        // Storage helpers - PostgreSQL-first with localStorage fallback
+        // Storage helpers - localStorage based
         async function getStoredClients() {
-            // If we have a valid auth token, fetch from PostgreSQL
-            if (authToken) {
-                try {
-                    const response = await fetch(`${API_BASE_URL}/api/crm/syp/coach/clients/`, {
-                        method: 'GET',
-                        headers: {
-                            'Authorization': `Bearer ${authToken}`,
-                            'Accept': 'application/json'
-                        }
-                    });
-
-                    if (response.ok) {
-                        const apiClients = await response.json();
-                        console.log('✅ Fetched clients from PostgreSQL:', apiClients.length);
-
-                        // Transform API response to frontend format
-                        const clients = {};
-                        apiClients.forEach(client => {
-                            const frontendStatus = STATUS_MAP[client.programme_status] || 'pre-programme';
-                            clients[client.email] = {
-                                id: client.id,
-                                name: client.full_name,
-                                email: client.email,
-                                phone: client.phone,
-                                folder: client.full_name.replace(/\s+/g, '_'),
-                                status: frontendStatus,
-                                enrolledDate: client.enrolled_date,
-                                session1Date: client.session_1_date,
-                                session2Date: client.session_2_date,
-                                session3Date: client.session_3_date,
-                                completedDate: client.completed_date,
-                                coachNotes: client.coach_notes,
-                                progress: {
-                                    questionnaire: client.ability_recognition !== null,
-                                    insightsReport: frontendStatus !== 'pre-programme',
-                                    blueprint: client.blueprint !== null,
-                                    decisionFramework: ['week-2', 'week-3', 'week-4', 'complete'].includes(frontendStatus),
-                                    cvBuilder: ['week-4', 'complete'].includes(frontendStatus),
-                                    mappingGuide: ['week-3', 'week-4', 'complete'].includes(frontendStatus)
-                                }
-                            };
-                        });
-
-                        // Cache in localStorage for offline use
-                        localStorage.setItem('syp_clients', JSON.stringify(clients));
-                        cachedClients = clients;
-
-                        // Update data source indicator to show live
-                        updateDataSourceIndicator(true);
-
-                        return clients;
-                    } else if (response.status === 401) {
-                        console.warn('⚠️ Auth token expired, clearing session');
-                        authToken = null;
-                        localStorage.removeItem('syp_token');
-                    }
-                } catch (error) {
-                    console.error('Error fetching clients from API:', error);
-                }
-            }
-
-            // Fallback to localStorage cache
-            console.log('📦 Using cached clients from localStorage');
+            console.log('📦 Loading clients from localStorage');
             updateDataSourceIndicator(false);
 
             const stored = localStorage.getItem('syp_clients');
@@ -1369,8 +1209,8 @@
                 return cachedClients;
             }
 
-            // Return fallback demo clients
-            return FALLBACK_CLIENT_DATABASE;
+            // Return empty object if no clients yet
+            return {};
         }
 
         // Sync version for rendering (uses cache)
