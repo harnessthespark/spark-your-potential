@@ -47,7 +47,7 @@ This document contains important context for Claude to remember across sessions 
 ## Current Clients
 
 ### Donald Pirie
-- **Email:** donald.pirie@example.com
+- **Email:** donaldpirie111@hotmail.co.uk
 - **Status:** Complete
 - **Programme:** 4-Week Career Booster
 - **Enrolled:** October 2024
@@ -133,12 +133,44 @@ This document contains important context for Claude to remember across sessions 
 - Uses same PostgreSQL database as SparkHub
 - JWT authentication shared with SparkHub platform
 
+## Production URLs
+- **Dashboard (Coach):** https://stingray-app-7kg9p.ondigitalocean.app/dashboard.html
+- **Client Portal:** https://stingray-app-7kg9p.ondigitalocean.app/client-portal.html
+- **Backend API:** https://sparkhub-be-qtmmb.ondigitalocean.app
+
 ## Session History
 
-### December 2025 - Raj Samuel Onboarding
-- Created Raj_Samuel folder
-- Created personalised coaching agreement
-- Created programme outline
-- Added Raj to DEFAULT_CLIENTS in dashboard
+### 1 December 2025 - Raj Samuel Onboarding & Client Portal
+
+**Raj Samuel Setup:**
+- Created Raj_Samuel folder with all onboarding documents
+- `Raj_Samuel_Coaching_Agreement.html` - Digital signature ready
+- `Raj_Samuel_Programme_Outline.html` - 4-week journey overview
+- `Raj_Samuel_Welcome_Email.html` - 4-step onboarding flow
+- Added to DEFAULT_CLIENTS in dashboard
 - Email: rs@rajsamuel.net
 - Programme: 4-Week Career Booster
+
+**Client Portal Created:**
+- `client-portal.html` - Client self-service access
+- Email-based login (no password)
+- Career Toolkit design matching screenshot
+- 6 tool cards with locked/unlocked states based on programme stage
+- Progressive document unlocking
+
+**Dashboard Fixes:**
+- Fixed Donald's email: donaldpirie111@hotmail.co.uk
+- Fixed DEFAULT_CLIENTS rendering bug - was only showing Sarah
+- All 3 clients now in DEFAULT_CLIENTS: Sarah (demo), Donald, Raj
+- Cache merge logic fixed to always preserve DEFAULT_CLIENTS
+
+**Files Reorganised:**
+- Donald's files moved into `/Donald/` folder
+- Social assets moved into `/social asset/` folder
+- Templates added to `/templates/` folder
+
+**To Test Tomorrow:**
+1. Clear browser cache: `localStorage.clear(); location.reload();`
+2. Login to dashboard.html
+3. Verify all 3 clients show (Sarah, Donald, Raj)
+4. Test client portal login with donaldpirie111@hotmail.co.uk
