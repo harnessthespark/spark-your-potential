@@ -952,16 +952,16 @@
             console.log('✅ Coach mode activated for authenticated staff user');
             document.getElementById('coachMode').style.display = 'block';
 
-            // Clear stale cache to ensure DEFAULT_CLIENTS shows fresh
-            localStorage.removeItem('syp_clients');
-            cachedClients = null;
+            // Don't clear cache - renderClientList() always starts with DEFAULT_CLIENTS anyway
+            // This ensures offline mode still works with all 3 default clients
 
             renderClientList();
         }
 
         // Refresh clients from database
         async function refreshClients() {
-            // Clear cache to force fresh fetch
+            // Clear cache to force fresh fetch from API
+            // Note: renderClientList() always starts with DEFAULT_CLIENTS, so they won't be lost
             localStorage.removeItem('syp_clients');
             cachedClients = null;
             await renderClientList();
@@ -988,17 +988,18 @@
             // Show loading state
             container.innerHTML = '<div style="color: white; text-align: center; padding: 20px;">Loading clients...</div>';
 
-            // Always start with DEFAULT_CLIENTS
+            // ALWAYS start with DEFAULT_CLIENTS to ensure they're never lost
             let clients = { ...DEFAULT_CLIENTS };
 
-            // Try to fetch from API and merge
+            // Try to fetch from API and merge (API data overwrites defaults, but defaults remain if no API match)
             try {
                 const apiClients = await getStoredClients();
                 if (Object.keys(apiClients).length > 0) {
+                    // Merge: DEFAULT_CLIENTS first, then API data on top (API wins for duplicates)
                     clients = { ...DEFAULT_CLIENTS, ...apiClients };
                 }
             } catch (error) {
-                console.log('📦 Using DEFAULT_CLIENTS (API unavailable)');
+                console.log('📦 Using DEFAULT_CLIENTS only (API unavailable)');
                 updateDataSourceIndicator(false);
             }
 
@@ -1391,10 +1392,11 @@
                         };
                     });
 
-                    // Merge with default clients (Donald etc) - only for authenticated coaches
+                    // ALWAYS merge with DEFAULT_CLIENTS to ensure they're never lost
+                    // API data overwrites defaults for duplicate emails, but defaults remain if no API match
                     const mergedClients = { ...DEFAULT_CLIENTS, ...clients };
 
-                    // Cache in localStorage for offline use (still requires auth to access)
+                    // Cache merged data in localStorage for offline use (still requires auth to access)
                     localStorage.setItem('syp_clients', JSON.stringify(mergedClients));
                     cachedClients = mergedClients;
 
