@@ -564,9 +564,10 @@
                     })
                 });
 
-                if (response.ok) {
-                    const data = await response.json();
+                const data = await response.json();
+                console.log('Login response:', data);
 
+                if (response.ok && data.success !== false) {
                     // Store JWT token
                     authToken = data.token || data.access;
                     localStorage.setItem('syp_token', authToken);
@@ -583,8 +584,8 @@
                     console.log('✅ Login successful:', currentUser.name);
                     showDashboard();
                 } else {
-                    const errorData = await response.json().catch(() => ({}));
-                    errorEl.textContent = errorData.detail || errorData.error || 'Invalid credentials';
+                    // Handle error response - SparkHub returns {success: false, message: "..."}
+                    errorEl.textContent = data.message || data.detail || data.error || 'Invalid credentials';
                     errorEl.style.display = 'block';
                 }
             } catch (error) {
