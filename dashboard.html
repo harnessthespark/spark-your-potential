@@ -487,6 +487,25 @@
         // Default clients - only shown when authenticated as coach
         // These are fallback clients when PostgreSQL API is unavailable
         const DEFAULT_CLIENTS = {
+            'sarah.mitchell@example.com': {
+                id: 'client-sarah-demo',
+                name: 'Sarah Mitchell',
+                email: 'sarah.mitchell@example.com',
+                phone: '',
+                folder: 'sarah_mitchell_demo_client',
+                status: 'week-2',
+                enrolledDate: '2024-11-01',
+                completedDate: null,
+                isDemo: true,
+                progress: {
+                    questionnaire: true,
+                    insightsReport: true,
+                    blueprint: false,
+                    decisionFramework: false,
+                    cvBuilder: false,
+                    mappingGuide: false
+                }
+            },
             'donald.pirie@example.com': {
                 id: 'client-donald',
                 name: 'Donald Pirie',
@@ -503,6 +522,24 @@
                     decisionFramework: true,
                     cvBuilder: true,
                     mappingGuide: true
+                }
+            },
+            'rs@rajsamuel.net': {
+                id: 'client-raj',
+                name: 'Raj Samuel',
+                email: 'rs@rajsamuel.net',
+                phone: '',
+                folder: 'Raj_Samuel',
+                status: 'pre-programme',
+                enrolledDate: '2025-12-01',
+                completedDate: null,
+                progress: {
+                    questionnaire: false,
+                    insightsReport: false,
+                    blueprint: false,
+                    decisionFramework: false,
+                    cvBuilder: false,
+                    mappingGuide: false
                 }
             }
         };
@@ -914,6 +951,11 @@
             }
             console.log('✅ Coach mode activated for authenticated staff user');
             document.getElementById('coachMode').style.display = 'block';
+
+            // Clear stale cache to ensure DEFAULT_CLIENTS shows fresh
+            localStorage.removeItem('syp_clients');
+            cachedClients = null;
+
             renderClientList();
         }
 
@@ -944,28 +986,43 @@
             const container = document.getElementById('clientList');
 
             // Show loading state
-            container.innerHTML = '<div style="color: white; text-align: center; padding: 20px;">Loading clients from PostgreSQL...</div>';
+            container.innerHTML = '<div style="color: white; text-align: center; padding: 20px;">Loading clients...</div>';
 
-            const clients = await getStoredClients();
+            // Always start with DEFAULT_CLIENTS
+            let clients = { ...DEFAULT_CLIENTS };
+
+            // Try to fetch from API and merge
+            try {
+                const apiClients = await getStoredClients();
+                if (Object.keys(apiClients).length > 0) {
+                    clients = { ...DEFAULT_CLIENTS, ...apiClients };
+                }
+            } catch (error) {
+                console.log('📦 Using DEFAULT_CLIENTS (API unavailable)');
+                updateDataSourceIndicator(false);
+            }
+
             const clientList = Object.values(clients);
 
-            // If no clients, show empty state
+            // Should never be empty now since DEFAULT_CLIENTS always has entries
             if (clientList.length === 0) {
                 container.innerHTML = `
                     <div style="background: rgba(255,255,255,0.95); border-radius: 12px; padding: 30px; text-align: center; grid-column: 1 / -1;">
                         <div style="font-size: 2em; margin-bottom: 15px;">👋</div>
                         <h4 style="color: #333; margin-bottom: 10px;">No clients yet</h4>
                         <p style="color: #666; margin-bottom: 20px;">Click "+ Add New Client" to add your first client to the programme.</p>
-                        ${!authToken ? '<p style="color: #e74c3c; font-size: 0.85em;">⚠️ Not connected to PostgreSQL. Log in with your admin credentials to sync.</p>' : ''}
                     </div>
                 `;
                 return;
             }
 
             container.innerHTML = clientList.map(client => `
-                <div style="background: rgba(255,255,255,0.95); border-radius: 12px; padding: 20px; cursor: pointer;" onclick="viewClientJourney('${client.email}')">
+                <div style="background: rgba(255,255,255,0.95); border-radius: 12px; padding: 20px; cursor: pointer; ${client.isDemo ? 'border: 2px dashed #ffc107;' : ''}" onclick="viewClientJourney('${client.email}')">
                     <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px;">
-                        <h4 style="color: #333; margin: 0;">${client.name}</h4>
+                        <h4 style="color: #333; margin: 0;">
+                            ${client.name}
+                            ${client.isDemo ? '<span style="font-size: 0.7em; background: #ffc107; color: #333; padding: 2px 6px; border-radius: 4px; margin-left: 8px;">DEMO</span>' : ''}
+                        </h4>
                         <span style="background: ${getStatusColour(client.status)}; color: white; padding: 3px 10px; border-radius: 12px; font-size: 0.75em;">
                             ${WEEK_INFO[client.status]?.label || client.status}
                         </span>

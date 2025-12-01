@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Career Toolkit - Spark Your Potential</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            min-height: 100vh;
+            padding: 40px 20px;
+            color: #fff;
+        }
+        .container { max-width: 1000px; margin: 0 auto; }
+
+        /* Header */
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .header h1 {
+            font-size: 2.2em;
+            font-weight: 800;
+            margin-bottom: 8px;
+            color: #fff;
+        }
+        .header h1 span { color: #FFB627; }
+        .header .subtitle {
+            font-size: 1em;
+            color: #aaa;
+            margin-bottom: 8px;
+        }
+        .header .welcome {
+            font-size: 1.1em;
+            color: #4ECDC4;
+            font-weight: 600;
+        }
+
+        /* Stats Bar */
+        .stats-bar {
+            background: rgba(255,255,255,0.1);
+            border-radius: 12px;
+            padding: 20px 30px;
+            margin-bottom: 30px;
+            display: flex;
+            justify-content: space-around;
+            text-align: center;
+        }
+        .stat-item .stat-value {
+            font-size: 1.8em;
+            font-weight: 800;
+            color: #FFB627;
+        }
+        .stat-item .stat-label {
+            font-size: 0.85em;
+            color: #aaa;
+            margin-top: 4px;
+        }
+
+        /* Login Section */
+        .login-section {
+            background: rgba(255,255,255,0.95);
+            border-radius: 20px;
+            padding: 40px;
+            text-align: center;
+            max-width: 450px;
+            margin: 60px auto;
+        }
+        .login-section h2 {
+            color: #1a1a2e;
+            margin-bottom: 10px;
+            font-size: 1.5em;
+        }
+        .login-section p {
+            color: #666;
+            margin-bottom: 25px;
+        }
+        .email-input {
+            width: 100%;
+            padding: 15px 20px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 1em;
+            margin-bottom: 15px;
+            font-family: inherit;
+        }
+        .email-input:focus {
+            outline: none;
+            border-color: #4ECDC4;
+        }
+        .login-btn {
+            width: 100%;
+            background: linear-gradient(135deg, #4ECDC4 0%, #44A08D 100%);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            border-radius: 10px;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .login-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(78, 205, 196, 0.4);
+        }
+        .login-error {
+            background: #ffe0e0;
+            color: #c00;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            display: none;
+            font-size: 0.9em;
+        }
+
+        /* Portal Content */
+        .portal-content {
+            display: none;
+        }
+        .portal-content.visible {
+            display: block;
+        }
+
+        /* Tool Cards Grid */
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        @media (max-width: 800px) {
+            .tools-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+        @media (max-width: 550px) {
+            .tools-grid { grid-template-columns: 1fr; }
+        }
+
+        /* Tool Card */
+        .tool-card {
+            background: rgba(255,255,255,0.95);
+            border-radius: 16px;
+            padding: 25px;
+            transition: transform 0.2s, box-shadow 0.2s;
+            border: 3px solid transparent;
+        }
+        .tool-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+        .tool-card.completed {
+            border-color: #4ECDC4;
+        }
+        .tool-card.locked {
+            opacity: 0.5;
+            pointer-events: none;
+            filter: grayscale(50%);
+        }
+        .tool-card .tool-icon {
+            font-size: 2.2em;
+            margin-bottom: 12px;
+        }
+        .tool-card h3 {
+            color: #1a1a2e;
+            font-size: 1.1em;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+        .tool-card .status-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.75em;
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+        .status-completed {
+            background: #e8f5e9;
+            color: #2e7d32;
+        }
+        .status-ready {
+            background: #fff3e0;
+            color: #e65100;
+        }
+        .status-locked {
+            background: #f5f5f5;
+            color: #999;
+        }
+        .status-reference {
+            background: #e3f2fd;
+            color: #1565c0;
+        }
+        .tool-card p {
+            color: #666;
+            font-size: 0.9em;
+            line-height: 1.5;
+            margin-bottom: 15px;
+        }
+        .tool-card .tool-btn {
+            display: inline-block;
+            background: linear-gradient(135deg, #4ECDC4 0%, #44A08D 100%);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-size: 0.9em;
+            font-weight: 600;
+            transition: transform 0.2s;
+            border: none;
+            cursor: pointer;
+        }
+        .tool-card .tool-btn:hover {
+            transform: translateY(-1px);
+        }
+        .tool-card .tool-btn.secondary {
+            background: #e0e0e0;
+            color: #555;
+            margin-left: 8px;
+        }
+        .tool-card.locked .tool-btn {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+
+        /* Journey Section */
+        .journey-section {
+            background: rgba(255,255,255,0.1);
+            border-radius: 16px;
+            padding: 25px;
+            margin-bottom: 30px;
+        }
+        .journey-section h3 {
+            color: #fff;
+            margin-bottom: 20px;
+            font-size: 1.1em;
+        }
+        .journey-steps {
+            display: flex;
+            gap: 10px;
+        }
+        .journey-step {
+            flex: 1;
+            text-align: center;
+            padding: 15px 8px;
+            border-radius: 10px;
+            background: rgba(255,255,255,0.1);
+            border: 2px solid rgba(255,255,255,0.2);
+        }
+        .journey-step.completed {
+            background: rgba(78, 205, 196, 0.2);
+            border-color: #4ECDC4;
+        }
+        .journey-step.current {
+            background: rgba(255, 182, 39, 0.2);
+            border-color: #FFB627;
+        }
+        .journey-step.locked {
+            opacity: 0.4;
+        }
+        .journey-step .icon {
+            font-size: 1.5em;
+            margin-bottom: 6px;
+        }
+        .journey-step .label {
+            font-size: 0.75em;
+            color: #fff;
+            font-weight: 500;
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            padding: 20px;
+            color: #aaa;
+        }
+        .footer a {
+            color: #4ECDC4;
+            text-decoration: none;
+        }
+        .logout-link {
+            display: inline-block;
+            margin-top: 15px;
+            color: #888;
+            cursor: pointer;
+            font-size: 0.9em;
+        }
+        .logout-link:hover {
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Login Section -->
+        <div class="login-section" id="loginSection">
+            <h2>⚡ Your Career Toolkit</h2>
+            <p>Enter your email to access your documents</p>
+            <div class="login-error" id="loginError"></div>
+            <input type="email" class="email-input" id="emailInput" placeholder="your@email.com" onkeypress="if(event.key==='Enter') clientLogin()">
+            <button class="login-btn" onclick="clientLogin()">Access My Toolkit</button>
+        </div>
+
+        <!-- Portal Content -->
+        <div class="portal-content" id="portalContent">
+            <!-- Header -->
+            <div class="header">
+                <h1><span>⚡</span> Your Career Toolkit</h1>
+                <p class="subtitle">Spark Your Potential</p>
+                <p class="welcome">Welcome, <span id="clientName"></span></p>
+            </div>
+
+            <!-- Stats Bar -->
+            <div class="stats-bar">
+                <div class="stat-item">
+                    <div class="stat-value" id="statBlueprints">0</div>
+                    <div class="stat-label">Blueprints</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="statTools">0/6</div>
+                    <div class="stat-label">Tools Used</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="statDate">-</div>
+                    <div class="stat-label">Last Updated</div>
+                </div>
+            </div>
+
+            <!-- Journey Timeline -->
+            <div class="journey-section">
+                <h3>📅 Your Journey</h3>
+                <div class="journey-steps" id="journeySteps"></div>
+            </div>
+
+            <!-- Tools Grid -->
+            <div class="tools-grid" id="toolsGrid"></div>
+
+            <!-- Footer -->
+            <div class="footer">
+                <p>Need help? Contact Lisa: <a href="mailto:lisa@harnessthespark.com">lisa@harnessthespark.com</a></p>
+                <p class="logout-link" onclick="logout()">Log Out</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Client data
+        const CLIENTS = {
+            'sarah.mitchell@example.com': {
+                name: 'Sarah Mitchell',
+                email: 'sarah.mitchell@example.com',
+                folder: 'sarah_mitchell_demo_client',
+                status: 'week-2',
+                isDemo: true
+            },
+            'donald.pirie@example.com': {
+                name: 'Donald Pirie',
+                email: 'donald.pirie@example.com',
+                folder: 'Donald',
+                status: 'complete'
+            },
+            'rs@rajsamuel.net': {
+                name: 'Raj Samuel',
+                email: 'rs@rajsamuel.net',
+                folder: 'Raj_Samuel',
+                status: 'pre-programme'
+            }
+        };
+
+        const STAGES = [
+            { id: 'pre-programme', label: 'Pre-Programme', icon: '📋' },
+            { id: 'week-1', label: 'Week 1', icon: '🌱' },
+            { id: 'week-2', label: 'Week 2', icon: '🧭' },
+            { id: 'week-3', label: 'Week 3', icon: '🎯' },
+            { id: 'week-4', label: 'Week 4', icon: '🚀' },
+            { id: 'complete', label: 'Complete', icon: '🏆' }
+        ];
+
+        let currentClient = null;
+
+        // Check for saved session
+        window.onload = function() {
+            const savedEmail = localStorage.getItem('syp_client_email');
+            if (savedEmail && CLIENTS[savedEmail.toLowerCase()]) {
+                showPortal(CLIENTS[savedEmail.toLowerCase()]);
+            }
+        };
+
+        // Client login
+        function clientLogin() {
+            const email = document.getElementById('emailInput').value.trim().toLowerCase();
+            const errorEl = document.getElementById('loginError');
+
+            if (!email) {
+                errorEl.textContent = 'Please enter your email address';
+                errorEl.style.display = 'block';
+                return;
+            }
+
+            const client = CLIENTS[email];
+            if (!client) {
+                errorEl.textContent = 'Email not found. Please check your email or contact Lisa.';
+                errorEl.style.display = 'block';
+                return;
+            }
+
+            localStorage.setItem('syp_client_email', email);
+            showPortal(client);
+        }
+
+        // Show portal
+        function showPortal(client) {
+            currentClient = client;
+            document.getElementById('loginSection').style.display = 'none';
+            document.getElementById('portalContent').classList.add('visible');
+
+            // Update header
+            document.getElementById('clientName').textContent = client.name.split(' ')[0];
+
+            // Calculate stats
+            const stageIndex = STAGES.findIndex(s => s.id === client.status);
+            const toolsUnlocked = getToolsUnlocked(stageIndex);
+
+            document.getElementById('statBlueprints').textContent = stageIndex >= 2 ? '1' : '0';
+            document.getElementById('statTools').textContent = `${toolsUnlocked}/6`;
+            document.getElementById('statDate').textContent = new Date().toLocaleDateString('en-GB');
+
+            // Render journey
+            renderJourney(client);
+
+            // Render tools
+            renderTools(client);
+        }
+
+        function getToolsUnlocked(stageIndex) {
+            if (stageIndex >= 5) return 6; // complete
+            if (stageIndex >= 3) return 6; // week-3+
+            if (stageIndex >= 2) return 4; // week-2
+            if (stageIndex >= 1) return 3; // week-1
+            return 2; // pre-programme
+        }
+
+        // Render journey timeline
+        function renderJourney(client) {
+            const container = document.getElementById('journeySteps');
+            const currentIndex = STAGES.findIndex(s => s.id === client.status);
+
+            container.innerHTML = STAGES.map((stage, index) => {
+                let className = 'journey-step';
+                let icon = stage.icon;
+
+                if (index < currentIndex || client.status === 'complete') {
+                    className += ' completed';
+                    icon = '✅';
+                } else if (index === currentIndex) {
+                    className += ' current';
+                } else {
+                    className += ' locked';
+                }
+
+                return `
+                    <div class="${className}">
+                        <div class="icon">${icon}</div>
+                        <div class="label">${stage.label}</div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // Render tools grid
+        function renderTools(client) {
+            const container = document.getElementById('toolsGrid');
+            const stageIndex = STAGES.findIndex(s => s.id === client.status);
+            const folder = client.folder;
+            const nameUnderscored = client.name.replace(/\s+/g, '_');
+
+            const tools = [
+                {
+                    icon: '📝',
+                    title: 'Discovery Questionnaire',
+                    description: 'Deep reflection questions about your patterns, superpowers, and career journey. Your answers fuel the analysis.',
+                    file: 'ability-recognition-visual.html',
+                    btnText: 'View Responses',
+                    unlockStage: 0,
+                    statusWhenComplete: 'completed'
+                },
+                {
+                    icon: '📊',
+                    title: 'Career Insights Report',
+                    description: "Lisa's deep-dive analysis of your questionnaire responses. Your core pattern, unique thread, and career direction.",
+                    file: `${folder}/${nameUnderscored}_Career_Insights_Report.html`,
+                    btnText: 'View Report',
+                    unlockStage: 1,
+                    statusWhenComplete: 'completed'
+                },
+                {
+                    icon: '📘',
+                    title: 'Transformation Blueprint',
+                    description: 'Your complete positioning document built through coaching sessions. Evidence, belief moments, unique thread.',
+                    file: `${folder}/${nameUnderscored}_Blueprint.html`,
+                    btnText: 'View Blueprint',
+                    unlockStage: 2,
+                    statusWhenComplete: 'completed'
+                },
+                {
+                    icon: '📄',
+                    title: 'CV Builder',
+                    description: 'Build your CV with fields pre-filled from your Blueprint. Edit and refine your positioning.',
+                    file: `${folder}/${nameUnderscored}_CV_Builder.html`,
+                    btnText: 'Open Builder',
+                    secondaryBtn: 'Export PDF',
+                    unlockStage: 3,
+                    statusWhenComplete: 'ready'
+                },
+                {
+                    icon: '🗺️',
+                    title: 'Mapping Guide',
+                    description: 'A visual guide showing where your Blueprint content goes across LinkedIn, CV, and interviews.',
+                    file: `${folder}/${nameUnderscored}_Mapping_Guide.html`,
+                    btnText: 'View Guide',
+                    unlockStage: 3,
+                    statusWhenComplete: 'reference'
+                },
+                {
+                    icon: '⚖️',
+                    title: 'Decision Framework',
+                    description: 'Evaluate opportunities against your red flags and green flags. Score roles objectively.',
+                    file: `${folder}/${nameUnderscored}_Decision_Framework.html`,
+                    btnText: 'Open Scorecard',
+                    unlockStage: 2,
+                    statusWhenComplete: 'ready'
+                }
+            ];
+
+            container.innerHTML = tools.map(tool => {
+                const isUnlocked = stageIndex >= tool.unlockStage || client.status === 'complete';
+                const isComplete = stageIndex > tool.unlockStage || client.status === 'complete';
+
+                let cardClass = 'tool-card';
+                let statusClass = 'status-locked';
+                let statusText = '🔒 Locked';
+
+                if (!isUnlocked) {
+                    cardClass += ' locked';
+                } else if (isComplete) {
+                    cardClass += ' completed';
+                    if (tool.statusWhenComplete === 'completed') {
+                        statusClass = 'status-completed';
+                        statusText = '✓ Completed';
+                    } else if (tool.statusWhenComplete === 'ready') {
+                        statusClass = 'status-ready';
+                        statusText = 'Ready';
+                    } else {
+                        statusClass = 'status-reference';
+                        statusText = 'Reference';
+                    }
+                } else {
+                    statusClass = 'status-ready';
+                    statusText = 'Ready';
+                }
+
+                return `
+                    <div class="${cardClass}">
+                        <div class="tool-icon">${tool.icon}</div>
+                        <h3>${tool.title}</h3>
+                        <span class="status-badge ${statusClass}">${statusText}</span>
+                        <p>${tool.description}</p>
+                        <a href="${isUnlocked ? tool.file : '#'}" class="tool-btn" ${!isUnlocked ? 'onclick="return false;"' : ''}>${tool.btnText}</a>
+                        ${tool.secondaryBtn && isUnlocked ? `<button class="tool-btn secondary">${tool.secondaryBtn}</button>` : ''}
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // Logout
+        function logout() {
+            localStorage.removeItem('syp_client_email');
+            currentClient = null;
+            document.getElementById('portalContent').classList.remove('visible');
+            document.getElementById('loginSection').style.display = 'block';
+            document.getElementById('emailInput').value = '';
+            document.getElementById('loginError').style.display = 'none';
+        }
+    </script>
+</body>
+</html>

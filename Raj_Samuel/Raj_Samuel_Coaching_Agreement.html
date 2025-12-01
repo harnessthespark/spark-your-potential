@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Coaching Agreement - Raj Samuel - Harness the Spark</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #f8f9fa;
+            color: #333;
+            line-height: 1.6;
+        }
+        .document-container {
+            max-width: 800px;
+            margin: 40px auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        .header {
+            background: linear-gradient(135deg, #FF6B6B 0%, #FF8E53 100%);
+            padding: 40px;
+            text-align: center;
+            color: white;
+        }
+        .logo {
+            font-size: 1.5em;
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+        .logo span { color: #FFE66D; }
+        .header h1 {
+            font-size: 2em;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+        .header .subtitle {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+        .content {
+            padding: 40px;
+        }
+        .client-info {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 25px;
+            margin-bottom: 30px;
+        }
+        .client-info-row {
+            display: flex;
+            margin-bottom: 12px;
+        }
+        .client-info-row:last-child { margin-bottom: 0; }
+        .client-info-label {
+            font-weight: 600;
+            color: #666;
+            width: 120px;
+            flex-shrink: 0;
+        }
+        .client-info-value {
+            color: #333;
+            font-weight: 500;
+        }
+        h2 {
+            color: #4ECDC4;
+            font-size: 1.3em;
+            margin: 30px 0 15px 0;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #4ECDC4;
+        }
+        h2:first-of-type { margin-top: 0; }
+        p { margin-bottom: 15px; }
+        .highlight {
+            background: #FFF3CD;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: 600;
+        }
+        .important {
+            font-weight: 600;
+            color: #333;
+        }
+        ul {
+            margin: 15px 0 15px 25px;
+        }
+        li {
+            margin-bottom: 10px;
+        }
+        .programme-box {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        .programme-box h3 {
+            font-size: 1.2em;
+            margin-bottom: 15px;
+        }
+        .programme-box ul {
+            margin-left: 20px;
+        }
+        .programme-box li {
+            margin-bottom: 8px;
+        }
+        .signature-section {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 30px;
+            margin-top: 40px;
+        }
+        .signature-section h2 {
+            color: #FF6B6B;
+            border-color: #FF6B6B;
+            margin-top: 0;
+        }
+        .signature-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            margin-top: 25px;
+        }
+        .signature-box {
+            background: white;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            padding: 25px;
+        }
+        .signature-box h4 {
+            color: #666;
+            font-size: 0.9em;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 20px;
+        }
+        .signature-field {
+            margin-bottom: 20px;
+        }
+        .signature-field label {
+            display: block;
+            font-size: 0.85em;
+            color: #888;
+            margin-bottom: 8px;
+        }
+        .signature-field input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 1em;
+            font-family: inherit;
+        }
+        .signature-field input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        .signature-field input[type="text"].signature-input {
+            font-family: 'Brush Script MT', cursive;
+            font-size: 1.5em;
+            text-align: center;
+        }
+        .signature-canvas {
+            width: 100%;
+            height: 100px;
+            border: 2px dashed #ccc;
+            border-radius: 8px;
+            background: #fafafa;
+            cursor: crosshair;
+        }
+        .signature-pad-container {
+            position: relative;
+        }
+        .clear-signature {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            background: #ff6b6b;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-size: 0.75em;
+            cursor: pointer;
+        }
+        .coach-signature {
+            font-family: 'Brush Script MT', cursive;
+            font-size: 2em;
+            color: #333;
+            padding: 10px 0;
+        }
+        .submit-section {
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 30px;
+            border-top: 2px solid #e0e0e0;
+        }
+        .submit-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px 50px;
+            border-radius: 10px;
+            font-size: 1.1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+        }
+        .submit-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+        .checkbox-field {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            margin: 20px 0;
+            padding: 15px;
+            background: #fff;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+        }
+        .checkbox-field input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            margin-top: 2px;
+            cursor: pointer;
+        }
+        .checkbox-field label {
+            font-size: 0.95em;
+            cursor: pointer;
+        }
+        .footer {
+            background: #333;
+            color: white;
+            padding: 30px 40px;
+            text-align: center;
+        }
+        .footer p {
+            margin-bottom: 5px;
+            opacity: 0.9;
+        }
+        .footer a {
+            color: #4ECDC4;
+            text-decoration: none;
+        }
+        @media (max-width: 600px) {
+            .signature-grid {
+                grid-template-columns: 1fr;
+            }
+            .content { padding: 25px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="document-container">
+        <div class="header">
+            <div class="logo">Harness the <span>Spark</span> ⚡</div>
+            <h1>Coaching Agreement</h1>
+            <p class="subtitle">Career Transformation Programme</p>
+        </div>
+
+        <div class="content">
+            <div class="client-info">
+                <div class="client-info-row">
+                    <span class="client-info-label">Client:</span>
+                    <span class="client-info-value" id="clientName">Raj Samuel</span>
+                </div>
+                <div class="client-info-row">
+                    <span class="client-info-label">Coach:</span>
+                    <span class="client-info-value">Lisa Gills</span>
+                </div>
+                <div class="client-info-row">
+                    <span class="client-info-label">Date:</span>
+                    <span class="client-info-value" id="agreementDate"></span>
+                </div>
+                <div class="client-info-row">
+                    <span class="client-info-label">Programme:</span>
+                    <span class="client-info-value">4-Week Career Booster Programme</span>
+                </div>
+            </div>
+
+            <p>This agreement sets out how we'll work together during your coaching programme. It's designed to protect both of us and make expectations clear.</p>
+
+            <h2>1. What Coaching Is (and Isn't)</h2>
+            <p>Coaching is a collaborative process. It's designed to help you develop insight, build strategies, and make meaningful change. I'll ask questions, share tools, and offer structure — but ultimately, you're responsible for what you take from it and how you use it.</p>
+            <p><span class="important">This is not therapy or medical advice.</span> I don't diagnose or treat mental health conditions. If you feel you need therapeutic or clinical support, I'll help signpost you to it — but it's outside the scope of this coaching.</p>
+
+            <h2>2. Programme & Services</h2>
+            <p>This agreement covers the following programme:</p>
+
+            <div class="programme-box">
+                <h3>4-Week Career Booster Programme - £400 ex VAT (£480 inc VAT)</h3>
+                <ul>
+                    <li>4 x 1-hour sessions over 4 weeks (Phase 1)</li>
+                    <li>Focus on the AI tool, report, and core narrative</li>
+                    <li>Key deliverables: report, CV content framework, positioning statement</li>
+                    <li>Email support between sessions (response within 48 hours on working days)</li>
+                    <li>Access to proprietary AI questionnaire tool</li>
+                </ul>
+            </div>
+
+            <p>Sessions will take place online (Zoom) at mutually agreed times.</p>
+
+            <p><strong>Cancellation & Rescheduling:</strong></p>
+            <ul>
+                <li>If you're more than 15 minutes late or miss a session without 24 hours' notice, the session may be forfeited unless it's an emergency</li>
+                <li>I'll always do my best to be flexible where possible</li>
+                <li>If I need to reschedule, I'll give as much notice as I can (ideally 24 hours)</li>
+            </ul>
+
+            <p><strong>Option to Continue:</strong> At the end of Phase 1, you have the option to add Phase 2 (4 additional sessions for £400 ex VAT) to complete the full 8-Week Programme. This is entirely optional.</p>
+
+            <h2>3. Payment Terms</h2>
+            <p>The full fee for this programme is <span class="highlight">£480 inc VAT (£400 ex VAT)</span>.</p>
+            <p>Payment is required prior to the first session.</p>
+
+            <h2>4. Cancellation & Refunds</h2>
+            <p>Once the programme begins, refunds are not available except in exceptional circumstances. If something significant changes, we'll have a conversation and agree next steps.</p>
+            <p>You're free to pause or stop coaching at any time — just let me know, and we'll handle that properly.</p>
+
+            <h2>5. Confidentiality</h2>
+            <p>Everything shared in sessions is confidential. I operate within the spirit of the ICF Code of Ethics.</p>
+            <p><strong>The only exceptions are:</strong></p>
+            <ul>
+                <li>If I'm concerned about your safety or someone else's</li>
+                <li>If you give permission for me to discuss something (e.g. with Access to Work or an employer)</li>
+            </ul>
+            <p>Sessions may be recorded for internal training or accreditation purposes — but only with your consent. You can withdraw that consent at any time.</p>
+
+            <h2>6. Intellectual Property & Tool Usage</h2>
+            <p>The AI questionnaire tool, methodology, frameworks, and any materials I provide remain my intellectual property. You're welcome to use insights and outputs from the coaching for your own career development, but please don't copy, reproduce, or share the tool structure or methodology itself.</p>
+            <p>The content you create (your career narrative, CV content, etc.) is yours to use as you wish.</p>
+
+            <h2>7. Liability & Boundaries</h2>
+            <p>You're responsible for your own actions, choices, and results from coaching. I'm not liable for any outcomes, decisions, or impacts of the coaching process.</p>
+            <p><strong>Professional Boundaries:</strong></p>
+            <ul>
+                <li>Our relationship is professional coaching, not friendship or therapy</li>
+                <li>Contact outside sessions should be related to the coaching work</li>
+                <li>I reserve the right to terminate the coaching relationship if boundaries are not respected</li>
+            </ul>
+
+            <h2>8. The Legal Bit</h2>
+            <p>This agreement is governed by the laws of England and Wales. If a disagreement arises, we agree to try to resolve it through conversation and mediation first. If it becomes a legal matter, the party who wins may recover legal costs.</p>
+
+            <div class="signature-section">
+                <h2>Agreement</h2>
+                <p>By signing below, you confirm that you've read and agreed to these terms.</p>
+
+                <div class="checkbox-field">
+                    <input type="checkbox" id="agreeTerms" required>
+                    <label for="agreeTerms">I have read and agree to the terms of this Coaching Agreement</label>
+                </div>
+
+                <div class="checkbox-field">
+                    <input type="checkbox" id="agreeRecording">
+                    <label for="agreeRecording">I consent to sessions being recorded for training/accreditation purposes (optional)</label>
+                </div>
+
+                <div class="signature-grid">
+                    <div class="signature-box">
+                        <h4>Client</h4>
+                        <div class="signature-field">
+                            <label>Signature (type your name or draw below)</label>
+                            <input type="text" class="signature-input" id="clientSignature" placeholder="Type your signature">
+                        </div>
+                        <div class="signature-field signature-pad-container">
+                            <label>Or draw your signature:</label>
+                            <canvas id="signatureCanvas" class="signature-canvas"></canvas>
+                            <button type="button" class="clear-signature" onclick="clearSignature()">Clear</button>
+                        </div>
+                        <div class="signature-field">
+                            <label>Full Name</label>
+                            <input type="text" id="clientFullName" placeholder="Raj Samuel" value="Raj Samuel">
+                        </div>
+                        <div class="signature-field">
+                            <label>Date</label>
+                            <input type="date" id="clientSignDate">
+                        </div>
+                    </div>
+
+                    <div class="signature-box">
+                        <h4>Coach</h4>
+                        <div class="signature-field">
+                            <label>Signature</label>
+                            <div class="coach-signature">Lisa Gills</div>
+                        </div>
+                        <div class="signature-field">
+                            <label>Full Name</label>
+                            <p style="padding: 12px 0; font-weight: 500;">Lisa Gills</p>
+                        </div>
+                        <div class="signature-field">
+                            <label>Date</label>
+                            <p style="padding: 12px 0;" id="coachSignDate"></p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="submit-section">
+                    <button type="button" class="submit-btn" id="submitBtn" onclick="submitAgreement()" disabled>
+                        Sign & Submit Agreement
+                    </button>
+                    <p style="margin-top: 15px; font-size: 0.9em; color: #666;">
+                        By clicking "Sign & Submit", you agree to the terms above.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p><strong>Harness the Spark</strong></p>
+            <p>Lisa Gills</p>
+            <p>Email: <a href="mailto:lisa@harnessthespark.com">lisa@harnessthespark.com</a></p>
+            <p>Website: <a href="https://www.harnessthespark.com">www.harnessthespark.com</a></p>
+        </div>
+    </div>
+
+    <script>
+        // Set dates
+        document.getElementById('agreementDate').textContent = new Date().toLocaleDateString('en-GB');
+        document.getElementById('coachSignDate').textContent = new Date().toLocaleDateString('en-GB');
+        document.getElementById('clientSignDate').value = new Date().toISOString().split('T')[0];
+
+        // Signature canvas
+        const canvas = document.getElementById('signatureCanvas');
+        const ctx = canvas.getContext('2d');
+        let isDrawing = false;
+        let hasDrawnSignature = false;
+
+        function resizeCanvas() {
+            const rect = canvas.getBoundingClientRect();
+            canvas.width = rect.width;
+            canvas.height = rect.height;
+            ctx.strokeStyle = '#333';
+            ctx.lineWidth = 2;
+            ctx.lineCap = 'round';
+        }
+        resizeCanvas();
+        window.addEventListener('resize', resizeCanvas);
+
+        canvas.addEventListener('mousedown', startDrawing);
+        canvas.addEventListener('mousemove', draw);
+        canvas.addEventListener('mouseup', stopDrawing);
+        canvas.addEventListener('mouseout', stopDrawing);
+
+        canvas.addEventListener('touchstart', (e) => { e.preventDefault(); startDrawing(e.touches[0]); });
+        canvas.addEventListener('touchmove', (e) => { e.preventDefault(); draw(e.touches[0]); });
+        canvas.addEventListener('touchend', stopDrawing);
+
+        function startDrawing(e) {
+            isDrawing = true;
+            draw(e);
+        }
+
+        function draw(e) {
+            if (!isDrawing) return;
+            const rect = canvas.getBoundingClientRect();
+            const x = (e.clientX || e.pageX) - rect.left;
+            const y = (e.clientY || e.pageY) - rect.top;
+            ctx.lineTo(x, y);
+            ctx.stroke();
+            ctx.beginPath();
+            ctx.moveTo(x, y);
+            hasDrawnSignature = true;
+            checkFormValidity();
+        }
+
+        function stopDrawing() {
+            isDrawing = false;
+            ctx.beginPath();
+        }
+
+        function clearSignature() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            hasDrawnSignature = false;
+            checkFormValidity();
+        }
+
+        const agreeTerms = document.getElementById('agreeTerms');
+        const clientSignatureInput = document.getElementById('clientSignature');
+        const clientFullName = document.getElementById('clientFullName');
+        const submitBtn = document.getElementById('submitBtn');
+
+        function checkFormValidity() {
+            const hasSignature = clientSignatureInput.value.trim() || hasDrawnSignature;
+            const hasName = clientFullName.value.trim();
+            const hasAgreed = agreeTerms.checked;
+            submitBtn.disabled = !(hasSignature && hasName && hasAgreed);
+        }
+
+        agreeTerms.addEventListener('change', checkFormValidity);
+        clientSignatureInput.addEventListener('input', checkFormValidity);
+        clientFullName.addEventListener('input', checkFormValidity);
+
+        function submitAgreement() {
+            const signatureData = hasDrawnSignature ? canvas.toDataURL() : clientSignatureInput.value;
+
+            const agreementData = {
+                client: 'Raj Samuel',
+                email: 'rs@rajsamuel.net',
+                programme: '4-week',
+                signature: signatureData,
+                signatureType: hasDrawnSignature ? 'drawn' : 'typed',
+                fullName: clientFullName.value,
+                signedDate: document.getElementById('clientSignDate').value,
+                agreedToTerms: agreeTerms.checked,
+                consentToRecording: document.getElementById('agreeRecording').checked,
+                timestamp: new Date().toISOString()
+            };
+
+            // Save to localStorage
+            localStorage.setItem('agreement_Raj_Samuel', JSON.stringify(agreementData));
+
+            submitBtn.textContent = '✓ Agreement Signed';
+            submitBtn.style.background = '#28a745';
+
+            alert('Agreement signed successfully! Thank you, Raj.\n\nLisa will be in touch shortly to schedule your first session.');
+
+            // Optionally redirect
+            setTimeout(() => {
+                window.location.href = '../dashboard.html';
+            }, 2000);
+        }
+    </script>
+</body>
+</html>
