@@ -68,21 +68,6 @@
         [contenteditable="true"]:hover { background: #fffde7; }
         [contenteditable="true"]:focus { background: #fff9c4; box-shadow: inset 0 0 0 2px #ffc107; }
         .edit-hint { font-size: 0.75em; color: rgba(255,255,255,0.7); margin-top: 5px; font-style: italic; }
-        .btn-delete { background: rgba(255,255,255,0.2); border: none; color: white; width: 22px; height: 22px; border-radius: 50%; cursor: pointer; font-size: 1em; line-height: 1; transition: all 0.2s; }
-        .btn-delete:hover { background: #E63946; }
-        .modal-overlay { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.6); z-index: 1000; align-items: center; justify-content: center; }
-        .modal-overlay.active { display: flex; }
-        .modal { background: white; border-radius: 12px; padding: 30px; max-width: 500px; width: 90%; max-height: 80vh; overflow-y: auto; }
-        .modal h3 { color: #E63946; margin-bottom: 20px; }
-        .modal-input { width: 100%; padding: 10px 12px; border: 1px solid #ddd; border-radius: 6px; font-size: 0.9em; font-family: 'Inter', sans-serif; margin-bottom: 12px; }
-        .modal-input:focus { outline: none; border-color: #E63946; }
-        .modal-label { display: block; font-size: 0.8em; font-weight: 600; color: #666; margin-bottom: 4px; }
-        .modal-buttons { display: flex; gap: 10px; margin-top: 20px; }
-        .modal-btn { flex: 1; padding: 10px 15px; border: none; border-radius: 8px; font-size: 0.9em; font-weight: 600; cursor: pointer; }
-        .modal-btn-primary { background: #E63946; color: white; }
-        .modal-btn-primary:hover { background: #d32f3f; }
-        .modal-btn-secondary { background: #f0f0f0; color: #666; }
-        .modal-btn-secondary:hover { background: #e0e0e0; }
         @media print {
             .sidebar { display: none !important; }
             .app-container { grid-template-columns: 1fr; display: block; }
@@ -99,13 +84,6 @@
         <div class="sidebar">
             <h1>CV Builder</h1>
             <div class="subtitle">Blueprint → CV Tool for Donald Pirie</div>
-
-            <h2>🎨 CV Template</h2>
-            <div class="option-group">
-                <label><input type="radio" name="template" value="modern" checked onchange="changeTemplate(this.value)"><span>Modern (Clean)</span></label>
-                <label><input type="radio" name="template" value="classic" onchange="changeTemplate(this.value)"><span>Classic (Traditional)</span></label>
-                <label><input type="radio" name="template" value="creative" onchange="changeTemplate(this.value)"><span>Creative (Bold)</span></label>
-            </div>
 
             <h2>✍️ Draft Your Proposition</h2>
             <div class="option-group" style="background: rgba(255,215,0,0.15); border: 1px solid rgba(255,215,0,0.3);">
@@ -151,46 +129,17 @@
                 <div class="toggle-item"><span>Case Studies</span><label class="toggle-switch"><input type="checkbox" onchange="toggleSection('casestudies', this.checked)"><span class="toggle-slider"></span></label></div>
             </div>
 
-            <h2>📘 Blueprint Reference</h2>
-            <div class="option-group" style="background: rgba(102,126,234,0.2); border: 1px solid rgba(102,126,234,0.4); max-height: 300px; overflow-y: auto;">
-                <p style="font-size: 0.7em; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; opacity: 0.9;">Your Core Pattern</p>
-                <p style="font-size: 0.8em; margin-bottom: 12px; line-height: 1.5;">"You don't fix strategies. You restore belief systems."</p>
-                
-                <p style="font-size: 0.7em; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; opacity: 0.9;">Your Thread</p>
-                <p style="font-size: 0.8em; margin-bottom: 12px; line-height: 1.5;">"Connecting insight, ideas, infrastructure and people — staying until transformation is embedded."</p>
-                
-                <p style="font-size: 0.7em; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; opacity: 0.9;">Key Evidence</p>
-                <ul style="font-size: 0.75em; margin-left: 15px; line-height: 1.6; margin-bottom: 12px;">
-                    <li><strong>UBS:</strong> $2.5m incremental revenue, .com transformation</li>
-                    <li><strong>UPS:</strong> +20% EMEA penetration, "United Problem Solvers"</li>
-                    <li><strong>AMD:</strong> "Together We Advance" global platform</li>
-                </ul>
-                
-                <p style="font-size: 0.7em; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; opacity: 0.9;">The Engine of Donald</p>
-                <ul style="font-size: 0.75em; margin-left: 15px; line-height: 1.6; margin-bottom: 12px;">
-                    <li>Reading the room</li>
-                    <li>Unlocking the thinking</li>
-                    <li>Connecting creativity to commercial</li>
-                </ul>
-                
-                <p style="font-size: 0.7em; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; opacity: 0.9;">Transformation Statement</p>
-                <p style="font-size: 0.8em; line-height: 1.5; font-style: italic;">"I help people move from confusion to conviction. They leave clearer, more confident, reconnected to purpose."</p>
-            </div>
-            <p class="edit-hint">👆 Scroll for more. Copy text to use in your CV.</p>
-
             <h2>📊 Case Studies</h2>
-            <div class="toggle-group" id="case-study-toggles">
-                <div class="toggle-item" id="toggle-ubs"><span>UBS</span><div style="display:flex;align-items:center;gap:8px;"><label class="toggle-switch"><input type="checkbox" onchange="toggleCaseStudy('ubs', this.checked)"><span class="toggle-slider"></span></label><button class="btn-delete" onclick="deleteCaseStudy('ubs')" title="Delete">×</button></div></div>
-                <div class="toggle-item" id="toggle-ups"><span>UPS</span><div style="display:flex;align-items:center;gap:8px;"><label class="toggle-switch"><input type="checkbox" onchange="toggleCaseStudy('ups', this.checked)"><span class="toggle-slider"></span></label><button class="btn-delete" onclick="deleteCaseStudy('ups')" title="Delete">×</button></div></div>
-                <div class="toggle-item" id="toggle-amd"><span>AMD</span><div style="display:flex;align-items:center;gap:8px;"><label class="toggle-switch"><input type="checkbox" onchange="toggleCaseStudy('amd', this.checked)"><span class="toggle-slider"></span></label><button class="btn-delete" onclick="deleteCaseStudy('amd')" title="Delete">×</button></div></div>
+            <div class="toggle-group">
+                <div class="toggle-item"><span>UBS</span><label class="toggle-switch"><input type="checkbox" onchange="toggleCaseStudy('ubs', this.checked)"><span class="toggle-slider"></span></label></div>
+                <div class="toggle-item"><span>UPS</span><label class="toggle-switch"><input type="checkbox" onchange="toggleCaseStudy('ups', this.checked)"><span class="toggle-slider"></span></label></div>
+                <div class="toggle-item"><span>AMD</span><label class="toggle-switch"><input type="checkbox" onchange="toggleCaseStudy('amd', this.checked)"><span class="toggle-slider"></span></label></div>
             </div>
-            <button class="btn btn-secondary" style="margin-top: 8px;" onclick="openAddCaseStudyModal()">+ Add New Case Study</button>
 
             <p class="edit-hint">💡 Click any text in the CV to edit directly</p>
 
             <div class="action-buttons">
                 <button class="btn btn-primary" onclick="window.print()">🖨️ Print / Save as PDF</button>
-                <button class="btn btn-primary" onclick="downloadAsWord()" style="background: #2b579a; color: white;">📄 Download as Word</button>
                 <button class="btn btn-secondary" onclick="copyToClipboard()">📋 Copy Text</button>
                 <button class="btn btn-secondary" onclick="downloadAsHTML()">💾 Download HTML</button>
             </div>
@@ -207,7 +156,7 @@
                 </div>
                 
                 <!-- CONTACT -->
-                <div class="cv-contact" contenteditable="true">+44 (0)7958 398 954 / <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="7c1813121d10180c150e15194d4d4d3c141308111d1510521f13520917">[email&#160;protected]</a> / linkedin.com/in/donaldpirie</div>
+                <div class="cv-contact" contenteditable="true">+44 (0)7958 398 954 / donaldpirie111@hotmail.co.uk / linkedin.com/in/donaldpirie</div>
                 
                 <!-- PROFILE STORY -->
                 <div class="cv-section" id="section-profile">
@@ -387,44 +336,6 @@
         </div>
     </div>
 
-    <!-- ADD CASE STUDY MODAL -->
-    <div class="modal-overlay" id="add-casestudy-modal" onclick="if(event.target === this) closeAddCaseStudyModal()">
-        <div class="modal">
-            <h3>Add New Case Study</h3>
-            <label class="modal-label">Client/Project Name *</label>
-            <input type="text" class="modal-input" id="new-cs-name" placeholder="e.g., Juniper Networks">
-
-            <label class="modal-label">Case Study Title</label>
-            <input type="text" class="modal-input" id="new-cs-title" placeholder="e.g., The Now Way to Network">
-
-            <label class="modal-label">Brief</label>
-            <input type="text" class="modal-input" id="new-cs-brief" placeholder="What was the challenge?">
-
-            <label class="modal-label">Research</label>
-            <input type="text" class="modal-input" id="new-cs-research" placeholder="What did you discover?">
-
-            <label class="modal-label">Insight</label>
-            <input type="text" class="modal-input" id="new-cs-insight" placeholder="The key insight">
-
-            <label class="modal-label">Strategy</label>
-            <input type="text" class="modal-input" id="new-cs-strategy" placeholder="Your strategic approach">
-
-            <label class="modal-label">Proposition</label>
-            <input type="text" class="modal-input" id="new-cs-proposition" placeholder="The proposition/platform">
-
-            <label class="modal-label">Campaign</label>
-            <input type="text" class="modal-input" id="new-cs-campaign" placeholder="What was delivered?">
-
-            <label class="modal-label">Results</label>
-            <input type="text" class="modal-input" id="new-cs-results" placeholder="Measurable outcomes">
-
-            <div class="modal-buttons">
-                <button class="modal-btn modal-btn-secondary" onclick="closeAddCaseStudyModal()">Cancel</button>
-                <button class="modal-btn modal-btn-primary" onclick="addNewCaseStudy()">Add Case Study</button>
-            </div>
-        </div>
-    </div>
-
     <script>
         const profiles = {
             original: `I'm a Senior Strategist with 20+ years experience delivering strategic thinking across financial services, B2B tech and complex global brands including UBS, AMD and UPS. I am passionate about brand transformation that results in creative work which wins awards and moves the needle. My thread is connecting insight, ideas, infrastructure and people—and staying until it's embedded.`,
@@ -489,216 +400,7 @@
             a.download = 'Donald_Pirie_CV.html';
             a.click();
         }
-
-        function downloadAsWord() {
-            // Get CV content and clean it up for Word
-            const cvContent = document.getElementById('cv-document').cloneNode(true);
-
-            // Remove hidden elements
-            cvContent.querySelectorAll('.hidden').forEach(el => el.remove());
-
-            // Create Word-compatible HTML with proper styling
-            const wordHtml = `
-<!DOCTYPE html>
-<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word" xmlns="http://www.w3.org/TR/REC-html40">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <title>Donald Pirie CV</title>
-    <!--[if gte mso 9]>
-    <xml>
-        <w:WordDocument>
-            <w:View>Print</w:View>
-            <w:Zoom>100</w:Zoom>
-        </w:WordDocument>
-    </xml>
-    <![endif]-->
-    <style>
-        @page { size: A4; margin: 2.5cm; }
-        body { font-family: Calibri, Arial, sans-serif; font-size: 11pt; line-height: 1.5; color: #2c3e50; }
-        .cv-name { font-size: 24pt; font-weight: bold; text-transform: uppercase; margin-bottom: 6pt; color: #2c3e50; }
-        .cv-title { font-size: 12pt; font-style: italic; color: #555555; margin-bottom: 8pt; }
-        .cv-contact { font-size: 10pt; color: #666666; margin-bottom: 18pt; }
-        .cv-section { margin-bottom: 18pt; }
-        .cv-section-title { font-size: 12pt; font-weight: bold; color: #2c3e50; margin-bottom: 8pt; border-bottom: 1pt solid #2c3e50; padding-bottom: 4pt; }
-        .cv-profile { font-size: 11pt; color: #444444; margin-bottom: 18pt; }
-        .cv-skills { font-size: 10pt; color: #444444; }
-        .cv-highlights, .cv-exp-bullets, .cv-edu-list { margin-left: 18pt; font-size: 10pt; color: #444444; }
-        .cv-highlights li, .cv-exp-bullets li, .cv-edu-list li { margin-bottom: 4pt; }
-        .cv-experience-block { margin-bottom: 14pt; }
-        .cv-exp-header { font-size: 11pt; font-weight: bold; color: #2c3e50; margin-bottom: 2pt; }
-        .cv-exp-meta { font-size: 10pt; color: #666666; margin-bottom: 6pt; }
-        .cv-edu-section { margin-bottom: 8pt; }
-        .cv-edu-title { font-size: 10pt; font-weight: bold; color: #2c3e50; }
-        .cv-testimonial { background-color: #f8f9fa; padding: 12pt; margin-bottom: 10pt; border-left: 3pt solid #7B2CBF; }
-        .cv-testimonial-quote { font-size: 10pt; font-style: italic; color: #444444; }
-        .cv-testimonial-author { font-size: 9pt; color: #666666; margin-top: 6pt; }
-        .cv-case-study { background-color: #f8f9fa; padding: 12pt; margin-bottom: 12pt; border-left: 3pt solid #E63946; }
-        .cv-case-study-title { font-size: 11pt; font-weight: bold; color: #E63946; margin-bottom: 8pt; }
-        .cv-case-study-grid { font-size: 10pt; }
-        .cv-case-study-label { font-weight: bold; color: #666666; }
-        a { color: #2c3e50; text-decoration: none; }
-    </style>
-</head>
-<body>
-    ${cvContent.innerHTML}
-</body>
-</html>`;
-
-            // Create blob and download
-            const blob = new Blob([wordHtml], { type: 'application/msword' });
-            const a = document.createElement('a');
-            a.href = URL.createObjectURL(blob);
-            a.download = 'Donald_Pirie_CV.doc';
-            a.click();
-        }
         document.addEventListener('DOMContentLoaded', updateProposition);
-
-        // Case Study Management
-        let caseStudyCounter = 0;
-
-        function openAddCaseStudyModal() {
-            document.getElementById('add-casestudy-modal').classList.add('active');
-            document.getElementById('new-cs-name').focus();
-        }
-
-        function closeAddCaseStudyModal() {
-            document.getElementById('add-casestudy-modal').classList.remove('active');
-            // Clear form
-            ['name', 'title', 'brief', 'research', 'insight', 'strategy', 'proposition', 'campaign', 'results'].forEach(field => {
-                document.getElementById('new-cs-' + field).value = '';
-            });
-        }
-
-        function addNewCaseStudy() {
-            const name = document.getElementById('new-cs-name').value.trim();
-            if (!name) { alert('Please enter a client/project name'); return; }
-
-            const id = 'custom-' + (++caseStudyCounter);
-            const title = document.getElementById('new-cs-title').value.trim() || name;
-            const brief = document.getElementById('new-cs-brief').value.trim() || '[Add brief]';
-            const research = document.getElementById('new-cs-research').value.trim() || '[Add research]';
-            const insight = document.getElementById('new-cs-insight').value.trim() || '[Add insight]';
-            const strategy = document.getElementById('new-cs-strategy').value.trim() || '[Add strategy]';
-            const proposition = document.getElementById('new-cs-proposition').value.trim() || '[Add proposition]';
-            const campaign = document.getElementById('new-cs-campaign').value.trim() || '[Add campaign details]';
-            const results = document.getElementById('new-cs-results').value.trim() || '[Add results]';
-
-            // Add toggle in sidebar
-            const toggleGroup = document.getElementById('case-study-toggles');
-            const toggleItem = document.createElement('div');
-            toggleItem.className = 'toggle-item';
-            toggleItem.id = 'toggle-' + id;
-            toggleItem.innerHTML = `<span>${name}</span><div style="display:flex;align-items:center;gap:8px;"><label class="toggle-switch"><input type="checkbox" checked onchange="toggleCaseStudy('${id}', this.checked)"><span class="toggle-slider"></span></label><button class="btn-delete" onclick="deleteCaseStudy('${id}')" title="Delete">×</button></div>`;
-            toggleGroup.appendChild(toggleItem);
-
-            // Add case study to CV
-            const caseStudiesSection = document.getElementById('section-casestudies');
-            const caseStudyDiv = document.createElement('div');
-            caseStudyDiv.className = 'cv-case-study';
-            caseStudyDiv.id = 'casestudy-' + id;
-            caseStudyDiv.innerHTML = `
-                <div class="cv-case-study-title">Case Study: ${name} – "${title}"</div>
-                <div class="cv-case-study-grid" contenteditable="true">
-                    <div class="cv-case-study-label">Brief:</div><div>${brief}</div>
-                    <div class="cv-case-study-label">Research:</div><div>${research}</div>
-                    <div class="cv-case-study-label">Insight:</div><div>${insight}</div>
-                    <div class="cv-case-study-label">Strategy:</div><div>${strategy}</div>
-                    <div class="cv-case-study-label">Proposition:</div><div>${proposition}</div>
-                    <div class="cv-case-study-label">Campaign:</div><div>${campaign}</div>
-                    <div class="cv-case-study-label">Results:</div><div>${results}</div>
-                </div>
-            `;
-            caseStudiesSection.appendChild(caseStudyDiv);
-
-            // Show case studies section
-            caseStudiesSection.classList.remove('hidden');
-
-            closeAddCaseStudyModal();
-        }
-
-        function deleteCaseStudy(id) {
-            if (!confirm('Delete this case study?')) return;
-
-            // Remove from CV
-            const caseStudy = document.getElementById('casestudy-' + id);
-            if (caseStudy) caseStudy.remove();
-
-            // Remove toggle from sidebar
-            const toggle = document.getElementById('toggle-' + id);
-            if (toggle) toggle.remove();
-
-            // Hide case studies section if none visible
-            const anyVisible = document.querySelectorAll('.cv-case-study').length > 0;
-            if (!anyVisible) {
-                document.getElementById('section-casestudies').classList.add('hidden');
-            }
-        }
-
-        // Template Switching
-        function changeTemplate(template) {
-            const cvDoc = document.getElementById('cv-document');
-            const cvName = cvDoc.querySelector('.cv-name');
-            const cvTitle = cvDoc.querySelector('.cv-title');
-            const sectionTitles = cvDoc.querySelectorAll('.cv-section-title');
-
-            // Reset styles
-            cvDoc.style.fontFamily = "'Inter', sans-serif";
-            cvDoc.style.background = 'white';
-            cvName.style.color = '#2c3e50';
-            cvName.style.borderBottom = 'none';
-            cvName.style.paddingBottom = '0';
-            if (cvTitle) {
-                cvTitle.style.color = '#555';
-                cvTitle.style.borderLeft = 'none';
-                cvTitle.style.paddingLeft = '0';
-            }
-            sectionTitles.forEach(t => {
-                t.style.color = '#2c3e50';
-                t.style.background = 'none';
-                t.style.padding = '0';
-                t.style.borderRadius = '0';
-            });
-
-            if (template === 'modern') {
-                // Modern - clean, minimal
-                cvName.style.color = '#2c3e50';
-                cvName.style.borderBottom = '3px solid #667eea';
-                cvName.style.paddingBottom = '10px';
-                sectionTitles.forEach(t => {
-                    t.style.color = '#667eea';
-                    t.style.borderBottom = '2px solid #667eea';
-                    t.style.paddingBottom = '5px';
-                });
-            } else if (template === 'classic') {
-                // Classic - traditional serif
-                cvDoc.style.fontFamily = "'Georgia', 'Times New Roman', serif";
-                cvName.style.color = '#1a1a1a';
-                cvName.style.borderBottom = '2px solid #333';
-                cvName.style.paddingBottom = '8px';
-                sectionTitles.forEach(t => {
-                    t.style.color = '#333';
-                    t.style.borderBottom = '1px solid #999';
-                    t.style.paddingBottom = '5px';
-                });
-            } else if (template === 'creative') {
-                // Creative - bold colors
-                cvName.style.color = '#E63946';
-                cvName.style.borderBottom = '4px solid #E63946';
-                cvName.style.paddingBottom = '10px';
-                if (cvTitle) {
-                    cvTitle.style.color = '#7B2CBF';
-                    cvTitle.style.borderLeft = '4px solid #7B2CBF';
-                    cvTitle.style.paddingLeft = '15px';
-                }
-                sectionTitles.forEach(t => {
-                    t.style.background = 'linear-gradient(135deg, #E63946 0%, #7B2CBF 100%)';
-                    t.style.color = 'white';
-                    t.style.padding = '8px 15px';
-                    t.style.borderRadius = '5px';
-                });
-            }
-        }
     </script>
 </body>
 </html>

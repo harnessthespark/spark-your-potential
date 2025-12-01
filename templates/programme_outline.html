@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Career Booster Programme - What You'll Receive</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #f8f9fa;
+            color: #333;
+            line-height: 1.7;
+        }
+        .document-container {
+            max-width: 800px;
+            margin: 40px auto;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 4px 30px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 50px 40px;
+            text-align: center;
+            color: white;
+        }
+        .header-icon {
+            font-size: 3em;
+            margin-bottom: 15px;
+        }
+        .header h1 {
+            font-size: 2.2em;
+            font-weight: 800;
+            margin-bottom: 10px;
+        }
+        .header .subtitle {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+        .content {
+            padding: 50px 40px;
+        }
+        .intro {
+            font-size: 1.1em;
+            color: #555;
+            margin-bottom: 40px;
+            padding-bottom: 30px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+        .section-title {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 1.4em;
+            font-weight: 700;
+            color: #333;
+            margin: 40px 0 25px 0;
+        }
+        .section-title:first-of-type { margin-top: 0; }
+        .section-icon {
+            font-size: 1.2em;
+        }
+
+        /* Toolkit Cards */
+        .toolkit-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        .toolkit-card {
+            background: #f8f9fa;
+            border-left: 4px solid #667eea;
+            border-radius: 0 12px 12px 0;
+            padding: 25px;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .toolkit-card:hover {
+            transform: translateX(5px);
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+        }
+        .toolkit-card h3 {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.15em;
+            color: #333;
+            margin-bottom: 10px;
+        }
+        .toolkit-card h3 .card-icon {
+            font-size: 1.3em;
+        }
+        .toolkit-card p {
+            color: #666;
+            font-size: 0.95em;
+        }
+
+        /* Week Journey */
+        .journey-timeline {
+            position: relative;
+            padding-left: 30px;
+        }
+        .journey-timeline::before {
+            content: '';
+            position: absolute;
+            left: 10px;
+            top: 0;
+            bottom: 0;
+            width: 3px;
+            background: linear-gradient(to bottom, #667eea, #764ba2, #FF6B6B, #4ECDC4);
+            border-radius: 3px;
+        }
+        .week-item {
+            position: relative;
+            margin-bottom: 30px;
+            padding-left: 30px;
+        }
+        .week-item:last-child { margin-bottom: 0; }
+        .week-badge {
+            position: absolute;
+            left: -30px;
+            top: 0;
+            width: 50px;
+            height: 50px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.75em;
+            color: white;
+            text-align: center;
+            line-height: 1.2;
+        }
+        .week-1 .week-badge { background: #667eea; }
+        .week-2 .week-badge { background: #764ba2; }
+        .week-3 .week-badge { background: #FF6B6B; }
+        .week-4 .week-badge { background: #4ECDC4; }
+        .week-item h4 {
+            font-size: 1.1em;
+            color: #333;
+            margin-bottom: 8px;
+        }
+        .week-item p {
+            color: #666;
+            font-size: 0.95em;
+            margin-bottom: 10px;
+        }
+        .week-deliverables {
+            color: #667eea;
+            font-size: 0.9em;
+            font-weight: 500;
+        }
+
+        /* Outcomes */
+        .outcomes-box {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-radius: 12px;
+            padding: 30px;
+            margin-top: 20px;
+        }
+        .outcome-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            margin-bottom: 15px;
+        }
+        .outcome-item:last-child { margin-bottom: 0; }
+        .outcome-check {
+            color: #28a745;
+            font-size: 1.2em;
+            flex-shrink: 0;
+        }
+        .outcome-text {
+            color: #555;
+        }
+
+        /* How It Works */
+        .how-it-works {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 25px;
+            margin-top: 20px;
+        }
+        .how-it-works p {
+            margin-bottom: 10px;
+            font-size: 0.95em;
+        }
+        .how-it-works p:last-child { margin-bottom: 0; }
+        .how-it-works strong {
+            color: #667eea;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            background: linear-gradient(135deg, #FF6B6B 0%, #FF8E53 100%);
+            border-radius: 16px;
+            padding: 40px;
+            text-align: center;
+            color: white;
+            margin-top: 40px;
+        }
+        .cta-section h3 {
+            font-size: 1.5em;
+            margin-bottom: 10px;
+        }
+        .cta-section p {
+            opacity: 0.9;
+            margin-bottom: 20px;
+        }
+        .cta-price {
+            font-size: 2em;
+            font-weight: 800;
+            margin-bottom: 20px;
+        }
+        .cta-btn {
+            display: inline-block;
+            background: white;
+            color: #FF6B6B;
+            padding: 15px 40px;
+            border-radius: 10px;
+            font-weight: 700;
+            font-size: 1.1em;
+            text-decoration: none;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .cta-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+        }
+
+        .footer {
+            background: #333;
+            color: white;
+            padding: 30px 40px;
+            text-align: center;
+        }
+        .footer p {
+            margin-bottom: 5px;
+            opacity: 0.9;
+        }
+        .footer a {
+            color: #4ECDC4;
+            text-decoration: none;
+        }
+
+        /* Client personalisation */
+        .client-greeting {
+            background: linear-gradient(135deg, #4ECDC4 0%, #44A08D 100%);
+            color: white;
+            padding: 20px 30px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        .client-greeting .greeting-icon {
+            font-size: 2em;
+        }
+        .client-greeting h3 {
+            font-size: 1.2em;
+            margin-bottom: 5px;
+        }
+        .client-greeting p {
+            opacity: 0.9;
+            font-size: 0.95em;
+        }
+
+        @media (max-width: 600px) {
+            .content { padding: 30px 20px; }
+            .header { padding: 40px 20px; }
+            .week-item { padding-left: 20px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="document-container">
+        <div class="header">
+            <div class="header-icon">🚀</div>
+            <h1>Career Booster Programme</h1>
+            <p class="subtitle">What You'll Receive</p>
+        </div>
+
+        <div class="content">
+            <!-- Personalised greeting (shown when client name is provided) -->
+            <div class="client-greeting" id="clientGreeting" style="display: none;">
+                <div class="greeting-icon">👋</div>
+                <div>
+                    <h3>Welcome, <span id="clientNameDisplay">{{CLIENT_NAME}}</span>!</h3>
+                    <p>Here's everything you'll receive in your programme.</p>
+                </div>
+            </div>
+
+            <p class="intro">
+                Over <span id="programmeWeeks">4 weeks</span>, we'll build your complete career toolkit together. Each session adds to your package, so by the end you'll have everything you need to position yourself with clarity and confidence.
+            </p>
+
+            <div class="section-title">
+                <span class="section-icon">📦</span>
+                Your Complete Toolkit
+            </div>
+
+            <div class="toolkit-grid">
+                <div class="toolkit-card">
+                    <h3><span class="card-icon">📘</span> Career Blueprint</h3>
+                    <p>Your master reference document. Captures your unique patterns, positioning, evidence of impact, and what you need to thrive. We build this together across all sessions — it becomes your "source of truth" for career decisions.</p>
+                </div>
+
+                <div class="toolkit-card">
+                    <h3><span class="card-icon">📝</span> Interactive CV Builder</h3>
+                    <p>An editable CV template pre-loaded with your content. Draft your proposition, toggle sections on/off, pull from your Blueprint, and export as PDF. Create tailored CVs for different opportunities in minutes.</p>
+                </div>
+
+                <div class="toolkit-card">
+                    <h3><span class="card-icon">🗺️</span> Blueprint to CV/LinkedIn Mapping Guide</h3>
+                    <p>Your translation key. Shows exactly where each piece of your Blueprint lands in your CV and LinkedIn profile. Includes the proposition formula with your examples, so you know precisely what goes where.</p>
+                </div>
+
+                <div class="toolkit-card">
+                    <h3><span class="card-icon">⚖️</span> Decision Framework</h3>
+                    <p>A reusable scorecard for evaluating any opportunity against your patterns. Based on four core tests: Belief Transformation, Authenticity, Sustainability, and Growth & Impact. Never second-guess a career decision again.</p>
+                </div>
+
+                <div class="toolkit-card">
+                    <h3><span class="card-icon">🤖</span> AI Prompt Library</h3>
+                    <p>Custom prompts pre-loaded with your positioning. Use them in ChatGPT or Claude for CV tailoring, cover letters, interview prep, networking messages, and ongoing career support. Your personal AI career assistant.</p>
+                </div>
+            </div>
+
+            <div class="section-title">
+                <span class="section-icon">📅</span>
+                Your <span id="journeyWeeks">4</span>-Week Journey
+            </div>
+
+            <div class="journey-timeline">
+                <div class="week-item week-1">
+                    <div class="week-badge">Week<br>1</div>
+                    <h4>Foundation</h4>
+                    <p>Discover your core patterns, evidence of impact, and the thread that runs through your career.</p>
+                    <div class="week-deliverables">→ Blueprint (Week 1)</div>
+                </div>
+
+                <div class="week-item week-2">
+                    <div class="week-badge">Week<br>2</div>
+                    <h4>Career Direction</h4>
+                    <p>Deep pattern analysis. Define your 10/10 authentic role, what charges vs drains you, and your non-negotiables.</p>
+                    <div class="week-deliverables">→ Blueprint (Week 2) + Decision Framework</div>
+                </div>
+
+                <div class="week-item week-3">
+                    <div class="week-badge">Week<br>3</div>
+                    <h4>Positioning & Narrative</h4>
+                    <p>Craft your positioning statement, develop your "I Am / I Am Not" contrasts, sharpen your career narrative.</p>
+                    <div class="week-deliverables">→ Blueprint (Week 3) + CV Builder + Mapping Guide</div>
+                </div>
+
+                <div class="week-item week-4">
+                    <div class="week-badge">Week<br>4</div>
+                    <h4>Implementation</h4>
+                    <p>Walk through your CV and LinkedIn together. Practical application of everything we've built. Clear next steps.</p>
+                    <div class="week-deliverables">→ Complete Blueprint + AI Prompt Library + Final Toolkit</div>
+                </div>
+
+                <!-- Additional weeks for 8-week programme -->
+                <div class="week-item week-5" id="week5" style="display: none;">
+                    <div class="week-badge" style="background: #9B59B6;">Week<br>5</div>
+                    <h4>LinkedIn Optimisation</h4>
+                    <p>Transform your LinkedIn profile to reflect your authentic positioning. Strategic networking approach.</p>
+                    <div class="week-deliverables">→ LinkedIn Profile Review + Networking Strategy</div>
+                </div>
+
+                <div class="week-item week-6" id="week6" style="display: none;">
+                    <div class="week-badge" style="background: #E74C3C;">Week<br>6</div>
+                    <h4>Interview Preparation</h4>
+                    <p>Master your story for interviews. Practice responses that showcase your unique value.</p>
+                    <div class="week-deliverables">→ Interview Framework + Practice Session</div>
+                </div>
+
+                <div class="week-item week-7" id="week7" style="display: none;">
+                    <div class="week-badge" style="background: #F39C12;">Week<br>7</div>
+                    <h4>Job Search Strategy</h4>
+                    <p>Create your personalised job search plan. Identify target companies and approach strategies.</p>
+                    <div class="week-deliverables">→ Job Search Plan + Target List</div>
+                </div>
+
+                <div class="week-item week-8" id="week8" style="display: none;">
+                    <div class="week-badge" style="background: #27AE60;">Week<br>8</div>
+                    <h4>Launch & Support</h4>
+                    <p>Final review of all materials. Action plan for the next 90 days. Ongoing support structure.</p>
+                    <div class="week-deliverables">→ 90-Day Action Plan + Complete Toolkit + Ongoing AI Support</div>
+                </div>
+            </div>
+
+            <div class="section-title">
+                <span class="section-icon">✨</span>
+                By the End, You'll Have
+            </div>
+
+            <div class="outcomes-box">
+                <div class="outcome-item">
+                    <span class="outcome-check">✓</span>
+                    <span class="outcome-text">Clear understanding of your career patterns and what you need to thrive</span>
+                </div>
+                <div class="outcome-item">
+                    <span class="outcome-check">✓</span>
+                    <span class="outcome-text">Framework for evaluating opportunities — current and future</span>
+                </div>
+                <div class="outcome-item">
+                    <span class="outcome-check">✓</span>
+                    <span class="outcome-text">Authentic narrative that positions you strategically</span>
+                </div>
+                <div class="outcome-item">
+                    <span class="outcome-check">✓</span>
+                    <span class="outcome-text">Practical tools to update your CV and LinkedIn</span>
+                </div>
+                <div class="outcome-item">
+                    <span class="outcome-check">✓</span>
+                    <span class="outcome-text">Confidence in your career story and how to tell it</span>
+                </div>
+                <div class="outcome-item">
+                    <span class="outcome-check">✓</span>
+                    <span class="outcome-text">Clarity on your next steps</span>
+                </div>
+                <div class="outcome-item">
+                    <span class="outcome-check">✓</span>
+                    <span class="outcome-text">Ongoing AI support for your career journey</span>
+                </div>
+            </div>
+
+            <div class="section-title">
+                <span class="section-icon">🔄</span>
+                How Your Toolkit Works Together
+            </div>
+
+            <div class="how-it-works">
+                <p>Each document serves a different purpose in your career strategy:</p>
+                <p><strong>Blueprint</strong> = your source of truth (who you are)</p>
+                <p><strong>Mapping Guide</strong> = your translation key (where it goes)</p>
+                <p><strong>CV Builder</strong> = your output tool (how to create it)</p>
+                <p><strong>Decision Framework</strong> = your filter (should I pursue this?)</p>
+                <p><strong>AI Prompts</strong> = your ongoing support (help when you need it)</p>
+            </div>
+
+            <div class="cta-section">
+                <h3>Ready to Get Started?</h3>
+                <p>Let's build your career toolkit together.</p>
+                <div class="cta-price" id="ctaPrice">£400 + VAT</div>
+                <a href="#" class="cta-btn" id="ctaBtn">View Your Agreement</a>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p><strong>Harness the Spark</strong> | Career Booster Programme</p>
+            <p><a href="https://www.harnessthespark.com">www.harnessthespark.com</a></p>
+        </div>
+    </div>
+
+    <script>
+        // Get URL parameters
+        const urlParams = new URLSearchParams(window.location.search);
+        const clientName = urlParams.get('client');
+        const programmeType = urlParams.get('programme') || '4-week';
+
+        // Show client greeting if name provided
+        if (clientName) {
+            document.getElementById('clientGreeting').style.display = 'flex';
+            document.getElementById('clientNameDisplay').textContent = clientName;
+        }
+
+        // Configure for 8-week programme
+        if (programmeType === '8-week') {
+            document.getElementById('programmeWeeks').textContent = '8 weeks';
+            document.getElementById('journeyWeeks').textContent = '8';
+            document.getElementById('ctaPrice').textContent = '£800 + VAT';
+
+            // Show additional weeks
+            document.getElementById('week5').style.display = 'block';
+            document.getElementById('week6').style.display = 'block';
+            document.getElementById('week7').style.display = 'block';
+            document.getElementById('week8').style.display = 'block';
+        }
+
+        // Link to agreement
+        document.getElementById('ctaBtn').href = `coaching_agreement.html?client=${encodeURIComponent(clientName || '')}&programme=${programmeType}`;
+    </script>
+</body>
+</html>

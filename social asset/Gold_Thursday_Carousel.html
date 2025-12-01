@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gold Thursday Carousel</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background: #1a1a2e; padding: 40px; }
+        .instructions { background: #2d2d44; color: white; padding: 30px; border-radius: 15px; max-width: 1080px; margin: 0 auto 40px auto; }
+        .instructions h2 { margin-bottom: 15px; color: #FFB627; }
+        .instructions p { line-height: 1.7; margin-bottom: 10px; }
+        .instructions ol { margin-left: 20px; line-height: 2; }
+        
+        .carousel-container { display: flex; flex-wrap: wrap; gap: 30px; justify-content: center; }
+        
+        .slide { 
+            width: 1080px; 
+            height: 1080px; 
+            border-radius: 20px; 
+            overflow: hidden;
+            position: relative;
+            flex-shrink: 0;
+        }
+        
+        .slide-number {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(0,0,0,0.3);
+            color: white;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+        
+        /* Slide 1: Hook */
+        .slide-1 {
+            background: linear-gradient(135deg, #E63946 0%, #D81B60 50%, #7B2CBF 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 80px;
+            color: white;
+        }
+        .slide-1 h1 { font-size: 3.5em; font-weight: 800; line-height: 1.2; margin-bottom: 40px; }
+        .slide-1 p { font-size: 1.8em; opacity: 0.9; }
+        
+        /* Slide 2: The Problem */
+        .slide-2 {
+            background: #1a1a2e;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 80px;
+            color: white;
+        }
+        .slide-2 h2 { font-size: 2.5em; margin-bottom: 50px; color: #FFB627; }
+        .slide-2 .problem-item { 
+            display: flex; 
+            align-items: flex-start; 
+            margin-bottom: 35px;
+            font-size: 1.5em;
+            line-height: 1.5;
+        }
+        .slide-2 .problem-item .icon { 
+            margin-right: 20px; 
+            font-size: 1.2em;
+        }
+        .slide-2 .dim { opacity: 0.5; }
+        .slide-2 .bright { color: #FF6B6B; }
+        
+        /* Slide 3: The Solution */
+        .slide-3 {
+            background: linear-gradient(180deg, #1a1a2e 0%, #2d2d44 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 80px;
+            color: white;
+            text-align: center;
+        }
+        .slide-3 h2 { font-size: 2.8em; margin-bottom: 60px; }
+        .slide-3 .tools { display: flex; gap: 40px; justify-content: center; }
+        .slide-3 .tool { 
+            background: rgba(255,255,255,0.1); 
+            padding: 40px 35px; 
+            border-radius: 20px; 
+            text-align: center;
+            width: 280px;
+        }
+        .slide-3 .tool-icon { font-size: 4em; margin-bottom: 20px; }
+        .slide-3 .tool-name { font-size: 1.4em; font-weight: 700; margin-bottom: 10px; }
+        .slide-3 .tool-desc { font-size: 1.1em; opacity: 0.8; }
+        .slide-3 .arrow { font-size: 3em; color: #FFB627; align-self: center; }
+        
+        /* Slide 4: Blueprint Preview */
+        .slide-4 {
+            background: #f5f5f5;
+            padding: 60px;
+            display: flex;
+            flex-direction: column;
+        }
+        .slide-4 .label { 
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 12px 25px;
+            border-radius: 30px;
+            font-weight: 600;
+            font-size: 1.1em;
+            align-self: flex-start;
+            margin-bottom: 30px;
+        }
+        .slide-4 .preview-card {
+            background: white;
+            border-radius: 20px;
+            padding: 50px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.1);
+            flex: 1;
+        }
+        .slide-4 .preview-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px 40px;
+            border-radius: 15px;
+            margin-bottom: 40px;
+            text-align: center;
+        }
+        .slide-4 .preview-header h3 { font-size: 2em; margin-bottom: 10px; }
+        .slide-4 .preview-header p { opacity: 0.9; font-size: 1.2em; }
+        .slide-4 .pattern-box {
+            background: linear-gradient(135deg, #667eea15 0%, #764ba215 100%);
+            border-left: 5px solid #667eea;
+            padding: 40px;
+            border-radius: 15px;
+        }
+        .slide-4 .pattern-label { 
+            color: #667eea; 
+            font-weight: 700; 
+            font-size: 1.3em;
+            margin-bottom: 20px;
+        }
+        .slide-4 .pattern-text { 
+            font-size: 1.8em; 
+            line-height: 1.5; 
+            color: #2c3e50;
+        }
+        .slide-4 .highlight { 
+            background: #FFB627; 
+            padding: 2px 8px; 
+            border-radius: 4px;
+        }
+        
+        /* Slide 5: Mapping Guide */
+        .slide-5 {
+            background: #f5f5f5;
+            padding: 60px;
+            display: flex;
+            flex-direction: column;
+        }
+        .slide-5 .label { 
+            background: linear-gradient(135deg, #FF6B35 0%, #FFB627 100%);
+            color: white;
+            padding: 12px 25px;
+            border-radius: 30px;
+            font-weight: 600;
+            font-size: 1.1em;
+            align-self: flex-start;
+            margin-bottom: 30px;
+        }
+        .slide-5 .formula-card {
+            background: white;
+            border-radius: 20px;
+            padding: 50px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.1);
+            flex: 1;
+        }
+        .slide-5 h3 { font-size: 1.8em; color: #2c3e50; margin-bottom: 40px; text-align: center; }
+        .slide-5 .formula {
+            background: #2c3e50;
+            color: white;
+            padding: 40px;
+            border-radius: 15px;
+            font-size: 1.4em;
+            line-height: 2;
+            margin-bottom: 40px;
+        }
+        .slide-5 .formula .var { color: #FFB627; }
+        .slide-5 .mapping-row {
+            display: flex;
+            align-items: center;
+            padding: 20px 0;
+            border-bottom: 1px solid #e0e0e0;
+            font-size: 1.2em;
+        }
+        .slide-5 .mapping-row:last-child { border-bottom: none; }
+        .slide-5 .mapping-from { 
+            flex: 1; 
+            color: #667eea;
+            font-weight: 600;
+        }
+        .slide-5 .mapping-arrow { 
+            padding: 0 30px; 
+            color: #FFB627;
+            font-size: 1.5em;
+        }
+        .slide-5 .mapping-to { 
+            flex: 1; 
+            color: #2c3e50;
+        }
+        
+        /* Slide 6: CV Builder */
+        .slide-6 {
+            background: #f5f5f5;
+            padding: 60px;
+            display: flex;
+            flex-direction: column;
+        }
+        .slide-6 .label { 
+            background: linear-gradient(135deg, #4CAF50 0%, #8BC34A 100%);
+            color: white;
+            padding: 12px 25px;
+            border-radius: 30px;
+            font-weight: 600;
+            font-size: 1.1em;
+            align-self: flex-start;
+            margin-bottom: 30px;
+        }
+        .slide-6 .builder-preview {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.1);
+            flex: 1;
+            display: flex;
+            overflow: hidden;
+        }
+        .slide-6 .sidebar {
+            width: 320px;
+            background: #2c3e50;
+            color: white;
+            padding: 35px;
+        }
+        .slide-6 .sidebar h4 { 
+            font-size: 1.1em; 
+            margin-bottom: 25px;
+            color: #FFB627;
+        }
+        .slide-6 .sidebar input {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            font-size: 0.95em;
+        }
+        .slide-6 .sidebar .preview-text {
+            background: rgba(255,255,255,0.1);
+            padding: 20px;
+            border-radius: 10px;
+            font-size: 0.95em;
+            line-height: 1.6;
+            margin-top: 20px;
+        }
+        .slide-6 .cv-preview {
+            flex: 1;
+            padding: 40px;
+        }
+        .slide-6 .cv-name { 
+            font-size: 2.5em; 
+            font-weight: 700; 
+            text-transform: uppercase;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+        .slide-6 .cv-title { 
+            font-size: 1.2em; 
+            color: #667eea;
+            font-style: italic;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #e0e0e0;
+        }
+        .slide-6 .cv-section-title {
+            font-size: 1em;
+            font-weight: 700;
+            color: #2c3e50;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin: 25px 0 15px 0;
+        }
+        .slide-6 .cv-profile {
+            font-size: 1.1em;
+            line-height: 1.7;
+            color: #444;
+        }
+        
+        /* Slide 7: Before/After */
+        .slide-7 {
+            background: #1a1a2e;
+            padding: 80px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            color: white;
+        }
+        .slide-7 h2 { 
+            font-size: 2.5em; 
+            text-align: center; 
+            margin-bottom: 60px;
+        }
+        .slide-7 .comparison {
+            display: flex;
+            gap: 40px;
+        }
+        .slide-7 .before, .slide-7 .after {
+            flex: 1;
+            padding: 50px;
+            border-radius: 20px;
+        }
+        .slide-7 .before {
+            background: rgba(255,107,107,0.2);
+            border: 2px solid #FF6B6B;
+        }
+        .slide-7 .after {
+            background: rgba(78,205,196,0.2);
+            border: 2px solid #4ECDC4;
+        }
+        .slide-7 .label-tag {
+            font-size: 1em;
+            font-weight: 700;
+            margin-bottom: 25px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+        .slide-7 .before .label-tag { color: #FF6B6B; }
+        .slide-7 .after .label-tag { color: #4ECDC4; }
+        .slide-7 .comparison-text {
+            font-size: 1.6em;
+            line-height: 1.5;
+        }
+        
+        /* Slide 8: CTA */
+        .slide-8 {
+            background: linear-gradient(135deg, #E63946 0%, #FF6B35 50%, #FFB627 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 80px;
+            color: white;
+        }
+        .slide-8 .spark-icon { font-size: 5em; margin-bottom: 30px; }
+        .slide-8 h2 { font-size: 2.8em; margin-bottom: 20px; font-weight: 800; }
+        .slide-8 .event-details {
+            font-size: 1.8em;
+            margin-bottom: 50px;
+            line-height: 1.8;
+        }
+        .slide-8 .cta-box {
+            background: white;
+            color: #E63946;
+            padding: 25px 60px;
+            border-radius: 50px;
+            font-size: 1.5em;
+            font-weight: 700;
+        }
+        .slide-8 .subtext {
+            margin-top: 40px;
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="instructions">
+        <h2>📸 How to Save These Slides</h2>
+        <p>Each slide below is sized for LinkedIn (1080x1080). To save them as images:</p>
+        <ol>
+            <li>Right-click on each slide → "Inspect"</li>
+            <li>Or use a screenshot tool (Cmd+Shift+4 on Mac) to capture each one</li>
+            <li>Or print this page to PDF and extract images</li>
+            <li>Upload all 8 images to LinkedIn as a carousel (document post)</li>
+        </ol>
+        <p style="margin-top: 15px;"><strong>Tip:</strong> On LinkedIn, create a "Document" post and upload these as a PDF for carousel effect.</p>
+    </div>
+
+    <div class="carousel-container">
+        
+        <!-- SLIDE 1: HOOK -->
+        <div class="slide slide-1">
+            <div class="slide-number">1/8</div>
+            <h1>You can position a £50m brand in one sentence.</h1>
+            <p>So why can't you do the same for yourself?</p>
+        </div>
+
+        <!-- SLIDE 2: THE PROBLEM -->
+        <div class="slide slide-2">
+            <div class="slide-number">2/8</div>
+            <h2>Sound familiar?</h2>
+            <div class="problem-item">
+                <span class="icon">→</span>
+                <span><span class="dim">You articulate brand purpose with ease</span><br><span class="bright">But stumble at "so what do you do?"</span></span>
+            </div>
+            <div class="problem-item">
+                <span class="icon">→</span>
+                <span><span class="dim">You create transformation frameworks</span><br><span class="bright">But your CV reads like a task list</span></span>
+            </div>
+            <div class="problem-item">
+                <span class="icon">→</span>
+                <span><span class="dim">You help clients find their voice</span><br><span class="bright">But feel like an imposter describing yours</span></span>
+            </div>
+        </div>
+
+        <!-- SLIDE 3: THE SOLUTION -->
+        <div class="slide slide-3">
+            <div class="slide-number">3/8</div>
+            <h2>I built a toolkit to fix this</h2>
+            <div class="tools">
+                <div class="tool">
+                    <div class="tool-icon">📘</div>
+                    <div class="tool-name">Blueprint</div>
+                    <div class="tool-desc">Who you are</div>
+                </div>
+                <div class="arrow">→</div>
+                <div class="tool">
+                    <div class="tool-icon">🗺️</div>
+                    <div class="tool-name">Mapping Guide</div>
+                    <div class="tool-desc">Where it goes</div>
+                </div>
+                <div class="arrow">→</div>
+                <div class="tool">
+                    <div class="tool-icon">📝</div>
+                    <div class="tool-name">CV Builder</div>
+                    <div class="tool-desc">How to create it</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 4: BLUEPRINT -->
+        <div class="slide slide-4">
+            <div class="slide-number">4/8</div>
+            <div class="label">Step 1: Blueprint</div>
+            <div class="preview-card">
+                <div class="preview-header">
+                    <h3>Career Blueprint</h3>
+                    <p>Sarah Mitchell | Strategist</p>
+                </div>
+                <div class="pattern-box">
+                    <div class="pattern-label">Your Core Pattern</div>
+                    <div class="pattern-text">
+                        You don't just create campaigns.<br>
+                        You <span class="highlight">unlock creative potential</span> in teams that have forgotten what they're capable of.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 5: MAPPING GUIDE -->
+        <div class="slide slide-5">
+            <div class="slide-number">5/8</div>
+            <div class="label">Step 2: Mapping Guide</div>
+            <div class="formula-card">
+                <h3>The Proposition Formula</h3>
+                <div class="formula">
+                    "I'm a <span class="var">[role]</span> who <span class="var">[what you do]</span> for <span class="var">[who]</span>. I <span class="var">[unique approach]</span>."
+                </div>
+                <div class="mapping-row">
+                    <div class="mapping-from">Blueprint: Core Pattern</div>
+                    <div class="mapping-arrow">→</div>
+                    <div class="mapping-to">CV: Profile section</div>
+                </div>
+                <div class="mapping-row">
+                    <div class="mapping-from">Blueprint: Evidence</div>
+                    <div class="mapping-arrow">→</div>
+                    <div class="mapping-to">CV: Key Highlights</div>
+                </div>
+                <div class="mapping-row">
+                    <div class="mapping-from">Blueprint: Your Thread</div>
+                    <div class="mapping-arrow">→</div>
+                    <div class="mapping-to">LinkedIn: Headline</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 6: CV BUILDER -->
+        <div class="slide slide-6">
+            <div class="slide-number">6/8</div>
+            <div class="label">Step 3: CV Builder</div>
+            <div class="builder-preview">
+                <div class="sidebar">
+                    <h4>Draft Your Proposition</h4>
+                    <input type="text" value="Creative Catalyst" disabled>
+                    <input type="text" value="unlocks creative potential" disabled>
+                    <input type="text" value="agencies stuck in safe mode" disabled>
+                    <div class="preview-text">
+                        "I'm a Creative Catalyst who unlocks creative potential for agencies stuck in safe mode..."
+                    </div>
+                </div>
+                <div class="cv-preview">
+                    <div class="cv-name">Sarah Mitchell</div>
+                    <div class="cv-title">Creative Catalyst | Unlocking potential in teams that have forgotten what they're capable of</div>
+                    <div class="cv-section-title">Profile</div>
+                    <div class="cv-profile">
+                        I don't just create campaigns. I unlock creative potential in teams that have forgotten what they're capable of. From Nike to Spotify to Barclays, I've helped agencies rediscover their creative edge...
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 7: BEFORE/AFTER -->
+        <div class="slide slide-7">
+            <div class="slide-number">7/8</div>
+            <h2>The Transformation</h2>
+            <div class="comparison">
+                <div class="before">
+                    <div class="label-tag">❌ Before</div>
+                    <div class="comparison-text">"Senior Strategist with 15 years experience in advertising and marketing across multiple sectors."</div>
+                </div>
+                <div class="after">
+                    <div class="label-tag">✓ After</div>
+                    <div class="comparison-text">"I unlock creative potential in teams that have forgotten what they're capable of."</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 8: CTA -->
+        <div class="slide slide-8">
+            <div class="slide-number">8/8</div>
+            <div class="spark-icon">⚡</div>
+            <h2>GOLD THURSDAY</h2>
+            <div class="event-details">
+                Free Workshop<br>
+                Thursday 28th November<br>
+                45 mins on Zoom
+            </div>
+            <div class="cta-box">Comment "GOLD" for the link</div>
+            <div class="subtext">You'll try the exercise yourself and leave with real language you can use.</div>
+        </div>
+
+    </div>
+
+</body>
+</html>
