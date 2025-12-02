@@ -174,3 +174,40 @@ This document contains important context for Claude to remember across sessions 
 2. Login to dashboard.html
 3. Verify all 3 clients show (Sarah, Donald, Raj)
 4. Test client portal login with donaldpirie111@hotmail.co.uk
+
+### 2 December 2025 - CV Builder Update & Client Portal Fixes
+
+**Backend Fix:**
+- Fixed `/api/accounts/login/` endpoint to return `is_staff` field
+- Without this, coach mode wasn't activating (only demo client showed)
+- Commit: `8efd095b` on neurospark-be
+
+**Client Portal File Path Fixes:**
+- Fixed "Cannot GET" errors when clients accessed their tools
+- Added explicit `files` object to each client in CLIENTS constant
+- Maps tool types to actual file names (e.g., `cvBuilder: 'Donald/Donald_Interactive_CV_Builder.html'`)
+- Commit: `1dd5909` on spark-your-potential
+
+**Donald's CV Builder Major Update:**
+- Complete redesign with modern two-column layout
+- **Left column (dark):** Profile, Career Highlights, Skills, Sectors
+- **Right column (light):** Career History, Education, Testimonials, Case Studies
+- **Case Studies with Hero Images:** UBS, UPS, AMD each have branded gradient hero banners
+- **Print-Ready:** Full `@media print` styling with A4 sizing, colour preservation, page breaks
+- **Updated styling:** Gold (#FFD700) and Purple (#7B2CBF) accent colours, Inter font, pill-style skill tags
+- Commit: `032997b` on spark-your-potential
+
+**Raj Samuel Questionnaire:**
+- Created `Raj_Samuel/Raj_Samuel_Discovery_Questionnaire.html`
+- Based on Donald's ability-recognition-visual.html template
+- Personalised header for Raj
+
+**Files Modified:**
+- `/neurospark-be/accounts/api_views.py` - Added is_staff to login response
+- `/spark-your-potential/client-portal.html` - Fixed file path mappings
+- `/spark-your-potential/Donald/Donald_Interactive_CV_Builder.html` - Complete redesign
+- `/spark-your-potential/Raj_Samuel/Raj_Samuel_Discovery_Questionnaire.html` - Created
+
+**Database Updates:**
+- Fixed Donald's email to `donaldpirie111@hotmail.co.uk`
+- Updated Raj Samuel's status from `discovery` to `enrolled`
