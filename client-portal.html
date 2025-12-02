@@ -348,26 +348,50 @@
     </div>
 
     <script>
-        // Client data
+        // Client data with specific file paths
         const CLIENTS = {
             'sarah.mitchell@example.com': {
                 name: 'Sarah Mitchell',
                 email: 'sarah.mitchell@example.com',
                 folder: 'sarah_mitchell_demo_client',
                 status: 'week-2',
-                isDemo: true
+                isDemo: true,
+                files: {
+                    questionnaire: 'ability-recognition-visual.html',
+                    insights: 'sarah_mitchell_demo_client/Sarah_Mitchell_Career_Insights_Report.html',
+                    blueprint: 'sarah_mitchell_demo_client/Sarah_Mitchell_Blueprint.html',
+                    cvBuilder: 'sarah_mitchell_demo_client/Sarah_Mitchell_CV_Builder.html',
+                    mappingGuide: 'sarah_mitchell_demo_client/Sarah_Mitchell_Mapping_Guide.html',
+                    decisionFramework: 'sarah_mitchell_demo_client/Sarah_Mitchell_Decision_Framework.html'
+                }
             },
             'donaldpirie111@hotmail.co.uk': {
                 name: 'Donald Pirie',
                 email: 'donaldpirie111@hotmail.co.uk',
                 folder: 'Donald',
-                status: 'complete'
+                status: 'complete',
+                files: {
+                    questionnaire: 'Donald/donald-questionnaire-responses.html',
+                    insights: 'Donald/Donald_Pirie_Career_Insights_Report.html',
+                    blueprint: 'Donald/Donald_Pirie_Career_Blueprint_LIVE.html',
+                    cvBuilder: 'Donald/Donald_Interactive_CV_Builder.html',
+                    mappingGuide: 'Donald/Donald_Blueprint_CV_LinkedIn_Mapping_Guide.html',
+                    decisionFramework: 'Donald/Donald_Decision_Framework_Updated.html'
+                }
             },
             'rs@rajsamuel.net': {
                 name: 'Raj Samuel',
                 email: 'rs@rajsamuel.net',
                 folder: 'Raj_Samuel',
-                status: 'pre-programme'
+                status: 'pre-programme',
+                files: {
+                    questionnaire: 'Raj_Samuel/Raj_Samuel_Discovery_Questionnaire.html',
+                    insights: 'Raj_Samuel/Raj_Samuel_Career_Insights_Report.html',
+                    blueprint: 'Raj_Samuel/Raj_Samuel_Blueprint.html',
+                    cvBuilder: 'Raj_Samuel/Raj_Samuel_CV_Builder.html',
+                    mappingGuide: 'Raj_Samuel/Raj_Samuel_Mapping_Guide.html',
+                    decisionFramework: 'Raj_Samuel/Raj_Samuel_Decision_Framework.html'
+                }
             }
         };
 
@@ -478,12 +502,14 @@
             const folder = client.folder;
             const nameUnderscored = client.name.replace(/\s+/g, '_');
 
+            // Use client-specific file paths if available, otherwise fall back to generated names
+            const files = client.files || {};
             const tools = [
                 {
                     icon: '📝',
                     title: 'Discovery Questionnaire',
                     description: 'Deep reflection questions about your patterns, superpowers, and career journey. Your answers fuel the analysis.',
-                    file: 'ability-recognition-visual.html',
+                    file: files.questionnaire || 'ability-recognition-visual.html',
                     btnText: 'View Responses',
                     unlockStage: 0,
                     statusWhenComplete: 'completed'
@@ -492,7 +518,7 @@
                     icon: '📊',
                     title: 'Career Insights Report',
                     description: "Lisa's deep-dive analysis of your questionnaire responses. Your core pattern, unique thread, and career direction.",
-                    file: `${folder}/${nameUnderscored}_Career_Insights_Report.html`,
+                    file: files.insights || `${folder}/${nameUnderscored}_Career_Insights_Report.html`,
                     btnText: 'View Report',
                     unlockStage: 1,
                     statusWhenComplete: 'completed'
@@ -501,7 +527,7 @@
                     icon: '📘',
                     title: 'Transformation Blueprint',
                     description: 'Your complete positioning document built through coaching sessions. Evidence, belief moments, unique thread.',
-                    file: `${folder}/${nameUnderscored}_Blueprint.html`,
+                    file: files.blueprint || `${folder}/${nameUnderscored}_Blueprint.html`,
                     btnText: 'View Blueprint',
                     unlockStage: 2,
                     statusWhenComplete: 'completed'
@@ -510,7 +536,7 @@
                     icon: '📄',
                     title: 'CV Builder',
                     description: 'Build your CV with fields pre-filled from your Blueprint. Edit and refine your positioning.',
-                    file: `${folder}/${nameUnderscored}_CV_Builder.html`,
+                    file: files.cvBuilder || `${folder}/${nameUnderscored}_CV_Builder.html`,
                     btnText: 'Open Builder',
                     secondaryBtn: 'Export PDF',
                     unlockStage: 3,
@@ -520,7 +546,7 @@
                     icon: '🗺️',
                     title: 'Mapping Guide',
                     description: 'A visual guide showing where your Blueprint content goes across LinkedIn, CV, and interviews.',
-                    file: `${folder}/${nameUnderscored}_Mapping_Guide.html`,
+                    file: files.mappingGuide || `${folder}/${nameUnderscored}_Mapping_Guide.html`,
                     btnText: 'View Guide',
                     unlockStage: 3,
                     statusWhenComplete: 'reference'
@@ -529,7 +555,7 @@
                     icon: '⚖️',
                     title: 'Decision Framework',
                     description: 'Evaluate opportunities against your red flags and green flags. Score roles objectively.',
-                    file: `${folder}/${nameUnderscored}_Decision_Framework.html`,
+                    file: files.decisionFramework || `${folder}/${nameUnderscored}_Decision_Framework.html`,
                     btnText: 'Open Scorecard',
                     unlockStage: 2,
                     statusWhenComplete: 'ready'
