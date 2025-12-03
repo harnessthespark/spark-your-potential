@@ -59,10 +59,39 @@
         .editable:hover { background: #f8f9fa; }
         .editable:focus { outline: 2px solid #667eea; background: white; }
 
-        /* Case Study Card */
-        .case-study { background: #f8f9fa; border-radius: 10px; padding: 20px; margin-bottom: 15px; border-left: 4px solid #667eea; }
+        /* Case Study Card with Hero Banner */
+        .case-study { background: white; border-radius: 12px; overflow: hidden; margin-bottom: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.08); }
+        .case-study-hero { height: 80px; display: flex; align-items: flex-end; padding: 15px; }
+        .case-study-logo { color: white; font-size: 1.3em; font-weight: 700; text-shadow: 0 1px 3px rgba(0,0,0,0.3); }
+        .case-study-content { padding: 20px; }
         .case-study-title { font-weight: 600; color: #667eea; margin-bottom: 10px; }
-        .case-study-content { color: #555; line-height: 1.6; }
+        .case-study-text { color: #555; line-height: 1.6; }
+        .case-study-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px; }
+
+        /* Case Study Management Buttons */
+        .add-casestudy-btn { width: 100%; padding: 12px; margin-top: 10px; background: rgba(102,126,234,0.1); border: 2px dashed #667eea; color: #667eea; border-radius: 8px; font-weight: 600; cursor: pointer; transition: all 0.2s; }
+        .add-casestudy-btn:hover { background: rgba(102,126,234,0.2); }
+        .delete-btn { background: rgba(255,100,100,0.2); border: none; color: #ff6b6b; padding: 4px 10px; border-radius: 4px; cursor: pointer; font-size: 0.8em; transition: all 0.2s; }
+        .delete-btn:hover { background: rgba(255,100,100,0.4); }
+
+        /* Modal Styles */
+        .modal-overlay { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.7); z-index: 1000; }
+        .modal-overlay.visible { display: flex; align-items: center; justify-content: center; }
+        .modal { background: white; padding: 30px; border-radius: 15px; max-width: 500px; width: 90%; max-height: 80vh; overflow-y: auto; }
+        .modal h2 { margin-bottom: 20px; color: #667eea; }
+        .modal-field { margin-bottom: 15px; }
+        .modal-field label { display: block; margin-bottom: 5px; font-weight: 500; color: #333; }
+        .modal-field input, .modal-field textarea { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 8px; font-size: 0.9em; }
+        .modal-field textarea { min-height: 80px; resize: vertical; }
+        .modal-actions { display: flex; gap: 10px; margin-top: 20px; }
+        .modal-actions button { flex: 1; padding: 12px; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; }
+        .btn-save { background: #667eea; color: white; }
+        .btn-cancel { background: #f0f0f0; color: #333; }
+
+        /* Colour Picker */
+        .colour-picker-group { display: flex; gap: 10px; align-items: center; }
+        .colour-picker-group input[type="color"] { width: 50px; height: 40px; border: none; border-radius: 8px; cursor: pointer; }
+        .colour-preview { flex: 1; height: 40px; border-radius: 8px; display: flex; align-items: center; justify-content: center; color: white; font-weight: 600; text-shadow: 0 1px 2px rgba(0,0,0,0.3); }
 
         /* Template Styles */
         .template-modern .cv-header { border-bottom: 3px solid #667eea; }
@@ -205,21 +234,76 @@
                     <div class="cv-section-title">Key Transformations</div>
                     <p style="color: #666; margin-bottom: 15px; font-size: 0.9em;">From your Blueprint evidence collection:</p>
 
-                    <div class="case-study" id="case-study-1">
-                        <div class="case-study-title editable" contenteditable="true">Outcome #1: Title</div>
-                        <div class="case-study-content editable" contenteditable="true">
-                            Paste your Outcome #1 from the Blueprint here. Challenge → Action → Result format works well.
+                    <div class="case-study" id="casestudy-1" data-colour1="#667eea" data-colour2="#764ba2">
+                        <div class="case-study-hero" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                            <div class="case-study-logo editable" contenteditable="true">Company/Brand Name</div>
+                        </div>
+                        <div class="case-study-content">
+                            <div class="case-study-header">
+                                <div class="case-study-title editable" contenteditable="true">Outcome #1: Title</div>
+                                <button class="delete-btn" onclick="deleteCaseStudy('1')">🗑️ Delete</button>
+                            </div>
+                            <div class="case-study-text editable" contenteditable="true">
+                                Paste your Outcome #1 from the Blueprint here. Challenge → Action → Result format works well.
+                            </div>
                         </div>
                     </div>
 
-                    <div class="case-study" id="case-study-2">
-                        <div class="case-study-title editable" contenteditable="true">Outcome #2: Title</div>
-                        <div class="case-study-content editable" contenteditable="true">
-                            Paste your Outcome #2 here.
+                    <div class="case-study" id="casestudy-2" data-colour1="#4CAF50" data-colour2="#2196F3">
+                        <div class="case-study-hero" style="background: linear-gradient(135deg, #4CAF50 0%, #2196F3 100%);">
+                            <div class="case-study-logo editable" contenteditable="true">Company/Brand Name</div>
+                        </div>
+                        <div class="case-study-content">
+                            <div class="case-study-header">
+                                <div class="case-study-title editable" contenteditable="true">Outcome #2: Title</div>
+                                <button class="delete-btn" onclick="deleteCaseStudy('2')">🗑️ Delete</button>
+                            </div>
+                            <div class="case-study-text editable" contenteditable="true">
+                                Paste your Outcome #2 here.
+                            </div>
                         </div>
                     </div>
 
-                    <button onclick="addCaseStudy()" style="padding: 10px 20px; background: #f0f0f0; border: 2px dashed #ccc; border-radius: 8px; cursor: pointer; width: 100%; color: #666;">+ Add Case Study</button>
+                    <button class="add-casestudy-btn" onclick="openAddCaseStudyModal()">📊 Add New Case Study</button>
+                </div>
+
+                <!-- Add Case Study Modal -->
+                <div class="modal-overlay" id="addCaseStudyModal">
+                    <div class="modal">
+                        <h2>📊 Add New Case Study</h2>
+                        <div class="modal-field">
+                            <label>Company/Brand Name</label>
+                            <input type="text" id="csCompany" placeholder="e.g., Acme Corporation">
+                        </div>
+                        <div class="modal-field">
+                            <label>Project/Outcome Title</label>
+                            <input type="text" id="csTitle" placeholder="e.g., Digital Transformation">
+                        </div>
+                        <div class="modal-field">
+                            <label>Hero Banner Colours</label>
+                            <div class="colour-picker-group">
+                                <input type="color" id="csColour1" value="#667eea" onchange="updateColourPreview()">
+                                <input type="color" id="csColour2" value="#764ba2" onchange="updateColourPreview()">
+                                <div class="colour-preview" id="csColourPreview" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">Preview</div>
+                            </div>
+                        </div>
+                        <div class="modal-field">
+                            <label>Challenge</label>
+                            <textarea id="csChallenge" placeholder="What was the challenge or problem?"></textarea>
+                        </div>
+                        <div class="modal-field">
+                            <label>Action</label>
+                            <textarea id="csAction" placeholder="What did you do to solve it?"></textarea>
+                        </div>
+                        <div class="modal-field">
+                            <label>Result</label>
+                            <textarea id="csResult" placeholder="What was the measurable outcome?"></textarea>
+                        </div>
+                        <div class="modal-actions">
+                            <button class="btn-cancel" onclick="closeAddCaseStudyModal()">Cancel</button>
+                            <button class="btn-save" onclick="addCaseStudy()">Add Case Study</button>
+                        </div>
+                    </div>
                 </div>
 
                 <!-- Skills -->
@@ -273,32 +357,133 @@
             }
         }
 
-        // Add case study
-        let caseStudyCount = 2;
-        function addCaseStudy() {
-            caseStudyCount++;
-            const container = document.getElementById('case-studies-section');
-            const button = container.querySelector('button');
-            const newStudy = document.createElement('div');
-            newStudy.className = 'case-study';
-            newStudy.id = 'case-study-' + caseStudyCount;
-            newStudy.innerHTML = `
-                <div style="display: flex; justify-content: space-between; align-items: start;">
-                    <div class="case-study-title editable" contenteditable="true">Outcome #${caseStudyCount}: Title</div>
-                    <button onclick="removeCaseStudy(${caseStudyCount})" style="background: #ff5722; color: white; border: none; padding: 5px 10px; border-radius: 5px; cursor: pointer; font-size: 0.8em;">Remove</button>
-                </div>
-                <div class="case-study-content editable" contenteditable="true">
-                    Add your achievement here...
-                </div>
-            `;
-            container.insertBefore(newStudy, button);
+        // Case Study Management
+        let caseStudyCounter = 2;
+
+        // Open modal
+        function openAddCaseStudyModal() {
+            document.getElementById('addCaseStudyModal').classList.add('visible');
+            // Reset form
+            document.getElementById('csCompany').value = '';
+            document.getElementById('csTitle').value = '';
+            document.getElementById('csChallenge').value = '';
+            document.getElementById('csAction').value = '';
+            document.getElementById('csResult').value = '';
+            document.getElementById('csColour1').value = '#667eea';
+            document.getElementById('csColour2').value = '#764ba2';
+            updateColourPreview();
         }
 
-        // Remove case study
-        function removeCaseStudy(id) {
-            const study = document.getElementById('case-study-' + id);
-            if (study && confirm('Remove this case study?')) {
-                study.remove();
+        // Close modal
+        function closeAddCaseStudyModal() {
+            document.getElementById('addCaseStudyModal').classList.remove('visible');
+        }
+
+        // Update colour preview
+        function updateColourPreview() {
+            const colour1 = document.getElementById('csColour1').value;
+            const colour2 = document.getElementById('csColour2').value;
+            document.getElementById('csColourPreview').style.background = `linear-gradient(135deg, ${colour1} 0%, ${colour2} 100%)`;
+        }
+
+        // Add case study from modal
+        function addCaseStudy() {
+            const company = document.getElementById('csCompany').value || 'New Company';
+            const title = document.getElementById('csTitle').value || 'New Project';
+            const challenge = document.getElementById('csChallenge').value || 'Describe the challenge...';
+            const action = document.getElementById('csAction').value || 'Describe your action...';
+            const result = document.getElementById('csResult').value || 'Describe the result...';
+            const colour1 = document.getElementById('csColour1').value;
+            const colour2 = document.getElementById('csColour2').value;
+
+            caseStudyCounter++;
+            const id = 'custom-' + caseStudyCounter;
+
+            const caseStudyHTML = `
+                <div class="case-study" id="casestudy-${id}" data-colour1="${colour1}" data-colour2="${colour2}">
+                    <div class="case-study-hero" style="background: linear-gradient(135deg, ${colour1} 0%, ${colour2} 100%);">
+                        <div class="case-study-logo editable" contenteditable="true">${company}</div>
+                    </div>
+                    <div class="case-study-content">
+                        <div class="case-study-header">
+                            <div class="case-study-title editable" contenteditable="true">${title}</div>
+                            <button class="delete-btn" onclick="deleteCaseStudy('${id}')">🗑️ Delete</button>
+                        </div>
+                        <div class="case-study-text editable" contenteditable="true">
+                            <strong>Challenge:</strong> ${challenge}<br><br>
+                            <strong>Action:</strong> ${action}<br><br>
+                            <strong>Result:</strong> ${result}
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            const section = document.getElementById('case-studies-section');
+            const addButton = section.querySelector('.add-casestudy-btn');
+            addButton.insertAdjacentHTML('beforebegin', caseStudyHTML);
+
+            closeAddCaseStudyModal();
+            saveCaseStudies();
+        }
+
+        // Delete case study
+        function deleteCaseStudy(id) {
+            if (!confirm('Are you sure you want to delete this case study?')) return;
+            const element = document.getElementById('casestudy-' + id);
+            if (element) {
+                element.remove();
+                saveCaseStudies();
+            }
+        }
+
+        // Save case studies to localStorage
+        function saveCaseStudies() {
+            const caseStudies = [];
+            document.querySelectorAll('.case-study').forEach(cs => {
+                caseStudies.push({
+                    id: cs.id,
+                    company: cs.querySelector('.case-study-logo')?.innerText || '',
+                    title: cs.querySelector('.case-study-title')?.innerText || '',
+                    content: cs.querySelector('.case-study-text')?.innerHTML || '',
+                    colour1: cs.dataset.colour1 || '#667eea',
+                    colour2: cs.dataset.colour2 || '#764ba2'
+                });
+            });
+            localStorage.setItem('cv_casestudies_[CLIENT_ID]', JSON.stringify(caseStudies));
+        }
+
+        // Load case studies from localStorage
+        function loadCaseStudies() {
+            const saved = localStorage.getItem('cv_casestudies_[CLIENT_ID]');
+            if (saved) {
+                const section = document.getElementById('case-studies-section');
+                const addButton = section.querySelector('.add-casestudy-btn');
+
+                // Remove existing case studies
+                section.querySelectorAll('.case-study').forEach(cs => cs.remove());
+
+                // Add saved case studies
+                const caseStudies = JSON.parse(saved);
+                caseStudies.forEach(cs => {
+                    const html = `
+                        <div class="case-study" id="${cs.id}" data-colour1="${cs.colour1}" data-colour2="${cs.colour2}">
+                            <div class="case-study-hero" style="background: linear-gradient(135deg, ${cs.colour1} 0%, ${cs.colour2} 100%);">
+                                <div class="case-study-logo editable" contenteditable="true">${cs.company}</div>
+                            </div>
+                            <div class="case-study-content">
+                                <div class="case-study-header">
+                                    <div class="case-study-title editable" contenteditable="true">${cs.title}</div>
+                                    <button class="delete-btn" onclick="deleteCaseStudy('${cs.id.replace('casestudy-', '')}')">🗑️ Delete</button>
+                                </div>
+                                <div class="case-study-text editable" contenteditable="true">${cs.content}</div>
+                            </div>
+                        </div>
+                    `;
+                    addButton.insertAdjacentHTML('beforebegin', html);
+                });
+
+                // Update counter
+                caseStudyCounter = caseStudies.length;
             }
         }
 
@@ -337,6 +522,14 @@
 
         // Load on page load
         loadCV();
+        loadCaseStudies();
+
+        // Close modal when clicking outside
+        document.getElementById('addCaseStudyModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeAddCaseStudyModal();
+            }
+        });
     </script>
 </body>
 </html>

@@ -69,10 +69,16 @@
         .cv-testimonial { background: #f8f9fa; padding: 15px; border-radius: 8px; margin-bottom: 12px; border-left: 3px solid #7B2CBF; }
         .cv-testimonial-quote { font-style: italic; font-size: 0.85em; color: #444; margin-bottom: 5px; }
         .cv-testimonial-author { font-size: 0.8em; color: #666; }
-        .cv-case-study { background: #f8f9fa; border-radius: 8px; padding: 15px; margin-bottom: 15px; border-left: 3px solid #E63946; }
-        .cv-case-study-title { font-weight: 600; color: #E63946; margin-bottom: 10px; font-size: 0.95em; }
+        .cv-case-study { background: white; border-radius: 12px; overflow: hidden; margin-bottom: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.08); }
+        .cv-case-study-hero { height: 80px; display: flex; align-items: flex-end; padding: 15px; }
+        .cv-case-study-hero-logo { color: white; font-size: 1.3em; font-weight: 700; text-shadow: 0 1px 3px rgba(0,0,0,0.3); }
+        .cv-case-study-content { padding: 15px; }
+        .cv-case-study-title { font-weight: 600; color: #1a1a2e; margin-bottom: 10px; font-size: 0.95em; }
         .cv-case-study-grid { display: grid; grid-template-columns: 100px 1fr; gap: 4px 10px; font-size: 0.85em; }
-        .cv-case-study-label { font-weight: 600; color: #666; }
+        .cv-case-study-label { font-weight: 600; color: #7B2CBF; }
+        .colour-picker-row { display: flex; gap: 8px; align-items: center; margin: 10px 0; }
+        .colour-picker-row input[type="color"] { width: 35px; height: 30px; border: none; border-radius: 4px; cursor: pointer; }
+        .colour-preview { flex: 1; height: 30px; border-radius: 4px; display: flex; align-items: center; justify-content: center; color: white; font-size: 0.75em; font-weight: 600; }
         .hidden { display: none !important; }
         [contenteditable="true"] { outline: none; transition: background 0.2s; }
         [contenteditable="true"]:hover { background: #fffde7; }
@@ -383,12 +389,19 @@
     <!-- ADD CASE STUDY MODAL -->
     <div class="modal-overlay" id="add-casestudy-modal" onclick="if(event.target === this) closeAddCaseStudyModal()">
         <div class="modal">
-            <h3>Add New Case Study</h3>
+            <h3>📊 Add New Case Study</h3>
             <label class="modal-label">Client/Project Name *</label>
             <input type="text" class="modal-input" id="new-cs-name" placeholder="e.g., Unilever">
 
             <label class="modal-label">Case Study Title</label>
             <input type="text" class="modal-input" id="new-cs-title" placeholder="e.g., Dove Real Beauty Evolution">
+
+            <label class="modal-label">Hero Banner Colours</label>
+            <div class="colour-picker-row">
+                <input type="color" id="new-cs-colour1" value="#E63946" onchange="updateCsColourPreview()">
+                <input type="color" id="new-cs-colour2" value="#D81B60" onchange="updateCsColourPreview()">
+                <div class="colour-preview" id="cs-colour-preview" style="background: linear-gradient(135deg, #E63946 0%, #D81B60 100%);">Preview</div>
+            </div>
 
             <label class="modal-label">Brief</label>
             <input type="text" class="modal-input" id="new-cs-brief" placeholder="What was the challenge?">
@@ -560,9 +573,19 @@
         // Case Study Management
         let caseStudyCounter = 0;
 
+        function updateCsColourPreview() {
+            const c1 = document.getElementById('new-cs-colour1').value;
+            const c2 = document.getElementById('new-cs-colour2').value;
+            document.getElementById('cs-colour-preview').style.background = `linear-gradient(135deg, ${c1} 0%, ${c2} 100%)`;
+        }
+
         function openAddCaseStudyModal() {
             document.getElementById('add-casestudy-modal').classList.add('active');
             document.getElementById('new-cs-name').focus();
+            // Reset colours
+            document.getElementById('new-cs-colour1').value = '#E63946';
+            document.getElementById('new-cs-colour2').value = '#D81B60';
+            updateCsColourPreview();
         }
 
         function closeAddCaseStudyModal() {
@@ -578,6 +601,8 @@
 
             const id = 'custom-' + (++caseStudyCounter);
             const title = document.getElementById('new-cs-title').value.trim() || name;
+            const colour1 = document.getElementById('new-cs-colour1').value;
+            const colour2 = document.getElementById('new-cs-colour2').value;
             const brief = document.getElementById('new-cs-brief').value.trim() || '[Add brief]';
             const challenge = document.getElementById('new-cs-challenge').value.trim() || '[Add challenge]';
             const insight = document.getElementById('new-cs-insight').value.trim() || '[Add insight]';
@@ -597,14 +622,19 @@
             caseStudyDiv.className = 'cv-case-study';
             caseStudyDiv.id = 'casestudy-' + id;
             caseStudyDiv.innerHTML = `
-                <div class="cv-case-study-title">Case Study: ${name} – "${title}"</div>
-                <div class="cv-case-study-grid" contenteditable="true">
-                    <div class="cv-case-study-label">Brief:</div><div>${brief}</div>
-                    <div class="cv-case-study-label">Challenge:</div><div>${challenge}</div>
-                    <div class="cv-case-study-label">Insight:</div><div>${insight}</div>
-                    <div class="cv-case-study-label">Strategy:</div><div>${strategy}</div>
-                    <div class="cv-case-study-label">Campaign:</div><div>${campaign}</div>
-                    <div class="cv-case-study-label">Results:</div><div>${results}</div>
+                <div class="cv-case-study-hero" style="background: linear-gradient(135deg, ${colour1} 0%, ${colour2} 100%);">
+                    <div class="cv-case-study-hero-logo">${name}</div>
+                </div>
+                <div class="cv-case-study-content">
+                    <div class="cv-case-study-title">"${title}"</div>
+                    <div class="cv-case-study-grid" contenteditable="true">
+                        <div class="cv-case-study-label">Brief:</div><div>${brief}</div>
+                        <div class="cv-case-study-label">Challenge:</div><div>${challenge}</div>
+                        <div class="cv-case-study-label">Insight:</div><div>${insight}</div>
+                        <div class="cv-case-study-label">Strategy:</div><div>${strategy}</div>
+                        <div class="cv-case-study-label">Campaign:</div><div>${campaign}</div>
+                        <div class="cv-case-study-label">Results:</div><div>${results}</div>
+                    </div>
                 </div>
             `;
             caseStudiesSection.appendChild(caseStudyDiv);
