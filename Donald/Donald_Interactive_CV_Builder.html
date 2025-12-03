@@ -455,6 +455,152 @@
 
         .hidden { display: none !important; }
 
+        /* Add/Delete Case Study Buttons */
+        .add-casestudy-btn {
+            width: 100%;
+            padding: 12px;
+            margin-top: 10px;
+            background: rgba(255,215,0,0.2);
+            border: 2px dashed #FFD700;
+            color: #FFD700;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 0.85em;
+            transition: all 0.2s;
+        }
+        .add-casestudy-btn:hover {
+            background: rgba(255,215,0,0.3);
+            transform: translateY(-1px);
+        }
+        .delete-btn {
+            background: rgba(255,100,100,0.2);
+            border: none;
+            color: #ff6b6b;
+            padding: 4px 8px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.8em;
+            transition: all 0.2s;
+        }
+        .delete-btn:hover {
+            background: rgba(255,100,100,0.4);
+        }
+
+        /* Modal Styles */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.7);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+        .modal-overlay.visible {
+            display: flex;
+        }
+        .modal {
+            background: white;
+            border-radius: 16px;
+            padding: 30px;
+            max-width: 500px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        .modal h2 {
+            margin-bottom: 20px;
+            color: #1a1a2e;
+        }
+        .modal-field {
+            margin-bottom: 15px;
+        }
+        .modal-field label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 5px;
+            color: #333;
+            font-size: 0.9em;
+        }
+        .modal-field input,
+        .modal-field textarea {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 0.9em;
+            font-family: inherit;
+        }
+        .modal-field input:focus,
+        .modal-field textarea:focus {
+            outline: none;
+            border-color: #7B2CBF;
+        }
+        .modal-field textarea {
+            resize: vertical;
+            min-height: 60px;
+        }
+        .colour-picker-group {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+        .colour-picker-group input[type="color"] {
+            width: 50px;
+            height: 40px;
+            padding: 0;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+        .colour-preview {
+            flex: 1;
+            height: 40px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            font-size: 0.85em;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+        }
+        .modal-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        .modal-btn {
+            flex: 1;
+            padding: 12px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 0.9em;
+            transition: all 0.2s;
+        }
+        .modal-btn-primary {
+            background: linear-gradient(135deg, #7B2CBF 0%, #D81B60 100%);
+            color: white;
+            border: none;
+        }
+        .modal-btn-primary:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 15px rgba(123,44,191,0.3);
+        }
+        .modal-btn-secondary {
+            background: #f0f0f0;
+            color: #666;
+            border: none;
+        }
+        .modal-btn-secondary:hover {
+            background: #e0e0e0;
+        }
+
         /* Print Styles - PRINT READY */
         @media print {
             @page {
@@ -559,11 +705,12 @@
 
             <div class="control-section">
                 <div class="control-title">📊 Case Studies</div>
-                <div class="toggle-group">
-                    <div class="toggle-item"><span>UBS – Banking is our Craft</span><label class="toggle-switch"><input type="checkbox" onchange="toggleCaseStudy('ubs', this.checked)"><span class="toggle-slider"></span></label></div>
-                    <div class="toggle-item"><span>UPS – United Problem Solvers</span><label class="toggle-switch"><input type="checkbox" onchange="toggleCaseStudy('ups', this.checked)"><span class="toggle-slider"></span></label></div>
-                    <div class="toggle-item"><span>AMD – Together We Advance</span><label class="toggle-switch"><input type="checkbox" onchange="toggleCaseStudy('amd', this.checked)"><span class="toggle-slider"></span></label></div>
+                <div class="toggle-group" id="caseStudyToggles">
+                    <div class="toggle-item" data-casestudy="ubs"><span>UBS – Banking is our Craft</span><div style="display:flex;gap:5px;align-items:center;"><label class="toggle-switch"><input type="checkbox" onchange="toggleCaseStudy('ubs', this.checked)"><span class="toggle-slider"></span></label><button class="delete-btn" onclick="deleteCaseStudy('ubs')" title="Delete">🗑️</button></div></div>
+                    <div class="toggle-item" data-casestudy="ups"><span>UPS – United Problem Solvers</span><div style="display:flex;gap:5px;align-items:center;"><label class="toggle-switch"><input type="checkbox" onchange="toggleCaseStudy('ups', this.checked)"><span class="toggle-slider"></span></label><button class="delete-btn" onclick="deleteCaseStudy('ups')" title="Delete">🗑️</button></div></div>
+                    <div class="toggle-item" data-casestudy="amd"><span>AMD – Together We Advance</span><div style="display:flex;gap:5px;align-items:center;"><label class="toggle-switch"><input type="checkbox" onchange="toggleCaseStudy('amd', this.checked)"><span class="toggle-slider"></span></label><button class="delete-btn" onclick="deleteCaseStudy('amd')" title="Delete">🗑️</button></div></div>
                 </div>
+                <button class="add-casestudy-btn" onclick="openAddCaseStudyModal()">+ Add New Case Study</button>
             </div>
 
             <div class="hint-box">
@@ -819,7 +966,60 @@
         </div>
     </div>
 
+    <!-- Add Case Study Modal -->
+    <div class="modal-overlay" id="addCaseStudyModal">
+        <div class="modal">
+            <h2>📊 Add New Case Study</h2>
+
+            <div class="modal-field">
+                <label>Company/Brand Name</label>
+                <input type="text" id="csCompany" placeholder="e.g. Google, Nike, Spotify">
+            </div>
+
+            <div class="modal-field">
+                <label>Campaign/Project Title</label>
+                <input type="text" id="csTitle" placeholder="e.g. 'Think Different' Campaign">
+            </div>
+
+            <div class="modal-field">
+                <label>Hero Banner Colours</label>
+                <div class="colour-picker-group">
+                    <input type="color" id="csColour1" value="#7B2CBF" onchange="updateColourPreview()">
+                    <input type="color" id="csColour2" value="#D81B60" onchange="updateColourPreview()">
+                    <div class="colour-preview" id="csColourPreview" style="background: linear-gradient(135deg, #7B2CBF 0%, #D81B60 100%);">Preview</div>
+                </div>
+            </div>
+
+            <div class="modal-field">
+                <label>Brief</label>
+                <textarea id="csBrief" placeholder="What was the challenge or objective?"></textarea>
+            </div>
+
+            <div class="modal-field">
+                <label>Insight</label>
+                <textarea id="csInsight" placeholder="What key insight drove the strategy?"></textarea>
+            </div>
+
+            <div class="modal-field">
+                <label>Strategy</label>
+                <textarea id="csStrategy" placeholder="What approach did you take?"></textarea>
+            </div>
+
+            <div class="modal-field">
+                <label>Results</label>
+                <textarea id="csResults" placeholder="What was the outcome? Include metrics if possible."></textarea>
+            </div>
+
+            <div class="modal-buttons">
+                <button class="modal-btn modal-btn-secondary" onclick="closeAddCaseStudyModal()">Cancel</button>
+                <button class="modal-btn modal-btn-primary" onclick="addCaseStudy()">Add Case Study</button>
+            </div>
+        </div>
+    </div>
+
     <script>
+        let caseStudyCounter = 3; // Start after existing 3 (ubs, ups, amd)
+
         const profiles = {
             original: `I'm a Senior Strategist with 20+ years experience delivering strategic thinking across financial services, B2B tech and complex global brands including UBS, AMD and UPS. I am passionate about brand transformation that results in creative work which wins awards and moves the needle. My thread is connecting insight, ideas, infrastructure and people—and staying until it's embedded.`,
             transformation: `I don't fix strategies. I restore belief systems. Across every transformation I've led—UBS, UPS, AMD—I turn confusion into conviction. Teams arrive stuck and paralysed; I find the human truth beneath the noise, and they don't just get a strategy—they get belief back. I connect insight, ideas, infrastructure and people—staying until transformation is embedded.`,
@@ -881,6 +1081,161 @@
             a.download = 'Donald_Pirie_CV.html';
             a.click();
         }
+
+        // =============================================
+        // CASE STUDY MANAGEMENT
+        // =============================================
+
+        function openAddCaseStudyModal() {
+            document.getElementById('addCaseStudyModal').classList.add('visible');
+            // Clear form
+            document.getElementById('csCompany').value = '';
+            document.getElementById('csTitle').value = '';
+            document.getElementById('csBrief').value = '';
+            document.getElementById('csInsight').value = '';
+            document.getElementById('csStrategy').value = '';
+            document.getElementById('csResults').value = '';
+            document.getElementById('csColour1').value = '#7B2CBF';
+            document.getElementById('csColour2').value = '#D81B60';
+            updateColourPreview();
+        }
+
+        function closeAddCaseStudyModal() {
+            document.getElementById('addCaseStudyModal').classList.remove('visible');
+        }
+
+        function updateColourPreview() {
+            const c1 = document.getElementById('csColour1').value;
+            const c2 = document.getElementById('csColour2').value;
+            document.getElementById('csColourPreview').style.background = `linear-gradient(135deg, ${c1} 0%, ${c2} 100%)`;
+        }
+
+        function addCaseStudy() {
+            const company = document.getElementById('csCompany').value.trim();
+            const title = document.getElementById('csTitle').value.trim();
+            const brief = document.getElementById('csBrief').value.trim();
+            const insight = document.getElementById('csInsight').value.trim();
+            const strategy = document.getElementById('csStrategy').value.trim();
+            const results = document.getElementById('csResults').value.trim();
+            const colour1 = document.getElementById('csColour1').value;
+            const colour2 = document.getElementById('csColour2').value;
+
+            if (!company || !title) {
+                alert('Please enter at least a company name and title.');
+                return;
+            }
+
+            caseStudyCounter++;
+            const id = 'custom-' + caseStudyCounter;
+
+            // Create case study HTML
+            const caseStudyHTML = `
+                <div class="case-study" id="casestudy-${id}">
+                    <div class="case-study-hero" style="background: linear-gradient(135deg, ${colour1} 0%, ${colour2} 100%);">
+                        <div class="case-study-logo">${company}</div>
+                    </div>
+                    <div class="case-study-content">
+                        <div class="case-study-title">"${title}"</div>
+                        <div class="case-study-grid" contenteditable="true">
+                            <div class="case-study-label">Brief:</div>
+                            <div class="case-study-value">${brief || 'Click to edit...'}</div>
+                            <div class="case-study-label">Insight:</div>
+                            <div class="case-study-value">${insight || 'Click to edit...'}</div>
+                            <div class="case-study-label">Strategy:</div>
+                            <div class="case-study-value">${strategy || 'Click to edit...'}</div>
+                            <div class="case-study-label">Results:</div>
+                            <div class="case-study-value">${results || 'Click to edit...'}</div>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            // Add to case studies section
+            document.getElementById('section-casestudies').insertAdjacentHTML('beforeend', caseStudyHTML);
+
+            // Add toggle to control panel
+            const toggleHTML = `
+                <div class="toggle-item" data-casestudy="${id}">
+                    <span>${company} – ${title}</span>
+                    <div style="display:flex;gap:5px;align-items:center;">
+                        <label class="toggle-switch">
+                            <input type="checkbox" checked onchange="toggleCaseStudy('${id}', this.checked)">
+                            <span class="toggle-slider"></span>
+                        </label>
+                        <button class="delete-btn" onclick="deleteCaseStudy('${id}')" title="Delete">🗑️</button>
+                    </div>
+                </div>
+            `;
+            document.getElementById('caseStudyToggles').insertAdjacentHTML('beforeend', toggleHTML);
+
+            // Show case studies section
+            document.getElementById('section-casestudies').classList.remove('hidden');
+
+            // Close modal
+            closeAddCaseStudyModal();
+
+            // Save to localStorage
+            saveCaseStudies();
+        }
+
+        function deleteCaseStudy(id) {
+            if (!confirm('Are you sure you want to delete this case study?')) return;
+
+            // Remove from CV
+            const caseStudy = document.getElementById('casestudy-' + id);
+            if (caseStudy) caseStudy.remove();
+
+            // Remove from toggles
+            const toggle = document.querySelector(`[data-casestudy="${id}"]`);
+            if (toggle) toggle.remove();
+
+            // Hide case studies section if empty
+            const remaining = document.querySelectorAll('.case-study:not(.hidden)');
+            if (remaining.length === 0) {
+                document.getElementById('section-casestudies').classList.add('hidden');
+            }
+
+            // Save to localStorage
+            saveCaseStudies();
+        }
+
+        function saveCaseStudies() {
+            // Save current state to localStorage for persistence
+            const caseStudies = [];
+            document.querySelectorAll('.case-study').forEach(cs => {
+                caseStudies.push({
+                    id: cs.id.replace('casestudy-', ''),
+                    html: cs.outerHTML,
+                    visible: !cs.classList.contains('hidden')
+                });
+            });
+            localStorage.setItem('cv_casestudies_donald', JSON.stringify(caseStudies));
+        }
+
+        function loadCaseStudies() {
+            const saved = localStorage.getItem('cv_casestudies_donald');
+            if (saved) {
+                try {
+                    const caseStudies = JSON.parse(saved);
+                    // Restore custom case studies
+                    caseStudies.forEach(cs => {
+                        if (cs.id.startsWith('custom-')) {
+                            // Add to CV
+                            document.getElementById('section-casestudies').insertAdjacentHTML('beforeend', cs.html);
+                            // Toggle visibility
+                            if (!cs.visible) {
+                                document.getElementById('casestudy-' + cs.id).classList.add('hidden');
+                            }
+                        }
+                    });
+                } catch (e) {
+                    console.error('Error loading case studies:', e);
+                }
+            }
+        }
+
+        // Load saved case studies on page load
+        window.addEventListener('DOMContentLoaded', loadCaseStudies);
     </script>
 </body>
 </html>
