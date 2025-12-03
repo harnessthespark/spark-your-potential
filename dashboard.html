@@ -1018,8 +1018,15 @@
             }
 
             container.innerHTML = clientList.map(client => `
-                <div style="background: rgba(255,255,255,0.95); border-radius: 12px; padding: 20px; cursor: pointer; ${client.isDemo ? 'border: 2px dashed #ffc107;' : ''}" onclick="viewClientJourney('${client.email}')">
-                    <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px;">
+                <div style="background: rgba(255,255,255,0.95); border-radius: 12px; padding: 20px; cursor: pointer; position: relative; ${client.isDemo ? 'border: 2px dashed #ffc107;' : ''}" onclick="viewClientJourney('${client.email}')">
+                    <button onclick="event.stopPropagation(); deleteClient('${client.email}', '${client.name}')"
+                            style="position: absolute; top: 10px; right: 10px; background: rgba(220, 53, 69, 0.1); border: none; border-radius: 6px; padding: 5px 8px; cursor: pointer; font-size: 0.85em; color: #dc3545; transition: all 0.2s;"
+                            onmouseover="this.style.background='rgba(220, 53, 69, 0.2)'"
+                            onmouseout="this.style.background='rgba(220, 53, 69, 0.1)'"
+                            title="Delete client">
+                        🗑️
+                    </button>
+                    <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px; padding-right: 35px;">
                         <h4 style="color: #333; margin: 0;">
                             ${client.name}
                             ${client.isDemo ? '<span style="font-size: 0.7em; background: #ffc107; color: #333; padding: 2px 6px; border-radius: 4px; margin-left: 8px;">DEMO</span>' : ''}
@@ -1338,6 +1345,57 @@
         // Close journey view
         function closeJourneyView() {
             document.getElementById('journeyView').style.display = 'none';
+        }
+
+        // Delete client - removes from PostgreSQL and/or localStorage
+        async function deleteClient(email, name) {
+            // Confirm deletion
+            if (!confirm(`Are you sure you want to delete ${name}?\n\nThis will permanently remove them from the system.`)) {
+                return;
+            }
+
+            const clients = getStoredClientsSync();
+            const client = clients[email];
+            if (!client) {
+                alert('Client not found');
+                return;
+            }
+
+            // If client has a PostgreSQL ID (not a local-only client), delete from API
+            if (authToken && client.id && !client.id.startsWith('client-')) {
+                try {
+                    const response = await fetch(`${API_BASE_URL}/api/crm/syp/coach/clients/${client.id}/`, {
+                        method: 'DELETE',
+                        headers: {
+                            'Authorization': `Bearer ${authToken}`,
+                            'Accept': 'application/json'
+                        }
+                    });
+
+                    if (response.ok || response.status === 204) {
+                        console.log('✅ Client deleted from PostgreSQL:', email);
+                    } else {
+                        console.error('Failed to delete client from API:', response.status);
+                        // Continue to remove from local cache anyway
+                    }
+                } catch (error) {
+                    console.error('Error deleting client from API:', error);
+                    // Continue to remove from local cache anyway
+                }
+            }
+
+            // Remove from local storage/cache
+            delete clients[email];
+            saveStoredClients(clients);
+            cachedClients = clients;
+
+            // Close journey view if it was open for this client
+            closeJourneyView();
+
+            // Refresh the client list
+            await renderClientList();
+
+            alert(`✅ ${name} has been deleted.`);
         }
 
         // Storage helpers - PostgreSQL via SparkHub API
