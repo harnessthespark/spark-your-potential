@@ -126,7 +126,176 @@
             display: block;
         }
 
-        /* Tool Cards Grid */
+        /* ============================================
+           TRANSFORMATION JOURNEY - 3-Step Flow
+           ============================================ */
+        .transformation-section {
+            background: rgba(255,255,255,0.05);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+        }
+        .transformation-header {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+        .transformation-header h2 {
+            color: #fff;
+            font-size: 1.4em;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+        .transformation-header p {
+            color: #aaa;
+            font-size: 0.95em;
+        }
+
+        /* 3-Step Flow Container */
+        .transformation-flow {
+            display: flex;
+            align-items: stretch;
+            gap: 0;
+            position: relative;
+        }
+
+        /* Step Card */
+        .step-card {
+            flex: 1;
+            background: rgba(255,255,255,0.95);
+            border-radius: 16px;
+            padding: 25px 20px;
+            text-align: center;
+            position: relative;
+            transition: transform 0.2s, box-shadow 0.2s;
+            border: 3px solid transparent;
+        }
+        .step-card:hover:not(.locked) {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+        }
+
+        /* Step Number Badge */
+        .step-number {
+            position: absolute;
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 0.85em;
+            color: white;
+        }
+        .step-1 .step-number { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+        .step-2 .step-number { background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); }
+        .step-3 .step-number { background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); }
+
+        /* Step States */
+        .step-card.completed {
+            border-color: #4ECDC4;
+        }
+        .step-card.completed .step-number {
+            background: linear-gradient(135deg, #4ECDC4 0%, #44A08D 100%);
+        }
+        .step-card.current {
+            border-color: #FFB627;
+            box-shadow: 0 0 20px rgba(255, 182, 39, 0.3);
+        }
+        .step-card.current .step-number {
+            background: linear-gradient(135deg, #FFB627 0%, #FF6B35 100%);
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(255, 182, 39, 0.4); }
+            50% { box-shadow: 0 0 0 10px rgba(255, 182, 39, 0); }
+        }
+        .step-card.locked {
+            opacity: 0.4;
+            filter: grayscale(60%);
+        }
+
+        /* Arrow Connectors */
+        .step-arrow {
+            display: flex;
+            align-items: center;
+            padding: 0 8px;
+            color: rgba(255,255,255,0.4);
+            font-size: 1.8em;
+        }
+        .step-arrow.active {
+            color: #4ECDC4;
+        }
+
+        /* Step Content */
+        .step-icon {
+            font-size: 2.5em;
+            margin: 15px 0 12px 0;
+        }
+        .step-label {
+            font-size: 0.7em;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #888;
+            margin-bottom: 6px;
+        }
+        .step-title {
+            font-size: 1.05em;
+            font-weight: 700;
+            color: #1a1a2e;
+            margin-bottom: 10px;
+        }
+        .step-description {
+            font-size: 0.8em;
+            color: #666;
+            line-height: 1.5;
+            margin-bottom: 15px;
+        }
+        .step-btn {
+            display: inline-block;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-size: 0.85em;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.2s;
+            border: none;
+            cursor: pointer;
+        }
+        .step-1 .step-btn { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; }
+        .step-2 .step-btn { background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); color: white; }
+        .step-3 .step-btn { background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); color: white; }
+        .step-card.completed .step-btn { background: linear-gradient(135deg, #4ECDC4 0%, #44A08D 100%); }
+        .step-card.locked .step-btn { background: #ccc; cursor: not-allowed; }
+
+        /* Responsive */
+        @media (max-width: 700px) {
+            .transformation-flow {
+                flex-direction: column;
+                gap: 20px;
+            }
+            .step-arrow {
+                transform: rotate(90deg);
+                padding: 5px 0;
+                justify-content: center;
+            }
+        }
+
+        /* ============================================
+           SUPPORTING TOOLS GRID
+           ============================================ */
+        .tools-section {
+            margin-top: 20px;
+        }
+        .tools-section-header {
+            color: #fff;
+            font-size: 1.1em;
+            margin-bottom: 15px;
+            padding-left: 5px;
+        }
         .tools-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -566,8 +735,22 @@
                 <div class="journey-steps" id="journeySteps"></div>
             </div>
 
-            <!-- Tools Grid -->
-            <div class="tools-grid" id="toolsGrid"></div>
+            <!-- Transformation Journey - 3-Step Flow -->
+            <div class="transformation-section">
+                <div class="transformation-header">
+                    <h2>🚀 Your Transformation Journey</h2>
+                    <p>Three steps from self-discovery to career clarity</p>
+                </div>
+                <div class="transformation-flow" id="transformationFlow">
+                    <!-- Populated by JavaScript -->
+                </div>
+            </div>
+
+            <!-- Supporting Tools -->
+            <div class="tools-section">
+                <h3 class="tools-section-header">🧰 Your Career Tools</h3>
+                <div class="tools-grid" id="toolsGrid"></div>
+            </div>
 
             <!-- Footer -->
             <div class="footer">
@@ -616,7 +799,7 @@
                 email: 'rs@rajsamuel.net',
                 folder: 'Raj_Samuel',
                 status: 'pre-programme',
-                agreementSigned: false,
+                agreementSigned: true,
                 files: {
                     questionnaire: 'Raj_Samuel/Raj_Samuel_Discovery_Questionnaire.html',
                     insights: 'Raj_Samuel/Raj_Samuel_Career_Insights_Report.html',
@@ -706,7 +889,10 @@
             // Render journey
             renderJourney(client);
 
-            // Render tools
+            // Render transformation flow (3-step journey)
+            renderTransformationJourney(client);
+
+            // Render supporting tools
             renderTools(client);
         }
 
@@ -745,7 +931,84 @@
             }).join('');
         }
 
-        // Render tools grid
+        // Render transformation journey (3-step flow)
+        function renderTransformationJourney(client) {
+            const container = document.getElementById('transformationFlow');
+            const stageIndex = STAGES.findIndex(s => s.id === client.status);
+            const folder = client.folder;
+            const nameUnderscored = client.name.replace(/\s+/g, '_');
+            const files = client.files || {};
+
+            // Determine step states based on programme stage
+            // Step 1 (Questionnaire): Available from pre-programme
+            // Step 2 (Insights): Available from week-1
+            // Step 3 (Blueprint): Available from week-1, built through sessions
+
+            const steps = [
+                {
+                    num: 1,
+                    label: 'Step 1',
+                    title: 'Discovery',
+                    subtitle: 'Questionnaire',
+                    icon: '🔍',
+                    description: 'Deep reflection on your patterns, superpowers, and career journey. Your answers fuel everything that follows.',
+                    file: files.questionnaire || 'ability-recognition-visual.html',
+                    btnText: stageIndex >= 1 ? 'View Responses' : 'Start Questionnaire',
+                    unlockStage: 0
+                },
+                {
+                    num: 2,
+                    label: 'Step 2',
+                    title: 'Insights',
+                    subtitle: 'Career Report',
+                    icon: '💡',
+                    description: "Lisa's expert analysis of your responses. Uncover your core pattern, unique thread, and career direction.",
+                    file: files.insights || `${folder}/${nameUnderscored}_Career_Insights_Report.html`,
+                    btnText: 'View Report',
+                    unlockStage: 1
+                },
+                {
+                    num: 3,
+                    label: 'Step 3',
+                    title: 'Blueprint',
+                    subtitle: 'Your Positioning',
+                    icon: '🎯',
+                    description: 'Your complete positioning document built through coaching. Evidence, belief moments, and your unique thread.',
+                    file: files.blueprint || `${folder}/${nameUnderscored}_Blueprint.html`,
+                    btnText: 'View Blueprint',
+                    unlockStage: 1
+                }
+            ];
+
+            container.innerHTML = steps.map((step, index) => {
+                const isUnlocked = stageIndex >= step.unlockStage || client.status === 'complete';
+                const isComplete = stageIndex > step.unlockStage || client.status === 'complete';
+                const isCurrent = stageIndex === step.unlockStage && !isComplete;
+
+                let cardClass = `step-card step-${step.num}`;
+                if (isComplete) cardClass += ' completed';
+                else if (isCurrent) cardClass += ' current';
+                else if (!isUnlocked) cardClass += ' locked';
+
+                const arrow = index < steps.length - 1 ? `
+                    <div class="step-arrow ${isComplete ? 'active' : ''}">→</div>
+                ` : '';
+
+                return `
+                    <div class="${cardClass}">
+                        <div class="step-number">${isComplete ? '✓' : step.num}</div>
+                        <div class="step-icon">${step.icon}</div>
+                        <div class="step-label">${step.label}</div>
+                        <div class="step-title">${step.title}</div>
+                        <div class="step-description">${step.description}</div>
+                        <a href="${isUnlocked ? step.file : '#'}" class="step-btn" ${!isUnlocked ? 'onclick="return false;"' : ''}>${step.btnText}</a>
+                    </div>
+                    ${arrow}
+                `;
+            }).join('');
+        }
+
+        // Render supporting tools grid (excludes the 3 main transformation steps)
         function renderTools(client) {
             const container = document.getElementById('toolsGrid');
             const stageIndex = STAGES.findIndex(s => s.id === client.status);
@@ -754,34 +1017,9 @@
 
             // Use client-specific file paths if available, otherwise fall back to generated names
             const files = client.files || {};
+
+            // Only supporting tools - the main 3 (Questionnaire, Insights, Blueprint) are in the transformation flow
             const tools = [
-                {
-                    icon: '📝',
-                    title: 'Discovery Questionnaire',
-                    description: 'Deep reflection questions about your patterns, superpowers, and career journey. Your answers fuel the analysis.',
-                    file: files.questionnaire || 'ability-recognition-visual.html',
-                    btnText: 'View Responses',
-                    unlockStage: 0,
-                    statusWhenComplete: 'completed'
-                },
-                {
-                    icon: '📊',
-                    title: 'Career Insights Report',
-                    description: "Lisa's deep-dive analysis of your questionnaire responses. Your core pattern, unique thread, and career direction.",
-                    file: files.insights || `${folder}/${nameUnderscored}_Career_Insights_Report.html`,
-                    btnText: 'View Report',
-                    unlockStage: 1,
-                    statusWhenComplete: 'completed'
-                },
-                {
-                    icon: '📘',
-                    title: 'Transformation Blueprint',
-                    description: 'Your complete positioning document built through coaching sessions. Evidence, belief moments, unique thread.',
-                    file: files.blueprint || `${folder}/${nameUnderscored}_Blueprint.html`,
-                    btnText: 'View Blueprint',
-                    unlockStage: 2,
-                    statusWhenComplete: 'completed'
-                },
                 {
                     icon: '📄',
                     title: 'CV Builder',
