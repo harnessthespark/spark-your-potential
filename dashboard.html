@@ -1036,6 +1036,12 @@
                         </span>
                     </div>
                     <p style="color: #666; font-size: 0.85em; margin-bottom: 8px;">${client.email}</p>
+                    <div style="display: flex; gap: 8px; margin-bottom: 8px;">
+                        ${client.agreementSigned ?
+                            '<span style="font-size: 0.75em; background: #d4edda; color: #155724; padding: 2px 8px; border-radius: 4px;">✓ Agreement Signed</span>' :
+                            '<span style="font-size: 0.75em; background: #fff3cd; color: #856404; padding: 2px 8px; border-radius: 4px;">⏳ Agreement Pending</span>'
+                        }
+                    </div>
                     <p style="color: #888; font-size: 0.8em;">
                         ${WEEK_INFO[client.status]?.icon || '📋'} ${WEEK_INFO[client.status]?.description || ''}
                     </p>
@@ -1118,11 +1124,27 @@
             const container = document.getElementById('weekActions');
             const status = client.status;
 
+            // Generate folder name from client name
+            const clientFolder = client.folder || client.name.replace(/\s+/g, '_');
+
             const actions = {
                 'pre-programme': `
                     <h4 style="color: #9b59b6; margin-bottom: 15px;">📋 Pre-Programme Setup</h4>
+
+                    <!-- Documents Section -->
+                    <div style="background: #f8f9fa; border-radius: 8px; padding: 15px; margin-bottom: 15px;">
+                        <h5 style="color: #666; margin: 0 0 10px 0; font-size: 0.9em;">📄 Client Documents</h5>
+                        <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                            ${client.agreementSigned ?
+                                '<span style="font-size: 0.8em; background: #d4edda; color: #155724; padding: 4px 10px; border-radius: 4px;">✓ Agreement Signed</span>' :
+                                `<a href="${clientFolder}/${clientFolder}_Coaching_Agreement.html" target="_blank" style="font-size: 0.8em; background: #fff3cd; color: #856404; padding: 4px 10px; border-radius: 4px; text-decoration: none;">⏳ Agreement Pending</a>`
+                            }
+                            <a href="${clientFolder}/${clientFolder}_Programme_Outline.html" target="_blank" style="font-size: 0.8em; background: #e7f3ff; color: #0066cc; padding: 4px 10px; border-radius: 4px; text-decoration: none;">📖 Programme Outline</a>
+                        </div>
+                    </div>
+
                     <div style="display: grid; gap: 10px;">
-                        <a href="ability-recognition-visual.html" target="_blank" class="action-btn">📝 Send Questionnaire Link</a>
+                        <a href="${clientFolder}/${clientFolder}_Discovery_Questionnaire.html" target="_blank" class="action-btn">📝 Send Questionnaire Link</a>
                         <button onclick="openClientQuestionnaire('${client.email}')" class="action-btn">👁️ View Responses</button>
                         <button onclick="advanceClient('${client.email}', 'week-1')" class="action-btn advance">✅ Mark Questionnaire Complete → Week 1</button>
                     </div>
@@ -1439,6 +1461,8 @@
                             session3Date: client.session_3_date,
                             completedDate: client.completed_date,
                             coachNotes: client.coach_notes,
+                            agreementSigned: client.agreement_signed || false,
+                            signedDocuments: client.signed_documents || [],
                             progress: {
                                 questionnaire: client.ability_recognition !== null,
                                 insightsReport: frontendStatus !== 'pre-programme',

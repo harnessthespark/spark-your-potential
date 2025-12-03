@@ -144,7 +144,8 @@ This document contains important context for Claude to remember across sessions 
 
 **Raj Samuel Setup:**
 - Created Raj_Samuel folder with all onboarding documents
-- `Raj_Samuel_Coaching_Agreement.html` - Digital signature ready
+- 
+ - Digital signature ready
 - `Raj_Samuel_Programme_Outline.html` - 4-week journey overview
 - `Raj_Samuel_Welcome_Email.html` - 4-step onboarding flow
 - Added to DEFAULT_CLIENTS in dashboard
