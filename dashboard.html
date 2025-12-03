@@ -533,6 +533,8 @@
                 status: 'pre-programme',
                 enrolledDate: '2025-12-01',
                 completedDate: null,
+                agreementSigned: true,
+                signedDocuments: ['Raj_Samuel_Coaching_Agreement.html'],
                 progress: {
                     questionnaire: false,
                     insightsReport: false,
@@ -1136,7 +1138,7 @@
                         <h5 style="color: #666; margin: 0 0 10px 0; font-size: 0.9em;">📄 Client Documents</h5>
                         <div style="display: flex; gap: 8px; flex-wrap: wrap;">
                             ${client.agreementSigned ?
-                                '<span style="font-size: 0.8em; background: #d4edda; color: #155724; padding: 4px 10px; border-radius: 4px;">✓ Agreement Signed</span>' :
+                                `<a href="${clientFolder}/${clientFolder}_Coaching_Agreement.html" target="_blank" style="font-size: 0.8em; background: #d4edda; color: #155724; padding: 4px 10px; border-radius: 4px; text-decoration: none;">✓ View Signed Agreement</a>` :
                                 `<a href="${clientFolder}/${clientFolder}_Coaching_Agreement.html" target="_blank" style="font-size: 0.8em; background: #fff3cd; color: #856404; padding: 4px 10px; border-radius: 4px; text-decoration: none;">⏳ Agreement Pending</a>`
                             }
                             <a href="${clientFolder}/${clientFolder}_Programme_Outline.html" target="_blank" style="font-size: 0.8em; background: #e7f3ff; color: #0066cc; padding: 4px 10px; border-radius: 4px; text-decoration: none;">📖 Programme Outline</a>
