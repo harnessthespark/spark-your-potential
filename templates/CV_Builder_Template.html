@@ -61,18 +61,22 @@
 
         /* Case Study Card with Hero Banner */
         .case-study { background: white; border-radius: 12px; overflow: hidden; margin-bottom: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.08); }
-        .case-study-hero { height: 80px; display: flex; align-items: flex-end; padding: 15px; }
-        .case-study-logo { color: white; font-size: 1.3em; font-weight: 700; text-shadow: 0 1px 3px rgba(0,0,0,0.3); }
+        .case-study-hero { height: 120px; display: flex; align-items: flex-end; padding: 15px; background-size: cover; background-position: center; position: relative; }
+        .case-study-hero::before { content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: linear-gradient(to top, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0.1) 100%); }
+        .case-study-logo { color: white; font-size: 1.3em; font-weight: 700; text-shadow: 0 1px 3px rgba(0,0,0,0.5); position: relative; z-index: 1; }
         .case-study-content { padding: 20px; }
         .case-study-title { font-weight: 600; color: #667eea; margin-bottom: 10px; }
         .case-study-text { color: #555; line-height: 1.6; }
         .case-study-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px; }
+        .case-study-actions { display: flex; gap: 5px; }
 
         /* Case Study Management Buttons */
         .add-casestudy-btn { width: 100%; padding: 12px; margin-top: 10px; background: rgba(102,126,234,0.1); border: 2px dashed #667eea; color: #667eea; border-radius: 8px; font-weight: 600; cursor: pointer; transition: all 0.2s; }
         .add-casestudy-btn:hover { background: rgba(102,126,234,0.2); }
         .delete-btn { background: rgba(255,100,100,0.2); border: none; color: #ff6b6b; padding: 4px 10px; border-radius: 4px; cursor: pointer; font-size: 0.8em; transition: all 0.2s; }
         .delete-btn:hover { background: rgba(255,100,100,0.4); }
+        .change-image-btn { background: rgba(102,126,234,0.2); border: none; color: #667eea; padding: 4px 10px; border-radius: 4px; cursor: pointer; font-size: 0.8em; transition: all 0.2s; }
+        .change-image-btn:hover { background: rgba(102,126,234,0.4); }
 
         /* Modal Styles */
         .modal-overlay { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.7); z-index: 1000; }
@@ -88,10 +92,15 @@
         .btn-save { background: #667eea; color: white; }
         .btn-cancel { background: #f0f0f0; color: #333; }
 
-        /* Colour Picker */
-        .colour-picker-group { display: flex; gap: 10px; align-items: center; }
-        .colour-picker-group input[type="color"] { width: 50px; height: 40px; border: none; border-radius: 8px; cursor: pointer; }
-        .colour-preview { flex: 1; height: 40px; border-radius: 8px; display: flex; align-items: center; justify-content: center; color: white; font-weight: 600; text-shadow: 0 1px 2px rgba(0,0,0,0.3); }
+        /* Image Upload */
+        .image-upload-area { border: 2px dashed #667eea; border-radius: 8px; padding: 20px; text-align: center; cursor: pointer; transition: all 0.2s; background: #f8f9ff; }
+        .image-upload-area:hover { background: #eef1ff; border-color: #5a6fd6; }
+        .image-upload-area.has-image { border-style: solid; }
+        .image-upload-area input[type="file"] { display: none; }
+        .image-preview { max-width: 100%; max-height: 150px; border-radius: 8px; margin-top: 10px; }
+        .upload-icon { font-size: 2em; margin-bottom: 10px; }
+        .upload-text { color: #667eea; font-weight: 500; }
+        .upload-hint { color: #999; font-size: 0.85em; margin-top: 5px; }
 
         /* Template Styles */
         .template-modern .cv-header { border-bottom: 3px solid #667eea; }
@@ -234,34 +243,42 @@
                     <div class="cv-section-title">Key Transformations</div>
                     <p style="color: #666; margin-bottom: 15px; font-size: 0.9em;">From your Blueprint evidence collection:</p>
 
-                    <div class="case-study" id="casestudy-1" data-colour1="#667eea" data-colour2="#764ba2">
+                    <div class="case-study" id="casestudy-1" data-image="">
                         <div class="case-study-hero" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
                             <div class="case-study-logo editable" contenteditable="true">Company/Brand Name</div>
                         </div>
                         <div class="case-study-content">
                             <div class="case-study-header">
                                 <div class="case-study-title editable" contenteditable="true">Outcome #1: Title</div>
-                                <button class="delete-btn" onclick="deleteCaseStudy('1')">🗑️ Delete</button>
+                                <div class="case-study-actions">
+                                    <button class="change-image-btn" onclick="triggerImageUpload('1')">📷 Image</button>
+                                    <button class="delete-btn" onclick="deleteCaseStudy('1')">🗑️ Delete</button>
+                                </div>
                             </div>
                             <div class="case-study-text editable" contenteditable="true">
                                 Paste your Outcome #1 from the Blueprint here. Challenge → Action → Result format works well.
                             </div>
                         </div>
+                        <input type="file" id="imageUpload-1" accept="image/*" onchange="handleImageUpload('1', this)" style="display: none;">
                     </div>
 
-                    <div class="case-study" id="casestudy-2" data-colour1="#4CAF50" data-colour2="#2196F3">
+                    <div class="case-study" id="casestudy-2" data-image="">
                         <div class="case-study-hero" style="background: linear-gradient(135deg, #4CAF50 0%, #2196F3 100%);">
                             <div class="case-study-logo editable" contenteditable="true">Company/Brand Name</div>
                         </div>
                         <div class="case-study-content">
                             <div class="case-study-header">
                                 <div class="case-study-title editable" contenteditable="true">Outcome #2: Title</div>
-                                <button class="delete-btn" onclick="deleteCaseStudy('2')">🗑️ Delete</button>
+                                <div class="case-study-actions">
+                                    <button class="change-image-btn" onclick="triggerImageUpload('2')">📷 Image</button>
+                                    <button class="delete-btn" onclick="deleteCaseStudy('2')">🗑️ Delete</button>
+                                </div>
                             </div>
                             <div class="case-study-text editable" contenteditable="true">
                                 Paste your Outcome #2 here.
                             </div>
                         </div>
+                        <input type="file" id="imageUpload-2" accept="image/*" onchange="handleImageUpload('2', this)" style="display: none;">
                     </div>
 
                     <button class="add-casestudy-btn" onclick="openAddCaseStudyModal()">📊 Add New Case Study</button>
@@ -280,11 +297,13 @@
                             <input type="text" id="csTitle" placeholder="e.g., Digital Transformation">
                         </div>
                         <div class="modal-field">
-                            <label>Hero Banner Colours</label>
-                            <div class="colour-picker-group">
-                                <input type="color" id="csColour1" value="#667eea" onchange="updateColourPreview()">
-                                <input type="color" id="csColour2" value="#764ba2" onchange="updateColourPreview()">
-                                <div class="colour-preview" id="csColourPreview" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">Preview</div>
+                            <label>Hero Image (optional)</label>
+                            <div class="image-upload-area" id="csImageUploadArea" onclick="document.getElementById('csImageInput').click()">
+                                <div class="upload-icon">📷</div>
+                                <div class="upload-text">Click to upload image</div>
+                                <div class="upload-hint">PNG, JPG up to 2MB</div>
+                                <input type="file" id="csImageInput" accept="image/*" onchange="previewImage(this)">
+                                <img id="csImagePreview" class="image-preview" style="display: none;">
                             </div>
                         </div>
                         <div class="modal-field">
@@ -359,6 +378,7 @@
 
         // Case Study Management
         let caseStudyCounter = 2;
+        let pendingImageData = null;
 
         // Open modal
         function openAddCaseStudyModal() {
@@ -369,9 +389,10 @@
             document.getElementById('csChallenge').value = '';
             document.getElementById('csAction').value = '';
             document.getElementById('csResult').value = '';
-            document.getElementById('csColour1').value = '#667eea';
-            document.getElementById('csColour2').value = '#764ba2';
-            updateColourPreview();
+            document.getElementById('csImageInput').value = '';
+            document.getElementById('csImagePreview').style.display = 'none';
+            document.getElementById('csImageUploadArea').classList.remove('has-image');
+            pendingImageData = null;
         }
 
         // Close modal
@@ -379,11 +400,43 @@
             document.getElementById('addCaseStudyModal').classList.remove('visible');
         }
 
-        // Update colour preview
-        function updateColourPreview() {
-            const colour1 = document.getElementById('csColour1').value;
-            const colour2 = document.getElementById('csColour2').value;
-            document.getElementById('csColourPreview').style.background = `linear-gradient(135deg, ${colour1} 0%, ${colour2} 100%)`;
+        // Preview image in modal
+        function previewImage(input) {
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    pendingImageData = e.target.result;
+                    const preview = document.getElementById('csImagePreview');
+                    preview.src = pendingImageData;
+                    preview.style.display = 'block';
+                    document.getElementById('csImageUploadArea').classList.add('has-image');
+                };
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        // Trigger image upload for existing case study
+        function triggerImageUpload(id) {
+            document.getElementById('imageUpload-' + id).click();
+        }
+
+        // Handle image upload for existing case study
+        function handleImageUpload(id, input) {
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const imageData = e.target.result;
+                    const caseStudy = document.getElementById('casestudy-' + id);
+                    const hero = caseStudy.querySelector('.case-study-hero');
+                    hero.style.backgroundImage = `url(${imageData})`;
+                    hero.style.background = `linear-gradient(to top, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0.2) 100%), url(${imageData})`;
+                    hero.style.backgroundSize = 'cover';
+                    hero.style.backgroundPosition = 'center';
+                    caseStudy.dataset.image = imageData;
+                    saveCaseStudies();
+                };
+                reader.readAsDataURL(input.files[0]);
+            }
         }
 
         // Add case study from modal
@@ -393,21 +446,39 @@
             const challenge = document.getElementById('csChallenge').value || 'Describe the challenge...';
             const action = document.getElementById('csAction').value || 'Describe your action...';
             const result = document.getElementById('csResult').value || 'Describe the result...';
-            const colour1 = document.getElementById('csColour1').value;
-            const colour2 = document.getElementById('csColour2').value;
 
             caseStudyCounter++;
             const id = 'custom-' + caseStudyCounter;
 
+            // Determine background style
+            let heroStyle = '';
+            if (pendingImageData) {
+                heroStyle = `background: linear-gradient(to top, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0.2) 100%), url(${pendingImageData}); background-size: cover; background-position: center;`;
+            } else {
+                // Random gradient colours as fallback
+                const colours = [
+                    ['#667eea', '#764ba2'],
+                    ['#4CAF50', '#2196F3'],
+                    ['#FF6B6B', '#FFA726'],
+                    ['#00BCD4', '#3F51B5'],
+                    ['#E91E63', '#9C27B0']
+                ];
+                const randomColours = colours[Math.floor(Math.random() * colours.length)];
+                heroStyle = `background: linear-gradient(135deg, ${randomColours[0]} 0%, ${randomColours[1]} 100%);`;
+            }
+
             const caseStudyHTML = `
-                <div class="case-study" id="casestudy-${id}" data-colour1="${colour1}" data-colour2="${colour2}">
-                    <div class="case-study-hero" style="background: linear-gradient(135deg, ${colour1} 0%, ${colour2} 100%);">
+                <div class="case-study" id="casestudy-${id}" data-image="${pendingImageData || ''}">
+                    <div class="case-study-hero" style="${heroStyle}">
                         <div class="case-study-logo editable" contenteditable="true">${company}</div>
                     </div>
                     <div class="case-study-content">
                         <div class="case-study-header">
                             <div class="case-study-title editable" contenteditable="true">${title}</div>
-                            <button class="delete-btn" onclick="deleteCaseStudy('${id}')">🗑️ Delete</button>
+                            <div class="case-study-actions">
+                                <button class="change-image-btn" onclick="triggerImageUpload('${id}')">📷 Image</button>
+                                <button class="delete-btn" onclick="deleteCaseStudy('${id}')">🗑️ Delete</button>
+                            </div>
                         </div>
                         <div class="case-study-text editable" contenteditable="true">
                             <strong>Challenge:</strong> ${challenge}<br><br>
@@ -415,6 +486,7 @@
                             <strong>Result:</strong> ${result}
                         </div>
                     </div>
+                    <input type="file" id="imageUpload-${id}" accept="image/*" onchange="handleImageUpload('${id}', this)" style="display: none;">
                 </div>
             `;
 
@@ -445,8 +517,7 @@
                     company: cs.querySelector('.case-study-logo')?.innerText || '',
                     title: cs.querySelector('.case-study-title')?.innerText || '',
                     content: cs.querySelector('.case-study-text')?.innerHTML || '',
-                    colour1: cs.dataset.colour1 || '#667eea',
-                    colour2: cs.dataset.colour2 || '#764ba2'
+                    image: cs.dataset.image || ''
                 });
             });
             localStorage.setItem('cv_casestudies_[CLIENT_ID]', JSON.stringify(caseStudies));
@@ -465,18 +536,31 @@
                 // Add saved case studies
                 const caseStudies = JSON.parse(saved);
                 caseStudies.forEach(cs => {
+                    // Determine background style
+                    let heroStyle = '';
+                    if (cs.image) {
+                        heroStyle = `background: linear-gradient(to top, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0.2) 100%), url(${cs.image}); background-size: cover; background-position: center;`;
+                    } else {
+                        heroStyle = `background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);`;
+                    }
+
+                    const csId = cs.id.replace('casestudy-', '');
                     const html = `
-                        <div class="case-study" id="${cs.id}" data-colour1="${cs.colour1}" data-colour2="${cs.colour2}">
-                            <div class="case-study-hero" style="background: linear-gradient(135deg, ${cs.colour1} 0%, ${cs.colour2} 100%);">
+                        <div class="case-study" id="${cs.id}" data-image="${cs.image || ''}">
+                            <div class="case-study-hero" style="${heroStyle}">
                                 <div class="case-study-logo editable" contenteditable="true">${cs.company}</div>
                             </div>
                             <div class="case-study-content">
                                 <div class="case-study-header">
                                     <div class="case-study-title editable" contenteditable="true">${cs.title}</div>
-                                    <button class="delete-btn" onclick="deleteCaseStudy('${cs.id.replace('casestudy-', '')}')">🗑️ Delete</button>
+                                    <div class="case-study-actions">
+                                        <button class="change-image-btn" onclick="triggerImageUpload('${csId}')">📷 Image</button>
+                                        <button class="delete-btn" onclick="deleteCaseStudy('${csId}')">🗑️ Delete</button>
+                                    </div>
                                 </div>
                                 <div class="case-study-text editable" contenteditable="true">${cs.content}</div>
                             </div>
+                            <input type="file" id="imageUpload-${csId}" accept="image/*" onchange="handleImageUpload('${csId}', this)" style="display: none;">
                         </div>
                     `;
                     addButton.insertAdjacentHTML('beforebegin', html);

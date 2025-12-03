@@ -544,30 +544,62 @@
             resize: vertical;
             min-height: 60px;
         }
-        .colour-picker-group {
-            display: flex;
-            gap: 10px;
-            align-items: center;
-        }
-        .colour-picker-group input[type="color"] {
-            width: 50px;
-            height: 40px;
-            padding: 0;
-            border: 2px solid #e0e0e0;
+        /* Image Upload */
+        .image-upload-area {
+            border: 2px dashed #7B2CBF;
             border-radius: 8px;
+            padding: 20px;
+            text-align: center;
             cursor: pointer;
+            transition: all 0.2s;
+            background: rgba(123,44,191,0.05);
         }
-        .colour-preview {
-            flex: 1;
-            height: 40px;
+        .image-upload-area:hover {
+            background: rgba(123,44,191,0.1);
+            border-color: #D81B60;
+        }
+        .image-upload-area.has-image {
+            border-style: solid;
+        }
+        .image-upload-area input[type="file"] {
+            display: none;
+        }
+        .image-preview {
+            max-width: 100%;
+            max-height: 120px;
             border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
+            margin-top: 10px;
+        }
+        .upload-icon {
+            font-size: 2em;
+            margin-bottom: 8px;
+        }
+        .upload-text {
+            color: #7B2CBF;
             font-weight: 600;
-            font-size: 0.85em;
-            text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+            font-size: 0.9em;
+        }
+        .upload-hint {
+            color: #888;
+            font-size: 0.8em;
+            margin-top: 5px;
+        }
+        .change-image-btn {
+            background: rgba(123,44,191,0.2);
+            border: none;
+            color: #7B2CBF;
+            padding: 4px 8px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.8em;
+            transition: all 0.2s;
+        }
+        .change-image-btn:hover {
+            background: rgba(123,44,191,0.4);
+        }
+        .case-study-actions {
+            display: flex;
+            gap: 5px;
         }
         .modal-buttons {
             display: flex;

@@ -395,6 +395,231 @@
             cursor: not-allowed;
         }
 
+        /* ============================================
+           WEEKLY HOMEWORK SECTION
+           ============================================ */
+        .homework-section {
+            background: rgba(255,255,255,0.05);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+        }
+        .homework-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .homework-header h2 {
+            color: #fff;
+            font-size: 1.3em;
+            font-weight: 700;
+        }
+        .homework-header .week-badge {
+            background: linear-gradient(135deg, #FFB627 0%, #FF6B35 100%);
+            color: white;
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: 600;
+        }
+
+        /* Blueprint Progress */
+        .blueprint-progress {
+            background: rgba(255,255,255,0.1);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 25px;
+        }
+        .blueprint-progress-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+        .blueprint-progress-header h4 {
+            color: #fff;
+            font-size: 0.95em;
+            font-weight: 600;
+        }
+        .blueprint-progress-header .progress-text {
+            color: #4ECDC4;
+            font-size: 0.9em;
+            font-weight: 600;
+        }
+        .blueprint-progress-bar {
+            height: 8px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        .blueprint-progress-bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #4ECDC4 0%, #44A08D 100%);
+            border-radius: 4px;
+            transition: width 0.5s ease;
+        }
+
+        /* Personalised Prompt */
+        .personalised-prompt {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.2) 0%, rgba(118, 75, 162, 0.2) 100%);
+            border: 1px solid rgba(102, 126, 234, 0.3);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 25px;
+        }
+        .personalised-prompt-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 12px;
+        }
+        .personalised-prompt-header .icon {
+            font-size: 1.3em;
+        }
+        .personalised-prompt-header h4 {
+            color: #fff;
+            font-size: 0.95em;
+            font-weight: 600;
+        }
+        .personalised-prompt p {
+            color: #ddd;
+            font-size: 0.95em;
+            line-height: 1.6;
+            font-style: italic;
+        }
+        .personalised-prompt.empty {
+            opacity: 0.5;
+        }
+        .personalised-prompt.empty p {
+            color: #999;
+            font-style: normal;
+        }
+
+        /* Week Tabs */
+        .week-tabs {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        .week-tab {
+            padding: 10px 20px;
+            border-radius: 10px;
+            font-size: 0.9em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: 2px solid transparent;
+            background: rgba(255,255,255,0.1);
+            color: #aaa;
+        }
+        .week-tab:hover:not(.locked) {
+            background: rgba(255,255,255,0.15);
+        }
+        .week-tab.active {
+            background: rgba(255,255,255,0.95);
+            color: #1a1a2e;
+        }
+        .week-tab.completed {
+            background: rgba(78, 205, 196, 0.2);
+            border-color: #4ECDC4;
+            color: #4ECDC4;
+        }
+        .week-tab.locked {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+
+        /* Homework List */
+        .homework-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .homework-item {
+            background: rgba(255,255,255,0.95);
+            border-radius: 12px;
+            padding: 18px 20px;
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+            transition: all 0.2s;
+        }
+        .homework-item:hover {
+            transform: translateX(5px);
+        }
+        .homework-item.locked {
+            opacity: 0.4;
+            pointer-events: none;
+        }
+        .homework-checkbox {
+            width: 24px;
+            height: 24px;
+            border: 2px solid #ddd;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+        .homework-checkbox:hover {
+            border-color: #4ECDC4;
+        }
+        .homework-checkbox.checked {
+            background: linear-gradient(135deg, #4ECDC4 0%, #44A08D 100%);
+            border-color: #4ECDC4;
+            color: white;
+        }
+        .homework-content {
+            flex: 1;
+        }
+        .homework-title {
+            font-weight: 600;
+            color: #1a1a2e;
+            font-size: 0.95em;
+            margin-bottom: 4px;
+        }
+        .homework-description {
+            color: #666;
+            font-size: 0.85em;
+            line-height: 1.5;
+        }
+        .homework-link {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.85em;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            margin-top: 8px;
+        }
+        .homework-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Week Summary */
+        .week-summary {
+            background: rgba(255,255,255,0.1);
+            border-radius: 12px;
+            padding: 15px 20px;
+            margin-top: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .week-summary-text {
+            color: #aaa;
+            font-size: 0.9em;
+        }
+        .week-summary-text strong {
+            color: #4ECDC4;
+        }
+
         /* Journey Section */
         .journey-section {
             background: rgba(255,255,255,0.1);
@@ -746,6 +971,49 @@
                 </div>
             </div>
 
+            <!-- Weekly Homework Section -->
+            <div class="homework-section">
+                <div class="homework-header">
+                    <h2>📋 This Week's Focus</h2>
+                    <span class="week-badge" id="currentWeekBadge">Week 1</span>
+                </div>
+
+                <!-- Blueprint Progress -->
+                <div class="blueprint-progress">
+                    <div class="blueprint-progress-header">
+                        <h4>📘 Blueprint Progress</h4>
+                        <span class="progress-text" id="blueprintProgressText">0% Complete</span>
+                    </div>
+                    <div class="blueprint-progress-bar">
+                        <div class="blueprint-progress-bar-fill" id="blueprintProgressBar" style="width: 0%"></div>
+                    </div>
+                </div>
+
+                <!-- Personalised Prompt from Lisa -->
+                <div class="personalised-prompt" id="personalisedPrompt">
+                    <div class="personalised-prompt-header">
+                        <span class="icon">💬</span>
+                        <h4>Lisa's Focus for You</h4>
+                    </div>
+                    <p id="personalisedPromptText">No personalised prompt yet - check back after your session!</p>
+                </div>
+
+                <!-- Week Tabs -->
+                <div class="week-tabs" id="weekTabs">
+                    <!-- Populated by JavaScript -->
+                </div>
+
+                <!-- Homework List -->
+                <div class="homework-list" id="homeworkList">
+                    <!-- Populated by JavaScript -->
+                </div>
+
+                <!-- Week Summary -->
+                <div class="week-summary">
+                    <span class="week-summary-text"><strong id="homeworkCompleteCount">0</strong> of <span id="homeworkTotalCount">0</span> tasks completed</span>
+                </div>
+            </div>
+
             <!-- Supporting Tools -->
             <div class="tools-section">
                 <h3 class="tools-section-header">🧰 Your Career Tools</h3>
@@ -777,7 +1045,14 @@
                     cvBuilder: 'sarah_mitchell_demo_client/Sarah_Mitchell_CV_Builder.html',
                     mappingGuide: 'sarah_mitchell_demo_client/Sarah_Mitchell_Mapping_Guide.html',
                     decisionFramework: 'sarah_mitchell_demo_client/Sarah_Mitchell_Decision_Framework.html'
-                }
+                },
+                prompts: {
+                    week1: "Your questionnaire revealed a strong pattern of bringing order to chaos. This week, I'd like you to identify 3 specific examples where you turned a messy situation into something structured and successful.",
+                    week2: "Building on your 'organiser' pattern, think about what environments let you thrive vs drain you. What does your ideal next role look like?",
+                    week3: "",
+                    week4: ""
+                },
+                blueprintProgress: 45
             },
             'donaldpirie111@hotmail.co.uk': {
                 name: 'Donald Pirie',
@@ -792,7 +1067,14 @@
                     cvBuilder: 'Donald/Donald_Interactive_CV_Builder.html',
                     mappingGuide: 'Donald/Donald_Blueprint_CV_LinkedIn_Mapping_Guide.html',
                     decisionFramework: 'Donald/Donald_Decision_Framework_Updated.html'
-                }
+                },
+                prompts: {
+                    week1: "Your responses show you're a natural problem solver who thrives on complex challenges. Document 3 belief moments that prove this.",
+                    week2: "Let's explore what 'sustainable success' looks like for you. What are the non-negotiables for your next role?",
+                    week3: "Time to craft your story. How do you want to introduce yourself in 30 seconds?",
+                    week4: "Final push! Review your CV and LinkedIn - does every line reflect your unique thread?"
+                },
+                blueprintProgress: 100
             },
             'rs@rajsamuel.net': {
                 name: 'Raj Samuel',
@@ -807,7 +1089,14 @@
                     cvBuilder: 'Raj_Samuel/Raj_Samuel_CV_Builder.html',
                     mappingGuide: 'Raj_Samuel/Raj_Samuel_Mapping_Guide.html',
                     decisionFramework: 'Raj_Samuel/Raj_Samuel_Decision_Framework.html'
-                }
+                },
+                prompts: {
+                    week1: "",
+                    week2: "",
+                    week3: "",
+                    week4: ""
+                },
+                blueprintProgress: 0
             }
         };
 
@@ -820,7 +1109,138 @@
             { id: 'complete', label: 'Complete', icon: '🏆' }
         ];
 
+        // Weekly homework tasks - builds progressively towards complete toolkit
+        const WEEKLY_HOMEWORK = {
+            'week-1': {
+                title: 'Foundation',
+                subtitle: 'Discovery & Patterns',
+                tasks: [
+                    {
+                        id: 'w1-questionnaire',
+                        title: 'Complete Discovery Questionnaire',
+                        description: 'Deep reflection on your patterns, superpowers, and career journey',
+                        linkText: 'Open Questionnaire',
+                        linkKey: 'questionnaire'
+                    },
+                    {
+                        id: 'w1-belief-moments',
+                        title: 'Identify 3-5 Belief Moments',
+                        description: 'Stories from your career that prove your value - times when you made a real difference'
+                    },
+                    {
+                        id: 'w1-achievements',
+                        title: 'List Your Top 5 Achievements',
+                        description: 'What are you most proud of? These will fuel your positioning'
+                    },
+                    {
+                        id: 'w1-review-insights',
+                        title: 'Review Your Career Insights Report',
+                        description: 'Lisa will create this after your session - your patterns and unique thread revealed',
+                        linkText: 'View Report',
+                        linkKey: 'insights'
+                    }
+                ]
+            },
+            'week-2': {
+                title: 'Career Direction',
+                subtitle: 'Opportunities & Confidence',
+                tasks: [
+                    {
+                        id: 'w2-vision',
+                        title: 'Define Your Ideal Role Vision',
+                        description: 'What does your dream role look like? Environment, culture, responsibilities'
+                    },
+                    {
+                        id: 'w2-red-flags',
+                        title: 'Identify Your Red Flags',
+                        description: 'What are the deal-breakers? Things you won\'t tolerate in your next role'
+                    },
+                    {
+                        id: 'w2-green-flags',
+                        title: 'Identify Your Green Flags',
+                        description: 'What makes you thrive? The must-haves for sustainable success'
+                    },
+                    {
+                        id: 'w2-decision-framework',
+                        title: 'Start Your Decision Framework',
+                        description: 'Begin scoring criteria based on your red/green flags',
+                        linkText: 'Open Framework',
+                        linkKey: 'decisionFramework'
+                    }
+                ]
+            },
+            'week-3': {
+                title: 'Positioning & Voice',
+                subtitle: 'Crafting Your Narrative',
+                tasks: [
+                    {
+                        id: 'w3-one-sentence',
+                        title: 'Write Your One-Sentence Intro',
+                        description: 'Who you help and how - your positioning statement'
+                    },
+                    {
+                        id: 'w3-elevator-30s',
+                        title: 'Draft 30-Second Elevator Pitch',
+                        description: 'Quick intro for networking events and chance encounters'
+                    },
+                    {
+                        id: 'w3-elevator-60s',
+                        title: 'Draft 60-Second Elevator Pitch',
+                        description: 'Expanded version with a belief moment example'
+                    },
+                    {
+                        id: 'w3-elevator-2min',
+                        title: 'Draft 2-Minute Story',
+                        description: 'Full narrative for interviews and deep conversations'
+                    },
+                    {
+                        id: 'w3-blueprint-sections',
+                        title: 'Review Blueprint Sections',
+                        description: 'Check your Blueprint is capturing everything from sessions',
+                        linkText: 'View Blueprint',
+                        linkKey: 'blueprint'
+                    }
+                ]
+            },
+            'week-4': {
+                title: 'Implementation',
+                subtitle: 'Polish & Launch Ready',
+                tasks: [
+                    {
+                        id: 'w4-cv-complete',
+                        title: 'Complete Your CV',
+                        description: 'Use the CV Builder with content from your Blueprint',
+                        linkText: 'Open CV Builder',
+                        linkKey: 'cvBuilder'
+                    },
+                    {
+                        id: 'w4-linkedin-headline',
+                        title: 'Update LinkedIn Headline & Summary',
+                        description: 'Apply your positioning using the Mapping Guide',
+                        linkText: 'View Mapping Guide',
+                        linkKey: 'mappingGuide'
+                    },
+                    {
+                        id: 'w4-linkedin-experience',
+                        title: 'Update LinkedIn Experience Section',
+                        description: 'Rewrite using your unique thread and belief moments'
+                    },
+                    {
+                        id: 'w4-interview-prep',
+                        title: 'Prepare 5 Interview Answers',
+                        description: 'Common questions answered using your positioning and evidence'
+                    },
+                    {
+                        id: 'w4-action-plan',
+                        title: 'Create 30-Day Action Plan',
+                        description: 'Your launch plan - applications, networking, next steps'
+                    }
+                ]
+            }
+        };
+
         let currentClient = null;
+        let selectedWeek = null;
 
         // Check for saved session
         window.onload = function() {
@@ -891,6 +1311,9 @@
 
             // Render transformation flow (3-step journey)
             renderTransformationJourney(client);
+
+            // Render homework section
+            renderHomeworkSection(client);
 
             // Render supporting tools
             renderTools(client);
@@ -1090,10 +1513,174 @@
             }).join('');
         }
 
+        // =============================================
+        // HOMEWORK SYSTEM
+        // =============================================
+
+        // Get homework completion from localStorage
+        function getHomeworkCompletion(clientEmail) {
+            const key = `syp_homework_${clientEmail}`;
+            const stored = localStorage.getItem(key);
+            return stored ? JSON.parse(stored) : {};
+        }
+
+        // Save homework completion to localStorage
+        function saveHomeworkCompletion(clientEmail, taskId, completed) {
+            const key = `syp_homework_${clientEmail}`;
+            const current = getHomeworkCompletion(clientEmail);
+            current[taskId] = completed;
+            localStorage.setItem(key, JSON.stringify(current));
+        }
+
+        // Toggle homework item
+        function toggleHomework(taskId) {
+            if (!currentClient) return;
+            const completion = getHomeworkCompletion(currentClient.email);
+            const newState = !completion[taskId];
+            saveHomeworkCompletion(currentClient.email, taskId, newState);
+            renderHomework(currentClient, selectedWeek);
+        }
+
+        // Get current week based on status
+        function getCurrentWeek(status) {
+            if (status === 'pre-programme') return 'week-1';
+            if (status === 'complete') return 'week-4';
+            return status;
+        }
+
+        // Check if week is unlocked
+        function isWeekUnlocked(weekId, clientStatus) {
+            const weekOrder = ['week-1', 'week-2', 'week-3', 'week-4'];
+            const currentWeekIndex = weekOrder.indexOf(getCurrentWeek(clientStatus));
+            const targetWeekIndex = weekOrder.indexOf(weekId);
+            return targetWeekIndex <= currentWeekIndex || clientStatus === 'complete';
+        }
+
+        // Check if week is completed
+        function isWeekCompleted(weekId, clientStatus) {
+            const weekOrder = ['week-1', 'week-2', 'week-3', 'week-4'];
+            const currentWeekIndex = weekOrder.indexOf(getCurrentWeek(clientStatus));
+            const targetWeekIndex = weekOrder.indexOf(weekId);
+            return targetWeekIndex < currentWeekIndex || clientStatus === 'complete';
+        }
+
+        // Render week tabs
+        function renderWeekTabs(client) {
+            const container = document.getElementById('weekTabs');
+            const weeks = ['week-1', 'week-2', 'week-3', 'week-4'];
+            const weekLabels = {
+                'week-1': '🌱 Week 1',
+                'week-2': '🧭 Week 2',
+                'week-3': '🎯 Week 3',
+                'week-4': '🚀 Week 4'
+            };
+
+            container.innerHTML = weeks.map(weekId => {
+                const isUnlocked = isWeekUnlocked(weekId, client.status);
+                const isCompleted = isWeekCompleted(weekId, client.status);
+                const isActive = weekId === selectedWeek;
+
+                let tabClass = 'week-tab';
+                if (isActive) tabClass += ' active';
+                else if (isCompleted) tabClass += ' completed';
+                else if (!isUnlocked) tabClass += ' locked';
+
+                return `
+                    <div class="${tabClass}" onclick="${isUnlocked ? `selectWeek('${weekId}')` : ''}">
+                        ${weekLabels[weekId]}
+                        ${isCompleted && !isActive ? ' ✓' : ''}
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // Select a week
+        function selectWeek(weekId) {
+            selectedWeek = weekId;
+            renderWeekTabs(currentClient);
+            renderHomework(currentClient, weekId);
+        }
+
+        // Render homework section
+        function renderHomework(client, weekId) {
+            const weekData = WEEKLY_HOMEWORK[weekId];
+            if (!weekData) return;
+
+            const completion = getHomeworkCompletion(client.email);
+            const files = client.files || {};
+            const isUnlocked = isWeekUnlocked(weekId, client.status);
+            const isCompleted = isWeekCompleted(weekId, client.status);
+
+            // Update week badge
+            const weekNum = weekId.replace('week-', '');
+            document.getElementById('currentWeekBadge').textContent = `Week ${weekNum}: ${weekData.title}`;
+
+            // Update blueprint progress
+            const progress = client.blueprintProgress || 0;
+            document.getElementById('blueprintProgressText').textContent = `${progress}% Complete`;
+            document.getElementById('blueprintProgressBar').style.width = `${progress}%`;
+
+            // Update personalised prompt
+            const promptKey = weekId.replace('-', '');
+            const prompt = client.prompts?.[promptKey] || '';
+            const promptEl = document.getElementById('personalisedPrompt');
+            const promptTextEl = document.getElementById('personalisedPromptText');
+
+            if (prompt) {
+                promptEl.classList.remove('empty');
+                promptTextEl.textContent = `"${prompt}"`;
+            } else {
+                promptEl.classList.add('empty');
+                promptTextEl.textContent = 'No personalised prompt yet - check back after your session with Lisa!';
+            }
+
+            // Render homework list
+            const listContainer = document.getElementById('homeworkList');
+            let completedCount = 0;
+
+            listContainer.innerHTML = weekData.tasks.map(task => {
+                const isChecked = completion[task.id] || false;
+                if (isChecked) completedCount++;
+
+                const itemClass = `homework-item${!isUnlocked ? ' locked' : ''}`;
+                const checkboxClass = `homework-checkbox${isChecked ? ' checked' : ''}`;
+
+                let linkHtml = '';
+                if (task.linkKey && files[task.linkKey]) {
+                    linkHtml = `<a href="${files[task.linkKey]}" target="_blank" class="homework-link">${task.linkText} →</a>`;
+                }
+
+                return `
+                    <div class="${itemClass}">
+                        <div class="${checkboxClass}" onclick="${isUnlocked ? `toggleHomework('${task.id}')` : ''}">
+                            ${isChecked ? '✓' : ''}
+                        </div>
+                        <div class="homework-content">
+                            <div class="homework-title">${task.title}</div>
+                            <div class="homework-description">${task.description}</div>
+                            ${linkHtml}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            // Update summary
+            document.getElementById('homeworkCompleteCount').textContent = completedCount;
+            document.getElementById('homeworkTotalCount').textContent = weekData.tasks.length;
+        }
+
+        // Render full homework section
+        function renderHomeworkSection(client) {
+            selectedWeek = getCurrentWeek(client.status);
+            renderWeekTabs(client);
+            renderHomework(client, selectedWeek);
+        }
+
         // Logout
         function logout() {
             localStorage.removeItem('syp_client_email');
             currentClient = null;
+            selectedWeek = null;
             document.getElementById('portalContent').classList.remove('visible');
             document.getElementById('agreementSection').classList.remove('visible');
             document.getElementById('loginSection').style.display = 'block';
