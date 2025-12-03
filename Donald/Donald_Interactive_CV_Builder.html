@@ -383,7 +383,7 @@
             left: 0;
             right: 0;
             height: 60px;
-            background: linear-gradient(transparent, rgba(0,0,0,0.6));
+            background: linear-gradient(transparent, rgba(0,0,0,0.25));
         }
         .case-study-hero-ubs {
             background: linear-gradient(135deg, #E60000 0%, #8B0000 100%);
@@ -1014,11 +1014,13 @@
             </div>
 
             <div class="modal-field">
-                <label>Hero Banner Colours</label>
-                <div class="colour-picker-group">
-                    <input type="color" id="csColour1" value="#7B2CBF" onchange="updateColourPreview()">
-                    <input type="color" id="csColour2" value="#D81B60" onchange="updateColourPreview()">
-                    <div class="colour-preview" id="csColourPreview" style="background: linear-gradient(135deg, #7B2CBF 0%, #D81B60 100%);">Preview</div>
+                <label>Hero Image (optional)</label>
+                <div class="image-upload-area" id="csImageUploadArea" onclick="document.getElementById('csImageInput').click()">
+                    <div class="upload-icon">📷</div>
+                    <div class="upload-text">Click to upload image</div>
+                    <div class="upload-hint">PNG, JPG up to 2MB</div>
+                    <input type="file" id="csImageInput" accept="image/*" onchange="previewImage(this)">
+                    <img id="csImagePreview" class="image-preview" style="display: none;">
                 </div>
             </div>
 
@@ -1118,6 +1120,8 @@
         // CASE STUDY MANAGEMENT
         // =============================================
 
+        let pendingImageData = null;
+
         function openAddCaseStudyModal() {
             document.getElementById('addCaseStudyModal').classList.add('visible');
             // Clear form
@@ -1127,19 +1131,52 @@
             document.getElementById('csInsight').value = '';
             document.getElementById('csStrategy').value = '';
             document.getElementById('csResults').value = '';
-            document.getElementById('csColour1').value = '#7B2CBF';
-            document.getElementById('csColour2').value = '#D81B60';
-            updateColourPreview();
+            document.getElementById('csImageInput').value = '';
+            document.getElementById('csImagePreview').style.display = 'none';
+            document.getElementById('csImageUploadArea').classList.remove('has-image');
+            pendingImageData = null;
         }
 
         function closeAddCaseStudyModal() {
             document.getElementById('addCaseStudyModal').classList.remove('visible');
         }
 
-        function updateColourPreview() {
-            const c1 = document.getElementById('csColour1').value;
-            const c2 = document.getElementById('csColour2').value;
-            document.getElementById('csColourPreview').style.background = `linear-gradient(135deg, ${c1} 0%, ${c2} 100%)`;
+        // Preview image in modal
+        function previewImage(input) {
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    pendingImageData = e.target.result;
+                    const preview = document.getElementById('csImagePreview');
+                    preview.src = pendingImageData;
+                    preview.style.display = 'block';
+                    document.getElementById('csImageUploadArea').classList.add('has-image');
+                };
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        // Trigger image upload for existing case study
+        function triggerImageUpload(id) {
+            document.getElementById('imageUpload-' + id).click();
+        }
+
+        // Handle image upload for existing case study
+        function handleImageUpload(id, input) {
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const imageData = e.target.result;
+                    const caseStudy = document.getElementById('casestudy-' + id);
+                    const hero = caseStudy.querySelector('.case-study-hero');
+                    hero.style.background = `url(${imageData})`;
+                    hero.style.backgroundSize = 'cover';
+                    hero.style.backgroundPosition = 'center';
+                    caseStudy.dataset.image = imageData;
+                    saveCaseStudies();
+                };
+                reader.readAsDataURL(input.files[0]);
+            }
         }
 
         function addCaseStudy() {
@@ -1149,8 +1186,6 @@
             const insight = document.getElementById('csInsight').value.trim();
             const strategy = document.getElementById('csStrategy').value.trim();
             const results = document.getElementById('csResults').value.trim();
-            const colour1 = document.getElementById('csColour1').value;
-            const colour2 = document.getElementById('csColour2').value;
 
             if (!company || !title) {
                 alert('Please enter at least a company name and title.');
@@ -1160,14 +1195,36 @@
             caseStudyCounter++;
             const id = 'custom-' + caseStudyCounter;
 
-            // Create case study HTML
+            // Determine background style
+            let heroStyle = '';
+            if (pendingImageData) {
+                heroStyle = `background: url(${pendingImageData}); background-size: cover; background-position: center;`;
+            } else {
+                // Random gradient colours as fallback
+                const colours = [
+                    ['#7B2CBF', '#D81B60'],
+                    ['#E63946', '#1D3557'],
+                    ['#2A9D8F', '#E9C46A'],
+                    ['#264653', '#F4A261'],
+                    ['#6A4C93', '#1982C4']
+                ];
+                const randomColours = colours[Math.floor(Math.random() * colours.length)];
+                heroStyle = `background: linear-gradient(135deg, ${randomColours[0]} 0%, ${randomColours[1]} 100%);`;
+            }
+
+            // Create case study HTML with image upload capability
             const caseStudyHTML = `
-                <div class="case-study" id="casestudy-${id}">
-                    <div class="case-study-hero" style="background: linear-gradient(135deg, ${colour1} 0%, ${colour2} 100%);">
+                <div class="case-study" id="casestudy-${id}" data-image="${pendingImageData || ''}">
+                    <div class="case-study-hero" style="${heroStyle}">
                         <div class="case-study-logo">${company}</div>
                     </div>
                     <div class="case-study-content">
-                        <div class="case-study-title">"${title}"</div>
+                        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px;">
+                            <div class="case-study-title">"${title}"</div>
+                            <div class="case-study-actions">
+                                <button class="change-image-btn" onclick="triggerImageUpload('${id}')">📷 Image</button>
+                            </div>
+                        </div>
                         <div class="case-study-grid" contenteditable="true">
                             <div class="case-study-label">Brief:</div>
                             <div class="case-study-value">${brief || 'Click to edit...'}</div>
@@ -1179,6 +1236,7 @@
                             <div class="case-study-value">${results || 'Click to edit...'}</div>
                         </div>
                     </div>
+                    <input type="file" id="imageUpload-${id}" accept="image/*" onchange="handleImageUpload('${id}', this)" style="display: none;">
                 </div>
             `;
 

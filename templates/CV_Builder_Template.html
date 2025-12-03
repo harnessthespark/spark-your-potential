@@ -62,7 +62,7 @@
         /* Case Study Card with Hero Banner */
         .case-study { background: white; border-radius: 12px; overflow: hidden; margin-bottom: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.08); }
         .case-study-hero { height: 120px; display: flex; align-items: flex-end; padding: 15px; background-size: cover; background-position: center; position: relative; }
-        .case-study-hero::before { content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: linear-gradient(to top, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0.1) 100%); }
+        .case-study-hero::before { content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: linear-gradient(to top, rgba(0,0,0,0.3) 0%, transparent 100%); }
         .case-study-logo { color: white; font-size: 1.3em; font-weight: 700; text-shadow: 0 1px 3px rgba(0,0,0,0.5); position: relative; z-index: 1; }
         .case-study-content { padding: 20px; }
         .case-study-title { font-weight: 600; color: #667eea; margin-bottom: 10px; }
@@ -429,7 +429,7 @@
                     const caseStudy = document.getElementById('casestudy-' + id);
                     const hero = caseStudy.querySelector('.case-study-hero');
                     hero.style.backgroundImage = `url(${imageData})`;
-                    hero.style.background = `linear-gradient(to top, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0.2) 100%), url(${imageData})`;
+                    hero.style.background = `url(${imageData})`;
                     hero.style.backgroundSize = 'cover';
                     hero.style.backgroundPosition = 'center';
                     caseStudy.dataset.image = imageData;
@@ -453,7 +453,7 @@
             // Determine background style
             let heroStyle = '';
             if (pendingImageData) {
-                heroStyle = `background: linear-gradient(to top, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0.2) 100%), url(${pendingImageData}); background-size: cover; background-position: center;`;
+                heroStyle = `background: url(${pendingImageData}); background-size: cover; background-position: center;`;
             } else {
                 // Random gradient colours as fallback
                 const colours = [
@@ -539,7 +539,7 @@
                     // Determine background style
                     let heroStyle = '';
                     if (cs.image) {
-                        heroStyle = `background: linear-gradient(to top, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0.2) 100%), url(${cs.image}); background-size: cover; background-position: center;`;
+                        heroStyle = `background: url(${cs.image}); background-size: cover; background-position: center;`;
                     } else {
                         heroStyle = `background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);`;
                     }
