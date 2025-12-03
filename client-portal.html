@@ -292,6 +292,165 @@
         .logout-link:hover {
             color: #fff;
         }
+
+        /* Agreement Section */
+        .agreement-section {
+            display: none;
+            background: rgba(255,255,255,0.98);
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 800px;
+            margin: 0 auto 30px auto;
+            color: #333;
+        }
+        .agreement-section.visible {
+            display: block;
+        }
+        .agreement-section h2 {
+            color: #1a1a2e;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .agreement-section .intro {
+            color: #666;
+            margin-bottom: 25px;
+            line-height: 1.6;
+        }
+        .agreement-content {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 25px;
+            max-height: 400px;
+            overflow-y: auto;
+            font-size: 0.9em;
+            line-height: 1.7;
+        }
+        .agreement-content h3 {
+            color: #4ECDC4;
+            font-size: 1.1em;
+            margin: 20px 0 10px 0;
+            padding-bottom: 5px;
+            border-bottom: 2px solid #4ECDC4;
+        }
+        .agreement-content h3:first-child {
+            margin-top: 0;
+        }
+        .agreement-content ul {
+            margin: 10px 0 10px 20px;
+        }
+        .agreement-content li {
+            margin-bottom: 8px;
+        }
+        .programme-box {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 15px 0;
+        }
+        .programme-box h4 {
+            margin-bottom: 10px;
+        }
+        .signature-section {
+            background: #fff;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 20px;
+        }
+        .signature-section h4 {
+            color: #666;
+            font-size: 0.9em;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 15px;
+        }
+        .checkbox-field {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            margin: 15px 0;
+            padding: 12px;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+        .checkbox-field input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            margin-top: 2px;
+            cursor: pointer;
+        }
+        .checkbox-field label {
+            font-size: 0.9em;
+            cursor: pointer;
+            color: #333;
+        }
+        .signature-input {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-family: 'Brush Script MT', cursive;
+            font-size: 1.5em;
+            text-align: center;
+            margin-bottom: 15px;
+        }
+        .signature-input:focus {
+            outline: none;
+            border-color: #4ECDC4;
+        }
+        .signature-canvas-container {
+            position: relative;
+            margin-bottom: 15px;
+        }
+        .signature-canvas {
+            width: 100%;
+            height: 100px;
+            border: 2px dashed #ccc;
+            border-radius: 8px;
+            background: #fafafa;
+            cursor: crosshair;
+        }
+        .clear-signature {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            background: #ff6b6b;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-size: 0.75em;
+            cursor: pointer;
+        }
+        .sign-btn {
+            width: 100%;
+            background: linear-gradient(135deg, #4ECDC4 0%, #44A08D 100%);
+            color: white;
+            border: none;
+            padding: 18px 40px;
+            border-radius: 12px;
+            font-size: 1.1em;
+            font-weight: 700;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .sign-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(78, 205, 196, 0.4);
+        }
+        .sign-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+        .sign-btn.success {
+            background: linear-gradient(135deg, #27ae60 0%, #2ecc71 100%);
+        }
     </style>
 </head>
 <body>
@@ -303,6 +462,77 @@
             <div class="login-error" id="loginError"></div>
             <input type="email" class="email-input" id="emailInput" placeholder="your@email.com" onkeypress="if(event.key==='Enter') clientLogin()">
             <button class="login-btn" onclick="clientLogin()">Access My Toolkit</button>
+        </div>
+
+        <!-- Agreement Section (shown if not signed) -->
+        <div class="agreement-section" id="agreementSection">
+            <h2>📋 Coaching Agreement</h2>
+            <p class="intro">Welcome, <span id="agreementClientName"></span>! Before we begin your Career Booster journey, please review and sign the coaching agreement below.</p>
+
+            <div class="agreement-content">
+                <h3>1. What Coaching Is (and Isn't)</h3>
+                <p>Coaching is a collaborative process designed to help you develop insight, build strategies, and make meaningful change. I'll ask questions, share tools, and offer structure — but ultimately, you're responsible for what you take from it and how you use it.</p>
+                <p><strong>This is not therapy or medical advice.</strong> I don't diagnose or treat mental health conditions. If you feel you need therapeutic or clinical support, I'll help signpost you to it — but it's outside the scope of this coaching.</p>
+
+                <h3>2. Programme & Services</h3>
+                <div class="programme-box">
+                    <h4>4-Week Career Booster Programme - £400 ex VAT (£480 inc VAT)</h4>
+                    <ul>
+                        <li>4 x 1-hour sessions over 4 weeks</li>
+                        <li>Focus on the AI tool, report, and core narrative</li>
+                        <li>Key deliverables: report, CV content framework, positioning statement</li>
+                        <li>Email support between sessions (response within 48 hours on working days)</li>
+                        <li>Access to proprietary AI questionnaire tool</li>
+                    </ul>
+                </div>
+                <p>Sessions will take place online (Zoom) at mutually agreed times.</p>
+
+                <h3>3. Cancellation & Rescheduling</h3>
+                <ul>
+                    <li>If you're more than 15 minutes late or miss a session without 24 hours' notice, the session may be forfeited unless it's an emergency</li>
+                    <li>I'll always do my best to be flexible where possible</li>
+                    <li>If I need to reschedule, I'll give as much notice as I can (ideally 24 hours)</li>
+                </ul>
+
+                <h3>4. Payment Terms</h3>
+                <p>The full fee is <strong>£480 inc VAT (£400 ex VAT)</strong>. Payment is required prior to the first session.</p>
+
+                <h3>5. Confidentiality</h3>
+                <p>Everything shared in sessions is confidential. I operate within the spirit of the ICF Code of Ethics.</p>
+                <p><strong>Exceptions:</strong> If I'm concerned about your safety or someone else's, or if you give permission for me to discuss something (e.g., with Access to Work or an employer).</p>
+
+                <h3>6. Intellectual Property</h3>
+                <p>The AI questionnaire tool, methodology, frameworks, and materials remain my intellectual property. The content you create (your career narrative, CV content, etc.) is yours to use as you wish.</p>
+
+                <h3>7. Liability</h3>
+                <p>You're responsible for your own actions, choices, and results from coaching. I'm not liable for any outcomes, decisions, or impacts of the coaching process.</p>
+            </div>
+
+            <div class="signature-section">
+                <h4>Your Signature</h4>
+
+                <div class="checkbox-field">
+                    <input type="checkbox" id="agreeTerms">
+                    <label for="agreeTerms">I have read and agree to the terms of this Coaching Agreement</label>
+                </div>
+
+                <div class="checkbox-field">
+                    <input type="checkbox" id="agreeRecording">
+                    <label for="agreeRecording">I consent to sessions being recorded for training/accreditation purposes (optional)</label>
+                </div>
+
+                <p style="font-size: 0.85em; color: #666; margin-bottom: 10px;">Type your name or draw your signature below:</p>
+                <input type="text" class="signature-input" id="signatureInput" placeholder="Type your full name">
+
+                <div class="signature-canvas-container">
+                    <canvas id="signatureCanvas" class="signature-canvas"></canvas>
+                    <button type="button" class="clear-signature" onclick="clearSignature()">Clear</button>
+                </div>
+
+                <button class="sign-btn" id="signBtn" onclick="submitAgreement()" disabled>
+                    ✍️ Sign & Continue to Toolkit
+                </button>
+            </div>
         </div>
 
         <!-- Portal Content -->
@@ -356,6 +586,7 @@
                 folder: 'sarah_mitchell_demo_client',
                 status: 'week-2',
                 isDemo: true,
+                agreementSigned: true,
                 files: {
                     questionnaire: 'ability-recognition-visual.html',
                     insights: 'sarah_mitchell_demo_client/Sarah_Mitchell_Career_Insights_Report.html',
@@ -370,6 +601,7 @@
                 email: 'donaldpirie111@hotmail.co.uk',
                 folder: 'Donald',
                 status: 'complete',
+                agreementSigned: true,
                 files: {
                     questionnaire: 'Donald/donald-questionnaire-responses.html',
                     insights: 'Donald/Donald_Pirie_Career_Insights_Report.html',
@@ -384,6 +616,7 @@
                 email: 'rs@rajsamuel.net',
                 folder: 'Raj_Samuel',
                 status: 'pre-programme',
+                agreementSigned: false,
                 files: {
                     questionnaire: 'Raj_Samuel/Raj_Samuel_Discovery_Questionnaire.html',
                     insights: 'Raj_Samuel/Raj_Samuel_Career_Insights_Report.html',
@@ -440,6 +673,23 @@
         function showPortal(client) {
             currentClient = client;
             document.getElementById('loginSection').style.display = 'none';
+
+            // Check if agreement is signed
+            if (!hasSignedAgreement(client)) {
+                // Show agreement section
+                document.getElementById('agreementSection').classList.add('visible');
+                document.getElementById('portalContent').classList.remove('visible');
+
+                // Set client name in agreement
+                document.getElementById('agreementClientName').textContent = client.name;
+
+                // Setup agreement form
+                setupAgreementForm();
+                return;
+            }
+
+            // Agreement signed - show toolkit
+            document.getElementById('agreementSection').classList.remove('visible');
             document.getElementById('portalContent').classList.add('visible');
 
             // Update header
@@ -607,9 +857,250 @@
             localStorage.removeItem('syp_client_email');
             currentClient = null;
             document.getElementById('portalContent').classList.remove('visible');
+            document.getElementById('agreementSection').classList.remove('visible');
             document.getElementById('loginSection').style.display = 'block';
             document.getElementById('emailInput').value = '';
             document.getElementById('loginError').style.display = 'none';
+        }
+
+        // =============================================
+        // AGREEMENT SIGNING FUNCTIONALITY
+        // =============================================
+
+        let signatureCanvas = null;
+        let signatureCtx = null;
+        let isDrawing = false;
+        let hasDrawnSignature = false;
+
+        // Initialize signature canvas
+        function initSignatureCanvas() {
+            signatureCanvas = document.getElementById('signatureCanvas');
+            if (!signatureCanvas) return;
+
+            signatureCtx = signatureCanvas.getContext('2d');
+
+            // Set canvas size to match display size
+            const rect = signatureCanvas.getBoundingClientRect();
+            signatureCanvas.width = rect.width;
+            signatureCanvas.height = rect.height;
+
+            // Canvas styling
+            signatureCtx.strokeStyle = '#1a1a2e';
+            signatureCtx.lineWidth = 2;
+            signatureCtx.lineCap = 'round';
+            signatureCtx.lineJoin = 'round';
+
+            // Mouse events
+            signatureCanvas.addEventListener('mousedown', startDrawing);
+            signatureCanvas.addEventListener('mousemove', draw);
+            signatureCanvas.addEventListener('mouseup', stopDrawing);
+            signatureCanvas.addEventListener('mouseout', stopDrawing);
+
+            // Touch events for mobile
+            signatureCanvas.addEventListener('touchstart', handleTouchStart);
+            signatureCanvas.addEventListener('touchmove', handleTouchMove);
+            signatureCanvas.addEventListener('touchend', stopDrawing);
+        }
+
+        function startDrawing(e) {
+            isDrawing = true;
+            const rect = signatureCanvas.getBoundingClientRect();
+            signatureCtx.beginPath();
+            signatureCtx.moveTo(e.clientX - rect.left, e.clientY - rect.top);
+        }
+
+        function draw(e) {
+            if (!isDrawing) return;
+            const rect = signatureCanvas.getBoundingClientRect();
+            signatureCtx.lineTo(e.clientX - rect.left, e.clientY - rect.top);
+            signatureCtx.stroke();
+            hasDrawnSignature = true;
+            validateForm();
+        }
+
+        function stopDrawing() {
+            isDrawing = false;
+        }
+
+        function handleTouchStart(e) {
+            e.preventDefault();
+            const touch = e.touches[0];
+            const rect = signatureCanvas.getBoundingClientRect();
+            isDrawing = true;
+            signatureCtx.beginPath();
+            signatureCtx.moveTo(touch.clientX - rect.left, touch.clientY - rect.top);
+        }
+
+        function handleTouchMove(e) {
+            e.preventDefault();
+            if (!isDrawing) return;
+            const touch = e.touches[0];
+            const rect = signatureCanvas.getBoundingClientRect();
+            signatureCtx.lineTo(touch.clientX - rect.left, touch.clientY - rect.top);
+            signatureCtx.stroke();
+            hasDrawnSignature = true;
+            validateForm();
+        }
+
+        function clearSignature() {
+            if (!signatureCanvas || !signatureCtx) return;
+            signatureCtx.clearRect(0, 0, signatureCanvas.width, signatureCanvas.height);
+            hasDrawnSignature = false;
+            validateForm();
+        }
+
+        // Form validation
+        function validateForm() {
+            const agreeTerms = document.getElementById('agreeTerms').checked;
+            const signatureInput = document.getElementById('signatureInput').value.trim();
+            const signBtn = document.getElementById('signBtn');
+
+            // Must agree to terms AND have either typed or drawn signature
+            const hasSignature = signatureInput.length > 0 || hasDrawnSignature;
+            const isValid = agreeTerms && hasSignature;
+
+            signBtn.disabled = !isValid;
+        }
+
+        // Submit agreement to PostgreSQL API
+        async function submitAgreement() {
+            const signBtn = document.getElementById('signBtn');
+            signBtn.disabled = true;
+            signBtn.textContent = '⏳ Submitting...';
+
+            const signatureInput = document.getElementById('signatureInput').value.trim();
+            const agreeTerms = document.getElementById('agreeTerms').checked;
+            const agreeRecording = document.getElementById('agreeRecording').checked;
+
+            // Get signature data (prefer drawn, fallback to typed)
+            let signatureData = signatureInput;
+            let signatureType = 'typed';
+
+            if (hasDrawnSignature && signatureCanvas) {
+                signatureData = signatureCanvas.toDataURL('image/png');
+                signatureType = 'drawn';
+            }
+
+            const agreementData = {
+                client_email: currentClient.email,
+                client_full_name: currentClient.name,
+                document_type: 'coaching_agreement',
+                programme_type: 'career_booster_4_week',
+                client_signature: signatureData,
+                signature_type: signatureType,
+                signed_date: new Date().toISOString(),
+                agreed_to_terms: agreeTerms,
+                consent_to_recording: agreeRecording,
+                document_html: document.querySelector('.agreement-content').innerHTML
+            };
+
+            try {
+                // Submit to PostgreSQL API
+                const response = await fetch('https://sparkhub-be-qtmmb.ondigitalocean.app/api/crm/syp/public/sign-agreement/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(agreementData)
+                });
+
+                if (!response.ok) {
+                    throw new Error(`API error: ${response.status}`);
+                }
+
+                const result = await response.json();
+                console.log('Agreement saved to PostgreSQL:', result);
+
+                // Mark client as having signed (update local state)
+                currentClient.agreementSigned = true;
+
+                // Save to localStorage as backup
+                localStorage.setItem(`syp_agreement_${currentClient.email}`, JSON.stringify({
+                    signed: true,
+                    signedDate: new Date().toISOString(),
+                    signatureType: signatureType
+                }));
+
+                // Show success and proceed to toolkit
+                signBtn.classList.add('success');
+                signBtn.textContent = '✅ Agreement Signed!';
+
+                setTimeout(() => {
+                    // Hide agreement, show toolkit
+                    document.getElementById('agreementSection').classList.remove('visible');
+                    document.getElementById('portalContent').classList.add('visible');
+
+                    // Render the portal content
+                    document.getElementById('clientName').textContent = currentClient.name.split(' ')[0];
+                    const stageIndex = STAGES.findIndex(s => s.id === currentClient.status);
+                    const toolsUnlocked = getToolsUnlocked(stageIndex);
+                    document.getElementById('statBlueprints').textContent = stageIndex >= 2 ? '1' : '0';
+                    document.getElementById('statTools').textContent = `${toolsUnlocked}/6`;
+                    document.getElementById('statDate').textContent = new Date().toLocaleDateString('en-GB');
+                    renderJourney(currentClient);
+                    renderTools(currentClient);
+                }, 1500);
+
+            } catch (error) {
+                console.error('Failed to submit agreement:', error);
+
+                // Fallback: save to localStorage
+                localStorage.setItem(`syp_agreement_${currentClient.email}`, JSON.stringify({
+                    signed: true,
+                    signedDate: new Date().toISOString(),
+                    signatureType: signatureType,
+                    agreementData: agreementData
+                }));
+
+                // Still proceed (will sync later)
+                signBtn.classList.add('success');
+                signBtn.textContent = '✅ Agreement Saved!';
+
+                setTimeout(() => {
+                    document.getElementById('agreementSection').classList.remove('visible');
+                    document.getElementById('portalContent').classList.add('visible');
+                    document.getElementById('clientName').textContent = currentClient.name.split(' ')[0];
+                    const stageIndex = STAGES.findIndex(s => s.id === currentClient.status);
+                    const toolsUnlocked = getToolsUnlocked(stageIndex);
+                    document.getElementById('statBlueprints').textContent = stageIndex >= 2 ? '1' : '0';
+                    document.getElementById('statTools').textContent = `${toolsUnlocked}/6`;
+                    document.getElementById('statDate').textContent = new Date().toLocaleDateString('en-GB');
+                    renderJourney(currentClient);
+                    renderTools(currentClient);
+                }, 1500);
+            }
+        }
+
+        // Check if client has already signed agreement
+        function hasSignedAgreement(client) {
+            // Check localStorage first
+            const localSigned = localStorage.getItem(`syp_agreement_${client.email}`);
+            if (localSigned) {
+                try {
+                    const data = JSON.parse(localSigned);
+                    if (data.signed) return true;
+                } catch (e) {}
+            }
+
+            // Check client data from API
+            if (client.agreementSigned) return true;
+
+            return false;
+        }
+
+        // Setup form event listeners
+        function setupAgreementForm() {
+            const agreeTerms = document.getElementById('agreeTerms');
+            const signatureInput = document.getElementById('signatureInput');
+
+            if (agreeTerms) {
+                agreeTerms.addEventListener('change', validateForm);
+            }
+            if (signatureInput) {
+                signatureInput.addEventListener('input', validateForm);
+            }
+
+            initSignatureCanvas();
         }
     </script>
 </body>
