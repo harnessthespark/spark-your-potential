@@ -427,36 +427,160 @@
     </div>
 
     <script>
-        // Set dates
-        document.getElementById('agreementDate').textContent = new Date().toLocaleDateString('en-GB');
-        document.getElementById('coachSignDate').textContent = new Date().toLocaleDateString('en-GB');
-        document.getElementById('clientSignDate').value = new Date().toISOString().split('T')[0];
+        // CLIENT CONFIG
+        const CLIENT_NAME = 'Raj Samuel';
+        const CLIENT_EMAIL = 'rs@rajsamuel.net';
 
-        // Signature canvas
-        const canvas = document.getElementById('signatureCanvas');
-        const ctx = canvas.getContext('2d');
-        let isDrawing = false;
-        let hasDrawnSignature = false;
+        // Check if agreement is already signed
+        async function checkIfSigned() {
+            // First check localStorage
+            const localData = localStorage.getItem('agreement_Raj_Samuel');
+            if (localData) {
+                try {
+                    const parsed = JSON.parse(localData);
+                    if (parsed.signature) {
+                        displaySignedAgreement(parsed);
+                        return;
+                    }
+                } catch (e) {}
+            }
 
-        function resizeCanvas() {
-            const rect = canvas.getBoundingClientRect();
-            canvas.width = rect.width;
-            canvas.height = rect.height;
-            ctx.strokeStyle = '#333';
-            ctx.lineWidth = 2;
-            ctx.lineCap = 'round';
+            // Then check API
+            try {
+                const response = await fetch(`https://sparkhub-be-qtmmb.ondigitalocean.app/api/crm/syp/public/check-agreement/?email=${encodeURIComponent(CLIENT_EMAIL)}`);
+                if (response.ok) {
+                    const data = await response.json();
+                    if (data.signed && data.signature) {
+                        displaySignedAgreement(data);
+                        return;
+                    }
+                }
+            } catch (e) {
+                console.log('API check failed, showing form');
+            }
+
+            // Not signed - show form
+            initSigningForm();
         }
-        resizeCanvas();
-        window.addEventListener('resize', resizeCanvas);
 
-        canvas.addEventListener('mousedown', startDrawing);
-        canvas.addEventListener('mousemove', draw);
-        canvas.addEventListener('mouseup', stopDrawing);
-        canvas.addEventListener('mouseout', stopDrawing);
+        // Display signed agreement (read-only)
+        function displaySignedAgreement(data) {
+            document.getElementById('agreementDate').textContent = data.signed_date ? new Date(data.signed_date).toLocaleDateString('en-GB') : new Date().toLocaleDateString('en-GB');
+            document.getElementById('coachSignDate').textContent = data.signed_date ? new Date(data.signed_date).toLocaleDateString('en-GB') : new Date().toLocaleDateString('en-GB');
 
-        canvas.addEventListener('touchstart', (e) => { e.preventDefault(); startDrawing(e.touches[0]); });
-        canvas.addEventListener('touchmove', (e) => { e.preventDefault(); draw(e.touches[0]); });
-        canvas.addEventListener('touchend', stopDrawing);
+            // Replace the signature section with signed version
+            const signatureSection = document.querySelector('.signature-section');
+
+            // Determine signature display
+            let signatureDisplay = '';
+            if (data.signature_type === 'drawn' && data.signature && data.signature.startsWith('data:image')) {
+                signatureDisplay = `<img src="${data.signature}" alt="Client Signature" style="max-width: 100%; max-height: 120px; border: 1px solid #e0e0e0; border-radius: 8px; background: #fafafa;">`;
+            } else if (data.signature) {
+                signatureDisplay = `<div style="font-family: 'Brush Script MT', cursive; font-size: 2em; color: #333; padding: 15px 0;">${data.signature}</div>`;
+            }
+
+            signatureSection.innerHTML = `
+                <h2>Agreement - Signed ✓</h2>
+                <div style="background: #d4edda; border: 2px solid #28a745; border-radius: 10px; padding: 20px; margin-bottom: 25px; text-align: center;">
+                    <span style="font-size: 2em;">✅</span>
+                    <p style="color: #155724; font-weight: 600; margin: 10px 0 5px 0;">Agreement Successfully Signed</p>
+                    <p style="color: #155724; font-size: 0.9em;">Signed on ${data.signed_date ? new Date(data.signed_date).toLocaleDateString('en-GB') : 'N/A'}</p>
+                </div>
+
+                <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 20px;">
+                    <span style="background: ${data.agreed_to_terms ? '#d4edda' : '#f8d7da'}; color: ${data.agreed_to_terms ? '#155724' : '#721c24'}; padding: 6px 12px; border-radius: 6px; font-size: 0.85em;">
+                        ${data.agreed_to_terms ? '✓' : '✗'} Agreed to Terms
+                    </span>
+                    <span style="background: ${data.consent_to_recording ? '#d4edda' : '#fff3cd'}; color: ${data.consent_to_recording ? '#155724' : '#856404'}; padding: 6px 12px; border-radius: 6px; font-size: 0.85em;">
+                        ${data.consent_to_recording ? '✓ Recording Consent Given' : '○ Recording Consent Not Given'}
+                    </span>
+                </div>
+
+                <div class="signature-grid">
+                    <div class="signature-box">
+                        <h4>Client</h4>
+                        <div class="signature-field">
+                            <label>Signature</label>
+                            ${signatureDisplay}
+                        </div>
+                        <div class="signature-field">
+                            <label>Full Name</label>
+                            <p style="padding: 12px 0; font-weight: 500;">${data.client_name || CLIENT_NAME}</p>
+                        </div>
+                        <div class="signature-field">
+                            <label>Date Signed</label>
+                            <p style="padding: 12px 0;">${data.signed_date ? new Date(data.signed_date).toLocaleDateString('en-GB') : 'N/A'}</p>
+                        </div>
+                    </div>
+
+                    <div class="signature-box">
+                        <h4>Coach</h4>
+                        <div class="signature-field">
+                            <label>Signature</label>
+                            <div class="coach-signature">Lisa Gills</div>
+                        </div>
+                        <div class="signature-field">
+                            <label>Full Name</label>
+                            <p style="padding: 12px 0; font-weight: 500;">Lisa Gills</p>
+                        </div>
+                        <div class="signature-field">
+                            <label>Date</label>
+                            <p style="padding: 12px 0;">${data.signed_date ? new Date(data.signed_date).toLocaleDateString('en-GB') : 'N/A'}</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="text-align: center; margin-top: 25px; padding-top: 25px; border-top: 2px solid #e0e0e0;">
+                    <a href="Raj_Samuel_Programme_Outline.html" style="display: inline-block; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 12px 30px; border-radius: 8px; text-decoration: none; font-weight: 600;">
+                        View Programme Outline →
+                    </a>
+                </div>
+            `;
+        }
+
+        // Initialize signing form
+        function initSigningForm() {
+            // Set dates
+            document.getElementById('agreementDate').textContent = new Date().toLocaleDateString('en-GB');
+            document.getElementById('coachSignDate').textContent = new Date().toLocaleDateString('en-GB');
+            document.getElementById('clientSignDate').value = new Date().toISOString().split('T')[0];
+
+            // Setup canvas and form validation
+            setupSignatureCanvas();
+            setupFormValidation();
+        }
+
+        // Check on page load
+        checkIfSigned();
+
+        // Signature canvas setup
+        let canvas, ctx, isDrawing = false, hasDrawnSignature = false;
+
+        function setupSignatureCanvas() {
+            canvas = document.getElementById('signatureCanvas');
+            if (!canvas) return;
+            ctx = canvas.getContext('2d');
+
+            function resizeCanvas() {
+                const rect = canvas.getBoundingClientRect();
+                canvas.width = rect.width;
+                canvas.height = rect.height;
+                ctx.strokeStyle = '#333';
+                ctx.lineWidth = 2;
+                ctx.lineCap = 'round';
+            }
+            resizeCanvas();
+            window.addEventListener('resize', resizeCanvas);
+
+            canvas.addEventListener('mousedown', startDrawing);
+            canvas.addEventListener('mousemove', draw);
+            canvas.addEventListener('mouseup', stopDrawing);
+            canvas.addEventListener('mouseout', stopDrawing);
+
+            canvas.addEventListener('touchstart', (e) => { e.preventDefault(); startDrawing(e.touches[0]); });
+            canvas.addEventListener('touchmove', (e) => { e.preventDefault(); draw(e.touches[0]); });
+            canvas.addEventListener('touchend', stopDrawing);
+        }
 
         function startDrawing(e) {
             isDrawing = true;
@@ -482,33 +606,46 @@
         }
 
         function clearSignature() {
+            if (!ctx || !canvas) return;
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             hasDrawnSignature = false;
             checkFormValidity();
         }
 
-        const agreeTerms = document.getElementById('agreeTerms');
-        const clientSignatureInput = document.getElementById('clientSignature');
-        const clientFullName = document.getElementById('clientFullName');
-        const submitBtn = document.getElementById('submitBtn');
+        function setupFormValidation() {
+            const agreeTerms = document.getElementById('agreeTerms');
+            const clientSignatureInput = document.getElementById('clientSignature');
+            const clientFullName = document.getElementById('clientFullName');
+
+            if (agreeTerms) agreeTerms.addEventListener('change', checkFormValidity);
+            if (clientSignatureInput) clientSignatureInput.addEventListener('input', checkFormValidity);
+            if (clientFullName) clientFullName.addEventListener('input', checkFormValidity);
+        }
 
         function checkFormValidity() {
+            const agreeTerms = document.getElementById('agreeTerms');
+            const clientSignatureInput = document.getElementById('clientSignature');
+            const clientFullName = document.getElementById('clientFullName');
+            const submitBtn = document.getElementById('submitBtn');
+
+            if (!agreeTerms || !clientSignatureInput || !clientFullName || !submitBtn) return;
+
             const hasSignature = clientSignatureInput.value.trim() || hasDrawnSignature;
             const hasName = clientFullName.value.trim();
             const hasAgreed = agreeTerms.checked;
             submitBtn.disabled = !(hasSignature && hasName && hasAgreed);
         }
 
-        agreeTerms.addEventListener('change', checkFormValidity);
-        clientSignatureInput.addEventListener('input', checkFormValidity);
-        clientFullName.addEventListener('input', checkFormValidity);
-
         async function submitAgreement() {
+            const clientSignatureInput = document.getElementById('clientSignature');
+            const agreeTerms = document.getElementById('agreeTerms');
+            const submitBtn = document.getElementById('submitBtn');
+
             const signatureData = hasDrawnSignature ? canvas.toDataURL() : clientSignatureInput.value;
 
             const agreementData = {
-                client_name: 'Raj Samuel',
-                email: 'rs@rajsamuel.net',
+                client_name: CLIENT_NAME,
+                email: CLIENT_EMAIL,
                 programme_type: '4-week',
                 signature: signatureData,
                 signature_type: hasDrawnSignature ? 'drawn' : 'typed',
@@ -534,7 +671,7 @@
                 const result = await response.json();
 
                 if (response.ok && result.success) {
-                    // Also save to localStorage as backup
+                    // Save to localStorage for display
                     localStorage.setItem('agreement_Raj_Samuel', JSON.stringify({
                         ...agreementData,
                         timestamp: new Date().toISOString(),
@@ -545,12 +682,12 @@
                     submitBtn.textContent = '✓ Agreement Signed';
                     submitBtn.style.background = '#28a745';
 
-                    alert('Agreement signed successfully! Thank you, Raj.\n\nLisa has been notified and will be in touch shortly to schedule your first session.');
+                    alert(`Agreement signed successfully! Thank you, ${CLIENT_NAME.split(' ')[0]}.\n\nLisa has been notified and will be in touch shortly to schedule your first session.`);
 
-                    // Redirect to confirmation page
+                    // Reload to show signed agreement
                     setTimeout(() => {
-                        window.location.href = 'Raj_Samuel_Programme_Outline.html';
-                    }, 2000);
+                        window.location.reload();
+                    }, 1500);
                 } else {
                     throw new Error(result.error || 'Failed to submit agreement');
                 }
@@ -568,11 +705,12 @@
                 submitBtn.textContent = '✓ Agreement Signed';
                 submitBtn.style.background = '#28a745';
 
-                alert('Agreement signed successfully! Thank you, Raj.\n\nLisa will be in touch shortly to schedule your first session.\n\n(Note: Your agreement has been saved locally. Lisa will receive confirmation shortly.)');
+                alert(`Agreement signed successfully! Thank you, ${CLIENT_NAME.split(' ')[0]}.\n\nLisa will be in touch shortly to schedule your first session.`);
 
+                // Reload to show signed agreement
                 setTimeout(() => {
-                    window.location.href = 'Raj_Samuel_Programme_Outline.html';
-                }, 2000);
+                    window.location.reload();
+                }, 1500);
             }
         }
     </script>
