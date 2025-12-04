@@ -1195,6 +1195,7 @@
                         <button onclick="openClientBlueprint('${client.email}')" class="action-btn">📘 View Final Blueprint</button>
                         <button onclick="openClientCV('${client.email}')" class="action-btn">📝 View CV Builder</button>
                         <button onclick="openAllClientDocs('${client.email}')" class="action-btn">📁 View All Documents</button>
+                        <a href="client-portal.html?client=${encodeURIComponent(client.email)}" class="action-btn" style="text-decoration: none;">👤 Open Client Portal</a>
                     </div>
                 `
             };
