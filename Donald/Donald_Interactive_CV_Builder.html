@@ -577,6 +577,39 @@
         .upload-text {
             color: #7B2CBF;
             font-weight: 600;
+        }
+        /* Theme Selector */
+        .theme-options {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 8px;
+        }
+        .theme-btn {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 10px;
+            background: #f8f9fa;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.8em;
+            transition: all 0.2s;
+        }
+        .theme-btn:hover {
+            border-color: #7B2CBF;
+            background: #f0e6f6;
+        }
+        .theme-btn.active {
+            border-color: #7B2CBF;
+            background: rgba(123,44,191,0.1);
+        }
+        .theme-preview {
+            width: 40px;
+            height: 25px;
+            border-radius: 4px;
+            margin-bottom: 5px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.2);
             font-size: 0.9em;
         }
         .upload-hint {
@@ -711,6 +744,28 @@
             <div class="export-buttons">
                 <button class="export-btn" onclick="exportPDF()">🖨️ Print / PDF</button>
                 <button class="export-btn" onclick="downloadAsHTML()">💾 Download</button>
+            </div>
+
+            <div class="control-section">
+                <div class="control-title">🎨 CV Theme</div>
+                <div class="theme-options">
+                    <button class="theme-btn active" data-theme="modern" onclick="changeTheme('modern')">
+                        <span class="theme-preview" style="background: linear-gradient(135deg, #1a1a2e 50%, white 50%);"></span>
+                        Modern
+                    </button>
+                    <button class="theme-btn" data-theme="classic" onclick="changeTheme('classic')">
+                        <span class="theme-preview" style="background: linear-gradient(135deg, #2c3e50 50%, #ecf0f1 50%);"></span>
+                        Classic
+                    </button>
+                    <button class="theme-btn" data-theme="bold" onclick="changeTheme('bold')">
+                        <span class="theme-preview" style="background: linear-gradient(135deg, #7B2CBF 50%, #fff 50%);"></span>
+                        Bold
+                    </button>
+                    <button class="theme-btn" data-theme="minimal" onclick="changeTheme('minimal')">
+                        <span class="theme-preview" style="background: linear-gradient(135deg, #333 50%, #fafafa 50%);"></span>
+                        Minimal
+                    </button>
+                </div>
             </div>
 
             <div class="control-section">
@@ -1084,6 +1139,86 @@
             const anyVisible = document.querySelectorAll('.case-study:not(.hidden)').length > 0;
             document.getElementById('section-casestudies').classList.toggle('hidden', !anyVisible);
         }
+
+        // Theme definitions
+        const themes = {
+            modern: {
+                leftBg: 'linear-gradient(180deg, #1a1a2e 0%, #16213e 100%)',
+                leftText: '#fff',
+                leftAccent: '#FFD700',
+                rightBg: '#fff',
+                rightText: '#333',
+                rightAccent: '#7B2CBF',
+                sectionBg: '#f8f9fa'
+            },
+            classic: {
+                leftBg: 'linear-gradient(180deg, #2c3e50 0%, #34495e 100%)',
+                leftText: '#ecf0f1',
+                leftAccent: '#3498db',
+                rightBg: '#ecf0f1',
+                rightText: '#2c3e50',
+                rightAccent: '#2980b9',
+                sectionBg: '#d5dbdb'
+            },
+            bold: {
+                leftBg: 'linear-gradient(180deg, #7B2CBF 0%, #9B59B6 100%)',
+                leftText: '#fff',
+                leftAccent: '#FFD700',
+                rightBg: '#fff',
+                rightText: '#333',
+                rightAccent: '#7B2CBF',
+                sectionBg: '#f5eef8'
+            },
+            minimal: {
+                leftBg: '#333',
+                leftText: '#f5f5f5',
+                leftAccent: '#fff',
+                rightBg: '#fafafa',
+                rightText: '#333',
+                rightAccent: '#555',
+                sectionBg: '#f0f0f0'
+            }
+        };
+
+        function changeTheme(themeName) {
+            const theme = themes[themeName];
+            if (!theme) return;
+
+            // Update button states
+            document.querySelectorAll('.theme-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.theme === themeName);
+            });
+
+            // Apply theme to CV
+            const leftColumn = document.querySelector('.cv-left');
+            const rightColumn = document.querySelector('.cv-right');
+
+            if (leftColumn) {
+                leftColumn.style.background = theme.leftBg;
+                leftColumn.style.color = theme.leftText;
+                leftColumn.querySelectorAll('.cv-name, .cv-title').forEach(el => el.style.color = theme.leftText);
+                leftColumn.querySelectorAll('.highlights-title, .skills-category h4, .sectors-title').forEach(el => el.style.color = theme.leftAccent);
+            }
+
+            if (rightColumn) {
+                rightColumn.style.background = theme.rightBg;
+                rightColumn.style.color = theme.rightText;
+                rightColumn.querySelectorAll('.section-title').forEach(el => {
+                    el.style.color = theme.rightAccent;
+                    el.style.borderBottomColor = theme.rightAccent;
+                });
+                rightColumn.querySelectorAll('.cv-section').forEach(el => el.style.background = theme.sectionBg);
+            }
+
+            // Save preference
+            localStorage.setItem('cv_theme', themeName);
+        }
+
+        // Load saved theme on page load
+        window.addEventListener('load', function() {
+            const savedTheme = localStorage.getItem('cv_theme') || 'modern';
+            changeTheme(savedTheme);
+        });
 
         function exportPDF() {
             window.print();
