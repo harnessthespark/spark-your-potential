@@ -864,6 +864,125 @@
             <button class="login-btn" onclick="clientLogin()">Access My Toolkit</button>
         </div>
 
+        <!-- Testimonial Agreement Section (shown for testimonial-access clients) -->
+        <div class="agreement-section" id="testimonialAgreementSection">
+            <h2>📋 Testimonial Access Agreement</h2>
+            <p class="intro">Welcome, <span id="testimonialClientName"></span>! In exchange for a testimonial, you're getting access to the Spark Your Potential career portal tools. Please review and sign the agreement below.</p>
+
+            <div class="agreement-content">
+                <h3>1. Purpose of This Agreement</h3>
+                <p>You have previously completed the proprietary AI questionnaire and are being granted <strong>complimentary access</strong> to the Spark Your Potential career portal tools. In exchange, you agree to provide a testimonial about your experience.</p>
+
+                <div class="programme-box" style="background: linear-gradient(135deg, #28a745 0%, #20c997 100%);">
+                    <h4>What You're Getting Access To:</h4>
+                    <ul>
+                        <li>Interactive CV Builder with your questionnaire insights</li>
+                        <li>Career Blueprint document</li>
+                        <li>Decision-Making Framework</li>
+                        <li>AI Prompt Library for career support</li>
+                        <li>Blueprint to CV/LinkedIn Mapping Guide</li>
+                    </ul>
+                </div>
+
+                <h3>2. Testimonial Requirements</h3>
+                <p>In exchange for portal access, you agree to:</p>
+                <ul>
+                    <li>Provide a written or video testimonial about your experience</li>
+                    <li>Allow the testimonial to be used on the Harness the Spark website, social media, and marketing materials</li>
+                    <li>Allow your first name (or full name if agreed) to be associated with the testimonial</li>
+                    <li>Provide the testimonial within 30 days of gaining portal access</li>
+                </ul>
+
+                <h3>3. Intellectual Property Protection</h3>
+                <p><strong>This section is critical.</strong> The AI questionnaire tool, methodology, frameworks, portal structure, and all associated materials are the proprietary intellectual property of Lisa Gills / Harness the Spark.</p>
+
+                <div class="programme-box" style="background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);">
+                    <h4>⚠️ Strictly Prohibited Actions:</h4>
+                    <ul>
+                        <li><strong>Copying or reproducing</strong> the questionnaire structure, questions, or methodology</li>
+                        <li><strong>Recreating or reverse-engineering</strong> any aspect of the AI tool or framework</li>
+                        <li><strong>Sharing screenshots, exports, or descriptions</strong> of the tool structure with third parties</li>
+                        <li><strong>Using the methodology</strong> to create competing products or services</li>
+                        <li><strong>Discussing the technical implementation</strong> with recruitment companies, employers, or competitors</li>
+                        <li><strong>Presenting the methodology as your own</strong> in any professional context</li>
+                    </ul>
+                </div>
+
+                <h3>4. Recruitment Company Disclosure Warning</h3>
+                <p style="background: #fff3cd; padding: 15px; border-radius: 8px; border-left: 4px solid #ffc107;">
+                    <strong>⚠️ Important:</strong> You acknowledge you may be in discussions with recruitment companies. You expressly agree NOT to disclose the structure, methodology, or approach of the questionnaire to any recruitment company, or suggest/recommend/facilitate the recreation of similar tools by any third party.
+                </p>
+
+                <h3>5. What You CAN Use</h3>
+                <p>You ARE permitted to:</p>
+                <ul>
+                    <li>Use your personal career insights and outputs for your own job search</li>
+                    <li>Reference the Career Blueprint content in applications and interviews</li>
+                    <li>Use the CV content generated for your professional purposes</li>
+                    <li>Mention that you used a career coaching tool (without describing how it works)</li>
+                    <li>Recommend the service to others (directing them to Harness the Spark)</li>
+                </ul>
+
+                <h3>6. Non-Compete Acknowledgement</h3>
+                <p>You agree:</p>
+                <ul>
+                    <li><strong>Not to develop, assist in developing, or advise on</strong> any similar career assessment or AI questionnaire tool for a period of <strong>2 years</strong> from the date of this agreement</li>
+                    <li><strong>Not to work on or consult for</strong> any project that seeks to replicate or compete with this methodology</li>
+                    <li>To notify Lisa Gills immediately if approached to assist with any such project</li>
+                </ul>
+
+                <h3>7. Confidentiality</h3>
+                <p>You agree to treat all aspects of the tool's methodology, question structure, AI prompts, and framework design as <strong>strictly confidential</strong>. This confidentiality obligation survives indefinitely.</p>
+
+                <h3>8. Breach of Agreement</h3>
+                <p>If you breach any intellectual property or confidentiality terms:</p>
+                <ul>
+                    <li>Portal access will be <strong>immediately revoked</strong></li>
+                    <li>Lisa Gills reserves the right to pursue <strong>legal remedies</strong> including injunctive relief and damages</li>
+                    <li>You may be liable for <strong>any losses</strong> arising from the breach</li>
+                </ul>
+
+                <h3>9. Duration of Access</h3>
+                <p>Portal access is granted for <strong>6 months</strong> from the date of this agreement.</p>
+            </div>
+
+            <div class="signature-section">
+                <h4>Your Signature</h4>
+
+                <div class="checkbox-field" style="border: 2px solid #dc3545; background: #fff5f5;">
+                    <input type="checkbox" id="agreeIPTestimonial">
+                    <label for="agreeIPTestimonial"><strong>I understand and agree</strong> that the questionnaire methodology, tool structure, and frameworks are proprietary intellectual property that I must not copy, reproduce, share, or disclose to any third party including recruitment companies.</label>
+                </div>
+
+                <div class="checkbox-field" style="border: 2px solid #dc3545; background: #fff5f5;">
+                    <input type="checkbox" id="agreeNonCompeteTestimonial">
+                    <label for="agreeNonCompeteTestimonial"><strong>I agree</strong> not to develop, assist in developing, or advise on any similar career assessment tool for 2 years, and to notify Lisa Gills if approached to do so.</label>
+                </div>
+
+                <div class="checkbox-field">
+                    <input type="checkbox" id="agreeTestimonialProvide">
+                    <label for="agreeTestimonialProvide">I agree to provide a testimonial within 30 days and allow it to be used for marketing purposes.</label>
+                </div>
+
+                <div class="checkbox-field">
+                    <input type="checkbox" id="agreeTestimonialTerms">
+                    <label for="agreeTestimonialTerms">I have read and agree to all terms of this Testimonial Access Agreement.</label>
+                </div>
+
+                <p style="font-size: 0.85em; color: #666; margin-bottom: 10px;">Type your name or draw your signature below:</p>
+                <input type="text" class="signature-input" id="testimonialSignatureInput" placeholder="Type your full name">
+
+                <div class="signature-canvas-container">
+                    <canvas id="testimonialSignatureCanvas" class="signature-canvas"></canvas>
+                    <button type="button" class="clear-signature" onclick="clearTestimonialSignature()">Clear</button>
+                </div>
+
+                <button class="sign-btn" id="testimonialSignBtn" onclick="submitTestimonialAgreement()" disabled>
+                    ✍️ Sign & Continue to Toolkit
+                </button>
+            </div>
+        </div>
+
         <!-- Agreement Section (shown if not signed) -->
         <div class="agreement-section" id="agreementSection">
             <h2>📋 Coaching Agreement</h2>
@@ -1104,6 +1223,31 @@
                     week4: ""
                 },
                 blueprintProgress: 0
+            },
+            'simon@boothlucking.com': {
+                name: 'Simon Booth-Lucking',
+                email: 'simon@boothlucking.com',
+                folder: 'Simon_Booth_Lucking',
+                status: 'complete',  // Full access - self-service testimonial client
+                agreementSigned: false,
+                programmeType: 'testimonial-access',
+                files: {
+                    agreement: 'Simon_Booth_Lucking/Simon_Booth_Lucking_Testimonial_Agreement.html',
+                    questionnaire: 'Simon_Booth_Lucking/Simon_Booth_Lucking_Discovery_Questionnaire.html',
+                    insights: 'Simon_Booth_Lucking/Simon_Booth_Lucking_Career_Insights_Report.html',
+                    blueprint: 'Simon_Booth_Lucking/Simon_Booth_Lucking_Blueprint.html',
+                    cvBuilder: 'Simon_Booth_Lucking/Simon_Booth_Lucking_CV_Builder.html',
+                    mappingGuide: 'Simon_Booth_Lucking/Simon_Booth_Lucking_Mapping_Guide.html',
+                    decisionFramework: 'Simon_Booth_Lucking/Simon_Booth_Lucking_Decision_Framework.html'
+                },
+                prompts: {
+                    week1: "",
+                    week2: "",
+                    week3: "",
+                    week4: ""
+                },
+                blueprintProgress: 0,
+                isTestimonialClient: true  // Flag for different UI treatment if needed
             }
         };
 
@@ -1298,8 +1442,24 @@
 
             // Check if agreement is signed
             if (!hasSignedAgreement(client)) {
-                // Show agreement section
+                // Check if this is a testimonial-access client
+                if (client.programmeType === 'testimonial-access') {
+                    // Show testimonial agreement section
+                    document.getElementById('testimonialAgreementSection').classList.add('visible');
+                    document.getElementById('agreementSection').classList.remove('visible');
+                    document.getElementById('portalContent').classList.remove('visible');
+
+                    // Set client name in testimonial agreement
+                    document.getElementById('testimonialClientName').textContent = client.name;
+
+                    // Setup testimonial agreement form
+                    setupTestimonialAgreementForm();
+                    return;
+                }
+
+                // Regular coaching agreement
                 document.getElementById('agreementSection').classList.add('visible');
+                document.getElementById('testimonialAgreementSection').classList.remove('visible');
                 document.getElementById('portalContent').classList.remove('visible');
 
                 // Set client name in agreement
@@ -1312,6 +1472,7 @@
 
             // Agreement signed - show toolkit
             document.getElementById('agreementSection').classList.remove('visible');
+            document.getElementById('testimonialAgreementSection').classList.remove('visible');
             document.getElementById('portalContent').classList.add('visible');
 
             // Update header
@@ -1461,12 +1622,22 @@
             const files = client.files || {};
 
             // Only supporting tools - the main 3 (Questionnaire, Insights, Blueprint) are in the transformation flow
+            // Determine agreement type based on programmeType
+            const isTestimonialClient = client.programmeType === 'testimonial-access';
+            const agreementTitle = isTestimonialClient ? 'Testimonial Agreement' : 'Coaching Agreement';
+            const agreementDesc = isTestimonialClient
+                ? 'Your signed testimonial access agreement with terms and conditions.'
+                : 'Your signed coaching agreement with programme details and terms.';
+            const agreementFile = isTestimonialClient
+                ? `${folder}/${nameUnderscored}_Testimonial_Agreement.html`
+                : `${folder}/${nameUnderscored}_Coaching_Agreement.html`;
+
             const tools = [
                 {
                     icon: '📋',
-                    title: 'Coaching Agreement',
-                    description: 'Your signed coaching agreement with programme details and terms.',
-                    file: `${folder}/${nameUnderscored}_Coaching_Agreement.html`,
+                    title: agreementTitle,
+                    description: agreementDesc,
+                    file: agreementFile,
                     btnText: 'View Agreement',
                     unlockStage: 0,
                     statusWhenComplete: 'signed',
@@ -1960,6 +2131,213 @@
             }
 
             initSignatureCanvas();
+        }
+
+        // ============================================================
+        // TESTIMONIAL AGREEMENT FUNCTIONS
+        // ============================================================
+
+        let testimonialSignatureCanvas = null;
+        let testimonialCtx = null;
+        let testimonialHasDrawnSignature = false;
+
+        function setupTestimonialAgreementForm() {
+            const agreeIP = document.getElementById('agreeIPTestimonial');
+            const agreeNonCompete = document.getElementById('agreeNonCompeteTestimonial');
+            const agreeProvide = document.getElementById('agreeTestimonialProvide');
+            const agreeTerms = document.getElementById('agreeTestimonialTerms');
+            const signatureInput = document.getElementById('testimonialSignatureInput');
+
+            [agreeIP, agreeNonCompete, agreeProvide, agreeTerms].forEach(el => {
+                if (el) el.addEventListener('change', validateTestimonialForm);
+            });
+
+            if (signatureInput) {
+                signatureInput.addEventListener('input', validateTestimonialForm);
+            }
+
+            initTestimonialSignatureCanvas();
+        }
+
+        function validateTestimonialForm() {
+            const agreeIP = document.getElementById('agreeIPTestimonial').checked;
+            const agreeNonCompete = document.getElementById('agreeNonCompeteTestimonial').checked;
+            const agreeProvide = document.getElementById('agreeTestimonialProvide').checked;
+            const agreeTerms = document.getElementById('agreeTestimonialTerms').checked;
+            const signatureInput = document.getElementById('testimonialSignatureInput').value.trim();
+
+            const hasSignature = signatureInput || testimonialHasDrawnSignature;
+            const allChecked = agreeIP && agreeNonCompete && agreeProvide && agreeTerms;
+
+            document.getElementById('testimonialSignBtn').disabled = !(hasSignature && allChecked);
+        }
+
+        function initTestimonialSignatureCanvas() {
+            testimonialSignatureCanvas = document.getElementById('testimonialSignatureCanvas');
+            if (!testimonialSignatureCanvas) return;
+
+            testimonialCtx = testimonialSignatureCanvas.getContext('2d');
+
+            // Set canvas size
+            const rect = testimonialSignatureCanvas.getBoundingClientRect();
+            testimonialSignatureCanvas.width = rect.width;
+            testimonialSignatureCanvas.height = rect.height;
+
+            testimonialCtx.strokeStyle = '#333';
+            testimonialCtx.lineWidth = 2;
+            testimonialCtx.lineCap = 'round';
+
+            let isDrawing = false;
+
+            testimonialSignatureCanvas.addEventListener('mousedown', (e) => {
+                isDrawing = true;
+                testimonialCtx.beginPath();
+                testimonialCtx.moveTo(e.offsetX, e.offsetY);
+            });
+
+            testimonialSignatureCanvas.addEventListener('mousemove', (e) => {
+                if (!isDrawing) return;
+                testimonialCtx.lineTo(e.offsetX, e.offsetY);
+                testimonialCtx.stroke();
+                testimonialHasDrawnSignature = true;
+                validateTestimonialForm();
+            });
+
+            testimonialSignatureCanvas.addEventListener('mouseup', () => { isDrawing = false; });
+            testimonialSignatureCanvas.addEventListener('mouseout', () => { isDrawing = false; });
+
+            // Touch support
+            testimonialSignatureCanvas.addEventListener('touchstart', (e) => {
+                e.preventDefault();
+                const touch = e.touches[0];
+                const rect = testimonialSignatureCanvas.getBoundingClientRect();
+                isDrawing = true;
+                testimonialCtx.beginPath();
+                testimonialCtx.moveTo(touch.clientX - rect.left, touch.clientY - rect.top);
+            });
+
+            testimonialSignatureCanvas.addEventListener('touchmove', (e) => {
+                if (!isDrawing) return;
+                e.preventDefault();
+                const touch = e.touches[0];
+                const rect = testimonialSignatureCanvas.getBoundingClientRect();
+                testimonialCtx.lineTo(touch.clientX - rect.left, touch.clientY - rect.top);
+                testimonialCtx.stroke();
+                testimonialHasDrawnSignature = true;
+                validateTestimonialForm();
+            });
+
+            testimonialSignatureCanvas.addEventListener('touchend', () => { isDrawing = false; });
+        }
+
+        function clearTestimonialSignature() {
+            if (testimonialCtx && testimonialSignatureCanvas) {
+                testimonialCtx.clearRect(0, 0, testimonialSignatureCanvas.width, testimonialSignatureCanvas.height);
+                testimonialHasDrawnSignature = false;
+                validateTestimonialForm();
+            }
+        }
+
+        async function submitTestimonialAgreement() {
+            const signBtn = document.getElementById('testimonialSignBtn');
+            signBtn.disabled = true;
+            signBtn.textContent = '⏳ Submitting...';
+
+            const signatureInput = document.getElementById('testimonialSignatureInput').value.trim();
+            const agreeIP = document.getElementById('agreeIPTestimonial').checked;
+            const agreeNonCompete = document.getElementById('agreeNonCompeteTestimonial').checked;
+            const agreeProvide = document.getElementById('agreeTestimonialProvide').checked;
+            const agreeTerms = document.getElementById('agreeTestimonialTerms').checked;
+
+            // Get signature data
+            let signatureData = signatureInput;
+            let signatureType = 'typed';
+
+            if (testimonialHasDrawnSignature && testimonialSignatureCanvas) {
+                signatureData = testimonialSignatureCanvas.toDataURL('image/png');
+                signatureType = 'drawn';
+            }
+
+            const agreementData = {
+                client_email: currentClient.email,
+                client_full_name: currentClient.name,
+                document_type: 'testimonial_access_agreement',
+                programme_type: 'testimonial_access',
+                client_signature: signatureData,
+                signature_type: signatureType,
+                signed_date: new Date().toISOString(),
+                agreed_to_ip_protection: agreeIP,
+                agreed_to_non_compete: agreeNonCompete,
+                agreed_to_testimonial: agreeProvide,
+                agreed_to_terms: agreeTerms,
+                document_html: document.querySelector('#testimonialAgreementSection .agreement-content').innerHTML
+            };
+
+            try {
+                // Submit to PostgreSQL API
+                const response = await fetch('https://sparkhub-be-qtmmb.ondigitalocean.app/api/crm/syp/public/sign-agreement/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(agreementData)
+                });
+
+                if (!response.ok) {
+                    throw new Error(`API error: ${response.status}`);
+                }
+
+                const result = await response.json();
+                console.log('Testimonial agreement saved to PostgreSQL:', result);
+
+                // Mark client as having signed
+                currentClient.agreementSigned = true;
+
+                // Save to localStorage
+                const signedAgreements = JSON.parse(localStorage.getItem('syp_signed_agreements') || '{}');
+                signedAgreements[currentClient.email] = {
+                    signedAt: new Date().toISOString(),
+                    documentType: 'testimonial_access_agreement',
+                    agreedToIP: agreeIP,
+                    agreedToNonCompete: agreeNonCompete,
+                    agreedToTestimonial: agreeProvide
+                };
+                localStorage.setItem('syp_signed_agreements', JSON.stringify(signedAgreements));
+
+                // Success UI
+                signBtn.textContent = '✓ Agreement Signed!';
+                signBtn.classList.add('success');
+
+                // Redirect to toolkit
+                setTimeout(() => {
+                    document.getElementById('testimonialAgreementSection').classList.remove('visible');
+                    showPortal(currentClient);
+                }, 1500);
+
+            } catch (error) {
+                console.error('Error submitting testimonial agreement:', error);
+
+                // Save locally as backup
+                const signedAgreements = JSON.parse(localStorage.getItem('syp_signed_agreements') || '{}');
+                signedAgreements[currentClient.email] = {
+                    signedAt: new Date().toISOString(),
+                    documentType: 'testimonial_access_agreement',
+                    savedLocally: true,
+                    agreedToIP: agreeIP,
+                    agreedToNonCompete: agreeNonCompete,
+                    agreedToTestimonial: agreeProvide
+                };
+                localStorage.setItem('syp_signed_agreements', JSON.stringify(signedAgreements));
+
+                currentClient.agreementSigned = true;
+                signBtn.textContent = '✓ Agreement Signed (Saved Locally)';
+                signBtn.classList.add('success');
+
+                setTimeout(() => {
+                    document.getElementById('testimonialAgreementSection').classList.remove('visible');
+                    showPortal(currentClient);
+                }, 1500);
+            }
         }
     </script>
 </body>
