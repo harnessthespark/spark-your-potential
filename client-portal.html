@@ -1456,6 +1456,16 @@
             // Only supporting tools - the main 3 (Questionnaire, Insights, Blueprint) are in the transformation flow
             const tools = [
                 {
+                    icon: '📋',
+                    title: 'Coaching Agreement',
+                    description: 'Your signed coaching agreement with programme details and terms.',
+                    file: `${folder}/${nameUnderscored}_Coaching_Agreement.html`,
+                    btnText: 'View Agreement',
+                    unlockStage: 0,
+                    statusWhenComplete: 'signed',
+                    alwaysUnlocked: true
+                },
+                {
                     icon: '📄',
                     title: 'CV Builder',
                     description: 'Build your CV with fields pre-filled from your Blueprint. Edit and refine your positioning.',
@@ -1486,7 +1496,7 @@
             ];
 
             container.innerHTML = tools.map(tool => {
-                const isUnlocked = stageIndex >= tool.unlockStage || client.status === 'complete';
+                const isUnlocked = tool.alwaysUnlocked || stageIndex >= tool.unlockStage || client.status === 'complete';
                 const isComplete = stageIndex > tool.unlockStage || client.status === 'complete';
 
                 let cardClass = 'tool-card';
@@ -1495,6 +1505,11 @@
 
                 if (!isUnlocked) {
                     cardClass += ' locked';
+                } else if (tool.statusWhenComplete === 'signed') {
+                    // Special handling for signed documents
+                    cardClass += ' completed';
+                    statusClass = 'status-completed';
+                    statusText = '✓ Signed';
                 } else if (isComplete) {
                     cardClass += ' completed';
                     if (tool.statusWhenComplete === 'completed') {
