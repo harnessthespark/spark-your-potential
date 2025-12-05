@@ -761,8 +761,8 @@
                 padding: 0 !important;
             }
 
-            /* TWO-COLUMN LAYOUT PRINT */
-            .cv-preview:not(.layout-top-header) {
+            /* WITH COLOUR - TWO-COLUMN LAYOUT PRINT */
+            .cv-preview:not(.layout-no-colour) {
                 box-shadow: none !important;
                 max-width: none !important;
                 min-height: auto !important;
@@ -770,58 +770,66 @@
                 display: grid !important;
                 grid-template-columns: 250px 1fr !important;
             }
-            .cv-preview:not(.layout-top-header) .cv-left {
+            .cv-preview:not(.layout-no-colour) .cv-left {
                 background: #1a1a2e !important;
                 -webkit-print-color-adjust: exact;
                 print-color-adjust: exact;
                 padding: 20px 15px !important;
             }
-            .cv-preview:not(.layout-top-header) .cv-right {
+            .cv-preview:not(.layout-no-colour) .cv-right {
                 padding: 20px !important;
             }
 
-            /* TOP HEADER LAYOUT PRINT */
-            .cv-preview.layout-top-header {
+            /* WITHOUT COLOUR - SINGLE COLUMN B&W PRINT */
+            .cv-preview.layout-no-colour {
                 box-shadow: none !important;
                 max-width: none !important;
                 min-height: auto !important;
                 display: block !important;
+                grid-template-columns: 1fr !important;
             }
-            .cv-preview.layout-top-header .cv-left {
-                background: #1a1a2e !important;
-                -webkit-print-color-adjust: exact;
-                print-color-adjust: exact;
-                padding: 15px 25px !important;
+            .cv-preview.layout-no-colour .cv-left {
+                background: white !important;
+                color: #333 !important;
+                padding: 20px 30px !important;
+                border-bottom: 2px solid #333 !important;
+                display: block !important;
+            }
+            .cv-preview.layout-no-colour .cv-name {
+                color: #333 !important;
+                font-size: 2em !important;
+                margin-bottom: 5px !important;
+            }
+            .cv-preview.layout-no-colour .cv-title {
+                color: #555 !important;
+                font-size: 1em !important;
+            }
+            .cv-preview.layout-no-colour .cv-contact-info {
+                color: #333 !important;
                 display: flex !important;
+                gap: 20px !important;
+                margin-top: 10px !important;
                 flex-wrap: wrap !important;
-                align-items: center !important;
-                justify-content: space-between !important;
-                gap: 10px !important;
             }
-            .cv-preview.layout-top-header .cv-name {
-                font-size: 1.4em !important;
-                flex: 0 0 auto !important;
-            }
-            .cv-preview.layout-top-header .cv-title {
-                font-size: 0.85em !important;
-                flex: 1 !important;
-                text-align: center !important;
-            }
-            .cv-preview.layout-top-header .cv-contact-info {
-                font-size: 0.75em !important;
-                text-align: right !important;
-                flex: 0 0 auto !important;
-            }
-            .cv-preview.layout-top-header .cv-left-section {
+            .cv-preview.layout-no-colour .cv-left-section {
                 display: none !important;
             }
-            .cv-preview.layout-top-header .cv-right {
-                padding: 20px 25px !important;
+            .cv-preview.layout-no-colour .cv-right {
+                padding: 20px 30px !important;
                 background: white !important;
             }
-            .cv-preview.layout-top-header #section-profile-right,
-            .cv-preview.layout-top-header #section-highlights-right,
-            .cv-preview.layout-top-header #section-skills-right {
+            .cv-preview.layout-no-colour .cv-right-title {
+                color: #333 !important;
+                border-bottom-color: #333 !important;
+            }
+            .cv-preview.layout-no-colour .cv-skill-tag {
+                background: #f0f0f0 !important;
+                color: #333 !important;
+                border: 1px solid #ccc !important;
+            }
+            .cv-preview.layout-no-colour #section-profile-right,
+            .cv-preview.layout-no-colour #section-highlights-right,
+            .cv-preview.layout-no-colour #section-skills-right {
                 display: block !important;
             }
 
@@ -830,7 +838,7 @@
                 page-break-inside: avoid;
                 page-break-after: auto;
             }
-            .cv-skill-tag {
+            .cv-preview:not(.layout-no-colour) .cv-skill-tag {
                 background: rgba(255,215,0,0.2) !important;
                 -webkit-print-color-adjust: exact;
                 print-color-adjust: exact;
