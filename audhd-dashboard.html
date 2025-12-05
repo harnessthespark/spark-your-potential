@@ -844,14 +844,25 @@
         // Initialize
         window.onload = function() {
             const savedUser = localStorage.getItem('syp_user');
-            const savedToken = localStorage.getItem('syp_token');
 
-            if (savedUser && savedToken) {
+            if (savedUser) {
                 currentUser = JSON.parse(savedUser);
-                authToken = savedToken;
-                showDashboard();
+
+                // Check if user has AuDHD access
+                const hasAccess = currentUser.programme_access === 'audhd' ||
+                                 currentUser.programme_access === 'both' ||
+                                 currentUser.isStaff;
+
+                if (hasAccess) {
+                    showDashboard();
+                } else {
+                    // No access - clear and redirect
+                    alert('You do not have access to the AuDHD Coaching Portal.');
+                    localStorage.removeItem('syp_user');
+                    window.location.href = 'login.html';
+                }
             } else {
-                // Redirect to AuDHD login page
+                // Not logged in - redirect to login page
                 window.location.href = 'audhd-login.html';
             }
         };
