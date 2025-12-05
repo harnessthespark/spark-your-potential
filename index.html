@@ -380,7 +380,14 @@
             if (portal === 'career') {
                 window.location.href = 'dashboard.html';
             } else if (portal === 'audhd') {
-                window.location.href = 'audhd-dashboard.html';
+                // Check if already logged in
+                const savedUser = localStorage.getItem('syp_user');
+                const savedToken = localStorage.getItem('syp_token');
+                if (savedUser && savedToken) {
+                    window.location.href = 'audhd-dashboard.html';
+                } else {
+                    window.location.href = 'audhd-login.html';
+                }
             }
         }
 

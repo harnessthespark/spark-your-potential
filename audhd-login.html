@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - AuDHD Coaching Portal</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧠</text></svg>">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #2d1b4e 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 20px;
+            color: white;
+        }
+
+        .back-link {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            color: white;
+            text-decoration: none;
+            opacity: 0.7;
+            font-size: 0.9em;
+            transition: opacity 0.2s;
+        }
+        .back-link:hover {
+            opacity: 1;
+        }
+
+        .logo {
+            margin-bottom: 20px;
+        }
+        .logo img {
+            height: 70px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        .header h1 {
+            font-size: 2.2em;
+            font-weight: 800;
+            margin-bottom: 10px;
+            background: linear-gradient(135deg, #E91E78 0%, #8B5CF6 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .header .subtitle {
+            font-size: 1.1em;
+            opacity: 0.7;
+            color: #ccc;
+        }
+
+        .login-card {
+            background: white;
+            border-radius: 24px;
+            padding: 40px;
+            width: 100%;
+            max-width: 420px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+        }
+
+        .login-card h2 {
+            color: #2d1b4e;
+            font-size: 1.4em;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+        .login-card .intro {
+            color: #666;
+            font-size: 0.9em;
+            text-align: center;
+            margin-bottom: 30px;
+            line-height: 1.5;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+        .form-group label {
+            display: block;
+            color: #444;
+            font-size: 0.9em;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+        .form-group input {
+            width: 100%;
+            padding: 15px 18px;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            font-size: 1em;
+            font-family: inherit;
+            transition: all 0.2s;
+        }
+        .form-group input:focus {
+            outline: none;
+            border-color: #E91E78;
+            box-shadow: 0 0 0 4px rgba(233, 30, 120, 0.1);
+        }
+        .form-group input::placeholder {
+            color: #aaa;
+        }
+
+        .login-btn {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, #E91E78 0%, #8B5CF6 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.1em;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+            margin-top: 10px;
+        }
+        .login-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(233, 30, 120, 0.3);
+        }
+        .login-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .error-message {
+            background: #fef2f2;
+            border: 1px solid #fecaca;
+            color: #dc2626;
+            padding: 12px 15px;
+            border-radius: 10px;
+            font-size: 0.9em;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .success-message {
+            background: #f0fdf4;
+            border: 1px solid #bbf7d0;
+            color: #16a34a;
+            padding: 12px 15px;
+            border-radius: 10px;
+            font-size: 0.9em;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .help-text {
+            text-align: center;
+            margin-top: 25px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+        }
+        .help-text p {
+            color: #888;
+            font-size: 0.85em;
+            margin-bottom: 10px;
+        }
+        .help-text a {
+            color: #E91E78;
+            text-decoration: none;
+            font-weight: 600;
+        }
+        .help-text a:hover {
+            text-decoration: underline;
+        }
+
+        /* Quick access tools - no login needed */
+        .quick-tools {
+            margin-top: 40px;
+            text-align: center;
+        }
+        .quick-tools p {
+            color: #888;
+            font-size: 0.85em;
+            margin-bottom: 15px;
+        }
+        .quick-tools-grid {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        .quick-tool {
+            padding: 10px 18px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 20px;
+            color: white;
+            text-decoration: none;
+            font-size: 0.85em;
+            transition: all 0.2s;
+        }
+        .quick-tool:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+        }
+
+        /* Loading spinner */
+        .spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 0.8s ease-in-out infinite;
+            margin-right: 10px;
+            vertical-align: middle;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Responsive */
+        @media (max-width: 480px) {
+            .login-card { padding: 30px 25px; }
+            .header h1 { font-size: 1.8em; }
+        }
+    </style>
+</head>
+<body>
+    <a href="index.html" class="back-link">← Back to Home</a>
+
+    <div class="logo">
+        <img src="White.png" alt="Harness the Spark" onerror="this.style.display='none'">
+    </div>
+
+    <div class="header">
+        <h1>🧠 AuDHD Coaching Portal</h1>
+        <div class="subtitle">Honouring Your Beautiful Paradox</div>
+    </div>
+
+    <div class="login-card">
+        <h2>Welcome Back</h2>
+        <p class="intro">Log in to access your coaching portal, tools, and progress.</p>
+
+        <div class="error-message" id="errorMessage"></div>
+        <div class="success-message" id="successMessage"></div>
+
+        <form id="loginForm" onsubmit="handleLogin(event)">
+            <div class="form-group">
+                <label for="email">Email Address</label>
+                <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    placeholder="your@email.com"
+                    required
+                    autocomplete="email"
+                >
+            </div>
+
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input
+                    type="password"
+                    id="password"
+                    name="password"
+                    placeholder="Enter your password"
+                    required
+                    autocomplete="current-password"
+                >
+            </div>
+
+            <button type="submit" class="login-btn" id="loginBtn">
+                Log In
+            </button>
+        </form>
+
+        <div class="help-text">
+            <p>New client? Lisa will set up your account.</p>
+            <p>Forgot password? <a href="mailto:lisa@harnessthespark.com">Contact Lisa</a></p>
+        </div>
+    </div>
+
+    <!-- Quick access to tools (no login needed) -->
+    <div class="quick-tools">
+        <p>Need a tool right now? These work without logging in:</p>
+        <div class="quick-tools-grid">
+            <a href="spark-ignition.html" class="quick-tool">🔥 Spark Ignition</a>
+            <a href="audhd-energy.html" class="quick-tool">⚡ Energy Planner</a>
+            <a href="audhd-foundations.html" class="quick-tool">🏗️ Foundations</a>
+        </div>
+    </div>
+
+    <script>
+        // Configuration
+        const API_BASE_URL = 'https://sparkhub-be-qtmmb.ondigitalocean.app';
+
+        // Check if already logged in
+        window.onload = function() {
+            const savedUser = localStorage.getItem('syp_user');
+            const savedToken = localStorage.getItem('syp_token');
+
+            if (savedUser && savedToken) {
+                // Already logged in - redirect to dashboard
+                window.location.href = 'audhd-dashboard.html';
+            }
+        };
+
+        async function handleLogin(event) {
+            event.preventDefault();
+
+            const email = document.getElementById('email').value.trim();
+            const password = document.getElementById('password').value;
+            const loginBtn = document.getElementById('loginBtn');
+            const errorDiv = document.getElementById('errorMessage');
+            const successDiv = document.getElementById('successMessage');
+
+            // Reset messages
+            errorDiv.style.display = 'none';
+            successDiv.style.display = 'none';
+
+            // Show loading state
+            loginBtn.disabled = true;
+            loginBtn.innerHTML = '<span class="spinner"></span> Logging in...';
+
+            try {
+                const response = await fetch(`${API_BASE_URL}/api/accounts/login/`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        email: email,
+                        password: password
+                    })
+                });
+
+                const data = await response.json();
+
+                if (response.ok && data.token) {
+                    // Success - store user data
+                    const userData = {
+                        id: data.user?.id || data.user_id || email,
+                        email: email,
+                        name: data.user?.first_name || data.user?.name || email.split('@')[0],
+                        isStaff: data.user?.is_staff || data.is_staff || false
+                    };
+
+                    localStorage.setItem('syp_user', JSON.stringify(userData));
+                    localStorage.setItem('syp_token', data.token);
+
+                    // Show success
+                    successDiv.textContent = 'Login successful! Redirecting...';
+                    successDiv.style.display = 'block';
+
+                    // Redirect to AuDHD dashboard
+                    setTimeout(() => {
+                        window.location.href = 'audhd-dashboard.html';
+                    }, 1000);
+
+                } else {
+                    // Error
+                    throw new Error(data.error || data.detail || 'Invalid email or password');
+                }
+
+            } catch (error) {
+                console.error('Login error:', error);
+                errorDiv.textContent = error.message || 'Unable to log in. Please check your credentials.';
+                errorDiv.style.display = 'block';
+
+                // Reset button
+                loginBtn.disabled = false;
+                loginBtn.innerHTML = 'Log In';
+            }
+        }
+    </script>
+</body>
+</html>
