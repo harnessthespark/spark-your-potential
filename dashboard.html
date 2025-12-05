@@ -310,6 +310,58 @@
                 <div id="clientList" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 15px;">
                     <!-- Client cards will be populated here -->
                 </div>
+
+                <!-- Admin Tools Toggle -->
+                <div style="margin-top: 20px; text-align: center;">
+                    <button onclick="toggleAdminTools()" id="adminToolsToggle" style="background: rgba(255,255,255,0.2); color: white; border: 1px solid rgba(255,255,255,0.3); padding: 10px 20px; border-radius: 8px; cursor: pointer; font-size: 0.9em;">
+                        🔐 Admin Tools ▼
+                    </button>
+                </div>
+
+                <!-- Admin Tools Panel (hidden by default) -->
+                <div id="adminToolsPanel" style="display: none; margin-top: 20px; background: rgba(255,255,255,0.95); border-radius: 12px; padding: 25px;">
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px;">
+
+                        <!-- Create Client Account -->
+                        <div style="background: #f8f9fa; border-radius: 10px; padding: 20px;">
+                            <h4 style="color: #667eea; margin-bottom: 15px;">➕ Create Client Account</h4>
+                            <div style="margin-bottom: 12px;">
+                                <label style="display: block; font-size: 0.85em; color: #555; margin-bottom: 5px;">Client Name</label>
+                                <input type="text" id="adminClientName" placeholder="e.g., Sarah Mitchell" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px; font-size: 0.95em;">
+                            </div>
+                            <div style="margin-bottom: 12px;">
+                                <label style="display: block; font-size: 0.85em; color: #555; margin-bottom: 5px;">Client Email</label>
+                                <input type="email" id="adminClientEmail" placeholder="client@email.com" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px; font-size: 0.95em;">
+                            </div>
+                            <div style="margin-bottom: 15px;">
+                                <label style="display: block; font-size: 0.85em; color: #555; margin-bottom: 5px;">Password (leave blank to auto-generate)</label>
+                                <input type="text" id="adminClientPassword" placeholder="Create a password" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px; font-size: 0.95em;">
+                            </div>
+                            <button onclick="createClientAccount()" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; font-weight: 600; width: 100%;">
+                                Create Account
+                            </button>
+                            <div id="createAccountMessage" style="margin-top: 10px; padding: 10px; border-radius: 6px; display: none;"></div>
+                        </div>
+
+                        <!-- Reset Password -->
+                        <div style="background: #f8f9fa; border-radius: 10px; padding: 20px;">
+                            <h4 style="color: #667eea; margin-bottom: 15px;">🔄 Reset Client Password</h4>
+                            <div style="margin-bottom: 12px;">
+                                <label style="display: block; font-size: 0.85em; color: #555; margin-bottom: 5px;">Client Email</label>
+                                <input type="email" id="resetClientEmail" placeholder="client@email.com" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px; font-size: 0.95em;">
+                            </div>
+                            <div style="margin-bottom: 15px;">
+                                <label style="display: block; font-size: 0.85em; color: #555; margin-bottom: 5px;">New Password (leave blank to auto-generate)</label>
+                                <input type="text" id="resetClientPassword" placeholder="New password" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px; font-size: 0.95em;">
+                            </div>
+                            <button onclick="resetClientPassword()" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; font-weight: 600; width: 100%;">
+                                Reset Password
+                            </button>
+                            <div id="resetPasswordMessage" style="margin-top: 10px; padding: 10px; border-radius: 6px; display: none;"></div>
+                        </div>
+
+                    </div>
+                </div>
             </div>
 
             <!-- Journey View (shown when client selected) -->
@@ -1620,6 +1672,174 @@
                 // Open folder listing (in production, this would show a document list)
                 alert(`Documents for ${client.name}:\n\n- Career Blueprint\n- Career Insights Report\n- Decision Framework\n- CV Builder\n- Mapping Guide\n- AI Prompt Library`);
             }
+        }
+
+        // ============================================================
+        // ADMIN TOOLS FUNCTIONS
+        // ============================================================
+
+        // Toggle admin tools panel visibility
+        function toggleAdminTools() {
+            const panel = document.getElementById('adminToolsPanel');
+            const toggle = document.getElementById('adminToolsToggle');
+
+            if (panel.style.display === 'none') {
+                panel.style.display = 'block';
+                toggle.innerHTML = '🔐 Admin Tools ▲';
+            } else {
+                panel.style.display = 'none';
+                toggle.innerHTML = '🔐 Admin Tools ▼';
+            }
+        }
+
+        // Generate random password
+        function generatePassword() {
+            const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZabcdefghjkmnpqrstuvwxyz23456789';
+            let password = '';
+            for (let i = 0; i < 8; i++) {
+                password += chars.charAt(Math.floor(Math.random() * chars.length));
+            }
+            return password;
+        }
+
+        // Create client account with password
+        async function createClientAccount() {
+            const name = document.getElementById('adminClientName').value.trim();
+            const email = document.getElementById('adminClientEmail').value.trim();
+            let password = document.getElementById('adminClientPassword').value || generatePassword();
+            const messageEl = document.getElementById('createAccountMessage');
+
+            // Validation
+            if (!name) {
+                showMessage(messageEl, 'Please enter a client name', 'error');
+                return;
+            }
+            if (!email || !email.includes('@')) {
+                showMessage(messageEl, 'Please enter a valid email', 'error');
+                return;
+            }
+
+            try {
+                // Create user account via SparkHub API
+                const response = await fetch(`${API_BASE_URL}/api/accounts/register/`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${authToken}`
+                    },
+                    body: JSON.stringify({
+                        username: email.split('@')[0], // Use email prefix as username
+                        email: email,
+                        password: password,
+                        first_name: name.split(' ')[0],
+                        last_name: name.split(' ').slice(1).join(' ') || ''
+                    })
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+
+                    // Also add to SYP client list
+                    await addClientToSYP(name, email);
+
+                    showMessage(messageEl, `
+                        <strong>✓ Account created!</strong><br>
+                        <strong>Name:</strong> ${name}<br>
+                        <strong>Email:</strong> ${email}<br>
+                        <strong>Password:</strong> <code style="background: #e0e0e0; padding: 2px 6px; border-radius: 3px;">${password}</code><br>
+                        <em style="font-size: 0.85em;">Share these credentials with your client.</em>
+                    `, 'success');
+
+                    // Clear form
+                    document.getElementById('adminClientName').value = '';
+                    document.getElementById('adminClientEmail').value = '';
+                    document.getElementById('adminClientPassword').value = '';
+
+                    // Refresh client list
+                    await renderClientList();
+                } else {
+                    const errorData = await response.json().catch(() => ({}));
+                    showMessage(messageEl, `Error: ${errorData.detail || errorData.email || errorData.username || 'Could not create account'}`, 'error');
+                }
+            } catch (error) {
+                console.error('Create account error:', error);
+                showMessage(messageEl, 'Could not connect to server. Try again later.', 'error');
+            }
+        }
+
+        // Add client to SYP system (separate from user account)
+        async function addClientToSYP(name, email) {
+            try {
+                await fetch(`${API_BASE_URL}/api/crm/syp/coach/clients/`, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${authToken}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        full_name: name,
+                        email: email,
+                        programme_status: 'enrolled',
+                        enrolled_date: new Date().toISOString().split('T')[0]
+                    })
+                });
+            } catch (error) {
+                console.log('Could not add to SYP client list:', error);
+            }
+        }
+
+        // Reset client password
+        async function resetClientPassword() {
+            const email = document.getElementById('resetClientEmail').value.trim();
+            let password = document.getElementById('resetClientPassword').value || generatePassword();
+            const messageEl = document.getElementById('resetPasswordMessage');
+
+            if (!email || !email.includes('@')) {
+                showMessage(messageEl, 'Please enter a valid email', 'error');
+                return;
+            }
+
+            try {
+                // Reset password via SparkHub API
+                const response = await fetch(`${API_BASE_URL}/api/accounts/admin/reset-password/`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${authToken}`
+                    },
+                    body: JSON.stringify({
+                        email: email,
+                        new_password: password
+                    })
+                });
+
+                if (response.ok) {
+                    showMessage(messageEl, `
+                        <strong>✓ Password reset!</strong><br>
+                        <strong>Email:</strong> ${email}<br>
+                        <strong>New Password:</strong> <code style="background: #e0e0e0; padding: 2px 6px; border-radius: 3px;">${password}</code><br>
+                        <em style="font-size: 0.85em;">Share the new password with your client.</em>
+                    `, 'success');
+
+                    // Clear form
+                    document.getElementById('resetClientEmail').value = '';
+                    document.getElementById('resetClientPassword').value = '';
+                } else {
+                    const errorData = await response.json().catch(() => ({}));
+                    showMessage(messageEl, `Error: ${errorData.detail || errorData.error || 'Could not reset password'}`, 'error');
+                }
+            } catch (error) {
+                console.error('Reset password error:', error);
+                showMessage(messageEl, 'Could not connect to server. Try again later.', 'error');
+            }
+        }
+
+        // Helper to show messages
+        function showMessage(element, message, type) {
+            element.innerHTML = message;
+            element.style.display = 'block';
+            element.style.background = type === 'success' ? '#d4edda' : '#f8d7da';
+            element.style.color = type === 'success' ? '#155724' : '#721c24';
         }
     </script>
 </body>
