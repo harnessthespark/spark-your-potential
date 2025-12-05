@@ -219,6 +219,89 @@
             border-left: 4px solid #8b5cf6;
         }
 
+        /* DMN/TPN Explainer */
+        .brain-networks-explainer {
+            background: #f0f9ff;
+            border: 2px solid #0ea5e9;
+            border-radius: 12px;
+            margin-top: 15px;
+            overflow: hidden;
+        }
+        .explainer-toggle {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 16px;
+            cursor: pointer;
+            background: transparent;
+            border: none;
+            width: 100%;
+            font-family: inherit;
+            color: #0369a1;
+            font-weight: 600;
+            font-size: 0.9em;
+        }
+        .explainer-toggle:hover {
+            background: rgba(14, 165, 233, 0.1);
+        }
+        .explainer-toggle .icon {
+            transition: transform 0.3s ease;
+        }
+        .explainer-toggle.open .icon {
+            transform: rotate(180deg);
+        }
+        .explainer-content {
+            display: none;
+            padding: 0 16px 16px;
+        }
+        .explainer-content.open {
+            display: block;
+        }
+        .network-box {
+            background: white;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 12px;
+            border-left: 4px solid;
+        }
+        .network-box.dmn {
+            border-color: #8b5cf6;
+        }
+        .network-box.tpn {
+            border-color: #22c55e;
+        }
+        .network-box h5 {
+            color: #1e293b;
+            font-size: 0.95em;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .network-box p {
+            color: #64748b;
+            font-size: 0.85em;
+            line-height: 1.5;
+            margin: 0;
+        }
+        .network-box ul {
+            margin: 8px 0 0 0;
+            padding-left: 20px;
+            color: #64748b;
+            font-size: 0.85em;
+        }
+        .network-box li {
+            margin-bottom: 4px;
+        }
+        .explainer-summary {
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+            border-radius: 8px;
+            padding: 12px 15px;
+            font-size: 0.85em;
+            color: #92400e;
+            line-height: 1.5;
+        }
+
         /* Intervention Section */
         .intervention-section {
             margin-top: 30px;
@@ -1135,6 +1218,42 @@
                     <div class="explanation-card neurology">
                         <h4>🧠 What's happening neurologically</h4>
                         <p>${state.neurology}</p>
+
+                        <div class="brain-networks-explainer">
+                            <button class="explainer-toggle" onclick="toggleExplainer(event)">
+                                <span>ℹ️ What are DMN and TPN?</span>
+                                <span class="icon">▼</span>
+                            </button>
+                            <div class="explainer-content">
+                                <div class="network-box dmn">
+                                    <h5>🔮 DMN - Default Mode Network</h5>
+                                    <p><strong>Your internal processing mode.</strong> This network activates when you're:</p>
+                                    <ul>
+                                        <li>Reflecting on yourself or your life</li>
+                                        <li>Thinking about others and relationships</li>
+                                        <li>Daydreaming or imagining future scenarios</li>
+                                        <li>Processing emotions and memories</li>
+                                    </ul>
+                                    <p style="margin-top: 8px;"><em>When overactive:</em> rumination spirals, overthinking, catastrophising</p>
+                                </div>
+
+                                <div class="network-box tpn">
+                                    <h5>🎯 TPN - Task Positive Network</h5>
+                                    <p><strong>Your external focus mode.</strong> This network activates when you're:</p>
+                                    <ul>
+                                        <li>Concentrating on a specific task</li>
+                                        <li>Paying attention to the outside world</li>
+                                        <li>Problem-solving in the present moment</li>
+                                        <li>Taking deliberate action</li>
+                                    </ul>
+                                    <p style="margin-top: 8px;"><em>When overactive:</em> exhaustion, no time for reflection or rest</p>
+                                </div>
+
+                                <div class="explainer-summary">
+                                    💡 <strong>The key:</strong> A regulated brain can switch smoothly between these networks. Dysregulation often means being stuck in one (DMN rumination in hyper-arousal) or losing access to both (shutdown in hypo-arousal).
+                                </div>
+                            </div>
+                        </div>
                     </div>
 
                     <div class="explanation-card validation">
@@ -1364,8 +1483,30 @@
             return date.toLocaleDateString('en-GB');
         }
 
+        // Toggle DMN/TPN explainer
+        function toggleExplainer(event) {
+            event.stopPropagation();
+            const toggle = event.currentTarget;
+            const content = toggle.nextElementSibling;
+            toggle.classList.toggle('open');
+            content.classList.toggle('open');
+        }
+
         // Initialize
-        loadUserData();
+        function checkAuth() {
+            const savedUser = localStorage.getItem('syp_user');
+            const savedToken = localStorage.getItem('syp_token');
+            if (!savedUser || !savedToken) {
+                window.location.href = 'audhd-login.html';
+                return false;
+            }
+            return true;
+        }
+
+        // Check auth before loading
+        if (checkAuth()) {
+            loadUserData();
+        }
     </script>
 </body>
 </html>

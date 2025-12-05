@@ -723,8 +723,21 @@
             window.autoSaveTimeout = setTimeout(saveFoundations, 2000);
         }
 
+        // Check auth on load
+        function checkAuth() {
+            const savedUser = localStorage.getItem('syp_user');
+            const savedToken = localStorage.getItem('syp_token');
+            if (!savedUser || !savedToken) {
+                window.location.href = 'audhd-login.html';
+                return false;
+            }
+            return true;
+        }
+
         // Initialize
         document.addEventListener('DOMContentLoaded', function() {
+            if (!checkAuth()) return;
+
             loadFoundations();
 
             // Add auto-save listeners

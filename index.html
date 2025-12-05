@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Spark Your Potential - Coaching Portal</title>
+    <title>Spark Your Potential - Client Portal</title>
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
@@ -22,7 +22,7 @@
         }
 
         .logo {
-            margin-bottom: 20px;
+            margin-bottom: 30px;
         }
         .logo img {
             height: 80px;
@@ -30,219 +30,171 @@
 
         .header {
             text-align: center;
-            margin-bottom: 50px;
+            margin-bottom: 40px;
         }
         .header h1 {
-            font-size: 2.8em;
+            font-size: 2.5em;
             font-weight: 800;
             margin-bottom: 10px;
-            background: linear-gradient(135deg, #E91E78 0%, #F97B4D 50%, #FACC15 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+            color: white;
         }
         .header .subtitle {
-            font-size: 1.2em;
-            opacity: 0.8;
+            font-size: 1.1em;
+            opacity: 0.7;
             color: #ccc;
         }
-
-        .portal-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-            gap: 30px;
-            max-width: 900px;
-            width: 100%;
+        .header .user-welcome {
+            margin-top: 15px;
+            font-size: 1.2em;
+            color: #E91E78;
+            font-weight: 600;
         }
 
-        .portal-card {
-            background: rgba(255, 255, 255, 0.05);
-            border: 2px solid rgba(255, 255, 255, 0.1);
+        /* Login Form */
+        .login-card {
+            background: white;
             border-radius: 24px;
             padding: 40px;
+            width: 100%;
+            max-width: 420px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+        }
+        .login-card h2 {
+            color: #2d1b4e;
+            font-size: 1.3em;
+            margin-bottom: 25px;
             text-align: center;
-            cursor: pointer;
-            transition: all 0.4s ease;
-            position: relative;
-            overflow: hidden;
         }
-        .portal-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 5px;
-        }
-        .portal-card:hover {
-            transform: translateY(-10px);
-            border-color: rgba(255, 255, 255, 0.3);
-            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.4);
-        }
-
-        /* Career Portal */
-        .portal-card.career::before {
-            background: linear-gradient(90deg, #F97B4D, #FACC15);
-        }
-        .portal-card.career:hover {
-            background: rgba(249, 123, 77, 0.1);
-            border-color: #F97B4D;
-        }
-
-        /* AuDHD Portal */
-        .portal-card.audhd::before {
-            background: linear-gradient(90deg, #E91E78, #8B5CF6);
-        }
-        .portal-card.audhd:hover {
-            background: rgba(233, 30, 120, 0.1);
-            border-color: #E91E78;
-        }
-
-        .portal-icon {
-            font-size: 4em;
+        .form-group {
             margin-bottom: 20px;
         }
-
-        .portal-title {
-            font-size: 1.6em;
-            font-weight: 700;
-            margin-bottom: 10px;
-        }
-        .portal-card.career .portal-title {
-            color: #F97B4D;
-        }
-        .portal-card.audhd .portal-title {
-            color: #E91E78;
-        }
-
-        .portal-description {
-            color: #aaa;
-            font-size: 0.95em;
-            line-height: 1.6;
-            margin-bottom: 25px;
-        }
-
-        .portal-features {
-            text-align: left;
-            margin-bottom: 25px;
-        }
-        .portal-features li {
-            color: #ccc;
+        .form-group label {
+            display: block;
+            color: #444;
             font-size: 0.9em;
-            padding: 8px 0;
-            padding-left: 25px;
-            position: relative;
-            list-style: none;
+            font-weight: 600;
+            margin-bottom: 8px;
         }
-        .portal-features li::before {
-            content: '✓';
-            position: absolute;
-            left: 0;
-            color: #22c55e;
-            font-weight: bold;
-        }
-
-        .portal-btn {
-            display: inline-block;
-            padding: 15px 40px;
-            border-radius: 30px;
+        .form-group input {
+            width: 100%;
+            padding: 15px 18px;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
             font-size: 1em;
-            font-weight: 700;
-            text-decoration: none;
-            transition: all 0.3s ease;
-        }
-        .portal-card.career .portal-btn {
-            background: linear-gradient(135deg, #F97B4D 0%, #FACC15 100%);
-            color: #1a1a2e;
-        }
-        .portal-card.audhd .portal-btn {
-            background: linear-gradient(135deg, #E91E78 0%, #8B5CF6 100%);
-            color: white;
-        }
-        .portal-btn:hover {
-            transform: scale(1.05);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-        }
-
-        /* Quick Access for returning users */
-        .quick-access {
-            margin-top: 50px;
-            text-align: center;
-        }
-        .quick-access p {
-            color: #888;
-            font-size: 0.9em;
-            margin-bottom: 15px;
-        }
-        .quick-links {
-            display: flex;
-            gap: 15px;
-            justify-content: center;
-            flex-wrap: wrap;
-        }
-        .quick-link {
-            padding: 10px 20px;
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 20px;
-            color: white;
-            text-decoration: none;
-            font-size: 0.85em;
+            font-family: inherit;
             transition: all 0.2s;
         }
-        .quick-link:hover {
-            background: rgba(255, 255, 255, 0.2);
-            border-color: rgba(255, 255, 255, 0.4);
-        }
-
-        /* Coach Mode Badge */
-        .coach-badge {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-        .coach-badge span {
-            color: #aaa;
-            font-size: 0.9em;
-        }
-        .logout-btn {
-            padding: 8px 16px;
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 8px;
-            color: white;
-            text-decoration: none;
-            font-size: 0.85em;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-        .logout-btn:hover {
-            background: rgba(255, 255, 255, 0.2);
-        }
-
-        /* Login Prompt */
-        .login-prompt {
-            position: fixed;
-            top: 20px;
-            right: 20px;
+        .form-group input:focus {
+            outline: none;
+            border-color: #E91E78;
+            box-shadow: 0 0 0 4px rgba(233, 30, 120, 0.1);
         }
         .login-btn {
-            padding: 10px 25px;
+            width: 100%;
+            padding: 16px;
             background: linear-gradient(135deg, #E91E78 0%, #F97B4D 100%);
-            border: none;
-            border-radius: 25px;
             color: white;
-            font-weight: 600;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.1em;
+            font-weight: 700;
             cursor: pointer;
-            text-decoration: none;
             transition: all 0.2s;
         }
         .login-btn:hover {
             transform: translateY(-2px);
             box-shadow: 0 10px 30px rgba(233, 30, 120, 0.3);
+        }
+        .login-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+        .error-message {
+            background: #fef2f2;
+            border: 1px solid #fecaca;
+            color: #dc2626;
+            padding: 12px 15px;
+            border-radius: 10px;
+            font-size: 0.9em;
+            margin-bottom: 20px;
+            display: none;
+        }
+        .help-text {
+            text-align: center;
+            margin-top: 20px;
+            color: #888;
+            font-size: 0.85em;
+        }
+        .help-text a {
+            color: #E91E78;
+            text-decoration: none;
+        }
+
+        /* Portal Selection (shown after login) */
+        .portal-selection {
+            display: none;
+            text-align: center;
+        }
+        .portal-buttons {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-bottom: 30px;
+        }
+        .portal-btn {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 20px 40px;
+            border-radius: 16px;
+            font-size: 1.1em;
+            font-weight: 700;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            min-width: 250px;
+            justify-content: center;
+        }
+        .portal-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+        }
+        .portal-btn.career {
+            background: linear-gradient(135deg, #F97B4D 0%, #FACC15 100%);
+            color: #1a1a2e;
+        }
+        .portal-btn.audhd {
+            background: linear-gradient(135deg, #E91E78 0%, #8B5CF6 100%);
+            color: white;
+        }
+        .portal-btn .icon {
+            font-size: 1.4em;
+        }
+        .logout-link {
+            color: #888;
+            font-size: 0.9em;
+            cursor: pointer;
+            text-decoration: underline;
+        }
+        .logout-link:hover {
+            color: #E91E78;
+        }
+
+        /* Spinner */
+        .spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 0.8s ease-in-out infinite;
+            margin-right: 10px;
+            vertical-align: middle;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
         }
 
         /* Footer */
@@ -261,146 +213,247 @@
         }
 
         /* Responsive */
-        @media (max-width: 700px) {
-            .header h1 { font-size: 2em; }
-            .portal-grid { grid-template-columns: 1fr; }
-            .portal-card { padding: 30px; }
-        }
-
-        /* Animation */
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-        .portal-card {
-            animation: fadeInUp 0.6s ease-out;
-        }
-        .portal-card:nth-child(2) {
-            animation-delay: 0.15s;
+        @media (max-width: 550px) {
+            .header h1 { font-size: 1.8em; }
+            .portal-buttons { flex-direction: column; }
+            .portal-btn { min-width: 100%; }
+            .login-card { padding: 30px 25px; }
         }
     </style>
 </head>
 <body>
-    <!-- Coach Badge (shown when logged in) -->
-    <div id="coachBadge" class="coach-badge" style="display: none;">
-        <span id="userEmail"></span>
-        <button class="logout-btn" onclick="logout()">Log out</button>
-    </div>
-
-    <!-- Login Button (shown when not logged in) -->
-    <div id="loginPrompt" class="login-prompt">
-        <a href="dashboard.html" class="login-btn">Coach Login</a>
-    </div>
-
     <div class="logo">
         <img src="White.png" alt="Harness the Spark" onerror="this.style.display='none'">
     </div>
 
     <div class="header">
         <h1>Spark Your Potential</h1>
-        <div class="subtitle">Choose your coaching journey</div>
+        <div class="subtitle">Client Portal</div>
+        <div class="user-welcome" id="userWelcome" style="display: none;"></div>
     </div>
 
-    <div class="portal-grid">
-        <!-- Career Portal -->
-        <div class="portal-card career" onclick="navigateTo('career')">
-            <div class="portal-icon">⚡</div>
-            <h2 class="portal-title">Career Booster</h2>
-            <p class="portal-description">
-                Transform your career with clarity, positioning, and practical tools.
-                4 or 8 week programmes to unlock your potential.
-            </p>
-            <ul class="portal-features">
-                <li>Career Blueprint development</li>
-                <li>Interactive CV Builder</li>
-                <li>LinkedIn optimisation</li>
-                <li>Decision frameworks</li>
-                <li>AI prompt library</li>
-            </ul>
-            <span class="portal-btn">Enter Career Portal →</span>
-        </div>
-
-        <!-- AuDHD Portal -->
-        <div class="portal-card audhd" onclick="navigateTo('audhd')">
-            <div class="portal-icon">🧠</div>
-            <h2 class="portal-title">AuDHD Coaching</h2>
-            <p class="portal-description">
-                Honour your beautiful paradox. Navigate the unique challenges and strengths
-                of living with both autism and ADHD.
-            </p>
-            <ul class="portal-features">
-                <li>6 Paradox Domains framework</li>
-                <li>Energy management tools</li>
-                <li>Laying the Foundations worksheet</li>
-                <li>Spark Ignition first aid kit</li>
-                <li>Personalised interventions</li>
-            </ul>
-            <span class="portal-btn">Enter AuDHD Portal →</span>
+    <!-- Login Form (shown when not logged in) -->
+    <div class="login-card" id="loginCard">
+        <h2>Log in to your portal</h2>
+        <div class="error-message" id="errorMessage"></div>
+        <form id="loginForm" onsubmit="handleLogin(event)">
+            <div class="form-group">
+                <label for="email">Email Address</label>
+                <input type="email" id="email" placeholder="your@email.com" required autocomplete="email">
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" placeholder="Enter your password" required autocomplete="current-password">
+            </div>
+            <button type="submit" class="login-btn" id="loginBtn">Log In</button>
+        </form>
+        <div class="help-text">
+            <p>Forgot password? <a href="mailto:lisa@harnessthespark.com">Contact Lisa</a></p>
         </div>
     </div>
 
-    <!-- Quick Access Tools -->
-    <div class="quick-access">
-        <p>Quick access to tools:</p>
-        <div class="quick-links">
-            <a href="spark-ignition.html" class="quick-link">🔥 Spark Ignition</a>
-            <a href="audhd-energy.html" class="quick-link">⚡ Energy Planner</a>
-            <a href="audhd-foundations.html" class="quick-link">🏗️ Foundations</a>
+    <!-- Portal Selection (shown after login, based on access) -->
+    <div class="portal-selection" id="portalSelection">
+        <div class="portal-buttons" id="portalButtons">
+            <!-- Buttons added dynamically based on user's programme access -->
         </div>
+        <span class="logout-link" onclick="logout()">Log out</span>
     </div>
 
     <div class="footer">
-        <p>Harness the Spark | <a href="mailto:lisa@harnessthespark.com">lisa@harnessthespark.com</a> | <a href="https://harnessthespark.com" target="_blank">harnessthespark.com</a></p>
+        <p>Harness the Spark | <a href="mailto:lisa@harnessthespark.com">lisa@harnessthespark.com</a></p>
     </div>
 
     <script>
-        // Check if user is logged in
-        function checkAuth() {
+        const API_BASE_URL = 'https://sparkhub-be-qtmmb.ondigitalocean.app';
+
+        // Check if already logged in
+        window.onload = function() {
             const savedUser = localStorage.getItem('syp_user');
             const savedToken = localStorage.getItem('syp_token');
 
             if (savedUser && savedToken) {
                 const user = JSON.parse(savedUser);
-                document.getElementById('coachBadge').style.display = 'flex';
-                document.getElementById('loginPrompt').style.display = 'none';
-                document.getElementById('userEmail').textContent = user.email || 'Coach';
-            } else {
-                document.getElementById('coachBadge').style.display = 'none';
-                document.getElementById('loginPrompt').style.display = 'block';
+                showPortalSelection(user);
+            }
+        };
+
+        async function handleLogin(event) {
+            event.preventDefault();
+
+            const email = document.getElementById('email').value.trim();
+            const password = document.getElementById('password').value;
+            const loginBtn = document.getElementById('loginBtn');
+            const errorDiv = document.getElementById('errorMessage');
+
+            errorDiv.style.display = 'none';
+            loginBtn.disabled = true;
+            loginBtn.innerHTML = '<span class="spinner"></span> Logging in...';
+
+            try {
+                const response = await fetch(`${API_BASE_URL}/api/accounts/login/`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, password })
+                });
+
+                const data = await response.json();
+
+                if (response.ok && data.token) {
+                    // Determine programme access
+                    // Staff (Lisa) gets access to both
+                    // Clients get access based on their programme field
+                    const programmeAccess = determineProgrammeAccess(data.user, email);
+
+                    const userData = {
+                        id: data.user?.id || data.user_id || email,
+                        email: email,
+                        name: data.user?.first_name || data.user?.name || email.split('@')[0],
+                        isStaff: data.user?.is_staff || data.is_staff || false,
+                        programmes: programmeAccess
+                    };
+
+                    localStorage.setItem('syp_user', JSON.stringify(userData));
+                    localStorage.setItem('syp_token', data.token);
+
+                    showPortalSelection(userData);
+                } else {
+                    throw new Error(data.error || data.detail || 'Invalid email or password');
+                }
+            } catch (error) {
+                errorDiv.textContent = error.message || 'Unable to log in. Please check your credentials.';
+                errorDiv.style.display = 'block';
+                loginBtn.disabled = false;
+                loginBtn.innerHTML = 'Log In';
             }
         }
 
-        function navigateTo(portal) {
-            if (portal === 'career') {
-                window.location.href = 'dashboard.html';
-            } else if (portal === 'audhd') {
-                // Check if already logged in
-                const savedUser = localStorage.getItem('syp_user');
-                const savedToken = localStorage.getItem('syp_token');
-                if (savedUser && savedToken) {
-                    window.location.href = 'audhd-dashboard.html';
-                } else {
-                    window.location.href = 'audhd-login.html';
+        function determineProgrammeAccess(user, email) {
+            // Staff gets access to both portals
+            if (user?.is_staff) {
+                return ['career', 'audhd'];
+            }
+
+            // Check localStorage for client programme assignments
+            // This is set by Lisa when adding clients
+            const careerClients = JSON.parse(localStorage.getItem('career_clients') || '{}');
+            const audhdClients = JSON.parse(localStorage.getItem('audhd_clients') || '{}');
+
+            const programmes = [];
+
+            // Check if email is in career clients
+            if (careerClients[email] || isDefaultCareerClient(email)) {
+                programmes.push('career');
+            }
+
+            // Check if email is in AuDHD clients
+            if (audhdClients[email] || isDefaultAuDHDClient(email)) {
+                programmes.push('audhd');
+            }
+
+            // If no specific assignment found, check user object
+            if (programmes.length === 0 && user?.programme) {
+                if (user.programme === 'career' || user.programme === 'career_booster') {
+                    programmes.push('career');
+                } else if (user.programme === 'audhd') {
+                    programmes.push('audhd');
                 }
+            }
+
+            return programmes;
+        }
+
+        // Default career clients (from your existing setup)
+        function isDefaultCareerClient(email) {
+            const defaults = [
+                'sarah.mitchell@example.com',
+                'donaldpirie111@hotmail.co.uk',
+                'rs@rajsamuel.net'
+            ];
+            return defaults.includes(email.toLowerCase());
+        }
+
+        // Default AuDHD clients
+        function isDefaultAuDHDClient(email) {
+            // Add your AuDHD client emails here
+            const defaults = [];
+            return defaults.includes(email.toLowerCase());
+        }
+
+        function showPortalSelection(user) {
+            document.getElementById('loginCard').style.display = 'none';
+            document.getElementById('portalSelection').style.display = 'block';
+            document.getElementById('userWelcome').style.display = 'block';
+            document.getElementById('userWelcome').textContent = `Welcome, ${user.name}`;
+
+            const buttonsDiv = document.getElementById('portalButtons');
+            buttonsDiv.innerHTML = '';
+
+            const programmes = user.programmes || [];
+
+            // If staff, show both
+            if (user.isStaff) {
+                buttonsDiv.innerHTML = `
+                    <a href="dashboard.html" class="portal-btn career">
+                        <span class="icon">⚡</span>
+                        <span>Career Coaching</span>
+                    </a>
+                    <a href="audhd-dashboard.html" class="portal-btn audhd">
+                        <span class="icon">🧠</span>
+                        <span>AuDHD Coaching</span>
+                    </a>
+                `;
+                return;
+            }
+
+            // Show only the portals the client has access to
+            if (programmes.includes('career')) {
+                buttonsDiv.innerHTML += `
+                    <a href="dashboard.html" class="portal-btn career">
+                        <span class="icon">⚡</span>
+                        <span>Career Coaching</span>
+                    </a>
+                `;
+            }
+
+            if (programmes.includes('audhd')) {
+                buttonsDiv.innerHTML += `
+                    <a href="audhd-dashboard.html" class="portal-btn audhd">
+                        <span class="icon">🧠</span>
+                        <span>AuDHD Coaching</span>
+                    </a>
+                `;
+            }
+
+            // If only one programme, auto-redirect
+            if (programmes.length === 1) {
+                if (programmes[0] === 'career') {
+                    window.location.href = 'dashboard.html';
+                } else if (programmes[0] === 'audhd') {
+                    window.location.href = 'audhd-dashboard.html';
+                }
+            }
+
+            // If no programmes assigned, show message
+            if (programmes.length === 0) {
+                buttonsDiv.innerHTML = `
+                    <div style="color: #666; text-align: center; padding: 20px;">
+                        <p>Your portal access is being set up.</p>
+                        <p style="margin-top: 10px;">Please contact <a href="mailto:lisa@harnessthespark.com" style="color: #E91E78;">Lisa</a> if you need assistance.</p>
+                    </div>
+                `;
             }
         }
 
         function logout() {
-            if (confirm('Are you sure you want to log out?')) {
-                localStorage.removeItem('syp_user');
-                localStorage.removeItem('syp_token');
-                checkAuth();
-            }
+            localStorage.removeItem('syp_user');
+            localStorage.removeItem('syp_token');
+            document.getElementById('loginCard').style.display = 'block';
+            document.getElementById('portalSelection').style.display = 'none';
+            document.getElementById('userWelcome').style.display = 'none';
+            document.getElementById('email').value = '';
+            document.getElementById('password').value = '';
         }
-
-        // Initialize
-        checkAuth();
     </script>
 </body>
 </html>

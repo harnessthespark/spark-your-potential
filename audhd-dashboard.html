@@ -613,6 +613,13 @@
                     <p>Your AuDHD first aid kit. Identify your nervous system state and access tailored interventions.</p>
                     <button class="tool-btn" onclick="openTool('ignition')">Open First Aid Kit</button>
                 </div>
+
+                <!-- Session Notes - Coach Only -->
+                <div class="tool-card coach-only" id="sessionNotesTool" style="display: none; border: 2px solid #8B5CF6;">
+                    <h4>📝 Session Notes</h4>
+                    <p>Structured coaching session template. Check-in, recap, agenda, goals, wrap-up.</p>
+                    <button class="tool-btn" onclick="openTool('session-notes')">Open Session Notes</button>
+                </div>
             </div>
         </div>
 
@@ -1033,6 +1040,7 @@
             if (currentUser.isStaff) {
                 document.getElementById('coachNotes').style.display = 'block';
                 document.getElementById('coachCalendar').style.display = 'block';
+                document.getElementById('sessionNotesTool').style.display = 'block';
             }
 
             renderSessions();
@@ -1394,6 +1402,9 @@
                 case 'ignition':
                     window.open('spark-ignition.html', '_blank');
                     addSparks(2, 'Used Spark Ignition');
+                    break;
+                case 'session-notes':
+                    window.open('audhd-session-notes.html', '_blank');
                     break;
                 default:
                     alert('Tool coming soon!');

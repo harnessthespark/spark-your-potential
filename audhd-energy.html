@@ -1159,7 +1159,20 @@
             saveDay();
         }
 
-        init();
+        // Check auth before loading
+        function checkAuth() {
+            const savedUser = localStorage.getItem('syp_user');
+            const savedToken = localStorage.getItem('syp_token');
+            if (!savedUser || !savedToken) {
+                window.location.href = 'audhd-login.html';
+                return false;
+            }
+            return true;
+        }
+
+        if (checkAuth()) {
+            init();
+        }
     </script>
 </body>
 </html>
