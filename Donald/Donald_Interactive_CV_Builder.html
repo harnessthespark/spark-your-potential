@@ -136,7 +136,7 @@
             overflow-y: auto;
         }
 
-        /* CV Preview - Two Column Layout */
+        /* CV Preview - Two Column Layout (Default) */
         .cv-preview {
             background: white;
             max-width: 900px;
@@ -145,6 +145,69 @@
             display: grid;
             grid-template-columns: 280px 1fr;
             min-height: 1200px;
+        }
+
+        /* Top Header Layout */
+        .cv-preview.layout-top-header {
+            grid-template-columns: 1fr;
+            grid-template-rows: auto 1fr;
+        }
+        .cv-preview.layout-top-header .cv-left {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 20px;
+            padding: 30px 40px;
+        }
+        .cv-preview.layout-top-header .cv-name {
+            grid-column: 1;
+            font-size: 1.6em;
+            align-self: center;
+        }
+        .cv-preview.layout-top-header .cv-title {
+            grid-column: 2;
+            font-size: 0.9em;
+            align-self: center;
+            text-align: center;
+        }
+        .cv-preview.layout-top-header .cv-contact-info {
+            grid-column: 3;
+            text-align: right;
+            font-size: 0.8em;
+            align-self: center;
+        }
+        .cv-preview.layout-top-header .cv-left-section {
+            display: none;
+        }
+        .cv-preview.layout-top-header .cv-right {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            padding: 30px 40px;
+        }
+        .cv-preview.layout-top-header .cv-right-section:first-child {
+            grid-column: 1 / -1;
+        }
+        .cv-preview.layout-top-header #section-profile-right {
+            display: block !important;
+            grid-column: 1 / -1;
+        }
+        .cv-preview.layout-top-header #section-highlights-right {
+            display: block !important;
+        }
+        .cv-preview.layout-top-header #section-skills-right {
+            display: block !important;
+        }
+        .cv-preview.layout-top-header #section-career {
+            grid-column: 1 / -1;
+        }
+        .cv-preview.layout-top-header #section-education {
+            grid-column: 1;
+        }
+        .cv-preview.layout-top-header #section-testimonials {
+            grid-column: 2;
+        }
+        .cv-preview.layout-top-header #section-casestudies {
+            grid-column: 1 / -1;
         }
 
         /* Left Column - Dark */
@@ -666,7 +729,7 @@
             background: #e0e0e0;
         }
 
-        /* Print Styles - PRINT READY */
+        /* Print Styles - PRINT READY (Multi-page support) */
         @media print {
             @page {
                 margin: 1cm;
@@ -685,19 +748,40 @@
             .cv-preview {
                 box-shadow: none !important;
                 max-width: none !important;
-                page-break-inside: avoid;
+                min-height: auto !important;
+                height: auto !important;
+                display: block !important;
+                /* Allow content to flow across multiple pages */
+            }
+            .cv-left, .cv-right {
+                display: block !important;
+                width: 100% !important;
+                float: none !important;
             }
             .cv-left {
                 background: #1a1a2e !important;
                 -webkit-print-color-adjust: exact;
                 print-color-adjust: exact;
+                page-break-after: avoid;
+            }
+            .cv-right {
+                page-break-before: auto;
+            }
+            /* Allow page breaks between sections */
+            .cv-left-section, .cv-right-section {
+                page-break-inside: avoid;
+                page-break-after: auto;
             }
             .cv-skill-tag {
                 background: rgba(255,215,0,0.2) !important;
                 -webkit-print-color-adjust: exact;
                 print-color-adjust: exact;
             }
+            /* Keep case studies and career entries together */
             .case-study {
+                page-break-inside: avoid;
+            }
+            .career-entry {
                 page-break-inside: avoid;
             }
             .case-study-hero {
@@ -708,6 +792,10 @@
                 background: #f8f9fa !important;
                 -webkit-print-color-adjust: exact;
                 print-color-adjust: exact;
+                page-break-inside: avoid;
+            }
+            .education-entry {
+                page-break-inside: avoid;
             }
             [contenteditable="true"] {
                 border: none !important;
@@ -744,6 +832,20 @@
             <div class="export-buttons">
                 <button class="export-btn" onclick="exportPDF()">🖨️ Print / PDF</button>
                 <button class="export-btn" onclick="downloadAsHTML()">💾 Download</button>
+            </div>
+
+            <div class="control-section">
+                <div class="control-title">📐 CV Layout</div>
+                <div class="theme-options">
+                    <button class="theme-btn active" data-layout="two-column" onclick="changeLayout('two-column')">
+                        <span class="theme-preview" style="background: linear-gradient(90deg, #1a1a2e 35%, white 35%); border: 1px solid #ddd;"></span>
+                        Two Column
+                    </button>
+                    <button class="theme-btn" data-layout="top-header" onclick="changeLayout('top-header')">
+                        <span class="theme-preview" style="background: linear-gradient(180deg, #1a1a2e 25%, white 25%); border: 1px solid #ddd;"></span>
+                        Top Header
+                    </button>
+                </div>
             </div>
 
             <div class="control-section">
@@ -990,11 +1092,14 @@
 
                         <!-- UBS Case Study -->
                         <div class="case-study hidden" id="casestudy-ubs">
-                            <div class="case-study-hero case-study-hero-ubs">
+                            <div class="case-study-hero case-study-hero-ubs" id="casestudy-hero-ubs">
                                 <div class="case-study-logo">UBS</div>
                             </div>
                             <div class="case-study-content">
-                                <div class="case-study-title">"Banking is our Craft"</div>
+                                <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px;">
+                                    <div class="case-study-title">"Banking is our Craft"</div>
+                                    <button class="change-image-btn" onclick="triggerImageUpload('ubs')">📷 Image</button>
+                                </div>
                                 <div class="case-study-grid" contenteditable="true">
                                     <div class="case-study-label">Brief:</div>
                                     <div class="case-study-value">Reposition UBS digital presence for new generation of HNWIs</div>
@@ -1006,15 +1111,19 @@
                                     <div class="case-study-value">$2.5m incremental revenue, increased leads, restored belief internally and externally</div>
                                 </div>
                             </div>
+                            <input type="file" id="imageUpload-ubs" accept="image/*" onchange="handleImageUpload('ubs', this)" style="display: none;">
                         </div>
 
                         <!-- UPS Case Study -->
                         <div class="case-study hidden" id="casestudy-ups">
-                            <div class="case-study-hero case-study-hero-ups">
+                            <div class="case-study-hero case-study-hero-ups" id="casestudy-hero-ups">
                                 <div class="case-study-logo">UPS</div>
                             </div>
                             <div class="case-study-content">
-                                <div class="case-study-title">"United Problem Solvers"</div>
+                                <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px;">
+                                    <div class="case-study-title">"United Problem Solvers"</div>
+                                    <button class="change-image-btn" onclick="triggerImageUpload('ups')">📷 Image</button>
+                                </div>
                                 <div class="case-study-grid" contenteditable="true">
                                     <div class="case-study-label">Brief:</div>
                                     <div class="case-study-value">Revitalise UPS brand positioning globally</div>
@@ -1026,15 +1135,19 @@
                                     <div class="case-study-value">+20% EMEA penetration, transformed employee pride for 400,000 staff</div>
                                 </div>
                             </div>
+                            <input type="file" id="imageUpload-ups" accept="image/*" onchange="handleImageUpload('ups', this)" style="display: none;">
                         </div>
 
                         <!-- AMD Case Study -->
                         <div class="case-study hidden" id="casestudy-amd">
-                            <div class="case-study-hero case-study-hero-amd">
+                            <div class="case-study-hero case-study-hero-amd" id="casestudy-hero-amd">
                                 <div class="case-study-logo">AMD</div>
                             </div>
                             <div class="case-study-content">
-                                <div class="case-study-title">"Together We Advance"</div>
+                                <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px;">
+                                    <div class="case-study-title">"Together We Advance"</div>
+                                    <button class="change-image-btn" onclick="triggerImageUpload('amd')">📷 Image</button>
+                                </div>
                                 <div class="case-study-grid" contenteditable="true">
                                     <div class="case-study-label">Brief:</div>
                                     <div class="case-study-value">Create new brand platform to compete beyond specs</div>
@@ -1046,6 +1159,7 @@
                                     <div class="case-study-value">New competitive positioning, multi-audience impact, building market share</div>
                                 </div>
                             </div>
+                            <input type="file" id="imageUpload-amd" accept="image/*" onchange="handleImageUpload('amd', this)" style="display: none;">
                         </div>
                     </div>
                 </div>
@@ -1180,12 +1294,31 @@
             }
         };
 
+        // Layout switching function
+        function changeLayout(layoutName) {
+            const cvPreview = document.getElementById('cvPreview');
+
+            // Update button states for layout buttons
+            document.querySelectorAll('.theme-btn[data-layout]').forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.layout === layoutName);
+            });
+
+            // Remove all layout classes and apply new one
+            cvPreview.classList.remove('layout-two-column', 'layout-top-header');
+            if (layoutName === 'top-header') {
+                cvPreview.classList.add('layout-top-header');
+            }
+
+            // Save preference
+            localStorage.setItem('cv_layout', layoutName);
+        }
+
         function changeTheme(themeName) {
             const theme = themes[themeName];
             if (!theme) return;
 
-            // Update button states
-            document.querySelectorAll('.theme-btn').forEach(btn => {
+            // Update button states for theme buttons only
+            document.querySelectorAll('.theme-btn[data-theme]').forEach(btn => {
                 btn.classList.toggle('active', btn.dataset.theme === themeName);
             });
 
@@ -1214,10 +1347,12 @@
             localStorage.setItem('cv_theme', themeName);
         }
 
-        // Load saved theme on page load
+        // Load saved theme and layout on page load
         window.addEventListener('load', function() {
             const savedTheme = localStorage.getItem('cv_theme') || 'modern';
+            const savedLayout = localStorage.getItem('cv_layout') || 'two-column';
             changeTheme(savedTheme);
+            changeLayout(savedLayout);
         });
 
         function exportPDF() {
