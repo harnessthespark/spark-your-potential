@@ -733,7 +733,7 @@
         /* Print Styles - PRINT READY (Multi-page support) */
         @media print {
             @page {
-                margin: 1cm;
+                margin: 0.8cm;
                 size: A4;
             }
             body {
@@ -746,29 +746,72 @@
                 margin-left: 0 !important;
                 padding: 0 !important;
             }
-            .cv-preview {
+
+            /* TWO-COLUMN LAYOUT PRINT */
+            .cv-preview:not(.layout-top-header) {
                 box-shadow: none !important;
                 max-width: none !important;
                 min-height: auto !important;
                 height: auto !important;
-                display: block !important;
-                /* Allow content to flow across multiple pages */
+                display: grid !important;
+                grid-template-columns: 250px 1fr !important;
             }
-            .cv-left, .cv-right {
-                display: block !important;
-                width: 100% !important;
-                float: none !important;
-            }
-            .cv-left {
+            .cv-preview:not(.layout-top-header) .cv-left {
                 background: #1a1a2e !important;
                 -webkit-print-color-adjust: exact;
                 print-color-adjust: exact;
-                page-break-after: avoid;
+                padding: 20px 15px !important;
             }
-            .cv-right {
-                page-break-before: auto;
+            .cv-preview:not(.layout-top-header) .cv-right {
+                padding: 20px !important;
             }
-            /* Allow page breaks between sections */
+
+            /* TOP HEADER LAYOUT PRINT */
+            .cv-preview.layout-top-header {
+                box-shadow: none !important;
+                max-width: none !important;
+                min-height: auto !important;
+                display: block !important;
+            }
+            .cv-preview.layout-top-header .cv-left {
+                background: #1a1a2e !important;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+                padding: 15px 25px !important;
+                display: flex !important;
+                flex-wrap: wrap !important;
+                align-items: center !important;
+                justify-content: space-between !important;
+                gap: 10px !important;
+            }
+            .cv-preview.layout-top-header .cv-name {
+                font-size: 1.4em !important;
+                flex: 0 0 auto !important;
+            }
+            .cv-preview.layout-top-header .cv-title {
+                font-size: 0.85em !important;
+                flex: 1 !important;
+                text-align: center !important;
+            }
+            .cv-preview.layout-top-header .cv-contact-info {
+                font-size: 0.75em !important;
+                text-align: right !important;
+                flex: 0 0 auto !important;
+            }
+            .cv-preview.layout-top-header .cv-left-section {
+                display: none !important;
+            }
+            .cv-preview.layout-top-header .cv-right {
+                padding: 20px 25px !important;
+                background: white !important;
+            }
+            .cv-preview.layout-top-header #section-profile-right,
+            .cv-preview.layout-top-header #section-highlights-right,
+            .cv-preview.layout-top-header #section-skills-right {
+                display: block !important;
+            }
+
+            /* Common print styles */
             .cv-left-section, .cv-right-section {
                 page-break-inside: avoid;
                 page-break-after: auto;
@@ -777,12 +820,14 @@
                 background: rgba(255,215,0,0.2) !important;
                 -webkit-print-color-adjust: exact;
                 print-color-adjust: exact;
-            }
-            /* Keep case studies and career entries together */
-            .case-study {
-                page-break-inside: avoid;
+                font-size: 0.75em !important;
+                padding: 3px 8px !important;
             }
             .career-entry {
+                page-break-inside: avoid;
+                margin-bottom: 12px !important;
+            }
+            .case-study {
                 page-break-inside: avoid;
             }
             .case-study-hero {
@@ -797,6 +842,14 @@
             }
             .education-entry {
                 page-break-inside: avoid;
+            }
+            .cv-right-title {
+                font-size: 0.9em !important;
+                margin-bottom: 8px !important;
+            }
+            .cv-left-title {
+                font-size: 0.85em !important;
+                margin-bottom: 6px !important;
             }
             [contenteditable="true"] {
                 border: none !important;
