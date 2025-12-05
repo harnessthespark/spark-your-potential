@@ -95,6 +95,17 @@
         }
         .client-info strong { color: #2d1b4e; }
         .client-info small { color: #666; }
+        .btn-delete {
+            background: #dc3545;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-size: 0.85em;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        .btn-delete:hover { background: #c82333; }
         .admin-key-section {
             background: #fff3cd;
             padding: 15px;
@@ -248,6 +259,7 @@
                                     <small>${user.email}</small><br>
                                     <small>Access: ${user.programme_access || 'career'}</small>
                                 </div>
+                                <button class="btn-delete" onclick="deleteClient(${user.id}, '${user.email}')">Delete</button>
                             </div>
                         `).join('');
                     }
@@ -256,6 +268,37 @@
                 }
             } catch (error) {
                 listEl.innerHTML = `<p style="color: #dc3545;">Error: ${error.message}</p>`;
+            }
+        }
+
+        // Delete client
+        async function deleteClient(userId, email) {
+            if (!confirm(`Are you sure you want to delete ${email}?`)) {
+                return;
+            }
+
+            const adminKey = document.getElementById('adminKey').value;
+            if (!adminKey) {
+                alert('Please enter admin key first');
+                return;
+            }
+
+            try {
+                const response = await fetch(`${API_BASE}/api/admin/delete-client`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ userId, adminKey })
+                });
+
+                const data = await response.json();
+                if (data.success) {
+                    alert(`✅ Deleted: ${email}`);
+                    loadClients(); // Refresh list
+                } else {
+                    alert(`❌ Error: ${data.error}`);
+                }
+            } catch (error) {
+                alert(`❌ Error: ${error.message}`);
             }
         }
 

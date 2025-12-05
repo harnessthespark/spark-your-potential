@@ -1,0 +1,1737 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simon Booth-Lucking - Interactive CV Builder</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background: #f5f5f5; min-height: 100vh; }
+
+        .app-container { display: flex; min-height: 100vh; }
+
+        /* Control Panel */
+        .control-panel {
+            width: 340px;
+            background: linear-gradient(135deg, #E63946 0%, #D81B60 50%, #7B2CBF 100%);
+            padding: 25px;
+            color: white;
+            overflow-y: auto;
+            position: fixed;
+            height: 100vh;
+        }
+        .control-header { margin-bottom: 20px; }
+        .control-header h1 { font-size: 1.3em; margin-bottom: 5px; }
+        .control-header p { opacity: 0.8; font-size: 0.85em; }
+        .back-link {
+            color: #FFD700;
+            text-decoration: none;
+            font-size: 0.85em;
+        }
+        .back-link:hover { text-decoration: underline; }
+
+        .control-section { margin-bottom: 20px; }
+        .control-title {
+            font-size: 0.75em;
+            font-weight: 700;
+            color: #FFD700;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .export-buttons {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+        .export-btn {
+            flex: 1;
+            padding: 10px;
+            border: 2px solid white;
+            background: transparent;
+            color: white;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 0.85em;
+            transition: all 0.2s;
+        }
+        .export-btn:hover {
+            background: white;
+            color: #D81B60;
+        }
+
+        .hint-box {
+            background: rgba(255,255,255,0.15);
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 0.8em;
+            line-height: 1.5;
+            margin-top: 15px;
+        }
+
+        /* Profile Style Options */
+        .option-group {
+            background: rgba(255,255,255,0.1);
+            border-radius: 10px;
+            padding: 12px;
+            margin-bottom: 12px;
+        }
+        .option-group label {
+            display: block;
+            padding: 8px 10px;
+            margin: 4px 0;
+            background: rgba(255,255,255,0.1);
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.8em;
+            transition: all 0.2s;
+        }
+        .option-group label:hover { background: rgba(255,255,255,0.2); }
+        .option-group input[type="radio"] { margin-right: 8px; }
+
+        /* Toggle Switches */
+        .toggle-group { margin: 8px 0; }
+        .toggle-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 8px 10px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 6px;
+            margin: 4px 0;
+            font-size: 0.8em;
+        }
+        .toggle-switch { position: relative; width: 40px; height: 22px; }
+        .toggle-switch input { opacity: 0; width: 0; height: 0; }
+        .toggle-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-color: rgba(0,0,0,0.3);
+            transition: 0.3s;
+            border-radius: 22px;
+        }
+        .toggle-slider:before {
+            position: absolute;
+            content: "";
+            height: 16px;
+            width: 16px;
+            left: 3px;
+            bottom: 3px;
+            background-color: white;
+            transition: 0.3s;
+            border-radius: 50%;
+        }
+        input:checked + .toggle-slider { background-color: #4CAF50; }
+        input:checked + .toggle-slider:before { transform: translateX(18px); }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            padding: 30px;
+            margin-left: 340px;
+            overflow-y: auto;
+        }
+
+        /* CV Preview - Two Column Layout (Default) */
+        .cv-preview {
+            background: white;
+            max-width: 900px;
+            margin: 0 auto;
+            box-shadow: 0 5px 30px rgba(0,0,0,0.15);
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            min-height: 1200px;
+        }
+
+        /* No Colour Layout - Clean black & white for printing */
+        .cv-preview.layout-no-colour {
+            grid-template-columns: 1fr;
+        }
+        .cv-preview.layout-no-colour .cv-left {
+            background: white !important;
+            color: #333 !important;
+            padding: 30px 40px;
+            border-bottom: 2px solid #333;
+            display: block;
+        }
+        .cv-preview.layout-no-colour .cv-name {
+            color: #333 !important;
+            font-size: 2em;
+            margin-bottom: 5px;
+        }
+        .cv-preview.layout-no-colour .cv-title {
+            color: #555 !important;
+            font-size: 1em;
+            margin-bottom: 15px;
+        }
+        .cv-preview.layout-no-colour .cv-contact-info {
+            color: #333 !important;
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            font-size: 0.9em;
+        }
+        .cv-preview.layout-no-colour .cv-left-section {
+            display: none;
+        }
+        .cv-preview.layout-no-colour .cv-left-title {
+            color: #333 !important;
+        }
+        .cv-preview.layout-no-colour .cv-right {
+            padding: 30px 40px;
+        }
+        .cv-preview.layout-no-colour #section-profile-right {
+            display: block !important;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #ddd;
+        }
+        .cv-preview.layout-no-colour #section-highlights-right {
+            display: block !important;
+            margin-bottom: 25px;
+        }
+        .cv-preview.layout-no-colour #section-skills-right {
+            display: block !important;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #ddd;
+        }
+        .cv-preview.layout-no-colour .cv-right-title {
+            color: #333;
+            border-bottom-color: #333;
+        }
+        .cv-preview.layout-no-colour .cv-skill-tag {
+            background: #f0f0f0 !important;
+            color: #333 !important;
+        }
+        .cv-preview.layout-no-colour .career-role {
+            color: #333 !important;
+        }
+
+        /* Left Column - Dark */
+        .cv-left {
+            background: #1a1a2e;
+            color: white;
+            padding: 40px 25px;
+        }
+
+        .cv-name {
+            font-size: 1.8em;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            line-height: 1.2;
+            margin-bottom: 5px;
+        }
+        .cv-title {
+            color: #FFD700;
+            font-size: 0.9em;
+            font-weight: 600;
+            margin-bottom: 25px;
+            line-height: 1.4;
+        }
+
+        .cv-contact-info {
+            font-size: 0.8em;
+            margin-bottom: 30px;
+            line-height: 1.8;
+            opacity: 0.9;
+        }
+        .cv-contact-info div { margin-bottom: 5px; }
+
+        .cv-left-section {
+            margin-bottom: 25px;
+        }
+        .cv-left-title {
+            font-size: 0.75em;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: #FFD700;
+            margin-bottom: 12px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .cv-profile-text {
+            font-size: 0.85em;
+            line-height: 1.7;
+            opacity: 0.95;
+        }
+
+        .cv-highlights-list {
+            list-style: none;
+            font-size: 0.8em;
+            line-height: 1.6;
+        }
+        .cv-highlights-list li {
+            margin-bottom: 12px;
+            padding-left: 15px;
+            position: relative;
+        }
+        .cv-highlights-list li::before {
+            content: "→";
+            position: absolute;
+            left: 0;
+            color: #FFD700;
+        }
+
+        .cv-skills-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+        .cv-skill-tag {
+            background: rgba(255,215,0,0.2);
+            color: #FFD700;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.7em;
+            font-weight: 500;
+        }
+
+        .cv-categories-list {
+            font-size: 0.8em;
+            line-height: 1.6;
+            opacity: 0.9;
+        }
+
+        /* Right Column - Light */
+        .cv-right {
+            padding: 40px 30px;
+            background: white;
+        }
+
+        .cv-right-section {
+            margin-bottom: 30px;
+        }
+        .cv-right-title {
+            font-size: 0.7em;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: #7B2CBF;
+            margin-bottom: 15px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #7B2CBF;
+        }
+
+        /* Career Entry */
+        .career-entry {
+            margin-bottom: 20px;
+        }
+        .career-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            margin-bottom: 6px;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        .career-company {
+            font-weight: 700;
+            color: #1a1a2e;
+            font-size: 0.95em;
+        }
+        .career-title-role {
+            color: #7B2CBF;
+            font-weight: 600;
+            font-size: 0.85em;
+        }
+        .career-dates {
+            color: #888;
+            font-size: 0.8em;
+        }
+        .career-intro {
+            font-style: italic;
+            color: #666;
+            margin-bottom: 8px;
+            font-size: 0.85em;
+        }
+        .career-bullets {
+            list-style: none;
+            padding: 0;
+        }
+        .career-bullets li {
+            margin-bottom: 6px;
+            padding-left: 18px;
+            position: relative;
+            font-size: 0.85em;
+            line-height: 1.5;
+            color: #444;
+        }
+        .career-bullets li::before {
+            content: "•";
+            position: absolute;
+            left: 0;
+            color: #7B2CBF;
+            font-weight: bold;
+        }
+
+        /* Brand highlights inline */
+        .brand-highlight {
+            font-weight: 600;
+            color: #1a1a2e;
+        }
+
+        /* Education & Training */
+        .education-entry {
+            margin-bottom: 12px;
+        }
+        .education-title {
+            font-weight: 600;
+            color: #1a1a2e;
+            font-size: 0.85em;
+        }
+        .education-detail {
+            color: #666;
+            font-size: 0.8em;
+        }
+
+        /* Awards */
+        .awards-list {
+            list-style: none;
+        }
+        .awards-list li {
+            margin-bottom: 8px;
+            font-size: 0.85em;
+            color: #444;
+        }
+        .award-name {
+            font-weight: 600;
+            color: #1a1a2e;
+        }
+
+        /* Testimonials */
+        .testimonial {
+            background: #f8f9fa;
+            padding: 15px;
+            border-left: 3px solid #7B2CBF;
+            margin-bottom: 15px;
+            border-radius: 0 8px 8px 0;
+        }
+        .testimonial-quote {
+            font-style: italic;
+            color: #444;
+            font-size: 0.85em;
+            line-height: 1.6;
+            margin-bottom: 8px;
+        }
+        .testimonial-author {
+            font-size: 0.75em;
+            color: #888;
+        }
+
+        /* Case Studies - NEW DESIGN WITH HERO IMAGES */
+        .case-study {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            margin-bottom: 25px;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.08);
+            border: 1px solid #eee;
+        }
+        .case-study-hero {
+            height: 120px;
+            background-size: cover;
+            background-position: center;
+            position: relative;
+        }
+        .case-study-hero::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 60px;
+            background: linear-gradient(transparent, rgba(0,0,0,0.25));
+        }
+        .case-study-hero-ubs {
+            background: linear-gradient(135deg, #E60000 0%, #8B0000 100%);
+        }
+        .case-study-hero-ups {
+            background: linear-gradient(135deg, #351C15 0%, #FFB500 100%);
+        }
+        .case-study-hero-amd {
+            background: linear-gradient(135deg, #ED1C24 0%, #000 100%);
+        }
+        .case-study-logo {
+            position: absolute;
+            bottom: 15px;
+            left: 20px;
+            color: white;
+            font-size: 1.5em;
+            font-weight: 800;
+            z-index: 1;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+        .case-study-content {
+            padding: 20px;
+        }
+        .case-study-title {
+            font-weight: 700;
+            color: #1a1a2e;
+            margin-bottom: 15px;
+            font-size: 1em;
+        }
+        .case-study-grid {
+            display: grid;
+            grid-template-columns: 90px 1fr;
+            gap: 6px 12px;
+            font-size: 0.8em;
+        }
+        .case-study-label {
+            font-weight: 600;
+            color: #7B2CBF;
+        }
+        .case-study-value {
+            color: #555;
+            line-height: 1.5;
+        }
+
+        /* Interests */
+        .interests-text {
+            font-size: 0.85em;
+            color: #555;
+            line-height: 1.6;
+        }
+
+        /* Editable styling */
+        [contenteditable="true"] {
+            border: 1px dashed transparent;
+            padding: 3px;
+            margin: -3px;
+            border-radius: 4px;
+            transition: all 0.2s;
+        }
+        [contenteditable="true"]:hover {
+            border-color: rgba(123, 44, 191, 0.4);
+            background: rgba(123, 44, 191, 0.03);
+        }
+        [contenteditable="true"]:focus {
+            outline: none;
+            border-color: #7B2CBF;
+            background: rgba(123, 44, 191, 0.05);
+        }
+
+        .hidden { display: none !important; }
+
+        /* Add/Delete Case Study Buttons */
+        .add-casestudy-btn {
+            width: 100%;
+            padding: 12px;
+            margin-top: 10px;
+            background: rgba(255,215,0,0.2);
+            border: 2px dashed #FFD700;
+            color: #FFD700;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 0.85em;
+            transition: all 0.2s;
+        }
+        .add-casestudy-btn:hover {
+            background: rgba(255,215,0,0.3);
+            transform: translateY(-1px);
+        }
+        .delete-btn {
+            background: rgba(255,100,100,0.2);
+            border: none;
+            color: #ff6b6b;
+            padding: 4px 8px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.8em;
+            transition: all 0.2s;
+        }
+        .delete-btn:hover {
+            background: rgba(255,100,100,0.4);
+        }
+
+        /* Modal Styles */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.7);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+        .modal-overlay.visible {
+            display: flex;
+        }
+        .modal {
+            background: white;
+            border-radius: 16px;
+            padding: 30px;
+            max-width: 500px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        .modal h2 {
+            margin-bottom: 20px;
+            color: #1a1a2e;
+        }
+        .modal-field {
+            margin-bottom: 15px;
+        }
+        .modal-field label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 5px;
+            color: #333;
+            font-size: 0.9em;
+        }
+        .modal-field input,
+        .modal-field textarea {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 0.9em;
+            font-family: inherit;
+        }
+        .modal-field input:focus,
+        .modal-field textarea:focus {
+            outline: none;
+            border-color: #7B2CBF;
+        }
+        .modal-field textarea {
+            resize: vertical;
+            min-height: 60px;
+        }
+        /* Image Upload */
+        .image-upload-area {
+            border: 2px dashed #7B2CBF;
+            border-radius: 8px;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            background: rgba(123,44,191,0.05);
+        }
+        .image-upload-area:hover {
+            background: rgba(123,44,191,0.1);
+            border-color: #D81B60;
+        }
+        .image-upload-area.has-image {
+            border-style: solid;
+        }
+        .image-upload-area input[type="file"] {
+            display: none;
+        }
+        .image-preview {
+            max-width: 100%;
+            max-height: 120px;
+            border-radius: 8px;
+            margin-top: 10px;
+        }
+        .upload-icon {
+            font-size: 2em;
+            margin-bottom: 8px;
+        }
+        .upload-text {
+            color: #7B2CBF;
+            font-weight: 600;
+        }
+        /* Theme Selector */
+        .theme-options {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 8px;
+        }
+        .theme-btn {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 10px;
+            background: #f8f9fa;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.8em;
+            transition: all 0.2s;
+        }
+        .theme-btn:hover {
+            border-color: #7B2CBF;
+            background: #f0e6f6;
+        }
+        .theme-btn.active {
+            border-color: #7B2CBF;
+            background: rgba(123,44,191,0.1);
+        }
+        .theme-preview {
+            width: 40px;
+            height: 25px;
+            border-radius: 4px;
+            margin-bottom: 5px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+            font-size: 0.9em;
+        }
+        .upload-hint {
+            color: #888;
+            font-size: 0.8em;
+            margin-top: 5px;
+        }
+        .change-image-btn {
+            background: rgba(123,44,191,0.2);
+            border: none;
+            color: #7B2CBF;
+            padding: 4px 8px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.8em;
+            transition: all 0.2s;
+        }
+        .change-image-btn:hover {
+            background: rgba(123,44,191,0.4);
+        }
+        .delete-image-btn {
+            background: rgba(220,53,69,0.2);
+            border: none;
+            color: #dc3545;
+            padding: 4px 8px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.8em;
+            transition: all 0.2s;
+        }
+        .delete-image-btn:hover {
+            background: rgba(220,53,69,0.4);
+        }
+        .case-study-actions {
+            display: flex;
+            gap: 5px;
+        }
+        .modal-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        .modal-btn {
+            flex: 1;
+            padding: 12px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 0.9em;
+            transition: all 0.2s;
+        }
+        .modal-btn-primary {
+            background: linear-gradient(135deg, #7B2CBF 0%, #D81B60 100%);
+            color: white;
+            border: none;
+        }
+        .modal-btn-primary:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 15px rgba(123,44,191,0.3);
+        }
+        .modal-btn-secondary {
+            background: #f0f0f0;
+            color: #666;
+            border: none;
+        }
+        .modal-btn-secondary:hover {
+            background: #e0e0e0;
+        }
+
+        /* Print Styles - PRINT READY (Multi-page support) */
+        @media print {
+            @page {
+                margin: 0.8cm;
+                size: A4;
+            }
+            body {
+                background: white;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+            .control-panel { display: none !important; }
+            .main-content {
+                margin-left: 0 !important;
+                padding: 0 !important;
+            }
+
+            /* WITH COLOUR - TWO-COLUMN LAYOUT PRINT */
+            .cv-preview:not(.layout-no-colour) {
+                box-shadow: none !important;
+                max-width: none !important;
+                min-height: auto !important;
+                height: auto !important;
+                display: grid !important;
+                grid-template-columns: 250px 1fr !important;
+            }
+            .cv-preview:not(.layout-no-colour) .cv-left {
+                background: #1a1a2e !important;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+                padding: 20px 15px !important;
+            }
+            .cv-preview:not(.layout-no-colour) .cv-right {
+                padding: 20px !important;
+            }
+
+            /* WITHOUT COLOUR - SINGLE COLUMN B&W PRINT */
+            .cv-preview.layout-no-colour {
+                box-shadow: none !important;
+                max-width: none !important;
+                min-height: auto !important;
+                display: block !important;
+                grid-template-columns: 1fr !important;
+            }
+            .cv-preview.layout-no-colour .cv-left {
+                background: white !important;
+                color: #333 !important;
+                padding: 20px 30px !important;
+                border-bottom: 2px solid #333 !important;
+                display: block !important;
+            }
+            .cv-preview.layout-no-colour .cv-name {
+                color: #333 !important;
+                font-size: 2em !important;
+                margin-bottom: 5px !important;
+            }
+            .cv-preview.layout-no-colour .cv-title {
+                color: #555 !important;
+                font-size: 1em !important;
+            }
+            .cv-preview.layout-no-colour .cv-contact-info {
+                color: #333 !important;
+                display: flex !important;
+                gap: 20px !important;
+                margin-top: 10px !important;
+                flex-wrap: wrap !important;
+            }
+            .cv-preview.layout-no-colour .cv-left-section {
+                display: none !important;
+            }
+            .cv-preview.layout-no-colour .cv-right {
+                padding: 20px 30px !important;
+                background: white !important;
+            }
+            .cv-preview.layout-no-colour .cv-right-title {
+                color: #333 !important;
+                border-bottom-color: #333 !important;
+            }
+            .cv-preview.layout-no-colour .cv-skill-tag {
+                background: #f0f0f0 !important;
+                color: #333 !important;
+                border: 1px solid #ccc !important;
+            }
+            .cv-preview.layout-no-colour #section-profile-right,
+            .cv-preview.layout-no-colour #section-highlights-right,
+            .cv-preview.layout-no-colour #section-skills-right {
+                display: block !important;
+            }
+
+            /* Common print styles */
+            .cv-left-section, .cv-right-section {
+                page-break-inside: avoid;
+                page-break-after: auto;
+            }
+            .cv-preview:not(.layout-no-colour) .cv-skill-tag {
+                background: rgba(255,215,0,0.2) !important;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+                font-size: 0.75em !important;
+                padding: 3px 8px !important;
+            }
+            .career-entry {
+                page-break-inside: avoid;
+                margin-bottom: 12px !important;
+            }
+            .case-study {
+                page-break-inside: avoid;
+            }
+            .case-study-hero {
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+            .testimonial {
+                background: #f8f9fa !important;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+                page-break-inside: avoid;
+            }
+            .education-entry {
+                page-break-inside: avoid;
+            }
+            .cv-right-title {
+                font-size: 0.9em !important;
+                margin-bottom: 8px !important;
+            }
+            .cv-left-title {
+                font-size: 0.85em !important;
+                margin-bottom: 6px !important;
+            }
+            [contenteditable="true"] {
+                border: none !important;
+            }
+            [contenteditable="true"]:hover,
+            [contenteditable="true"]:focus {
+                background: transparent !important;
+                border: none !important;
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 1000px) {
+            .app-container { flex-direction: column; }
+            .control-panel { position: relative; width: 100%; height: auto; }
+            .main-content { margin-left: 0; }
+            .cv-preview { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Control Panel -->
+        <div class="control-panel">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                <a href="../client-portal.html" class="back-link">← Back to Portal</a>
+            </div>
+
+            <div class="control-header">
+                <h1>📝 CV Builder</h1>
+                <p>Simon Booth-Lucking • Testimonial Access Programme</p>
+            </div>
+
+            <div class="export-buttons">
+                <button class="export-btn" onclick="exportPDF()">🖨️ Print / PDF</button>
+                <button class="export-btn" onclick="downloadAsHTML()">💾 Download</button>
+            </div>
+
+            <div class="control-section">
+                <div class="control-title">🖨️ Print Style</div>
+                <div class="theme-options">
+                    <button class="theme-btn active" data-layout="with-colour" onclick="changeLayout('with-colour')">
+                        <span class="theme-preview" style="background: linear-gradient(90deg, #1a1a2e 35%, white 35%); border: 1px solid #ddd;"></span>
+                        With Colour
+                    </button>
+                    <button class="theme-btn" data-layout="no-colour" onclick="changeLayout('no-colour')">
+                        <span class="theme-preview" style="background: white; border: 1px solid #333;"></span>
+                        Without Colour
+                    </button>
+                </div>
+            </div>
+
+            <div class="control-section">
+                <div class="control-title">🎨 CV Theme</div>
+                <div class="theme-options">
+                    <button class="theme-btn active" data-theme="modern" onclick="changeTheme('modern')">
+                        <span class="theme-preview" style="background: linear-gradient(135deg, #1a1a2e 50%, white 50%);"></span>
+                        Modern
+                    </button>
+                    <button class="theme-btn" data-theme="classic" onclick="changeTheme('classic')">
+                        <span class="theme-preview" style="background: linear-gradient(135deg, #2c3e50 50%, #ecf0f1 50%);"></span>
+                        Classic
+                    </button>
+                    <button class="theme-btn" data-theme="minimal" onclick="changeTheme('minimal')">
+                        <span class="theme-preview" style="background: linear-gradient(135deg, #333 50%, #fafafa 50%);"></span>
+                        Minimal
+                    </button>
+                </div>
+            </div>
+
+            <div class="control-section">
+                <div class="control-title">📝 Profile Style</div>
+                <div class="option-group">
+                    <label><input type="radio" name="profile" value="original" checked onchange="updateProfile(this.value)"><span>Original CV</span></label>
+                    <label><input type="radio" name="profile" value="transformation" onchange="updateProfile(this.value)"><span>Transformation Focus</span></label>
+                    <label><input type="radio" name="profile" value="commercial" onchange="updateProfile(this.value)"><span>Commercial Focus</span></label>
+                </div>
+            </div>
+
+            <div class="control-section">
+                <div class="control-title">🎯 Sections to Include</div>
+                <div class="toggle-group">
+                    <div class="toggle-item"><span>Profile Story</span><label class="toggle-switch"><input type="checkbox" checked onchange="toggleSection('profile', this.checked)"><span class="toggle-slider"></span></label></div>
+                    <div class="toggle-item"><span>Career Highlights</span><label class="toggle-switch"><input type="checkbox" checked onchange="toggleSection('highlights', this.checked)"><span class="toggle-slider"></span></label></div>
+                    <div class="toggle-item"><span>Key Skills</span><label class="toggle-switch"><input type="checkbox" checked onchange="toggleSection('skills', this.checked)"><span class="toggle-slider"></span></label></div>
+                    <div class="toggle-item"><span>Career History</span><label class="toggle-switch"><input type="checkbox" checked onchange="toggleSection('career', this.checked)"><span class="toggle-slider"></span></label></div>
+                    <div class="toggle-item"><span>Education & Awards</span><label class="toggle-switch"><input type="checkbox" checked onchange="toggleSection('education', this.checked)"><span class="toggle-slider"></span></label></div>
+                    <div class="toggle-item"><span>Case Studies</span><label class="toggle-switch"><input type="checkbox" onchange="toggleSection('casestudies', this.checked)"><span class="toggle-slider"></span></label></div>
+                    <div class="toggle-item"><span>Testimonials</span><label class="toggle-switch"><input type="checkbox" onchange="toggleSection('testimonials', this.checked)"><span class="toggle-slider"></span></label></div>
+                </div>
+            </div>
+
+            <div class="control-section">
+                <div class="control-title">📊 Case Studies</div>
+                <div class="toggle-group" id="caseStudyToggles">
+                    <div class="toggle-item" data-casestudy="ubs"><span>UBS – Banking is our Craft</span><div style="display:flex;gap:5px;align-items:center;"><label class="toggle-switch"><input type="checkbox" onchange="toggleCaseStudy('ubs', this.checked)"><span class="toggle-slider"></span></label><button class="delete-btn" onclick="deleteCaseStudy('ubs')" title="Delete">🗑️</button></div></div>
+                    <div class="toggle-item" data-casestudy="ups"><span>UPS – United Problem Solvers</span><div style="display:flex;gap:5px;align-items:center;"><label class="toggle-switch"><input type="checkbox" onchange="toggleCaseStudy('ups', this.checked)"><span class="toggle-slider"></span></label><button class="delete-btn" onclick="deleteCaseStudy('ups')" title="Delete">🗑️</button></div></div>
+                    <div class="toggle-item" data-casestudy="amd"><span>AMD – Together We Advance</span><div style="display:flex;gap:5px;align-items:center;"><label class="toggle-switch"><input type="checkbox" onchange="toggleCaseStudy('amd', this.checked)"><span class="toggle-slider"></span></label><button class="delete-btn" onclick="deleteCaseStudy('amd')" title="Delete">🗑️</button></div></div>
+                </div>
+                <button class="add-casestudy-btn" onclick="openAddCaseStudyModal()">+ Add New Case Study</button>
+            </div>
+
+            <div class="hint-box">
+                <strong>💡 How to use:</strong><br>
+                Click any text on the CV to edit directly. Toggle sections on/off using the switches above. When ready, click Print/PDF to export.
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <div class="cv-preview" id="cvPreview">
+                <!-- LEFT COLUMN -->
+                <div class="cv-left">
+                    <div class="cv-name" contenteditable="true">DONALD<br>PIRIE</div>
+                    <div class="cv-title" id="cv-title" contenteditable="true">Transformational Strategist | Restoring belief and building brand platforms that last</div>
+
+                    <div class="cv-contact-info" contenteditable="true">
+                        <div>📞 +44 (0)7958 398 954</div>
+                        <div>📧 donaldpirie111@hotmail.co.uk</div>
+                        <div>🔗 linkedin.com/in/donaldpirie</div>
+                    </div>
+
+                    <!-- PROFILE -->
+                    <div class="cv-left-section" id="section-profile">
+                        <div class="cv-left-title">My Profile</div>
+                        <div class="cv-profile-text" id="cv-profile" contenteditable="true">
+                            I'm a Senior Strategist with 20+ years experience delivering strategic thinking across financial services, B2B tech and complex global brands including UBS, AMD and UPS. I am passionate about brand transformation that results in creative work which wins awards and moves the needle. My thread is connecting insight, ideas, infrastructure and people—and staying until it's embedded.
+                        </div>
+                    </div>
+
+                    <!-- CAREER HIGHLIGHTS -->
+                    <div class="cv-left-section" id="section-highlights">
+                        <div class="cv-left-title">Career Highlights</div>
+                        <ul class="cv-highlights-list" contenteditable="true">
+                            <li>Created $2.5m incremental revenue at UBS through .com transformation</li>
+                            <li>Co-created "United Problem Solvers" – grew UPS EMEA penetration +20%</li>
+                            <li>Launched AMD's "Together We Advance" platform across all divisions</li>
+                            <li>Creative award winner at Cannes, BTAA, OneShow, DMA</li>
+                            <li>IPA Effectiveness Awards, Euro Effies Grand Prix</li>
+                        </ul>
+                    </div>
+
+                    <!-- SKILLS -->
+                    <div class="cv-left-section" id="section-skills">
+                        <div class="cv-left-title">Key Skills</div>
+                        <div class="cv-skills-list">
+                            <span class="cv-skill-tag">Brand Strategy</span>
+                            <span class="cv-skill-tag">Transformation</span>
+                            <span class="cv-skill-tag">Campaign Dev</span>
+                            <span class="cv-skill-tag">Research</span>
+                            <span class="cv-skill-tag">Workshops</span>
+                            <span class="cv-skill-tag">C-Suite</span>
+                            <span class="cv-skill-tag">Team Leadership</span>
+                            <span class="cv-skill-tag">Effectiveness</span>
+                        </div>
+                    </div>
+
+                    <!-- SECTORS -->
+                    <div class="cv-left-section">
+                        <div class="cv-left-title">Sectors</div>
+                        <div class="cv-categories-list" contenteditable="true">
+                            Financial Services • B2B Tech • Energy • Logistics • FMCG • Consumer Tech
+                        </div>
+                    </div>
+                </div>
+
+                <!-- RIGHT COLUMN -->
+                <div class="cv-right">
+                    <!-- PROFILE (for Top Header layout only) -->
+                    <div class="cv-right-section" id="section-profile-right" style="display: none;">
+                        <div class="cv-right-title">My Profile</div>
+                        <p class="cv-profile-text-right" contenteditable="true" style="color: #333; line-height: 1.7; margin-bottom: 20px;">
+                            I'm a Senior Strategist with 20+ years experience delivering strategic thinking across financial services, B2B tech and complex global brands including UBS, AMD and UPS. I am passionate about brand transformation that results in creative work which wins awards and moves the needle. My thread is connecting insight, ideas, infrastructure and people—and staying until it's embedded.
+                        </p>
+                    </div>
+
+                    <!-- CAREER HIGHLIGHTS (for Top Header layout only) -->
+                    <div class="cv-right-section" id="section-highlights-right" style="display: none;">
+                        <div class="cv-right-title">Career Highlights</div>
+                        <ul style="color: #333; line-height: 1.8; padding-left: 20px;">
+                            <li>Created $2.5m incremental revenue at UBS through .com transformation</li>
+                            <li>Co-created "United Problem Solvers" – grew UPS EMEA penetration +20%</li>
+                            <li>Launched AMD's "Together We Advance" platform across all divisions</li>
+                            <li>Creative award winner at Cannes, BTAA, OneShow, DMA</li>
+                        </ul>
+                    </div>
+
+                    <!-- KEY SKILLS (for Top Header layout only) -->
+                    <div class="cv-right-section" id="section-skills-right" style="display: none;">
+                        <div class="cv-right-title">Key Skills</div>
+                        <div style="display: flex; flex-wrap: wrap; gap: 8px;">
+                            <span style="background: #f0f0f0; padding: 5px 12px; border-radius: 15px; font-size: 0.85em;">Brand Strategy</span>
+                            <span style="background: #f0f0f0; padding: 5px 12px; border-radius: 15px; font-size: 0.85em;">Transformation</span>
+                            <span style="background: #f0f0f0; padding: 5px 12px; border-radius: 15px; font-size: 0.85em;">Campaign Dev</span>
+                            <span style="background: #f0f0f0; padding: 5px 12px; border-radius: 15px; font-size: 0.85em;">Research</span>
+                            <span style="background: #f0f0f0; padding: 5px 12px; border-radius: 15px; font-size: 0.85em;">C-Suite</span>
+                            <span style="background: #f0f0f0; padding: 5px 12px; border-radius: 15px; font-size: 0.85em;">Effectiveness</span>
+                        </div>
+                    </div>
+
+                    <!-- CAREER -->
+                    <div class="cv-right-section" id="section-career">
+                        <div class="cv-right-title">Career</div>
+
+                        <div class="career-entry">
+                            <div class="career-header">
+                                <span class="career-company">The Effectiveness Partnership</span>
+                                <span class="career-dates">Dec 2024 – Present</span>
+                            </div>
+                            <div class="career-title-role" contenteditable="true">Consultant Strategist</div>
+                        </div>
+
+                        <div class="career-entry">
+                            <div class="career-header">
+                                <span class="career-company">Digitas / UBS</span>
+                                <span class="career-dates">May 2022 – Nov 2024</span>
+                            </div>
+                            <div class="career-title-role" contenteditable="true">Strategy Partner (Freelance)</div>
+                            <ul class="career-bullets" contenteditable="true">
+                                <li><span class="brand-highlight">UBS.com</span> transformation enabled new purpose, content and journey frameworks, growing leads</li>
+                                <li>Created brand campaign-driven customer journeys, growing HNW acquisition</li>
+                                <li>New global digital content strategy – grew familiarity, engagement and leads</li>
+                            </ul>
+                        </div>
+
+                        <div class="career-entry">
+                            <div class="career-header">
+                                <span class="career-company">TBWA / AMD</span>
+                                <span class="career-dates">Mar 2021 – Apr 2022</span>
+                            </div>
+                            <div class="career-title-role" contenteditable="true">Strategy Partner</div>
+                            <ul class="career-bullets" contenteditable="true">
+                                <li>Co-created <span class="brand-highlight">AMD's</span> new brand platform "Together We Advance"</li>
+                                <li>Fame campaigns across gaming, consumer and commercial divisions</li>
+                            </ul>
+                        </div>
+
+                        <div class="career-entry">
+                            <div class="career-header">
+                                <span class="career-company">McCann Worldgroup / Aramco</span>
+                                <span class="career-dates">May 2019 – Aug 2020</span>
+                            </div>
+                            <div class="career-title-role" contenteditable="true">Global Strategy Director</div>
+                            <ul class="career-bullets" contenteditable="true">
+                                <li>Co-founded Well-7, <span class="brand-highlight">Aramco's</span> in-house agency</li>
+                                <li>Led brand platform, IPO campaign and F1 sponsorship strategy</li>
+                            </ul>
+                        </div>
+
+                        <div class="career-entry">
+                            <div class="career-header">
+                                <span class="career-company">Wunderman Thompson / Vype</span>
+                                <span class="career-dates">Sep 2017 – May 2019</span>
+                            </div>
+                            <div class="career-title-role" contenteditable="true">Global Strategy Director</div>
+                            <ul class="career-bullets" contenteditable="true">
+                                <li>Enabled <span class="brand-highlight">Vype</span> to become #1 vapour brand globally</li>
+                                <li>Won IPA Effectiveness Award</li>
+                            </ul>
+                        </div>
+
+                        <div class="career-entry">
+                            <div class="career-header">
+                                <span class="career-company">Ogilvy Group</span>
+                                <span class="career-dates">Aug 2010 – Feb 2017</span>
+                            </div>
+                            <div class="career-title-role" contenteditable="true">Strategy Director</div>
+                            <ul class="career-bullets" contenteditable="true">
+                                <li><span class="brand-highlight">UPS</span> new global platform "United Problem Solvers" – grew EMEA +20%</li>
+                                <li><span class="brand-highlight">UBS</span> x TED programme grew employee pride</li>
+                                <li>Co-developed <span class="brand-highlight">EY's</span> "Better Questions" brand platform</li>
+                            </ul>
+                        </div>
+
+                        <div class="career-entry">
+                            <div class="career-header">
+                                <span class="career-company">Early Career</span>
+                                <span class="career-dates">1996 – 2010</span>
+                            </div>
+                            <div class="career-intro" contenteditable="true">i-level, Rapp, Havas, BMP DDB, Leo Burnett, M&C Saatchi, PwC</div>
+                            <div style="font-size: 0.8em; color: #666;" contenteditable="true">Key clients: Samsung, NSPCC, Dell, McDonald's, Kellogg's, Nestlé, Specsavers</div>
+                        </div>
+                    </div>
+
+                    <!-- EDUCATION & AWARDS -->
+                    <div class="cv-right-section" id="section-education">
+                        <div class="cv-right-title">Education & Awards</div>
+                        <div contenteditable="true">
+                            <div class="education-entry">
+                                <div class="education-title">BA Hons Modern History</div>
+                                <div class="education-detail">Oxford University • 1991-1994</div>
+                            </div>
+                            <div class="education-entry">
+                                <div class="education-title">APG Planning & Strategy Course</div>
+                            </div>
+                            <div class="education-entry">
+                                <div class="education-title">IPA Effectiveness Training</div>
+                            </div>
+                        </div>
+                        <ul class="awards-list" style="margin-top: 15px;" contenteditable="true">
+                            <li><span class="award-name">Cannes Lions</span> – BTAA, OneShow, DMA Awards</li>
+                            <li><span class="award-name">IPA Effectiveness Awards</span> – Euro Effies Grand Prix</li>
+                        </ul>
+                    </div>
+
+                    <!-- TESTIMONIALS -->
+                    <div class="cv-right-section hidden" id="section-testimonials">
+                        <div class="cv-right-title">Testimonials</div>
+                        <div class="testimonial">
+                            <div class="testimonial-quote" contenteditable="true">"Donald doesn't just deliver strategy—he transforms how teams think about their work. His ability to find the human truth and make it actionable is exceptional."</div>
+                            <div class="testimonial-author" contenteditable="true">— CSO, Global Agency</div>
+                        </div>
+                        <div class="testimonial">
+                            <div class="testimonial-quote" contenteditable="true">"Working with Donald felt like having someone finally articulate what we'd been struggling to say. He gave us our story back."</div>
+                            <div class="testimonial-author" contenteditable="true">— CMO, Financial Services</div>
+                        </div>
+                    </div>
+
+                    <!-- CASE STUDIES -->
+                    <div class="cv-right-section hidden" id="section-casestudies">
+                        <div class="cv-right-title">Case Studies</div>
+
+                        <!-- UBS Case Study -->
+                        <div class="case-study hidden" id="casestudy-ubs">
+                            <div class="case-study-hero case-study-hero-ubs" id="casestudy-hero-ubs">
+                                <div class="case-study-logo">UBS</div>
+                            </div>
+                            <div class="case-study-content">
+                                <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px;">
+                                    <div class="case-study-title">"Banking is our Craft"</div>
+                                    <div class="case-study-actions">
+                                        <button class="change-image-btn" onclick="triggerImageUpload('ubs')">📷 Image</button>
+                                        <button class="delete-image-btn" onclick="deleteImage('ubs')" style="display: none;">🗑️ Remove</button>
+                                    </div>
+                                </div>
+                                <div class="case-study-grid" contenteditable="true">
+                                    <div class="case-study-label">Brief:</div>
+                                    <div class="case-study-value">Reposition UBS digital presence for new generation of HNWIs</div>
+                                    <div class="case-study-label">Insight:</div>
+                                    <div class="case-study-value">UBS had lost confidence in what made them special—the human craft behind banking</div>
+                                    <div class="case-study-label">Strategy:</div>
+                                    <div class="case-study-value">Reconnect brand with craft narrative, elevating human intelligence and care</div>
+                                    <div class="case-study-label">Results:</div>
+                                    <div class="case-study-value">$2.5m incremental revenue, increased leads, restored belief internally and externally</div>
+                                </div>
+                            </div>
+                            <input type="file" id="imageUpload-ubs" accept="image/*" onchange="handleImageUpload('ubs', this)" style="display: none;">
+                        </div>
+
+                        <!-- UPS Case Study -->
+                        <div class="case-study hidden" id="casestudy-ups">
+                            <div class="case-study-hero case-study-hero-ups" id="casestudy-hero-ups">
+                                <div class="case-study-logo">UPS</div>
+                            </div>
+                            <div class="case-study-content">
+                                <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px;">
+                                    <div class="case-study-title">"United Problem Solvers"</div>
+                                    <div class="case-study-actions">
+                                        <button class="change-image-btn" onclick="triggerImageUpload('ups')">📷 Image</button>
+                                        <button class="delete-image-btn" onclick="deleteImage('ups')" style="display: none;">🗑️ Remove</button>
+                                    </div>
+                                </div>
+                                <div class="case-study-grid" contenteditable="true">
+                                    <div class="case-study-label">Brief:</div>
+                                    <div class="case-study-value">Revitalise UPS brand positioning globally</div>
+                                    <div class="case-study-label">Insight:</div>
+                                    <div class="case-study-value">UPS's real value is human ingenuity in solving business problems, not just delivery</div>
+                                    <div class="case-study-label">Strategy:</div>
+                                    <div class="case-study-value">Reframe brand as creative problem-solving partner for business growth</div>
+                                    <div class="case-study-label">Results:</div>
+                                    <div class="case-study-value">+20% EMEA penetration, transformed employee pride for 400,000 staff</div>
+                                </div>
+                            </div>
+                            <input type="file" id="imageUpload-ups" accept="image/*" onchange="handleImageUpload('ups', this)" style="display: none;">
+                        </div>
+
+                        <!-- AMD Case Study -->
+                        <div class="case-study hidden" id="casestudy-amd">
+                            <div class="case-study-hero case-study-hero-amd" id="casestudy-hero-amd">
+                                <div class="case-study-logo">AMD</div>
+                            </div>
+                            <div class="case-study-content">
+                                <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px;">
+                                    <div class="case-study-title">"Together We Advance"</div>
+                                    <div class="case-study-actions">
+                                        <button class="change-image-btn" onclick="triggerImageUpload('amd')">📷 Image</button>
+                                        <button class="delete-image-btn" onclick="deleteImage('amd')" style="display: none;">🗑️ Remove</button>
+                                    </div>
+                                </div>
+                                <div class="case-study-grid" contenteditable="true">
+                                    <div class="case-study-label">Brief:</div>
+                                    <div class="case-study-value">Create new brand platform to compete beyond specs</div>
+                                    <div class="case-study-label">Insight:</div>
+                                    <div class="case-study-value">AMD could lead on vision and progress, not just performance metrics</div>
+                                    <div class="case-study-label">Strategy:</div>
+                                    <div class="case-study-value">Shift from promoting specs to shaping progress narrative</div>
+                                    <div class="case-study-label">Results:</div>
+                                    <div class="case-study-value">New competitive positioning, multi-audience impact, building market share</div>
+                                </div>
+                            </div>
+                            <input type="file" id="imageUpload-amd" accept="image/*" onchange="handleImageUpload('amd', this)" style="display: none;">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Case Study Modal -->
+    <div class="modal-overlay" id="addCaseStudyModal">
+        <div class="modal">
+            <h2>📊 Add New Case Study</h2>
+
+            <div class="modal-field">
+                <label>Company/Brand Name</label>
+                <input type="text" id="csCompany" placeholder="e.g. Google, Nike, Spotify">
+            </div>
+
+            <div class="modal-field">
+                <label>Campaign/Project Title</label>
+                <input type="text" id="csTitle" placeholder="e.g. 'Think Different' Campaign">
+            </div>
+
+            <div class="modal-field">
+                <label>Hero Image (optional)</label>
+                <div class="image-upload-area" id="csImageUploadArea" onclick="document.getElementById('csImageInput').click()">
+                    <div class="upload-icon">📷</div>
+                    <div class="upload-text">Click to upload image</div>
+                    <div class="upload-hint">PNG, JPG up to 2MB</div>
+                    <input type="file" id="csImageInput" accept="image/*" onchange="previewImage(this)">
+                    <img id="csImagePreview" class="image-preview" style="display: none;">
+                </div>
+            </div>
+
+            <div class="modal-field">
+                <label>Brief</label>
+                <textarea id="csBrief" placeholder="What was the challenge or objective?"></textarea>
+            </div>
+
+            <div class="modal-field">
+                <label>Insight</label>
+                <textarea id="csInsight" placeholder="What key insight drove the strategy?"></textarea>
+            </div>
+
+            <div class="modal-field">
+                <label>Strategy</label>
+                <textarea id="csStrategy" placeholder="What approach did you take?"></textarea>
+            </div>
+
+            <div class="modal-field">
+                <label>Results</label>
+                <textarea id="csResults" placeholder="What was the outcome? Include metrics if possible."></textarea>
+            </div>
+
+            <div class="modal-buttons">
+                <button class="modal-btn modal-btn-secondary" onclick="closeAddCaseStudyModal()">Cancel</button>
+                <button class="modal-btn modal-btn-primary" onclick="addCaseStudy()">Add Case Study</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let caseStudyCounter = 3; // Start after existing 3 (ubs, ups, amd)
+
+        const profiles = {
+            original: `I'm a Senior Strategist with 20+ years experience delivering strategic thinking across financial services, B2B tech and complex global brands including UBS, AMD and UPS. I am passionate about brand transformation that results in creative work which wins awards and moves the needle. My thread is connecting insight, ideas, infrastructure and people—and staying until it's embedded.`,
+            transformation: `I don't fix strategies. I restore belief systems. Across every transformation I've led—UBS, UPS, AMD—I turn confusion into conviction. Teams arrive stuck and paralysed; I find the human truth beneath the noise, and they don't just get a strategy—they get belief back. I connect insight, ideas, infrastructure and people—staying until transformation is embedded.`,
+            commercial: `Transformational strategist with 20+ years delivering measurable business impact through brand platforms. At UPS, I led "United Problem Solvers" growing EMEA penetration +20%. At UBS, I drove $2.5m incremental revenue through .com transformation. I specialise in connecting creativity to commercial outcomes—translating strategic vision into boardroom language.`
+        };
+
+        const titles = {
+            original: `Transformational Strategist | Restoring belief and building brand platforms that last`,
+            transformation: `Transformational Strategist | Turning confusion into conviction`,
+            commercial: `Strategy Director | Driving commercial growth through brand transformation`
+        };
+
+        function updateProfile(value) {
+            document.getElementById('cv-profile').textContent = profiles[value];
+            document.getElementById('cv-title').textContent = titles[value];
+        }
+
+        function toggleSection(section, show) {
+            const el = document.getElementById('section-' + section);
+            if (el) el.classList.toggle('hidden', !show);
+        }
+
+        function toggleCaseStudy(study, show) {
+            const el = document.getElementById('casestudy-' + study);
+            if (el) el.classList.toggle('hidden', !show);
+
+            // Show case studies section if any case study is visible
+            const anyVisible = document.querySelectorAll('.case-study:not(.hidden)').length > 0;
+            document.getElementById('section-casestudies').classList.toggle('hidden', !anyVisible);
+        }
+
+        // Theme definitions
+        const themes = {
+            modern: {
+                leftBg: 'linear-gradient(180deg, #1a1a2e 0%, #16213e 100%)',
+                leftText: '#fff',
+                leftAccent: '#FFD700',
+                rightBg: '#fff',
+                rightText: '#333',
+                rightAccent: '#7B2CBF',
+                sectionBg: '#f8f9fa'
+            },
+            classic: {
+                leftBg: 'linear-gradient(180deg, #2c3e50 0%, #34495e 100%)',
+                leftText: '#ecf0f1',
+                leftAccent: '#3498db',
+                rightBg: '#ecf0f1',
+                rightText: '#2c3e50',
+                rightAccent: '#2980b9',
+                sectionBg: '#d5dbdb'
+            },
+            minimal: {
+                leftBg: '#333',
+                leftText: '#f5f5f5',
+                leftAccent: '#fff',
+                rightBg: '#fafafa',
+                rightText: '#333',
+                rightAccent: '#555',
+                sectionBg: '#f0f0f0'
+            }
+        };
+
+        // Layout switching function
+        function changeLayout(layoutName) {
+            const cvPreview = document.getElementById('cvPreview');
+
+            // Update button states for layout buttons
+            document.querySelectorAll('.theme-btn[data-layout]').forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.layout === layoutName);
+            });
+
+            // Remove all layout classes and apply new one
+            cvPreview.classList.remove('layout-no-colour');
+            if (layoutName === 'no-colour') {
+                cvPreview.classList.add('layout-no-colour');
+            }
+
+            // Save preference
+            localStorage.setItem('cv_layout', layoutName);
+        }
+
+        function changeTheme(themeName) {
+            const theme = themes[themeName];
+            if (!theme) return;
+
+            // Update button states for theme buttons only
+            document.querySelectorAll('.theme-btn[data-theme]').forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.theme === themeName);
+            });
+
+            // Apply theme to CV
+            const leftColumn = document.querySelector('.cv-left');
+            const rightColumn = document.querySelector('.cv-right');
+
+            if (leftColumn) {
+                leftColumn.style.background = theme.leftBg;
+                leftColumn.style.color = theme.leftText;
+                leftColumn.querySelectorAll('.cv-name, .cv-title').forEach(el => el.style.color = theme.leftText);
+                leftColumn.querySelectorAll('.highlights-title, .skills-category h4, .sectors-title').forEach(el => el.style.color = theme.leftAccent);
+            }
+
+            if (rightColumn) {
+                rightColumn.style.background = theme.rightBg;
+                rightColumn.style.color = theme.rightText;
+                rightColumn.querySelectorAll('.section-title').forEach(el => {
+                    el.style.color = theme.rightAccent;
+                    el.style.borderBottomColor = theme.rightAccent;
+                });
+                rightColumn.querySelectorAll('.cv-section').forEach(el => el.style.background = theme.sectionBg);
+            }
+
+            // Save preference
+            localStorage.setItem('cv_theme', themeName);
+        }
+
+        // Load saved theme and layout on page load
+        window.addEventListener('load', function() {
+            const savedTheme = localStorage.getItem('cv_theme') || 'modern';
+            const savedLayout = localStorage.getItem('cv_layout') || 'with-colour';
+            changeTheme(savedTheme);
+            changeLayout(savedLayout);
+        });
+
+        function exportPDF() {
+            window.print();
+        }
+
+        function downloadAsHTML() {
+            const cvContent = document.getElementById('cvPreview').outerHTML;
+            const styles = document.querySelector('style').outerHTML;
+            const html = `<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+    <meta charset="UTF-8">
+    <title>Simon Booth-Lucking CV</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    ${styles}
+    <style>
+        body { background: white; margin: 0; padding: 20px; }
+        .cv-preview { box-shadow: none; margin: 0; }
+    </style>
+</head>
+<body>
+    ${cvContent}
+</body>
+</html>`;
+
+            const blob = new Blob([html], { type: 'text/html' });
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = 'Donald_Pirie_CV.html';
+            a.click();
+        }
+
+        // =============================================
+        // CASE STUDY MANAGEMENT
+        // =============================================
+
+        let pendingImageData = null;
+
+        function openAddCaseStudyModal() {
+            document.getElementById('addCaseStudyModal').classList.add('visible');
+            // Clear form
+            document.getElementById('csCompany').value = '';
+            document.getElementById('csTitle').value = '';
+            document.getElementById('csBrief').value = '';
+            document.getElementById('csInsight').value = '';
+            document.getElementById('csStrategy').value = '';
+            document.getElementById('csResults').value = '';
+            document.getElementById('csImageInput').value = '';
+            document.getElementById('csImagePreview').style.display = 'none';
+            document.getElementById('csImageUploadArea').classList.remove('has-image');
+            pendingImageData = null;
+        }
+
+        function closeAddCaseStudyModal() {
+            document.getElementById('addCaseStudyModal').classList.remove('visible');
+        }
+
+        // Preview image in modal
+        function previewImage(input) {
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    pendingImageData = e.target.result;
+                    const preview = document.getElementById('csImagePreview');
+                    preview.src = pendingImageData;
+                    preview.style.display = 'block';
+                    document.getElementById('csImageUploadArea').classList.add('has-image');
+                };
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        // Trigger image upload for existing case study
+        function triggerImageUpload(id) {
+            document.getElementById('imageUpload-' + id).click();
+        }
+
+        // Handle image upload for existing case study
+        function handleImageUpload(id, input) {
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const imageData = e.target.result;
+                    const caseStudy = document.getElementById('casestudy-' + id);
+                    const hero = caseStudy.querySelector('.case-study-hero');
+                    hero.style.background = `url(${imageData})`;
+                    hero.style.backgroundSize = 'cover';
+                    hero.style.backgroundPosition = 'center';
+                    caseStudy.dataset.image = imageData;
+                    // Show delete button
+                    const deleteBtn = caseStudy.querySelector('.delete-image-btn');
+                    if (deleteBtn) deleteBtn.style.display = 'inline-block';
+                    saveCaseStudies();
+                };
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        // Delete image from case study (restore gradient)
+        function deleteImage(id) {
+            const caseStudy = document.getElementById('casestudy-' + id);
+            const hero = caseStudy.querySelector('.case-study-hero');
+
+            // Restore gradient background
+            const gradients = {
+                'ubs': 'linear-gradient(135deg, #E60000 0%, #8B0000 100%)',
+                'ups': 'linear-gradient(135deg, #351C15 0%, #FFB500 100%)',
+                'amd': 'linear-gradient(135deg, #ED1C24 0%, #000000 100%)'
+            };
+
+            // Use default gradient if not a known case study
+            const gradient = gradients[id] || 'linear-gradient(135deg, #7B2CBF 0%, #D81B60 100%)';
+            hero.style.background = gradient;
+            hero.style.backgroundSize = '';
+            hero.style.backgroundPosition = '';
+
+            // Clear image data
+            caseStudy.dataset.image = '';
+
+            // Hide delete button
+            const deleteBtn = caseStudy.querySelector('.delete-image-btn');
+            if (deleteBtn) deleteBtn.style.display = 'none';
+
+            saveCaseStudies();
+        }
+
+        function addCaseStudy() {
+            const company = document.getElementById('csCompany').value.trim();
+            const title = document.getElementById('csTitle').value.trim();
+            const brief = document.getElementById('csBrief').value.trim();
+            const insight = document.getElementById('csInsight').value.trim();
+            const strategy = document.getElementById('csStrategy').value.trim();
+            const results = document.getElementById('csResults').value.trim();
+
+            if (!company || !title) {
+                alert('Please enter at least a company name and title.');
+                return;
+            }
+
+            caseStudyCounter++;
+            const id = 'custom-' + caseStudyCounter;
+
+            // Determine background style
+            let heroStyle = '';
+            if (pendingImageData) {
+                heroStyle = `background: url(${pendingImageData}); background-size: cover; background-position: center;`;
+            } else {
+                // Random gradient colours as fallback
+                const colours = [
+                    ['#7B2CBF', '#D81B60'],
+                    ['#E63946', '#1D3557'],
+                    ['#2A9D8F', '#E9C46A'],
+                    ['#264653', '#F4A261'],
+                    ['#6A4C93', '#1982C4']
+                ];
+                const randomColours = colours[Math.floor(Math.random() * colours.length)];
+                heroStyle = `background: linear-gradient(135deg, ${randomColours[0]} 0%, ${randomColours[1]} 100%);`;
+            }
+
+            // Create case study HTML with image upload capability
+            const caseStudyHTML = `
+                <div class="case-study" id="casestudy-${id}" data-image="${pendingImageData || ''}">
+                    <div class="case-study-hero" style="${heroStyle}">
+                        <div class="case-study-logo">${company}</div>
+                    </div>
+                    <div class="case-study-content">
+                        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px;">
+                            <div class="case-study-title">"${title}"</div>
+                            <div class="case-study-actions">
+                                <button class="change-image-btn" onclick="triggerImageUpload('${id}')">📷 Image</button>
+                                <button class="delete-image-btn" onclick="deleteImage('${id}')" style="${pendingImageData ? 'display: inline-block;' : 'display: none;'}">🗑️ Remove</button>
+                            </div>
+                        </div>
+                        <div class="case-study-grid" contenteditable="true">
+                            <div class="case-study-label">Brief:</div>
+                            <div class="case-study-value">${brief || 'Click to edit...'}</div>
+                            <div class="case-study-label">Insight:</div>
+                            <div class="case-study-value">${insight || 'Click to edit...'}</div>
+                            <div class="case-study-label">Strategy:</div>
+                            <div class="case-study-value">${strategy || 'Click to edit...'}</div>
+                            <div class="case-study-label">Results:</div>
+                            <div class="case-study-value">${results || 'Click to edit...'}</div>
+                        </div>
+                    </div>
+                    <input type="file" id="imageUpload-${id}" accept="image/*" onchange="handleImageUpload('${id}', this)" style="display: none;">
+                </div>
+            `;
+
+            // Add to case studies section
+            document.getElementById('section-casestudies').insertAdjacentHTML('beforeend', caseStudyHTML);
+
+            // Add toggle to control panel
+            const toggleHTML = `
+                <div class="toggle-item" data-casestudy="${id}">
+                    <span>${company} – ${title}</span>
+                    <div style="display:flex;gap:5px;align-items:center;">
+                        <label class="toggle-switch">
+                            <input type="checkbox" checked onchange="toggleCaseStudy('${id}', this.checked)">
+                            <span class="toggle-slider"></span>
+                        </label>
+                        <button class="delete-btn" onclick="deleteCaseStudy('${id}')" title="Delete">🗑️</button>
+                    </div>
+                </div>
+            `;
+            document.getElementById('caseStudyToggles').insertAdjacentHTML('beforeend', toggleHTML);
+
+            // Show case studies section
+            document.getElementById('section-casestudies').classList.remove('hidden');
+
+            // Close modal
+            closeAddCaseStudyModal();
+
+            // Save to localStorage
+            saveCaseStudies();
+        }
+
+        function deleteCaseStudy(id) {
+            if (!confirm('Are you sure you want to delete this case study?')) return;
+
+            // Remove from CV
+            const caseStudy = document.getElementById('casestudy-' + id);
+            if (caseStudy) caseStudy.remove();
+
+            // Remove from toggles
+            const toggle = document.querySelector(`[data-casestudy="${id}"]`);
+            if (toggle) toggle.remove();
+
+            // Hide case studies section if empty
+            const remaining = document.querySelectorAll('.case-study:not(.hidden)');
+            if (remaining.length === 0) {
+                document.getElementById('section-casestudies').classList.add('hidden');
+            }
+
+            // Save to localStorage
+            saveCaseStudies();
+        }
+
+        function saveCaseStudies() {
+            // Save current state to localStorage for persistence
+            const caseStudies = [];
+            document.querySelectorAll('.case-study').forEach(cs => {
+                caseStudies.push({
+                    id: cs.id.replace('casestudy-', ''),
+                    html: cs.outerHTML,
+                    visible: !cs.classList.contains('hidden')
+                });
+            });
+            localStorage.setItem('cv_casestudies_donald', JSON.stringify(caseStudies));
+        }
+
+        function loadCaseStudies() {
+            const saved = localStorage.getItem('cv_casestudies_donald');
+            if (saved) {
+                try {
+                    const caseStudies = JSON.parse(saved);
+                    // Restore custom case studies
+                    caseStudies.forEach(cs => {
+                        if (cs.id.startsWith('custom-')) {
+                            // Add to CV
+                            document.getElementById('section-casestudies').insertAdjacentHTML('beforeend', cs.html);
+                            // Toggle visibility
+                            if (!cs.visible) {
+                                document.getElementById('casestudy-' + cs.id).classList.add('hidden');
+                            }
+                        }
+                    });
+                } catch (e) {
+                    console.error('Error loading case studies:', e);
+                }
+            }
+        }
+
+        // Load saved case studies on page load
+        window.addEventListener('DOMContentLoaded', loadCaseStudies);
+    </script>
+</body>
+</html>
