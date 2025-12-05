@@ -344,7 +344,7 @@
                             <h4 style="color: #667eea; margin-bottom: 15px;">➕ Create Client Account</h4>
                             <div style="margin-bottom: 12px;">
                                 <label style="display: block; font-size: 0.85em; color: #555; margin-bottom: 5px;">Client Name</label>
-                                <input type="text" id="adminClientName" placeholder="e.g., Sarah Mitchell" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px; font-size: 0.95em;">
+                                <input type="text" id="adminClientName" placeholder="e.g., John Smith" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px; font-size: 0.95em;">
                             </div>
                             <div style="margin-bottom: 12px;">
                                 <label style="display: block; font-size: 0.85em; color: #555; margin-bottom: 5px;">Client Email</label>
@@ -557,25 +557,6 @@
         // Default clients - only shown when authenticated as coach
         // These are fallback clients when PostgreSQL API is unavailable
         const DEFAULT_CLIENTS = {
-            'sarah.mitchell@example.com': {
-                id: 'client-sarah-demo',
-                name: 'Sarah Mitchell',
-                email: 'sarah.mitchell@example.com',
-                phone: '',
-                folder: 'sarah_mitchell_demo_client',
-                status: 'week-2',
-                enrolledDate: '2024-11-01',
-                completedDate: null,
-                isDemo: true,
-                progress: {
-                    questionnaire: true,
-                    insightsReport: true,
-                    blueprint: false,
-                    decisionFramework: false,
-                    cvBuilder: false,
-                    mappingGuide: false
-                }
-            },
             'donaldpirie111@hotmail.co.uk': {
                 id: 'client-donald',
                 name: 'Donald Pirie',
@@ -807,23 +788,26 @@
         // Navigation functions - Load user-specific documents
         function getUserPrefix() {
             // Return document prefix based on logged-in user
-            if (!currentUser) return 'Sarah_Mitchell';
+            if (!currentUser) return 'templates';
 
             const email = currentUser.email.toLowerCase();
             if (email.includes('donald')) {
                 return 'Donald/Donald_Pirie';
+            } else if (email.includes('raj') || email.includes('rajsamuel')) {
+                return 'Raj_Samuel/Raj_Samuel';
             }
-            // Default to Sarah for demo
-            return 'Sarah_Mitchell';
+            // Default to templates
+            return 'templates';
         }
 
         function openQuestionnaire() {
             const prefix = getUserPrefix();
             if (prefix.includes('Donald')) {
-                // Donald's completed questionnaire responses
-                window.open('/donald-questionnaire', '_blank');
+                window.open('Donald/donald-questionnaire-responses.html', '_blank');
+            } else if (prefix.includes('Raj_Samuel')) {
+                window.open('Raj_Samuel/Raj_Samuel_Discovery_Questionnaire.html', '_blank');
             } else {
-                window.open('sarah_mitchell_demo_client/Sarah_Mitchell_Questionnaire.html', '_blank');
+                window.open('templates/discovery_questionnaire.html', '_blank');
             }
         }
 
@@ -831,8 +815,10 @@
             const prefix = getUserPrefix();
             if (prefix.includes('Donald')) {
                 window.open('Donald/Donald_Pirie_Career_Insights_Report.html', '_blank');
+            } else if (prefix.includes('Raj_Samuel')) {
+                alert('Insights Report will be available after Week 1 session.');
             } else {
-                window.open('sarah_mitchell_demo_client/Sarah_Mitchell_Career_Insights_Report.html', '_blank');
+                alert('Please log in to view your Insights Report.');
             }
         }
 
@@ -840,8 +826,10 @@
             const prefix = getUserPrefix();
             if (prefix.includes('Donald')) {
                 window.open('Donald/Donald_Pirie_Career_Blueprint_LIVE.html', '_blank');
+            } else if (prefix.includes('Raj_Samuel')) {
+                alert('Blueprint will be available after completing the programme.');
             } else {
-                window.open('sarah_mitchell_demo_client/Sarah_Mitchell_Blueprint.html', '_blank');
+                alert('Please log in to view your Blueprint.');
             }
         }
 
@@ -853,8 +841,10 @@
             const prefix = getUserPrefix();
             if (prefix.includes('Donald')) {
                 window.open('Donald/Donald_Interactive_CV_Builder.html', '_blank');
+            } else if (prefix.includes('Raj_Samuel')) {
+                alert('CV Builder will be available after Week 2 session.');
             } else {
-                window.open('sarah_mitchell_demo_client/Sarah_Mitchell_CV_Builder.html', '_blank');
+                alert('Please log in to access the CV Builder.');
             }
         }
 
@@ -862,8 +852,10 @@
             const prefix = getUserPrefix();
             if (prefix.includes('Donald')) {
                 window.open('Donald/Donald_Blueprint_CV_LinkedIn_Mapping_Guide_1.html', '_blank');
+            } else if (prefix.includes('Raj_Samuel')) {
+                alert('Mapping Guide will be available after Week 3 session.');
             } else {
-                window.open('sarah_mitchell_demo_client/Sarah_Mitchell_Mapping_Guide.html', '_blank');
+                alert('Please log in to access the Mapping Guide.');
             }
         }
 
@@ -871,8 +863,10 @@
             const prefix = getUserPrefix();
             if (prefix.includes('Donald')) {
                 window.open('Donald/Donald_Decision_Framework_Updated_1.html', '_blank');
+            } else if (prefix.includes('Raj_Samuel')) {
+                alert('Decision Framework will be available after Week 2 session.');
             } else {
-                window.open('sarah_mitchell_demo_client/Sarah_Mitchell_Decision_Framework.html', '_blank');
+                alert('Please log in to access the Decision Framework.');
             }
         }
 
