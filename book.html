@@ -395,10 +395,19 @@
 <body>
     <!-- Hero Section -->
     <div class="hero">
-        <a href="dashboard.html" class="back-link">← Back to Dashboard</a>
+        <a href="dashboard.html" class="back-link" id="backLink" style="display: none;">← Back to Dashboard</a>
         <h1>Ready to Spark Your Potential?</h1>
         <p>Coaching + Tools = Clarity on what makes you different</p>
     </div>
+
+    <script>
+        // Only show "Back to Dashboard" link for logged-in coaches
+        const sypToken = localStorage.getItem('syp_token');
+        const sypUser = localStorage.getItem('syp_user');
+        if (sypToken || sypUser) {
+            document.getElementById('backLink').style.display = 'inline-block';
+        }
+    </script>
 
     <!-- Pricing Section -->
     <div class="container">
