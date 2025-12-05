@@ -356,7 +356,7 @@ async function isAdmin(userId) {
 /**
  * Update client details (admin function)
  */
-async function updateClient(userId, { name, email }) {
+async function updateClient(userId, { name, email, programmeAccess }) {
     const updates = [];
     const values = [];
     let paramCount = 1;
@@ -370,6 +370,12 @@ async function updateClient(userId, { name, email }) {
     if (email !== undefined && email !== null) {
         updates.push(`email = $${paramCount}`);
         values.push(email);
+        paramCount++;
+    }
+
+    if (programmeAccess !== undefined && programmeAccess !== null) {
+        updates.push(`programme_access = $${paramCount}`);
+        values.push(programmeAccess);
         paramCount++;
     }
 

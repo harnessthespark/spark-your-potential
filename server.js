@@ -202,7 +202,7 @@ app.post('/api/admin/reset-password', async (req, res) => {
 // Update client (admin only)
 app.post('/api/admin/update-client', async (req, res) => {
     try {
-        const { userId, name, email, adminKey } = req.body;
+        const { userId, name, email, programmeAccess, adminKey } = req.body;
 
         const ADMIN_KEY = process.env.ADMIN_KEY || 'spark-admin-2025';
         if (adminKey !== ADMIN_KEY) {
@@ -213,8 +213,8 @@ app.post('/api/admin/update-client', async (req, res) => {
             return res.status(400).json({ success: false, error: 'User ID is required' });
         }
 
-        const user = await db.updateClient(userId, { name, email });
-        res.json({ success: true, user: { id: user.id, email: user.email, name: user.name } });
+        const user = await db.updateClient(userId, { name, email, programmeAccess });
+        res.json({ success: true, user: { id: user.id, email: user.email, name: user.name, programme_access: user.programme_access } });
     } catch (error) {
         console.error('Update client error:', error);
         res.status(500).json({ success: false, error: error.message });
