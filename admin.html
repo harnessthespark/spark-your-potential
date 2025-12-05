@@ -123,10 +123,12 @@
         <!-- Admin Key -->
         <div class="card">
             <div class="admin-key-section">
-                <div class="form-group">
-                    <label>Admin Key (required for all actions)</label>
-                    <input type="password" id="adminKey" placeholder="Enter admin key">
-                </div>
+                <form onsubmit="return false;">
+                    <div class="form-group">
+                        <label>Admin Key (required for all actions)</label>
+                        <input type="password" id="adminKey" placeholder="Enter admin key" autocomplete="off">
+                    </div>
+                </form>
             </div>
         </div>
 
