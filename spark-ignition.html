@@ -584,6 +584,124 @@
         .pulse {
             animation: pulse 2s infinite;
         }
+
+        /* Neurotransmitter Section */
+        .neuro-section {
+            margin-top: 30px;
+            padding-top: 25px;
+            border-top: 2px solid #f0f0f0;
+        }
+        .neuro-section h3 {
+            color: #2d1b4e;
+            margin-bottom: 20px;
+            font-size: 1.2em;
+            text-align: center;
+        }
+        .neuro-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+        @media (max-width: 600px) {
+            .neuro-grid { grid-template-columns: 1fr; }
+        }
+        .neuro-card {
+            border-radius: 12px;
+            padding: 18px;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: 3px solid transparent;
+        }
+        .neuro-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+        .neuro-card.selected {
+            border-color: #2d1b4e;
+        }
+        .neuro-card.dopamine { background: linear-gradient(135deg, #fce4ec 0%, #f8bbd9 100%); }
+        .neuro-card.oxytocin { background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%); }
+        .neuro-card.serotonin { background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%); }
+        .neuro-card.endorphins { background: linear-gradient(135deg, #e0f7fa 0%, #b2ebf2 100%); }
+        .neuro-card-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+        .neuro-card-header .icon {
+            font-size: 1.8em;
+        }
+        .neuro-card-header h4 {
+            font-size: 1.1em;
+            font-weight: 700;
+            color: #2d1b4e;
+        }
+        .neuro-card p {
+            font-size: 0.85em;
+            color: #555;
+            margin: 0;
+        }
+        .neuro-detail {
+            display: none;
+            margin-top: 20px;
+            padding: 20px;
+            background: white;
+            border-radius: 12px;
+            border: 2px solid #e0e0e0;
+        }
+        .neuro-detail.active {
+            display: block;
+        }
+        .neuro-detail h4 {
+            color: #2d1b4e;
+            margin-bottom: 15px;
+            font-size: 1.1em;
+        }
+        .neuro-detail-section {
+            margin-bottom: 20px;
+        }
+        .neuro-detail-section h5 {
+            font-size: 0.9em;
+            font-weight: 600;
+            color: #666;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .neuro-detail-section ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .neuro-detail-section li {
+            padding: 8px 12px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            margin-bottom: 6px;
+            font-size: 0.9em;
+            color: #444;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .neuro-detail-section.deficiency li {
+            background: #fef2f2;
+            border-left: 3px solid #ef4444;
+        }
+        .neuro-detail-section.boost li {
+            background: #f0fdf4;
+            border-left: 3px solid #22c55e;
+        }
+        @media (max-width: 600px) {
+            .neuro-detail > div[style*="grid-template-columns"] {
+                display: block !important;
+            }
+            .neuro-detail-section {
+                margin-bottom: 25px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -653,6 +771,48 @@
                 <div class="quick-access" id="quickAccess" style="display: none;">
                     <span>⭐ Your Go-Tos:</span>
                     <div id="favouritesList"></div>
+                </div>
+
+                <!-- Neurotransmitter Section -->
+                <div class="neuro-section">
+                    <h3>🧪 Happiness Chemicals - What Does Your Brain Need?</h3>
+                    <p style="text-align: center; color: #666; margin-bottom: 20px; font-size: 0.9em;">Tap a chemical to see deficiency signs and how to boost it naturally</p>
+
+                    <div class="neuro-grid">
+                        <div class="neuro-card dopamine" onclick="selectNeuro('dopamine')">
+                            <div class="neuro-card-header">
+                                <span class="icon">💗</span>
+                                <h4>DOPAMINE</h4>
+                            </div>
+                            <p>The reward chemical - motivation & pleasure</p>
+                        </div>
+
+                        <div class="neuro-card oxytocin" onclick="selectNeuro('oxytocin')">
+                            <div class="neuro-card-header">
+                                <span class="icon">🧡</span>
+                                <h4>OXYTOCIN</h4>
+                            </div>
+                            <p>The love hormone - connection & bonding</p>
+                        </div>
+
+                        <div class="neuro-card serotonin" onclick="selectNeuro('serotonin')">
+                            <div class="neuro-card-header">
+                                <span class="icon">💙</span>
+                                <h4>SEROTONIN</h4>
+                            </div>
+                            <p>The mood stabiliser - confidence & calm</p>
+                        </div>
+
+                        <div class="neuro-card endorphins" onclick="selectNeuro('endorphins')">
+                            <div class="neuro-card-header">
+                                <span class="icon">💚</span>
+                                <h4>ENDORPHINS</h4>
+                            </div>
+                            <p>The pain reliever - natural highs & relief</p>
+                        </div>
+                    </div>
+
+                    <div id="neuroDetail" class="neuro-detail"></div>
                 </div>
 
                 <!-- Recent History -->
@@ -1144,10 +1304,120 @@
         };
 
         // ============================================
+        // NEUROTRANSMITTER DATA
+        // ============================================
+
+        const NEUROTRANSMITTERS = {
+            dopamine: {
+                name: 'DOPAMINE',
+                icon: '💗',
+                colour: '#E91E63',
+                subtitle: 'The Reward Chemical',
+                description: 'Dopamine drives motivation, pleasure, and the feeling of reward. It\'s released when you achieve goals, experience pleasure, or anticipate something exciting.',
+                deficiency: [
+                    { icon: '😴', text: 'Procrastination' },
+                    { icon: '😔', text: 'Low self-esteem' },
+                    { icon: '🔋', text: 'Lack of motivation' },
+                    { icon: '⚡', text: 'Low energy or fatigue' },
+                    { icon: '🎯', text: 'Inability to focus' },
+                    { icon: '😰', text: 'Feeling anxious' },
+                    { icon: '💭', text: 'Feeling hopeless' },
+                    { icon: '🎭', text: 'Mood swings' }
+                ],
+                boost: [
+                    { icon: '🧘', text: 'Meditate' },
+                    { icon: '📝', text: 'Daily to-do list (ticking things off!)' },
+                    { icon: '🎯', text: 'Set long-term goals' },
+                    { icon: '🥩', text: 'Foods rich in L-Tyrosine (cheese, meat, fish)' },
+                    { icon: '🏃', text: 'Exercise regularly' },
+                    { icon: '🎨', text: 'Create something: writing, music, or art' }
+                ],
+                audhd_tip: 'For AuDHD brains: Dopamine is often low, making motivation feel impossible. Break tasks into tiny steps so you get more "reward hits". Use body doubling and novelty to spark interest.'
+            },
+            oxytocin: {
+                name: 'OXYTOCIN',
+                icon: '🧡',
+                colour: '#FF9800',
+                subtitle: 'The Love Hormone',
+                description: 'Oxytocin is released during bonding, physical touch, and social connection. It creates feelings of trust, safety, and belonging.',
+                deficiency: [
+                    { icon: '😢', text: 'Feeling lonely' },
+                    { icon: '😓', text: 'Stressed' },
+                    { icon: '🔋', text: 'Lack of motivation' },
+                    { icon: '⚡', text: 'Low energy or fatigue' },
+                    { icon: '💔', text: 'Disconnect of relationships' },
+                    { icon: '😰', text: 'Feeling anxious' },
+                    { icon: '😴', text: 'Insomnia' }
+                ],
+                boost: [
+                    { icon: '🤗', text: 'Physical touch (hugs, cuddles)' },
+                    { icon: '👥', text: 'Socialising with people you trust' },
+                    { icon: '💆', text: 'Massage' },
+                    { icon: '📍', text: 'Acupuncture' },
+                    { icon: '🎵', text: 'Listening to music' },
+                    { icon: '🏃', text: 'Exercise' },
+                    { icon: '🚿', text: 'Cold shower' },
+                    { icon: '🧘', text: 'Meditate' }
+                ],
+                audhd_tip: 'For AuDHD brains: Social anxiety can make connection hard. Try parallel activities (watching a film together, crafting side-by-side) instead of face-to-face conversation. Pet cuddles count too!'
+            },
+            serotonin: {
+                name: 'SEROTONIN',
+                icon: '💙',
+                colour: '#2196F3',
+                subtitle: 'The Mood Stabiliser',
+                description: 'Serotonin regulates mood, sleep, and appetite. It creates feelings of wellbeing, confidence, and emotional stability.',
+                deficiency: [
+                    { icon: '😔', text: 'Low self-esteem' },
+                    { icon: '💧', text: 'Overly sensitive' },
+                    { icon: '😰', text: 'Anxiety/panic attacks' },
+                    { icon: '🎭', text: 'Mood swings' },
+                    { icon: '💭', text: 'Feeling hopeless' },
+                    { icon: '👥', text: 'Social phobia' },
+                    { icon: '🔄', text: 'Obsession/compulsion' },
+                    { icon: '😴', text: 'Insomnia' }
+                ],
+                boost: [
+                    { icon: '🏃', text: 'Exercise' },
+                    { icon: '🚿', text: 'Cold showers' },
+                    { icon: '☀️', text: 'Sunlight exposure' },
+                    { icon: '💆', text: 'Massage' }
+                ],
+                audhd_tip: 'For AuDHD brains: Rejection Sensitive Dysphoria (RSD) may be linked to serotonin. Morning sunlight (even 10 mins) can significantly help. Exercise helps but doesn\'t have to be intense - walking counts.'
+            },
+            endorphins: {
+                name: 'ENDORPHINS',
+                icon: '💚',
+                colour: '#4CAF50',
+                subtitle: 'The Pain Reliever',
+                description: 'Endorphins are natural painkillers that create feelings of euphoria. They\'re released during exercise, laughter, and pleasurable activities.',
+                deficiency: [
+                    { icon: '😰', text: 'Anxiety' },
+                    { icon: '😔', text: 'Depression' },
+                    { icon: '🎭', text: 'Mood swings' },
+                    { icon: '🤕', text: 'Aches and pains' },
+                    { icon: '😴', text: 'Insomnia' },
+                    { icon: '⚡', text: 'Impulsive behaviour' }
+                ],
+                boost: [
+                    { icon: '😂', text: 'Laughter/crying (emotional release)' },
+                    { icon: '🎨', text: 'Creating music/art' },
+                    { icon: '🍫', text: 'Eat dark chocolate' },
+                    { icon: '🌶️', text: 'Eat spicy foods' },
+                    { icon: '🧘', text: 'Exercise/stretching' },
+                    { icon: '💆', text: 'Massage' },
+                    { icon: '🧘', text: 'Meditate' }
+                ],
+                audhd_tip: 'For AuDHD brains: The need for stimulation is often an endorphin-seeking behaviour. Try "safe" endorphin hits: spicy food, intense music, dancing, or cold water immersion instead of impulsive choices.'
+            }
+        };
+
+        // ============================================
         // STATE MANAGEMENT
         // ============================================
 
         let selectedState = null;
+        let selectedNeuro = null;
         let userData = {
             favourites: [],
             triedTools: [],
@@ -1481,6 +1751,67 @@
             if (seconds < 86400) return Math.floor(seconds / 3600) + ' hours ago';
             if (seconds < 604800) return Math.floor(seconds / 86400) + ' days ago';
             return date.toLocaleDateString('en-GB');
+        }
+
+        // ============================================
+        // NEUROTRANSMITTER FUNCTIONS
+        // ============================================
+
+        function selectNeuro(neuroId) {
+            selectedNeuro = neuroId;
+            const neuro = NEUROTRANSMITTERS[neuroId];
+
+            // Update card selection
+            document.querySelectorAll('.neuro-card').forEach(card => {
+                card.classList.remove('selected');
+            });
+            document.querySelector(`.neuro-card.${neuroId}`).classList.add('selected');
+
+            // Show detail panel
+            const detailDiv = document.getElementById('neuroDetail');
+            detailDiv.innerHTML = `
+                <h4 style="color: ${neuro.colour}; display: flex; align-items: center; gap: 10px;">
+                    <span style="font-size: 1.5em;">${neuro.icon}</span>
+                    ${neuro.name} - ${neuro.subtitle}
+                </h4>
+                <p style="color: #555; margin-bottom: 20px; line-height: 1.6;">${neuro.description}</p>
+
+                <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px;">
+                    <div class="neuro-detail-section deficiency">
+                        <h5>⚠️ Signs of Deficiency</h5>
+                        <ul>
+                            ${neuro.deficiency.map(item => `
+                                <li><span>${item.icon}</span> ${item.text}</li>
+                            `).join('')}
+                        </ul>
+                    </div>
+
+                    <div class="neuro-detail-section boost">
+                        <h5>✨ How to Boost It</h5>
+                        <ul>
+                            ${neuro.boost.map(item => `
+                                <li><span>${item.icon}</span> ${item.text}</li>
+                            `).join('')}
+                        </ul>
+                    </div>
+                </div>
+
+                <div style="margin-top: 20px; padding: 15px; background: linear-gradient(135deg, #ddd6fe 0%, #c4b5fd 100%); border-radius: 10px; border-left: 4px solid #8b5cf6;">
+                    <h5 style="color: #5b21b6; margin-bottom: 8px; font-size: 0.9em;">💜 AuDHD-Specific Tip</h5>
+                    <p style="color: #6b21a8; font-size: 0.9em; margin: 0; line-height: 1.6;">${neuro.audhd_tip}</p>
+                </div>
+            `;
+
+            detailDiv.classList.add('active');
+            detailDiv.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+
+        function closeNeuroDetail() {
+            selectedNeuro = null;
+            document.querySelectorAll('.neuro-card').forEach(card => {
+                card.classList.remove('selected');
+            });
+            document.getElementById('neuroDetail').classList.remove('active');
         }
 
         // Toggle DMN/TPN explainer
