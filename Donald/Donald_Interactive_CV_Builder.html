@@ -179,35 +179,36 @@
             display: none;
         }
         .cv-preview.layout-top-header .cv-right {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 30px;
+            display: block;
             padding: 30px 40px;
-        }
-        .cv-preview.layout-top-header .cv-right-section:first-child {
-            grid-column: 1 / -1;
         }
         .cv-preview.layout-top-header #section-profile-right {
             display: block !important;
-            grid-column: 1 / -1;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #e0e0e0;
         }
         .cv-preview.layout-top-header #section-highlights-right {
             display: block !important;
+            margin-bottom: 30px;
         }
         .cv-preview.layout-top-header #section-skills-right {
             display: block !important;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #e0e0e0;
         }
         .cv-preview.layout-top-header #section-career {
-            grid-column: 1 / -1;
+            margin-bottom: 30px;
         }
         .cv-preview.layout-top-header #section-education {
-            grid-column: 1;
+            margin-bottom: 30px;
         }
         .cv-preview.layout-top-header #section-testimonials {
-            grid-column: 2;
+            margin-bottom: 30px;
         }
         .cv-preview.layout-top-header #section-casestudies {
-            grid-column: 1 / -1;
+            margin-bottom: 30px;
         }
 
         /* Left Column - Dark */
@@ -968,6 +969,38 @@
 
                 <!-- RIGHT COLUMN -->
                 <div class="cv-right">
+                    <!-- PROFILE (for Top Header layout only) -->
+                    <div class="cv-right-section" id="section-profile-right" style="display: none;">
+                        <div class="cv-right-title">My Profile</div>
+                        <p class="cv-profile-text-right" contenteditable="true" style="color: #333; line-height: 1.7; margin-bottom: 20px;">
+                            I'm a Senior Strategist with 20+ years experience delivering strategic thinking across financial services, B2B tech and complex global brands including UBS, AMD and UPS. I am passionate about brand transformation that results in creative work which wins awards and moves the needle. My thread is connecting insight, ideas, infrastructure and people—and staying until it's embedded.
+                        </p>
+                    </div>
+
+                    <!-- CAREER HIGHLIGHTS (for Top Header layout only) -->
+                    <div class="cv-right-section" id="section-highlights-right" style="display: none;">
+                        <div class="cv-right-title">Career Highlights</div>
+                        <ul style="color: #333; line-height: 1.8; padding-left: 20px;">
+                            <li>Created $2.5m incremental revenue at UBS through .com transformation</li>
+                            <li>Co-created "United Problem Solvers" – grew UPS EMEA penetration +20%</li>
+                            <li>Launched AMD's "Together We Advance" platform across all divisions</li>
+                            <li>Creative award winner at Cannes, BTAA, OneShow, DMA</li>
+                        </ul>
+                    </div>
+
+                    <!-- KEY SKILLS (for Top Header layout only) -->
+                    <div class="cv-right-section" id="section-skills-right" style="display: none;">
+                        <div class="cv-right-title">Key Skills</div>
+                        <div style="display: flex; flex-wrap: wrap; gap: 8px;">
+                            <span style="background: #f0f0f0; padding: 5px 12px; border-radius: 15px; font-size: 0.85em;">Brand Strategy</span>
+                            <span style="background: #f0f0f0; padding: 5px 12px; border-radius: 15px; font-size: 0.85em;">Transformation</span>
+                            <span style="background: #f0f0f0; padding: 5px 12px; border-radius: 15px; font-size: 0.85em;">Campaign Dev</span>
+                            <span style="background: #f0f0f0; padding: 5px 12px; border-radius: 15px; font-size: 0.85em;">Research</span>
+                            <span style="background: #f0f0f0; padding: 5px 12px; border-radius: 15px; font-size: 0.85em;">C-Suite</span>
+                            <span style="background: #f0f0f0; padding: 5px 12px; border-radius: 15px; font-size: 0.85em;">Effectiveness</span>
+                        </div>
+                    </div>
+
                     <!-- CAREER -->
                     <div class="cv-right-section" id="section-career">
                         <div class="cv-right-title">Career</div>
