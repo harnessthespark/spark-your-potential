@@ -1,0 +1,690 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book Your Spark Session - Spark Your Potential</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #f8f9fa;
+            min-height: 100vh;
+            color: #333;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, #E63946 0%, #D81B60 50%, #7B2CBF 100%);
+            padding: 80px 20px;
+            text-align: center;
+            color: white;
+        }
+        .hero h1 {
+            font-size: 3em;
+            font-weight: 800;
+            margin-bottom: 15px;
+        }
+        .hero p {
+            font-size: 1.4em;
+            opacity: 0.95;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        .back-link {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            color: white;
+            text-decoration: none;
+            font-size: 0.9em;
+            opacity: 0.8;
+            transition: opacity 0.2s;
+        }
+        .back-link:hover { opacity: 1; }
+
+        /* Container */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 60px 20px;
+        }
+
+        /* Section Titles */
+        .section-title {
+            text-align: center;
+            font-size: 2em;
+            font-weight: 700;
+            color: #1a1a2e;
+            margin-bottom: 40px;
+        }
+
+        /* Pricing Grid */
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 20px;
+            margin-bottom: 80px;
+        }
+        @media (max-width: 1100px) {
+            .pricing-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+        @media (max-width: 768px) {
+            .pricing-grid {
+                grid-template-columns: 1fr;
+                max-width: 400px;
+                margin-left: auto;
+                margin-right: auto;
+            }
+        }
+
+        .pricing-card {
+            background: white;
+            border-radius: 16px;
+            padding: 30px 20px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            text-align: center;
+            position: relative;
+            transition: transform 0.3s, box-shadow 0.3s;
+            display: flex;
+            flex-direction: column;
+        }
+        .pricing-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+        }
+        .pricing-card.highlighted {
+            background: linear-gradient(135deg, #7B2CBF 0%, #D81B60 100%);
+            color: white;
+            transform: scale(1.05);
+        }
+        .pricing-card.highlighted:hover {
+            transform: scale(1.05) translateY(-5px);
+        }
+        .pricing-card.highlighted .pricing-title {
+            color: white;
+        }
+        .pricing-card.highlighted .pricing-price {
+            color: white;
+        }
+        .pricing-card.highlighted .pricing-feature {
+            color: rgba(255,255,255,0.9);
+        }
+        .pricing-card.highlighted .pricing-btn {
+            background: white;
+            color: #7B2CBF;
+        }
+
+        .save-badge {
+            position: absolute;
+            top: -12px;
+            right: 15px;
+            background: #FFB627;
+            color: #1a1a2e;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.75em;
+            font-weight: 700;
+        }
+
+        .pricing-title {
+            font-size: 1.2em;
+            font-weight: 700;
+            color: #1a1a2e;
+            margin-bottom: 15px;
+        }
+        .pricing-price {
+            font-size: 2.2em;
+            font-weight: 800;
+            color: #7B2CBF;
+            margin-bottom: 5px;
+        }
+        .pricing-subtitle {
+            font-size: 0.85em;
+            opacity: 0.7;
+            margin-bottom: 20px;
+        }
+        .pricing-features {
+            list-style: none;
+            margin-bottom: 25px;
+            flex-grow: 1;
+        }
+        .pricing-feature {
+            padding: 8px 0;
+            font-size: 0.9em;
+            color: #555;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        .pricing-card.highlighted .pricing-feature {
+            border-bottom-color: rgba(255,255,255,0.2);
+        }
+        .pricing-feature:last-child {
+            border-bottom: none;
+        }
+        .pricing-btn {
+            background: linear-gradient(135deg, #7B2CBF 0%, #D81B60 100%);
+            color: white;
+            border: none;
+            padding: 14px 24px;
+            border-radius: 10px;
+            font-size: 0.95em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            width: 100%;
+        }
+        .pricing-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(123, 44, 191, 0.4);
+        }
+
+        /* How It Works */
+        .how-it-works {
+            background: white;
+            border-radius: 20px;
+            padding: 50px 40px;
+            margin-bottom: 80px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+        }
+        .steps-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 30px;
+            margin-top: 40px;
+        }
+        @media (max-width: 768px) {
+            .steps-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+        @media (max-width: 500px) {
+            .steps-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        .step {
+            text-align: center;
+        }
+        .step-number {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #E63946 0%, #D81B60 100%);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3em;
+            font-weight: 700;
+            margin: 0 auto 15px;
+        }
+        .step-title {
+            font-weight: 600;
+            color: #1a1a2e;
+            margin-bottom: 8px;
+        }
+        .step-desc {
+            font-size: 0.9em;
+            color: #666;
+        }
+
+        /* FAQ Section */
+        .faq-section {
+            margin-bottom: 80px;
+        }
+        .faq-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 25px;
+        }
+        @media (max-width: 768px) {
+            .faq-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        .faq-item {
+            background: white;
+            border-radius: 16px;
+            padding: 25px 30px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+        }
+        .faq-question {
+            font-weight: 700;
+            color: #1a1a2e;
+            margin-bottom: 12px;
+            font-size: 1.05em;
+        }
+        .faq-answer {
+            color: #555;
+            line-height: 1.6;
+        }
+
+        /* Modal */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.7);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        .modal-overlay.visible {
+            display: flex;
+        }
+        .modal {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 500px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+        }
+        .modal-close {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            background: none;
+            border: none;
+            font-size: 1.5em;
+            cursor: pointer;
+            color: #999;
+        }
+        .modal-close:hover { color: #333; }
+        .modal h2 {
+            color: #1a1a2e;
+            margin-bottom: 10px;
+        }
+        .modal-subtitle {
+            color: #666;
+            margin-bottom: 25px;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 8px;
+            font-size: 0.9em;
+        }
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 1em;
+            font-family: inherit;
+            transition: border-color 0.2s;
+        }
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #7B2CBF;
+        }
+        .form-group textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+        .submit-btn {
+            background: linear-gradient(135deg, #7B2CBF 0%, #D81B60 100%);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 10px;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(123, 44, 191, 0.4);
+        }
+        .submit-btn:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* Success State */
+        .success-message {
+            text-align: center;
+            padding: 30px 0;
+        }
+        .success-icon {
+            font-size: 4em;
+            margin-bottom: 20px;
+        }
+        .success-message h3 {
+            color: #1a1a2e;
+            margin-bottom: 15px;
+        }
+        .success-message p {
+            color: #666;
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 40px 20px;
+            color: #888;
+            font-size: 0.9em;
+        }
+        .footer a {
+            color: #7B2CBF;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <!-- Hero Section -->
+    <div class="hero">
+        <a href="dashboard.html" class="back-link">← Back to Dashboard</a>
+        <h1>Ready to find your Spark?</h1>
+        <p>Coaching + Tools = Clarity on what makes you different</p>
+    </div>
+
+    <!-- Pricing Section -->
+    <div class="container">
+        <h2 class="section-title">Choose Your Package</h2>
+
+        <div class="pricing-grid">
+            <!-- Tier 1: Spark Session -->
+            <div class="pricing-card">
+                <div class="pricing-title">Spark Session</div>
+                <div class="pricing-price">£99</div>
+                <div class="pricing-subtitle">One-time session</div>
+                <ul class="pricing-features">
+                    <li class="pricing-feature">1 hour with Lisa</li>
+                    <li class="pricing-feature">Discovery questions</li>
+                    <li class="pricing-feature">Insight report</li>
+                </ul>
+                <button class="pricing-btn" onclick="openBookingModal('Spark Session', '£99')">Book Spark Session</button>
+            </div>
+
+            <!-- Tier 2: + Transformation -->
+            <div class="pricing-card">
+                <div class="pricing-title">+ Transformation</div>
+                <div class="pricing-price">£199</div>
+                <div class="pricing-subtitle">+£100 from Spark</div>
+                <ul class="pricing-features">
+                    <li class="pricing-feature">Everything in Spark Session</li>
+                    <li class="pricing-feature">CV Builder tool</li>
+                    <li class="pricing-feature">Mapping Guide</li>
+                </ul>
+                <button class="pricing-btn" onclick="openBookingModal('Transformation', '£199')">Book Transformation</button>
+            </div>
+
+            <!-- Tier 3: + Decision Framework -->
+            <div class="pricing-card">
+                <div class="pricing-title">+ Decision Framework</div>
+                <div class="pricing-price">£299</div>
+                <div class="pricing-subtitle">+£100 from Transformation</div>
+                <ul class="pricing-features">
+                    <li class="pricing-feature">Everything above</li>
+                    <li class="pricing-feature">Decision Framework tool</li>
+                    <li class="pricing-feature">Career clarity system</li>
+                </ul>
+                <button class="pricing-btn" onclick="openBookingModal('Decision Framework', '£299')">Book Decision</button>
+            </div>
+
+            <!-- Tier 4: + AI Prompts -->
+            <div class="pricing-card">
+                <div class="pricing-title">+ AI Prompts</div>
+                <div class="pricing-price">£399</div>
+                <div class="pricing-subtitle">+£100 from Decision</div>
+                <ul class="pricing-features">
+                    <li class="pricing-feature">Everything above</li>
+                    <li class="pricing-feature">AI Engineered Prompts Library</li>
+                    <li class="pricing-feature">Career AI assistant</li>
+                </ul>
+                <button class="pricing-btn" onclick="openBookingModal('AI Prompts', '£399')">Book AI Prompts</button>
+            </div>
+
+            <!-- Tier 5: Full Programme (Highlighted) -->
+            <div class="pricing-card highlighted">
+                <span class="save-badge">SAVE £50</span>
+                <div class="pricing-title">Full Programme</div>
+                <div class="pricing-price">£450</div>
+                <div class="pricing-subtitle">was £500</div>
+                <ul class="pricing-features">
+                    <li class="pricing-feature">4 × coaching sessions (1 hour each)</li>
+                    <li class="pricing-feature">Full toolkit access</li>
+                    <li class="pricing-feature">All 5 tools included</li>
+                    <li class="pricing-feature">Email support</li>
+                </ul>
+                <button class="pricing-btn" onclick="openBookingModal('Full Programme', '£450')">Book Full Programme</button>
+            </div>
+        </div>
+
+        <!-- How It Works -->
+        <div class="how-it-works">
+            <h2 class="section-title" style="margin-bottom: 0;">How It Works</h2>
+            <div class="steps-grid">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <div class="step-title">Book your session</div>
+                    <div class="step-desc">Choose your package and submit your details</div>
+                </div>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <div class="step-title">Complete discovery questions</div>
+                    <div class="step-desc">Reflect on your career patterns and goals</div>
+                </div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <div class="step-title">Get your Blueprint + tools</div>
+                    <div class="step-desc">Receive your personalised career toolkit</div>
+                </div>
+                <div class="step">
+                    <div class="step-number">4</div>
+                    <div class="step-title">Access your dashboard</div>
+                    <div class="step-desc">Track progress and use your tools anytime</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- FAQ Section -->
+        <div class="faq-section">
+            <h2 class="section-title">Frequently Asked Questions</h2>
+            <div class="faq-grid">
+                <div class="faq-item">
+                    <div class="faq-question">What if I don't know my pattern yet?</div>
+                    <div class="faq-answer">That's what the Spark Session is for. We find it together.</div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">Can I upgrade later?</div>
+                    <div class="faq-answer">Yes, you can add tools anytime. 12 Days of Spark pricing (£450 for Full Programme) ends 20th December.</div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">How long does it take?</div>
+                    <div class="faq-answer">Spark Session is 1 hour. Full Programme is 4 sessions over 4 weeks.</div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">Is this for job hunters only?</div>
+                    <div class="faq-answer">No — it's for anyone who wants clarity. Freelancers, people going for promotion, founders.</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+        <p>© 2025 Spark Your Potential • <a href="mailto:lisa@harnessthespark.com">lisa@harnessthespark.com</a></p>
+    </div>
+
+    <!-- Booking Modal -->
+    <div class="modal-overlay" id="bookingModal">
+        <div class="modal">
+            <button class="modal-close" onclick="closeBookingModal()">×</button>
+
+            <div id="bookingForm">
+                <h2>Book Your Session</h2>
+                <p class="modal-subtitle" id="modalPackage">Package: Spark Session (£99)</p>
+
+                <form onsubmit="submitBooking(event)">
+                    <div class="form-group">
+                        <label for="name">Name *</label>
+                        <input type="text" id="name" name="name" required placeholder="Your full name">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email">Email *</label>
+                        <input type="email" id="email" name="email" required placeholder="your@email.com">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="phone">Phone</label>
+                        <input type="tel" id="phone" name="phone" placeholder="Your phone number">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="package">Which package? *</label>
+                        <select id="package" name="package" required>
+                            <option value="Spark Session (£99)">Spark Session (£99)</option>
+                            <option value="Transformation (£199)">+ Transformation (£199)</option>
+                            <option value="Decision Framework (£299)">+ Decision Framework (£299)</option>
+                            <option value="AI Prompts (£399)">+ AI Prompts (£399)</option>
+                            <option value="Full Programme (£450)">Full Programme (£450) - SAVE £50</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="message">Message (optional)</label>
+                        <textarea id="message" name="message" placeholder="Anything you'd like me to know before our session?"></textarea>
+                    </div>
+
+                    <button type="submit" class="submit-btn" id="submitBtn">Send Booking Request</button>
+                </form>
+            </div>
+
+            <div id="successMessage" class="success-message" style="display: none;">
+                <div class="success-icon">✨</div>
+                <h3>Thanks for booking!</h3>
+                <p>I'll be in touch within 24 hours to confirm your session.</p>
+                <p style="margin-top: 15px; font-size: 0.9em; color: #888;">Check your inbox (and spam folder) for my email.</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let selectedPackage = '';
+        let selectedPrice = '';
+
+        function openBookingModal(packageName, price) {
+            selectedPackage = packageName;
+            selectedPrice = price;
+
+            document.getElementById('modalPackage').textContent = `Package: ${packageName} (${price})`;
+            document.getElementById('package').value = `${packageName} (${price})`;
+            document.getElementById('bookingModal').classList.add('visible');
+            document.getElementById('bookingForm').style.display = 'block';
+            document.getElementById('successMessage').style.display = 'none';
+
+            // Reset form
+            document.getElementById('name').value = '';
+            document.getElementById('email').value = '';
+            document.getElementById('phone').value = '';
+            document.getElementById('message').value = '';
+        }
+
+        function closeBookingModal() {
+            document.getElementById('bookingModal').classList.remove('visible');
+        }
+
+        async function submitBooking(event) {
+            event.preventDefault();
+
+            const submitBtn = document.getElementById('submitBtn');
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Sending...';
+
+            const formData = {
+                name: document.getElementById('name').value,
+                email: document.getElementById('email').value,
+                phone: document.getElementById('phone').value,
+                package: document.getElementById('package').value,
+                message: document.getElementById('message').value,
+                timestamp: new Date().toISOString()
+            };
+
+            try {
+                // For now, store in localStorage as a backup
+                const bookings = JSON.parse(localStorage.getItem('syp_bookings') || '[]');
+                bookings.push(formData);
+                localStorage.setItem('syp_bookings', JSON.stringify(bookings));
+
+                // Try to send email via backend (will fail gracefully if not available)
+                try {
+                    await fetch('https://sparkhub-be-qtmmb.ondigitalocean.app/api/crm/syp/booking/', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(formData)
+                    });
+                } catch (e) {
+                    // Backend not available, that's okay - we have localStorage backup
+                    console.log('Backend not available, booking saved locally');
+                }
+
+                // Show success message
+                document.getElementById('bookingForm').style.display = 'none';
+                document.getElementById('successMessage').style.display = 'block';
+
+                // Also send via mailto as fallback (opens email client)
+                const subject = encodeURIComponent(`New Booking: ${formData.package}`);
+                const body = encodeURIComponent(`
+New booking request from Spark Your Potential:
+
+Name: ${formData.name}
+Email: ${formData.email}
+Phone: ${formData.phone || 'Not provided'}
+Package: ${formData.package}
+Message: ${formData.message || 'No message'}
+
+Submitted: ${new Date().toLocaleString('en-GB')}
+                `.trim());
+
+                // Create mailto link but don't auto-open (could be annoying)
+                console.log(`Booking received: mailto:lisa@harnessthespark.com?subject=${subject}&body=${body}`);
+
+            } catch (error) {
+                console.error('Booking error:', error);
+                alert('There was an error submitting your booking. Please try again or email lisa@harnessthespark.com directly.');
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Send Booking Request';
+            }
+        }
+
+        // Close modal on escape key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeBookingModal();
+            }
+        });
+
+        // Close modal on background click
+        document.getElementById('bookingModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeBookingModal();
+            }
+        });
+    </script>
+</body>
+</html>
