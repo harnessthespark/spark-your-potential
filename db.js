@@ -336,7 +336,7 @@ async function createClientAccount(email, name, password, programmeAccess = 'car
  */
 async function getAllUsers() {
     const result = await pool.query(
-        `SELECT id, email, name, is_admin, created_at, last_login, subscription_tier
+        `SELECT id, email, name, is_admin, created_at, last_login, subscription_tier, programme_access
          FROM users ORDER BY created_at DESC`
     );
     return result.rows;
