@@ -639,16 +639,16 @@
                 bookings.push(formData);
                 localStorage.setItem('syp_bookings', JSON.stringify(bookings));
 
-                // Try to send email via backend (will fail gracefully if not available)
-                try {
-                    await fetch('https://sparkhub-be-qtmmb.ondigitalocean.app/api/crm/syp/booking/', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(formData)
-                    });
-                } catch (e) {
-                    // Backend not available, that's okay - we have localStorage backup
-                    console.log('Backend not available, booking saved locally');
+                // Send to backend API
+                const response = await fetch('https://sparkhub-be-qtmmb.ondigitalocean.app/api/crm/syp/public/booking/', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(formData)
+                });
+
+                if (!response.ok) {
+                    const error = await response.json();
+                    throw new Error(error.error || 'Failed to submit booking');
                 }
 
                 // Show success message
