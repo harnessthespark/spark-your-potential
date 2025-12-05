@@ -1450,20 +1450,8 @@
         let currentClient = null;
         let selectedWeek = null;
 
-        // Check for saved session or URL parameter
+        // Check for saved session (requires previous password login)
         window.onload = function() {
-            // First, check for URL parameter (allows direct linking to specific client)
-            const urlParams = new URLSearchParams(window.location.search);
-            const urlEmail = urlParams.get('client');
-
-            if (urlEmail && CLIENTS[urlEmail.toLowerCase()]) {
-                // URL parameter takes priority - save to localStorage and show portal
-                localStorage.setItem('syp_client_email', urlEmail.toLowerCase());
-                showPortal(CLIENTS[urlEmail.toLowerCase()]);
-                return;
-            }
-
-            // Fall back to saved session
             const savedEmail = localStorage.getItem('syp_client_email');
             if (savedEmail && CLIENTS[savedEmail.toLowerCase()]) {
                 showPortal(CLIENTS[savedEmail.toLowerCase()]);
