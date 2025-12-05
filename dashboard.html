@@ -361,6 +361,7 @@
                                     <option value="career">💼 Career Booster Only</option>
                                     <option value="audhd">🧠 AuDHD Coaching Only</option>
                                     <option value="both">✨ Both Programmes</option>
+                                    <option value="testimonial">🎁 Testimonial Access (Self-Service)</option>
                                 </select>
                             </div>
                             <button onclick="createClientAccount()" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; font-weight: 600; width: 100%;">
@@ -1353,7 +1354,8 @@
             const backendStatus = STATUS_MAP_REVERSE[newStatus] || newStatus;
 
             // If we have auth token and client has an ID (from PostgreSQL), update via API
-            if (authToken && client.id && !client.id.startsWith('client-')) {
+            const isPostgreSQLId = client.id && (typeof client.id === 'number' || !String(client.id).startsWith('client-'));
+            if (authToken && isPostgreSQLId) {
                 try {
                     const response = await fetch(`${API_BASE_URL}/api/crm/syp/coach/clients/${client.id}/advance-stage/`, {
                         method: 'PATCH',
@@ -1501,7 +1503,9 @@
             }
 
             // If client has a PostgreSQL ID (not a local-only client), delete from API
-            if (authToken && client.id && !client.id.startsWith('client-')) {
+            // Handle both numeric IDs from PostgreSQL and string IDs like 'client-xxx'
+            const isPostgreSQLClient = authToken && client.id && (typeof client.id === 'number' || !String(client.id).startsWith('client-'));
+            if (isPostgreSQLClient) {
                 try {
                     const response = await fetch(`${API_BASE_URL}/api/crm/syp/coach/clients/${client.id}/`, {
                         method: 'DELETE',
