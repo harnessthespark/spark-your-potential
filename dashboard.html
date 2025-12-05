@@ -558,6 +558,25 @@
         // Default clients - only shown when authenticated as coach
         // These are fallback clients when PostgreSQL API is unavailable
         const DEFAULT_CLIENTS = {
+            'sarah.mitchell@demo.com': {
+                id: 'client-sarah-demo',
+                name: 'Sarah Mitchell',
+                email: 'sarah.mitchell@demo.com',
+                phone: '',
+                folder: 'sarah_mitchell_demo_client',
+                status: 'complete',
+                isDemo: true,
+                enrolledDate: '2024-09-01',
+                completedDate: '2024-10-15',
+                progress: {
+                    questionnaire: true,
+                    insightsReport: true,
+                    blueprint: true,
+                    decisionFramework: true,
+                    cvBuilder: true,
+                    mappingGuide: true
+                }
+            },
             'donaldpirie111@hotmail.co.uk': {
                 id: 'client-donald',
                 name: 'Donald Pirie',
