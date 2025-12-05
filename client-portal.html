@@ -526,6 +526,11 @@
             border-color: #4ECDC4;
             color: #4ECDC4;
         }
+        .week-tab.completed.active {
+            background: rgba(78, 205, 196, 0.95);
+            border-color: #4ECDC4;
+            color: #1a1a2e;
+        }
         .week-tab.locked {
             opacity: 0.4;
             cursor: not-allowed;
@@ -1786,14 +1791,14 @@
                 const isActive = weekId === selectedWeek;
 
                 let tabClass = 'week-tab';
+                if (isCompleted) tabClass += ' completed';
                 if (isActive) tabClass += ' active';
-                else if (isCompleted) tabClass += ' completed';
-                else if (!isUnlocked) tabClass += ' locked';
+                if (!isUnlocked && !isCompleted) tabClass += ' locked';
 
                 return `
                     <div class="${tabClass}" onclick="${isUnlocked ? `selectWeek('${weekId}')` : ''}">
                         ${weekLabels[weekId]}
-                        ${isCompleted && !isActive ? ' ✓' : ''}
+                        ${isCompleted ? ' ✓' : ''}
                     </div>
                 `;
             }).join('');
