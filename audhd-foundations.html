@@ -1,0 +1,738 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Laying the Foundations - AuDHD Coaching</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏗️</text></svg>">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #FEF0F5 0%, #FFF5F0 100%);
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* Back link */
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: #E91E78;
+            text-decoration: none;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Header */
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        h1 {
+            color: #333;
+            margin: 0 0 10px 0;
+            font-size: 32px;
+        }
+
+        h1 span {
+            background: linear-gradient(90deg, #E91E78, #F97B4D);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .subtitle {
+            color: #666;
+            font-size: 16px;
+            max-width: 700px;
+            margin: 0 auto 20px;
+            line-height: 1.6;
+        }
+
+        /* Action buttons */
+        .header-actions {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .btn {
+            padding: 10px 25px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            transition: all 0.2s;
+        }
+
+        .btn-primary {
+            background: linear-gradient(90deg, #E91E78, #F97B4D);
+            color: white;
+        }
+        .btn-primary:hover { opacity: 0.9; }
+
+        .btn-secondary {
+            background: #10B981;
+            color: white;
+        }
+        .btn-secondary:hover { background: #059669; }
+
+        .save-status {
+            font-size: 0.9em;
+            color: #10B981;
+            margin-left: 10px;
+        }
+
+        /* Discovery Section */
+        .discovery-section {
+            background: white;
+            border-radius: 16px;
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .discovery-section h3 {
+            color: #E91E78;
+            margin: 0 0 15px 0;
+            font-size: 18px;
+        }
+
+        .discovery-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .discovery-card {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 20px;
+            border-left: 4px solid #E91E78;
+        }
+
+        .discovery-card h4 {
+            color: #333;
+            margin: 0 0 8px 0;
+            font-size: 14px;
+        }
+
+        .discovery-card p {
+            color: #666;
+            font-size: 13px;
+            margin: 0 0 12px 0;
+        }
+
+        .discovery-card a {
+            color: #E91E78;
+            font-size: 13px;
+        }
+
+        .discovery-card input {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 14px;
+            margin-top: 8px;
+        }
+
+        .discovery-card input:focus {
+            outline: none;
+            border-color: #E91E78;
+        }
+
+        /* Main Table */
+        .foundations-table {
+            background: white;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .table-header {
+            display: grid;
+            grid-template-columns: 60px 120px 1fr 1fr 200px;
+            background: linear-gradient(90deg, #E91E78, #F97B4D);
+            color: white;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .table-header > div {
+            padding: 15px;
+            text-align: center;
+        }
+
+        .table-header > div:nth-child(3),
+        .table-header > div:nth-child(4),
+        .table-header > div:nth-child(5) {
+            text-align: left;
+        }
+
+        .table-header .header-hint {
+            font-size: 11px;
+            font-weight: 400;
+            opacity: 0.9;
+            display: block;
+            margin-top: 3px;
+        }
+
+        /* Category Rows */
+        .category-row {
+            display: grid;
+            grid-template-columns: 60px 120px 1fr 1fr 200px;
+            border-bottom: 1px solid #e0e0e0;
+            align-items: stretch;
+        }
+
+        .category-row:last-child {
+            border-bottom: none;
+        }
+
+        .category-row:nth-child(odd) {
+            background: #fef7f9;
+        }
+
+        .category-row:nth-child(even) {
+            background: #fff9f7;
+        }
+
+        /* Colour Picker */
+        .colour-cell {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 10px;
+        }
+
+        .colour-picker {
+            width: 40px;
+            height: 40px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            padding: 0;
+        }
+
+        .colour-picker::-webkit-color-swatch-wrapper {
+            padding: 0;
+        }
+
+        .colour-picker::-webkit-color-swatch {
+            border: 2px solid #ddd;
+            border-radius: 6px;
+        }
+
+        /* Category Name */
+        .category-name {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 15px;
+            font-weight: 700;
+            font-size: 15px;
+        }
+
+        .category-name.sleep { color: #6366F1; }
+        .category-name.work { color: #EF4444; }
+        .category-name.social { color: #F59E0B; }
+        .category-name.food { color: #10B981; }
+        .category-name.exercise { color: #3B82F6; }
+        .category-name.selfcare { color: #EC4899; }
+        .category-name.interests { color: #8B5CF6; }
+        .category-name.misc { color: #6B7280; }
+
+        /* Text Cells */
+        .text-cell {
+            padding: 10px;
+        }
+
+        .text-cell textarea {
+            width: 100%;
+            min-height: 80px;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 12px;
+            font-size: 13px;
+            font-family: inherit;
+            resize: vertical;
+            line-height: 1.5;
+        }
+
+        .text-cell textarea:focus {
+            outline: none;
+            border-color: #E91E78;
+            box-shadow: 0 0 0 3px rgba(233, 30, 120, 0.1);
+        }
+
+        .text-cell textarea::placeholder {
+            color: #aaa;
+        }
+
+        /* Protected Time Cell */
+        .protected-cell {
+            padding: 10px;
+        }
+
+        .protected-cell input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 13px;
+            text-align: center;
+        }
+
+        .protected-cell input:focus {
+            outline: none;
+            border-color: #E91E78;
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            color: #888;
+            margin-top: 30px;
+            font-size: 0.9em;
+        }
+
+        .footer a {
+            color: #E91E78;
+        }
+
+        /* Tips */
+        .tips-section {
+            background: white;
+            border-radius: 16px;
+            padding: 25px;
+            margin-top: 25px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .tips-section h3 {
+            color: #E91E78;
+            margin: 0 0 15px 0;
+        }
+
+        .tips-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+        }
+
+        .tip {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 15px;
+            border-left: 3px solid #E91E78;
+        }
+
+        .tip h4 {
+            color: #333;
+            margin: 0 0 8px 0;
+            font-size: 14px;
+        }
+
+        .tip p {
+            color: #666;
+            font-size: 13px;
+            margin: 0;
+            line-height: 1.5;
+        }
+
+        /* Responsive */
+        @media (max-width: 900px) {
+            .table-header,
+            .category-row {
+                grid-template-columns: 50px 100px 1fr;
+            }
+
+            .table-header > div:nth-child(4),
+            .table-header > div:nth-child(5),
+            .category-row > div:nth-child(4),
+            .category-row > div:nth-child(5) {
+                display: none;
+            }
+
+            .discovery-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 600px) {
+            body { padding: 10px; }
+
+            h1 { font-size: 24px; }
+
+            .table-header,
+            .category-row {
+                display: flex;
+                flex-direction: column;
+            }
+
+            .table-header > div,
+            .category-row > div {
+                padding: 10px 15px;
+            }
+
+            .colour-cell {
+                justify-content: flex-start;
+                gap: 15px;
+            }
+
+            .category-name {
+                justify-content: flex-start;
+                background: rgba(233, 30, 120, 0.1);
+                font-size: 16px;
+            }
+
+            .text-cell textarea {
+                min-height: 60px;
+            }
+
+            .header-actions {
+                flex-direction: column;
+            }
+        }
+
+        /* Print styles */
+        @media print {
+            body {
+                background: white;
+                padding: 0;
+            }
+
+            .back-link, .header-actions, .tips-section {
+                display: none;
+            }
+
+            .foundations-table {
+                box-shadow: none;
+                border: 1px solid #ddd;
+            }
+
+            .category-row {
+                page-break-inside: avoid;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="audhd-dashboard.html" class="back-link">← Back to AuDHD Portal</a>
+
+        <header>
+            <h1><span>Laying the Foundations</span> 🏗️</h1>
+            <p class="subtitle">
+                What do you need to get balance on in order to harness your spark? Define your default
+                'rules', plan for flexibility, and protect time for what matters. Use the colour column to
+                create a colour-coding system you can apply to your diary or calendar app!
+            </p>
+            <div class="header-actions">
+                <button class="btn btn-secondary" onclick="saveFoundations()">💾 Save Progress</button>
+                <button class="btn btn-primary" onclick="window.print()">🖨️ Print / Export PDF</button>
+                <span class="save-status" id="saveStatus"></span>
+            </div>
+        </header>
+
+        <!-- Discovery Section -->
+        <div class="discovery-section">
+            <h3>🔍 Discover Your Style</h3>
+            <div class="discovery-grid">
+                <div class="discovery-card">
+                    <h4>Discover your 'tendency'</h4>
+                    <p>How does your brain respond to expectations? Use this to stay accountable to your rules.</p>
+                    <a href="https://quiz.gretchenrubin.com" target="_blank">quiz.gretchenrubin.com →</a>
+                    <input type="text" id="tendency" placeholder="My tendency: e.g. Questioner, Obliger...">
+                </div>
+                <div class="discovery-card">
+                    <h4>Discover your 'focus style'</h4>
+                    <p>High score? You may benefit from grouping tasks into 'attention tunnels' vs multi-tasking.</p>
+                    <a href="https://monotropism.org/questionnaire" target="_blank">monotropism.org/questionnaire →</a>
+                    <input type="text" id="monotropism" placeholder="My score:">
+                </div>
+            </div>
+        </div>
+
+        <!-- Foundations Table -->
+        <div class="foundations-table">
+            <div class="table-header">
+                <div>Colour</div>
+                <div>Category</div>
+                <div>
+                    Your rules
+                    <span class="header-hint">(default choices)</span>
+                </div>
+                <div>
+                    Your exceptions
+                    <span class="header-hint">(flexibility factors)</span>
+                </div>
+                <div>
+                    Protected time
+                    <span class="header-hint">(when?)</span>
+                </div>
+            </div>
+
+            <!-- Sleep -->
+            <div class="category-row">
+                <div class="colour-cell">
+                    <input type="color" class="colour-picker" id="colour-sleep" value="#6366F1">
+                </div>
+                <div class="category-name sleep">Sleep</div>
+                <div class="text-cell">
+                    <textarea id="rules-sleep" placeholder="e.g. Put phone in sleep mode from 10pm"></textarea>
+                </div>
+                <div class="text-cell">
+                    <textarea id="exceptions-sleep" placeholder="e.g. Unless it's the weekend"></textarea>
+                </div>
+                <div class="protected-cell">
+                    <input type="text" id="protected-sleep" placeholder="e.g. In bed by 12, up by 8am">
+                </div>
+            </div>
+
+            <!-- Work -->
+            <div class="category-row">
+                <div class="colour-cell">
+                    <input type="color" class="colour-picker" id="colour-work" value="#EF4444">
+                </div>
+                <div class="category-name work">Work</div>
+                <div class="text-cell">
+                    <textarea id="rules-work" placeholder="e.g. No meetings before 10am&#10;Deep work in mornings"></textarea>
+                </div>
+                <div class="text-cell">
+                    <textarea id="exceptions-work" placeholder="e.g. Urgent client calls&#10;Monthly all-hands"></textarea>
+                </div>
+                <div class="protected-cell">
+                    <input type="text" id="protected-work" placeholder="e.g. Focus time 9-12">
+                </div>
+            </div>
+
+            <!-- Social -->
+            <div class="category-row">
+                <div class="colour-cell">
+                    <input type="color" class="colour-picker" id="colour-social" value="#F59E0B">
+                </div>
+                <div class="category-name social">Social</div>
+                <div class="text-cell">
+                    <textarea id="rules-social" placeholder="e.g. Max 2 social events per week&#10;Recovery day after big events"></textarea>
+                </div>
+                <div class="text-cell">
+                    <textarea id="exceptions-social" placeholder="e.g. Family birthdays&#10;Close friend emergencies"></textarea>
+                </div>
+                <div class="protected-cell">
+                    <input type="text" id="protected-social" placeholder="e.g. Sundays = quiet day">
+                </div>
+            </div>
+
+            <!-- Food -->
+            <div class="category-row">
+                <div class="colour-cell">
+                    <input type="color" class="colour-picker" id="colour-food" value="#10B981">
+                </div>
+                <div class="category-name food">Food</div>
+                <div class="text-cell">
+                    <textarea id="rules-food" placeholder="e.g. Meal prep on Sundays&#10;Keep safe foods stocked"></textarea>
+                </div>
+                <div class="text-cell">
+                    <textarea id="exceptions-food" placeholder="e.g. Eating out with friends&#10;Holidays"></textarea>
+                </div>
+                <div class="protected-cell">
+                    <input type="text" id="protected-food" placeholder="e.g. Lunch 12-1pm">
+                </div>
+            </div>
+
+            <!-- Exercise -->
+            <div class="category-row">
+                <div class="colour-cell">
+                    <input type="color" class="colour-picker" id="colour-exercise" value="#3B82F6">
+                </div>
+                <div class="category-name exercise">Exercise</div>
+                <div class="text-cell">
+                    <textarea id="rules-exercise" placeholder="e.g. Walk every morning&#10;Gym 3x per week"></textarea>
+                </div>
+                <div class="text-cell">
+                    <textarea id="exceptions-exercise" placeholder="e.g. Rest when energy < 3&#10;Weather extremes"></textarea>
+                </div>
+                <div class="protected-cell">
+                    <input type="text" id="protected-exercise" placeholder="e.g. 7am daily walk">
+                </div>
+            </div>
+
+            <!-- Self-care -->
+            <div class="category-row">
+                <div class="colour-cell">
+                    <input type="color" class="colour-picker" id="colour-selfcare" value="#EC4899">
+                </div>
+                <div class="category-name selfcare">Self-care</div>
+                <div class="text-cell">
+                    <textarea id="rules-selfcare" placeholder="e.g. Weekly bath night&#10;10 mins quiet time daily"></textarea>
+                </div>
+                <div class="text-cell">
+                    <textarea id="exceptions-selfcare" placeholder="e.g. Skip if truly exhausted&#10;Shorten don't skip"></textarea>
+                </div>
+                <div class="protected-cell">
+                    <input type="text" id="protected-selfcare" placeholder="e.g. Friday evening">
+                </div>
+            </div>
+
+            <!-- Interests -->
+            <div class="category-row">
+                <div class="colour-cell">
+                    <input type="color" class="colour-picker" id="colour-interests" value="#8B5CF6">
+                </div>
+                <div class="category-name interests">Interests</div>
+                <div class="text-cell">
+                    <textarea id="rules-interests" placeholder="e.g. 1 hour gaming allowed daily&#10;Craft time on weekends"></textarea>
+                </div>
+                <div class="text-cell">
+                    <textarea id="exceptions-interests" placeholder="e.g. Hyperfocus okay on weekends&#10;New game releases"></textarea>
+                </div>
+                <div class="protected-cell">
+                    <input type="text" id="protected-interests" placeholder="e.g. Sat afternoon">
+                </div>
+            </div>
+
+            <!-- Misc -->
+            <div class="category-row">
+                <div class="colour-cell">
+                    <input type="color" class="colour-picker" id="colour-misc" value="#6B7280">
+                </div>
+                <div class="category-name misc">Misc</div>
+                <div class="text-cell">
+                    <textarea id="rules-misc" placeholder="e.g. Admin tasks batched Mondays&#10;Laundry every Wednesday"></textarea>
+                </div>
+                <div class="text-cell">
+                    <textarea id="exceptions-misc" placeholder="e.g. Urgent household issues&#10;Visitors coming"></textarea>
+                </div>
+                <div class="protected-cell">
+                    <input type="text" id="protected-misc" placeholder="e.g. Mon 2-4pm">
+                </div>
+            </div>
+        </div>
+
+        <!-- Tips Section -->
+        <div class="tips-section">
+            <h3>💡 Tips for Your Foundations</h3>
+            <div class="tips-grid">
+                <div class="tip">
+                    <h4>Rules provide structure</h4>
+                    <p>Your autistic brain loves knowing what to expect. Rules reduce daily decision fatigue.</p>
+                </div>
+                <div class="tip">
+                    <h4>Exceptions provide flexibility</h4>
+                    <p>Your ADHD brain needs room to breathe. Pre-planned exceptions prevent guilt when life happens.</p>
+                </div>
+                <div class="tip">
+                    <h4>Protected time is sacred</h4>
+                    <p>Block these times in your calendar. They're appointments with yourself that can't be cancelled.</p>
+                </div>
+                <div class="tip">
+                    <h4>Colours sync to your calendar</h4>
+                    <p>Use these same colours in Google Calendar, Outlook, or your planner for visual consistency.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>© Harness the Spark Ltd | <a href="https://harnessthespark.co.uk">harnessthespark.co.uk</a></p>
+        </div>
+    </div>
+
+    <script>
+        // Categories
+        const categories = ['sleep', 'work', 'social', 'food', 'exercise', 'selfcare', 'interests', 'misc'];
+
+        // Get user ID
+        function getUserId() {
+            const user = localStorage.getItem('syp_user');
+            if (user) {
+                return JSON.parse(user).id || 'anonymous';
+            }
+            return 'anonymous';
+        }
+
+        // Load saved data
+        function loadFoundations() {
+            const saved = localStorage.getItem('foundations_' + getUserId());
+            if (saved) {
+                const data = JSON.parse(saved);
+
+                // Load discovery results
+                if (data.tendency) document.getElementById('tendency').value = data.tendency;
+                if (data.monotropism) document.getElementById('monotropism').value = data.monotropism;
+
+                // Load each category
+                categories.forEach(cat => {
+                    if (data[cat]) {
+                        if (data[cat].colour) document.getElementById('colour-' + cat).value = data[cat].colour;
+                        if (data[cat].rules) document.getElementById('rules-' + cat).value = data[cat].rules;
+                        if (data[cat].exceptions) document.getElementById('exceptions-' + cat).value = data[cat].exceptions;
+                        if (data[cat].protected) document.getElementById('protected-' + cat).value = data[cat].protected;
+                    }
+                });
+            }
+        }
+
+        // Save data
+        function saveFoundations() {
+            const data = {
+                tendency: document.getElementById('tendency').value,
+                monotropism: document.getElementById('monotropism').value,
+                savedAt: new Date().toISOString()
+            };
+
+            // Save each category
+            categories.forEach(cat => {
+                data[cat] = {
+                    colour: document.getElementById('colour-' + cat).value,
+                    rules: document.getElementById('rules-' + cat).value,
+                    exceptions: document.getElementById('exceptions-' + cat).value,
+                    protected: document.getElementById('protected-' + cat).value
+                };
+            });
+
+            localStorage.setItem('foundations_' + getUserId(), JSON.stringify(data));
+
+            // Show save status
+            const status = document.getElementById('saveStatus');
+            status.textContent = '✓ Saved!';
+            setTimeout(() => { status.textContent = ''; }, 2000);
+        }
+
+        // Auto-save
+        function autoSave() {
+            clearTimeout(window.autoSaveTimeout);
+            window.autoSaveTimeout = setTimeout(saveFoundations, 2000);
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            loadFoundations();
+
+            // Add auto-save listeners
+            document.querySelectorAll('textarea, input').forEach(el => {
+                el.addEventListener('input', autoSave);
+                el.addEventListener('change', autoSave);
+            });
+        });
+    </script>
+</body>
+</html>

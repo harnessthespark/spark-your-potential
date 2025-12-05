@@ -1,0 +1,840 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AuDHD Coaching Portal - Spark Your Potential</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧠</text></svg>">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #2d1b4e 100%);
+            min-height: 100vh;
+            padding: 40px;
+            color: #333;
+        }
+        .container { max-width: 1200px; margin: 0 auto; }
+
+        /* Header */
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            color: white;
+        }
+        .header h1 {
+            font-size: 2.5em;
+            font-weight: 800;
+            margin-bottom: 10px;
+        }
+        .header .subtitle {
+            font-size: 1.2em;
+            opacity: 0.8;
+        }
+        .user-name {
+            font-size: 1.3em;
+            color: #E91E78;
+            margin-top: 15px;
+            font-weight: 600;
+        }
+
+        /* Navigation */
+        .nav-tabs {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 30px;
+        }
+        .nav-tab {
+            background: rgba(255,255,255,0.1);
+            color: white;
+            border: 1px solid rgba(255,255,255,0.2);
+            padding: 10px 25px;
+            border-radius: 25px;
+            font-size: 0.95em;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-decoration: none;
+        }
+        .nav-tab:hover, .nav-tab.active {
+            background: rgba(255,255,255,0.2);
+            border-color: #E91E78;
+        }
+        .nav-tab.active {
+            background: linear-gradient(135deg, #E91E78 0%, #F97B4D 100%);
+            border-color: transparent;
+        }
+
+        /* User Menu */
+        .user-menu {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        .user-email {
+            color: white;
+            opacity: 0.8;
+            font-size: 0.9em;
+        }
+        .logout-btn {
+            background: rgba(255,255,255,0.2);
+            color: white;
+            border: 1px solid rgba(255,255,255,0.3);
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 0.85em;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-decoration: none;
+        }
+        .logout-btn:hover {
+            background: rgba(255,255,255,0.3);
+        }
+
+        /* Programme Selector */
+        .programme-selector {
+            background: rgba(255,255,255,0.1);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 30px;
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        .programme-option {
+            background: white;
+            border-radius: 12px;
+            padding: 20px 30px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: 3px solid transparent;
+            min-width: 200px;
+        }
+        .programme-option:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+        .programme-option.selected {
+            border-color: #E91E78;
+        }
+        .programme-option h3 {
+            color: #2d1b4e;
+            margin-bottom: 5px;
+        }
+        .programme-option p {
+            color: #666;
+            font-size: 0.9em;
+        }
+        .programme-option .sessions {
+            background: linear-gradient(135deg, #E91E78 0%, #F97B4D 100%);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            margin-top: 10px;
+            display: inline-block;
+        }
+
+        /* Journey Progress */
+        .journey-progress {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+        }
+        .journey-title {
+            font-size: 1.3em;
+            color: #2d1b4e;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .session-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 15px;
+        }
+        .session-card {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            border: 2px solid #e0e0e0;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .session-card:hover {
+            border-color: #E91E78;
+            transform: translateY(-2px);
+        }
+        .session-card.complete {
+            background: #e8f5e9;
+            border-color: #4CAF50;
+        }
+        .session-card.current {
+            background: #fff3e0;
+            border-color: #FF9800;
+        }
+        .session-card.locked {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        .session-number {
+            font-size: 2em;
+            font-weight: 700;
+            color: #2d1b4e;
+        }
+        .session-card.complete .session-number {
+            color: #4CAF50;
+        }
+        .session-card.current .session-number {
+            color: #FF9800;
+        }
+        .session-type {
+            font-size: 0.75em;
+            color: #888;
+            margin-top: 5px;
+        }
+        .session-type.worksheet {
+            color: #E91E78;
+        }
+        .session-type.conversation {
+            color: #667eea;
+        }
+
+        /* Paradox Domains */
+        .domains-section {
+            margin-bottom: 30px;
+        }
+        .domains-title {
+            color: white;
+            font-size: 1.3em;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .domains-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+        .domain-card {
+            background: white;
+            border-radius: 16px;
+            padding: 25px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            transition: transform 0.3s, box-shadow 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+        .domain-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 50px rgba(0,0,0,0.3);
+        }
+        .domain-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+        }
+        .domain-card.communication::before { background: #E91E78; }
+        .domain-card.executive::before { background: #F97B4D; }
+        .domain-card.energy::before { background: #FACC15; }
+        .domain-card.emotional::before { background: #3B82F6; }
+        .domain-card.processing::before { background: #8B5CF6; }
+        .domain-card.relationships::before { background: #10B981; }
+
+        .domain-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 15px;
+        }
+        .domain-icon {
+            font-size: 2em;
+        }
+        .domain-name {
+            font-size: 1.2em;
+            font-weight: 700;
+            color: #2d1b4e;
+        }
+        .domain-paradox {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 12px;
+            margin-bottom: 15px;
+            font-size: 0.9em;
+            color: #666;
+            font-style: italic;
+        }
+        .domain-goal {
+            font-size: 0.95em;
+            color: #333;
+            line-height: 1.5;
+        }
+        .domain-status {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            font-size: 0.8em;
+            padding: 4px 10px;
+            border-radius: 12px;
+        }
+        .domain-status.exploring {
+            background: #fff3e0;
+            color: #FF9800;
+        }
+        .domain-status.complete {
+            background: #e8f5e9;
+            color: #4CAF50;
+        }
+        .domain-status.upcoming {
+            background: #f5f5f5;
+            color: #999;
+        }
+
+        /* Tools Section */
+        .tools-section {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+        }
+        .tools-title {
+            font-size: 1.3em;
+            color: #2d1b4e;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+        }
+        .tool-card {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 20px;
+            border: 2px solid #e0e0e0;
+            transition: all 0.2s;
+        }
+        .tool-card:hover {
+            border-color: #E91E78;
+            transform: translateY(-2px);
+        }
+        .tool-card h4 {
+            color: #2d1b4e;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .tool-card p {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .tool-btn {
+            background: linear-gradient(135deg, #E91E78 0%, #F97B4D 100%);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-size: 0.9em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            width: 100%;
+        }
+        .tool-btn:hover {
+            opacity: 0.9;
+            transform: translateY(-1px);
+        }
+        .tool-btn.secondary {
+            background: #f0f0f0;
+            color: #555;
+        }
+        .tool-btn.secondary:hover {
+            background: #e0e0e0;
+        }
+
+        /* Coach Notes */
+        .notes-section {
+            background: rgba(255,255,255,0.1);
+            border-radius: 15px;
+            padding: 20px;
+            margin-top: 30px;
+        }
+        .notes-title {
+            color: white;
+            font-size: 1.1em;
+            margin-bottom: 15px;
+        }
+        .notes-textarea {
+            width: 100%;
+            min-height: 120px;
+            border: none;
+            border-radius: 10px;
+            padding: 15px;
+            font-family: inherit;
+            font-size: 0.95em;
+            resize: vertical;
+        }
+        .notes-textarea:focus {
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(233, 30, 120, 0.3);
+        }
+        .save-notes-btn {
+            background: linear-gradient(135deg, #E91E78 0%, #F97B4D 100%);
+            color: white;
+            border: none;
+            padding: 10px 25px;
+            border-radius: 8px;
+            margin-top: 10px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            color: white;
+            opacity: 0.6;
+            margin-top: 40px;
+            font-size: 0.9em;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            body { padding: 20px; }
+            .header h1 { font-size: 1.8em; }
+            .domains-grid { grid-template-columns: 1fr; }
+            .programme-selector { flex-direction: column; }
+            .programme-option { min-width: auto; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- User Menu -->
+        <div class="user-menu" id="userMenu">
+            <a href="dashboard.html" class="logout-btn">← Career Toolkit</a>
+            <span class="user-email" id="userEmail"></span>
+            <button class="logout-btn" onclick="logout()">Log out</button>
+        </div>
+
+        <div class="header">
+            <img src="White.png" alt="Harness the Spark" style="height: 60px; margin-bottom: 20px;">
+            <h1>🧠 AuDHD Coaching Portal</h1>
+            <div class="subtitle">Honouring Your Beautiful Paradox</div>
+            <div class="user-name" id="userName"></div>
+        </div>
+
+        <!-- Navigation Tabs -->
+        <div class="nav-tabs">
+            <a href="dashboard.html" class="nav-tab">⚡ Career Toolkit</a>
+            <a href="audhd-dashboard.html" class="nav-tab active">🧠 AuDHD Coaching</a>
+        </div>
+
+        <!-- Programme Selector -->
+        <div class="programme-selector" id="programmeSelector">
+            <div class="programme-option" data-sessions="4" onclick="selectProgramme(4)">
+                <h3>Foundations</h3>
+                <p>Introduction & key tools</p>
+                <span class="sessions">4 Sessions</span>
+            </div>
+            <div class="programme-option selected" data-sessions="8" onclick="selectProgramme(8)">
+                <h3>Deep Dive</h3>
+                <p>Full paradox exploration</p>
+                <span class="sessions">8 Sessions</span>
+            </div>
+            <div class="programme-option" data-sessions="12" onclick="selectProgramme(12)">
+                <h3>Transformation</h3>
+                <p>Complete journey + integration</p>
+                <span class="sessions">12 Sessions</span>
+            </div>
+        </div>
+
+        <!-- Journey Progress -->
+        <div class="journey-progress">
+            <div class="journey-title">
+                📍 Your Journey Progress
+                <span style="font-size: 0.7em; color: #888; margin-left: auto;">Session <span id="currentSession">1</span> of <span id="totalSessions">8</span></span>
+            </div>
+            <div class="session-grid" id="sessionGrid">
+                <!-- Sessions populated by JS -->
+            </div>
+        </div>
+
+        <!-- 6 Paradox Domains -->
+        <div class="domains-section">
+            <h2 class="domains-title">The 6 Paradox Domains</h2>
+            <div class="domains-grid">
+                <!-- Communication -->
+                <div class="domain-card communication">
+                    <span class="domain-status exploring">Exploring</span>
+                    <div class="domain-header">
+                        <span class="domain-icon">💬</span>
+                        <span class="domain-name">Communication</span>
+                    </div>
+                    <div class="domain-paradox">
+                        "Autism makes the rules, ADHD breaks them — making it hard to trust ourselves."
+                    </div>
+                    <div class="domain-goal">
+                        We need to meet ourselves to be able to communicate clearly with others, creating & upholding our boundaries.
+                    </div>
+                </div>
+
+                <!-- Executive Functioning -->
+                <div class="domain-card executive">
+                    <span class="domain-status upcoming">Upcoming</span>
+                    <div class="domain-header">
+                        <span class="domain-icon">🧩</span>
+                        <span class="domain-name">Executive Functioning</span>
+                    </div>
+                    <div class="domain-paradox">
+                        "ADHD needs to do everything, autism needs to know how."
+                    </div>
+                    <div class="domain-goal">
+                        We need to create pillars, anchors & routines to provide adaptable structures enabling us to 'do what we know'.
+                    </div>
+                </div>
+
+                <!-- Energy -->
+                <div class="domain-card energy">
+                    <span class="domain-status upcoming">Upcoming</span>
+                    <div class="domain-header">
+                        <span class="domain-icon">⚡</span>
+                        <span class="domain-name">Energy</span>
+                    </div>
+                    <div class="domain-paradox">
+                        "ADHD seeks chaos, autism seeks peace — resulting in sensory overload."
+                    </div>
+                    <div class="domain-goal">
+                        We need to understand our unique sensory experiences to be able to manage our energy effectively.
+                    </div>
+                </div>
+
+                <!-- Emotional -->
+                <div class="domain-card emotional">
+                    <span class="domain-status upcoming">Upcoming</span>
+                    <div class="domain-header">
+                        <span class="domain-icon">💙</span>
+                        <span class="domain-name">Emotional</span>
+                    </div>
+                    <div class="domain-paradox">
+                        "ADHD feels 'too much', autism doesn't feel enough — leading to overwhelm."
+                    </div>
+                    <div class="domain-goal">
+                        We need to be able to identify our emotional experiences to be able to process them effectively.
+                    </div>
+                </div>
+
+                <!-- Processing -->
+                <div class="domain-card processing">
+                    <span class="domain-status upcoming">Upcoming</span>
+                    <div class="domain-header">
+                        <span class="domain-icon">🔄</span>
+                        <span class="domain-name">Processing</span>
+                    </div>
+                    <div class="domain-paradox">
+                        "Autism focuses on the details, ADHD focuses on the ideas."
+                    </div>
+                    <div class="domain-goal">
+                        We need to understand our AuDHD inner conflict to be able to process information in the ways that work for us.
+                    </div>
+                </div>
+
+                <!-- Relationships -->
+                <div class="domain-card relationships">
+                    <span class="domain-status upcoming">Upcoming</span>
+                    <div class="domain-header">
+                        <span class="domain-icon">🤝</span>
+                        <span class="domain-name">Relationships</span>
+                    </div>
+                    <div class="domain-paradox">
+                        "ADHD overshares, autism undershares."
+                    </div>
+                    <div class="domain-goal">
+                        We need to be able to understand our personal needs to curate fulfilling, meaningful relationships.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tools Section -->
+        <div class="tools-section">
+            <div class="tools-title">🧰 Your AuDHD Toolkit</div>
+            <div class="tools-grid">
+                <!-- Laying the Foundations -->
+                <div class="tool-card">
+                    <h4>🏗️ Laying the Foundations</h4>
+                    <p>Define your rules, plan for flexibility, and protect time for what matters across 8 life categories.</p>
+                    <button class="tool-btn" onclick="openTool('foundations')">Open Worksheet</button>
+                </div>
+
+                <!-- Fuelling Your Spark -->
+                <div class="tool-card">
+                    <h4>⚡ Fuelling Your Spark</h4>
+                    <p>Plan your day around energy costs. Track what drains vs fuels you. Don't stack drains!</p>
+                    <button class="tool-btn" onclick="openTool('energy')">Open Planner</button>
+                </div>
+
+                <!-- Tendency Quiz -->
+                <div class="tool-card">
+                    <h4>🎯 Four Tendencies</h4>
+                    <p>Discover how your brain responds to expectations. Essential for staying accountable to your rules.</p>
+                    <a href="https://quiz.gretchenrubin.com" target="_blank" class="tool-btn secondary" style="display: block; text-decoration: none; text-align: center;">Take Quiz →</a>
+                </div>
+
+                <!-- Monotropism Score -->
+                <div class="tool-card">
+                    <h4>🔍 Focus Style (Monotropism)</h4>
+                    <p>High score? You may benefit from 'attention tunnels' rather than multi-tasking.</p>
+                    <a href="https://monotropism.org/questionnaire" target="_blank" class="tool-btn secondary" style="display: block; text-decoration: none; text-align: center;">Take Quiz →</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Session Notes (Coach View) -->
+        <div class="notes-section" id="coachNotes" style="display: none;">
+            <div class="notes-title">📝 Session Notes (Coach View)</div>
+            <textarea class="notes-textarea" id="sessionNotes" placeholder="Add notes from this session..."></textarea>
+            <button class="save-notes-btn" onclick="saveNotes()">Save Notes</button>
+        </div>
+
+        <div class="footer">
+            AuDHD Coaching by Harness the Spark | harnessthespark.com
+        </div>
+    </div>
+
+    <script>
+        // Configuration
+        const API_BASE_URL = 'https://sparkhub-be-qtmmb.ondigitalocean.app';
+
+        // State
+        let currentUser = null;
+        let authToken = null;
+        let selectedProgramme = 8;
+        let clientData = {
+            currentSession: 1,
+            programme: 8,
+            sessions: [],
+            domains: {
+                communication: 'exploring',
+                executive: 'upcoming',
+                energy: 'upcoming',
+                emotional: 'upcoming',
+                processing: 'upcoming',
+                relationships: 'upcoming'
+            },
+            foundationsComplete: false,
+            energyPlannerUsed: false,
+            tendencyResult: null,
+            monotropismScore: null,
+            notes: ''
+        };
+
+        // Session templates based on programme length
+        const SESSION_TEMPLATES = {
+            4: [
+                { num: 1, type: 'worksheet', label: 'Foundations', domain: 'executive' },
+                { num: 2, type: 'conversation', label: 'Energy & Patterns', domain: 'energy' },
+                { num: 3, type: 'worksheet', label: 'Daily Planning', domain: 'energy' },
+                { num: 4, type: 'conversation', label: 'Integration', domain: 'communication' }
+            ],
+            8: [
+                { num: 1, type: 'worksheet', label: 'Foundations', domain: 'executive' },
+                { num: 2, type: 'conversation', label: 'Communication', domain: 'communication' },
+                { num: 3, type: 'worksheet', label: 'Energy Mapping', domain: 'energy' },
+                { num: 4, type: 'conversation', label: 'Emotional Patterns', domain: 'emotional' },
+                { num: 5, type: 'worksheet', label: 'Processing Style', domain: 'processing' },
+                { num: 6, type: 'conversation', label: 'Relationships', domain: 'relationships' },
+                { num: 7, type: 'worksheet', label: 'Daily Rhythms', domain: 'energy' },
+                { num: 8, type: 'conversation', label: 'Integration', domain: 'communication' }
+            ],
+            12: [
+                { num: 1, type: 'worksheet', label: 'Foundations', domain: 'executive' },
+                { num: 2, type: 'conversation', label: 'Self-Discovery', domain: 'communication' },
+                { num: 3, type: 'worksheet', label: 'Energy Audit', domain: 'energy' },
+                { num: 4, type: 'conversation', label: 'Sensory Profile', domain: 'energy' },
+                { num: 5, type: 'worksheet', label: 'Emotional Map', domain: 'emotional' },
+                { num: 6, type: 'conversation', label: 'Inner Conflict', domain: 'processing' },
+                { num: 7, type: 'worksheet', label: 'Processing Styles', domain: 'processing' },
+                { num: 8, type: 'conversation', label: 'Boundaries', domain: 'communication' },
+                { num: 9, type: 'worksheet', label: 'Relationship Needs', domain: 'relationships' },
+                { num: 10, type: 'conversation', label: 'Support Systems', domain: 'relationships' },
+                { num: 11, type: 'worksheet', label: 'Daily Rhythms', domain: 'executive' },
+                { num: 12, type: 'conversation', label: 'Integration & Next Steps', domain: 'communication' }
+            ]
+        };
+
+        // Initialize
+        window.onload = function() {
+            const savedUser = localStorage.getItem('syp_user');
+            const savedToken = localStorage.getItem('syp_token');
+
+            if (savedUser && savedToken) {
+                currentUser = JSON.parse(savedUser);
+                authToken = savedToken;
+                showDashboard();
+            } else {
+                // Redirect to main dashboard for login
+                window.location.href = 'dashboard.html';
+            }
+        };
+
+        function showDashboard() {
+            document.getElementById('userName').textContent = `Welcome, ${currentUser.name || currentUser.email}`;
+            document.getElementById('userEmail').textContent = currentUser.email;
+
+            // Load client data
+            loadClientData();
+
+            // Show coach notes if Lisa
+            if (currentUser.isStaff) {
+                document.getElementById('coachNotes').style.display = 'block';
+            }
+
+            renderSessions();
+            updateDomainStatuses();
+        }
+
+        function loadClientData() {
+            // Try to load from localStorage
+            const saved = localStorage.getItem('audhd_client_' + currentUser.id);
+            if (saved) {
+                clientData = JSON.parse(saved);
+                selectedProgramme = clientData.programme;
+            }
+
+            // Update programme selector
+            document.querySelectorAll('.programme-option').forEach(opt => {
+                opt.classList.toggle('selected', parseInt(opt.dataset.sessions) === selectedProgramme);
+            });
+        }
+
+        function saveClientData() {
+            localStorage.setItem('audhd_client_' + currentUser.id, JSON.stringify(clientData));
+        }
+
+        function selectProgramme(sessions) {
+            selectedProgramme = sessions;
+            clientData.programme = sessions;
+
+            // Update UI
+            document.querySelectorAll('.programme-option').forEach(opt => {
+                opt.classList.toggle('selected', parseInt(opt.dataset.sessions) === sessions);
+            });
+
+            saveClientData();
+            renderSessions();
+        }
+
+        function renderSessions() {
+            const grid = document.getElementById('sessionGrid');
+            const sessions = SESSION_TEMPLATES[selectedProgramme];
+
+            document.getElementById('totalSessions').textContent = selectedProgramme;
+            document.getElementById('currentSession').textContent = clientData.currentSession;
+
+            grid.innerHTML = sessions.map((session, index) => {
+                const isComplete = index < clientData.currentSession - 1;
+                const isCurrent = index === clientData.currentSession - 1;
+                const isLocked = index > clientData.currentSession - 1;
+
+                let statusClass = '';
+                if (isComplete) statusClass = 'complete';
+                else if (isCurrent) statusClass = 'current';
+                else if (isLocked) statusClass = 'locked';
+
+                return `
+                    <div class="session-card ${statusClass}" onclick="${!isLocked ? `openSession(${session.num})` : ''}">
+                        <div class="session-number">${isComplete ? '✓' : session.num}</div>
+                        <div style="font-size: 0.85em; color: #555; margin-top: 5px;">${session.label}</div>
+                        <div class="session-type ${session.type}">${session.type === 'worksheet' ? '📝 Worksheet' : '💬 Conversation'}</div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function updateDomainStatuses() {
+            Object.keys(clientData.domains).forEach(domain => {
+                const card = document.querySelector(`.domain-card.${domain}`);
+                if (card) {
+                    const status = card.querySelector('.domain-status');
+                    status.className = 'domain-status ' + clientData.domains[domain];
+                    status.textContent = clientData.domains[domain].charAt(0).toUpperCase() + clientData.domains[domain].slice(1);
+                }
+            });
+        }
+
+        function openSession(sessionNum) {
+            const session = SESSION_TEMPLATES[selectedProgramme].find(s => s.num === sessionNum);
+            if (!session) return;
+
+            if (session.type === 'worksheet') {
+                // Open relevant worksheet
+                if (session.label.includes('Foundations')) {
+                    openTool('foundations');
+                } else if (session.label.includes('Energy') || session.label.includes('Daily')) {
+                    openTool('energy');
+                } else {
+                    alert(`Opening ${session.label} worksheet...`);
+                }
+            } else {
+                // Conversation session - show notes
+                alert(`Session ${sessionNum}: ${session.label}\n\nThis is a conversation session. Open your video call and use the notes section below to capture insights.`);
+            }
+        }
+
+        function openTool(tool) {
+            switch(tool) {
+                case 'foundations':
+                    window.open('audhd-foundations.html', '_blank');
+                    break;
+                case 'energy':
+                    window.open('audhd-energy.html', '_blank');
+                    break;
+                default:
+                    alert('Tool coming soon!');
+            }
+        }
+
+        function saveNotes() {
+            clientData.notes = document.getElementById('sessionNotes').value;
+            saveClientData();
+            alert('Notes saved!');
+        }
+
+        function logout() {
+            if (confirm('Are you sure you want to log out?')) {
+                localStorage.removeItem('syp_user');
+                localStorage.removeItem('syp_token');
+                window.location.href = 'dashboard.html';
+            }
+        }
+
+        // Coach functions
+        function advanceSession() {
+            if (clientData.currentSession < selectedProgramme) {
+                clientData.currentSession++;
+                saveClientData();
+                renderSessions();
+            }
+        }
+    </script>
+</body>
+</html>

@@ -253,6 +253,7 @@
     <div class="container">
         <!-- User Menu (shown when logged in) -->
         <div class="user-menu" id="userMenu" style="display: none;">
+            <a href="audhd-dashboard.html" class="logout-btn" style="background: linear-gradient(135deg, #8B5CF6 0%, #EC4899 100%); border: none;">🧠 AuDHD Portal</a>
             <a href="book.html" class="logout-btn" style="background: linear-gradient(135deg, #E63946 0%, #D81B60 100%); border: none;">⚡ Book</a>
             <span class="user-email" id="userEmail"></span>
             <button class="logout-btn" onclick="logout()">Log out</button>
@@ -291,7 +292,7 @@
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
                     <div>
                         <h2 style="font-size: 1.8em; margin-bottom: 5px;">🔥 Coach Mode</h2>
-                        <p style="opacity: 0.9;">Manage your Career Booster clients</p>
+                        <p style="opacity: 0.9;">Manage all your coaching clients</p>
                         <div id="dataSourceIndicator" style="margin-top: 8px; font-size: 0.85em; padding: 4px 10px; background: rgba(255,255,255,0.2); border-radius: 12px; display: inline-block;">
                             <span id="dataSourceIcon">📦</span> <span id="dataSourceText">Loading...</span>
                         </div>
@@ -301,9 +302,25 @@
                             🔄 Refresh
                         </button>
                         <button onclick="addNewClient()" style="background: white; color: #FF6B35; border: none; padding: 12px 25px; border-radius: 8px; font-weight: 600; cursor: pointer; font-size: 1em;">
-                            + Add New Client
+                            + Add Career Client
+                        </button>
+                        <button onclick="addAuDHDClient()" style="background: white; color: #8B5CF6; border: none; padding: 12px 25px; border-radius: 8px; font-weight: 600; cursor: pointer; font-size: 1em;">
+                            + Add AuDHD Client
                         </button>
                     </div>
+                </div>
+
+                <!-- Programme Filter -->
+                <div style="display: flex; gap: 10px; margin-bottom: 20px;">
+                    <button onclick="filterClients('all')" id="filterAll" class="filter-btn active" style="background: rgba(255,255,255,0.3); color: white; border: 1px solid rgba(255,255,255,0.5); padding: 8px 16px; border-radius: 20px; cursor: pointer; font-size: 0.85em;">
+                        All Clients
+                    </button>
+                    <button onclick="filterClients('career')" id="filterCareer" class="filter-btn" style="background: rgba(255,255,255,0.1); color: white; border: 1px solid rgba(255,255,255,0.3); padding: 8px 16px; border-radius: 20px; cursor: pointer; font-size: 0.85em;">
+                        ⚡ Career Booster
+                    </button>
+                    <button onclick="filterClients('audhd')" id="filterAudhd" class="filter-btn" style="background: rgba(255,255,255,0.1); color: white; border: 1px solid rgba(255,255,255,0.3); padding: 8px 16px; border-radius: 20px; cursor: pointer; font-size: 0.85em;">
+                        🧠 AuDHD Coaching
+                    </button>
                 </div>
 
                 <!-- Client List -->
@@ -1841,6 +1858,236 @@
             element.style.background = type === 'success' ? '#d4edda' : '#f8d7da';
             element.style.color = type === 'success' ? '#155724' : '#721c24';
         }
+
+        // ============================================================
+        // AUDHD CLIENT FUNCTIONS
+        // ============================================================
+
+        // Current filter state
+        let currentFilter = 'all';
+
+        // AuDHD programme info
+        const AUDHD_PROGRAMME_INFO = {
+            4: { name: 'Foundations', sessions: 4 },
+            8: { name: 'Deep Dive', sessions: 8 },
+            12: { name: 'Transformation', sessions: 12 }
+        };
+
+        // AuDHD session statuses
+        const AUDHD_SESSION_INFO = {
+            'session-1': { label: 'Session 1', description: 'Foundations' },
+            'session-2': { label: 'Session 2', description: 'Communication' },
+            'session-3': { label: 'Session 3', description: 'Energy' },
+            'session-4': { label: 'Session 4', description: 'Emotional' },
+            'session-5': { label: 'Session 5', description: 'Processing' },
+            'session-6': { label: 'Session 6', description: 'Relationships' },
+            'session-7': { label: 'Session 7', description: 'Daily Rhythms' },
+            'session-8': { label: 'Session 8', description: 'Integration' },
+            'session-9': { label: 'Session 9', description: 'Relationship Needs' },
+            'session-10': { label: 'Session 10', description: 'Support Systems' },
+            'session-11': { label: 'Session 11', description: 'Daily Rhythms' },
+            'session-12': { label: 'Session 12', description: 'Integration' },
+            'complete': { label: 'Complete', description: 'Programme Finished' }
+        };
+
+        // Default AuDHD clients (localStorage)
+        const DEFAULT_AUDHD_CLIENTS = {};
+
+        // Add new AuDHD client
+        async function addAuDHDClient() {
+            const name = prompt('Client Name:');
+            if (!name) return;
+
+            const email = prompt('Client Email:');
+            if (!email || !email.includes('@')) {
+                alert('Please enter a valid email address');
+                return;
+            }
+
+            const programmeChoice = prompt('Programme length:\n1 = Foundations (4 sessions)\n2 = Deep Dive (8 sessions)\n3 = Transformation (12 sessions)\n\nEnter 1, 2, or 3:');
+            let programme = 8; // default
+            if (programmeChoice === '1') programme = 4;
+            else if (programmeChoice === '3') programme = 12;
+
+            // Get stored AuDHD clients
+            let audhdClients = JSON.parse(localStorage.getItem('audhd_clients') || '{}');
+
+            if (audhdClients[email]) {
+                alert('A client with this email already exists');
+                return;
+            }
+
+            // Create client
+            audhdClients[email] = {
+                id: 'audhd-' + Date.now(),
+                name: name,
+                email: email,
+                programme: 'audhd',
+                programmeLength: programme,
+                currentSession: 1,
+                status: 'session-1',
+                enrolledDate: new Date().toISOString().split('T')[0],
+                completedDate: null,
+                foundationsComplete: false,
+                energyPlannerUsed: false,
+                tendencyResult: null,
+                monotropismScore: null,
+                notes: ''
+            };
+
+            localStorage.setItem('audhd_clients', JSON.stringify(audhdClients));
+            await renderClientList();
+            alert(`✅ ${name} added to AuDHD ${AUDHD_PROGRAMME_INFO[programme].name} programme (${programme} sessions)!`);
+        }
+
+        // Filter clients by programme type
+        function filterClients(filter) {
+            currentFilter = filter;
+
+            // Update button styles
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.style.background = 'rgba(255,255,255,0.1)';
+                btn.style.borderColor = 'rgba(255,255,255,0.3)';
+            });
+
+            const activeBtn = document.getElementById('filter' + filter.charAt(0).toUpperCase() + filter.slice(1));
+            if (activeBtn) {
+                activeBtn.style.background = 'rgba(255,255,255,0.3)';
+                activeBtn.style.borderColor = 'rgba(255,255,255,0.5)';
+            }
+
+            renderClientList();
+        }
+
+        // Get all clients (career + AuDHD) - override the original renderClientList
+        const originalRenderClientList = renderClientList;
+        renderClientList = async function() {
+            const container = document.getElementById('clientList');
+            container.innerHTML = '<div style="color: white; text-align: center; padding: 20px;">Loading clients...</div>';
+
+            // Get career clients
+            let careerClients = { ...DEFAULT_CLIENTS };
+            try {
+                const apiClients = await getStoredClients();
+                if (Object.keys(apiClients).length > 0) {
+                    careerClients = { ...DEFAULT_CLIENTS, ...apiClients };
+                }
+            } catch (error) {
+                console.log('Using DEFAULT_CLIENTS only');
+            }
+
+            // Mark career clients
+            Object.values(careerClients).forEach(c => c.programme = c.programme || 'career');
+
+            // Get AuDHD clients from localStorage
+            let audhdClients = JSON.parse(localStorage.getItem('audhd_clients') || '{}');
+
+            // Combine all clients
+            let allClients = { ...careerClients };
+            Object.keys(audhdClients).forEach(email => {
+                allClients[email] = audhdClients[email];
+            });
+
+            // Filter based on current filter
+            let filteredClients = Object.values(allClients);
+            if (currentFilter === 'career') {
+                filteredClients = filteredClients.filter(c => c.programme !== 'audhd');
+            } else if (currentFilter === 'audhd') {
+                filteredClients = filteredClients.filter(c => c.programme === 'audhd');
+            }
+
+            if (filteredClients.length === 0) {
+                container.innerHTML = `
+                    <div style="background: rgba(255,255,255,0.95); border-radius: 12px; padding: 30px; text-align: center; grid-column: 1 / -1;">
+                        <div style="font-size: 2em; margin-bottom: 15px;">👋</div>
+                        <h4 style="color: #333; margin-bottom: 10px;">No ${currentFilter === 'all' ? '' : currentFilter + ' '}clients yet</h4>
+                        <p style="color: #666; margin-bottom: 20px;">Click the appropriate "+ Add" button to add your first client.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = filteredClients.map(client => {
+                const isAuDHD = client.programme === 'audhd';
+                const statusInfo = isAuDHD ? AUDHD_SESSION_INFO[client.status] : WEEK_INFO[client.status];
+                const statusLabel = statusInfo?.label || client.status;
+                const statusDesc = statusInfo?.description || '';
+
+                // Calculate progress
+                let progress = 0;
+                if (isAuDHD) {
+                    const currentSession = client.currentSession || 1;
+                    const totalSessions = client.programmeLength || 8;
+                    progress = Math.round((currentSession / totalSessions) * 100);
+                } else {
+                    progress = getProgressPercentage(client.status);
+                }
+
+                const colour = isAuDHD ? '#8B5CF6' : getStatusColour(client.status);
+                const programmeBadge = isAuDHD
+                    ? `<span style="font-size: 0.7em; background: #8B5CF6; color: white; padding: 2px 6px; border-radius: 4px; margin-left: 8px;">🧠 AuDHD ${client.programmeLength || 8}s</span>`
+                    : `<span style="font-size: 0.7em; background: #FF6B35; color: white; padding: 2px 6px; border-radius: 4px; margin-left: 8px;">⚡ Career</span>`;
+
+                return `
+                    <div style="background: rgba(255,255,255,0.95); border-radius: 12px; padding: 20px; cursor: pointer; position: relative; ${client.isDemo ? 'border: 2px dashed #ffc107;' : ''}" onclick="${isAuDHD ? `viewAuDHDClient('${client.email}')` : `viewClientJourney('${client.email}')`}">
+                        <button onclick="event.stopPropagation(); deleteClient('${client.email}', '${client.name}')"
+                                style="position: absolute; top: 10px; right: 10px; background: rgba(220, 53, 69, 0.1); border: none; border-radius: 6px; padding: 5px 8px; cursor: pointer; font-size: 0.85em; color: #dc3545; transition: all 0.2s;"
+                                onmouseover="this.style.background='rgba(220, 53, 69, 0.2)'"
+                                onmouseout="this.style.background='rgba(220, 53, 69, 0.1)'"
+                                title="Delete client">
+                            🗑️
+                        </button>
+                        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px; padding-right: 35px;">
+                            <h4 style="color: #333; margin: 0;">
+                                ${client.name}
+                                ${programmeBadge}
+                                ${client.isDemo ? '<span style="font-size: 0.7em; background: #ffc107; color: #333; padding: 2px 6px; border-radius: 4px; margin-left: 8px;">DEMO</span>' : ''}
+                            </h4>
+                        </div>
+                        <div style="margin-bottom: 8px;">
+                            <span style="background: ${colour}; color: white; padding: 3px 10px; border-radius: 12px; font-size: 0.75em;">
+                                ${statusLabel}
+                            </span>
+                        </div>
+                        <p style="color: #666; font-size: 0.85em; margin-bottom: 8px;">${client.email}</p>
+                        <p style="color: #888; font-size: 0.8em;">
+                            ${isAuDHD ? '🧠' : (WEEK_INFO[client.status]?.icon || '📋')} ${statusDesc}
+                        </p>
+                        <div style="margin-top: 10px; height: 4px; background: #e0e0e0; border-radius: 2px;">
+                            <div style="height: 100%; width: ${progress}%; background: ${colour}; border-radius: 2px;"></div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        };
+
+        // View AuDHD client (opens their portal)
+        function viewAuDHDClient(email) {
+            // Store selected client for the portal
+            localStorage.setItem('viewing_audhd_client', email);
+            window.open('audhd-dashboard.html?client=' + encodeURIComponent(email), '_blank');
+        }
+
+        // Override delete to handle AuDHD clients too
+        const originalDeleteClient = deleteClient;
+        deleteClient = async function(email, name) {
+            if (!confirm(`Are you sure you want to delete ${name}?\n\nThis will permanently remove them from the system.`)) {
+                return;
+            }
+
+            // Check if AuDHD client
+            let audhdClients = JSON.parse(localStorage.getItem('audhd_clients') || '{}');
+            if (audhdClients[email]) {
+                delete audhdClients[email];
+                localStorage.setItem('audhd_clients', JSON.stringify(audhdClients));
+                await renderClientList();
+                alert(`✅ ${name} has been deleted.`);
+                return;
+            }
+
+            // Otherwise use original delete for career clients
+            await originalDeleteClient(email, name);
+        };
     </script>
 </body>
 </html>

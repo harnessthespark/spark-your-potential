@@ -1,0 +1,1165 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fuelling Your Spark - AuDHD Energy Planner</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #FEF0F5 0%, #FFF5F0 100%);
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        /* Back link */
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: #E91E78;
+            text-decoration: none;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 15px;
+        }
+
+        h1 {
+            color: #333;
+            margin: 0;
+            font-size: 26px;
+        }
+
+        h1 span {
+            background: linear-gradient(90deg, #E91E78, #F97B4D);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .subtitle {
+            color: #666;
+            font-style: italic;
+            margin-bottom: 15px;
+            font-size: 14px;
+        }
+
+        /* Spark Tank */
+        .spark-tank {
+            background: white;
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .tank-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .tank-title {
+            font-weight: bold;
+            font-size: 18px;
+        }
+
+        .tank-level {
+            font-size: 28px;
+            font-weight: bold;
+            padding: 8px 20px;
+            border-radius: 8px;
+            transition: all 0.3s;
+        }
+
+        .tank-level.full { background: #D1FAE5; color: #065F46; }
+        .tank-level.good { background: #FEF3C7; color: #92400E; }
+        .tank-level.low { background: #FEE2E2; color: #991B1B; }
+        .tank-level.empty { background: #991B1B; color: white; }
+
+        .tank-visual {
+            display: flex;
+            gap: 4px;
+            flex-wrap: wrap;
+            min-height: 40px;
+            padding: 10px;
+            background: #F9FAFB;
+            border-radius: 8px;
+        }
+
+        .spark {
+            font-size: 24px;
+            transition: transform 0.2s;
+        }
+
+        /* Categories */
+        .categories {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .category {
+            border-radius: 10px;
+            overflow: hidden;
+            border: 2px solid;
+        }
+
+        .category.red { border-color: #DC2626; }
+        .category.orange { border-color: #EA580C; }
+        .category.yellow { border-color: #CA8A04; }
+
+        .category-header {
+            padding: 12px;
+            text-align: center;
+            color: white;
+        }
+
+        .category.red .category-header { background: #EF4444; }
+        .category.orange .category-header { background: #F97316; }
+        .category.yellow .category-header { background: #FACC15; color: #666; }
+
+        .category-header .name { font-weight: bold; font-size: 14px; }
+        .category-header .cost { font-size: 20px; font-weight: bold; }
+        .category-header .hint { font-size: 11px; opacity: 0.9; }
+
+        .category-list {
+            background: white;
+            min-height: 80px;
+            padding: 8px;
+        }
+
+        .category-list textarea {
+            width: 100%;
+            height: 70px;
+            border: none;
+            resize: none;
+            font-size: 12px;
+            font-family: inherit;
+            background: transparent;
+        }
+
+        .category-list textarea:focus {
+            outline: none;
+        }
+
+        .category-list textarea::placeholder {
+            color: #999;
+        }
+
+        /* Timeline */
+        .timeline {
+            background: white;
+            border-radius: 12px;
+            padding: 15px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .timeline h2 {
+            margin: 0 0 12px 0;
+            color: #E91E78;
+            font-size: 18px;
+        }
+
+        .timeline-table {
+            border: 2px solid #D1D5DB;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .timeline-header {
+            display: grid;
+            grid-template-columns: 220px 1fr 50px 160px 70px;
+            gap: 15px;
+            padding: 12px 20px;
+            background: #E91E78;
+            color: white;
+            font-weight: bold;
+            font-size: 13px;
+        }
+
+        .time-slot {
+            display: grid;
+            grid-template-columns: 220px 1fr 50px 160px 70px;
+            gap: 15px;
+            align-items: center;
+            padding: 15px 20px;
+            border-bottom: 1px solid #D1D5DB;
+            position: relative;
+        }
+
+        .time-slot:last-of-type {
+            border-bottom: none;
+        }
+
+        .time-slot:nth-child(odd) { background: #FEF0F5; }
+        .time-slot:nth-child(even) { background: #FFF5F0; }
+
+        .time-block {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            min-width: 200px;
+        }
+
+        .slot-name {
+            font-weight: bold;
+            color: #E91E78;
+            font-size: 15px;
+            border: none;
+            background: transparent;
+            padding: 4px 6px;
+            width: 100%;
+        }
+
+        .slot-name:focus {
+            outline: none;
+            background: white;
+            border-radius: 4px;
+        }
+
+        .time-range {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+            color: #666;
+        }
+
+        .time-input {
+            width: 90px;
+            padding: 6px 8px;
+            border: 1px solid #E5E7EB;
+            border-radius: 4px;
+            font-size: 13px;
+        }
+
+        .time-input:focus {
+            outline: none;
+            border-color: #E91E78;
+        }
+
+        .duration-display {
+            text-align: center;
+            font-size: 15px;
+            color: #666;
+            font-weight: 600;
+        }
+
+        .add-slot-row {
+            padding: 10px 15px;
+            background: #F9FAFB;
+            text-align: center;
+        }
+
+        .add-slot-btn {
+            background: transparent;
+            border: 2px dashed #D1D5DB;
+            padding: 8px 16px;
+            border-radius: 8px;
+            color: #666;
+            cursor: pointer;
+            font-size: 13px;
+        }
+
+        .add-slot-btn:hover {
+            border-color: #E91E78;
+            color: #E91E78;
+        }
+
+        .time-label {
+            font-weight: bold;
+            color: #E91E78;
+            font-size: 14px;
+        }
+
+        .activity-input {
+            padding: 12px 14px;
+            border: 1px solid #E5E7EB;
+            border-radius: 8px;
+            font-size: 14px;
+            width: 100%;
+        }
+
+        .activity-input:focus {
+            outline: none;
+            border-color: #E91E78;
+        }
+
+        /* Spark controls */
+        .spark-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .spark-btn {
+            width: 32px;
+            height: 32px;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .spark-btn.cost {
+            background: #FEE2E2;
+            color: #991B1B;
+        }
+
+        .spark-btn.cost:hover { background: #FECACA; }
+
+        .spark-btn.fuel {
+            background: #FEF3C7;
+            color: #92400E;
+        }
+
+        .spark-btn.fuel:hover { background: #FDE68A; }
+
+        .spark-btn:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+        }
+
+        .spark-display {
+            min-width: 60px;
+            text-align: center;
+            font-size: 16px;
+            padding: 4px;
+        }
+
+        .spark-display.negative { color: #991B1B; }
+        .spark-display.positive { color: #065F46; }
+
+        .slot-balance {
+            font-weight: bold;
+            text-align: center;
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-size: 18px;
+            min-width: 50px;
+        }
+
+        .slot-balance.full { background: #D1FAE5; color: #065F46; }
+        .slot-balance.good { background: #FEF3C7; color: #92400E; }
+        .slot-balance.low { background: #FEE2E2; color: #991B1B; }
+        .slot-balance.empty { background: #991B1B; color: white; }
+
+        .time-slot.stacked-warning {
+            outline: 2px solid #EF4444;
+            outline-offset: -2px;
+        }
+
+        .stacked-indicator {
+            position: absolute;
+            right: -8px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: #EF4444;
+            color: white;
+            font-size: 10px;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+
+        .duration-input {
+            width: 50px;
+            padding: 6px 8px;
+            border: 1px solid #E5E7EB;
+            border-radius: 6px;
+            font-size: 14px;
+            text-align: center;
+        }
+
+        .duration-input:focus {
+            outline: none;
+            border-color: #E91E78;
+        }
+
+        .timeline-footer {
+            padding: 12px 15px;
+            background: #F3F4F6;
+            border-top: 2px solid #D1D5DB;
+            font-size: 14px;
+            text-align: right;
+        }
+
+        .timeline-footer.warning {
+            background: #FEF3C7;
+            color: #92400E;
+        }
+
+        .timeline-footer.danger {
+            background: #FEE2E2;
+            color: #991B1B;
+        }
+
+        /* Warning */
+        .warning {
+            background: #FEE2E2;
+            border: 2px solid #EF4444;
+            border-radius: 12px;
+            padding: 12px;
+            margin-top: 15px;
+            display: none;
+        }
+
+        .warning.show { display: block; }
+        .warning h3 { color: #991B1B; margin: 0 0 5px 0; font-size: 16px; }
+        .warning p { margin: 0; color: #991B1B; font-size: 14px; }
+
+        /* Failsafes */
+        .failsafes {
+            background: #F9FAFB;
+            border-radius: 12px;
+            margin-top: 15px;
+            display: flex;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .failsafe-accent {
+            width: 6px;
+            background: linear-gradient(180deg, #E91E78, #F97B4D);
+        }
+
+        .failsafe-content {
+            padding: 20px;
+            flex: 1;
+        }
+
+        .failsafe-content h3 {
+            margin: 0 0 15px 0;
+            font-size: 16px;
+            color: #333;
+        }
+
+        .failsafe-row {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 12px;
+        }
+
+        .failsafe-row:last-child {
+            margin-bottom: 0;
+        }
+
+        .failsafe-row label {
+            min-width: 200px;
+            font-size: 14px;
+            color: #555;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .dot {
+            display: inline-block;
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+        }
+
+        .dot.red { background: #EF4444; }
+
+        .failsafe-row input {
+            flex: 1;
+            padding: 10px 12px;
+            border: 1px solid #E5E7EB;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+
+        .failsafe-row input:focus {
+            outline: none;
+            border-color: #E91E78;
+        }
+
+        /* Buttons */
+        .reset-btn {
+            background: linear-gradient(90deg, #E91E78, #F97B4D);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: bold;
+        }
+
+        .reset-btn:hover { opacity: 0.9; }
+
+        .save-btn {
+            background: #10B981;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: bold;
+            margin-left: 10px;
+        }
+        .save-btn:hover { background: #059669; }
+
+        /* Save indicator */
+        .save-status {
+            font-size: 0.85em;
+            color: #10B981;
+            margin-left: 15px;
+        }
+
+        /* ===== MOBILE RESPONSIVE STYLES ===== */
+        @media (max-width: 768px) {
+            body {
+                padding: 12px;
+            }
+
+            h1 {
+                font-size: 20px;
+            }
+
+            .subtitle {
+                font-size: 13px;
+            }
+
+            /* Categories - stack vertically on mobile */
+            .categories {
+                grid-template-columns: 1fr;
+                gap: 12px;
+            }
+
+            .category-header .name { font-size: 16px; }
+            .category-header .cost { font-size: 24px; }
+            .category-list textarea {
+                height: 60px;
+                font-size: 14px;
+            }
+
+            /* Timeline - card-based layout for mobile */
+            .timeline-header {
+                display: none;
+            }
+
+            .time-slot {
+                display: flex;
+                flex-direction: column;
+                gap: 12px;
+                padding: 16px;
+                border-radius: 0;
+            }
+
+            .time-block {
+                min-width: unset;
+                width: 100%;
+            }
+
+            .slot-name {
+                font-size: 18px;
+                padding: 8px;
+                background: rgba(233, 30, 120, 0.1);
+                border-radius: 6px;
+            }
+
+            .time-range {
+                flex-wrap: wrap;
+                justify-content: flex-start;
+            }
+
+            .time-input {
+                width: 110px;
+                padding: 10px 12px;
+                font-size: 16px;
+            }
+
+            .activity-input {
+                font-size: 16px;
+                padding: 14px;
+            }
+
+            .duration-display {
+                font-size: 18px;
+                font-weight: bold;
+                color: #E91E78;
+            }
+
+            /* Spark controls - make bigger for touch */
+            .spark-controls {
+                justify-content: center;
+                gap: 12px;
+                padding: 8px 0;
+            }
+
+            .spark-btn {
+                width: 48px;
+                height: 48px;
+                font-size: 24px;
+                border-radius: 10px;
+            }
+
+            .spark-display {
+                min-width: 50px;
+                font-size: 20px;
+                font-weight: bold;
+            }
+
+            .slot-balance {
+                font-size: 24px;
+                padding: 12px 20px;
+                width: 100%;
+                text-align: center;
+            }
+
+            /* Failsafes */
+            .failsafe-row {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 8px;
+            }
+
+            .failsafe-row label {
+                min-width: unset;
+            }
+
+            .failsafe-row input {
+                padding: 14px;
+                font-size: 16px;
+            }
+
+            /* Warning */
+            .warning {
+                margin-top: 12px;
+            }
+
+            /* Tank */
+            .tank-level {
+                font-size: 24px;
+                padding: 6px 16px;
+            }
+
+            .spark {
+                font-size: 20px;
+            }
+
+            /* Footer */
+            .timeline-footer {
+                text-align: center;
+                padding: 16px;
+                font-size: 16px;
+            }
+
+            /* Add slot button */
+            .add-slot-btn {
+                width: 100%;
+                padding: 14px;
+                font-size: 16px;
+            }
+        }
+
+        /* Extra small screens */
+        @media (max-width: 400px) {
+            h1 {
+                font-size: 18px;
+            }
+
+            .reset-btn, .save-btn {
+                padding: 6px 12px;
+                font-size: 12px;
+            }
+
+            .time-input {
+                width: 100px;
+            }
+
+            .spark-btn {
+                width: 44px;
+                height: 44px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="audhd-dashboard.html" class="back-link">← Back to AuDHD Portal</a>
+
+        <header>
+            <h1><span>Fuelling Your Spark</span> ⚡</h1>
+            <div>
+                <button class="reset-btn" onclick="resetDay()">Reset Day</button>
+                <button class="save-btn" onclick="saveDay()">💾 Save</button>
+                <span class="save-status" id="saveStatus"></span>
+            </div>
+        </header>
+
+        <p class="subtitle">Don't stack drains - if you run over mileage, tomorrow starts with a lower tank!</p>
+
+        <!-- Spark Tank -->
+        <div class="spark-tank">
+            <div class="tank-header">
+                <span class="tank-title">⚡ My Spark Tank</span>
+                <span class="tank-level full" id="tankLevel">12</span>
+            </div>
+            <div class="tank-visual" id="tankVisual"></div>
+        </div>
+
+        <!-- Categories -->
+        <div class="categories">
+            <div class="category red">
+                <div class="category-header">
+                    <div class="name">Drains sparks</div>
+                    <div class="cost">-3 to -5</div>
+                    <div class="hint">~2 sparks/hour</div>
+                </div>
+                <div class="category-list">
+                    <textarea id="drainsList" placeholder="e.g. Big meetings&#10;Difficult calls&#10;Admin tasks"></textarea>
+                </div>
+            </div>
+            <div class="category orange">
+                <div class="category-header">
+                    <div class="name">Costs sparks</div>
+                    <div class="cost">-1 to -2</div>
+                    <div class="hint">~1 spark/hour</div>
+                </div>
+                <div class="category-list">
+                    <textarea id="costsList" placeholder="e.g. Emails&#10;General work&#10;Cooking"></textarea>
+                </div>
+            </div>
+            <div class="category yellow">
+                <div class="category-header">
+                    <div class="name">Gives sparks</div>
+                    <div class="cost">+1 to +2</div>
+                    <div class="hint">+1 spark/hour</div>
+                </div>
+                <div class="category-list">
+                    <textarea id="fuelsList" placeholder="e.g. Walk&#10;Cats&#10;Coffee break"></textarea>
+                </div>
+            </div>
+        </div>
+
+        <!-- Timeline -->
+        <div class="timeline">
+            <h2>Plan Your Day</h2>
+            <div class="timeline-table">
+                <div class="timeline-header">
+                    <span>Time block</span>
+                    <span>What's planned</span>
+                    <span style="text-align:center">Hrs</span>
+                    <span style="text-align:center">Sparks</span>
+                    <span style="text-align:center">Balance</span>
+                </div>
+                <div id="timeSlots"></div>
+                <div class="timeline-footer" id="timeFooter">
+                    Hours planned: <strong id="totalHours">0</strong>h
+                </div>
+            </div>
+        </div>
+
+        <!-- Warning -->
+        <div class="warning" id="warning">
+            <h3>⚠️ Running on Empty!</h3>
+            <p>You've run over mileage. Tomorrow starts with <strong id="overage">0</strong> fewer sparks in the tank.</p>
+        </div>
+
+        <!-- Failsafes -->
+        <div class="failsafes">
+            <div class="failsafe-accent"></div>
+            <div class="failsafe-content">
+                <h3>Your Failsafes (If this, then...)</h3>
+                <div class="failsafe-row">
+                    <label>If I see <span style="border:2px solid #EF4444;padding:2px 6px;border-radius:4px;font-size:11px;">red outline</span>:</label>
+                    <input type="text" id="failsafe1" placeholder="e.g. Add a recovery buffer between them">
+                </div>
+                <div class="failsafe-row">
+                    <label>If I'm running on empty:</label>
+                    <input type="text" id="failsafe2" placeholder="e.g. Cancel or reschedule, prioritise rest">
+                </div>
+                <div class="failsafe-row">
+                    <label>If plans change:</label>
+                    <input type="text" id="failsafe3" placeholder="e.g. Reassess the day, adjust balance">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const STARTING = 12;
+        let availableHours = 16;
+
+        let slots = [
+            { name: 'Morning', start: '07:00', end: '09:00' },
+            { name: 'Mid-morning', start: '09:00', end: '12:00' },
+            { name: 'Midday', start: '12:00', end: '14:00' },
+            { name: 'Afternoon', start: '14:00', end: '17:00' },
+            { name: 'Evening', start: '17:00', end: '21:00' },
+            { name: 'Wind down', start: '21:00', end: '23:00' },
+            { name: 'Sleep 😴', start: '23:00', end: '07:00' }
+        ];
+
+        let data = {};
+
+        // Get user ID from localStorage
+        function getUserId() {
+            const user = localStorage.getItem('syp_user');
+            if (user) {
+                return JSON.parse(user).id || 'anonymous';
+            }
+            return 'anonymous';
+        }
+
+        // Load saved data
+        function loadSavedData() {
+            const saved = localStorage.getItem('fuelling_spark_' + getUserId());
+            if (saved) {
+                const parsed = JSON.parse(saved);
+                if (parsed.slots) slots = parsed.slots;
+                if (parsed.data) data = parsed.data;
+                if (parsed.categories) {
+                    document.getElementById('drainsList').value = parsed.categories.drains || '';
+                    document.getElementById('costsList').value = parsed.categories.costs || '';
+                    document.getElementById('fuelsList').value = parsed.categories.fuels || '';
+                }
+                if (parsed.failsafes) {
+                    document.getElementById('failsafe1').value = parsed.failsafes[0] || '';
+                    document.getElementById('failsafe2').value = parsed.failsafes[1] || '';
+                    document.getElementById('failsafe3').value = parsed.failsafes[2] || '';
+                }
+            }
+        }
+
+        // Save data
+        function saveDay() {
+            const saveData = {
+                slots: slots,
+                data: data,
+                categories: {
+                    drains: document.getElementById('drainsList').value,
+                    costs: document.getElementById('costsList').value,
+                    fuels: document.getElementById('fuelsList').value
+                },
+                failsafes: [
+                    document.getElementById('failsafe1').value,
+                    document.getElementById('failsafe2').value,
+                    document.getElementById('failsafe3').value
+                ],
+                savedAt: new Date().toISOString()
+            };
+            localStorage.setItem('fuelling_spark_' + getUserId(), JSON.stringify(saveData));
+
+            // Show save status
+            const status = document.getElementById('saveStatus');
+            status.textContent = '✓ Saved!';
+            setTimeout(() => { status.textContent = ''; }, 2000);
+        }
+
+        // Auto-save on changes
+        function autoSave() {
+            clearTimeout(window.autoSaveTimeout);
+            window.autoSaveTimeout = setTimeout(saveDay, 2000);
+        }
+
+        function init() {
+            loadSavedData();
+
+            slots.forEach(slot => {
+                if (!data[slot.name]) {
+                    data[slot.name] = {
+                        cost: 0,
+                        fuel: 0,
+                        activity: '',
+                        duration: calculateDuration(slot.start, slot.end)
+                    };
+                }
+            });
+            renderTank();
+            renderSlots();
+            updateBalances();
+
+            // Add auto-save listeners
+            document.querySelectorAll('textarea, input').forEach(el => {
+                el.addEventListener('input', autoSave);
+            });
+        }
+
+        function calculateDuration(start, end) {
+            const [startH, startM] = start.split(':').map(Number);
+            const [endH, endM] = end.split(':').map(Number);
+            let duration = (endH + endM/60) - (startH + startM/60);
+
+            if (duration <= 0) {
+                duration += 24;
+            }
+
+            return Math.round(duration * 100) / 100;
+        }
+
+        function renderTank() {
+            const netSpent = getNetSpent();
+            const remaining = STARTING - netSpent;
+            const tank = document.getElementById('tankVisual');
+            const level = document.getElementById('tankLevel');
+
+            tank.innerHTML = '';
+            for (let i = 0; i < Math.max(0, remaining); i++) {
+                tank.innerHTML += '<span class="spark">⚡</span>';
+            }
+            if (remaining <= 0) {
+                tank.innerHTML = '<span style="color:#999;font-size:14px;">Tank empty!</span>';
+            }
+
+            level.textContent = remaining;
+            level.className = 'tank-level ' + getLevelClass(remaining);
+        }
+
+        function renderSlots() {
+            const container = document.getElementById('timeSlots');
+            container.innerHTML = '';
+
+            slots.forEach((slot, index) => {
+                const slotData = data[slot.name] || { cost: 0, fuel: 0, activity: '', duration: 0 };
+                const net = slotData.fuel - slotData.cost;
+
+                const div = document.createElement('div');
+                div.className = 'time-slot';
+                div.id = 'slot-' + index;
+                div.innerHTML = `
+                    <div class="time-block">
+                        <input type="text" class="slot-name" value="${slot.name}"
+                               onchange="updateSlotName(${index}, this.value)">
+                        <div class="time-range">
+                            <input type="time" class="time-input" value="${slot.start}"
+                                   onchange="updateSlotTime(${index}, 'start', this.value)">
+                            <span style="font-weight:bold;color:#999;">→</span>
+                            <input type="time" class="time-input" value="${slot.end}"
+                                   onchange="updateSlotTime(${index}, 'end', this.value)">
+                        </div>
+                    </div>
+                    <input type="text" class="activity-input" placeholder="What's planned?"
+                           value="${slotData.activity || ''}"
+                           onchange="updateActivity('${slot.name}', this.value)">
+                    <div class="duration-display" id="dur-${index}">${slotData.duration || 0}h</div>
+                    <div class="spark-controls">
+                        <button class="spark-btn cost" onclick="addCost('${slot.name}')" title="Costs sparks">−</button>
+                        <span class="spark-display ${net > 0 ? 'positive' : net < 0 ? 'negative' : ''}" id="net-${index}">
+                            ${net === 0 ? '-' : (net > 0 ? '+' + net : net)}
+                        </span>
+                        <button class="spark-btn fuel" onclick="addFuel('${slot.name}')" title="Fuels sparks">+</button>
+                    </div>
+                    <div class="slot-balance" id="balance-${index}">-</div>
+                `;
+                container.appendChild(div);
+            });
+
+            const addBtn = document.createElement('div');
+            addBtn.className = 'add-slot-row';
+            addBtn.innerHTML = '<button class="add-slot-btn" onclick="addSlot()">+ Add time block</button>';
+            container.appendChild(addBtn);
+        }
+
+        function addSlot() {
+            const lastSlot = slots[slots.length - 1];
+            const newSlot = {
+                name: 'New block',
+                start: lastSlot.end,
+                end: incrementTime(lastSlot.end, 2)
+            };
+            slots.push(newSlot);
+            data[newSlot.name] = { cost: 0, fuel: 0, activity: '', duration: calculateDuration(newSlot.start, newSlot.end) };
+            renderSlots();
+            updateBalances();
+            autoSave();
+        }
+
+        function incrementTime(time, hours) {
+            const [h, m] = time.split(':').map(Number);
+            const newH = Math.min(23, h + hours);
+            return `${String(newH).padStart(2, '0')}:${String(m).padStart(2, '0')}`;
+        }
+
+        function updateSlotName(index, name) {
+            const oldName = slots[index].name;
+            slots[index].name = name;
+            data[name] = data[oldName];
+            delete data[oldName];
+            renderSlots();
+            autoSave();
+        }
+
+        function updateSlotTime(index, field, value) {
+            slots[index][field] = value;
+            const slot = slots[index];
+            data[slot.name].duration = calculateDuration(slot.start, slot.end);
+            renderSlots();
+            updateBalances();
+            autoSave();
+        }
+
+        function getNetSpent() {
+            return Object.values(data).reduce((sum, d) => sum + (d.cost || 0) - (d.fuel || 0), 0);
+        }
+
+        function getTotalHours() {
+            const total = Object.values(data).reduce((sum, d) => sum + (parseFloat(d.duration) || 0), 0);
+            return Math.round(total * 10) / 10;
+        }
+
+        function getRunningBalance(upToIndex) {
+            let balance = STARTING;
+            for (let i = 0; i <= upToIndex; i++) {
+                const slotName = slots[i].name;
+                const slotData = data[slotName] || { cost: 0, fuel: 0 };
+                balance = balance - (slotData.cost || 0) + (slotData.fuel || 0);
+            }
+            return balance;
+        }
+
+        function addCost(slotName) {
+            if (!data[slotName]) data[slotName] = { cost: 0, fuel: 0, activity: '', duration: 0 };
+            data[slotName].cost++;
+            renderTank();
+            renderSlots();
+            updateBalances();
+            autoSave();
+        }
+
+        function addFuel(slotName) {
+            if (!data[slotName]) data[slotName] = { cost: 0, fuel: 0, activity: '', duration: 0 };
+            data[slotName].fuel++;
+            renderTank();
+            renderSlots();
+            updateBalances();
+            autoSave();
+        }
+
+        function updateActivity(slotName, value) {
+            if (!data[slotName]) data[slotName] = { cost: 0, fuel: 0, activity: '', duration: 0 };
+            data[slotName].activity = value;
+            autoSave();
+        }
+
+        function updateBalances() {
+            let previousHighCost = false;
+
+            slots.forEach((slot, index) => {
+                const balanceEl = document.getElementById('balance-' + index);
+                const durEl = document.getElementById('dur-' + index);
+                const slotEl = document.getElementById('slot-' + index);
+                const slotData = data[slot.name] || { cost: 0, fuel: 0, duration: 0 };
+                const cost = slotData.cost || 0;
+                const fuel = slotData.fuel || 0;
+                const net = fuel - cost;
+                const balance = getRunningBalance(index);
+                const duration = slotData.duration || 0;
+
+                const isHighCost = cost >= 3;
+                if (slotEl) {
+                    if (isHighCost && previousHighCost) {
+                        slotEl.classList.add('stacked-warning');
+                    } else {
+                        slotEl.classList.remove('stacked-warning');
+                    }
+                }
+                previousHighCost = isHighCost;
+
+                if (durEl) {
+                    if (duration >= 1) {
+                        const displayHours = duration % 1 === 0 ? duration : Math.round(duration * 10) / 10;
+                        durEl.textContent = displayHours + 'h';
+                    } else {
+                        durEl.textContent = Math.round(duration * 60) + 'm';
+                    }
+                }
+
+                if (balanceEl) {
+                    if (cost > 0 || fuel > 0 || (index > 0 && (data[slots[index-1].name]?.cost > 0 || data[slots[index-1].name]?.fuel > 0))) {
+                        balanceEl.textContent = balance;
+                        balanceEl.className = 'slot-balance ' + getLevelClass(balance);
+                    } else {
+                        balanceEl.textContent = '-';
+                        balanceEl.className = 'slot-balance';
+                    }
+                }
+            });
+
+            const totalHours = getTotalHours();
+            const footerEl = document.getElementById('timeFooter');
+
+            if (footerEl) {
+                if (totalHours > 24.1) {
+                    footerEl.className = 'timeline-footer danger';
+                    footerEl.innerHTML = '⚠️ <strong>' + totalHours + 'h</strong> scheduled - Overlapping time blocks!';
+                } else if (totalHours >= 23.9 && totalHours <= 24.1) {
+                    footerEl.className = 'timeline-footer';
+                    footerEl.innerHTML = '✓ <strong>24h</strong> - Full day planned';
+                } else {
+                    footerEl.className = 'timeline-footer';
+                    footerEl.innerHTML = '<strong>' + totalHours + '</strong>h scheduled of 24h day';
+                }
+            }
+
+            const finalBalance = getRunningBalance(slots.length - 1);
+            const warning = document.getElementById('warning');
+            if (warning) {
+                if (finalBalance < 0) {
+                    warning.classList.add('show');
+                    document.getElementById('overage').textContent = Math.abs(finalBalance);
+                } else {
+                    warning.classList.remove('show');
+                }
+            }
+        }
+
+        function getLevelClass(balance) {
+            if (balance >= 8) return 'full';
+            if (balance >= 4) return 'good';
+            if (balance > 0) return 'low';
+            return 'empty';
+        }
+
+        function resetDay() {
+            if (!confirm('Reset all entries for today? Your category lists and failsafes will be kept.')) return;
+
+            slots = [
+                { name: 'Morning', start: '07:00', end: '09:00' },
+                { name: 'Mid-morning', start: '09:00', end: '12:00' },
+                { name: 'Midday', start: '12:00', end: '14:00' },
+                { name: 'Afternoon', start: '14:00', end: '17:00' },
+                { name: 'Evening', start: '17:00', end: '21:00' },
+                { name: 'Wind down', start: '21:00', end: '23:00' },
+                { name: 'Sleep 😴', start: '23:00', end: '07:00' }
+            ];
+            data = {};
+            init();
+            saveDay();
+        }
+
+        init();
+    </script>
+</body>
+</html>
