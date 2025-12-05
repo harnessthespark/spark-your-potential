@@ -351,9 +351,17 @@
                                 <label style="display: block; font-size: 0.85em; color: #555; margin-bottom: 5px;">Client Email</label>
                                 <input type="email" id="adminClientEmail" placeholder="client@email.com" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px; font-size: 0.95em;">
                             </div>
-                            <div style="margin-bottom: 15px;">
+                            <div style="margin-bottom: 12px;">
                                 <label style="display: block; font-size: 0.85em; color: #555; margin-bottom: 5px;">Password (leave blank to auto-generate)</label>
                                 <input type="text" id="adminClientPassword" placeholder="Create a password" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px; font-size: 0.95em;">
+                            </div>
+                            <div style="margin-bottom: 15px;">
+                                <label style="display: block; font-size: 0.85em; color: #555; margin-bottom: 5px;">Programme Access</label>
+                                <select id="adminProgrammeAccess" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px; font-size: 0.95em; background: white;">
+                                    <option value="career">💼 Career Booster Only</option>
+                                    <option value="audhd">🧠 AuDHD Coaching Only</option>
+                                    <option value="both">✨ Both Programmes</option>
+                                </select>
                             </div>
                             <button onclick="createClientAccount()" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; font-weight: 600; width: 100%;">
                                 Create Account
@@ -1772,6 +1780,7 @@
             const name = document.getElementById('adminClientName').value.trim();
             const email = document.getElementById('adminClientEmail').value.trim();
             let password = document.getElementById('adminClientPassword').value || generatePassword();
+            const programmeAccess = document.getElementById('adminProgrammeAccess').value;
             const messageEl = document.getElementById('createAccountMessage');
 
             // Validation
@@ -1796,6 +1805,7 @@
                         email: email,
                         name: name,
                         password: password,
+                        programmeAccess: programmeAccess,
                         adminKey: 'spark-admin-2025'
                     })
                 });
@@ -1803,14 +1813,23 @@
                 if (response.ok) {
                     const data = await response.json();
 
-                    // Also add to SYP client list
+                    // Also add to SYP client list in SparkHub CRM
                     await addClientToSYP(name, email);
+
+                    // Programme access labels
+                    const accessLabels = {
+                        'career': '💼 Career Booster',
+                        'audhd': '🧠 AuDHD Coaching',
+                        'both': '✨ Both Programmes'
+                    };
 
                     showMessage(messageEl, `
                         <strong>✓ Account created!</strong><br>
                         <strong>Name:</strong> ${name}<br>
                         <strong>Email:</strong> ${email}<br>
                         <strong>Password:</strong> <code style="background: #e0e0e0; padding: 2px 6px; border-radius: 3px;">${password}</code><br>
+                        <strong>Access:</strong> ${accessLabels[programmeAccess] || programmeAccess}<br>
+                        <strong>Login URL:</strong> <a href="login.html" target="_blank">login.html</a><br>
                         <em style="font-size: 0.85em;">Share these credentials with your client.</em>
                     `, 'success');
 
@@ -1818,6 +1837,7 @@
                     document.getElementById('adminClientName').value = '';
                     document.getElementById('adminClientEmail').value = '';
                     document.getElementById('adminClientPassword').value = '';
+                    document.getElementById('adminProgrammeAccess').value = 'career';
 
                     // Refresh client list
                     await renderClientList();

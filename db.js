@@ -72,6 +72,12 @@ async function initDatabase() {
             ALTER TABLE users ADD COLUMN IF NOT EXISTS is_admin BOOLEAN DEFAULT false;
         `);
 
+        // Add programme_access column (migration) - stores which programmes client can access
+        // Values: 'career' (Career Booster only), 'audhd' (AuDHD Coaching only), 'both' (both programmes)
+        await client.query(`
+            ALTER TABLE users ADD COLUMN IF NOT EXISTS programme_access VARCHAR(50) DEFAULT 'career';
+        `);
+
         // Create blueprints table
         await client.query(`
             CREATE TABLE IF NOT EXISTS blueprints (
@@ -290,8 +296,12 @@ async function loginUser(email, password) {
 
 /**
  * Create a new client account (admin function)
+ * @param {string} email - Client email
+ * @param {string} name - Client name
+ * @param {string} password - Client password
+ * @param {string} programmeAccess - 'career', 'audhd', or 'both'
  */
-async function createClientAccount(email, name, password) {
+async function createClientAccount(email, name, password, programmeAccess = 'career') {
     // Check if user already exists
     const existing = await pool.query(
         'SELECT id FROM users WHERE email = $1',
@@ -299,24 +309,24 @@ async function createClientAccount(email, name, password) {
     );
 
     if (existing.rows.length > 0) {
-        // Update existing user with password
+        // Update existing user with password and programme access
         const hashedPassword = hashPassword(password);
         const result = await pool.query(
-            `UPDATE users SET name = $2, password_hash = $3, updated_at = NOW()
+            `UPDATE users SET name = COALESCE($2, name), password_hash = $3, programme_access = $4, updated_at = NOW()
              WHERE email = $1
              RETURNING *`,
-            [email, name, hashedPassword]
+            [email, name, hashedPassword, programmeAccess]
         );
         return result.rows[0];
     }
 
-    // Create new user with password
+    // Create new user with password and programme access
     const hashedPassword = hashPassword(password);
     const result = await pool.query(
-        `INSERT INTO users (email, name, password_hash, last_login)
-         VALUES ($1, $2, $3, NOW())
+        `INSERT INTO users (email, name, password_hash, programme_access, last_login)
+         VALUES ($1, $2, $3, $4, NOW())
          RETURNING *`,
-        [email, name, hashedPassword]
+        [email, name, hashedPassword, programmeAccess]
     );
     return result.rows[0];
 }

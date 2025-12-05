@@ -136,7 +136,7 @@ app.get('/admin', (req, res) => {
 // Create client account (admin only)
 app.post('/api/admin/create-client', async (req, res) => {
     try {
-        const { email, name, password, adminKey } = req.body;
+        const { email, name, password, adminKey, programmeAccess } = req.body;
 
         // Simple admin key check (set in environment variable)
         const ADMIN_KEY = process.env.ADMIN_KEY || 'spark-admin-2025';
@@ -148,8 +148,10 @@ app.post('/api/admin/create-client', async (req, res) => {
             return res.status(400).json({ success: false, error: 'Email, name, and password are required' });
         }
 
-        const user = await db.createClientAccount(email, name, password);
-        res.json({ success: true, user: { id: user.id, email: user.email, name: user.name } });
+        // programmeAccess: 'career' (Career Booster), 'audhd' (AuDHD Coaching), or 'both'
+        const access = programmeAccess || 'career';
+        const user = await db.createClientAccount(email, name, password, access);
+        res.json({ success: true, user: { id: user.id, email: user.email, name: user.name, programme_access: user.programme_access } });
     } catch (error) {
         console.error('Create client error:', error);
         res.status(500).json({ success: false, error: error.message });

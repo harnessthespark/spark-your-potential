@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - AuDHD Coaching Portal</title>
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧠</text></svg>">
+    <title>Client Login - Harness the Spark</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>✨</text></svg>">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -19,20 +19,6 @@
             justify-content: center;
             padding: 40px 20px;
             color: white;
-        }
-
-        .back-link {
-            position: absolute;
-            top: 20px;
-            left: 20px;
-            color: white;
-            text-decoration: none;
-            opacity: 0.7;
-            font-size: 0.9em;
-            transition: opacity 0.2s;
-        }
-        .back-link:hover {
-            opacity: 1;
         }
 
         .logo {
@@ -50,7 +36,7 @@
             font-size: 2.2em;
             font-weight: 800;
             margin-bottom: 10px;
-            background: linear-gradient(135deg, #E91E78 0%, #8B5CF6 100%);
+            background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
@@ -105,8 +91,8 @@
         }
         .form-group input:focus {
             outline: none;
-            border-color: #E91E78;
-            box-shadow: 0 0 0 4px rgba(233, 30, 120, 0.1);
+            border-color: #FFD700;
+            box-shadow: 0 0 0 4px rgba(255, 215, 0, 0.15);
         }
         .form-group input::placeholder {
             color: #aaa;
@@ -115,8 +101,8 @@
         .login-btn {
             width: 100%;
             padding: 16px;
-            background: linear-gradient(135deg, #E91E78 0%, #8B5CF6 100%);
-            color: white;
+            background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+            color: #1a1a2e;
             border: none;
             border-radius: 12px;
             font-size: 1.1em;
@@ -127,7 +113,7 @@
         }
         .login-btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 10px 30px rgba(233, 30, 120, 0.3);
+            box-shadow: 0 10px 30px rgba(255, 215, 0, 0.3);
         }
         .login-btn:disabled {
             opacity: 0.6;
@@ -157,6 +143,50 @@
             display: none;
         }
 
+        /* Programme Selection (shown after login if user has both) */
+        .programme-choice {
+            display: none;
+        }
+        .programme-choice h3 {
+            color: #2d1b4e;
+            font-size: 1.2em;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .programme-options {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        .programme-btn {
+            padding: 20px;
+            border: 2px solid #e0e0e0;
+            border-radius: 16px;
+            background: white;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-align: left;
+        }
+        .programme-btn:hover {
+            border-color: #FFD700;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+        }
+        .programme-btn .emoji {
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+        .programme-btn .title {
+            color: #2d1b4e;
+            font-size: 1.1em;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+        .programme-btn .desc {
+            color: #666;
+            font-size: 0.85em;
+        }
+
         .help-text {
             text-align: center;
             margin-top: 25px;
@@ -169,7 +199,7 @@
             margin-bottom: 10px;
         }
         .help-text a {
-            color: #E91E78;
+            color: #FFD700;
             text-decoration: none;
             font-weight: 600;
         }
@@ -182,9 +212,9 @@
             display: inline-block;
             width: 20px;
             height: 20px;
-            border: 3px solid rgba(255,255,255,0.3);
+            border: 3px solid rgba(0,0,0,0.2);
             border-radius: 50%;
-            border-top-color: white;
+            border-top-color: #1a1a2e;
             animation: spin 0.8s ease-in-out infinite;
             margin-right: 10px;
             vertical-align: middle;
@@ -193,146 +223,86 @@
             to { transform: rotate(360deg); }
         }
 
-        /* Crisis Support */
-        .crisis-support {
-            margin-top: 40px;
-            text-align: center;
-        }
-        .crisis-support > p {
-            color: #888;
-            font-size: 0.9em;
-            margin-bottom: 15px;
-        }
-        .crisis-links {
-            display: flex;
-            gap: 12px;
-            justify-content: center;
-            flex-wrap: wrap;
-        }
-        .crisis-link {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 15px 20px;
-            background: rgba(255, 255, 255, 0.08);
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            border-radius: 12px;
-            color: white;
-            text-decoration: none;
-            min-width: 120px;
-            transition: all 0.2s;
-        }
-        .crisis-link:hover {
-            background: rgba(255, 255, 255, 0.15);
-            transform: translateY(-3px);
-        }
-        .crisis-link.samaritans:hover { border-color: #4ade80; }
-        .crisis-link.mind:hover { border-color: #22c55e; }
-        .crisis-link.nhs:hover { border-color: #3b82f6; }
-        .crisis-link.shout:hover { border-color: #a855f7; }
-
-        .crisis-icon {
-            font-size: 1.5em;
-            margin-bottom: 5px;
-        }
-        .crisis-name {
-            font-weight: 600;
-            font-size: 0.9em;
-        }
-        .crisis-detail {
-            font-size: 0.75em;
-            opacity: 0.7;
-            margin-top: 3px;
-        }
-
         /* Responsive */
         @media (max-width: 480px) {
             .login-card { padding: 30px 25px; }
             .header h1 { font-size: 1.8em; }
-            .crisis-links { gap: 8px; }
-            .crisis-link { min-width: 100px; padding: 12px 15px; }
         }
     </style>
 </head>
 <body>
-    <a href="index.html" class="back-link">← Back to Home</a>
-
     <div class="logo">
         <img src="White.png" alt="Harness the Spark" onerror="this.style.display='none'">
     </div>
 
     <div class="header">
-        <h1>🧠 AuDHD Coaching Portal</h1>
-        <div class="subtitle">Honouring Your Beautiful Paradox</div>
+        <h1>✨ Client Portal</h1>
+        <div class="subtitle">Harness the Spark Coaching</div>
     </div>
 
     <div class="login-card">
-        <h2>Welcome Back</h2>
-        <p class="intro">Log in to access your coaching portal, tools, and progress.</p>
+        <!-- Login Form -->
+        <div id="loginSection">
+            <h2>Welcome Back</h2>
+            <p class="intro">Log in to access your coaching portal and tools.</p>
 
-        <div class="error-message" id="errorMessage"></div>
-        <div class="success-message" id="successMessage"></div>
+            <div class="error-message" id="errorMessage"></div>
+            <div class="success-message" id="successMessage"></div>
 
-        <form id="loginForm" onsubmit="handleLogin(event)">
-            <div class="form-group">
-                <label for="email">Email Address</label>
-                <input
-                    type="email"
-                    id="email"
-                    name="email"
-                    placeholder="your@email.com"
-                    required
-                    autocomplete="email"
-                >
+            <form id="loginForm" onsubmit="handleLogin(event)">
+                <div class="form-group">
+                    <label for="email">Email Address</label>
+                    <input
+                        type="email"
+                        id="email"
+                        name="email"
+                        placeholder="your@email.com"
+                        required
+                        autocomplete="email"
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input
+                        type="password"
+                        id="password"
+                        name="password"
+                        placeholder="Enter your password"
+                        required
+                        autocomplete="current-password"
+                    >
+                </div>
+
+                <button type="submit" class="login-btn" id="loginBtn">
+                    Log In
+                </button>
+            </form>
+
+            <div class="help-text">
+                <p>New client? Lisa will set up your account.</p>
+                <p>Forgot password? <a href="mailto:lisa@harnessthespark.com">Contact Lisa</a></p>
             </div>
-
-            <div class="form-group">
-                <label for="password">Password</label>
-                <input
-                    type="password"
-                    id="password"
-                    name="password"
-                    placeholder="Enter your password"
-                    required
-                    autocomplete="current-password"
-                >
-            </div>
-
-            <button type="submit" class="login-btn" id="loginBtn">
-                Log In
-            </button>
-        </form>
-
-        <div class="help-text">
-            <p>New client? Lisa will set up your account.</p>
-            <p>Forgot password? <a href="mailto:lisa@harnessthespark.com">Contact Lisa</a></p>
         </div>
-    </div>
 
-    <!-- Crisis Support Resources -->
-    <div class="crisis-support">
-        <p>Need support right now?</p>
-        <div class="crisis-links">
-            <a href="tel:116123" class="crisis-link samaritans">
-                <span class="crisis-icon">📞</span>
-                <span class="crisis-name">Samaritans</span>
-                <span class="crisis-detail">116 123 (24/7, free)</span>
-            </a>
-            <a href="https://www.mind.org.uk/information-support/helplines/" target="_blank" class="crisis-link mind">
-                <span class="crisis-icon">💚</span>
-                <span class="crisis-name">Mind</span>
-                <span class="crisis-detail">Mental health support</span>
-            </a>
-            <a href="https://www.nhs.uk/mental-health/feelings-symptoms-behaviours/behaviours/help-for-suicidal-thoughts/" target="_blank" class="crisis-link nhs">
-                <span class="crisis-icon">🏥</span>
-                <span class="crisis-name">NHS</span>
-                <span class="crisis-detail">Crisis resources</span>
-            </a>
-            <a href="text:SHOUT to 85258" class="crisis-link shout">
-                <span class="crisis-icon">💬</span>
-                <span class="crisis-name">Shout</span>
-                <span class="crisis-detail">Text SHOUT to 85258</span>
-            </a>
+        <!-- Programme Selection (shown if user has access to both) -->
+        <div id="programmeChoice" class="programme-choice">
+            <h3>Choose Your Portal</h3>
+            <p class="intro">You have access to multiple programmes. Which would you like to open?</p>
+
+            <div class="programme-options">
+                <button class="programme-btn" onclick="goToPortal('career')">
+                    <div class="emoji">💼</div>
+                    <div class="title">Career Booster</div>
+                    <div class="desc">CV Builder, Blueprint, Decision Framework</div>
+                </button>
+
+                <button class="programme-btn" onclick="goToPortal('audhd')">
+                    <div class="emoji">🧠</div>
+                    <div class="title">AuDHD Coaching</div>
+                    <div class="desc">Energy tracking, Paradox tools, Session notes</div>
+                </button>
+            </div>
         </div>
     </div>
 
@@ -346,14 +316,8 @@
 
             if (savedUser) {
                 const user = JSON.parse(savedUser);
-                // Check if user has AuDHD access
-                if (user.programme_access === 'audhd' || user.programme_access === 'both' || user.isStaff) {
-                    window.location.href = 'audhd-dashboard.html';
-                } else {
-                    // No AuDHD access - redirect to unified login
-                    localStorage.removeItem('syp_user');
-                    window.location.href = 'login.html';
-                }
+                // Redirect based on programme access
+                redirectBasedOnAccess(user.programme_access || 'career');
             }
         };
 
@@ -390,15 +354,6 @@
                 const data = await response.json();
 
                 if (data.success && data.user) {
-                    // Check if user has AuDHD access
-                    const hasAccess = data.user.programme_access === 'audhd' ||
-                                     data.user.programme_access === 'both' ||
-                                     data.user.is_admin;
-
-                    if (!hasAccess) {
-                        throw new Error('You do not have access to the AuDHD Coaching Portal. Please contact Lisa.');
-                    }
-
                     // Success - store user data
                     const userData = {
                         id: data.user.id,
@@ -411,13 +366,13 @@
                     localStorage.setItem('syp_user', JSON.stringify(userData));
 
                     // Show success
-                    successDiv.textContent = 'Login successful! Redirecting...';
+                    successDiv.textContent = 'Login successful!';
                     successDiv.style.display = 'block';
 
-                    // Redirect to AuDHD dashboard
+                    // Redirect based on programme access
                     setTimeout(() => {
-                        window.location.href = 'audhd-dashboard.html';
-                    }, 1000);
+                        redirectBasedOnAccess(userData.programme_access);
+                    }, 500);
 
                 } else {
                     throw new Error(data.error || 'Invalid email or password');
@@ -431,6 +386,28 @@
                 // Reset button
                 loginBtn.disabled = false;
                 loginBtn.innerHTML = 'Log In';
+            }
+        }
+
+        function redirectBasedOnAccess(access) {
+            if (access === 'both') {
+                // Show programme choice
+                document.getElementById('loginSection').style.display = 'none';
+                document.getElementById('programmeChoice').style.display = 'block';
+            } else if (access === 'audhd') {
+                // Go to AuDHD portal
+                window.location.href = 'audhd-dashboard.html';
+            } else {
+                // Default: Go to Career Booster client portal
+                window.location.href = 'client-portal.html';
+            }
+        }
+
+        function goToPortal(portal) {
+            if (portal === 'audhd') {
+                window.location.href = 'audhd-dashboard.html';
+            } else {
+                window.location.href = 'client-portal.html';
             }
         }
     </script>
