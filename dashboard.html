@@ -614,6 +614,28 @@
                     cvBuilder: false,
                     mappingGuide: false
                 }
+            },
+            'simon@boothlucking.com': {
+                id: 'client-simon',
+                name: 'Simon Booth-Lucking',
+                email: 'simon@boothlucking.com',
+                phone: '',
+                folder: 'Simon_Booth_Lucking',
+                status: 'pre-programme',
+                enrolledDate: '2025-12-05',
+                completedDate: null,
+                agreementSigned: false,
+                signedDocuments: [],
+                programmeType: 'testimonial-access',
+                notes: 'Testimonial exchange client - previously completed questionnaire',
+                progress: {
+                    questionnaire: true,
+                    insightsReport: false,
+                    blueprint: false,
+                    decisionFramework: false,
+                    cvBuilder: false,
+                    mappingGuide: false
+                }
             }
         };
 
@@ -1763,19 +1785,18 @@
             }
 
             try {
-                // Create user account via SparkHub API
-                const response = await fetch(`${API_BASE_URL}/api/accounts/register/`, {
+                // Create user account via SYP server's own API (NOT SparkHub - no beta codes needed)
+                const SYP_SERVER = window.location.origin;
+                const response = await fetch(`${SYP_SERVER}/api/admin/create-client`, {
                     method: 'POST',
                     headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${authToken}`
+                        'Content-Type': 'application/json'
                     },
                     body: JSON.stringify({
-                        username: email.split('@')[0], // Use email prefix as username
                         email: email,
+                        name: name,
                         password: password,
-                        first_name: name.split(' ')[0],
-                        last_name: name.split(' ').slice(1).join(' ') || ''
+                        adminKey: 'spark-admin-2025'
                     })
                 });
 
@@ -1802,7 +1823,7 @@
                     await renderClientList();
                 } else {
                     const errorData = await response.json().catch(() => ({}));
-                    showMessage(messageEl, `Error: ${errorData.detail || errorData.email || errorData.username || 'Could not create account'}`, 'error');
+                    showMessage(messageEl, `Error: ${errorData.error || 'Could not create account'}`, 'error');
                 }
             } catch (error) {
                 console.error('Create account error:', error);
