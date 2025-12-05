@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spark Your Potential - Coaching Portal</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #2d1b4e 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 20px;
+            color: white;
+        }
+
+        .logo {
+            margin-bottom: 20px;
+        }
+        .logo img {
+            height: 80px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+        .header h1 {
+            font-size: 2.8em;
+            font-weight: 800;
+            margin-bottom: 10px;
+            background: linear-gradient(135deg, #E91E78 0%, #F97B4D 50%, #FACC15 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .header .subtitle {
+            font-size: 1.2em;
+            opacity: 0.8;
+            color: #ccc;
+        }
+
+        .portal-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 30px;
+            max-width: 900px;
+            width: 100%;
+        }
+
+        .portal-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 24px;
+            padding: 40px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        .portal-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+        }
+        .portal-card:hover {
+            transform: translateY(-10px);
+            border-color: rgba(255, 255, 255, 0.3);
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.4);
+        }
+
+        /* Career Portal */
+        .portal-card.career::before {
+            background: linear-gradient(90deg, #F97B4D, #FACC15);
+        }
+        .portal-card.career:hover {
+            background: rgba(249, 123, 77, 0.1);
+            border-color: #F97B4D;
+        }
+
+        /* AuDHD Portal */
+        .portal-card.audhd::before {
+            background: linear-gradient(90deg, #E91E78, #8B5CF6);
+        }
+        .portal-card.audhd:hover {
+            background: rgba(233, 30, 120, 0.1);
+            border-color: #E91E78;
+        }
+
+        .portal-icon {
+            font-size: 4em;
+            margin-bottom: 20px;
+        }
+
+        .portal-title {
+            font-size: 1.6em;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+        .portal-card.career .portal-title {
+            color: #F97B4D;
+        }
+        .portal-card.audhd .portal-title {
+            color: #E91E78;
+        }
+
+        .portal-description {
+            color: #aaa;
+            font-size: 0.95em;
+            line-height: 1.6;
+            margin-bottom: 25px;
+        }
+
+        .portal-features {
+            text-align: left;
+            margin-bottom: 25px;
+        }
+        .portal-features li {
+            color: #ccc;
+            font-size: 0.9em;
+            padding: 8px 0;
+            padding-left: 25px;
+            position: relative;
+            list-style: none;
+        }
+        .portal-features li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: #22c55e;
+            font-weight: bold;
+        }
+
+        .portal-btn {
+            display: inline-block;
+            padding: 15px 40px;
+            border-radius: 30px;
+            font-size: 1em;
+            font-weight: 700;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        .portal-card.career .portal-btn {
+            background: linear-gradient(135deg, #F97B4D 0%, #FACC15 100%);
+            color: #1a1a2e;
+        }
+        .portal-card.audhd .portal-btn {
+            background: linear-gradient(135deg, #E91E78 0%, #8B5CF6 100%);
+            color: white;
+        }
+        .portal-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Quick Access for returning users */
+        .quick-access {
+            margin-top: 50px;
+            text-align: center;
+        }
+        .quick-access p {
+            color: #888;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .quick-links {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        .quick-link {
+            padding: 10px 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 20px;
+            color: white;
+            text-decoration: none;
+            font-size: 0.85em;
+            transition: all 0.2s;
+        }
+        .quick-link:hover {
+            background: rgba(255, 255, 255, 0.2);
+            border-color: rgba(255, 255, 255, 0.4);
+        }
+
+        /* Coach Mode Badge */
+        .coach-badge {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        .coach-badge span {
+            color: #aaa;
+            font-size: 0.9em;
+        }
+        .logout-btn {
+            padding: 8px 16px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            color: white;
+            text-decoration: none;
+            font-size: 0.85em;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .logout-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        /* Login Prompt */
+        .login-prompt {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+        }
+        .login-btn {
+            padding: 10px 25px;
+            background: linear-gradient(135deg, #E91E78 0%, #F97B4D 100%);
+            border: none;
+            border-radius: 25px;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+        .login-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(233, 30, 120, 0.3);
+        }
+
+        /* Footer */
+        .footer {
+            margin-top: 60px;
+            text-align: center;
+            color: #666;
+            font-size: 0.85em;
+        }
+        .footer a {
+            color: #888;
+            text-decoration: none;
+        }
+        .footer a:hover {
+            color: #E91E78;
+        }
+
+        /* Responsive */
+        @media (max-width: 700px) {
+            .header h1 { font-size: 2em; }
+            .portal-grid { grid-template-columns: 1fr; }
+            .portal-card { padding: 30px; }
+        }
+
+        /* Animation */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .portal-card {
+            animation: fadeInUp 0.6s ease-out;
+        }
+        .portal-card:nth-child(2) {
+            animation-delay: 0.15s;
+        }
+    </style>
+</head>
+<body>
+    <!-- Coach Badge (shown when logged in) -->
+    <div id="coachBadge" class="coach-badge" style="display: none;">
+        <span id="userEmail"></span>
+        <button class="logout-btn" onclick="logout()">Log out</button>
+    </div>
+
+    <!-- Login Button (shown when not logged in) -->
+    <div id="loginPrompt" class="login-prompt">
+        <a href="dashboard.html" class="login-btn">Coach Login</a>
+    </div>
+
+    <div class="logo">
+        <img src="White.png" alt="Harness the Spark" onerror="this.style.display='none'">
+    </div>
+
+    <div class="header">
+        <h1>Spark Your Potential</h1>
+        <div class="subtitle">Choose your coaching journey</div>
+    </div>
+
+    <div class="portal-grid">
+        <!-- Career Portal -->
+        <div class="portal-card career" onclick="navigateTo('career')">
+            <div class="portal-icon">⚡</div>
+            <h2 class="portal-title">Career Booster</h2>
+            <p class="portal-description">
+                Transform your career with clarity, positioning, and practical tools.
+                4 or 8 week programmes to unlock your potential.
+            </p>
+            <ul class="portal-features">
+                <li>Career Blueprint development</li>
+                <li>Interactive CV Builder</li>
+                <li>LinkedIn optimisation</li>
+                <li>Decision frameworks</li>
+                <li>AI prompt library</li>
+            </ul>
+            <span class="portal-btn">Enter Career Portal →</span>
+        </div>
+
+        <!-- AuDHD Portal -->
+        <div class="portal-card audhd" onclick="navigateTo('audhd')">
+            <div class="portal-icon">🧠</div>
+            <h2 class="portal-title">AuDHD Coaching</h2>
+            <p class="portal-description">
+                Honour your beautiful paradox. Navigate the unique challenges and strengths
+                of living with both autism and ADHD.
+            </p>
+            <ul class="portal-features">
+                <li>6 Paradox Domains framework</li>
+                <li>Energy management tools</li>
+                <li>Laying the Foundations worksheet</li>
+                <li>Spark Ignition first aid kit</li>
+                <li>Personalised interventions</li>
+            </ul>
+            <span class="portal-btn">Enter AuDHD Portal →</span>
+        </div>
+    </div>
+
+    <!-- Quick Access Tools -->
+    <div class="quick-access">
+        <p>Quick access to tools:</p>
+        <div class="quick-links">
+            <a href="spark-ignition.html" class="quick-link">🔥 Spark Ignition</a>
+            <a href="audhd-energy.html" class="quick-link">⚡ Energy Planner</a>
+            <a href="audhd-foundations.html" class="quick-link">🏗️ Foundations</a>
+        </div>
+    </div>
+
+    <div class="footer">
+        <p>Harness the Spark | <a href="mailto:lisa@harnessthespark.com">lisa@harnessthespark.com</a> | <a href="https://harnessthespark.com" target="_blank">harnessthespark.com</a></p>
+    </div>
+
+    <script>
+        // Check if user is logged in
+        function checkAuth() {
+            const savedUser = localStorage.getItem('syp_user');
+            const savedToken = localStorage.getItem('syp_token');
+
+            if (savedUser && savedToken) {
+                const user = JSON.parse(savedUser);
+                document.getElementById('coachBadge').style.display = 'flex';
+                document.getElementById('loginPrompt').style.display = 'none';
+                document.getElementById('userEmail').textContent = user.email || 'Coach';
+            } else {
+                document.getElementById('coachBadge').style.display = 'none';
+                document.getElementById('loginPrompt').style.display = 'block';
+            }
+        }
+
+        function navigateTo(portal) {
+            if (portal === 'career') {
+                window.location.href = 'dashboard.html';
+            } else if (portal === 'audhd') {
+                window.location.href = 'audhd-dashboard.html';
+            }
+        }
+
+        function logout() {
+            if (confirm('Are you sure you want to log out?')) {
+                localStorage.removeItem('syp_user');
+                localStorage.removeItem('syp_token');
+                checkAuth();
+            }
+        }
+
+        // Initialize
+        checkAuth();
+    </script>
+</body>
+</html>
