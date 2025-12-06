@@ -1,0 +1,670 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blueprint to CV/LinkedIn Mapping Guide - Simon Booth-Lucking</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            line-height: 1.6;
+            color: #2c3e50;
+            background: #f5f5f5;
+            padding: 40px 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #E63946 0%, #D81B60 50%, #7B2CBF 100%);
+            color: white;
+            padding: 50px 40px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.2em;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .header .subtitle {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+
+        .header .meta {
+            margin-top: 20px;
+            font-size: 0.9em;
+            opacity: 0.8;
+        }
+
+        .content {
+            padding: 50px 40px;
+        }
+
+        .intro-box {
+            background: linear-gradient(135deg, #667eea15 0%, #764ba215 100%);
+            padding: 25px;
+            border-radius: 15px;
+            border-left: 5px solid #667eea;
+            margin-bottom: 40px;
+        }
+
+        .intro-box h2 {
+            color: #667eea;
+            margin-bottom: 10px;
+            font-size: 1.2em;
+        }
+
+        .section {
+            margin-bottom: 50px;
+        }
+
+        .section-title {
+            font-size: 1.5em;
+            font-weight: 700;
+            color: #E63946;
+            margin-bottom: 25px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #E63946;
+        }
+
+        /* Mapping Table Styles */
+        .mapping-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            font-size: 0.95em;
+        }
+
+        .mapping-table th {
+            background: linear-gradient(135deg, #E63946 0%, #D81B60 100%);
+            color: white;
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        .mapping-table td {
+            padding: 15px;
+            border: 1px solid #e0e0e0;
+            vertical-align: top;
+        }
+
+        .mapping-table tr:nth-child(even) {
+            background: #f8f9fa;
+        }
+
+        .mapping-table .blueprint-col {
+            background: #fff3cd;
+            font-weight: 500;
+        }
+
+        .mapping-table .cv-col {
+            background: #d4edda;
+        }
+
+        .mapping-table .linkedin-col {
+            background: #cce5ff;
+        }
+
+        /* Mapping Card Styles */
+        .mapping-card {
+            background: white;
+            border-radius: 15px;
+            border: 2px solid #e0e0e0;
+            margin-bottom: 25px;
+            overflow: hidden;
+        }
+
+        .mapping-card-header {
+            background: linear-gradient(135deg, #E63946 0%, #D81B60 100%);
+            color: white;
+            padding: 15px 20px;
+            font-weight: 600;
+            font-size: 1.1em;
+        }
+
+        .mapping-card-body {
+            padding: 20px;
+        }
+
+        .mapping-card-source {
+            background: #fff3cd;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            border-left: 4px solid #ffc107;
+        }
+
+        .mapping-card-source h4 {
+            color: #856404;
+            font-size: 0.85em;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
+        }
+
+        .mapping-card-destinations {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .destination-box {
+            padding: 15px;
+            border-radius: 10px;
+        }
+
+        .destination-box.cv {
+            background: #d4edda;
+            border-left: 4px solid #28a745;
+        }
+
+        .destination-box.linkedin {
+            background: #cce5ff;
+            border-left: 4px solid #007bff;
+        }
+
+        .destination-box h4 {
+            font-size: 0.85em;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
+        }
+
+        .destination-box.cv h4 {
+            color: #155724;
+        }
+
+        .destination-box.linkedin h4 {
+            color: #004085;
+        }
+
+        .example-box {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 15px;
+            border: 1px dashed #ccc;
+        }
+
+        .example-box h4 {
+            color: #666;
+            font-size: 0.85em;
+            margin-bottom: 10px;
+        }
+
+        .example-box .example-text {
+            font-style: italic;
+            color: #444;
+            font-size: 0.95em;
+            line-height: 1.6;
+        }
+
+        /* Checklist Styles */
+        .checklist {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 15px;
+            margin: 20px 0;
+        }
+
+        .checklist h3 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+        }
+
+        .checklist-item {
+            display: flex;
+            align-items: flex-start;
+            padding: 10px 0;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .checklist-item:last-child {
+            border-bottom: none;
+        }
+
+        .checklist-checkbox {
+            width: 24px;
+            height: 24px;
+            border: 2px solid #E63946;
+            border-radius: 4px;
+            margin-right: 15px;
+            flex-shrink: 0;
+        }
+
+        .checklist-text {
+            flex: 1;
+        }
+
+        .checklist-text strong {
+            color: #E63946;
+        }
+
+        /* Tips Box */
+        .tips-box {
+            background: linear-gradient(135deg, #E6394615 0%, #D81B6015 100%);
+            padding: 25px;
+            border-radius: 15px;
+            border-left: 5px solid #E63946;
+            margin: 30px 0;
+        }
+
+        .tips-box h3 {
+            color: #E63946;
+            margin-bottom: 15px;
+        }
+
+        .tips-box ul {
+            margin-left: 20px;
+        }
+
+        .tips-box li {
+            margin-bottom: 10px;
+        }
+
+        /* Flow Diagram */
+        .flow-diagram {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            margin: 30px 0;
+            flex-wrap: wrap;
+        }
+
+        .flow-box {
+            padding: 20px 30px;
+            border-radius: 10px;
+            text-align: center;
+            font-weight: 600;
+        }
+
+        .flow-box.blueprint {
+            background: #fff3cd;
+            border: 2px solid #ffc107;
+            color: #856404;
+        }
+
+        .flow-box.cv {
+            background: #d4edda;
+            border: 2px solid #28a745;
+            color: #155724;
+        }
+
+        .flow-box.linkedin {
+            background: #cce5ff;
+            border: 2px solid #007bff;
+            color: #004085;
+        }
+
+        .flow-arrow {
+            font-size: 2em;
+            color: #ccc;
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 30px;
+            background: #f8f9fa;
+            color: #666;
+            font-size: 0.9em;
+        }
+
+        .footer a {
+            color: #E63946;
+            text-decoration: none;
+        }
+
+        @media print {
+            body {
+                background: white;
+                padding: 0;
+            }
+            .container {
+                box-shadow: none;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .mapping-card-destinations {
+                grid-template-columns: 1fr;
+            }
+            .flow-diagram {
+                flex-direction: column;
+            }
+            .flow-arrow {
+                transform: rotate(90deg);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Blueprint → CV/LinkedIn</h1>
+            <div class="subtitle">Mapping Guide</div>
+            <div class="meta">Simon Booth-Lucking | Testimonial Access Programme | December 2025</div>
+        </div>
+
+        <div class="content">
+            <!-- INTRO -->
+            <div class="intro-box">
+                <h2>How This Guide Works</h2>
+                <p>Your Career Blueprint contains everything you need to create a compelling CV and LinkedIn profile. This guide shows you <strong>exactly where each piece of insight should land</strong>.</p>
+                <p style="margin-top: 15px;"><strong>The principle:</strong> Your Blueprint captures WHO YOU ARE. Your CV and LinkedIn translate that into WHAT YOU OFFER employers.</p>
+            </div>
+
+            <!-- PROPOSITION FRAMEWORK -->
+            <div class="section" style="background: linear-gradient(135deg, #FFD70015 0%, #FFA50015 100%); padding: 25px; border-radius: 15px; border: 2px solid #FFD700; margin-bottom: 40px;">
+                <h2 style="color: #B8860B; margin-bottom: 20px; font-size: 1.3em;">✍️ Your Proposition Framework</h2>
+                <p style="margin-bottom: 20px;">Use this formula to craft your positioning statement. Complete each element, then combine them into your Profile/About section.</p>
+
+                <div style="background: white; padding: 20px; border-radius: 10px; margin-bottom: 20px; border-left: 4px solid #FFD700;">
+                    <p style="font-size: 1.1em; line-height: 1.8; color: #333;">
+                        <strong>"I'm a</strong> <span style="background: #E6394620; padding: 2px 8px; border-radius: 4px;">[your role identity]</span>
+                        <strong>who</strong> <span style="background: #7B2CBF20; padding: 2px 8px; border-radius: 4px;">[what you do]</span>
+                        <strong>for</strong> <span style="background: #667eea20; padding: 2px 8px; border-radius: 4px;">[who you serve]</span>.
+                        <strong>I</strong> <span style="background: #28a74520; padding: 2px 8px; border-radius: 4px;">[your unique approach/value]</span>.
+                        <strong>After</strong> <span style="background: #fd7e1420; padding: 2px 8px; border-radius: 4px;">[career background]</span>,
+                        <strong>I'm now</strong> <span style="background: #17a2b820; padding: 2px 8px; border-radius: 4px;">[where you're heading and why]</span>.<strong>"</strong>
+                    </p>
+                </div>
+
+                <h3 style="color: #B8860B; margin: 20px 0 15px 0; font-size: 1em;">Simon's Example:</h3>
+                <table style="width: 100%; border-collapse: collapse; font-size: 0.9em;">
+                    <tr style="background: #f8f9fa;">
+                        <td style="padding: 12px; border: 1px solid #ddd; width: 25%; font-weight: 600; color: #E63946;">I'm a...</td>
+                        <td style="padding: 12px; border: 1px solid #ddd;">Strategy Director specialising in Brand, Innovation & Communications</td>
+                        <td style="padding: 12px; border: 1px solid #ddd; width: 30%; font-size: 0.85em; color: #666;">📍 From: Core Pattern</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 12px; border: 1px solid #ddd; font-weight: 600; color: #7B2CBF;">who...</td>
+                        <td style="padding: 12px; border: 1px solid #ddd;">helps organisations find solutions that bridge the gap between brand strategy, innovative digital solutions, employee engagement and customer reality</td>
+                        <td style="padding: 12px; border: 1px solid #ddd; font-size: 0.85em; color: #666;">📍 From: Core Pattern + Thread</td>
+                    </tr>
+                    <tr style="background: #f8f9fa;">
+                        <td style="padding: 12px; border: 1px solid #ddd; font-weight: 600; color: #667eea;">for...</td>
+                        <td style="padding: 12px; border: 1px solid #ddd;">organisations across Financial Services, Pharma, Automotive and FMCG sectors</td>
+                        <td style="padding: 12px; border: 1px solid #ddd; font-size: 0.85em; color: #666;">📍 From: Sector Expertise</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 12px; border: 1px solid #ddd; font-weight: 600; color: #28a745;">I...</td>
+                        <td style="padding: 12px; border: 1px solid #ddd;">understand how the whole system works—from content creation and digital innovation to strategic brand transformation—bridging marketing strategy with operational reality</td>
+                        <td style="padding: 12px; border: 1px solid #ddd; font-size: 0.85em; color: #666;">📍 From: Your Thread</td>
+                    </tr>
+                    <tr style="background: #f8f9fa;">
+                        <td style="padding: 12px; border: 1px solid #ddd; font-weight: 600; color: #fd7e14;">After...</td>
+                        <td style="padding: 12px; border: 1px solid #ddd;">delivering transformational results including 368% ROI at Lloyds Bank, €484k savings at Siemens, and 20.9% cost reduction through AI applications</td>
+                        <td style="padding: 12px; border: 1px solid #ddd; font-size: 0.85em; color: #666;">📍 From: Evidence Collection</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 12px; border: 1px solid #ddd; font-weight: 600; color: #17a2b8;">I'm now...</td>
+                        <td style="padding: 12px; border: 1px solid #ddd;">seeking roles where I can drive strategic transformation and build solutions that create measurable business impact</td>
+                        <td style="padding: 12px; border: 1px solid #ddd; font-size: 0.85em; color: #666;">📍 From: Why Now Story</td>
+                    </tr>
+                </table>
+
+                <div style="background: #d4edda; padding: 15px; border-radius: 8px; margin-top: 20px; border-left: 4px solid #28a745;">
+                    <h4 style="color: #155724; margin-bottom: 10px;">✨ Combined Result:</h4>
+                    <p style="font-style: italic; color: #155724; line-height: 1.6;">"I'm a Strategy Director specialising in Brand, Innovation & Communications who helps organisations find solutions that bridge the gap between brand strategy, innovative digital solutions, employee engagement and customer reality. I understand how the whole system works—from content creation and digital innovation to strategic brand transformation—bridging marketing strategy with operational reality. After delivering transformational results including 368% ROI at Lloyds Bank, €484k savings at Siemens, and 20.9% cost reduction through AI applications, I'm now seeking roles where I can drive strategic transformation and build solutions that create measurable business impact."</p>
+                </div>
+            </div>
+
+            <!-- VISUAL FLOW -->
+            <div class="flow-diagram">
+                <div class="flow-box blueprint">📋 Blueprint<br><small>Your insights & evidence</small></div>
+                <div class="flow-arrow">→</div>
+                <div class="flow-box cv">📄 CV<br><small>Your professional story</small></div>
+                <div class="flow-arrow">→</div>
+                <div class="flow-box linkedin">💼 LinkedIn<br><small>Your public presence</small></div>
+            </div>
+
+            <!-- QUICK REFERENCE TABLE -->
+            <div class="section">
+                <div class="section-title">Quick Reference: Where Everything Goes</div>
+
+                <table class="mapping-table">
+                    <thead>
+                        <tr>
+                            <th style="width: 30%;">Blueprint Section</th>
+                            <th style="width: 35%;">CV Location</th>
+                            <th style="width: 35%;">LinkedIn Location</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="blueprint-col"><strong>Core Pattern</strong><br><em>"Bridge strategy with operational reality"</em></td>
+                            <td class="cv-col">Title/Headline<br>Profile Story opening</td>
+                            <td class="linkedin-col">Headline<br>About section opener</td>
+                        </tr>
+                        <tr>
+                            <td class="blueprint-col"><strong>Your Thread</strong><br><em>"Understand how the whole system works"</em></td>
+                            <td class="cv-col">Profile Story paragraph</td>
+                            <td class="linkedin-col">About section (middle)</td>
+                        </tr>
+                        <tr>
+                            <td class="blueprint-col"><strong>Positioning Statement</strong><br><em>(from proposition formula)</em></td>
+                            <td class="cv-col">Title + Profile Story</td>
+                            <td class="linkedin-col">Headline + About opener</td>
+                        </tr>
+                        <tr>
+                            <td class="blueprint-col"><strong>Evidence Collection</strong><br><em>(Lloyds 368%, Siemens €484k, JLR 23%)</em></td>
+                            <td class="cv-col">Career Highlights section<br>Experience bullets</td>
+                            <td class="linkedin-col">Featured section<br>Experience bullets</td>
+                        </tr>
+                        <tr>
+                            <td class="blueprint-col"><strong>Key Case Studies</strong><br><em>(Nike, ACG/Pharmallama, Save the Children)</em></td>
+                            <td class="cv-col">Case Studies section<br>(Brief → Insight → Strategy → Results)</td>
+                            <td class="linkedin-col">Featured posts<br>Experience highlights</td>
+                        </tr>
+                        <tr>
+                            <td class="blueprint-col"><strong>Core Capabilities</strong><br><em>(Brand Transformation, Workshop Facilitation, etc.)</em></td>
+                            <td class="cv-col">Key Skills section<br>(comma-separated list)</td>
+                            <td class="linkedin-col">Skills section<br>About section</td>
+                        </tr>
+                        <tr>
+                            <td class="blueprint-col"><strong>Why Now Story</strong></td>
+                            <td class="cv-col">Profile Story (closing)<br>Cover letter</td>
+                            <td class="linkedin-col">About section (closing)</td>
+                        </tr>
+                        <tr>
+                            <td class="blueprint-col"><strong>Non-Negotiables</strong><br><em>(Green lights/Red flags)</em></td>
+                            <td class="cv-col"><em>Not on CV</em><br>(Interview prep only)</td>
+                            <td class="linkedin-col"><em>Not visible</em><br>(Informs role selection)</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div style="background: #e8f4fd; padding: 20px; border-radius: 10px; margin-top: 25px; border-left: 4px solid #2196F3;">
+                    <h3 style="color: #1976D2; margin-bottom: 12px; font-size: 1em;">📋 CV Framework Structure</h3>
+                    <p style="font-size: 0.9em; color: #333; line-height: 1.6;">
+                        Your CV should follow this structure:<br><br>
+                        <strong>1. Header:</strong> Name, Title, Contact details<br>
+                        <strong>2. Profile:</strong> 3-4 sentences combining your Core Pattern + Thread + Evidence<br>
+                        <strong>3. Career Highlights:</strong> 4-5 quantified achievements (your best evidence)<br>
+                        <strong>4. Skills:</strong> Your core capabilities in comma-separated format<br>
+                        <strong>5. Sectors:</strong> Industries where you've proven impact<br>
+                        <strong>6. Career History:</strong> Roles with context → action → result bullets<br>
+                        <strong>7. Case Studies:</strong> 2-3 detailed examples showing your approach<br>
+                        <strong>8. Education & Awards:</strong> Credentials and recognition
+                    </p>
+                </div>
+            </div>
+
+            <!-- DETAILED MAPPING CARDS -->
+            <div class="section">
+                <div class="section-title">Detailed Mapping: Element by Element</div>
+
+                <!-- Core Pattern -->
+                <div class="mapping-card">
+                    <div class="mapping-card-header">1. Core Pattern → Headlines</div>
+                    <div class="mapping-card-body">
+                        <div class="mapping-card-source">
+                            <h4>📋 From Your Blueprint</h4>
+                            <p><strong>Your Core Pattern:</strong> "Bridge the gap between brand strategy, innovative digital solutions, employee engagement and customer reality"</p>
+                        </div>
+                        <div class="mapping-card-destinations">
+                            <div class="destination-box cv">
+                                <h4>📄 CV Title</h4>
+                                <p>Strategy Director | Brand, Innovation & Communications</p>
+                            </div>
+                            <div class="destination-box linkedin">
+                                <h4>💼 LinkedIn Headline</h4>
+                                <p>Strategy Director | Bridging Brand Strategy with Digital Innovation & Customer Reality</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Evidence -->
+                <div class="mapping-card">
+                    <div class="mapping-card-header">2. Evidence Collection → Career Highlights</div>
+                    <div class="mapping-card-body">
+                        <div class="mapping-card-source">
+                            <h4>📋 From Your Blueprint</h4>
+                            <p><strong>Your Key Achievements:</strong></p>
+                            <ul style="margin-left: 20px; margin-top: 10px;">
+                                <li>368% growth in performance at Lloyds Bank via behavioural economics</li>
+                                <li>€484,000 agency cost reduction at Siemens Energy</li>
+                                <li>20.9% cost reduction through AI application development</li>
+                                <li>23% retention improvement at JLR during production cycle crisis</li>
+                            </ul>
+                        </div>
+                        <div class="mapping-card-destinations">
+                            <div class="destination-box cv">
+                                <h4>📄 CV Career Highlights</h4>
+                                <p>Format each as: <strong>[Result] + [Context] + [How]</strong></p>
+                                <ul style="margin-top: 8px; font-size: 0.9em;">
+                                    <li>368% growth through behavioural economics at Lloyds Bank</li>
+                                    <li>€484k agency savings at Siemens Energy</li>
+                                    <li>20.9% cost reduction via AI innovation</li>
+                                </ul>
+                            </div>
+                            <div class="destination-box linkedin">
+                                <h4>💼 LinkedIn Featured</h4>
+                                <p>Create posts/articles about your biggest wins:</p>
+                                <ul style="margin-top: 8px; font-size: 0.9em;">
+                                    <li>"How behavioural economics drove 368% growth"</li>
+                                    <li>"Saving €484k through strategic agency review"</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Skills -->
+                <div class="mapping-card">
+                    <div class="mapping-card-header">3. Capabilities → Skills Sections</div>
+                    <div class="mapping-card-body">
+                        <div class="mapping-card-source">
+                            <h4>📋 From Your Blueprint</h4>
+                            <p><strong>Your Core Capabilities:</strong> Brand Transformation, Workshop Facilitation, UX Strategy, Technology Adoption, Behavioural Economics, Content Marketing, Automation & AI, Agency Management</p>
+                        </div>
+                        <div class="mapping-card-destinations">
+                            <div class="destination-box cv">
+                                <h4>📄 CV Skills Section</h4>
+                                <p>List as comma-separated tags under "Key Skills" with visual pill styling</p>
+                            </div>
+                            <div class="destination-box linkedin">
+                                <h4>💼 LinkedIn Skills</h4>
+                                <p>Add each as a skill. Request endorsements from colleagues who've seen you demonstrate each.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sectors -->
+                <div class="mapping-card">
+                    <div class="mapping-card-header">4. Sector Experience → Industry Expertise</div>
+                    <div class="mapping-card-body">
+                        <div class="mapping-card-source">
+                            <h4>📋 From Your Blueprint</h4>
+                            <p><strong>Your Sectors:</strong> Financial Services, Employer Branding, Pharma, Automotive, Digital Transformation, FMCG, Non-Profit</p>
+                        </div>
+                        <div class="mapping-card-destinations">
+                            <div class="destination-box cv">
+                                <h4>📄 CV Sectors Section</h4>
+                                <p>List sectors with visual tags. Consider grouping by strength/recency.</p>
+                            </div>
+                            <div class="destination-box linkedin">
+                                <h4>💼 LinkedIn About</h4>
+                                <p>Mention in About: "I've delivered results across [sector list]..."</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- LINKEDIN CHECKLIST -->
+            <div class="section">
+                <div class="section-title">LinkedIn Optimisation Checklist</div>
+
+                <div class="checklist">
+                    <h3>✅ Profile Completion</h3>
+                    <div class="checklist-item">
+                        <div class="checklist-checkbox"></div>
+                        <div class="checklist-text"><strong>Headline:</strong> Strategy Director | Bridging Brand Strategy with Digital Innovation & Customer Reality</div>
+                    </div>
+                    <div class="checklist-item">
+                        <div class="checklist-checkbox"></div>
+                        <div class="checklist-text"><strong>About:</strong> Use your proposition framework as the opening paragraph</div>
+                    </div>
+                    <div class="checklist-item">
+                        <div class="checklist-checkbox"></div>
+                        <div class="checklist-text"><strong>Featured:</strong> Add case study posts, presentations, or articles showcasing your work</div>
+                    </div>
+                    <div class="checklist-item">
+                        <div class="checklist-checkbox"></div>
+                        <div class="checklist-text"><strong>Experience:</strong> Each role has 3-5 achievement bullets with metrics</div>
+                    </div>
+                    <div class="checklist-item">
+                        <div class="checklist-checkbox"></div>
+                        <div class="checklist-text"><strong>Skills:</strong> All core capabilities added and endorsed</div>
+                    </div>
+                    <div class="checklist-item">
+                        <div class="checklist-checkbox"></div>
+                        <div class="checklist-text"><strong>Recommendations:</strong> Request from Elena Farragher, Stephen Elson, and key clients</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PRO TIPS -->
+            <div class="tips-box">
+                <h3>💡 Pro Tips for Simon</h3>
+                <ul>
+                    <li><strong>Lead with impact:</strong> Your 368% Lloyds Bank result is your headline grabber—use it early and often.</li>
+                    <li><strong>Bridge the gap:</strong> Your unique value is understanding the WHOLE system. Emphasise this in interviews.</li>
+                    <li><strong>Quantify everything:</strong> €484k, 20.9%, 23%—these numbers tell your story better than adjectives.</li>
+                    <li><strong>Show range:</strong> Nike, Siemens, JLR, Save the Children—you've proven impact across wildly different contexts.</li>
+                    <li><strong>AI angle:</strong> Your AI application work is increasingly valuable—highlight the 20.9% cost reduction story.</li>
+                    <li><strong>Awards validate:</strong> Bronze IHR 2024, Gold SABRE 2017—these prove external recognition of your work.</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>⚡ Spark Your Potential | Blueprint to CV/LinkedIn Mapping Guide</p>
+            <p style="margin-top: 10px;"><a href="client-portal.html">← Back to Career Toolkit</a></p>
+        </div>
+    </div>
+</body>
+</html>

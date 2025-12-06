@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simon Booth-Lucking - Decision-Making Framework</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            line-height: 1.6;
+            color: #2c3e50;
+            background: linear-gradient(135deg, #E63946 0%, #D81B60 50%, #7B2CBF 100%);
+            padding: 40px 20px;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+        .header {
+            background: linear-gradient(135deg, #E63946 0%, #D81B60 50%, #7B2CBF 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+        .header h1 { font-size: 2.2em; margin-bottom: 10px; }
+        .header .subtitle { font-size: 1.1em; opacity: 0.9; }
+        .content { padding: 50px 40px; }
+        .intro {
+            background: linear-gradient(135deg, #FF6B6B15 0%, #FF149315 100%);
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 40px;
+            border-left: 5px solid #FF1493;
+        }
+        .section { margin-bottom: 40px; }
+        .section-title {
+            font-size: 1.5em;
+            font-weight: 700;
+            color: #E63946;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #E63946;
+        }
+        .framework-box {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 15px;
+            margin: 20px 0;
+            border: 2px solid #E63946;
+        }
+        .framework-box h3 { color: #E63946; margin-bottom: 15px; }
+        .question-list { margin-left: 20px; margin-top: 10px; }
+        .question-list li { margin-bottom: 12px; }
+        table { width: 100%; border-collapse: collapse; margin: 20px 0; }
+        th {
+            background: linear-gradient(135deg, #E63946 0%, #D81B60 100%);
+            color: white;
+            padding: 15px;
+            text-align: left;
+        }
+        td { padding: 15px; border: 1px solid #e0e0e0; }
+        tr:nth-child(even) { background: #f8f9fa; }
+        .score-input {
+            width: 70px;
+            padding: 10px;
+            border: 2px solid #E63946;
+            border-radius: 5px;
+            text-align: center;
+            font-size: 1.1em;
+        }
+        .total-row { background: #FF149315 !important; font-weight: 700; }
+        .weight-indicator { font-size: 0.9em; color: #7f8c8d; font-style: italic; }
+        .note-box {
+            background: #fff3cd;
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 4px solid #ffc107;
+            margin: 20px 0;
+        }
+        .insight-box {
+            background: linear-gradient(135deg, #667eea15 0%, #764ba215 100%);
+            padding: 25px;
+            border-radius: 15px;
+            border-left: 5px solid #667eea;
+            margin: 20px 0;
+        }
+        .green-flags {
+            background: #d4edda;
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 4px solid #28a745;
+            margin: 15px 0;
+        }
+        .red-flags {
+            background: #f8d7da;
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 4px solid #dc3545;
+            margin: 15px 0;
+        }
+        .footer {
+            text-align: center;
+            padding: 30px;
+            background: #f8f9fa;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .footer a {
+            color: #E63946;
+            text-decoration: none;
+        }
+        @media print {
+            body { background: white; padding: 0; }
+            .container { box-shadow: none; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div style="margin-bottom: 20px; font-size: 1.2em;">⚡ Spark Your Potential</div>
+            <h1>Decision-Making Framework</h1>
+            <div class="subtitle">Evaluating Career Opportunities Against Your Patterns</div>
+        </div>
+
+        <div class="content">
+            <div class="intro">
+                <p style="font-size: 1.1em; font-weight: 600; margin-bottom: 10px;">📋 Your Reusable Framework</p>
+                <p style="margin-bottom: 10px;">This framework helps you evaluate ANY opportunity against your patterns. Use it whenever a new role emerges—whether agency, client-side, consultancy, or interim.</p>
+                <p><strong>Key insight from your profile:</strong> You thrive when you can see the whole system and bridge strategy with operational reality. Roles that silo you into just one piece of the puzzle will frustrate you.</p>
+            </div>
+
+            <!-- THE FOUR CORE TESTS -->
+            <div class="section">
+                <div class="section-title">The Four Core Tests</div>
+                <p style="margin-bottom: 20px;">Any opportunity should pass these tests to be worth your energy:</p>
+
+                <div class="framework-box">
+                    <h3>1. The Systems Thinking Test</h3>
+                    <p style="margin-bottom: 10px;"><strong>Core Question:</strong> Will this role let me work across the full spectrum—not just one silo?</p>
+                    <ul class="question-list">
+                        <li>Can I connect brand strategy with digital solutions AND employee engagement AND customer reality?</li>
+                        <li>Will I have visibility across content creation, innovation, and transformation?</li>
+                        <li>Is this a "whole picture" role or am I being hired for just one narrow function?</li>
+                        <li>Can I bridge marketing strategy with operational reality?</li>
+                        <li>Will I have the autonomy to join the dots others miss?</li>
+                    </ul>
+                    <p style="margin-top: 15px; font-weight: 600; color: #E63946;">If you're being siloed into just "brand" or just "digital" without seeing the connections, this fails the test.</p>
+                </div>
+
+                <div class="framework-box">
+                    <h3>2. The Innovation & Technology Test</h3>
+                    <p style="margin-bottom: 10px;"><strong>Core Question:</strong> Will I be able to apply technology and innovation to solve real problems?</p>
+                    <ul class="question-list">
+                        <li>Is there appetite for AI, automation, and innovative solutions?</li>
+                        <li>Will I be valued for bringing new approaches (like behavioural economics)?</li>
+                        <li>Is "digital transformation" just a buzzword or genuinely embedded?</li>
+                        <li>Can I help build and optimise, not just deliver what's always been done?</li>
+                        <li>Is there budget and mandate for technology adoption?</li>
+                    </ul>
+                    <p style="margin-top: 15px; font-weight: 600; color: #E63946;">Your 20.9% cost reduction through AI and €484k savings at Siemens prove you can deliver—make sure the org will let you.</p>
+                </div>
+
+                <div class="framework-box">
+                    <h3>3. The Impact & Measurement Test</h3>
+                    <p style="margin-bottom: 10px;"><strong>Core Question:</strong> Will my contribution be measurable and visible?</p>
+                    <ul class="question-list">
+                        <li>Are there clear metrics for success (like your 368% at Lloyds)?</li>
+                        <li>Will leadership see and value the results I create?</li>
+                        <li>Is there a culture of measurement and accountability?</li>
+                        <li>Can I point to outcomes, not just outputs?</li>
+                        <li>Will I have case studies worth adding to my portfolio?</li>
+                    </ul>
+                    <p style="margin-top: 15px; font-weight: 600; color: #E63946;">You've delivered Nike, JLR, Siemens-level work. Don't accept roles where your impact gets lost in noise.</p>
+                </div>
+
+                <div class="framework-box">
+                    <h3>4. The Variety & Sector Fit Test</h3>
+                    <p style="margin-bottom: 10px;"><strong>Core Question:</strong> Will this role give me the breadth I need across clients/challenges?</p>
+                    <ul class="question-list">
+                        <li>Will I work across multiple sectors (Financial Services, Pharma, Automotive, FMCG)?</li>
+                        <li>Is there variety in the problems I'll solve?</li>
+                        <li>Does the client/portfolio include organisations I respect?</li>
+                        <li>Will I learn something new, or is it just repeating what I've done?</li>
+                        <li>Is there potential for Save the Children-style purpose-driven work alongside commercial?</li>
+                    </ul>
+                    <p style="margin-top: 15px; font-weight: 600; color: #E63946;">Your range is your superpower. Roles that narrow you to just one sector may not energise you.</p>
+                </div>
+            </div>
+
+            <!-- GREEN FLAGS / RED FLAGS -->
+            <div class="section">
+                <div class="section-title">Your Green Flags & Red Flags</div>
+
+                <div class="green-flags">
+                    <h4 style="color: #155724; margin-bottom: 15px;">🟢 Green Flags (Look for these)</h4>
+                    <ul style="margin-left: 20px;">
+                        <li>Cross-functional responsibility (brand + digital + engagement)</li>
+                        <li>Appetite for AI and automation</li>
+                        <li>Clear measurement culture with visible metrics</li>
+                        <li>Multi-sector exposure or complex client portfolio</li>
+                        <li>Senior stakeholder access and visibility</li>
+                        <li>Mandate to innovate and challenge status quo</li>
+                        <li>Workshop facilitation opportunities</li>
+                        <li>Mix of commercial and purpose-driven work</li>
+                    </ul>
+                </div>
+
+                <div class="red-flags">
+                    <h4 style="color: #721c24; margin-bottom: 15px;">🔴 Red Flags (Watch out for these)</h4>
+                    <ul style="margin-left: 20px;">
+                        <li>Siloed into just one function (brand OR digital, not both)</li>
+                        <li>Resistance to technology or "we've always done it this way" culture</li>
+                        <li>No clear metrics for success</li>
+                        <li>Bureaucratic approval layers that slow everything down</li>
+                        <li>Single-sector focus with no variety</li>
+                        <li>Hidden from senior stakeholders</li>
+                        <li>Execution-only roles (no strategic input)</li>
+                        <li>Agencies in "ad factory" mode rather than transformation mode</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- SCORING FRAMEWORK -->
+            <div class="section">
+                <div class="section-title">Opportunity Evaluation Scorecard</div>
+                <p style="margin-bottom: 20px;">Score each opportunity out of 10 for each criterion. Be honest—this is for you, not them.</p>
+
+                <div class="note-box">
+                    <strong>Scoring Guide:</strong>
+                    <ul style="margin-top: 10px; margin-left: 20px;">
+                        <li><strong>8-10:</strong> Clear strength / excellent fit</li>
+                        <li><strong>5-7:</strong> Acceptable / neutral</li>
+                        <li><strong>3-4:</strong> Concern / potential problem</li>
+                        <li><strong>0-2:</strong> Deal-breaker / major red flag</li>
+                    </ul>
+                </div>
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th style="width: 35%;">Criterion</th>
+                            <th style="width: 10%;">Weight</th>
+                            <th style="width: 13.75%;">Opp 1<br>/10</th>
+                            <th style="width: 13.75%;">Opp 2<br>/10</th>
+                            <th style="width: 13.75%;">Opp 3<br>/10</th>
+                            <th style="width: 13.75%;">Opp 4<br>/10</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td colspan="6" style="background: #E63946; color: white; font-weight: 600;">SYSTEMS THINKING</td></tr>
+                        <tr>
+                            <td>Can I work across the full spectrum (brand + digital + engagement)?</td>
+                            <td><span class="weight-indicator">High</span></td>
+                            <td><input type="number" min="0" max="10" class="score-input" placeholder="0-10"></td>
+                            <td><input type="number" min="0" max="10" class="score-input" placeholder="0-10"></td>
+                            <td><input type="number" min="0" max="10" class="score-input" placeholder="0-10"></td>
+                            <td><input type="number" min="0" max="10" class="score-input" placeholder="0-10"></td>
+                        </tr>
+                        <tr>
+                            <td>Will I bridge strategy with operational reality?</td>
+                            <td><span class="weight-indicator">High</span></td>
+                            <td><input type="number" min="0" max="10" class="score-input" placeholder="0-10"></td>
+                            <td><input type="number" min="0" max="10" class="score-input" placeholder="0-10"></td>
+                            <td><input type="number" min="0" max="10" class="score-input" placeholder="0-10"></td>
+                            <td><input type="number" min="0" max="10" class="score-input" placeholder="0-10"></td>
+                        </tr>
+                        <tr>
+                            <td>Do I have autonomy to join the dots others miss?</td>
+                            <td><span class="weight-indicator">Med</span></td>
+                            <td><input type="number" min="0" max="10" class="score-input" placeholder="0-10"></td>
+                            <td><input type="number" min="0" max="10" class="score-input" placeholder="0-10"></td>
+                            <td><input type="number" min="0" max="10" class="score-input" placeholder="0-10"></td>
+                            <td><input type="number" min="0" max="10" class="score-input" placeholder="0-10"></td>
+                        </tr>
+
+                        <tr><td colspan="6" style="background: #D81B60; color: white; font-weight: 600;">INNOVATION & TECHNOLOGY</td></tr>
+                        <tr>
+                            <td>Is there appetite for AI, automation, and innovation?</td>
+                            <td><span class="weight-indicator">High</span></td>
+                            <td><input type="number" min="0" max="10" class="score-input" placeholder="0-10"></td>
+                            <td><input type="number" min="0" max="10" class="score-input" placeholder="0-10"></td>
+                            <td><input type="number" min="0" max="10" class="score-input" placeholder="0-10"></td>
+                            <td><input type="number" min="0" max="10" class="score-input" placeholder="0-10"></td>
+                        </tr>
+                        <tr>
+                            <td>Will behavioural economics/new approaches be valued?</td>
+                            <td><span class="weight-indicator">Med</span></td>
+                            <td><input type="number" min="0" max="10" class="score-input" placeholder="0-10"></td>
+                            <td><input type="number" min="0" max="10" class="score-input" placeholder="0-10"></td>
+                            <td><input type="number" min="0" max="10" class="score-input" placeholder="0-10"></td>
+                            <td><input type="number" min="0" max="10" class="score-input" placeholder="0-10"></td>
+                        </tr>
+                        <tr>
+                            <td>Is digital transformation genuine (not just buzzwords)?</td>
+                            <td><span class="weight-indicator">Med</span></td>
+                            <td><input type="number" min="0" max="10" class="score-input" placeholder="0-10"></td>
+                            <td><input type="number" min="0" max="10" class="score-input" placeholder="0-10"></td>
+                            <td><input type="number" min="0" max="10" class="score-input" placeholder="0-10"></td>
+                            <td><input type="number" min="0" max="10" class="score-input" placeholder="0-10"></td>
+                        </tr>
+
+                        <tr><td colspan="6" style="background: #7B2CBF; color: white; font-weight: 600;">IMPACT & MEASUREMENT</td></tr>
+                        <tr>
+                            <td>Are there clear metrics for success?</td>
+                            <td><span class="weight-indicator">High</span></td>
+                            <td><input type="number" min="0" max="10" class="score-input" placeholder="0-10"></td>
+                            <td><input type="number" min="0" max="10" class="score-input" placeholder="0-10"></td>
+                            <td><input type="number" min="0" max="10" class="score-input" placeholder="0-10"></td>
+                            <td><input type="number" min="0" max="10" class="score-input" placeholder="0-10"></td>
+                        </tr>
+                        <tr>
+                            <td>Will leadership see and value my results?</td>
+                            <td><span class="weight-indicator">High</span></td>
+                            <td><input type="number" min="0" max="10" class="score-input" placeholder="0-10"></td>
+                            <td><input type="number" min="0" max="10" class="score-input" placeholder="0-10"></td>
+                            <td><input type="number" min="0" max="10" class="score-input" placeholder="0-10"></td>
+                            <td><input type="number" min="0" max="10" class="score-input" placeholder="0-10"></td>
+                        </tr>
+                        <tr>
+                            <td>Will I create case studies worth adding to my portfolio?</td>
+                            <td><span class="weight-indicator">Med</span></td>
+                            <td><input type="number" min="0" max="10" class="score-input" placeholder="0-10"></td>
+                            <td><input type="number" min="0" max="10" class="score-input" placeholder="0-10"></td>
+                            <td><input type="number" min="0" max="10" class="score-input" placeholder="0-10"></td>
+                            <td><input type="number" min="0" max="10" class="score-input" placeholder="0-10"></td>
+                        </tr>
+
+                        <tr><td colspan="6" style="background: #667eea; color: white; font-weight: 600;">VARIETY & SECTOR FIT</td></tr>
+                        <tr>
+                            <td>Will I work across multiple sectors?</td>
+                            <td><span class="weight-indicator">Med</span></td>
+                            <td><input type="number" min="0" max="10" class="score-input" placeholder="0-10"></td>
+                            <td><input type="number" min="0" max="10" class="score-input" placeholder="0-10"></td>
+                            <td><input type="number" min="0" max="10" class="score-input" placeholder="0-10"></td>
+                            <td><input type="number" min="0" max="10" class="score-input" placeholder="0-10"></td>
+                        </tr>
+                        <tr>
+                            <td>Is there variety in the problems I'll solve?</td>
+                            <td><span class="weight-indicator">Med</span></td>
+                            <td><input type="number" min="0" max="10" class="score-input" placeholder="0-10"></td>
+                            <td><input type="number" min="0" max="10" class="score-input" placeholder="0-10"></td>
+                            <td><input type="number" min="0" max="10" class="score-input" placeholder="0-10"></td>
+                            <td><input type="number" min="0" max="10" class="score-input" placeholder="0-10"></td>
+                        </tr>
+                        <tr>
+                            <td>Includes clients/organisations I respect?</td>
+                            <td><span class="weight-indicator">Low</span></td>
+                            <td><input type="number" min="0" max="10" class="score-input" placeholder="0-10"></td>
+                            <td><input type="number" min="0" max="10" class="score-input" placeholder="0-10"></td>
+                            <td><input type="number" min="0" max="10" class="score-input" placeholder="0-10"></td>
+                            <td><input type="number" min="0" max="10" class="score-input" placeholder="0-10"></td>
+                        </tr>
+
+                        <tr class="total-row">
+                            <td><strong>TOTAL SCORE</strong></td>
+                            <td></td>
+                            <td><input type="text" class="score-input" id="total1" readonly placeholder="/120"></td>
+                            <td><input type="text" class="score-input" id="total2" readonly placeholder="/120"></td>
+                            <td><input type="text" class="score-input" id="total3" readonly placeholder="/120"></td>
+                            <td><input type="text" class="score-input" id="total4" readonly placeholder="/120"></td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="insight-box">
+                    <h4 style="color: #667eea; margin-bottom: 15px;">📊 How to Interpret Your Scores</h4>
+                    <ul style="margin-left: 20px;">
+                        <li><strong>90-120:</strong> Excellent fit—pursue aggressively</li>
+                        <li><strong>70-89:</strong> Good fit—worth exploring, negotiate on gaps</li>
+                        <li><strong>50-69:</strong> Mixed fit—proceed with caution, know what you're trading off</li>
+                        <li><strong>Below 50:</strong> Poor fit—likely to frustrate you, reconsider</li>
+                    </ul>
+                    <p style="margin-top: 15px;"><strong>Remember:</strong> A low score in a "High" weight criterion is more concerning than a low score in a "Low" weight area. Trust your patterns.</p>
+                </div>
+            </div>
+
+            <!-- INTERVIEW QUESTIONS -->
+            <div class="section">
+                <div class="section-title">Questions to Ask in Interviews</div>
+                <p style="margin-bottom: 20px;">Use these to validate your scorecard:</p>
+
+                <div class="framework-box" style="border-color: #28a745;">
+                    <h3 style="color: #28a745;">Systems Thinking Questions</h3>
+                    <ul class="question-list">
+                        <li>"How does this role connect with other functions—brand, digital, HR, customer experience?"</li>
+                        <li>"Walk me through a recent project where multiple disciplines collaborated?"</li>
+                        <li>"What does success look like in 12 months, and who else needs to be involved to achieve it?"</li>
+                    </ul>
+                </div>
+
+                <div class="framework-box" style="border-color: #007bff;">
+                    <h3 style="color: #007bff;">Innovation Questions</h3>
+                    <ul class="question-list">
+                        <li>"What's your appetite for AI and automation in this function?"</li>
+                        <li>"Tell me about a time the team tried something genuinely new—what happened?"</li>
+                        <li>"Is there budget and mandate for technology adoption?"</li>
+                    </ul>
+                </div>
+
+                <div class="framework-box" style="border-color: #ffc107;">
+                    <h3 style="color: #B8860B;">Impact Questions</h3>
+                    <ul class="question-list">
+                        <li>"How do you measure success for this role?"</li>
+                        <li>"Who will I report to, and how often will I have visibility to senior leadership?"</li>
+                        <li>"Can you share a recent win that the team celebrated—and how it was measured?"</li>
+                    </ul>
+                </div>
+
+                <div class="framework-box" style="border-color: #17a2b8;">
+                    <h3 style="color: #117a8b;">Variety Questions</h3>
+                    <ul class="question-list">
+                        <li>"What's the client/sector mix I'd be working across?"</li>
+                        <li>"How varied are the problems—or is it largely repeating proven solutions?"</li>
+                        <li>"Is there scope for purpose-driven work alongside commercial clients?"</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- REFLECTION -->
+            <div class="insight-box">
+                <h4 style="color: #667eea; margin-bottom: 15px;">🔑 Your Core Decision Principle</h4>
+                <p style="font-size: 1.1em; font-style: italic; line-height: 1.7;">"Most strategists understand one piece of the puzzle—I understand how the whole system works, from content creation and digital innovation to strategic brand transformation. My approach bridges marketing strategy with operational reality because I've built, delivered, and optimised across the full spectrum."</p>
+                <p style="margin-top: 15px;"><strong>When in doubt:</strong> Choose the role that lets you see and influence the whole system. That's where you create the most value—and where you'll be most fulfilled.</p>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>⚡ Spark Your Potential | Decision-Making Framework</p>
+            <p style="margin-top: 10px;"><a href="client-portal.html">← Back to Career Toolkit</a></p>
+        </div>
+    </div>
+
+    <script>
+        // Auto-calculate totals
+        document.querySelectorAll('.score-input').forEach(input => {
+            if (!input.readOnly) {
+                input.addEventListener('input', calculateTotals);
+            }
+        });
+
+        function calculateTotals() {
+            const inputs = document.querySelectorAll('.score-input:not([readonly])');
+            const columns = [[], [], [], []];
+
+            inputs.forEach((input, i) => {
+                const colIndex = i % 4;
+                const value = parseInt(input.value) || 0;
+                columns[colIndex].push(value);
+            });
+
+            document.getElementById('total1').value = columns[0].reduce((a, b) => a + b, 0) + '/120';
+            document.getElementById('total2').value = columns[1].reduce((a, b) => a + b, 0) + '/120';
+            document.getElementById('total3').value = columns[2].reduce((a, b) => a + b, 0) + '/120';
+            document.getElementById('total4').value = columns[3].reduce((a, b) => a + b, 0) + '/120';
+        }
+    </script>
+</body>
+</html>
