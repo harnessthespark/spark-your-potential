@@ -848,9 +848,10 @@
             if (savedUser) {
                 currentUser = JSON.parse(savedUser);
 
-                // Check if user has AuDHD access
+                // Check if user has AuDHD access (career users also allowed)
                 const hasAccess = currentUser.programme_access === 'audhd' ||
                                  currentUser.programme_access === 'both' ||
+                                 currentUser.programme_access === 'career' ||
                                  currentUser.isStaff;
 
                 if (hasAccess) {

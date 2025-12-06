@@ -390,9 +390,10 @@
                 const data = await response.json();
 
                 if (data.success && data.user) {
-                    // Check if user has AuDHD access
+                    // Check if user has AuDHD access (career users also allowed)
                     const hasAccess = data.user.programme_access === 'audhd' ||
                                      data.user.programme_access === 'both' ||
+                                     data.user.programme_access === 'career' ||
                                      data.user.is_admin;
 
                     if (!hasAccess) {
