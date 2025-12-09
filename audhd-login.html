@@ -338,7 +338,8 @@
 
     <script>
         // Configuration - Use SYP's own server, NOT SparkHub
-        const SYP_SERVER = window.location.origin;
+        // Backend API server (SparkHub Django backend)
+        const SYP_SERVER = 'https://sparkhub-be-qtmmb.ondigitalocean.app';
 
         // Check if already logged in
         window.onload = function() {
@@ -375,38 +376,35 @@
             loginBtn.innerHTML = '<span class="spinner"></span> Logging in...';
 
             try {
-                // Use SYP's own login endpoint
-                const response = await fetch(`${SYP_SERVER}/api/login`, {
+                // Use SparkHub backend login endpoint
+                const response = await fetch(`${SYP_SERVER}/api/accounts/login/`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
                     },
                     body: JSON.stringify({
-                        email: email,
+                        username: email,  // SparkHub uses username field
                         password: password
                     })
                 });
 
                 const data = await response.json();
 
+                // SparkHub returns { success: true, user: {...}, token: "..." }
                 if (data.success && data.user) {
-                    // Check if user has AuDHD access (career users also allowed)
-                    const hasAccess = data.user.programme_access === 'audhd' ||
-                                     data.user.programme_access === 'both' ||
-                                     data.user.programme_access === 'career' ||
-                                     data.user.is_admin;
-
-                    if (!hasAccess) {
-                        throw new Error('You do not have access to the AuDHD Coaching Portal. Please contact Lisa.');
+                    // Store JWT token for API calls
+                    if (data.token) {
+                        localStorage.setItem('sparkhub_token', data.token);
                     }
 
                     // Success - store user data
                     const userData = {
-                        id: data.user.id,
+                        id: data.user.id || data.user.user_id,
                         email: data.user.email,
-                        name: data.user.name || email.split('@')[0],
-                        isStaff: data.user.is_admin || false,
-                        programme_access: data.user.programme_access || 'career'
+                        username: data.user.username,
+                        name: data.user.first_name || data.user.firstName || email.split('@')[0],
+                        isStaff: data.user.is_staff || false,
+                        programme_access: 'audhd'  // Default for this portal
                     };
 
                     localStorage.setItem('syp_user', JSON.stringify(userData));
@@ -421,7 +419,7 @@
                     }, 1000);
 
                 } else {
-                    throw new Error(data.error || 'Invalid email or password');
+                    throw new Error(data.message || data.error || 'Invalid username or password');
                 }
 
             } catch (error) {
