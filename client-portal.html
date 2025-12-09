@@ -1713,9 +1713,10 @@
             const agreementDesc = isTestimonialClient
                 ? 'Your signed testimonial access agreement with terms and conditions.'
                 : 'Your signed coaching agreement with programme details and terms.';
-            const agreementFile = isTestimonialClient
+            // Use client-specific file if available, otherwise fall back to generated name
+            const agreementFile = files.agreement || (isTestimonialClient
                 ? `${folder}/${nameUnderscored}_Testimonial_Agreement.html`
-                : `${folder}/${nameUnderscored}_Coaching_Agreement.html`;
+                : `${folder}/${nameUnderscored}_Coaching_Agreement.html`);
 
             const tools = [
                 {
