@@ -313,8 +313,8 @@
     </div>
 
     <script>
-        // Configuration - Use SYP's own server, NOT SparkHub
-        const SYP_SERVER = window.location.origin;
+        // Configuration - Use SparkHub backend for authentication
+        const API_SERVER = 'https://sparkhub-be-qtmmb.ondigitalocean.app';
 
         // Check if already logged in
         window.onload = function() {
@@ -322,8 +322,12 @@
 
             if (savedUser) {
                 const user = JSON.parse(savedUser);
-                // Redirect based on programme access
-                redirectBasedOnAccess(user.programme_access || 'career');
+                // If staff, go to coach hub; otherwise redirect based on programme
+                if (user.isStaff) {
+                    window.location.href = 'coach-hub.html';
+                } else {
+                    redirectBasedOnAccess(user.programme_access || 'career');
+                }
             }
         };
 
@@ -345,43 +349,48 @@
             loginBtn.innerHTML = '<span class="spinner"></span> Logging in...';
 
             try {
-                // Use SYP's own login endpoint
-                const response = await fetch(`${SYP_SERVER}/api/login`, {
+                // Use SparkHub backend for authentication
+                const response = await fetch(`${API_SERVER}/api/accounts/login/`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
                     },
                     body: JSON.stringify({
-                        email: email,
+                        username: email,  // SparkHub uses username field
                         password: password
                     })
                 });
 
                 const data = await response.json();
 
-                if (data.success && data.user) {
+                if (response.ok && data.token) {
                     // Success - store user data
                     const userData = {
-                        id: data.user.id,
-                        email: data.user.email,
-                        name: data.user.name || email.split('@')[0],
-                        isStaff: data.user.is_admin || false,
-                        programme_access: data.user.programme_access || 'career'
+                        id: data.user?.id || 1,
+                        email: data.user?.email || email,
+                        name: data.user?.first_name || data.user?.username || email.split('@')[0],
+                        isStaff: data.user?.is_staff || false,
+                        programme_access: data.user?.is_staff ? 'all' : 'career'
                     };
 
                     localStorage.setItem('syp_user', JSON.stringify(userData));
+                    localStorage.setItem('syp_token', data.token);
 
                     // Show success
                     successDiv.textContent = 'Login successful!';
                     successDiv.style.display = 'block';
 
-                    // Redirect based on programme access
+                    // Redirect - staff go to coach hub, clients go to their portal
                     setTimeout(() => {
-                        redirectBasedOnAccess(userData.programme_access);
+                        if (userData.isStaff) {
+                            window.location.href = 'coach-hub.html';
+                        } else {
+                            redirectBasedOnAccess(userData.programme_access);
+                        }
                     }, 500);
 
                 } else {
-                    throw new Error(data.error || 'Invalid email or password');
+                    throw new Error(data.detail || data.error || 'Invalid email or password');
                 }
 
             } catch (error) {
