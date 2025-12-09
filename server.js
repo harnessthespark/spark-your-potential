@@ -668,6 +668,75 @@ Generate a complete Career Blueprint JSON.`;
 });
 
 // ============================================
+// EMERGENCY SUPPORT ENDPOINT
+// ============================================
+
+// Emergency alert - sends email to Lisa
+app.post('/api/emergency-alert', async (req, res) => {
+    try {
+        const { clientName, clientEmail, timestamp, type } = req.body;
+
+        console.log('🆘 EMERGENCY ALERT RECEIVED:');
+        console.log(`   Client: ${clientName}`);
+        console.log(`   Email: ${clientEmail}`);
+        console.log(`   Time: ${timestamp}`);
+        console.log(`   Type: ${type}`);
+
+        // For now, log the alert - email integration can be added later
+        // Options for email:
+        // 1. Use SendGrid API
+        // 2. Use Nodemailer with SMTP
+        // 3. Use SparkHub backend /api/email/ endpoint
+
+        // Try to send via SparkHub backend if available
+        try {
+            const fetch = (await import('node-fetch')).default;
+            const sparkHubResponse = await fetch('https://sparkhub-be-qtmmb.ondigitalocean.app/api/email/send/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    to: 'lisa@harnessthespark.com',
+                    subject: `🆘 URGENT: Emergency Support Request from ${clientName}`,
+                    body: `
+EMERGENCY SUPPORT REQUEST
+
+Client: ${clientName}
+Email: ${clientEmail}
+Time: ${new Date(timestamp).toLocaleString('en-GB')}
+
+A client has pressed the emergency support button on the AuDHD Coaching Portal.
+
+Please respond as soon as possible.
+
+---
+This alert was sent automatically from the AuDHD Coaching Portal.
+                    `.trim()
+                })
+            });
+
+            if (sparkHubResponse.ok) {
+                console.log('✅ Emergency alert email sent via SparkHub backend');
+            }
+        } catch (emailError) {
+            console.log('⚠️ Could not send via SparkHub backend, alert logged only:', emailError.message);
+        }
+
+        // Always return success - the alert was logged
+        res.json({
+            success: true,
+            message: 'Emergency alert received and logged',
+            timestamp: new Date().toISOString()
+        });
+
+    } catch (error) {
+        console.error('Emergency alert error:', error);
+        res.status(500).json({ success: false, error: error.message });
+    }
+});
+
+// ============================================
 // START SERVER
 // ============================================
 const PORT = process.env.PORT || 8080;
