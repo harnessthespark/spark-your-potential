@@ -224,13 +224,9 @@
         const API_SERVER = 'https://sparkhub-be-qtmmb.ondigitalocean.app';
         const REDIRECT_TO = 'client-portal.html';
 
-        // Check if already logged in
+        // Redirect to client-portal which has its own login
         window.onload = function() {
-            const savedUser = localStorage.getItem('syp_user');
-            if (savedUser) {
-                const user = JSON.parse(savedUser);
-                window.location.href = REDIRECT_TO;
-            }
+            window.location.href = 'client-portal.html';
         };
 
         async function handleLogin(event) {
