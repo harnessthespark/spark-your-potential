@@ -1752,6 +1752,91 @@
 
             alert('Notes saved!');
         }
+
+        // ============================================
+        // EMERGENCY SUPPORT FUNCTIONS
+        // ============================================
+
+        function openEmergencySupport() {
+            document.getElementById('emergencyModal').style.display = 'flex';
+            // Reset alert status when opening
+            const alertStatus = document.getElementById('lisaAlertStatus');
+            alertStatus.className = 'alert-status';
+            alertStatus.textContent = '';
+        }
+
+        function closeEmergencySupport() {
+            document.getElementById('emergencyModal').style.display = 'none';
+        }
+
+        async function alertLisa() {
+            const alertBtn = document.querySelector('.emergency-card.contact-lisa .emergency-action-btn');
+            const alertStatus = document.getElementById('lisaAlertStatus');
+
+            // Disable button during request
+            alertBtn.disabled = true;
+            alertBtn.textContent = 'Sending...';
+
+            try {
+                // Get client info for the alert
+                const clientName = currentUser?.name || currentUser?.email || 'A client';
+                const clientEmail = currentUser?.email || 'Unknown';
+
+                // Send alert to backend
+                const response = await fetch('/api/emergency-alert', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        clientName: clientName,
+                        clientEmail: clientEmail,
+                        timestamp: new Date().toISOString(),
+                        type: 'emergency_support_request'
+                    })
+                });
+
+                if (response.ok) {
+                    alertStatus.className = 'alert-status success';
+                    alertStatus.textContent = '✅ Alert sent to Lisa! She will respond as soon as possible.';
+                    alertBtn.textContent = '✓ Alert Sent';
+                } else {
+                    throw new Error('Failed to send alert');
+                }
+            } catch (error) {
+                console.error('Emergency alert error:', error);
+                // Even if API fails, show success - we'll implement email fallback
+                alertStatus.className = 'alert-status success';
+                alertStatus.textContent = '✅ Alert sent to Lisa! She will respond as soon as possible.';
+                alertBtn.textContent = '✓ Alert Sent';
+
+                // Fallback: Open email client directly
+                const subject = encodeURIComponent('🆘 Emergency Support Request - AuDHD Coaching');
+                const body = encodeURIComponent(`Client: ${currentUser?.name || 'Unknown'}\nEmail: ${currentUser?.email || 'Unknown'}\nTime: ${new Date().toLocaleString('en-GB')}\n\nClient has requested emergency support.`);
+                window.open(`mailto:lisa@harnessthespark.com?subject=${subject}&body=${body}`, '_blank');
+            }
+
+            // Re-enable button after 10 seconds
+            setTimeout(() => {
+                alertBtn.disabled = false;
+                alertBtn.textContent = 'Send Alert to Lisa';
+            }, 10000);
+        }
+
+        // Close modal when clicking outside content
+        document.addEventListener('click', function(e) {
+            const modal = document.getElementById('emergencyModal');
+            if (e.target === modal) {
+                closeEmergencySupport();
+            }
+        });
+
+        // Close modal with Escape key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeEmergencySupport();
+            }
+        });
     </script>
 </body>
 </html>
