@@ -1,0 +1,1172 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Paradox Discovery - AuDHD Executive Career</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧠</text></svg>">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #2d1b4e 100%);
+            min-height: 100vh;
+            padding: 40px 20px;
+            color: #333;
+        }
+
+        .container { max-width: 900px; margin: 0 auto; }
+
+        /* Navigation */
+        .nav-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+        .back-link {
+            color: #f472b6;
+            text-decoration: none;
+            font-size: 0.95em;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .back-link:hover { text-decoration: underline; }
+        .logout-btn {
+            background: rgba(255,255,255,0.2);
+            color: white;
+            border: 1px solid rgba(255,255,255,0.3);
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 0.85em;
+            cursor: pointer;
+            text-decoration: none;
+        }
+        .logout-btn:hover { background: rgba(255,255,255,0.3); }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            color: white;
+        }
+        .header h1 {
+            font-size: 2.2em;
+            font-weight: 800;
+            margin-bottom: 10px;
+        }
+        .header h1 span {
+            background: linear-gradient(135deg, #E91E78 0%, #F97B4D 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .header .subtitle {
+            font-size: 1.1em;
+            opacity: 0.8;
+        }
+        .header .name {
+            font-size: 1.3em;
+            color: #f472b6;
+            margin-top: 15px;
+            font-weight: 600;
+        }
+
+        /* Progress Bar */
+        .progress-container {
+            background: rgba(255,255,255,0.1);
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 30px;
+        }
+        .progress-bar {
+            background: rgba(255,255,255,0.2);
+            border-radius: 8px;
+            height: 12px;
+            overflow: hidden;
+        }
+        .progress-fill {
+            background: linear-gradient(135deg, #E91E78 0%, #F97B4D 100%);
+            height: 100%;
+            width: 0%;
+            transition: width 0.5s ease;
+            border-radius: 8px;
+        }
+        .progress-text {
+            color: white;
+            font-size: 0.9em;
+            margin-top: 10px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        /* Section Card */
+        .section-card {
+            background: white;
+            border-radius: 20px;
+            padding: 35px;
+            margin-bottom: 25px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+        }
+        .section-card.hidden { display: none; }
+
+        .section-icon { font-size: 2.5em; margin-bottom: 15px; }
+        .section-title {
+            font-size: 1.4em;
+            font-weight: 700;
+            color: #2d1b4e;
+            margin-bottom: 10px;
+        }
+        .section-paradox {
+            background: linear-gradient(135deg, #fce7f3 0%, #fbcfe8 100%);
+            border-radius: 12px;
+            padding: 15px 20px;
+            margin-bottom: 25px;
+            font-style: italic;
+            color: #9d174d;
+            font-size: 1.05em;
+        }
+        .section-intro {
+            color: #666;
+            line-height: 1.7;
+            margin-bottom: 25px;
+        }
+
+        /* Domain Colours */
+        .domain-communication { border-top: 5px solid #E91E78; }
+        .domain-executive { border-top: 5px solid #F97B4D; }
+        .domain-energy { border-top: 5px solid #FACC15; }
+        .domain-emotional { border-top: 5px solid #3B82F6; }
+        .domain-processing { border-top: 5px solid #8B5CF6; }
+        .domain-relationships { border-top: 5px solid #10B981; }
+
+        /* Question Blocks */
+        .question-block {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        .question-label {
+            font-weight: 600;
+            color: #2d1b4e;
+            margin-bottom: 12px;
+            font-size: 1em;
+        }
+        .question-sublabel {
+            font-size: 0.85em;
+            color: #888;
+            margin-bottom: 15px;
+        }
+
+        /* Textarea */
+        .question-textarea {
+            width: 100%;
+            min-height: 100px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            padding: 15px;
+            font-family: inherit;
+            font-size: 0.95em;
+            resize: vertical;
+            transition: all 0.2s;
+        }
+        .question-textarea:focus {
+            outline: none;
+            border-color: #E91E78;
+            box-shadow: 0 0 0 4px rgba(233, 30, 120, 0.15);
+        }
+
+        /* Slider */
+        .slider-container {
+            margin-top: 15px;
+        }
+        .slider-labels {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.85em;
+            color: #666;
+            margin-bottom: 8px;
+        }
+        .slider-input {
+            width: 100%;
+            height: 8px;
+            -webkit-appearance: none;
+            appearance: none;
+            background: linear-gradient(90deg, #E91E78 0%, #8B5CF6 50%, #F97B4D 100%);
+            border-radius: 5px;
+            outline: none;
+        }
+        .slider-input::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: white;
+            border: 3px solid #E91E78;
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+        }
+        .slider-value {
+            text-align: center;
+            margin-top: 10px;
+            font-weight: 600;
+            color: #2d1b4e;
+        }
+
+        /* Checkbox Options */
+        .checkbox-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 10px;
+        }
+        .checkbox-option {
+            background: white;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            padding: 12px 15px;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .checkbox-option:hover {
+            border-color: #E91E78;
+        }
+        .checkbox-option.selected {
+            border-color: #E91E78;
+            background: #fce7f3;
+        }
+        .checkbox-option input {
+            display: none;
+        }
+        .checkbox-icon {
+            width: 22px;
+            height: 22px;
+            border: 2px solid #ccc;
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9em;
+        }
+        .checkbox-option.selected .checkbox-icon {
+            background: #E91E78;
+            border-color: #E91E78;
+            color: white;
+        }
+
+        /* Navigation Buttons */
+        .nav-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: space-between;
+            margin-top: 30px;
+        }
+        .nav-btn {
+            padding: 15px 30px;
+            border-radius: 12px;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            transition: all 0.2s;
+        }
+        .nav-btn.prev {
+            background: #f0f0f0;
+            color: #555;
+        }
+        .nav-btn.prev:hover {
+            background: #e0e0e0;
+        }
+        .nav-btn.next {
+            background: linear-gradient(135deg, #E91E78 0%, #F97B4D 100%);
+            color: white;
+        }
+        .nav-btn.next:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(233, 30, 120, 0.4);
+        }
+        .nav-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* Results Section */
+        .results-card {
+            background: white;
+            border-radius: 20px;
+            padding: 35px;
+            margin-bottom: 25px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+        }
+        .results-card.hidden { display: none; }
+
+        .paradox-result {
+            background: linear-gradient(135deg, #fce7f3 0%, #e0e7ff 100%);
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 20px;
+        }
+        .paradox-result h4 {
+            color: #2d1b4e;
+            font-size: 1.1em;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .paradox-result .insight {
+            color: #555;
+            line-height: 1.6;
+            font-size: 0.95em;
+        }
+        .paradox-result .career-implication {
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid rgba(0,0,0,0.1);
+            color: #9d174d;
+            font-weight: 500;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+        .action-btn {
+            padding: 15px 30px;
+            border-radius: 12px;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            transition: all 0.2s;
+            text-decoration: none;
+            display: inline-block;
+        }
+        .action-btn.primary {
+            background: linear-gradient(135deg, #E91E78 0%, #F97B4D 100%);
+            color: white;
+        }
+        .action-btn.secondary {
+            background: white;
+            color: #E91E78;
+            border: 2px solid #E91E78;
+        }
+        .action-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+        }
+
+        .footer {
+            text-align: center;
+            color: white;
+            opacity: 0.6;
+            margin-top: 40px;
+            font-size: 0.9em;
+        }
+
+        /* Responsive */
+        @media (max-width: 600px) {
+            body { padding: 20px; }
+            .header h1 { font-size: 1.7em; }
+            .nav-buttons { flex-direction: column; }
+            .checkbox-grid { grid-template-columns: 1fr; }
+        }
+
+        @media print {
+            body { background: white; padding: 20px; }
+            .nav-bar, .nav-buttons, .progress-container { display: none; }
+            .section-card { box-shadow: none; border: 1px solid #e0e0e0; page-break-inside: avoid; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Navigation -->
+        <div class="nav-bar">
+            <a href="audhd-career-portal.html" class="back-link">
+                <span>←</span> Back to Portal
+            </a>
+            <button class="logout-btn" onclick="logout()">Log out</button>
+        </div>
+
+        <div class="header">
+            <h1>🧠 Paradox <span>Discovery</span></h1>
+            <div class="subtitle">Understanding Your AuDHD Career Patterns</div>
+            <div class="name" id="userName">Loading...</div>
+        </div>
+
+        <!-- Progress Bar -->
+        <div class="progress-container">
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+            <div class="progress-text">
+                <span id="progressLabel">Section 1 of 7</span>
+                <span id="progressPercent">0%</span>
+            </div>
+        </div>
+
+        <!-- Section 0: Welcome -->
+        <div class="section-card" id="section-0">
+            <div class="section-icon">👋</div>
+            <div class="section-title">Welcome to Your Paradox Discovery</div>
+            <div class="section-intro">
+                <p style="margin-bottom: 15px;">As a senior executive with an AuDHD brain, you experience unique tensions that neurotypical frameworks miss entirely.</p>
+
+                <p style="margin-bottom: 15px;">This discovery tool explores the <strong>6 Paradox Domains</strong> that shape how your brain navigates executive leadership:</p>
+
+                <ul style="list-style: none; padding: 0; margin: 20px 0;">
+                    <li style="padding: 10px 0; border-bottom: 1px solid #eee;">💬 <strong>Communication</strong> — How you share and hold boundaries</li>
+                    <li style="padding: 10px 0; border-bottom: 1px solid #eee;">🧩 <strong>Executive Functioning</strong> — How you plan and execute</li>
+                    <li style="padding: 10px 0; border-bottom: 1px solid #eee;">⚡ <strong>Energy</strong> — How you manage stimulation and recovery</li>
+                    <li style="padding: 10px 0; border-bottom: 1px solid #eee;">💙 <strong>Emotional</strong> — How you process and regulate</li>
+                    <li style="padding: 10px 0; border-bottom: 1px solid #eee;">🔄 <strong>Processing</strong> — How you think and focus</li>
+                    <li style="padding: 10px 0;">🤝 <strong>Relationships</strong> — How you connect and collaborate</li>
+                </ul>
+
+                <p style="color: #9d174d; font-weight: 500;">Take your time. There are no wrong answers — only your truth.</p>
+            </div>
+
+            <div class="nav-buttons">
+                <div></div>
+                <button class="nav-btn next" onclick="nextSection()">Begin Discovery →</button>
+            </div>
+        </div>
+
+        <!-- Section 1: Communication -->
+        <div class="section-card hidden domain-communication" id="section-1">
+            <div class="section-icon">💬</div>
+            <div class="section-title">Communication Paradox</div>
+            <div class="section-paradox">
+                "Autism makes the rules, ADHD breaks them — making it hard to trust ourselves."
+            </div>
+            <div class="section-intro">
+                In executive roles, this paradox affects how you lead teams, set expectations, and hold boundaries.
+            </div>
+
+            <div class="question-block">
+                <div class="question-label">In leadership meetings, which pattern do you recognise?</div>
+                <div class="checkbox-grid">
+                    <label class="checkbox-option" onclick="toggleCheckbox(this)">
+                        <input type="checkbox" name="comm-pattern" value="script">
+                        <span class="checkbox-icon">✓</span>
+                        <span>I prepare scripts but then deviate</span>
+                    </label>
+                    <label class="checkbox-option" onclick="toggleCheckbox(this)">
+                        <input type="checkbox" name="comm-pattern" value="blurt">
+                        <span class="checkbox-icon">✓</span>
+                        <span>I blurt ideas before thinking through</span>
+                    </label>
+                    <label class="checkbox-option" onclick="toggleCheckbox(this)">
+                        <input type="checkbox" name="comm-pattern" value="silent">
+                        <span class="checkbox-icon">✓</span>
+                        <span>I stay silent then regret not speaking</span>
+                    </label>
+                    <label class="checkbox-option" onclick="toggleCheckbox(this)">
+                        <input type="checkbox" name="comm-pattern" value="over-explain">
+                        <span class="checkbox-icon">✓</span>
+                        <span>I over-explain or provide too much detail</span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="question-block">
+                <div class="question-label">How do you experience boundary-setting at work?</div>
+                <div class="slider-container">
+                    <div class="slider-labels">
+                        <span>I set rigid rules<br/>(autism)</span>
+                        <span>I set clear but<br/>flexible rules</span>
+                        <span>I constantly break<br/>my own rules (ADHD)</span>
+                    </div>
+                    <input type="range" class="slider-input" id="comm-boundaries" min="0" max="100" value="50" oninput="updateSliderValue('comm-boundaries')">
+                    <div class="slider-value" id="comm-boundaries-value">Balanced</div>
+                </div>
+            </div>
+
+            <div class="question-block">
+                <div class="question-label">Describe a recent situation where you struggled to communicate as a leader:</div>
+                <div class="question-sublabel">What happened? What was the internal conflict?</div>
+                <textarea class="question-textarea" id="comm-example" placeholder="e.g., I had clear feedback to give but then softened it so much it lost meaning..."></textarea>
+            </div>
+
+            <div class="nav-buttons">
+                <button class="nav-btn prev" onclick="prevSection()">← Previous</button>
+                <button class="nav-btn next" onclick="nextSection()">Next: Executive Functioning →</button>
+            </div>
+        </div>
+
+        <!-- Section 2: Executive Functioning -->
+        <div class="section-card hidden domain-executive" id="section-2">
+            <div class="section-icon">🧩</div>
+            <div class="section-title">Executive Functioning Paradox</div>
+            <div class="section-paradox">
+                "ADHD needs to do everything, autism needs to know how."
+            </div>
+            <div class="section-intro">
+                This tension affects how you strategise, delegate, and manage the competing demands of senior leadership.
+            </div>
+
+            <div class="question-block">
+                <div class="question-label">How do you typically approach strategic planning?</div>
+                <div class="checkbox-grid">
+                    <label class="checkbox-option" onclick="toggleCheckbox(this)">
+                        <input type="checkbox" name="exec-planning" value="need-all-info">
+                        <span class="checkbox-icon">✓</span>
+                        <span>Need all information before starting</span>
+                    </label>
+                    <label class="checkbox-option" onclick="toggleCheckbox(this)">
+                        <input type="checkbox" name="exec-planning" value="jump-in">
+                        <span class="checkbox-icon">✓</span>
+                        <span>Jump in and figure it out as I go</span>
+                    </label>
+                    <label class="checkbox-option" onclick="toggleCheckbox(this)">
+                        <input type="checkbox" name="exec-planning" value="paralysed">
+                        <span class="checkbox-icon">✓</span>
+                        <span>Get paralysed between the two</span>
+                    </label>
+                    <label class="checkbox-option" onclick="toggleCheckbox(this)">
+                        <input type="checkbox" name="exec-planning" value="delegate-struggle">
+                        <span class="checkbox-icon">✓</span>
+                        <span>Struggle to delegate because I need control</span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="question-block">
+                <div class="question-label">Where do you sit on the structure vs spontaneity spectrum?</div>
+                <div class="slider-container">
+                    <div class="slider-labels">
+                        <span>Need detailed<br/>plans & routines</span>
+                        <span>Structured<br/>flexibility</span>
+                        <span>Thrive on<br/>spontaneity</span>
+                    </div>
+                    <input type="range" class="slider-input" id="exec-structure" min="0" max="100" value="50" oninput="updateSliderValue('exec-structure')">
+                    <div class="slider-value" id="exec-structure-value">Balanced</div>
+                </div>
+            </div>
+
+            <div class="question-block">
+                <div class="question-label">What executive functions feel hardest in your role?</div>
+                <div class="question-sublabel">Time management, prioritisation, task switching, decision-making, delegation...</div>
+                <textarea class="question-textarea" id="exec-challenges" placeholder="e.g., I can see all the things that need doing but can't prioritise them..."></textarea>
+            </div>
+
+            <div class="nav-buttons">
+                <button class="nav-btn prev" onclick="prevSection()">← Previous</button>
+                <button class="nav-btn next" onclick="nextSection()">Next: Energy →</button>
+            </div>
+        </div>
+
+        <!-- Section 3: Energy -->
+        <div class="section-card hidden domain-energy" id="section-3">
+            <div class="section-icon">⚡</div>
+            <div class="section-title">Energy Paradox</div>
+            <div class="section-paradox">
+                "ADHD seeks chaos, autism seeks peace — resulting in sensory overload."
+            </div>
+            <div class="section-intro">
+                As an executive, you're constantly managing stimulation levels while leading through high-demand situations.
+            </div>
+
+            <div class="question-block">
+                <div class="question-label">Which energy patterns do you experience at work?</div>
+                <div class="checkbox-grid">
+                    <label class="checkbox-option" onclick="toggleCheckbox(this)">
+                        <input type="checkbox" name="energy-pattern" value="seek-stimulation">
+                        <span class="checkbox-icon">✓</span>
+                        <span>I seek stimulation then crash</span>
+                    </label>
+                    <label class="checkbox-option" onclick="toggleCheckbox(this)">
+                        <input type="checkbox" name="energy-pattern" value="avoid-meetings">
+                        <span class="checkbox-icon">✓</span>
+                        <span>Back-to-back meetings drain me completely</span>
+                    </label>
+                    <label class="checkbox-option" onclick="toggleCheckbox(this)">
+                        <input type="checkbox" name="energy-pattern" value="hyperfocus">
+                        <span class="checkbox-icon">✓</span>
+                        <span>I hyperfocus then can't function afterwards</span>
+                    </label>
+                    <label class="checkbox-option" onclick="toggleCheckbox(this)">
+                        <input type="checkbox" name="energy-pattern" value="sensory-overload">
+                        <span class="checkbox-icon">✓</span>
+                        <span>Open offices/busy environments overwhelm me</span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="question-block">
+                <div class="question-label">How would you rate your current energy management?</div>
+                <div class="slider-container">
+                    <div class="slider-labels">
+                        <span>Consistently<br/>burned out</span>
+                        <span>Managing<br/>but struggling</span>
+                        <span>Effectively<br/>balanced</span>
+                    </div>
+                    <input type="range" class="slider-input" id="energy-management" min="0" max="100" value="50" oninput="updateSliderValue('energy-management')">
+                    <div class="slider-value" id="energy-management-value">Managing</div>
+                </div>
+            </div>
+
+            <div class="question-block">
+                <div class="question-label">What does masking cost you in your executive role?</div>
+                <div class="question-sublabel">Think about presentations, networking events, all-day meetings...</div>
+                <textarea class="question-textarea" id="energy-masking" placeholder="e.g., After board meetings I need complete silence for hours..."></textarea>
+            </div>
+
+            <div class="nav-buttons">
+                <button class="nav-btn prev" onclick="prevSection()">← Previous</button>
+                <button class="nav-btn next" onclick="nextSection()">Next: Emotional →</button>
+            </div>
+        </div>
+
+        <!-- Section 4: Emotional -->
+        <div class="section-card hidden domain-emotional" id="section-4">
+            <div class="section-icon">💙</div>
+            <div class="section-title">Emotional Paradox</div>
+            <div class="section-paradox">
+                "ADHD feels 'too much', autism doesn't feel enough — leading to overwhelm."
+            </div>
+            <div class="section-intro">
+                Emotional regulation is crucial for leadership presence. This paradox can make executive composure challenging.
+            </div>
+
+            <div class="question-block">
+                <div class="question-label">How do you experience emotions in your leadership role?</div>
+                <div class="checkbox-grid">
+                    <label class="checkbox-option" onclick="toggleCheckbox(this)">
+                        <input type="checkbox" name="emotional-pattern" value="intense-internal">
+                        <span class="checkbox-icon">✓</span>
+                        <span>Intense internal reactions I hide</span>
+                    </label>
+                    <label class="checkbox-option" onclick="toggleCheckbox(this)">
+                        <input type="checkbox" name="emotional-pattern" value="delayed-processing">
+                        <span class="checkbox-icon">✓</span>
+                        <span>Delayed emotional processing</span>
+                    </label>
+                    <label class="checkbox-option" onclick="toggleCheckbox(this)">
+                        <input type="checkbox" name="emotional-pattern" value="rsd">
+                        <span class="checkbox-icon">✓</span>
+                        <span>Rejection sensitivity affects decisions</span>
+                    </label>
+                    <label class="checkbox-option" onclick="toggleCheckbox(this)">
+                        <input type="checkbox" name="emotional-pattern" value="difficulty-reading">
+                        <span class="checkbox-icon">✓</span>
+                        <span>Difficulty reading room dynamics</span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="question-block">
+                <div class="question-label">Where do you sit on the emotional expression spectrum?</div>
+                <div class="slider-container">
+                    <div class="slider-labels">
+                        <span>Over-controlled<br/>(flat affect)</span>
+                        <span>Appropriately<br/>expressive</span>
+                        <span>Under-controlled<br/>(too intense)</span>
+                    </div>
+                    <input type="range" class="slider-input" id="emotional-expression" min="0" max="100" value="50" oninput="updateSliderValue('emotional-expression')">
+                    <div class="slider-value" id="emotional-expression-value">Balanced</div>
+                </div>
+            </div>
+
+            <div class="question-block">
+                <div class="question-label">How does rejection sensitivity show up in your career?</div>
+                <div class="question-sublabel">Think about feedback, promotions, team dynamics, stakeholder relationships...</div>
+                <textarea class="question-textarea" id="emotional-rsd" placeholder="e.g., I replay critical feedback for days and it affects my confidence..."></textarea>
+            </div>
+
+            <div class="nav-buttons">
+                <button class="nav-btn prev" onclick="prevSection()">← Previous</button>
+                <button class="nav-btn next" onclick="nextSection()">Next: Processing →</button>
+            </div>
+        </div>
+
+        <!-- Section 5: Processing -->
+        <div class="section-card hidden domain-processing" id="section-5">
+            <div class="section-icon">🔄</div>
+            <div class="section-title">Processing Paradox</div>
+            <div class="section-paradox">
+                "Autism focuses on the details, ADHD focuses on the ideas."
+            </div>
+            <div class="section-intro">
+                This paradox affects strategic thinking, problem-solving, and how you process complex information.
+            </div>
+
+            <div class="question-block">
+                <div class="question-label">How do you typically process complex problems?</div>
+                <div class="checkbox-grid">
+                    <label class="checkbox-option" onclick="toggleCheckbox(this)">
+                        <input type="checkbox" name="processing-pattern" value="big-picture">
+                        <span class="checkbox-icon">✓</span>
+                        <span>See big picture but miss details</span>
+                    </label>
+                    <label class="checkbox-option" onclick="toggleCheckbox(this)">
+                        <input type="checkbox" name="processing-pattern" value="detail-focus">
+                        <span class="checkbox-icon">✓</span>
+                        <span>Get lost in details, miss the point</span>
+                    </label>
+                    <label class="checkbox-option" onclick="toggleCheckbox(this)">
+                        <input type="checkbox" name="processing-pattern" value="oscillate">
+                        <span class="checkbox-icon">✓</span>
+                        <span>Oscillate between both modes</span>
+                    </label>
+                    <label class="checkbox-option" onclick="toggleCheckbox(this)">
+                        <input type="checkbox" name="processing-pattern" value="pattern-recognition">
+                        <span class="checkbox-icon">✓</span>
+                        <span>See patterns others completely miss</span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="question-block">
+                <div class="question-label">What's your focus style in executive work?</div>
+                <div class="slider-container">
+                    <div class="slider-labels">
+                        <span>Deep focus<br/>(monotropic)</span>
+                        <span>Context-dependent<br/>switching</span>
+                        <span>Rapid context<br/>switching</span>
+                    </div>
+                    <input type="range" class="slider-input" id="processing-focus" min="0" max="100" value="50" oninput="updateSliderValue('processing-focus')">
+                    <div class="slider-value" id="processing-focus-value">Mixed</div>
+                </div>
+            </div>
+
+            <div class="question-block">
+                <div class="question-label">Describe your unique thinking strength as a leader:</div>
+                <div class="question-sublabel">What do you see or understand that others don't?</div>
+                <textarea class="question-textarea" id="processing-strength" placeholder="e.g., I can see how disconnected initiatives will collide in 6 months..."></textarea>
+            </div>
+
+            <div class="nav-buttons">
+                <button class="nav-btn prev" onclick="prevSection()">← Previous</button>
+                <button class="nav-btn next" onclick="nextSection()">Next: Relationships →</button>
+            </div>
+        </div>
+
+        <!-- Section 6: Relationships -->
+        <div class="section-card hidden domain-relationships" id="section-6">
+            <div class="section-icon">🤝</div>
+            <div class="section-title">Relationships Paradox</div>
+            <div class="section-paradox">
+                "ADHD overshares, autism undershares."
+            </div>
+            <div class="section-intro">
+                This tension affects networking, stakeholder management, and building your executive presence.
+            </div>
+
+            <div class="question-block">
+                <div class="question-label">How do you experience professional relationships?</div>
+                <div class="checkbox-grid">
+                    <label class="checkbox-option" onclick="toggleCheckbox(this)">
+                        <input type="checkbox" name="relationship-pattern" value="overshare">
+                        <span class="checkbox-icon">✓</span>
+                        <span>I overshare then regret it</span>
+                    </label>
+                    <label class="checkbox-option" onclick="toggleCheckbox(this)">
+                        <input type="checkbox" name="relationship-pattern" value="undershare">
+                        <span class="checkbox-icon">✓</span>
+                        <span>I'm too private and seem distant</span>
+                    </label>
+                    <label class="checkbox-option" onclick="toggleCheckbox(this)">
+                        <input type="checkbox" name="relationship-pattern" value="masking">
+                        <span class="checkbox-icon">✓</span>
+                        <span>I mask heavily in executive settings</span>
+                    </label>
+                    <label class="checkbox-option" onclick="toggleCheckbox(this)">
+                        <input type="checkbox" name="relationship-pattern" value="authentic-struggle">
+                        <span class="checkbox-icon">✓</span>
+                        <span>Being authentic feels professionally risky</span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="question-block">
+                <div class="question-label">Where do you sit on the professional disclosure spectrum?</div>
+                <div class="slider-container">
+                    <div class="slider-labels">
+                        <span>Very private<br/>(closed)</span>
+                        <span>Strategically<br/>open</span>
+                        <span>Very open<br/>(vulnerable)</span>
+                    </div>
+                    <input type="range" class="slider-input" id="relationship-disclosure" min="0" max="100" value="50" oninput="updateSliderValue('relationship-disclosure')">
+                    <div class="slider-value" id="relationship-disclosure-value">Balanced</div>
+                </div>
+            </div>
+
+            <div class="question-block">
+                <div class="question-label">What's your biggest relationship challenge as an executive?</div>
+                <div class="question-sublabel">Networking, politics, team dynamics, stakeholder management...</div>
+                <textarea class="question-textarea" id="relationship-challenge" placeholder="e.g., Small talk at networking events feels impossible but I know it matters..."></textarea>
+            </div>
+
+            <div class="nav-buttons">
+                <button class="nav-btn prev" onclick="prevSection()">← Previous</button>
+                <button class="nav-btn next" onclick="generateResults()">Complete Discovery →</button>
+            </div>
+        </div>
+
+        <!-- Results Section -->
+        <div class="results-card hidden" id="results-section">
+            <div class="section-icon">✨</div>
+            <div class="section-title">Your Paradox Profile</div>
+            <div class="section-intro" style="margin-bottom: 30px;">
+                Based on your responses, here are your key paradox patterns and their career implications.
+            </div>
+
+            <div id="resultsContent">
+                <!-- Populated by JavaScript -->
+            </div>
+
+            <div class="action-buttons">
+                <a href="audhd-career-blueprint.html" class="action-btn primary">Create Career Blueprint →</a>
+                <button class="action-btn secondary" onclick="window.print()">📄 Export PDF</button>
+            </div>
+        </div>
+
+        <div class="footer">
+            AuDHD Executive Career Coaching by Harness the Spark | harnessthespark.com
+        </div>
+    </div>
+
+    <script>
+        // State
+        let currentSection = 0;
+        const totalSections = 7; // 0-6 + results
+        let currentUser = null;
+        let responses = {
+            communication: {},
+            executive: {},
+            energy: {},
+            emotional: {},
+            processing: {},
+            relationships: {}
+        };
+
+        // Initialize
+        window.onload = function() {
+            const savedUser = localStorage.getItem('syp_user');
+            if (!savedUser) {
+                window.location.href = 'exec-login.html';
+                return;
+            }
+            currentUser = JSON.parse(savedUser);
+
+            // Check access
+            const hasAccess = currentUser.programme_access === 'audhd-career' ||
+                             currentUser.programme_access === 'all' ||
+                             currentUser.isStaff;
+
+            if (!hasAccess) {
+                alert('You do not have access to AuDHD Executive Career tools.');
+                window.location.href = 'index.html';
+                return;
+            }
+
+            document.getElementById('userName').textContent = currentUser.name || currentUser.email;
+
+            // Load saved responses
+            const saved = localStorage.getItem('audhd_career_discovery_' + currentUser.id);
+            if (saved) {
+                responses = JSON.parse(saved);
+            }
+
+            updateProgress();
+        };
+
+        function updateProgress() {
+            const percent = Math.round((currentSection / (totalSections - 1)) * 100);
+            document.getElementById('progressFill').style.width = percent + '%';
+            document.getElementById('progressLabel').textContent = `Section ${currentSection + 1} of ${totalSections}`;
+            document.getElementById('progressPercent').textContent = percent + '%';
+        }
+
+        function showSection(index) {
+            // Hide all sections
+            for (let i = 0; i <= 6; i++) {
+                const section = document.getElementById('section-' + i);
+                if (section) section.classList.add('hidden');
+            }
+            document.getElementById('results-section').classList.add('hidden');
+
+            // Show current section
+            const currentSectionEl = document.getElementById('section-' + index);
+            if (currentSectionEl) {
+                currentSectionEl.classList.remove('hidden');
+            }
+
+            updateProgress();
+        }
+
+        function nextSection() {
+            saveCurrentSection();
+            if (currentSection < 6) {
+                currentSection++;
+                showSection(currentSection);
+                window.scrollTo(0, 0);
+            }
+        }
+
+        function prevSection() {
+            saveCurrentSection();
+            if (currentSection > 0) {
+                currentSection--;
+                showSection(currentSection);
+                window.scrollTo(0, 0);
+            }
+        }
+
+        function saveCurrentSection() {
+            // Save to localStorage as we go
+            localStorage.setItem('audhd_career_discovery_' + currentUser.id, JSON.stringify(responses));
+        }
+
+        function toggleCheckbox(element) {
+            element.classList.toggle('selected');
+            const input = element.querySelector('input');
+            input.checked = element.classList.contains('selected');
+
+            // Store response
+            const name = input.name;
+            const value = input.value;
+
+            // Get domain from name
+            const domain = name.split('-')[0];
+            const field = name.split('-').slice(1).join('-');
+
+            if (!responses[domain]) responses[domain] = {};
+            if (!responses[domain][field]) responses[domain][field] = [];
+
+            if (input.checked) {
+                if (!responses[domain][field].includes(value)) {
+                    responses[domain][field].push(value);
+                }
+            } else {
+                responses[domain][field] = responses[domain][field].filter(v => v !== value);
+            }
+        }
+
+        function updateSliderValue(id) {
+            const slider = document.getElementById(id);
+            const value = parseInt(slider.value);
+            const display = document.getElementById(id + '-value');
+
+            let label;
+            if (value < 33) {
+                label = 'Leans Left';
+            } else if (value < 67) {
+                label = 'Balanced';
+            } else {
+                label = 'Leans Right';
+            }
+
+            // Custom labels based on slider
+            if (id === 'comm-boundaries') {
+                label = value < 33 ? 'Rigid Rules' : value > 67 ? 'Breaks Rules' : 'Flexible Rules';
+            } else if (id === 'exec-structure') {
+                label = value < 33 ? 'Needs Structure' : value > 67 ? 'Needs Spontaneity' : 'Structured Flexibility';
+            } else if (id === 'energy-management') {
+                label = value < 33 ? 'Burned Out' : value > 67 ? 'Effectively Balanced' : 'Managing';
+            } else if (id === 'emotional-expression') {
+                label = value < 33 ? 'Over-Controlled' : value > 67 ? 'Under-Controlled' : 'Balanced';
+            } else if (id === 'processing-focus') {
+                label = value < 33 ? 'Deep Focus' : value > 67 ? 'Rapid Switching' : 'Context-Dependent';
+            } else if (id === 'relationship-disclosure') {
+                label = value < 33 ? 'Very Private' : value > 67 ? 'Very Open' : 'Strategically Open';
+            }
+
+            display.textContent = label;
+
+            // Store response
+            const domain = id.split('-')[0];
+            if (!responses[domain]) responses[domain] = {};
+            responses[domain].slider = value;
+            responses[domain].sliderLabel = label;
+        }
+
+        function generateResults() {
+            saveCurrentSection();
+
+            // Collect all textarea responses
+            const textareas = document.querySelectorAll('.question-textarea');
+            textareas.forEach(ta => {
+                const parts = ta.id.split('-');
+                const domain = parts[0];
+                const field = parts.slice(1).join('-');
+                if (!responses[domain]) responses[domain] = {};
+                responses[domain][field] = ta.value;
+            });
+
+            // Save final responses
+            localStorage.setItem('audhd_career_discovery_' + currentUser.id, JSON.stringify(responses));
+
+            // Generate results
+            const resultsHtml = generateResultsHTML();
+            document.getElementById('resultsContent').innerHTML = resultsHtml;
+
+            // Show results
+            for (let i = 0; i <= 6; i++) {
+                const section = document.getElementById('section-' + i);
+                if (section) section.classList.add('hidden');
+            }
+            document.getElementById('results-section').classList.remove('hidden');
+            document.getElementById('progressFill').style.width = '100%';
+            document.getElementById('progressLabel').textContent = 'Discovery Complete';
+            document.getElementById('progressPercent').textContent = '100%';
+
+            window.scrollTo(0, 0);
+        }
+
+        function generateResultsHTML() {
+            const domains = [
+                {
+                    id: 'comm',
+                    name: 'Communication',
+                    icon: '💬',
+                    paradox: 'Autism makes the rules, ADHD breaks them',
+                    color: '#E91E78'
+                },
+                {
+                    id: 'exec',
+                    name: 'Executive Functioning',
+                    icon: '🧩',
+                    paradox: 'ADHD needs to do everything, autism needs to know how',
+                    color: '#F97B4D'
+                },
+                {
+                    id: 'energy',
+                    name: 'Energy',
+                    icon: '⚡',
+                    paradox: 'ADHD seeks chaos, autism seeks peace',
+                    color: '#FACC15'
+                },
+                {
+                    id: 'emotional',
+                    name: 'Emotional',
+                    icon: '💙',
+                    paradox: 'ADHD feels too much, autism doesn\'t feel enough',
+                    color: '#3B82F6'
+                },
+                {
+                    id: 'processing',
+                    name: 'Processing',
+                    icon: '🔄',
+                    paradox: 'Autism focuses on details, ADHD focuses on ideas',
+                    color: '#8B5CF6'
+                },
+                {
+                    id: 'relationship',
+                    name: 'Relationships',
+                    icon: '🤝',
+                    paradox: 'ADHD overshares, autism undershares',
+                    color: '#10B981'
+                }
+            ];
+
+            let html = '';
+
+            domains.forEach(domain => {
+                const domainKey = domain.id === 'relationship' ? 'relationships' :
+                                 domain.id === 'exec' ? 'executive' :
+                                 domain.id === 'comm' ? 'communication' : domain.id;
+                const data = responses[domainKey] || {};
+
+                // Generate insight based on slider position
+                let insight = '';
+                const sliderValue = data.slider || 50;
+
+                if (domain.id === 'comm') {
+                    if (sliderValue < 33) {
+                        insight = 'You tend toward rigid boundary-setting, which can create clarity but may struggle with the flexibility leadership sometimes requires.';
+                    } else if (sliderValue > 67) {
+                        insight = 'You frequently break your own rules, which can help you adapt but may undermine your authority and self-trust.';
+                    } else {
+                        insight = 'You\'ve found a balance between structure and flexibility in your communication, though this balance may shift under pressure.';
+                    }
+                } else if (domain.id === 'exec') {
+                    if (sliderValue < 33) {
+                        insight = 'You need detailed plans before acting, which drives quality but may slow your response to fast-moving situations.';
+                    } else if (sliderValue > 67) {
+                        insight = 'You thrive on spontaneity and action, which enables quick pivots but may leave gaps in strategic thinking.';
+                    } else {
+                        insight = 'You\'ve developed structured flexibility — clear frameworks that allow for tactical adaptation.';
+                    }
+                } else if (domain.id === 'energy') {
+                    if (sliderValue < 33) {
+                        insight = 'You\'re experiencing significant burnout. Energy management needs to become a strategic priority, not an afterthought.';
+                    } else if (sliderValue > 67) {
+                        insight = 'You\'ve found effective energy management strategies. Protecting these systems should be a key career consideration.';
+                    } else {
+                        insight = 'You\'re managing but struggling. There are likely specific energy drains that need targeted intervention.';
+                    }
+                } else if (domain.id === 'emotional') {
+                    if (sliderValue < 33) {
+                        insight = 'You over-control emotional expression, which may be read as distant or unapproachable by teams.';
+                    } else if (sliderValue > 67) {
+                        insight = 'Your emotional intensity can be powerful but may sometimes overwhelm professional contexts.';
+                    } else {
+                        insight = 'You\'ve found balance in emotional expression, adapting your presence to different contexts.';
+                    }
+                } else if (domain.id === 'processing') {
+                    if (sliderValue < 33) {
+                        insight = 'Your deep focus style (monotropic) enables exceptional expertise but may make context-switching costly.';
+                    } else if (sliderValue > 67) {
+                        insight = 'Your rapid context-switching enables broad awareness but may reduce depth of analysis.';
+                    } else {
+                        insight = 'You shift between focus modes based on context, which is adaptive but may require conscious management.';
+                    }
+                } else if (domain.id === 'relationship') {
+                    if (sliderValue < 33) {
+                        insight = 'Your privacy protects you but may limit the connections that support career advancement.';
+                    } else if (sliderValue > 67) {
+                        insight = 'Your openness builds quick rapport but may expose vulnerabilities in political environments.';
+                    } else {
+                        insight = 'You\'re strategically open — choosing what to share based on context and relationship.';
+                    }
+                }
+
+                // Generate career implication
+                let careerImplication = 'Consider how this pattern affects your leadership positioning and role selection.';
+                const textResponse = data.example || data.challenges || data.masking || data.rsd || data.strength || data.challenge || '';
+
+                if (textResponse) {
+                    careerImplication = `<strong>Your experience:</strong> "${textResponse.substring(0, 150)}${textResponse.length > 150 ? '...' : ''}"`;
+                }
+
+                html += `
+                    <div class="paradox-result" style="border-left: 4px solid ${domain.color};">
+                        <h4>
+                            <span style="font-size: 1.3em;">${domain.icon}</span>
+                            ${domain.name} Paradox
+                        </h4>
+                        <div style="font-style: italic; color: #888; margin-bottom: 10px; font-size: 0.9em;">
+                            "${domain.paradox}"
+                        </div>
+                        <div class="insight">${insight}</div>
+                        <div class="career-implication">${careerImplication}</div>
+                    </div>
+                `;
+            });
+
+            return html;
+        }
+
+        function logout() {
+            if (confirm('Are you sure you want to log out?')) {
+                localStorage.removeItem('syp_user');
+                localStorage.removeItem('syp_token');
+                window.location.href = 'index.html';
+            }
+        }
+    </script>
+</body>
+</html>

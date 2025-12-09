@@ -1,0 +1,727 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AuDHD Executive Career Coaching - Spark Your Potential</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧠</text></svg>">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #2d1b4e 100%);
+            min-height: 100vh;
+            padding: 40px 20px;
+            color: #fff;
+        }
+        .container { max-width: 1100px; margin: 0 auto; }
+
+        /* Header */
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .logo { margin-bottom: 20px; }
+        .logo img { height: 60px; }
+        .header h1 {
+            font-size: 2.2em;
+            font-weight: 800;
+            margin-bottom: 8px;
+            color: #fff;
+        }
+        .header h1 .accent {
+            background: linear-gradient(135deg, #E91E78 0%, #F97B4D 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .header .subtitle {
+            font-size: 1.1em;
+            color: #aaa;
+            margin-bottom: 8px;
+        }
+        .header .welcome {
+            font-size: 1.2em;
+            color: #E91E78;
+            font-weight: 600;
+        }
+
+        /* User Menu */
+        .user-menu {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        .user-email {
+            color: white;
+            opacity: 0.7;
+            font-size: 0.85em;
+        }
+        .menu-btn {
+            background: rgba(255,255,255,0.15);
+            color: white;
+            border: 1px solid rgba(255,255,255,0.3);
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 0.85em;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+        .menu-btn:hover {
+            background: rgba(255,255,255,0.25);
+        }
+
+        /* Programme Badge */
+        .programme-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #E91E78 0%, #F97B4D 100%);
+            color: white;
+            padding: 8px 20px;
+            border-radius: 25px;
+            font-size: 0.9em;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+
+        /* Stats Bar */
+        .stats-bar {
+            background: rgba(255,255,255,0.1);
+            border-radius: 16px;
+            padding: 20px 30px;
+            margin-bottom: 30px;
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        .stat-item { text-align: center; min-width: 100px; }
+        .stat-item .stat-value {
+            font-size: 1.8em;
+            font-weight: 800;
+            color: #F97B4D;
+        }
+        .stat-item .stat-label {
+            font-size: 0.8em;
+            color: #aaa;
+            margin-top: 4px;
+        }
+
+        /* Section Styles */
+        .section {
+            background: rgba(255,255,255,0.05);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+        }
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+        .section-icon {
+            font-size: 2em;
+        }
+        .section-title {
+            font-size: 1.4em;
+            font-weight: 700;
+            color: #fff;
+        }
+        .section-subtitle {
+            font-size: 0.9em;
+            color: #aaa;
+        }
+
+        /* Paradox Overview Cards */
+        .paradox-overview {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+        .paradox-mini {
+            background: rgba(255,255,255,0.1);
+            border-radius: 12px;
+            padding: 15px;
+            text-align: center;
+            border: 2px solid transparent;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .paradox-mini:hover {
+            background: rgba(255,255,255,0.15);
+            border-color: rgba(233, 30, 120, 0.3);
+        }
+        .paradox-mini .emoji { font-size: 1.8em; margin-bottom: 8px; }
+        .paradox-mini .name {
+            font-size: 0.85em;
+            font-weight: 600;
+            color: #fff;
+            margin-bottom: 5px;
+        }
+        .paradox-mini .status {
+            font-size: 0.7em;
+            padding: 3px 10px;
+            border-radius: 12px;
+            display: inline-block;
+        }
+        .paradox-mini .status.exploring {
+            background: rgba(249, 123, 77, 0.3);
+            color: #F97B4D;
+        }
+        .paradox-mini .status.mapped {
+            background: rgba(16, 185, 129, 0.3);
+            color: #10B981;
+        }
+        .paradox-mini .status.pending {
+            background: rgba(255,255,255,0.1);
+            color: #888;
+        }
+
+        /* Journey Steps */
+        .journey-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+        }
+        @media (max-width: 900px) {
+            .journey-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+        @media (max-width: 500px) {
+            .journey-grid { grid-template-columns: 1fr; }
+        }
+
+        .journey-step {
+            background: rgba(255,255,255,0.95);
+            border-radius: 16px;
+            padding: 25px 20px;
+            text-align: center;
+            position: relative;
+            transition: all 0.2s;
+            border: 3px solid transparent;
+        }
+        .journey-step:hover:not(.locked) {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+        }
+        .journey-step.current {
+            border-color: #F97B4D;
+        }
+        .journey-step.complete {
+            border-color: #10B981;
+        }
+        .journey-step.locked {
+            opacity: 0.6;
+        }
+
+        .step-week {
+            position: absolute;
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(135deg, #E91E78 0%, #F97B4D 100%);
+            color: white;
+            font-size: 0.75em;
+            font-weight: 700;
+            padding: 4px 14px;
+            border-radius: 12px;
+        }
+        .journey-step.complete .step-week {
+            background: linear-gradient(135deg, #10B981 0%, #059669 100%);
+        }
+        .step-icon {
+            font-size: 2.5em;
+            margin: 15px 0;
+        }
+        .step-title {
+            color: #1a1a2e;
+            font-size: 1.1em;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+        .step-desc {
+            color: #666;
+            font-size: 0.85em;
+            line-height: 1.4;
+            margin-bottom: 15px;
+        }
+        .step-btn {
+            display: inline-block;
+            background: linear-gradient(135deg, #E91E78 0%, #F97B4D 100%);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-size: 0.85em;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+        .step-btn:hover {
+            opacity: 0.9;
+            transform: translateY(-1px);
+        }
+        .step-btn.secondary {
+            background: #f0f0f0;
+            color: #555;
+        }
+        .step-btn.complete-btn {
+            background: linear-gradient(135deg, #10B981 0%, #059669 100%);
+        }
+        .journey-step.locked .step-btn {
+            background: #ddd;
+            color: #999;
+            cursor: not-allowed;
+        }
+
+        /* Tools Grid */
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+        }
+        .tool-card {
+            background: rgba(255,255,255,0.95);
+            border-radius: 16px;
+            padding: 25px;
+            transition: all 0.2s;
+            border: 3px solid transparent;
+        }
+        .tool-card:hover:not(.locked) {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+            border-color: rgba(233, 30, 120, 0.3);
+        }
+        .tool-card.locked {
+            opacity: 0.5;
+        }
+        .tool-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 15px;
+        }
+        .tool-icon { font-size: 2em; }
+        .tool-title {
+            color: #1a1a2e;
+            font-size: 1.1em;
+            font-weight: 700;
+        }
+        .tool-desc {
+            color: #666;
+            font-size: 0.9em;
+            line-height: 1.5;
+            margin-bottom: 15px;
+        }
+        .tool-paradox-tag {
+            display: inline-block;
+            background: rgba(233, 30, 120, 0.1);
+            color: #E91E78;
+            font-size: 0.75em;
+            padding: 4px 10px;
+            border-radius: 12px;
+            margin-bottom: 15px;
+        }
+        .tool-btn {
+            display: block;
+            width: 100%;
+            background: linear-gradient(135deg, #E91E78 0%, #F97B4D 100%);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 10px;
+            font-size: 0.95em;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            text-align: center;
+            transition: all 0.2s;
+        }
+        .tool-btn:hover {
+            opacity: 0.9;
+        }
+        .tool-card.locked .tool-btn {
+            background: #ddd;
+            color: #999;
+            cursor: not-allowed;
+        }
+
+        /* Superpower Reframe Box */
+        .superpower-box {
+            background: linear-gradient(135deg, rgba(233, 30, 120, 0.1) 0%, rgba(249, 123, 77, 0.1) 100%);
+            border-left: 4px solid #E91E78;
+            border-radius: 0 12px 12px 0;
+            padding: 20px 25px;
+            margin-bottom: 30px;
+        }
+        .superpower-box h3 {
+            color: #E91E78;
+            font-size: 1em;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+        .superpower-box p {
+            color: #ddd;
+            font-size: 0.95em;
+            line-height: 1.6;
+        }
+        .superpower-box .quote {
+            font-style: italic;
+            color: #fff;
+            margin-top: 10px;
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+        }
+        .footer p {
+            color: #666;
+            font-size: 0.85em;
+        }
+        .footer a {
+            color: #E91E78;
+            text-decoration: none;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            body { padding: 20px 15px; }
+            .header h1 { font-size: 1.8em; }
+            .user-menu { position: static; justify-content: center; margin-bottom: 20px; }
+            .stats-bar { padding: 15px; }
+            .paradox-overview { grid-template-columns: repeat(3, 1fr); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- User Menu -->
+        <div class="user-menu">
+            <span class="user-email" id="userEmail"></span>
+            <a href="index.html" class="menu-btn">Home</a>
+            <button class="menu-btn" onclick="logout()">Log Out</button>
+        </div>
+
+        <!-- Header -->
+        <div class="header">
+            <div class="logo">
+                <img src="White.png" alt="Harness the Spark" onerror="this.style.display='none'">
+            </div>
+            <div class="programme-badge">AuDHD Executive Career Coaching</div>
+            <h1>Your <span class="accent">Paradox-Powered</span> Career</h1>
+            <div class="subtitle">Career transformation that honours your beautiful brain</div>
+            <div class="welcome" id="welcomeMessage">Welcome back</div>
+        </div>
+
+        <!-- Stats Bar -->
+        <div class="stats-bar">
+            <div class="stat-item">
+                <div class="stat-value" id="weekNumber">1</div>
+                <div class="stat-label">Current Week</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value" id="paradoxesMapped">0</div>
+                <div class="stat-label">Paradoxes Mapped</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value" id="toolsComplete">0</div>
+                <div class="stat-label">Tools Complete</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value" id="energyScore">--</div>
+                <div class="stat-label">Energy Score</div>
+            </div>
+        </div>
+
+        <!-- Superpower Reminder -->
+        <div class="superpower-box">
+            <h3>Remember: Your Paradoxes Are Your Superpowers</h3>
+            <p>Your career success came from your unique brain - not from hiding it. This programme helps you lead as yourself, not as a performance.</p>
+            <p class="quote">"Stop masking. Start leading."</p>
+        </div>
+
+        <!-- Your 6 Paradoxes -->
+        <div class="section">
+            <div class="section-header">
+                <span class="section-icon">🧠</span>
+                <div>
+                    <div class="section-title">Your 6 Paradox Domains</div>
+                    <div class="section-subtitle">Click any domain to explore how it affects your career</div>
+                </div>
+            </div>
+
+            <div class="paradox-overview">
+                <div class="paradox-mini" onclick="openParadox('communication')">
+                    <div class="emoji">💬</div>
+                    <div class="name">Communication</div>
+                    <div class="status pending" id="status-communication">Not started</div>
+                </div>
+                <div class="paradox-mini" onclick="openParadox('executive')">
+                    <div class="emoji">🧩</div>
+                    <div class="name">Executive Function</div>
+                    <div class="status pending" id="status-executive">Not started</div>
+                </div>
+                <div class="paradox-mini" onclick="openParadox('energy')">
+                    <div class="emoji">⚡</div>
+                    <div class="name">Energy</div>
+                    <div class="status pending" id="status-energy">Not started</div>
+                </div>
+                <div class="paradox-mini" onclick="openParadox('emotional')">
+                    <div class="emoji">💙</div>
+                    <div class="name">Emotional</div>
+                    <div class="status pending" id="status-emotional">Not started</div>
+                </div>
+                <div class="paradox-mini" onclick="openParadox('processing')">
+                    <div class="emoji">🔄</div>
+                    <div class="name">Processing</div>
+                    <div class="status pending" id="status-processing">Not started</div>
+                </div>
+                <div class="paradox-mini" onclick="openParadox('relationships')">
+                    <div class="emoji">🤝</div>
+                    <div class="name">Relationships</div>
+                    <div class="status pending" id="status-relationships">Not started</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 4-Week Journey -->
+        <div class="section">
+            <div class="section-header">
+                <span class="section-icon">🗺️</span>
+                <div>
+                    <div class="section-title">Your 4-Week Journey</div>
+                    <div class="section-subtitle">Career transformation through the paradox lens</div>
+                </div>
+            </div>
+
+            <div class="journey-grid">
+                <!-- Week 1 -->
+                <div class="journey-step current" id="week1">
+                    <div class="step-week">Week 1</div>
+                    <div class="step-icon">🔍</div>
+                    <div class="step-title">Paradox Discovery</div>
+                    <div class="step-desc">Uncover your patterns through the AuDHD lens. Map your paradoxes to career experiences.</div>
+                    <button class="step-btn" onclick="openTool('discovery')">Start Discovery</button>
+                </div>
+
+                <!-- Week 2 -->
+                <div class="journey-step" id="week2">
+                    <div class="step-week">Week 2</div>
+                    <div class="step-icon">🎯</div>
+                    <div class="step-title">Career Direction</div>
+                    <div class="step-desc">Build your paradox-powered Blueprint. Define authentic positioning.</div>
+                    <button class="step-btn" onclick="openTool('blueprint')">Open Blueprint</button>
+                </div>
+
+                <!-- Week 3 -->
+                <div class="journey-step" id="week3">
+                    <div class="step-week">Week 3</div>
+                    <div class="step-icon">✨</div>
+                    <div class="step-title">Authentic Positioning</div>
+                    <div class="step-desc">Craft your unmasked narrative. Superpowers, not weaknesses.</div>
+                    <button class="step-btn" onclick="openTool('positioning')">Build Narrative</button>
+                </div>
+
+                <!-- Week 4 -->
+                <div class="journey-step" id="week4">
+                    <div class="step-week">Week 4</div>
+                    <div class="step-icon">🚀</div>
+                    <div class="step-title">Implementation</div>
+                    <div class="step-desc">CV, Decision Framework, and your energy-aware action plan.</div>
+                    <button class="step-btn" onclick="openTool('implementation')">Launch Tools</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Career Tools -->
+        <div class="section">
+            <div class="section-header">
+                <span class="section-icon">🧰</span>
+                <div>
+                    <div class="section-title">Your AuDHD Career Toolkit</div>
+                    <div class="section-subtitle">All tools are paradox-informed and energy-aware</div>
+                </div>
+            </div>
+
+            <div class="tools-grid">
+                <!-- Paradox Discovery -->
+                <div class="tool-card">
+                    <div class="tool-header">
+                        <span class="tool-icon">🔍</span>
+                        <span class="tool-title">Paradox Discovery</span>
+                    </div>
+                    <div class="tool-paradox-tag">All 6 Domains</div>
+                    <div class="tool-desc">Enhanced questionnaire that explores your career through the AuDHD paradox lens. Uncover your authentic patterns.</div>
+                    <a href="audhd-career-discovery.html" class="tool-btn">Start Discovery</a>
+                </div>
+
+                <!-- AuDHD Blueprint -->
+                <div class="tool-card">
+                    <div class="tool-header">
+                        <span class="tool-icon">📋</span>
+                        <span class="tool-title">AuDHD Career Blueprint</span>
+                    </div>
+                    <div class="tool-paradox-tag">Executive Function + Processing</div>
+                    <div class="tool-desc">Your career source of truth with Paradox Profile, Energy Budget, and authentic positioning.</div>
+                    <a href="audhd-career-blueprint.html" class="tool-btn">Open Blueprint</a>
+                </div>
+
+                <!-- AuDHD CV Builder -->
+                <div class="tool-card">
+                    <div class="tool-header">
+                        <span class="tool-icon">📄</span>
+                        <span class="tool-title">AuDHD CV Builder</span>
+                    </div>
+                    <div class="tool-paradox-tag">Communication + Processing</div>
+                    <div class="tool-desc">Build a CV that showcases your superpowers. Optional cognitive diversity statement included.</div>
+                    <a href="audhd-cv-builder.html" class="tool-btn">Build CV</a>
+                </div>
+
+                <!-- AuDHD Decision Framework -->
+                <div class="tool-card">
+                    <div class="tool-header">
+                        <span class="tool-icon">⚖️</span>
+                        <span class="tool-title">AuDHD Decision Framework</span>
+                    </div>
+                    <div class="tool-paradox-tag">Energy + Executive Function</div>
+                    <div class="tool-desc">Evaluate opportunities with paradox compatibility, masking cost, and energy projection built in.</div>
+                    <a href="audhd-decision-framework.html" class="tool-btn">Evaluate Opportunities</a>
+                </div>
+
+                <!-- Energy Budget -->
+                <div class="tool-card">
+                    <div class="tool-header">
+                        <span class="tool-icon">🔋</span>
+                        <span class="tool-title">Energy Budget Planner</span>
+                    </div>
+                    <div class="tool-paradox-tag">Energy Domain</div>
+                    <div class="tool-desc">Plan your career moves around sustainable energy. Track masking costs and sensory demands.</div>
+                    <a href="audhd-energy.html" class="tool-btn">Plan Energy</a>
+                </div>
+
+                <!-- Interview Questions -->
+                <div class="tool-card">
+                    <div class="tool-header">
+                        <span class="tool-icon">💡</span>
+                        <span class="tool-title">Paradox-Aware Interview Qs</span>
+                    </div>
+                    <div class="tool-paradox-tag">All 6 Domains</div>
+                    <div class="tool-desc">Questions to ask potential employers to surface red flags before you accept a role.</div>
+                    <a href="audhd-interview-questions.html" class="tool-btn">View Questions</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            <p>Harness the Spark | <a href="mailto:lisa@harnessthespark.com">lisa@harnessthespark.com</a></p>
+            <p style="margin-top: 8px; color: #555;">AuDHD Executive Career Coaching Programme</p>
+        </div>
+    </div>
+
+    <script>
+        // Configuration
+        const SYP_SERVER = window.location.origin;
+
+        // Check authentication on load
+        window.onload = function() {
+            const savedUser = localStorage.getItem('syp_user');
+
+            if (!savedUser) {
+                // Not logged in - redirect to login
+                window.location.href = 'login.html';
+                return;
+            }
+
+            const user = JSON.parse(savedUser);
+
+            // Check programme access
+            if (user.programme_access !== 'audhd-career' && user.programme_access !== 'both' && !user.isStaff) {
+                // Wrong programme - redirect to correct portal
+                if (user.programme_access === 'career') {
+                    window.location.href = 'client-portal.html';
+                } else if (user.programme_access === 'audhd') {
+                    window.location.href = 'audhd-dashboard.html';
+                } else {
+                    window.location.href = 'login.html';
+                }
+                return;
+            }
+
+            // Show user info
+            document.getElementById('userEmail').textContent = user.email;
+            document.getElementById('welcomeMessage').textContent = `Welcome back, ${user.name || user.email.split('@')[0]}`;
+
+            // Load progress data
+            loadProgress(user.id);
+        };
+
+        function logout() {
+            localStorage.removeItem('syp_user');
+            window.location.href = 'login.html';
+        }
+
+        function openParadox(domain) {
+            // Future: Open paradox exploration tool
+            alert(`Opening ${domain} paradox exploration - coming soon!`);
+        }
+
+        function openTool(tool) {
+            const toolPages = {
+                'discovery': 'audhd-career-discovery.html',
+                'blueprint': 'audhd-career-blueprint.html',
+                'positioning': 'audhd-career-blueprint.html#positioning',
+                'implementation': 'audhd-cv-builder.html'
+            };
+
+            if (toolPages[tool]) {
+                window.location.href = toolPages[tool];
+            }
+        }
+
+        async function loadProgress(userId) {
+            // For now, use localStorage for progress tracking
+            // Future: Load from API
+            const progress = JSON.parse(localStorage.getItem(`audhd_career_progress_${userId}`) || '{}');
+
+            // Update stats display
+            document.getElementById('weekNumber').textContent = progress.currentWeek || 1;
+            document.getElementById('paradoxesMapped').textContent = progress.paradoxesMapped || 0;
+            document.getElementById('toolsComplete').textContent = progress.toolsComplete || 0;
+
+            // Update paradox statuses
+            const paradoxes = ['communication', 'executive', 'energy', 'emotional', 'processing', 'relationships'];
+            paradoxes.forEach(p => {
+                const statusEl = document.getElementById(`status-${p}`);
+                const status = progress.paradoxes?.[p] || 'pending';
+                statusEl.textContent = status === 'mapped' ? 'Mapped' : status === 'exploring' ? 'Exploring' : 'Not started';
+                statusEl.className = `status ${status}`;
+            });
+
+            // Update journey step states
+            const currentWeek = progress.currentWeek || 1;
+            for (let i = 1; i <= 4; i++) {
+                const stepEl = document.getElementById(`week${i}`);
+                stepEl.classList.remove('current', 'complete', 'locked');
+                if (i < currentWeek) {
+                    stepEl.classList.add('complete');
+                } else if (i === currentWeek) {
+                    stepEl.classList.add('current');
+                } else {
+                    // Don't lock - allow exploration
+                }
+            }
+        }
+    </script>
+</body>
+</html>

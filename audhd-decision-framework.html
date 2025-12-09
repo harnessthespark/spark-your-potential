@@ -1,0 +1,1099 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Paradox Decision Framework - AuDHD Executive Career</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧠</text></svg>">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #2d1b4e 100%);
+            min-height: 100vh;
+            padding: 40px 20px;
+            color: #333;
+        }
+
+        .container { max-width: 900px; margin: 0 auto; }
+
+        /* Navigation */
+        .nav-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+        .back-link {
+            color: #f472b6;
+            text-decoration: none;
+            font-size: 0.95em;
+        }
+        .back-link:hover { text-decoration: underline; }
+        .logout-btn {
+            background: rgba(255,255,255,0.2);
+            color: white;
+            border: 1px solid rgba(255,255,255,0.3);
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 0.85em;
+            cursor: pointer;
+        }
+        .logout-btn:hover { background: rgba(255,255,255,0.3); }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            color: white;
+        }
+        .header h1 {
+            font-size: 2.2em;
+            font-weight: 800;
+            margin-bottom: 10px;
+        }
+        .header h1 span {
+            background: linear-gradient(135deg, #E91E78 0%, #F97B4D 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .header .subtitle {
+            font-size: 1.1em;
+            opacity: 0.8;
+        }
+
+        /* Section Cards */
+        .section {
+            background: white;
+            border-radius: 20px;
+            padding: 35px;
+            margin-bottom: 25px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+        }
+        .section-icon { font-size: 2em; margin-bottom: 15px; }
+        .section-title {
+            font-size: 1.4em;
+            font-weight: 700;
+            margin-bottom: 15px;
+            padding-bottom: 15px;
+            border-bottom: 3px solid;
+        }
+        .section-title.pink { color: #E91E78; border-color: #E91E78; }
+        .section-title.purple { color: #8B5CF6; border-color: #8B5CF6; }
+        .section-title.blue { color: #3B82F6; border-color: #3B82F6; }
+        .section-title.green { color: #10B981; border-color: #10B981; }
+        .section-title.orange { color: #F97B4D; border-color: #F97B4D; }
+
+        .section-intro {
+            color: #666;
+            line-height: 1.7;
+            margin-bottom: 25px;
+        }
+
+        /* Decision Input */
+        .decision-input {
+            background: linear-gradient(135deg, #fce7f3 0%, #e0e7ff 100%);
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 25px;
+        }
+        .decision-label {
+            font-weight: 700;
+            color: #2d1b4e;
+            margin-bottom: 12px;
+            font-size: 1.1em;
+        }
+        .decision-textarea {
+            width: 100%;
+            min-height: 80px;
+            border: 2px solid rgba(233, 30, 120, 0.3);
+            border-radius: 12px;
+            padding: 15px;
+            font-family: inherit;
+            font-size: 1.1em;
+            resize: vertical;
+            background: white;
+        }
+        .decision-textarea:focus {
+            outline: none;
+            border-color: #E91E78;
+            box-shadow: 0 0 0 4px rgba(233, 30, 120, 0.15);
+        }
+
+        /* Paradox Check Grid */
+        .paradox-check-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            margin-bottom: 25px;
+        }
+        @media (max-width: 700px) {
+            .paradox-check-grid { grid-template-columns: 1fr; }
+        }
+
+        .paradox-check {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 20px;
+            border: 2px solid #e0e0e0;
+            transition: all 0.2s;
+        }
+        .paradox-check.flagged {
+            border-color: #dc2626;
+            background: #fef2f2;
+        }
+        .paradox-check.clear {
+            border-color: #16a34a;
+            background: #f0fdf4;
+        }
+
+        .paradox-check-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+        .paradox-check-icon { font-size: 1.5em; }
+        .paradox-check-name {
+            font-weight: 700;
+            color: #2d1b4e;
+        }
+        .paradox-check-question {
+            font-size: 0.95em;
+            color: #666;
+            margin-bottom: 15px;
+            line-height: 1.5;
+        }
+
+        .check-options {
+            display: flex;
+            gap: 10px;
+        }
+        .check-option {
+            flex: 1;
+            padding: 10px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 0.9em;
+        }
+        .check-option:hover {
+            border-color: #888;
+        }
+        .check-option.selected.yes {
+            background: #dcfce7;
+            border-color: #16a34a;
+            color: #16a34a;
+        }
+        .check-option.selected.no {
+            background: #fee2e2;
+            border-color: #dc2626;
+            color: #dc2626;
+        }
+        .check-option.selected.maybe {
+            background: #fef3c7;
+            border-color: #ca8a04;
+            color: #ca8a04;
+        }
+
+        /* Energy Impact */
+        .energy-matrix {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            margin-bottom: 25px;
+        }
+        @media (max-width: 600px) {
+            .energy-matrix { grid-template-columns: 1fr; }
+        }
+
+        .energy-box {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            border: 2px solid;
+        }
+        .energy-box.drains {
+            border-color: #dc2626;
+            background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%);
+        }
+        .energy-box.fuels {
+            border-color: #16a34a;
+            background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+        }
+
+        .energy-box-title {
+            font-weight: 700;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .energy-box.drains .energy-box-title { color: #dc2626; }
+        .energy-box.fuels .energy-box-title { color: #16a34a; }
+
+        .energy-list {
+            list-style: none;
+            padding: 0;
+        }
+        .energy-list li {
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(0,0,0,0.1);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .energy-list li:last-child { border-bottom: none; }
+        .energy-list input {
+            flex: 1;
+            border: none;
+            background: transparent;
+            font-family: inherit;
+            font-size: 0.95em;
+            padding: 5px;
+        }
+        .energy-list input:focus { outline: none; }
+
+        /* Masking Cost */
+        .masking-slider {
+            margin: 25px 0;
+        }
+        .masking-label {
+            font-weight: 600;
+            color: #2d1b4e;
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: space-between;
+        }
+        .masking-track {
+            height: 12px;
+            background: linear-gradient(90deg, #22c55e 0%, #facc15 50%, #dc2626 100%);
+            border-radius: 6px;
+            position: relative;
+        }
+        .masking-input {
+            width: 100%;
+            -webkit-appearance: none;
+            appearance: none;
+            height: 12px;
+            background: transparent;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+        .masking-input::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: white;
+            border: 3px solid #2d1b4e;
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+        }
+        .masking-value {
+            text-align: center;
+            margin-top: 15px;
+            font-size: 1.1em;
+            font-weight: 600;
+        }
+
+        /* Alignment Check */
+        .alignment-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+        @media (max-width: 600px) {
+            .alignment-grid { grid-template-columns: 1fr; }
+        }
+
+        .alignment-card {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            border: 2px solid #e0e0e0;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .alignment-card:hover {
+            border-color: #E91E78;
+        }
+        .alignment-card.selected {
+            border-color: #E91E78;
+            background: #fce7f3;
+        }
+        .alignment-card .icon { font-size: 2em; margin-bottom: 10px; }
+        .alignment-card .label { font-weight: 600; color: #2d1b4e; }
+        .alignment-card .description {
+            font-size: 0.85em;
+            color: #666;
+            margin-top: 8px;
+        }
+
+        /* Result Section */
+        .result-section {
+            background: linear-gradient(135deg, #fce7f3 0%, #e0e7ff 100%);
+            border-radius: 20px;
+            padding: 30px;
+            margin-top: 30px;
+            display: none;
+        }
+        .result-section.visible { display: block; }
+
+        .result-header {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+        .result-verdict {
+            font-size: 3em;
+            margin-bottom: 10px;
+        }
+        .result-title {
+            font-size: 1.5em;
+            font-weight: 700;
+            color: #2d1b4e;
+        }
+        .result-subtitle {
+            color: #666;
+            margin-top: 10px;
+        }
+
+        .result-breakdown {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 20px;
+        }
+        .result-breakdown h4 {
+            font-size: 1.1em;
+            color: #2d1b4e;
+            margin-bottom: 15px;
+        }
+        .result-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 0;
+            border-bottom: 1px solid #eee;
+        }
+        .result-item:last-child { border-bottom: none; }
+        .result-icon { font-size: 1.3em; }
+        .result-text { flex: 1; color: #555; }
+        .result-status {
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 0.85em;
+            font-weight: 600;
+        }
+        .result-status.pass { background: #dcfce7; color: #16a34a; }
+        .result-status.warn { background: #fef3c7; color: #ca8a04; }
+        .result-status.fail { background: #fee2e2; color: #dc2626; }
+
+        /* Action Buttons */
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+        .action-btn {
+            padding: 15px 30px;
+            border-radius: 12px;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            transition: all 0.2s;
+            text-decoration: none;
+        }
+        .action-btn.primary {
+            background: linear-gradient(135deg, #E91E78 0%, #F97B4D 100%);
+            color: white;
+        }
+        .action-btn.secondary {
+            background: white;
+            color: #E91E78;
+            border: 2px solid #E91E78;
+        }
+        .action-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+        }
+
+        .footer {
+            text-align: center;
+            color: white;
+            opacity: 0.6;
+            margin-top: 40px;
+            font-size: 0.9em;
+        }
+
+        /* Print */
+        @media print {
+            body { background: white; padding: 20px; }
+            .nav-bar, .action-buttons { display: none; }
+            .section { box-shadow: none; border: 1px solid #e0e0e0; }
+            .header { color: #2d1b4e; }
+            .header h1 span { -webkit-text-fill-color: #E91E78; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Navigation -->
+        <div class="nav-bar">
+            <a href="audhd-career-portal.html" class="back-link">← Back to Portal</a>
+            <button class="logout-btn" onclick="logout()">Log out</button>
+        </div>
+
+        <div class="header">
+            <h1>🎯 Paradox <span>Decision Framework</span></h1>
+            <div class="subtitle">Career Decisions Through Your AuDHD Lens</div>
+        </div>
+
+        <!-- Decision Input -->
+        <div class="section">
+            <div class="section-icon">🤔</div>
+            <div class="section-title pink">The Decision</div>
+            <div class="section-intro">
+                Career decisions are complex for AuDHD executives. This framework helps you evaluate opportunities through your paradox lens — considering both what looks good on paper and what will actually work for your brain.
+            </div>
+
+            <div class="decision-input">
+                <div class="decision-label">What career decision are you considering?</div>
+                <textarea class="decision-textarea" id="decision-text" placeholder="e.g., Should I accept this COO role at the fintech startup? They're offering £180k + equity, but it's open-plan, always-on culture, and I'd be leading a team of 45..."></textarea>
+            </div>
+        </div>
+
+        <!-- Paradox Compatibility Check -->
+        <div class="section">
+            <div class="section-icon">🔮</div>
+            <div class="section-title purple">Paradox Compatibility Check</div>
+            <div class="section-intro">
+                Evaluate how this opportunity aligns with each of your paradox domains. A "No" doesn't necessarily mean don't do it — it means you need accommodations or a plan.
+            </div>
+
+            <div class="paradox-check-grid" id="paradoxChecks">
+                <!-- Communication -->
+                <div class="paradox-check" data-domain="communication">
+                    <div class="paradox-check-header">
+                        <span class="paradox-check-icon">💬</span>
+                        <span class="paradox-check-name">Communication</span>
+                    </div>
+                    <div class="paradox-check-question">
+                        Does this role allow you to set and hold boundaries? Will you have space to be authentic rather than constantly masking?
+                    </div>
+                    <div class="check-options">
+                        <div class="check-option" data-value="yes" onclick="selectCheck(this)">✓ Yes</div>
+                        <div class="check-option" data-value="maybe" onclick="selectCheck(this)">? Maybe</div>
+                        <div class="check-option" data-value="no" onclick="selectCheck(this)">✗ No</div>
+                    </div>
+                </div>
+
+                <!-- Executive Functioning -->
+                <div class="paradox-check" data-domain="executive">
+                    <div class="paradox-check-header">
+                        <span class="paradox-check-icon">🧩</span>
+                        <span class="paradox-check-name">Executive Functioning</span>
+                    </div>
+                    <div class="paradox-check-question">
+                        Does this role provide clear expectations and structure, while allowing flexibility in how you achieve outcomes?
+                    </div>
+                    <div class="check-options">
+                        <div class="check-option" data-value="yes" onclick="selectCheck(this)">✓ Yes</div>
+                        <div class="check-option" data-value="maybe" onclick="selectCheck(this)">? Maybe</div>
+                        <div class="check-option" data-value="no" onclick="selectCheck(this)">✗ No</div>
+                    </div>
+                </div>
+
+                <!-- Energy -->
+                <div class="paradox-check" data-domain="energy">
+                    <div class="paradox-check-header">
+                        <span class="paradox-check-icon">⚡</span>
+                        <span class="paradox-check-name">Energy</span>
+                    </div>
+                    <div class="paradox-check-question">
+                        Does this role allow for recovery time, sensory management, and sustainable workload? Can you protect your energy?
+                    </div>
+                    <div class="check-options">
+                        <div class="check-option" data-value="yes" onclick="selectCheck(this)">✓ Yes</div>
+                        <div class="check-option" data-value="maybe" onclick="selectCheck(this)">? Maybe</div>
+                        <div class="check-option" data-value="no" onclick="selectCheck(this)">✗ No</div>
+                    </div>
+                </div>
+
+                <!-- Emotional -->
+                <div class="paradox-check" data-domain="emotional">
+                    <div class="paradox-check-header">
+                        <span class="paradox-check-icon">💙</span>
+                        <span class="paradox-check-name">Emotional</span>
+                    </div>
+                    <div class="paradox-check-question">
+                        Is this a psychologically safe environment? Will rejection sensitivity be manageable? Is feedback culture healthy?
+                    </div>
+                    <div class="check-options">
+                        <div class="check-option" data-value="yes" onclick="selectCheck(this)">✓ Yes</div>
+                        <div class="check-option" data-value="maybe" onclick="selectCheck(this)">? Maybe</div>
+                        <div class="check-option" data-value="no" onclick="selectCheck(this)">✗ No</div>
+                    </div>
+                </div>
+
+                <!-- Processing -->
+                <div class="paradox-check" data-domain="processing">
+                    <div class="paradox-check-header">
+                        <span class="paradox-check-icon">🔄</span>
+                        <span class="paradox-check-name">Processing</span>
+                    </div>
+                    <div class="paradox-check-question">
+                        Does this role value your unique thinking style? Will you have deep work time? Is context-switching manageable?
+                    </div>
+                    <div class="check-options">
+                        <div class="check-option" data-value="yes" onclick="selectCheck(this)">✓ Yes</div>
+                        <div class="check-option" data-value="maybe" onclick="selectCheck(this)">? Maybe</div>
+                        <div class="check-option" data-value="no" onclick="selectCheck(this)">✗ No</div>
+                    </div>
+                </div>
+
+                <!-- Relationships -->
+                <div class="paradox-check" data-domain="relationships">
+                    <div class="paradox-check-header">
+                        <span class="paradox-check-icon">🤝</span>
+                        <span class="paradox-check-name">Relationships</span>
+                    </div>
+                    <div class="paradox-check-question">
+                        Does this environment allow authentic connection? Is the political landscape navigable? Can you manage disclosure levels?
+                    </div>
+                    <div class="check-options">
+                        <div class="check-option" data-value="yes" onclick="selectCheck(this)">✓ Yes</div>
+                        <div class="check-option" data-value="maybe" onclick="selectCheck(this)">? Maybe</div>
+                        <div class="check-option" data-value="no" onclick="selectCheck(this)">✗ No</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Energy Impact Assessment -->
+        <div class="section">
+            <div class="section-icon">⚡</div>
+            <div class="section-title orange">Energy Impact Assessment</div>
+            <div class="section-intro">
+                List the specific energy drains and fuels this opportunity would bring. Be honest — this is for your decision-making, not the interview.
+            </div>
+
+            <div class="energy-matrix">
+                <div class="energy-box drains">
+                    <div class="energy-box-title">🔋 Energy Drains</div>
+                    <ul class="energy-list" id="drains-list">
+                        <li><span>•</span><input type="text" placeholder="e.g., Open-plan office"></li>
+                        <li><span>•</span><input type="text" placeholder="e.g., Back-to-back meetings"></li>
+                        <li><span>•</span><input type="text" placeholder="e.g., Always-on culture"></li>
+                        <li><span>•</span><input type="text" placeholder="Add another..."></li>
+                    </ul>
+                </div>
+                <div class="energy-box fuels">
+                    <div class="energy-box-title">⚡ Energy Fuels</div>
+                    <ul class="energy-list" id="fuels-list">
+                        <li><span>•</span><input type="text" placeholder="e.g., Strategic work I love"></li>
+                        <li><span>•</span><input type="text" placeholder="e.g., Remote flexibility"></li>
+                        <li><span>•</span><input type="text" placeholder="e.g., Building something new"></li>
+                        <li><span>•</span><input type="text" placeholder="Add another..."></li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Masking Cost -->
+            <div class="masking-slider">
+                <div class="masking-label">
+                    <span>Estimated Daily Masking Requirement</span>
+                    <span id="masking-value">50%</span>
+                </div>
+                <div class="masking-track" style="position: relative;">
+                    <input type="range" class="masking-input" id="masking-slider" min="0" max="100" value="50" oninput="updateMasking()">
+                </div>
+                <div class="masking-value">
+                    <span id="masking-label">Moderate masking — sustainable with recovery</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Values Alignment -->
+        <div class="section">
+            <div class="section-icon">🧭</div>
+            <div class="section-title green">Values Alignment</div>
+            <div class="section-intro">
+                Beyond the practicalities, does this opportunity align with what matters most to you? Select all that apply.
+            </div>
+
+            <div class="alignment-grid" id="alignment-grid">
+                <div class="alignment-card" onclick="toggleAlignment(this)" data-value="growth">
+                    <div class="icon">📈</div>
+                    <div class="label">Growth</div>
+                    <div class="description">Learning and development opportunities</div>
+                </div>
+                <div class="alignment-card" onclick="toggleAlignment(this)" data-value="impact">
+                    <div class="icon">🌍</div>
+                    <div class="label">Impact</div>
+                    <div class="description">Making a meaningful difference</div>
+                </div>
+                <div class="alignment-card" onclick="toggleAlignment(this)" data-value="autonomy">
+                    <div class="icon">🎯</div>
+                    <div class="label">Autonomy</div>
+                    <div class="description">Control over how you work</div>
+                </div>
+                <div class="alignment-card" onclick="toggleAlignment(this)" data-value="security">
+                    <div class="icon">🛡️</div>
+                    <div class="label">Security</div>
+                    <div class="description">Financial and job stability</div>
+                </div>
+                <div class="alignment-card" onclick="toggleAlignment(this)" data-value="interest">
+                    <div class="icon">✨</div>
+                    <div class="label">Special Interest</div>
+                    <div class="description">Aligns with what energises you</div>
+                </div>
+                <div class="alignment-card" onclick="toggleAlignment(this)" data-value="balance">
+                    <div class="icon">⚖️</div>
+                    <div class="label">Balance</div>
+                    <div class="description">Sustainable work-life integration</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Generate Results Button -->
+        <div class="action-buttons">
+            <button class="action-btn primary" onclick="generateResult()">🔮 Generate Decision Insight</button>
+        </div>
+
+        <!-- Result Section -->
+        <div class="result-section" id="result-section">
+            <div class="result-header">
+                <div class="result-verdict" id="result-verdict">🟡</div>
+                <div class="result-title" id="result-title">Proceed with Conditions</div>
+                <div class="result-subtitle" id="result-subtitle">This opportunity has potential but requires accommodations</div>
+            </div>
+
+            <div class="result-breakdown">
+                <h4>Paradox Compatibility</h4>
+                <div id="paradox-results">
+                    <!-- Populated dynamically -->
+                </div>
+            </div>
+
+            <div class="result-breakdown">
+                <h4>Key Considerations</h4>
+                <div id="key-considerations">
+                    <!-- Populated dynamically -->
+                </div>
+            </div>
+
+            <div class="result-breakdown">
+                <h4>Recommended Next Steps</h4>
+                <div id="next-steps">
+                    <!-- Populated dynamically -->
+                </div>
+            </div>
+
+            <div class="action-buttons">
+                <button class="action-btn secondary" onclick="saveDecision()">💾 Save Decision</button>
+                <button class="action-btn secondary" onclick="window.print()">📄 Export PDF</button>
+                <button class="action-btn primary" onclick="newDecision()">🔄 New Decision</button>
+            </div>
+        </div>
+
+        <div class="footer">
+            AuDHD Executive Career Coaching by Harness the Spark | harnessthespark.com
+        </div>
+    </div>
+
+    <script>
+        // State
+        let currentUser = null;
+        let decisionData = {
+            decision: '',
+            paradoxChecks: {},
+            drains: [],
+            fuels: [],
+            maskingLevel: 50,
+            alignments: []
+        };
+
+        // Initialize
+        window.onload = function() {
+            const savedUser = localStorage.getItem('syp_user');
+            if (!savedUser) {
+                window.location.href = 'exec-login.html';
+                return;
+            }
+            currentUser = JSON.parse(savedUser);
+
+            // Check access
+            const hasAccess = currentUser.programme_access === 'audhd-career' ||
+                             currentUser.programme_access === 'all' ||
+                             currentUser.isStaff;
+
+            if (!hasAccess) {
+                alert('You do not have access to AuDHD Executive Career tools.');
+                window.location.href = 'index.html';
+                return;
+            }
+        };
+
+        function selectCheck(element) {
+            const parent = element.closest('.paradox-check');
+            const domain = parent.dataset.domain;
+            const value = element.dataset.value;
+
+            // Clear other selections in this group
+            parent.querySelectorAll('.check-option').forEach(opt => {
+                opt.classList.remove('selected', 'yes', 'no', 'maybe');
+            });
+
+            // Select this one
+            element.classList.add('selected', value);
+
+            // Update parent styling
+            parent.classList.remove('flagged', 'clear');
+            if (value === 'no') parent.classList.add('flagged');
+            if (value === 'yes') parent.classList.add('clear');
+
+            // Store
+            decisionData.paradoxChecks[domain] = value;
+        }
+
+        function updateMasking() {
+            const value = document.getElementById('masking-slider').value;
+            document.getElementById('masking-value').textContent = value + '%';
+
+            let label;
+            if (value < 30) {
+                label = 'Low masking — likely sustainable long-term';
+            } else if (value < 50) {
+                label = 'Moderate masking — sustainable with recovery time';
+            } else if (value < 70) {
+                label = 'High masking — requires significant recovery';
+            } else {
+                label = 'Very high masking — burnout risk significant';
+            }
+            document.getElementById('masking-label').textContent = label;
+
+            decisionData.maskingLevel = parseInt(value);
+        }
+
+        function toggleAlignment(element) {
+            element.classList.toggle('selected');
+            const value = element.dataset.value;
+
+            if (element.classList.contains('selected')) {
+                if (!decisionData.alignments.includes(value)) {
+                    decisionData.alignments.push(value);
+                }
+            } else {
+                decisionData.alignments = decisionData.alignments.filter(v => v !== value);
+            }
+        }
+
+        function generateResult() {
+            // Collect decision text
+            decisionData.decision = document.getElementById('decision-text').value;
+
+            // Collect drains and fuels
+            decisionData.drains = Array.from(document.querySelectorAll('#drains-list input'))
+                .map(i => i.value.trim())
+                .filter(v => v);
+            decisionData.fuels = Array.from(document.querySelectorAll('#fuels-list input'))
+                .map(i => i.value.trim())
+                .filter(v => v);
+
+            // Calculate scores
+            const paradoxScore = calculateParadoxScore();
+            const energyScore = calculateEnergyScore();
+            const alignmentScore = calculateAlignmentScore();
+
+            // Determine verdict
+            const totalScore = (paradoxScore * 0.5) + (energyScore * 0.3) + (alignmentScore * 0.2);
+
+            let verdict, title, subtitle, verdictEmoji;
+
+            if (totalScore >= 70) {
+                verdictEmoji = '🟢';
+                title = 'Proceed with Confidence';
+                subtitle = 'This opportunity aligns well with your AuDHD brain';
+            } else if (totalScore >= 50) {
+                verdictEmoji = '🟡';
+                title = 'Proceed with Conditions';
+                subtitle = 'Viable with specific accommodations and boundaries';
+            } else if (totalScore >= 30) {
+                verdictEmoji = '🟠';
+                title = 'Proceed with Caution';
+                subtitle = 'Significant concerns — negotiate or reconsider';
+            } else {
+                verdictEmoji = '🔴';
+                title = 'Reconsider This Opportunity';
+                subtitle = 'High risk of burnout or misalignment';
+            }
+
+            // Update result section
+            document.getElementById('result-verdict').textContent = verdictEmoji;
+            document.getElementById('result-title').textContent = title;
+            document.getElementById('result-subtitle').textContent = subtitle;
+
+            // Paradox results
+            const paradoxResultsHtml = generateParadoxResults();
+            document.getElementById('paradox-results').innerHTML = paradoxResultsHtml;
+
+            // Key considerations
+            const considerationsHtml = generateConsiderations();
+            document.getElementById('key-considerations').innerHTML = considerationsHtml;
+
+            // Next steps
+            const nextStepsHtml = generateNextSteps(totalScore);
+            document.getElementById('next-steps').innerHTML = nextStepsHtml;
+
+            // Show results
+            document.getElementById('result-section').classList.add('visible');
+            document.getElementById('result-section').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function calculateParadoxScore() {
+            const checks = Object.values(decisionData.paradoxChecks);
+            if (checks.length === 0) return 50;
+
+            let score = 0;
+            checks.forEach(v => {
+                if (v === 'yes') score += 100;
+                if (v === 'maybe') score += 50;
+            });
+            return score / checks.length;
+        }
+
+        function calculateEnergyScore() {
+            // Energy balance
+            const drainsCount = decisionData.drains.length;
+            const fuelsCount = decisionData.fuels.length;
+            const balance = fuelsCount > 0 ? (fuelsCount / (drainsCount + fuelsCount)) * 100 : 50;
+
+            // Masking cost (inverted)
+            const maskingScore = 100 - decisionData.maskingLevel;
+
+            return (balance * 0.6) + (maskingScore * 0.4);
+        }
+
+        function calculateAlignmentScore() {
+            // Each alignment adds 16.67 points (6 options = 100%)
+            return (decisionData.alignments.length / 6) * 100;
+        }
+
+        function generateParadoxResults() {
+            const domains = {
+                communication: { icon: '💬', name: 'Communication' },
+                executive: { icon: '🧩', name: 'Executive Functioning' },
+                energy: { icon: '⚡', name: 'Energy' },
+                emotional: { icon: '💙', name: 'Emotional' },
+                processing: { icon: '🔄', name: 'Processing' },
+                relationships: { icon: '🤝', name: 'Relationships' }
+            };
+
+            let html = '';
+            Object.keys(domains).forEach(domain => {
+                const value = decisionData.paradoxChecks[domain];
+                const info = domains[domain];
+
+                let statusClass, statusText;
+                if (value === 'yes') {
+                    statusClass = 'pass';
+                    statusText = 'Clear';
+                } else if (value === 'maybe') {
+                    statusClass = 'warn';
+                    statusText = 'Consider';
+                } else if (value === 'no') {
+                    statusClass = 'fail';
+                    statusText = 'Flag';
+                } else {
+                    statusClass = 'warn';
+                    statusText = 'Not assessed';
+                }
+
+                html += `
+                    <div class="result-item">
+                        <span class="result-icon">${info.icon}</span>
+                        <span class="result-text">${info.name}</span>
+                        <span class="result-status ${statusClass}">${statusText}</span>
+                    </div>
+                `;
+            });
+
+            return html;
+        }
+
+        function generateConsiderations() {
+            let considerations = [];
+
+            // Masking level
+            if (decisionData.maskingLevel >= 70) {
+                considerations.push({
+                    icon: '⚠️',
+                    text: 'Very high masking requirement — negotiate for accommodations or this may lead to burnout',
+                    status: 'fail'
+                });
+            } else if (decisionData.maskingLevel >= 50) {
+                considerations.push({
+                    icon: '💡',
+                    text: 'Moderate-high masking — ensure you have recovery time built into your week',
+                    status: 'warn'
+                });
+            }
+
+            // Energy balance
+            if (decisionData.drains.length > decisionData.fuels.length * 2) {
+                considerations.push({
+                    icon: '🔋',
+                    text: 'More energy drains than fuels — consider whether the compensation justifies the cost',
+                    status: 'fail'
+                });
+            }
+
+            // Paradox flags
+            Object.keys(decisionData.paradoxChecks).forEach(domain => {
+                if (decisionData.paradoxChecks[domain] === 'no') {
+                    const labels = {
+                        communication: 'Communication boundaries may be challenging',
+                        executive: 'Role clarity and structure may be lacking',
+                        energy: 'Energy management may be difficult',
+                        emotional: 'Emotional safety may be compromised',
+                        processing: 'Your thinking style may not be valued',
+                        relationships: 'Relationship dynamics may be draining'
+                    };
+                    considerations.push({
+                        icon: '🚩',
+                        text: labels[domain],
+                        status: 'fail'
+                    });
+                }
+            });
+
+            // Alignments
+            if (decisionData.alignments.includes('special-interest')) {
+                considerations.push({
+                    icon: '✨',
+                    text: 'Aligns with your special interests — powerful motivation boost',
+                    status: 'pass'
+                });
+            }
+
+            if (considerations.length === 0) {
+                considerations.push({
+                    icon: '✓',
+                    text: 'No major red flags identified — review the paradox checks for nuance',
+                    status: 'pass'
+                });
+            }
+
+            return considerations.map(c => `
+                <div class="result-item">
+                    <span class="result-icon">${c.icon}</span>
+                    <span class="result-text">${c.text}</span>
+                    <span class="result-status ${c.status}">${c.status === 'pass' ? 'Positive' : c.status === 'warn' ? 'Monitor' : 'Address'}</span>
+                </div>
+            `).join('');
+        }
+
+        function generateNextSteps(score) {
+            let steps = [];
+
+            if (score >= 70) {
+                steps = [
+                    { icon: '1️⃣', text: 'Proceed with the opportunity — it aligns well with your needs' },
+                    { icon: '2️⃣', text: 'Document your accommodations needs before starting' },
+                    { icon: '3️⃣', text: 'Set up your energy protection systems early' }
+                ];
+            } else if (score >= 50) {
+                steps = [
+                    { icon: '1️⃣', text: 'List your non-negotiable accommodations' },
+                    { icon: '2️⃣', text: 'Have honest conversations about flexibility before accepting' },
+                    { icon: '3️⃣', text: 'Create a 90-day energy monitoring plan' },
+                    { icon: '4️⃣', text: 'Define your exit criteria if it\'s not working' }
+                ];
+            } else if (score >= 30) {
+                steps = [
+                    { icon: '1️⃣', text: 'Identify 2-3 must-have accommodations and negotiate hard for them' },
+                    { icon: '2️⃣', text: 'Consider whether changes could improve the fit significantly' },
+                    { icon: '3️⃣', text: 'Talk to current/former employees about the culture' },
+                    { icon: '4️⃣', text: 'Explore alternatives before committing' }
+                ];
+            } else {
+                steps = [
+                    { icon: '1️⃣', text: 'Be honest about whether this is right for you' },
+                    { icon: '2️⃣', text: 'Explore what you\'d need to change to make it work' },
+                    { icon: '3️⃣', text: 'Consider whether the compensation justifies the health cost' },
+                    { icon: '4️⃣', text: 'Look for alternatives that better fit your brain' }
+                ];
+            }
+
+            return steps.map(s => `
+                <div class="result-item">
+                    <span class="result-icon">${s.icon}</span>
+                    <span class="result-text">${s.text}</span>
+                </div>
+            `).join('');
+        }
+
+        function saveDecision() {
+            const decisions = JSON.parse(localStorage.getItem('audhd_decisions_' + currentUser.id) || '[]');
+            decisions.push({
+                ...decisionData,
+                date: new Date().toISOString(),
+                id: Date.now()
+            });
+            localStorage.setItem('audhd_decisions_' + currentUser.id, JSON.stringify(decisions));
+            alert('Decision saved! You can review your past decisions anytime.');
+        }
+
+        function newDecision() {
+            // Reset form
+            document.getElementById('decision-text').value = '';
+            document.querySelectorAll('.paradox-check').forEach(p => {
+                p.classList.remove('flagged', 'clear');
+                p.querySelectorAll('.check-option').forEach(o => {
+                    o.classList.remove('selected', 'yes', 'no', 'maybe');
+                });
+            });
+            document.querySelectorAll('#drains-list input, #fuels-list input').forEach(i => i.value = '');
+            document.getElementById('masking-slider').value = 50;
+            updateMasking();
+            document.querySelectorAll('.alignment-card').forEach(a => a.classList.remove('selected'));
+
+            // Reset state
+            decisionData = {
+                decision: '',
+                paradoxChecks: {},
+                drains: [],
+                fuels: [],
+                maskingLevel: 50,
+                alignments: []
+            };
+
+            // Hide results
+            document.getElementById('result-section').classList.remove('visible');
+
+            // Scroll to top
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function logout() {
+            if (confirm('Are you sure you want to log out?')) {
+                localStorage.removeItem('syp_user');
+                localStorage.removeItem('syp_token');
+                window.location.href = 'index.html';
+            }
+        }
+    </script>
+</body>
+</html>

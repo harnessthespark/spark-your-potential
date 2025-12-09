@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Coach Hub - Harness the Spark</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎯</text></svg>">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            min-height: 100vh;
+            padding: 40px 20px;
+            color: white;
+        }
+
+        .container { max-width: 1200px; margin: 0 auto; }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        .logo { margin-bottom: 20px; }
+        .logo img { height: 60px; }
+        .header h1 {
+            font-size: 2.5em;
+            font-weight: 800;
+            margin-bottom: 10px;
+        }
+        .header h1 span { color: #fbbf24; }
+        .header .subtitle {
+            font-size: 1.1em;
+            color: #94a3b8;
+        }
+
+        /* Quick Stats */
+        .quick-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-bottom: 40px;
+        }
+        .stat-card {
+            background: rgba(255,255,255,0.1);
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+        }
+        .stat-card .number {
+            font-size: 2em;
+            font-weight: 800;
+            color: #fbbf24;
+        }
+        .stat-card .label {
+            font-size: 0.85em;
+            color: #94a3b8;
+            margin-top: 5px;
+        }
+
+        /* Three Tracks Section */
+        .tracks-section {
+            margin-bottom: 40px;
+        }
+        .section-title {
+            font-size: 1.3em;
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .tracks-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 25px;
+        }
+        @media (max-width: 900px) {
+            .tracks-grid { grid-template-columns: 1fr; }
+        }
+
+        .track-card {
+            background: rgba(255,255,255,0.05);
+            border-radius: 20px;
+            padding: 30px;
+            border: 2px solid rgba(255,255,255,0.1);
+            transition: all 0.3s;
+        }
+        .track-card:hover {
+            border-color: rgba(255,255,255,0.3);
+            transform: translateY(-5px);
+        }
+
+        .track-card.career { border-top: 4px solid #fbbf24; }
+        .track-card.audhd-life { border-top: 4px solid #a855f7; }
+        .track-card.audhd-exec { border-top: 4px solid #f472b6; }
+
+        .track-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        .track-icon { font-size: 2.5em; }
+        .track-name {
+            font-size: 1.2em;
+            font-weight: 700;
+        }
+        .track-badge {
+            font-size: 0.75em;
+            padding: 4px 10px;
+            border-radius: 12px;
+            margin-top: 5px;
+            display: inline-block;
+        }
+        .track-card.career .track-badge { background: rgba(251, 191, 36, 0.2); color: #fbbf24; }
+        .track-card.audhd-life .track-badge { background: rgba(168, 85, 247, 0.2); color: #a855f7; }
+        .track-card.audhd-exec .track-badge { background: rgba(244, 114, 182, 0.2); color: #f472b6; }
+
+        .track-clients {
+            margin: 20px 0;
+            padding: 15px;
+            background: rgba(0,0,0,0.2);
+            border-radius: 10px;
+        }
+        .track-clients h4 {
+            font-size: 0.85em;
+            color: #94a3b8;
+            margin-bottom: 10px;
+        }
+        .client-list {
+            font-size: 0.9em;
+            color: #e2e8f0;
+            line-height: 1.8;
+        }
+        .client-list .client {
+            display: flex;
+            justify-content: space-between;
+            padding: 5px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        .client-list .client:last-child { border-bottom: none; }
+        .client-status {
+            font-size: 0.8em;
+            padding: 2px 8px;
+            border-radius: 8px;
+        }
+        .client-status.active { background: rgba(34, 197, 94, 0.2); color: #22c55e; }
+        .client-status.complete { background: rgba(59, 130, 246, 0.2); color: #3b82f6; }
+
+        .track-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        .track-btn {
+            display: block;
+            padding: 12px 20px;
+            border-radius: 10px;
+            font-size: 0.9em;
+            font-weight: 600;
+            text-decoration: none;
+            text-align: center;
+            transition: all 0.2s;
+        }
+        .track-btn.primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        .track-btn.secondary {
+            background: rgba(255,255,255,0.1);
+            color: white;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+        .track-btn:hover {
+            transform: translateY(-2px);
+            opacity: 0.9;
+        }
+
+        /* Admin Tools */
+        .admin-section {
+            background: rgba(255,255,255,0.05);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 40px;
+        }
+        .admin-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+        .admin-btn {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 15px 20px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 12px;
+            color: white;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+        .admin-btn:hover {
+            background: rgba(255,255,255,0.2);
+            transform: translateY(-2px);
+        }
+        .admin-btn .icon { font-size: 1.5em; }
+        .admin-btn .text {
+            font-weight: 600;
+            font-size: 0.95em;
+        }
+
+        /* URL Reference */
+        .url-reference {
+            background: rgba(0,0,0,0.3);
+            border-radius: 16px;
+            padding: 25px;
+            margin-top: 40px;
+        }
+        .url-reference h3 {
+            font-size: 1.1em;
+            margin-bottom: 15px;
+            color: #94a3b8;
+        }
+        .url-table {
+            width: 100%;
+            font-size: 0.9em;
+        }
+        .url-table tr {
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        .url-table td {
+            padding: 10px 0;
+            color: #e2e8f0;
+        }
+        .url-table td:first-child {
+            color: #94a3b8;
+            width: 180px;
+        }
+        .url-table code {
+            background: rgba(255,255,255,0.1);
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-family: monospace;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 40px;
+            color: #64748b;
+            font-size: 0.85em;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo">
+                <img src="White.png" alt="Harness the Spark" onerror="this.style.display='none'">
+            </div>
+            <h1>🎯 Coach <span>Hub</span></h1>
+            <div class="subtitle">Your command centre for all coaching tracks</div>
+        </div>
+
+        <!-- Quick Stats -->
+        <div class="quick-stats">
+            <div class="stat-card">
+                <div class="number">3</div>
+                <div class="label">Active Tracks</div>
+            </div>
+            <div class="stat-card">
+                <div class="number" id="totalClients">6</div>
+                <div class="label">Total Clients</div>
+            </div>
+            <div class="stat-card">
+                <div class="number" id="careerClients">3</div>
+                <div class="label">Career</div>
+            </div>
+            <div class="stat-card">
+                <div class="number" id="audhdClients">2</div>
+                <div class="label">AuDHD Life</div>
+            </div>
+            <div class="stat-card">
+                <div class="number" id="execClients">0</div>
+                <div class="label">AuDHD Exec</div>
+            </div>
+        </div>
+
+        <!-- Three Tracks -->
+        <div class="tracks-section">
+            <div class="section-title">📚 Your Three Coaching Tracks</div>
+
+            <div class="tracks-grid">
+                <!-- Career Coaching -->
+                <div class="track-card career">
+                    <div class="track-header">
+                        <span class="track-icon">⚡</span>
+                        <div>
+                            <div class="track-name">Career Coaching</div>
+                            <div class="track-badge">4-Week Career Booster</div>
+                        </div>
+                    </div>
+                    <div class="track-clients">
+                        <h4>Current Clients</h4>
+                        <div class="client-list">
+                            <div class="client">
+                                <span>Donald Pirie</span>
+                                <span class="client-status complete">Complete</span>
+                            </div>
+                            <div class="client">
+                                <span>Raj Samuel</span>
+                                <span class="client-status active">Active</span>
+                            </div>
+                            <div class="client">
+                                <span>Simon Booth Lucking</span>
+                                <span class="client-status complete">Complete</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="track-actions">
+                        <a href="dashboard.html" class="track-btn primary">Open Coach Dashboard</a>
+                        <a href="client-portal.html" class="track-btn secondary">View Client Portal</a>
+                    </div>
+                </div>
+
+                <!-- AuDHD Life Coaching -->
+                <div class="track-card audhd-life">
+                    <div class="track-header">
+                        <span class="track-icon">🧠</span>
+                        <div>
+                            <div class="track-name">AuDHD Life Coaching</div>
+                            <div class="track-badge">Paradox-Based Coaching</div>
+                        </div>
+                    </div>
+                    <div class="track-clients">
+                        <h4>Current Clients</h4>
+                        <div class="client-list">
+                            <div class="client">
+                                <span>Deb Briggs</span>
+                                <span class="client-status active">Active</span>
+                            </div>
+                            <div class="client">
+                                <span>Chloe Cal</span>
+                                <span class="client-status active">Active</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="track-actions">
+                        <a href="audhd-dashboard.html" class="track-btn primary">Open AuDHD Dashboard</a>
+                        <a href="audhd-foundations.html" class="track-btn secondary">Foundations Tool</a>
+                    </div>
+                </div>
+
+                <!-- AuDHD Executive Career -->
+                <div class="track-card audhd-exec">
+                    <div class="track-header">
+                        <span class="track-icon">🧠💼</span>
+                        <div>
+                            <div class="track-name">AuDHD Executive Career</div>
+                            <div class="track-badge">NEW - Senior Execs</div>
+                        </div>
+                    </div>
+                    <div class="track-clients">
+                        <h4>Current Clients</h4>
+                        <div class="client-list">
+                            <div class="client" style="color: #64748b; font-style: italic;">
+                                <span>No clients yet</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="track-actions">
+                        <a href="audhd-career-portal.html" class="track-btn primary">Open Exec Portal</a>
+                        <a href="#" class="track-btn secondary" style="opacity: 0.5;">Tools Coming Soon</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Admin Tools -->
+        <div class="admin-section">
+            <div class="section-title">⚙️ Admin Tools</div>
+            <div class="admin-grid">
+                <a href="admin.html" class="admin-btn">
+                    <span class="icon">👥</span>
+                    <span class="text">Manage Clients</span>
+                </a>
+                <a href="import.html" class="admin-btn">
+                    <span class="icon">📥</span>
+                    <span class="text">Import Questionnaire</span>
+                </a>
+                <a href="ability-recognition-visual.html" class="admin-btn">
+                    <span class="icon">📋</span>
+                    <span class="text">Discovery Questionnaire</span>
+                </a>
+                <a href="cv-builder.html" class="admin-btn">
+                    <span class="icon">📄</span>
+                    <span class="text">CV Builder</span>
+                </a>
+                <a href="blueprint.html" class="admin-btn">
+                    <span class="icon">🎯</span>
+                    <span class="text">Blueprint Viewer</span>
+                </a>
+                <a href="audhd-energy.html" class="admin-btn">
+                    <span class="icon">⚡</span>
+                    <span class="text">Energy Planner</span>
+                </a>
+            </div>
+        </div>
+
+        <!-- URL Reference -->
+        <div class="url-reference">
+            <h3>📍 Quick URL Reference (After Domain Setup)</h3>
+            <table class="url-table">
+                <tr>
+                    <td>Career Coaching</td>
+                    <td><code>career.harnessthespark.ai</code> → career-login.html</td>
+                </tr>
+                <tr>
+                    <td>AuDHD Life Coaching</td>
+                    <td><code>life.harnessthespark.ai</code> → life-login.html</td>
+                </tr>
+                <tr>
+                    <td>AuDHD Exec Career</td>
+                    <td><code>exec.harnessthespark.ai</code> → exec-login.html</td>
+                </tr>
+                <tr>
+                    <td>Coach Hub (You)</td>
+                    <td><code>coach.harnessthespark.ai</code> → coach-hub.html</td>
+                </tr>
+                <tr>
+                    <td>Admin Panel</td>
+                    <td><code>coach.harnessthespark.ai/admin.html</code></td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="footer">
+            <p>Harness the Spark | lisa@harnessthespark.com</p>
+        </div>
+    </div>
+
+    <script>
+        // Check if logged in as staff
+        window.onload = function() {
+            const savedUser = localStorage.getItem('syp_user');
+            if (!savedUser) {
+                // Not logged in - redirect to login
+                window.location.href = 'login.html';
+                return;
+            }
+
+            const user = JSON.parse(savedUser);
+            if (!user.isStaff) {
+                // Not staff - redirect to appropriate portal
+                window.location.href = 'login.html';
+                return;
+            }
+
+            // Staff user - show the hub
+            console.log('Coach Hub loaded for:', user.email);
+        };
+    </script>
+</body>
+</html>

@@ -1,0 +1,1001 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Paradox Career Blueprint - AuDHD Executive Career</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧠</text></svg>">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #2d1b4e 100%);
+            min-height: 100vh;
+            padding: 40px 20px;
+            color: #333;
+        }
+
+        .container { max-width: 900px; margin: 0 auto; }
+
+        /* Navigation */
+        .nav-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+        .back-link {
+            color: #f472b6;
+            text-decoration: none;
+            font-size: 0.95em;
+        }
+        .back-link:hover { text-decoration: underline; }
+        .logout-btn {
+            background: rgba(255,255,255,0.2);
+            color: white;
+            border: 1px solid rgba(255,255,255,0.3);
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 0.85em;
+            cursor: pointer;
+        }
+        .logout-btn:hover { background: rgba(255,255,255,0.3); }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            color: white;
+        }
+        .header h1 {
+            font-size: 2.2em;
+            font-weight: 800;
+            margin-bottom: 10px;
+        }
+        .header h1 span {
+            background: linear-gradient(135deg, #E91E78 0%, #F97B4D 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .header .subtitle {
+            font-size: 1.1em;
+            opacity: 0.8;
+        }
+        .header .name {
+            font-size: 1.3em;
+            color: #f472b6;
+            margin-top: 15px;
+            font-weight: 600;
+        }
+
+        /* Section Cards */
+        .section {
+            background: white;
+            border-radius: 20px;
+            padding: 35px;
+            margin-bottom: 25px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+        }
+        .section-icon { font-size: 2em; margin-bottom: 15px; }
+        .section-title {
+            font-size: 1.4em;
+            font-weight: 700;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 3px solid;
+        }
+        .section-title.pink { color: #E91E78; border-color: #E91E78; }
+        .section-title.orange { color: #F97B4D; border-color: #F97B4D; }
+        .section-title.purple { color: #8B5CF6; border-color: #8B5CF6; }
+        .section-title.blue { color: #3B82F6; border-color: #3B82F6; }
+        .section-title.green { color: #10B981; border-color: #10B981; }
+        .section-title.yellow { color: #CA8A04; border-color: #FACC15; }
+
+        /* Thread Box */
+        .thread-box {
+            background: linear-gradient(135deg, #fce7f3 0%, #e0e7ff 100%);
+            border-left: 5px solid #E91E78;
+            padding: 25px;
+            border-radius: 0 15px 15px 0;
+            margin-bottom: 20px;
+        }
+        .thread-label {
+            font-size: 0.85em;
+            font-weight: 700;
+            color: #E91E78;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 10px;
+        }
+        .thread-text {
+            font-size: 1.3em;
+            line-height: 1.6;
+            color: #2d1b4e;
+        }
+        .highlight {
+            background: linear-gradient(135deg, #E91E78 0%, #F97B4D 100%);
+            color: white;
+            padding: 2px 10px;
+            border-radius: 4px;
+        }
+
+        /* Editable Fields */
+        .editable-field {
+            background: #f8f9fa;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 15px;
+            transition: all 0.2s;
+        }
+        .editable-field:focus-within {
+            border-color: #E91E78;
+            box-shadow: 0 0 0 4px rgba(233, 30, 120, 0.15);
+        }
+        .field-label {
+            font-size: 0.85em;
+            font-weight: 600;
+            color: #888;
+            margin-bottom: 8px;
+        }
+        .field-input {
+            width: 100%;
+            border: none;
+            background: transparent;
+            font-family: inherit;
+            font-size: 1em;
+            color: #333;
+            resize: none;
+            min-height: 60px;
+        }
+        .field-input:focus { outline: none; }
+
+        /* Paradox Domain Cards */
+        .paradox-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            margin-top: 20px;
+        }
+        @media (max-width: 700px) {
+            .paradox-grid { grid-template-columns: 1fr; }
+        }
+
+        .paradox-card {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            border: 2px solid #e0e0e0;
+            transition: all 0.2s;
+        }
+        .paradox-card:hover {
+            border-color: #E91E78;
+            transform: translateY(-3px);
+        }
+        .paradox-card.communication { border-top: 4px solid #E91E78; }
+        .paradox-card.executive { border-top: 4px solid #F97B4D; }
+        .paradox-card.energy { border-top: 4px solid #FACC15; }
+        .paradox-card.emotional { border-top: 4px solid #3B82F6; }
+        .paradox-card.processing { border-top: 4px solid #8B5CF6; }
+        .paradox-card.relationships { border-top: 4px solid #10B981; }
+
+        .paradox-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 12px;
+        }
+        .paradox-icon { font-size: 1.5em; }
+        .paradox-name { font-weight: 700; color: #2d1b4e; }
+        .paradox-status {
+            margin-left: auto;
+            font-size: 0.8em;
+            padding: 4px 10px;
+            border-radius: 12px;
+            background: #f0f0f0;
+            color: #666;
+        }
+        .paradox-status.strength { background: #dcfce7; color: #16a34a; }
+        .paradox-status.challenge { background: #fee2e2; color: #dc2626; }
+        .paradox-status.developing { background: #fef3c7; color: #ca8a04; }
+
+        .paradox-insight {
+            font-size: 0.9em;
+            color: #666;
+            line-height: 1.5;
+            margin-bottom: 12px;
+        }
+        .paradox-action {
+            font-size: 0.85em;
+            color: #E91E78;
+            font-weight: 500;
+        }
+
+        /* Evidence Grid */
+        .evidence-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        .evidence-card {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 20px;
+            border: 2px solid #e0e0e0;
+        }
+        .evidence-card h4 {
+            color: #E91E78;
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+        .evidence-card p {
+            font-size: 0.95em;
+            color: #555;
+            line-height: 1.6;
+        }
+        .evidence-result {
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 1px solid #e0e0e0;
+            font-weight: 600;
+            color: #2d1b4e;
+        }
+
+        /* Flags Container */
+        .flags-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 25px;
+            margin-top: 20px;
+        }
+        @media (max-width: 600px) {
+            .flags-container { grid-template-columns: 1fr; }
+        }
+
+        .flag-box {
+            padding: 25px;
+            border-radius: 15px;
+        }
+        .red-flags {
+            background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
+            border: 2px solid #fca5a5;
+        }
+        .green-flags {
+            background: linear-gradient(135deg, #dcfce7 0%, #bbf7d0 100%);
+            border: 2px solid #86efac;
+        }
+        .flag-title {
+            font-weight: 700;
+            margin-bottom: 15px;
+            font-size: 1.1em;
+        }
+        .red-flags .flag-title { color: #dc2626; }
+        .green-flags .flag-title { color: #16a34a; }
+        .flag-item {
+            padding: 12px;
+            border-bottom: 1px solid rgba(0,0,0,0.1);
+            font-size: 0.95em;
+        }
+        .flag-item:last-child { border-bottom: none; }
+        .flag-item input {
+            width: 100%;
+            border: none;
+            background: rgba(255,255,255,0.7);
+            border-radius: 8px;
+            padding: 10px;
+            font-family: inherit;
+        }
+        .flag-item input:focus {
+            outline: none;
+            background: white;
+        }
+
+        /* Accommodations Section */
+        .accommodations-list {
+            list-style: none;
+            padding: 0;
+        }
+        .accommodations-list li {
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+        }
+        .accommodations-list .icon {
+            font-size: 1.2em;
+            flex-shrink: 0;
+        }
+        .accommodations-list .text {
+            flex: 1;
+        }
+        .accommodations-list .label {
+            font-weight: 600;
+            color: #2d1b4e;
+            margin-bottom: 4px;
+        }
+        .accommodations-list .description {
+            font-size: 0.9em;
+            color: #666;
+        }
+
+        /* Action Buttons */
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+        .action-btn {
+            padding: 15px 30px;
+            border-radius: 12px;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            transition: all 0.2s;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .action-btn.primary {
+            background: linear-gradient(135deg, #E91E78 0%, #F97B4D 100%);
+            color: white;
+        }
+        .action-btn.secondary {
+            background: white;
+            color: #E91E78;
+            border: 2px solid #E91E78;
+        }
+        .action-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+        }
+
+        .footer {
+            text-align: center;
+            color: white;
+            opacity: 0.6;
+            margin-top: 40px;
+            font-size: 0.9em;
+        }
+
+        /* Print Styles */
+        @media print {
+            body { background: white; padding: 20px; }
+            .nav-bar, .action-buttons { display: none; }
+            .section { box-shadow: none; border: 1px solid #e0e0e0; page-break-inside: avoid; }
+            .header { color: #2d1b4e; }
+            .header h1 span { -webkit-text-fill-color: #E91E78; }
+            .header .name { color: #E91E78; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Navigation -->
+        <div class="nav-bar">
+            <a href="audhd-career-portal.html" class="back-link">← Back to Portal</a>
+            <button class="logout-btn" onclick="logout()">Log out</button>
+        </div>
+
+        <div class="header">
+            <h1>📘 Paradox Career <span>Blueprint</span></h1>
+            <div class="subtitle">Your Executive Career DNA — Honoured and Clear</div>
+            <div class="name" id="blueprintName">Loading...</div>
+        </div>
+
+        <!-- THE THREAD -->
+        <div class="section">
+            <div class="section-icon">🧵</div>
+            <div class="section-title pink">Your Executive Thread</div>
+            <p style="color: #666; margin-bottom: 20px;">The golden thread that runs through your career — what you always come back to.</p>
+
+            <div class="thread-box">
+                <div class="thread-label">Your Thread</div>
+                <div class="thread-text">
+                    I am the executive who <span class="highlight" contenteditable="true" id="thread-text">brings clarity to chaos while honouring complexity</span>
+                </div>
+            </div>
+
+            <div class="editable-field">
+                <div class="field-label">How this shows up in your leadership:</div>
+                <textarea class="field-input" id="thread-evidence" placeholder="e.g., I'm called in when things are messy because I can see the patterns others miss..."></textarea>
+            </div>
+        </div>
+
+        <!-- PARADOX PROFILE -->
+        <div class="section">
+            <div class="section-icon">🔮</div>
+            <div class="section-title purple">Your Paradox Profile</div>
+            <p style="color: #666; margin-bottom: 20px;">How each AuDHD paradox shapes your executive presence. Click any card to edit.</p>
+
+            <div class="paradox-grid" id="paradoxGrid">
+                <!-- Communication -->
+                <div class="paradox-card communication" onclick="editParadox('communication')">
+                    <div class="paradox-header">
+                        <span class="paradox-icon">💬</span>
+                        <span class="paradox-name">Communication</span>
+                        <span class="paradox-status" id="comm-status">Loading...</span>
+                    </div>
+                    <div class="paradox-insight" id="comm-insight">Loading insight...</div>
+                    <div class="paradox-action" id="comm-action">Loading action...</div>
+                </div>
+
+                <!-- Executive Functioning -->
+                <div class="paradox-card executive" onclick="editParadox('executive')">
+                    <div class="paradox-header">
+                        <span class="paradox-icon">🧩</span>
+                        <span class="paradox-name">Executive Functioning</span>
+                        <span class="paradox-status" id="exec-status">Loading...</span>
+                    </div>
+                    <div class="paradox-insight" id="exec-insight">Loading insight...</div>
+                    <div class="paradox-action" id="exec-action">Loading action...</div>
+                </div>
+
+                <!-- Energy -->
+                <div class="paradox-card energy" onclick="editParadox('energy')">
+                    <div class="paradox-header">
+                        <span class="paradox-icon">⚡</span>
+                        <span class="paradox-name">Energy</span>
+                        <span class="paradox-status" id="energy-status">Loading...</span>
+                    </div>
+                    <div class="paradox-insight" id="energy-insight">Loading insight...</div>
+                    <div class="paradox-action" id="energy-action">Loading action...</div>
+                </div>
+
+                <!-- Emotional -->
+                <div class="paradox-card emotional" onclick="editParadox('emotional')">
+                    <div class="paradox-header">
+                        <span class="paradox-icon">💙</span>
+                        <span class="paradox-name">Emotional</span>
+                        <span class="paradox-status" id="emotional-status">Loading...</span>
+                    </div>
+                    <div class="paradox-insight" id="emotional-insight">Loading insight...</div>
+                    <div class="paradox-action" id="emotional-action">Loading action...</div>
+                </div>
+
+                <!-- Processing -->
+                <div class="paradox-card processing" onclick="editParadox('processing')">
+                    <div class="paradox-header">
+                        <span class="paradox-icon">🔄</span>
+                        <span class="paradox-name">Processing</span>
+                        <span class="paradox-status" id="processing-status">Loading...</span>
+                    </div>
+                    <div class="paradox-insight" id="processing-insight">Loading insight...</div>
+                    <div class="paradox-action" id="processing-action">Loading action...</div>
+                </div>
+
+                <!-- Relationships -->
+                <div class="paradox-card relationships" onclick="editParadox('relationships')">
+                    <div class="paradox-header">
+                        <span class="paradox-icon">🤝</span>
+                        <span class="paradox-name">Relationships</span>
+                        <span class="paradox-status" id="relationships-status">Loading...</span>
+                    </div>
+                    <div class="paradox-insight" id="relationships-insight">Loading insight...</div>
+                    <div class="paradox-action" id="relationships-action">Loading action...</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- EVIDENCE COLLECTION -->
+        <div class="section">
+            <div class="section-icon">📂</div>
+            <div class="section-title orange">Evidence Collection</div>
+            <p style="color: #666; margin-bottom: 20px;">Career achievements that demonstrate your unique value as an AuDHD executive.</p>
+
+            <div class="evidence-grid" id="evidenceGrid">
+                <!-- Evidence cards populated dynamically -->
+            </div>
+
+            <button class="action-btn secondary" style="margin-top: 20px;" onclick="addEvidence()">
+                + Add Achievement
+            </button>
+        </div>
+
+        <!-- NON-NEGOTIABLES -->
+        <div class="section">
+            <div class="section-icon">🚦</div>
+            <div class="section-title green">Your Non-Negotiables</div>
+            <p style="color: #666; margin-bottom: 20px;">Based on your paradox profile, these are your career deal-breakers.</p>
+
+            <div class="flags-container">
+                <div class="flag-box red-flags">
+                    <div class="flag-title">🚩 Environment Red Flags</div>
+                    <div class="flag-item">
+                        <input type="text" placeholder="e.g., Open-plan offices with no quiet spaces" id="red-1">
+                    </div>
+                    <div class="flag-item">
+                        <input type="text" placeholder="e.g., Back-to-back meeting cultures" id="red-2">
+                    </div>
+                    <div class="flag-item">
+                        <input type="text" placeholder="e.g., Always-on communication expectations" id="red-3">
+                    </div>
+                    <div class="flag-item">
+                        <input type="text" placeholder="e.g., Lack of role clarity" id="red-4">
+                    </div>
+                </div>
+                <div class="flag-box green-flags">
+                    <div class="flag-title">✅ Environment Green Flags</div>
+                    <div class="flag-item">
+                        <input type="text" placeholder="e.g., Hybrid/remote flexibility" id="green-1">
+                    </div>
+                    <div class="flag-item">
+                        <input type="text" placeholder="e.g., Clear expectations and deliverables" id="green-2">
+                    </div>
+                    <div class="flag-item">
+                        <input type="text" placeholder="e.g., Async communication accepted" id="green-3">
+                    </div>
+                    <div class="flag-item">
+                        <input type="text" placeholder="e.g., Deep work time protected" id="green-4">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ACCOMMODATIONS -->
+        <div class="section">
+            <div class="section-icon">🛡️</div>
+            <div class="section-title blue">Executive Accommodations</div>
+            <p style="color: #666; margin-bottom: 20px;">Support strategies that enable your best executive performance.</p>
+
+            <ul class="accommodations-list" id="accommodationsList">
+                <li>
+                    <span class="icon">📅</span>
+                    <div class="text">
+                        <div class="label">Schedule Design</div>
+                        <div class="description">Buffer time between meetings, protected deep work blocks, energy-aware scheduling</div>
+                    </div>
+                </li>
+                <li>
+                    <span class="icon">🏠</span>
+                    <div class="text">
+                        <div class="label">Environment Control</div>
+                        <div class="description">Private workspace, noise control, lighting preferences, sensory management tools</div>
+                    </div>
+                </li>
+                <li>
+                    <span class="icon">💬</span>
+                    <div class="text">
+                        <div class="label">Communication Preferences</div>
+                        <div class="description">Written agendas, processing time before decisions, clear expectations</div>
+                    </div>
+                </li>
+                <li>
+                    <span class="icon">⚡</span>
+                    <div class="text">
+                        <div class="label">Energy Management</div>
+                        <div class="description">Recovery time after high-demand activities, masking breaks, workload boundaries</div>
+                    </div>
+                </li>
+            </ul>
+
+            <div class="editable-field" style="margin-top: 20px;">
+                <div class="field-label">Additional accommodations you've found helpful:</div>
+                <textarea class="field-input" id="custom-accommodations" placeholder="e.g., I need 24 hours notice before important meetings so I can prepare..."></textarea>
+            </div>
+        </div>
+
+        <!-- POSITIONING STATEMENT -->
+        <div class="section">
+            <div class="section-icon">🎯</div>
+            <div class="section-title pink">Your Executive Positioning</div>
+            <p style="color: #666; margin-bottom: 20px;">How you position your AuDHD brain as an executive advantage.</p>
+
+            <div class="thread-box" style="background: linear-gradient(135deg, #e0e7ff 0%, #ddd6fe 100%); border-color: #8B5CF6;">
+                <div class="thread-label" style="color: #8B5CF6;">Your Positioning Statement</div>
+                <textarea class="field-input" id="positioning-statement" style="font-size: 1.1em; min-height: 100px; background: transparent; color: #2d1b4e;"
+                    placeholder="e.g., I'm the executive who sees patterns others miss, designs systems that actually work, and brings both strategic vision and operational rigour to complex challenges."></textarea>
+            </div>
+
+            <div class="editable-field" style="margin-top: 20px;">
+                <div class="field-label">Your unique executive value (the thing you do that others can't):</div>
+                <textarea class="field-input" id="unique-value" placeholder="e.g., I can hold both the 30,000ft view and the ground-level detail simultaneously..."></textarea>
+            </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="action-buttons">
+            <a href="audhd-cv-builder.html" class="action-btn primary">
+                📝 Build Your CV →
+            </a>
+            <button class="action-btn secondary" onclick="saveBlueprint()">
+                💾 Save Blueprint
+            </button>
+            <button class="action-btn secondary" onclick="window.print()">
+                📄 Export PDF
+            </button>
+        </div>
+
+        <div class="footer">
+            AuDHD Executive Career Coaching by Harness the Spark | harnessthespark.com
+        </div>
+    </div>
+
+    <!-- Evidence Modal -->
+    <div id="evidenceModal" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.7); z-index: 1000; padding: 20px; overflow-y: auto;">
+        <div style="background: white; max-width: 500px; margin: 50px auto; border-radius: 20px; padding: 30px;">
+            <h3 style="color: #2d1b4e; margin-bottom: 20px;">Add Career Achievement</h3>
+            <div class="editable-field">
+                <div class="field-label">Company/Context</div>
+                <input type="text" id="evidence-company" style="width: 100%; border: none; background: transparent; font-size: 1em;" placeholder="e.g., Global Tech Corp">
+            </div>
+            <div class="editable-field">
+                <div class="field-label">What you did</div>
+                <textarea id="evidence-description" class="field-input" placeholder="e.g., Led digital transformation across 5 markets..."></textarea>
+            </div>
+            <div class="editable-field">
+                <div class="field-label">Result (quantified if possible)</div>
+                <input type="text" id="evidence-result" style="width: 100%; border: none; background: transparent; font-size: 1em;" placeholder="e.g., £2.4M cost savings, 40% efficiency gain">
+            </div>
+            <div class="editable-field">
+                <div class="field-label">Which paradox strength did this leverage?</div>
+                <select id="evidence-paradox" style="width: 100%; border: none; background: #f0f0f0; padding: 10px; border-radius: 8px;">
+                    <option value="">Select...</option>
+                    <option value="communication">Communication - Clear boundaries & rules</option>
+                    <option value="executive">Executive Functioning - Systems & planning</option>
+                    <option value="energy">Energy - Deep focus & intensity</option>
+                    <option value="emotional">Emotional - Passion & intensity</option>
+                    <option value="processing">Processing - Pattern recognition</option>
+                    <option value="relationships">Relationships - Authentic connection</option>
+                </select>
+            </div>
+            <div style="display: flex; gap: 15px; margin-top: 20px;">
+                <button class="action-btn secondary" onclick="closeEvidenceModal()">Cancel</button>
+                <button class="action-btn primary" onclick="saveEvidence()">Save Achievement</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // State
+        let currentUser = null;
+        let blueprintData = {
+            thread: '',
+            threadEvidence: '',
+            paradoxProfile: {
+                communication: { status: 'developing', insight: '', action: '' },
+                executive: { status: 'developing', insight: '', action: '' },
+                energy: { status: 'developing', insight: '', action: '' },
+                emotional: { status: 'developing', insight: '', action: '' },
+                processing: { status: 'developing', insight: '', action: '' },
+                relationships: { status: 'developing', insight: '', action: '' }
+            },
+            evidence: [],
+            redFlags: ['', '', '', ''],
+            greenFlags: ['', '', '', ''],
+            customAccommodations: '',
+            positioningStatement: '',
+            uniqueValue: ''
+        };
+
+        // Initialize
+        window.onload = function() {
+            const savedUser = localStorage.getItem('syp_user');
+            if (!savedUser) {
+                window.location.href = 'exec-login.html';
+                return;
+            }
+            currentUser = JSON.parse(savedUser);
+
+            // Check access
+            const hasAccess = currentUser.programme_access === 'audhd-career' ||
+                             currentUser.programme_access === 'all' ||
+                             currentUser.isStaff;
+
+            if (!hasAccess) {
+                alert('You do not have access to AuDHD Executive Career tools.');
+                window.location.href = 'index.html';
+                return;
+            }
+
+            document.getElementById('blueprintName').textContent = currentUser.name || currentUser.email;
+
+            // Load saved blueprint
+            loadBlueprint();
+
+            // Load discovery data to pre-populate
+            loadDiscoveryData();
+
+            // Setup autosave
+            setupAutosave();
+        };
+
+        function loadBlueprint() {
+            const saved = localStorage.getItem('audhd_career_blueprint_' + currentUser.id);
+            if (saved) {
+                blueprintData = JSON.parse(saved);
+                populateFields();
+            } else {
+                // Set defaults
+                populateDefaults();
+            }
+        }
+
+        function loadDiscoveryData() {
+            const discovery = localStorage.getItem('audhd_career_discovery_' + currentUser.id);
+            if (discovery) {
+                const data = JSON.parse(discovery);
+                // Pre-populate paradox insights from discovery
+                updateParadoxFromDiscovery(data);
+            }
+        }
+
+        function updateParadoxFromDiscovery(data) {
+            const domains = ['communication', 'executive', 'energy', 'emotional', 'processing', 'relationships'];
+
+            domains.forEach(domain => {
+                const domainData = data[domain];
+                if (domainData) {
+                    const slider = domainData.slider || 50;
+                    const label = domainData.sliderLabel || 'Balanced';
+
+                    // Determine status based on slider
+                    let status = 'developing';
+                    if (slider < 30 || slider > 70) {
+                        status = slider < 30 ? 'challenge' : 'strength';
+                    }
+
+                    // Only update if not already set
+                    if (!blueprintData.paradoxProfile[domain].insight) {
+                        blueprintData.paradoxProfile[domain].status = status;
+                        blueprintData.paradoxProfile[domain].insight = generateInsight(domain, slider);
+                        blueprintData.paradoxProfile[domain].action = generateAction(domain, slider);
+                    }
+                }
+            });
+
+            populateParadoxCards();
+        }
+
+        function generateInsight(domain, slider) {
+            const insights = {
+                communication: {
+                    low: 'You set clear rules and boundaries but may need flexibility strategies.',
+                    mid: 'You balance structure and adaptability in communication.',
+                    high: 'You adapt readily but may need anchoring strategies for consistency.'
+                },
+                executive: {
+                    low: 'You excel at planning but may need spontaneity triggers.',
+                    mid: 'You blend planning with adaptability effectively.',
+                    high: 'You thrive on action but may need structure scaffolds.'
+                },
+                energy: {
+                    low: 'Energy management is critical - protect recovery time fiercely.',
+                    mid: 'You manage energy but watch for cumulative drains.',
+                    high: 'Your energy management is strong - maintain these systems.'
+                },
+                emotional: {
+                    low: 'You control expression well but may seem distant - add warmth cues.',
+                    mid: 'You calibrate emotional expression to context.',
+                    high: 'Your passion is visible - channel it strategically.'
+                },
+                processing: {
+                    low: 'Deep focus is your superpower - protect it and plan transitions.',
+                    mid: 'You switch modes effectively based on context.',
+                    high: 'Broad awareness serves you - add depth anchors when needed.'
+                },
+                relationships: {
+                    low: 'Strategic privacy serves you - add openness where high-trust matters.',
+                    mid: 'You calibrate disclosure to relationship and context.',
+                    high: 'Your openness builds rapport - add strategic privacy for politics.'
+                }
+            };
+
+            const level = slider < 33 ? 'low' : slider > 67 ? 'high' : 'mid';
+            return insights[domain]?.[level] || 'Complete the Paradox Discovery to generate insights.';
+        }
+
+        function generateAction(domain, slider) {
+            const actions = {
+                communication: 'Define your communication rules and when you can break them.',
+                executive: 'Create your planning anchor that allows tactical flexibility.',
+                energy: 'Map your energy costs and design your ideal week structure.',
+                emotional: 'Identify your regulation strategies for high-stakes moments.',
+                processing: 'Understand your focus style and plan context-switches.',
+                relationships: 'Define your disclosure levels for different relationships.'
+            };
+
+            return actions[domain] || 'Complete the Paradox Discovery for personalised actions.';
+        }
+
+        function populateFields() {
+            // Thread
+            document.getElementById('thread-text').textContent = blueprintData.thread || 'brings clarity to chaos while honouring complexity';
+            document.getElementById('thread-evidence').value = blueprintData.threadEvidence || '';
+
+            // Paradox cards
+            populateParadoxCards();
+
+            // Evidence
+            renderEvidence();
+
+            // Flags
+            for (let i = 1; i <= 4; i++) {
+                document.getElementById('red-' + i).value = blueprintData.redFlags[i-1] || '';
+                document.getElementById('green-' + i).value = blueprintData.greenFlags[i-1] || '';
+            }
+
+            // Accommodations & positioning
+            document.getElementById('custom-accommodations').value = blueprintData.customAccommodations || '';
+            document.getElementById('positioning-statement').value = blueprintData.positioningStatement || '';
+            document.getElementById('unique-value').value = blueprintData.uniqueValue || '';
+        }
+
+        function populateDefaults() {
+            populateParadoxCards();
+            renderEvidence();
+        }
+
+        function populateParadoxCards() {
+            const domains = ['communication', 'executive', 'energy', 'emotional', 'processing', 'relationships'];
+            const domainIds = {
+                communication: 'comm',
+                executive: 'exec',
+                energy: 'energy',
+                emotional: 'emotional',
+                processing: 'processing',
+                relationships: 'relationships'
+            };
+
+            domains.forEach(domain => {
+                const prefix = domainIds[domain];
+                const data = blueprintData.paradoxProfile[domain];
+
+                const statusEl = document.getElementById(prefix + '-status');
+                const insightEl = document.getElementById(prefix + '-insight');
+                const actionEl = document.getElementById(prefix + '-action');
+
+                if (statusEl) {
+                    statusEl.textContent = data.status.charAt(0).toUpperCase() + data.status.slice(1);
+                    statusEl.className = 'paradox-status ' + data.status;
+                }
+                if (insightEl) {
+                    insightEl.textContent = data.insight || 'Complete Paradox Discovery for insights.';
+                }
+                if (actionEl) {
+                    actionEl.textContent = data.action ? '→ ' + data.action : '→ Complete Discovery for actions.';
+                }
+            });
+        }
+
+        function renderEvidence() {
+            const grid = document.getElementById('evidenceGrid');
+
+            if (blueprintData.evidence.length === 0) {
+                grid.innerHTML = `
+                    <div class="evidence-card" style="text-align: center; color: #888; border-style: dashed;">
+                        <p>No achievements added yet.</p>
+                        <p style="font-size: 0.85em; margin-top: 10px;">Click "Add Achievement" to document your career wins.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            grid.innerHTML = blueprintData.evidence.map((e, index) => `
+                <div class="evidence-card">
+                    <h4>${e.company || 'Achievement'}</h4>
+                    <p>${e.description || ''}</p>
+                    ${e.result ? `<div class="evidence-result">${e.result}</div>` : ''}
+                    ${e.paradox ? `<div style="margin-top: 10px; font-size: 0.8em; color: #E91E78;">Leveraged: ${e.paradox}</div>` : ''}
+                    <button onclick="removeEvidence(${index})" style="margin-top: 10px; background: none; border: none; color: #dc2626; cursor: pointer; font-size: 0.85em;">Remove</button>
+                </div>
+            `).join('');
+        }
+
+        function addEvidence() {
+            document.getElementById('evidenceModal').style.display = 'block';
+            document.getElementById('evidence-company').value = '';
+            document.getElementById('evidence-description').value = '';
+            document.getElementById('evidence-result').value = '';
+            document.getElementById('evidence-paradox').value = '';
+        }
+
+        function closeEvidenceModal() {
+            document.getElementById('evidenceModal').style.display = 'none';
+        }
+
+        function saveEvidence() {
+            const evidence = {
+                company: document.getElementById('evidence-company').value,
+                description: document.getElementById('evidence-description').value,
+                result: document.getElementById('evidence-result').value,
+                paradox: document.getElementById('evidence-paradox').value
+            };
+
+            if (!evidence.company && !evidence.description) {
+                alert('Please add at least a company/context or description.');
+                return;
+            }
+
+            blueprintData.evidence.push(evidence);
+            renderEvidence();
+            closeEvidenceModal();
+            saveBlueprint();
+        }
+
+        function removeEvidence(index) {
+            if (confirm('Remove this achievement?')) {
+                blueprintData.evidence.splice(index, 1);
+                renderEvidence();
+                saveBlueprint();
+            }
+        }
+
+        function editParadox(domain) {
+            // Could open a modal for detailed editing
+            alert(`To update your ${domain} paradox profile, complete the Paradox Discovery tool.\n\nYour insights are automatically imported.`);
+        }
+
+        function setupAutosave() {
+            // Autosave on field changes
+            const fields = ['thread-evidence', 'custom-accommodations', 'positioning-statement', 'unique-value'];
+            fields.forEach(id => {
+                const el = document.getElementById(id);
+                if (el) {
+                    el.addEventListener('input', debounce(collectAndSave, 1000));
+                }
+            });
+
+            // Thread text
+            document.getElementById('thread-text').addEventListener('blur', debounce(collectAndSave, 500));
+
+            // Flags
+            for (let i = 1; i <= 4; i++) {
+                document.getElementById('red-' + i).addEventListener('input', debounce(collectAndSave, 1000));
+                document.getElementById('green-' + i).addEventListener('input', debounce(collectAndSave, 1000));
+            }
+        }
+
+        function collectAndSave() {
+            // Collect all field values
+            blueprintData.thread = document.getElementById('thread-text').textContent;
+            blueprintData.threadEvidence = document.getElementById('thread-evidence').value;
+            blueprintData.customAccommodations = document.getElementById('custom-accommodations').value;
+            blueprintData.positioningStatement = document.getElementById('positioning-statement').value;
+            blueprintData.uniqueValue = document.getElementById('unique-value').value;
+
+            // Flags
+            for (let i = 1; i <= 4; i++) {
+                blueprintData.redFlags[i-1] = document.getElementById('red-' + i).value;
+                blueprintData.greenFlags[i-1] = document.getElementById('green-' + i).value;
+            }
+
+            saveBlueprint();
+        }
+
+        function saveBlueprint() {
+            localStorage.setItem('audhd_career_blueprint_' + currentUser.id, JSON.stringify(blueprintData));
+            console.log('Blueprint saved');
+        }
+
+        function debounce(func, wait) {
+            let timeout;
+            return function executedFunction(...args) {
+                const later = () => {
+                    clearTimeout(timeout);
+                    func(...args);
+                };
+                clearTimeout(timeout);
+                timeout = setTimeout(later, wait);
+            };
+        }
+
+        function logout() {
+            if (confirm('Are you sure you want to log out?')) {
+                localStorage.removeItem('syp_user');
+                localStorage.removeItem('syp_token');
+                window.location.href = 'index.html';
+            }
+        }
+    </script>
+</body>
+</html>

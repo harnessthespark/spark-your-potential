@@ -391,7 +391,7 @@
 
             const programmes = user.programmes || [];
 
-            // If staff, show both
+            // If staff, show all three tracks
             if (user.isStaff) {
                 buttonsDiv.innerHTML = `
                     <a href="dashboard.html" class="portal-btn career">
@@ -400,7 +400,11 @@
                     </a>
                     <a href="audhd-dashboard.html" class="portal-btn audhd">
                         <span class="icon">🧠</span>
-                        <span>AuDHD Coaching</span>
+                        <span>AuDHD Life Coaching</span>
+                    </a>
+                    <a href="audhd-career-portal.html" class="portal-btn audhd" style="border: 2px solid #E91E78;">
+                        <span class="icon">🧠💼</span>
+                        <span>AuDHD Executive Career</span>
                     </a>
                 `;
                 return;
@@ -409,7 +413,7 @@
             // Show only the portals the client has access to
             if (programmes.includes('career')) {
                 buttonsDiv.innerHTML += `
-                    <a href="dashboard.html" class="portal-btn career">
+                    <a href="client-portal.html" class="portal-btn career">
                         <span class="icon">⚡</span>
                         <span>Career Coaching</span>
                     </a>
@@ -420,7 +424,16 @@
                 buttonsDiv.innerHTML += `
                     <a href="audhd-dashboard.html" class="portal-btn audhd">
                         <span class="icon">🧠</span>
-                        <span>AuDHD Coaching</span>
+                        <span>AuDHD Life Coaching</span>
+                    </a>
+                `;
+            }
+
+            if (programmes.includes('audhd-career')) {
+                buttonsDiv.innerHTML += `
+                    <a href="audhd-career-portal.html" class="portal-btn audhd" style="border: 2px solid #E91E78;">
+                        <span class="icon">🧠💼</span>
+                        <span>AuDHD Executive Career</span>
                     </a>
                 `;
             }
@@ -428,9 +441,11 @@
             // If only one programme, auto-redirect
             if (programmes.length === 1) {
                 if (programmes[0] === 'career') {
-                    window.location.href = 'dashboard.html';
+                    window.location.href = 'client-portal.html';
                 } else if (programmes[0] === 'audhd') {
                     window.location.href = 'audhd-dashboard.html';
+                } else if (programmes[0] === 'audhd-career') {
+                    window.location.href = 'audhd-career-portal.html';
                 }
             }
 

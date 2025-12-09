@@ -416,6 +416,224 @@
             font-size: 0.9em;
         }
 
+        /* Emergency Support Styles */
+        .emergency-support-container {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+        .emergency-btn {
+            background: linear-gradient(135deg, #dc2626 0%, #991b1b 100%);
+            color: white;
+            border: 2px solid rgba(255,255,255,0.3);
+            padding: 12px 30px;
+            border-radius: 30px;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(220, 38, 38, 0.4);
+        }
+        .emergency-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 25px rgba(220, 38, 38, 0.6);
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+        }
+
+        /* Emergency Modal */
+        .emergency-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 10000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            overflow-y: auto;
+        }
+        .emergency-modal-content {
+            background: white;
+            border-radius: 24px;
+            max-width: 700px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+            padding: 30px;
+        }
+        .emergency-close {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            background: none;
+            border: none;
+            font-size: 2em;
+            cursor: pointer;
+            color: #666;
+            line-height: 1;
+        }
+        .emergency-close:hover { color: #333; }
+
+        .emergency-header {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+        .emergency-icon {
+            font-size: 3em;
+            display: block;
+            margin-bottom: 10px;
+        }
+        .emergency-header h2 {
+            color: #2d1b4e;
+            margin-bottom: 8px;
+            font-size: 1.8em;
+        }
+        .emergency-header p {
+            color: #666;
+            font-size: 1.1em;
+        }
+
+        .emergency-options {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        .emergency-card {
+            border-radius: 16px;
+            padding: 20px;
+        }
+        .emergency-card h3 {
+            margin-bottom: 10px;
+            font-size: 1.2em;
+        }
+        .emergency-card.contact-lisa {
+            background: linear-gradient(135deg, #fdf4ff 0%, #fce7f3 100%);
+            border: 2px solid #E91E78;
+        }
+        .emergency-card.contact-lisa h3 { color: #E91E78; }
+
+        .emergency-action-btn {
+            background: linear-gradient(135deg, #E91E78 0%, #F97B4D 100%);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 12px;
+            font-size: 1.1em;
+            font-weight: 700;
+            cursor: pointer;
+            width: 100%;
+            margin: 15px 0;
+            transition: all 0.2s;
+        }
+        .emergency-action-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(233, 30, 120, 0.4);
+        }
+        .emergency-action-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+        .alert-status {
+            text-align: center;
+            padding: 10px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            display: none;
+        }
+        .alert-status.success {
+            display: block;
+            background: #dcfce7;
+            color: #166534;
+        }
+        .alert-status.error {
+            display: block;
+            background: #fef2f2;
+            color: #dc2626;
+        }
+        .emergency-note {
+            font-size: 0.85em;
+            color: #666;
+            text-align: center;
+        }
+
+        .emergency-card.crisis-lines {
+            background: #f0fdf4;
+            border: 2px solid #22c55e;
+        }
+        .emergency-card.crisis-lines h3 { color: #166534; }
+        .crisis-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .crisis-line {
+            display: flex;
+            flex-direction: column;
+            background: white;
+            padding: 12px 15px;
+            border-radius: 10px;
+            text-decoration: none;
+            color: inherit;
+            border: 1px solid #e0e0e0;
+            transition: all 0.2s;
+        }
+        .crisis-line:hover {
+            border-color: #22c55e;
+            box-shadow: 0 3px 10px rgba(34, 197, 94, 0.2);
+        }
+        .crisis-line strong {
+            color: #166534;
+            font-size: 1em;
+        }
+        .crisis-line span {
+            color: #22c55e;
+            font-size: 1.2em;
+            font-weight: 700;
+            margin: 3px 0;
+        }
+        .crisis-line small {
+            color: #666;
+            font-size: 0.85em;
+        }
+
+        .emergency-card.grounding {
+            background: #fefce8;
+            border: 2px solid #facc15;
+        }
+        .emergency-card.grounding h3 { color: #854d0e; }
+        .emergency-card.grounding ul {
+            margin: 15px 0;
+            padding-left: 20px;
+        }
+        .emergency-card.grounding li {
+            margin: 8px 0;
+            color: #444;
+        }
+        .grounding-reminder {
+            background: white;
+            padding: 12px;
+            border-radius: 10px;
+            text-align: center;
+            color: #854d0e;
+            font-weight: 500;
+            margin-top: 10px;
+        }
+
+        .emergency-footer {
+            text-align: center;
+            margin-top: 25px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+        }
+        .emergency-footer p {
+            color: #dc2626;
+            font-weight: 600;
+        }
+
         /* Responsive */
         @media (max-width: 768px) {
             body { padding: 20px; }
@@ -447,6 +665,84 @@
         <div class="nav-tabs">
             <a href="client-portal.html" class="nav-tab">⚡ Career Toolkit</a>
             <a href="audhd-dashboard.html" class="nav-tab active">🧠 AuDHD Coaching</a>
+        </div>
+
+        <!-- Emergency Support Button -->
+        <div class="emergency-support-container">
+            <button class="emergency-btn" onclick="openEmergencySupport()">
+                🆘 Need emergency support... right now
+            </button>
+        </div>
+
+        <!-- Emergency Support Modal -->
+        <div id="emergencyModal" class="emergency-modal" style="display: none;">
+            <div class="emergency-modal-content">
+                <button class="emergency-close" onclick="closeEmergencySupport()">&times;</button>
+
+                <div class="emergency-header">
+                    <span class="emergency-icon">💜</span>
+                    <h2>You're Not Alone</h2>
+                    <p>It's okay to need support. Here are some options:</p>
+                </div>
+
+                <div class="emergency-options">
+                    <!-- Contact Lisa -->
+                    <div class="emergency-card contact-lisa">
+                        <h3>📱 Contact Lisa</h3>
+                        <p>Your coach is here for you</p>
+                        <button class="emergency-action-btn" onclick="alertLisa()">
+                            Send Alert to Lisa
+                        </button>
+                        <div id="lisaAlertStatus" class="alert-status"></div>
+                        <p class="emergency-note">Lisa will receive an email and respond as soon as possible</p>
+                    </div>
+
+                    <!-- Crisis Lines -->
+                    <div class="emergency-card crisis-lines">
+                        <h3>📞 Crisis Support Lines (UK)</h3>
+                        <div class="crisis-list">
+                            <a href="tel:116123" class="crisis-line">
+                                <strong>Samaritans</strong>
+                                <span>116 123</span>
+                                <small>Free, 24/7, confidential</small>
+                            </a>
+                            <a href="tel:0800689-5555" class="crisis-line">
+                                <strong>SANEline</strong>
+                                <span>0800 689 5555</span>
+                                <small>4:30pm-10:30pm daily</small>
+                            </a>
+                            <a href="tel:0300-304-7000" class="crisis-line">
+                                <strong>Mind Infoline</strong>
+                                <span>0300 304 7000</span>
+                                <small>Mon-Fri 9am-6pm</small>
+                            </a>
+                            <a href="sms:85258" class="crisis-line">
+                                <strong>Shout Crisis Text</strong>
+                                <span>Text "SHOUT" to 85258</span>
+                                <small>Free, 24/7 text support</small>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Grounding Techniques -->
+                    <div class="emergency-card grounding">
+                        <h3>🌿 Quick Grounding</h3>
+                        <p><strong>5-4-3-2-1 Technique:</strong></p>
+                        <ul>
+                            <li><strong>5</strong> things you can SEE</li>
+                            <li><strong>4</strong> things you can TOUCH</li>
+                            <li><strong>3</strong> things you can HEAR</li>
+                            <li><strong>2</strong> things you can SMELL</li>
+                            <li><strong>1</strong> thing you can TASTE</li>
+                        </ul>
+                        <p class="grounding-reminder">Take slow breaths. You are safe. This will pass. 💜</p>
+                    </div>
+                </div>
+
+                <div class="emergency-footer">
+                    <p>If you're in immediate danger, please call <strong>999</strong></p>
+                </div>
+            </div>
         </div>
 
         <!-- Programme Selector -->

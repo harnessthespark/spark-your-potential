@@ -285,7 +285,7 @@
             </div>
         </div>
 
-        <!-- Programme Selection (shown if user has access to both) -->
+        <!-- Programme Selection (shown if user has access to multiple programmes) -->
         <div id="programmeChoice" class="programme-choice">
             <h3>Choose Your Portal</h3>
             <p class="intro">You have access to multiple programmes. Which would you like to open?</p>
@@ -299,8 +299,14 @@
 
                 <button class="programme-btn" onclick="goToPortal('audhd')">
                     <div class="emoji">🧠</div>
-                    <div class="title">AuDHD Coaching</div>
+                    <div class="title">AuDHD Life Coaching</div>
                     <div class="desc">Energy tracking, Paradox tools, Session notes</div>
+                </button>
+
+                <button class="programme-btn" onclick="goToPortal('audhd-career')" style="border: 2px solid #E91E78;">
+                    <div class="emoji">🧠💼</div>
+                    <div class="title">AuDHD Executive Career</div>
+                    <div class="desc">Paradox-powered career tools for senior executives</div>
                 </button>
             </div>
         </div>
@@ -390,12 +396,15 @@
         }
 
         function redirectBasedOnAccess(access) {
-            if (access === 'both') {
+            if (access === 'both' || access === 'all') {
                 // Show programme choice
                 document.getElementById('loginSection').style.display = 'none';
                 document.getElementById('programmeChoice').style.display = 'block';
+            } else if (access === 'audhd-career') {
+                // Go to AuDHD Executive Career portal (NEW TRACK)
+                window.location.href = 'audhd-career-portal.html';
             } else if (access === 'audhd') {
-                // Go to AuDHD portal
+                // Go to AuDHD Life Coaching portal
                 window.location.href = 'audhd-dashboard.html';
             } else {
                 // Default: Go to Career Booster client portal
@@ -404,7 +413,9 @@
         }
 
         function goToPortal(portal) {
-            if (portal === 'audhd') {
+            if (portal === 'audhd-career') {
+                window.location.href = 'audhd-career-portal.html';
+            } else if (portal === 'audhd') {
                 window.location.href = 'audhd-dashboard.html';
             } else {
                 window.location.href = 'client-portal.html';
