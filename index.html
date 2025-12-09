@@ -267,6 +267,20 @@
     <script>
         const API_BASE_URL = 'https://sparkhub-be-qtmmb.ondigitalocean.app';
 
+        // Subdomain redirects - send users to the right login page
+        const hostname = window.location.hostname;
+
+        // Check subdomain and redirect immediately
+        if (hostname.startsWith('career.')) {
+            window.location.href = 'career-login.html';
+        } else if (hostname.startsWith('life.')) {
+            window.location.href = 'life-login.html';
+        } else if (hostname.startsWith('exec.')) {
+            window.location.href = 'exec-login.html';
+        } else if (hostname.startsWith('coach.')) {
+            window.location.href = 'coach-hub.html';
+        }
+
         // Check if already logged in
         window.onload = function() {
             const savedUser = localStorage.getItem('syp_user');
