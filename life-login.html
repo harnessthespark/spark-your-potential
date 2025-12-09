@@ -220,9 +220,8 @@
     </div>
 
     <script>
-        // Configuration
-        const SYP_SERVER = window.location.origin;
-        const ALLOWED_ACCESS = ['audhd', 'both', 'all']; // Only these can access this portal
+        // Configuration - Use SparkHub backend for authentication
+        const API_SERVER = 'https://sparkhub-be-qtmmb.ondigitalocean.app';
         const REDIRECT_TO = 'audhd-dashboard.html';
 
         // Check if already logged in
@@ -230,18 +229,9 @@
             const savedUser = localStorage.getItem('syp_user');
             if (savedUser) {
                 const user = JSON.parse(savedUser);
-                if (canAccess(user.programme_access)) {
-                    window.location.href = REDIRECT_TO;
-                } else {
-                    // Wrong portal - clear and show login
-                    localStorage.removeItem('syp_user');
-                }
+                window.location.href = REDIRECT_TO;
             }
         };
-
-        function canAccess(access) {
-            return ALLOWED_ACCESS.includes(access);
-        }
 
         async function handleLogin(event) {
             event.preventDefault();
@@ -259,32 +249,30 @@
             loginBtn.innerHTML = '<span class="spinner"></span> Logging in...';
 
             try {
-                const response = await fetch(`${SYP_SERVER}/api/login`, {
+                // Use SparkHub backend for authentication
+                const response = await fetch(`${API_SERVER}/api/accounts/login/`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ email, password })
+                    body: JSON.stringify({
+                        username: email,  // Can be username OR email
+                        password: password
+                    })
                 });
 
                 const data = await response.json();
 
-                if (data.success && data.user) {
-                    const access = data.user.programme_access || 'career';
-
-                    // Check if this user can access AuDHD Life portal
-                    if (!canAccess(access)) {
-                        throw new Error('Your account is not set up for AuDHD Coaching. Please check you are using the correct login page.');
-                    }
-
+                if (response.ok && data.token) {
                     // Success - store user data
                     const userData = {
-                        id: data.user.id,
-                        email: data.user.email,
-                        name: data.user.name || email.split('@')[0],
-                        isStaff: data.user.is_admin || false,
-                        programme_access: access
+                        id: data.user?.id || 1,
+                        email: data.user?.email || email,
+                        name: data.user?.first_name || data.user?.username || email.split('@')[0],
+                        isStaff: data.user?.is_staff || false,
+                        programme_access: 'audhd'
                     };
 
                     localStorage.setItem('syp_user', JSON.stringify(userData));
+                    localStorage.setItem('syp_token', data.token);
 
                     successDiv.textContent = 'Login successful!';
                     successDiv.style.display = 'block';
@@ -294,7 +282,7 @@
                     }, 500);
 
                 } else {
-                    throw new Error(data.error || 'Invalid email or password');
+                    throw new Error(data.detail || data.error || 'Invalid email or password');
                 }
 
             } catch (error) {
