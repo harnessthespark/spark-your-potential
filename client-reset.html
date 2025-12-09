@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reset Progress - AuDHD Coaching</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🔄</text></svg>">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #2d1b4e 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 20px;
+            color: white;
+        }
+
+        .container {
+            background: white;
+            border-radius: 24px;
+            padding: 40px;
+            max-width: 500px;
+            width: 100%;
+            text-align: center;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+        }
+
+        .icon {
+            font-size: 4em;
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            color: #2d1b4e;
+            font-size: 1.8em;
+            margin-bottom: 10px;
+        }
+
+        .description {
+            color: #666;
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+
+        .warning {
+            background: #fef3c7;
+            border: 1px solid #f59e0b;
+            color: #92400e;
+            padding: 15px;
+            border-radius: 12px;
+            margin-bottom: 25px;
+            font-size: 0.9em;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 16px 32px;
+            border-radius: 12px;
+            font-size: 1.1em;
+            font-weight: 700;
+            cursor: pointer;
+            border: none;
+            transition: all 0.2s;
+            margin: 5px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #E91E78 0%, #8B5CF6 100%);
+            color: white;
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(233, 30, 120, 0.3);
+        }
+
+        .btn-secondary {
+            background: #e5e7eb;
+            color: #374151;
+        }
+        .btn-secondary:hover {
+            background: #d1d5db;
+        }
+
+        .success {
+            background: #d1fae5;
+            border: 1px solid #34d399;
+            color: #065f46;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 25px;
+        }
+
+        .success-icon {
+            font-size: 3em;
+            margin-bottom: 10px;
+        }
+
+        .back-link {
+            color: white;
+            text-decoration: none;
+            margin-top: 30px;
+            display: inline-block;
+            opacity: 0.8;
+        }
+        .back-link:hover { opacity: 1; }
+
+        .what-resets {
+            text-align: left;
+            background: #f3f4f6;
+            padding: 15px 20px;
+            border-radius: 10px;
+            margin-bottom: 25px;
+        }
+        .what-resets h4 {
+            color: #374151;
+            font-size: 0.85em;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .what-resets ul {
+            color: #6b7280;
+            font-size: 0.9em;
+            padding-left: 20px;
+        }
+        .what-resets li {
+            margin-bottom: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container" id="resetContainer">
+        <!-- Content will be populated by JavaScript -->
+    </div>
+
+    <a href="audhd-dashboard.html" class="back-link">← Back to Dashboard</a>
+
+    <script>
+        const RESET_OPTIONS = {
+            badges: {
+                icon: '🎖️',
+                title: 'Reset Badges',
+                description: 'This will clear all earned badges so you can earn them again from scratch.',
+                items: ['All earned badges', 'Badge count display'],
+                action: () => {
+                    const data = JSON.parse(localStorage.getItem('audhd_gamification') || '{}');
+                    data.badges = [];
+                    localStorage.setItem('audhd_gamification', JSON.stringify(data));
+                }
+            },
+            sparks: {
+                icon: '✨',
+                title: 'Reset Sparks',
+                description: 'This will reset your spark count back to zero.',
+                items: ['Total sparks earned', 'Spark history'],
+                action: () => {
+                    const data = JSON.parse(localStorage.getItem('audhd_gamification') || '{}');
+                    data.sparks = 0;
+                    data.sparkHistory = [];
+                    localStorage.setItem('audhd_gamification', JSON.stringify(data));
+                }
+            },
+            gamification: {
+                icon: '🎮',
+                title: 'Reset All Progress',
+                description: 'This will reset ALL gamification progress including badges, sparks, streaks, celebrations, and check-ins.',
+                items: ['All badges', 'All sparks', 'Streak count', 'Check-in history', 'Celebrations logged'],
+                action: () => {
+                    localStorage.removeItem('audhd_gamification');
+                }
+            },
+            worksheets: {
+                icon: '📝',
+                title: 'Reset Worksheets',
+                description: 'This will clear all saved worksheet data so you can start fresh.',
+                items: ['Foundations worksheet', 'Energy planner entries', 'Session notes', 'Spark Ignition data'],
+                action: () => {
+                    // Remove all worksheet data
+                    const keysToRemove = [];
+                    for (let i = 0; i < localStorage.length; i++) {
+                        const key = localStorage.key(i);
+                        if (key && (
+                            key.startsWith('audhd_foundations') ||
+                            key.startsWith('audhd_energy') ||
+                            key.startsWith('audhd_session') ||
+                            key.startsWith('spark_ignition') ||
+                            key.startsWith('audhd_worksheet')
+                        )) {
+                            keysToRemove.push(key);
+                        }
+                    }
+                    keysToRemove.forEach(key => localStorage.removeItem(key));
+                }
+            }
+        };
+
+        // Get reset type from URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const resetType = urlParams.get('reset');
+
+        function renderResetPage() {
+            const container = document.getElementById('resetContainer');
+
+            if (!resetType || !RESET_OPTIONS[resetType]) {
+                container.innerHTML = `
+                    <div class="icon">❓</div>
+                    <h1>Invalid Reset Link</h1>
+                    <p class="description">This reset link is not valid. Please contact your coach for a new link.</p>
+                    <a href="audhd-dashboard.html" class="btn btn-secondary">Go to Dashboard</a>
+                `;
+                return;
+            }
+
+            const option = RESET_OPTIONS[resetType];
+
+            container.innerHTML = `
+                <div class="icon">${option.icon}</div>
+                <h1>${option.title}</h1>
+                <p class="description">${option.description}</p>
+
+                <div class="what-resets">
+                    <h4>What will be reset:</h4>
+                    <ul>
+                        ${option.items.map(item => `<li>${item}</li>`).join('')}
+                    </ul>
+                </div>
+
+                <div class="warning">
+                    ⚠️ This action cannot be undone. Make sure you want to proceed.
+                </div>
+
+                <button class="btn btn-primary" onclick="performReset('${resetType}')">
+                    Yes, Reset Now
+                </button>
+                <a href="audhd-dashboard.html" class="btn btn-secondary">Cancel</a>
+            `;
+        }
+
+        function performReset(type) {
+            const option = RESET_OPTIONS[type];
+
+            try {
+                option.action();
+
+                document.getElementById('resetContainer').innerHTML = `
+                    <div class="success">
+                        <div class="success-icon">✅</div>
+                        <h2 style="color: #065f46; margin-bottom: 10px;">Reset Complete!</h2>
+                        <p>${option.title} has been successfully reset.</p>
+                    </div>
+
+                    <p class="description">You can now return to your dashboard and start fresh.</p>
+
+                    <a href="audhd-dashboard.html" class="btn btn-primary">Go to Dashboard</a>
+                `;
+            } catch (error) {
+                alert('Something went wrong. Please try again or contact your coach.');
+                console.error('Reset error:', error);
+            }
+        }
+
+        // Render on load
+        renderResetPage();
+    </script>
+</body>
+</html>
