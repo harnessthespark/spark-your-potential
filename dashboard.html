@@ -1569,9 +1569,9 @@
                     const clients = {};
                     apiClients.forEach(client => {
                         const frontendStatus = STATUS_MAP[client.programme_status] || 'pre-programme';
-                        // Determine programme type from programme_access field
-                        const programmeAccess = client.programme_access || 'career';
-                        const isAuDHD = programmeAccess === 'audhd' || programmeAccess === 'both';
+                        // Determine programme type from programme_type field (audhd, career, exec)
+                        const programmeType = client.programme_type || 'career';
+                        const isAuDHD = programmeType === 'audhd';
                         clients[client.email] = {
                             id: client.id,
                             name: client.full_name,
@@ -1580,7 +1580,7 @@
                             folder: client.full_name.replace(/\s+/g, '_'),
                             status: frontendStatus,
                             programme: isAuDHD ? 'audhd' : 'career',
-                            programmeAccess: programmeAccess,
+                            programmeType: programmeType,
                             enrolledDate: client.enrolled_date,
                             session1Date: client.session_1_date,
                             session2Date: client.session_2_date,
