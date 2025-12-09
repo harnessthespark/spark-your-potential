@@ -889,6 +889,13 @@
                     <button class="tool-btn" onclick="openTool('energy')">Open Planner</button>
                 </div>
 
+                <!-- Brain Dump Box -->
+                <div class="tool-card" style="border: 2px solid #ef4444;">
+                    <h4>📦 Brain Dump Box</h4>
+                    <p>Overwhelmed? Get everything out of your head fast. Sort into: Do Now, Do Later, Delegate, Delete.</p>
+                    <button class="tool-btn" onclick="openTool('braindump')" style="background: linear-gradient(135deg, #ef4444 0%, #f97316 100%);">Empty My Head →</button>
+                </div>
+
                 <!-- Monotropism Score -->
                 <div class="tool-card">
                     <h4>🔍 Focus Style (Monotropism)</h4>
@@ -1710,6 +1717,10 @@
                 case 'ignition':
                     window.open('spark-ignition.html', '_blank');
                     addSparks(2, 'Used Spark Ignition');
+                    break;
+                case 'braindump':
+                    window.open('audhd-braindump.html', '_blank');
+                    addSparks(3, 'Used Brain Dump Box');
                     break;
                 case 'session-notes':
                     window.open('audhd-session-notes.html', '_blank');
