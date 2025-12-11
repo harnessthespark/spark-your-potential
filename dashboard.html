@@ -254,7 +254,7 @@
         <!-- User Menu (shown when logged in) -->
         <div class="user-menu" id="userMenu" style="display: none;">
             <a href="index.html" class="logout-btn" style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.3);">← Home</a>
-            <a href="audhd-dashboard.html" class="logout-btn" style="background: linear-gradient(135deg, #8B5CF6 0%, #EC4899 100%); border: none;">🧠 AuDHD Portal</a>
+            <a href="audhd-dashboard.html" class="logout-btn" style="background: linear-gradient(135deg, #8B5CF6 0%, #EC4899 100%); border: none;">🧠 ND Portal</a>
             <a href="book.html" class="logout-btn" style="background: linear-gradient(135deg, #E63946 0%, #D81B60 100%); border: none;">⚡ Book</a>
             <span class="user-email" id="userEmail"></span>
             <button class="logout-btn" onclick="logout()">Log out</button>
@@ -306,7 +306,7 @@
                             + Add Career Client
                         </button>
                         <button onclick="addAuDHDClient()" style="background: white; color: #8B5CF6; border: none; padding: 12px 25px; border-radius: 8px; font-weight: 600; cursor: pointer; font-size: 1em;">
-                            + Add AuDHD Client
+                            + Add ND Client
                         </button>
                     </div>
                 </div>
@@ -320,7 +320,7 @@
                         ⚡ Career Booster
                     </button>
                     <button onclick="filterClients('audhd')" id="filterAudhd" class="filter-btn" style="background: rgba(255,255,255,0.1); color: white; border: 1px solid rgba(255,255,255,0.3); padding: 8px 16px; border-radius: 20px; cursor: pointer; font-size: 0.85em;">
-                        🧠 AuDHD Coaching
+                        🧠 ND Coaching
                     </button>
                 </div>
 
@@ -359,7 +359,7 @@
                                 <label style="display: block; font-size: 0.85em; color: #555; margin-bottom: 5px;">Programme Access</label>
                                 <select id="adminProgrammeAccess" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px; font-size: 0.95em; background: white;">
                                     <option value="career">💼 Career Booster Only</option>
-                                    <option value="audhd">🧠 AuDHD Coaching Only</option>
+                                    <option value="audhd">🧠 ND Coaching Only</option>
                                     <option value="both">✨ Both Programmes</option>
                                     <option value="testimonial">🎁 Testimonial Access (Self-Service)</option>
                                 </select>
@@ -1828,7 +1828,7 @@
                     // Programme access labels
                     const accessLabels = {
                         'career': '💼 Career Booster',
-                        'audhd': '🧠 AuDHD Coaching',
+                        'audhd': '🧠 ND Coaching',
                         'both': '✨ Both Programmes'
                     };
 
