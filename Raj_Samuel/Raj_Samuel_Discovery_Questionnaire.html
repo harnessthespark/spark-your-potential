@@ -744,8 +744,8 @@
 <body>
     <script>
         // Security: Check if user is logged in to client portal
-        const savedUser = localStorage.getItem('syp_user');
-        if (!savedUser) {
+        const savedEmail = localStorage.getItem('syp_client_email');
+        if (!savedEmail) {
             window.location.href = '/client-portal.html';
         }
     </script>
