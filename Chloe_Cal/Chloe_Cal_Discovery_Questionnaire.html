@@ -743,9 +743,11 @@
 </head>
 <body>
     <script>
-        // Security: Check if user is logged in to client portal
+        // Security: Check if user is logged in (coach OR client)
         const savedUser = localStorage.getItem('syp_user');
-        if (!savedUser) {
+        const savedClientEmail = localStorage.getItem('syp_client_email');
+        if (!savedUser && !savedClientEmail) {
+            // Not logged in - redirect to client portal login
             window.location.href = '/client-portal.html';
         }
     </script>
