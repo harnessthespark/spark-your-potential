@@ -1473,10 +1473,32 @@
         let selectedWeek = null;
 
         // Check for saved session (requires previous password login)
+        // Supports both login methods:
+        // - syp_client_email: set by client-portal.html direct login
+        // - syp_user: set by login.html (central login hub) which redirects here
         window.onload = function() {
+            // Check for direct client portal login
             const savedEmail = localStorage.getItem('syp_client_email');
             if (savedEmail && CLIENTS[savedEmail.toLowerCase()]) {
                 showPortal(CLIENTS[savedEmail.toLowerCase()]);
+                return;
+            }
+
+            // Check for login.html redirect (stores user object with email)
+            const savedUser = localStorage.getItem('syp_user');
+            if (savedUser) {
+                try {
+                    const user = JSON.parse(savedUser);
+                    const email = user.email?.toLowerCase();
+                    if (email && CLIENTS[email]) {
+                        // Sync the client email for consistency
+                        localStorage.setItem('syp_client_email', email);
+                        showPortal(CLIENTS[email]);
+                        return;
+                    }
+                } catch (e) {
+                    console.error('Error parsing saved user:', e);
+                }
             }
         };
 
