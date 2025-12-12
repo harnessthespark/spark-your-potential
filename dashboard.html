@@ -1099,28 +1099,50 @@
         }
 
         // Render the client list cards
+        // VERSION: 2025-12-01-v2 - Debug client loading
         async function renderClientList() {
             const container = document.getElementById('clientList');
 
             // Show loading state
             container.innerHTML = '<div style="color: white; text-align: center; padding: 20px;">Loading clients...</div>';
 
-            // ALWAYS start with DEFAULT_CLIENTS to ensure they're never lost
-            let clients = { ...DEFAULT_CLIENTS };
+            // ALWAYS start with DEFAULT_CLIENTS - these must NEVER be lost
+            let clients = {};
 
-            // Try to fetch from API and merge (API data overwrites defaults, but defaults remain if no API match)
+            // Step 1: Copy all DEFAULT_CLIENTS first (guaranteed base)
+            Object.keys(DEFAULT_CLIENTS).forEach(email => {
+                clients[email] = { ...DEFAULT_CLIENTS[email] };
+            });
+            console.log('📦 Step 1 - DEFAULT_CLIENTS loaded:', Object.keys(clients).length, Object.keys(clients));
+
+            // Step 2: Try to fetch from API and merge (API data overwrites defaults for matching emails)
             try {
                 const apiClients = await getStoredClients();
-                if (Object.keys(apiClients).length > 0) {
-                    // Merge: DEFAULT_CLIENTS first, then API data on top (API wins for duplicates)
-                    clients = { ...DEFAULT_CLIENTS, ...apiClients };
+                const apiCount = Object.keys(apiClients).length;
+                console.log('📦 Step 2 - API returned:', apiCount, 'clients');
+
+                if (apiCount > 0) {
+                    // Merge API clients on top of defaults (API wins for duplicates, defaults remain for non-matches)
+                    Object.keys(apiClients).forEach(email => {
+                        clients[email] = { ...apiClients[email] };
+                    });
+                    console.log('📦 Step 2 - After merge:', Object.keys(clients).length, Object.keys(clients));
                 }
             } catch (error) {
-                console.log('📦 Using DEFAULT_CLIENTS only (API unavailable)');
+                console.error('📦 API error, using DEFAULT_CLIENTS only:', error);
                 updateDataSourceIndicator(false);
             }
 
+            // Step 3: Final safety check - ensure DEFAULT_CLIENTS are present
+            Object.keys(DEFAULT_CLIENTS).forEach(email => {
+                if (!clients[email]) {
+                    console.warn('⚠️ Missing default client, restoring:', email);
+                    clients[email] = { ...DEFAULT_CLIENTS[email] };
+                }
+            });
+
             const clientList = Object.values(clients);
+            console.log('📦 Final client list:', clientList.length, clientList.map(c => c.name));
 
             // Should never be empty now since DEFAULT_CLIENTS always has entries
             if (clientList.length === 0) {
@@ -1544,11 +1566,17 @@
         // Storage helpers - PostgreSQL via SparkHub API
         // SECURITY: Requires authentication to access client data
         async function getStoredClients() {
+            console.log('🔍 getStoredClients called');
+            console.log('🔍 authToken:', authToken ? 'present' : 'missing');
+            console.log('🔍 currentUser:', currentUser);
+            console.log('🔍 isStaff:', currentUser?.isStaff);
+
             // SECURITY: Must be authenticated to see any client data
             if (!authToken || !currentUser || !currentUser.isStaff) {
-                console.warn('⚠️ Not authenticated or not staff - no client access');
+                console.warn('⚠️ Not authenticated or not staff - returning DEFAULT_CLIENTS only');
                 updateDataSourceIndicator(false);
-                return {};
+                // Still return DEFAULT_CLIENTS for authenticated coaches even if API unavailable
+                return { ...DEFAULT_CLIENTS };
             }
 
             // Try to fetch from PostgreSQL API
@@ -1616,52 +1644,76 @@
                     console.warn('⚠️ Auth token expired, clearing session');
                     authToken = null;
                     localStorage.removeItem('syp_token');
-                    return {};
+                    // Still return DEFAULT_CLIENTS so UI doesn't break
+                    console.log('📦 Returning DEFAULT_CLIENTS after 401');
+                    return { ...DEFAULT_CLIENTS };
+                } else {
+                    console.warn('⚠️ API returned non-ok status:', response.status);
                 }
             } catch (error) {
                 console.error('Error fetching clients from API:', error);
             }
 
-            // Fallback to cached data + defaults - ONLY if still authenticated
-            if (authToken && currentUser && currentUser.isStaff) {
-                console.log('📦 Using cached clients from localStorage (offline mode)');
-                updateDataSourceIndicator(false);
+            // Fallback to cached data + defaults
+            console.log('📦 Using cached clients from localStorage (offline mode)');
+            updateDataSourceIndicator(false);
 
-                let clients = { ...DEFAULT_CLIENTS };
-                const stored = localStorage.getItem('syp_clients');
-                if (stored) {
+            let clients = { ...DEFAULT_CLIENTS };
+            const stored = localStorage.getItem('syp_clients');
+            if (stored) {
+                try {
                     const storedClients = JSON.parse(stored);
-                    clients = { ...clients, ...storedClients };
+                    // Merge stored on top of defaults
+                    Object.keys(storedClients).forEach(email => {
+                        clients[email] = { ...storedClients[email] };
+                    });
+                } catch (parseError) {
+                    console.error('Error parsing cached clients:', parseError);
                 }
-
-                cachedClients = clients;
-                return clients;
             }
 
-            return {};
+            // Final safety: ensure DEFAULT_CLIENTS are always present
+            Object.keys(DEFAULT_CLIENTS).forEach(email => {
+                if (!clients[email]) {
+                    clients[email] = { ...DEFAULT_CLIENTS[email] };
+                }
+            });
+
+            cachedClients = clients;
+            console.log('📦 Returning clients from cache:', Object.keys(clients).length);
+            return clients;
         }
 
         // Sync version for rendering (uses cache)
-        // SECURITY: Returns empty if not authenticated
+        // Returns cached clients or DEFAULT_CLIENTS as fallback
         function getStoredClientsSync() {
-            // SECURITY: Must be authenticated to see any client data
-            if (!authToken || !currentUser || !currentUser.isStaff) {
-                return {};
-            }
-
-            if (cachedClients) {
+            // If we have a cache, use it
+            if (cachedClients && Object.keys(cachedClients).length > 0) {
                 return cachedClients;
             }
 
-            // Start with default clients (only for authenticated coaches)
+            // Start with default clients
             let clients = { ...DEFAULT_CLIENTS };
 
-            // Merge with stored clients
+            // Merge with stored clients if available
             const stored = localStorage.getItem('syp_clients');
             if (stored) {
-                const storedClients = JSON.parse(stored);
-                clients = { ...clients, ...storedClients };
+                try {
+                    const storedClients = JSON.parse(stored);
+                    Object.keys(storedClients).forEach(email => {
+                        clients[email] = { ...storedClients[email] };
+                    });
+                } catch (e) {
+                    console.error('Error parsing stored clients:', e);
+                }
             }
+
+            // Ensure DEFAULT_CLIENTS are always present
+            Object.keys(DEFAULT_CLIENTS).forEach(email => {
+                if (!clients[email]) {
+                    clients[email] = { ...DEFAULT_CLIENTS[email] };
+                }
+            });
 
             return clients;
         }
