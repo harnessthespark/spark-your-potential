@@ -364,6 +364,23 @@
                     ignition: 'audhd-ignition.html',
                     paradox: 'audhd-paradox.html'
                 }
+            },
+            'lisa.gills@icloud.com': {
+                name: 'Lisa Gills',
+                tools: ['processingProfile', 'weeklyCheckin', 'questionnaire', 'foundations', 'energy', 'braindump', 'ignition', 'paradox', 'blueprint', 'cvBuilder', 'decisionFramework'],
+                files: {
+                    processingProfile: 'processing-profile.html',
+                    weeklyCheckin: 'weekly-checkin.html',
+                    questionnaire: 'processing-profile.html',
+                    foundations: 'audhd-foundations.html',
+                    energy: 'audhd-energy.html',
+                    braindump: 'audhd-braindump.html',
+                    ignition: 'audhd-ignition.html',
+                    paradox: 'audhd-paradox.html',
+                    blueprint: 'processing-profile.html',
+                    cvBuilder: 'processing-profile.html',
+                    decisionFramework: 'processing-profile.html'
+                }
             }
         };
 
@@ -396,13 +413,7 @@
 
             errorDiv.style.display = 'none';
 
-            // Check local clients first
-            if (CLIENTS[email]) {
-                loginUser(email);
-                return;
-            }
-
-            // Try API login
+            // Always require password authentication via API
             try {
                 const response = await fetch(`${API_SERVER}/api/accounts/login/`, {
                     method: 'POST',
@@ -421,7 +432,7 @@
                         return;
                     }
 
-                    // Otherwise try to find client
+                    // Otherwise try to find client toolkit
                     if (CLIENTS[email]) {
                         loginUser(email);
                     } else {
@@ -429,12 +440,12 @@
                         errorDiv.style.display = 'block';
                     }
                 } else {
-                    errorDiv.textContent = 'Email not found. Check your email or contact Lisa.';
+                    errorDiv.textContent = 'Invalid email or password. Please try again.';
                     errorDiv.style.display = 'block';
                 }
             } catch (err) {
-                // Offline - check local only
-                errorDiv.textContent = 'Email not found. Check your email or contact Lisa.';
+                // Network error
+                errorDiv.textContent = 'Unable to connect. Please check your internet connection.';
                 errorDiv.style.display = 'block';
             }
         }
