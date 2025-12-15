@@ -324,7 +324,7 @@
                 const user = JSON.parse(savedUser);
                 // If staff, go to coach hub; otherwise redirect based on programme
                 if (user.isStaff) {
-                    window.location.href = 'coach-hub.html';
+                    window.location.href = 'dashboard.html';
                 } else {
                     redirectBasedOnAccess(user.programme_access || 'career');
                 }
@@ -383,7 +383,7 @@
                     // Redirect - staff go to coach hub, clients go to their portal
                     setTimeout(() => {
                         if (userData.isStaff) {
-                            window.location.href = 'coach-hub.html';
+                            window.location.href = 'dashboard.html';
                         } else {
                             redirectBasedOnAccess(userData.programme_access);
                         }
