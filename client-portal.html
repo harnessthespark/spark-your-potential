@@ -1505,7 +1505,7 @@
         // SparkHub API server for authentication
         const API_SERVER = 'https://sparkhub-be-qtmmb.ondigitalocean.app';
 
-        // Client login - authenticates against SparkHub backend
+        // Client login - authenticates against SparkHub PostgreSQL backend
         async function clientLogin() {
             const email = document.getElementById('emailInput').value.trim().toLowerCase();
             const password = document.getElementById('passwordInput').value;
@@ -1524,21 +1524,13 @@
                 return;
             }
 
-            // Check if client exists in our system
-            const client = CLIENTS[email];
-            if (!client) {
-                errorEl.textContent = 'Email not found. Please check your email or contact Lisa.';
-                errorEl.style.display = 'block';
-                return;
-            }
-
             // Show loading state
             loginBtn.disabled = true;
             loginBtn.textContent = 'Logging in...';
             errorEl.style.display = 'none';
 
             try {
-                // Authenticate against SparkHub backend
+                // Authenticate against SparkHub PostgreSQL backend
                 const response = await fetch(`${API_SERVER}/api/accounts/login/`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
@@ -1554,14 +1546,62 @@
                     // Success - store auth data
                     localStorage.setItem('syp_client_email', email);
                     localStorage.setItem('syp_token', data.token);
+
+                    // Get client data - check CLIENTS first, then fetch from API
+                    let client = CLIENTS[email];
+
+                    if (!client) {
+                        // Client not in hardcoded list - fetch from API or create default
+                        try {
+                            const clientResponse = await fetch(`${API_SERVER}/api/crm/syp/clients/me/`, {
+                                headers: {
+                                    'Authorization': `Token ${data.token}`,
+                                    'Content-Type': 'application/json'
+                                }
+                            });
+
+                            if (clientResponse.ok) {
+                                const clientData = await clientResponse.json();
+                                client = {
+                                    name: clientData.full_name || data.user?.first_name || email.split('@')[0],
+                                    email: email,
+                                    folder: clientData.folder || email.split('@')[0].replace(/[^a-zA-Z0-9]/g, '_'),
+                                    status: clientData.programme_stage || 'pre-programme',
+                                    agreementSigned: clientData.agreement_signed || false,
+                                    files: {},
+                                    prompts: {},
+                                    blueprintProgress: 0
+                                };
+                            }
+                        } catch (apiError) {
+                            console.log('Could not fetch client data from API, using defaults');
+                        }
+
+                        // If still no client data, create minimal profile
+                        if (!client) {
+                            client = {
+                                name: data.user?.first_name || email.split('@')[0],
+                                email: email,
+                                folder: email.split('@')[0].replace(/[^a-zA-Z0-9]/g, '_'),
+                                status: 'pre-programme',
+                                agreementSigned: false,
+                                files: {},
+                                prompts: {},
+                                blueprintProgress: 0
+                            };
+                        }
+                    }
+
                     showPortal(client);
                 } else {
-                    throw new Error(data.detail || data.message || 'Invalid password');
+                    throw new Error(data.detail || data.message || 'Invalid credentials');
                 }
 
             } catch (error) {
                 console.error('Login error:', error);
-                errorEl.textContent = 'Incorrect password. Please try again or contact Lisa.';
+                errorEl.textContent = error.message.includes('credentials')
+                    ? 'Invalid email or password. Please try again.'
+                    : 'Login failed. Please try again or contact Lisa.';
                 errorEl.style.display = 'block';
                 loginBtn.disabled = false;
                 loginBtn.textContent = 'Log In';
