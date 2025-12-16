@@ -223,10 +223,64 @@
             to { transform: rotate(360deg); }
         }
 
+        /* Crisis Support */
+        .crisis-support {
+            margin-top: 40px;
+            text-align: center;
+        }
+        .crisis-support > p {
+            color: #888;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .crisis-links {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        .crisis-link {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 15px 20px;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 12px;
+            color: white;
+            text-decoration: none;
+            min-width: 120px;
+            transition: all 0.2s;
+        }
+        .crisis-link:hover {
+            background: rgba(255, 255, 255, 0.15);
+            transform: translateY(-3px);
+        }
+        .crisis-link.samaritans:hover { border-color: #4ade80; }
+        .crisis-link.mind:hover { border-color: #22c55e; }
+        .crisis-link.nhs:hover { border-color: #3b82f6; }
+        .crisis-link.shout:hover { border-color: #a855f7; }
+
+        .crisis-icon {
+            font-size: 1.5em;
+            margin-bottom: 5px;
+        }
+        .crisis-name {
+            font-weight: 600;
+            font-size: 0.9em;
+        }
+        .crisis-detail {
+            font-size: 0.75em;
+            opacity: 0.7;
+            margin-top: 3px;
+        }
+
         /* Responsive */
         @media (max-width: 480px) {
             .login-card { padding: 30px 25px; }
             .header h1 { font-size: 1.8em; }
+            .crisis-links { gap: 8px; }
+            .crisis-link { min-width: 100px; padding: 12px 15px; }
         }
     </style>
 </head>
@@ -309,6 +363,33 @@
                     <div class="desc">Paradox-powered career tools for senior executives</div>
                 </button>
             </div>
+        </div>
+    </div>
+
+    <!-- Crisis Support Resources -->
+    <div class="crisis-support">
+        <p>Need support right now?</p>
+        <div class="crisis-links">
+            <a href="tel:116123" class="crisis-link samaritans">
+                <span class="crisis-icon">📞</span>
+                <span class="crisis-name">Samaritans</span>
+                <span class="crisis-detail">116 123 (24/7, free)</span>
+            </a>
+            <a href="https://www.mind.org.uk/information-support/helplines/" target="_blank" class="crisis-link mind">
+                <span class="crisis-icon">💚</span>
+                <span class="crisis-name">Mind</span>
+                <span class="crisis-detail">Mental health support</span>
+            </a>
+            <a href="https://www.nhs.uk/mental-health/feelings-symptoms-behaviours/behaviours/help-for-suicidal-thoughts/" target="_blank" class="crisis-link nhs">
+                <span class="crisis-icon">🏥</span>
+                <span class="crisis-name">NHS</span>
+                <span class="crisis-detail">Crisis resources</span>
+            </a>
+            <a href="sms:85258?body=SHOUT" class="crisis-link shout">
+                <span class="crisis-icon">💬</span>
+                <span class="crisis-name">Shout</span>
+                <span class="crisis-detail">Text SHOUT to 85258</span>
+            </a>
         </div>
     </div>
 
