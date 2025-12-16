@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Laying the Foundations - AuDHD Coaching</title>
+    <title>Laying the Foundations - Spark Your Potential</title>
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏗️</text></svg>">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
@@ -98,65 +98,6 @@
             font-size: 0.9em;
             color: #10B981;
             margin-left: 10px;
-        }
-
-        /* Discovery Section */
-        .discovery-section {
-            background: white;
-            border-radius: 16px;
-            padding: 25px;
-            margin-bottom: 25px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-        }
-
-        .discovery-section h3 {
-            color: #E91E78;
-            margin: 0 0 15px 0;
-            font-size: 18px;
-        }
-
-        .discovery-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
-        }
-
-        .discovery-card {
-            background: #f8f9fa;
-            border-radius: 12px;
-            padding: 20px;
-            border-left: 4px solid #E91E78;
-        }
-
-        .discovery-card h4 {
-            color: #333;
-            margin: 0 0 8px 0;
-            font-size: 14px;
-        }
-
-        .discovery-card p {
-            color: #666;
-            font-size: 13px;
-            margin: 0 0 12px 0;
-        }
-
-        .discovery-card a {
-            color: #E91E78;
-            font-size: 13px;
-        }
-
-        .discovery-card input {
-            width: 100%;
-            padding: 10px 12px;
-            border: 1px solid #ddd;
-            border-radius: 6px;
-            font-size: 14px;
-            margin-top: 8px;
-        }
-
-        .discovery-card input:focus {
-            outline: none;
-            border-color: #E91E78;
         }
 
         /* Main Table */
@@ -371,10 +312,6 @@
             .category-row > div:nth-child(5) {
                 display: none;
             }
-
-            .discovery-grid {
-                grid-template-columns: 1fr;
-            }
         }
 
         @media (max-width: 600px) {
@@ -452,25 +389,6 @@
                 <span class="save-status" id="saveStatus"></span>
             </div>
         </header>
-
-        <!-- Discovery Section -->
-        <div class="discovery-section">
-            <h3>🔍 Discover Your Style</h3>
-            <div class="discovery-grid">
-                <div class="discovery-card">
-                    <h4>Discover your 'tendency'</h4>
-                    <p>How does your brain respond to expectations? Use this to stay accountable to your rules.</p>
-                    <a href="https://quiz.gretchenrubin.com" target="_blank">quiz.gretchenrubin.com →</a>
-                    <input type="text" id="tendency" placeholder="My tendency: e.g. Questioner, Obliger...">
-                </div>
-                <div class="discovery-card">
-                    <h4>Discover your 'focus style'</h4>
-                    <p>High score? You may benefit from grouping tasks into 'attention tunnels' vs multi-tasking.</p>
-                    <a href="https://monotropism.org/questionnaire" target="_blank">monotropism.org/questionnaire →</a>
-                    <input type="text" id="monotropism" placeholder="My score:">
-                </div>
-            </div>
-        </div>
 
         <!-- Foundations Table -->
         <div class="foundations-table">
@@ -675,10 +593,6 @@
             if (saved) {
                 const data = JSON.parse(saved);
 
-                // Load discovery results
-                if (data.tendency) document.getElementById('tendency').value = data.tendency;
-                if (data.monotropism) document.getElementById('monotropism').value = data.monotropism;
-
                 // Load each category
                 categories.forEach(cat => {
                     if (data[cat]) {
@@ -694,8 +608,6 @@
         // Save data
         function saveFoundations() {
             const data = {
-                tendency: document.getElementById('tendency').value,
-                monotropism: document.getElementById('monotropism').value,
                 savedAt: new Date().toISOString()
             };
 
