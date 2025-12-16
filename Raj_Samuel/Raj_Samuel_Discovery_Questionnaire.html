@@ -1400,77 +1400,70 @@
             return formatted;
         }
 
-        // Google Sheets configuration
-        // IMPORTANT: Replace this URL with your Google Apps Script Web App URL
-        // Instructions are in the google-apps-script.js file
-        const GOOGLE_SHEETS_URL = 'https://script.google.com/macros/s/AKfycbwv7qIXwqxjLgIAsenTiRZC6fDoi50vf9zqq8O7KoiRTn_zVMq6s-y0cawDNLDOcww/exec';
+        // PostgreSQL API configuration - saves directly to coach dashboard
+        const API_URL = 'https://sparkhub-be-qtmmb.ondigitalocean.app/api/crm/syp/public/questionnaire/';
+        const CLIENT_EMAIL = 'rs@rajsamuel.net';  // Raj's email for identification
+        const CLIENT_NAME = 'Raj Samuel';
 
-        // Save to Google Sheets
+        // Submit to PostgreSQL
         document.getElementById('saveToSheets').addEventListener('click', async function() {
             const responses = collectAllResponses();
             const button = this;
 
-            // Check if URL has been configured
-            if (GOOGLE_SHEETS_URL.includes('YOUR_SCRIPT_ID_HERE')) {
-                alert('⚙️ Google Sheets Not Configured\n\n' +
-                      'To enable Google Sheets saving:\n\n' +
-                      '1. Open the google-apps-script.js file\n' +
-                      '2. Follow the setup instructions inside\n' +
-                      '3. Copy your Web App URL\n' +
-                      '4. Paste it in the HTML file (line 743)\n\n' +
-                      'For now, use "Save My Results" or "Email My Results" buttons instead.');
-                return;
-            }
-
             // Show loading state
             button.style.background = '#FFA500';
-            button.textContent = 'Saving to Sheets...';
+            button.textContent = 'Submitting...';
             button.disabled = true;
 
             try {
-                // Add timestamp and client info
+                // Prepare data for PostgreSQL API
                 const data = {
+                    email: CLIENT_EMAIL,
+                    client_name: CLIENT_NAME,
                     timestamp: new Date().toISOString(),
-                    clientName: document.getElementById('clientName').value || 'Anonymous',
                     ...responses
                 };
 
-                const response = await fetch(GOOGLE_SHEETS_URL, {
+                const response = await fetch(API_URL, {
                     method: 'POST',
-                    mode: 'no-cors', // Required for Google Apps Script
                     headers: {
                         'Content-Type': 'application/json',
                     },
                     body: JSON.stringify(data)
                 });
 
-                // With no-cors mode, we can't read the response, but if no error was thrown, it likely succeeded
-                button.style.background = '#4CAF50';
-                button.textContent = '✓ Saved to Google Sheets!';
+                const result = await response.json();
 
-                // Also save locally as backup
-                localStorage.setItem('last_save_timestamp', new Date().toISOString());
+                if (response.ok && result.success) {
+                    // Success!
+                    button.style.background = '#4CAF50';
+                    button.textContent = '✓ Submitted to Lisa!';
 
-                setTimeout(() => {
-                    button.style.background = 'linear-gradient(135deg, #7c3aed 0%, #a855f7 100%)';
-                    button.textContent = 'Submit Answers';
-                    button.disabled = false;
-                }, 3000);
+                    // Save locally as backup
+                    localStorage.setItem('last_save_timestamp', new Date().toISOString());
+                    localStorage.setItem('questionnaire_submitted', 'true');
+
+                    // Show success message
+                    alert('✅ Your responses have been submitted successfully!\n\nLisa will receive a notification and can now view your responses in her coach dashboard.\n\nThank you for completing the questionnaire!');
+
+                    setTimeout(() => {
+                        button.style.background = 'linear-gradient(135deg, #7c3aed 0%, #a855f7 100%)';
+                        button.textContent = '✓ Submitted';
+                        button.disabled = true;  // Keep disabled after successful submission
+                    }, 3000);
+                } else {
+                    throw new Error(result.error || 'Submission failed');
+                }
 
             } catch (error) {
-                console.error('Error saving to sheets:', error);
+                console.error('Error submitting questionnaire:', error);
 
                 // Error state
                 button.style.background = '#f44336';
                 button.textContent = '⚠ Error - Try Again';
 
                 // Show detailed error
-                alert('Error saving to Google Sheets:\n\n' + error.message + '\n\n' +
-                      'Please check:\n' +
-                      '1. Your Google Apps Script URL is correct\n' +
-                      '2. The script is deployed as a web app\n' +
-                      '3. Access is set to "Anyone"\n\n' +
-                      'Use "Save My Results" as a backup.');
+                alert('Error submitting questionnaire:\n\n' + error.message + '\n\nPlease try again or contact Lisa directly.');
 
                 setTimeout(() => {
                     button.style.background = 'linear-gradient(135deg, #7c3aed 0%, #a855f7 100%)';
