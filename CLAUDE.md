@@ -55,16 +55,18 @@ This document contains important context for Claude to remember across sessions 
 - **Folder:** `/Donald/`
 - **Progress:** All deliverables complete
 
-### Raj Samuel (NEW - December 2025)
+### Raj Samuel (December 2025)
 - **Email:** rs@rajsamuel.net
-- **Status:** Pre-Programme (agreement pending signature)
+- **Status:** Week 2 (Questionnaire complete)
 - **Programme:** 4-Week Career Booster
 - **Enrolled:** December 2025
 - **Folder:** `/Raj_Samuel/`
 - **Files created:**
-  - `Raj_Samuel_Coaching_Agreement.html` - Digital signature ready
-  - `Raj_Samuel_Programme_Outline.html` - What he'll receive
-- **Progress:** Awaiting agreement signature and questionnaire
+  - `Raj_Samuel_Coaching_Agreement.html` - Signed
+  - `Raj_Samuel_Programme_Outline.html` - Programme overview
+  - `Raj_Samuel_Questionnaire_Responses.html` - Completed responses
+  - `Raj_Samuel_Discovery_Questionnaire.html` - Original form
+- **Progress:** Questionnaire complete, ready for Week 2 sessions
 
 ## Folder Structure
 ```
@@ -250,3 +252,17 @@ This document contains important context for Claude to remember across sessions 
 - Single coach hub showing all clients
 - PostgreSQL backend for all client data
 - Programme type determines tools and stage labels shown
+
+### 17 December 2025 - Raj Status Update & Git Push
+
+**Client Status Updates:**
+- Raj Samuel updated to `week-2` (questionnaire complete)
+- Step 1 Discovery now shows as complete with checkmark
+- "View Responses" button instead of "Start Questionnaire"
+
+**Git Commit:** `3d28d13`
+- feat: unified client portal and coach hub for all programme types
+
+**Production URLs:**
+- Client Portal: https://stingray-app-7kg9p.ondigitalocean.app/client-portal.html
+- Coach Dashboard: https://stingray-app-7kg9p.ondigitalocean.app/dashboard.html
