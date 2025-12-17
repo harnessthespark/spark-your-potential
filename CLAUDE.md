@@ -212,3 +212,41 @@ This document contains important context for Claude to remember across sessions 
 **Database Updates:**
 - Fixed Donald's email to `donaldpirie111@hotmail.co.uk`
 - Updated Raj Samuel's status from `discovery` to `enrolled`
+
+### 16 December 2025 - Unified Portal & Coach Hub
+
+**Unified Client Portal:**
+- `client-portal.html` now serves ALL clients (Career + AuDHD)
+- Dynamic title based on programmeType: "Your Career Toolkit" or "Your AuDHD Toolkit"
+- AuDHD clients see different tools: Brain Dump, Energy Tracker, AuDHD Foundations, Session Notes, Decision Framework
+- PostgreSQL-first authentication - checks API before hardcoded list
+
+**Coach Hub Updates (dashboard.html):**
+- Programme type badges on client cards (Career, AuDHD, Life, Executive)
+- AuDHD clients show purple left border for visual distinction
+- Programme-specific stage labels (Sessions 1-4 for AuDHD vs Weeks 1-4 for Career)
+- AuDHD-specific coach actions for each session stage
+- Filter buttons: All Clients, Career Booster, ND Coaching
+- addAuDHDClient() now saves to PostgreSQL API
+
+**Constants Added:**
+- `AUDHD_STAGE_INFO` - Session 1-4 stage descriptions for AuDHD clients
+- `PROGRAMME_TYPES` - Labels and colours for all programme types
+- `getStageInfo()` - Returns correct stage info based on programme type
+
+**Raj Samuel Data Import:**
+- Imported questionnaire responses from Google Sheets to PostgreSQL
+- Created `Raj_Samuel_Questionnaire_Responses.html` with formatted answers
+- Updated Simon's questionnaire to use PostgreSQL API
+
+**Files Modified:**
+- `/spark-your-potential/client-portal.html` - Unified portal with AuDHD support
+- `/spark-your-potential/dashboard.html` - Coach hub with programme type awareness
+- `/spark-your-potential/Raj_Samuel/Raj_Samuel_Questionnaire_Responses.html` - Created
+- `/spark-your-potential/Simon_Booth_Lucking/Simon_Booth_Lucking_Discovery_Questionnaire.html` - PostgreSQL
+
+**Key Architecture:**
+- Single client portal for all programme types
+- Single coach hub showing all clients
+- PostgreSQL backend for all client data
+- Programme type determines tools and stage labels shown

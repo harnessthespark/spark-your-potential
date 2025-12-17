@@ -1094,7 +1094,7 @@
 
             <!-- Header -->
             <div class="header">
-                <h1><span>⚡</span> Your Career Toolkit</h1>
+                <h1><span>⚡</span> <span id="portalTitle">Your Career Toolkit</span></h1>
                 <p class="subtitle">Spark Your Potential</p>
                 <p class="welcome">Welcome, <span id="clientName"></span></p>
             </div>
@@ -1237,7 +1237,8 @@
                 name: 'Raj Samuel',
                 email: 'rs@rajsamuel.net',
                 folder: 'Raj_Samuel',
-                status: 'pre-programme',
+                status: 'week-2',  // Questionnaire complete, now in Week 2
+                programmeType: 'career',
                 agreementSigned: true,
                 files: {
                     questionnaire: 'Raj_Samuel/Raj_Samuel_Questionnaire_Responses.html',
@@ -1651,6 +1652,10 @@
             // Update header
             document.getElementById('clientName').textContent = client.name.split(' ')[0];
 
+            // Update portal title based on programme type
+            const isAuDHDClient = client.programmeType === 'audhd';
+            document.getElementById('portalTitle').textContent = isAuDHDClient ? 'Your AuDHD Toolkit' : 'Your Career Toolkit';
+
             // Calculate stats
             const stageIndex = STAGES.findIndex(s => s.id === client.status);
             const toolsUnlocked = getToolsUnlocked(stageIndex);
@@ -1794,14 +1799,91 @@
             // Use client-specific file paths if available, otherwise fall back to generated names
             const files = client.files || {};
 
-            // Only supporting tools - the main 3 (Questionnaire, Insights, Blueprint) are in the transformation flow
-            // Determine agreement type based on programmeType
+            // Check if AuDHD client
+            const isAuDHDClient = client.programmeType === 'audhd';
+
+            // AuDHD clients get different tools
+            if (isAuDHDClient) {
+                const audhdTools = [
+                    {
+                        icon: '📋',
+                        title: 'Coaching Agreement',
+                        description: 'Your signed coaching agreement with programme details and terms.',
+                        file: files.agreement || `${folder}/${nameUnderscored}_AuDHD_Coaching_Agreement.html`,
+                        btnText: 'View Agreement',
+                        alwaysUnlocked: true,
+                        statusWhenComplete: 'signed'
+                    },
+                    {
+                        icon: '🧠',
+                        title: 'Brain Dump',
+                        description: 'Capture thoughts, ideas, and tasks as they come. Text, voice, or sketch - syncs across devices.',
+                        file: 'audhd-braindump.html',
+                        btnText: 'Open Brain Dump',
+                        alwaysUnlocked: true,
+                        statusWhenComplete: 'ready',
+                        badge: '☁️ Syncs'
+                    },
+                    {
+                        icon: '⚡',
+                        title: 'Energy Tracker',
+                        description: 'Track your energy levels throughout the day. Spot patterns and plan around your peaks.',
+                        file: 'audhd-energy.html',
+                        btnText: 'Track Energy',
+                        alwaysUnlocked: true,
+                        statusWhenComplete: 'ready',
+                        badge: '☁️ Syncs'
+                    },
+                    {
+                        icon: '🎯',
+                        title: 'AuDHD Foundations',
+                        description: 'Your personalised AuDHD foundations worksheets and reflections.',
+                        file: 'audhd-foundations.html',
+                        btnText: 'Open Foundations',
+                        alwaysUnlocked: true,
+                        statusWhenComplete: 'ready',
+                        badge: '☁️ Syncs'
+                    },
+                    {
+                        icon: '📝',
+                        title: 'Session Notes',
+                        description: 'Notes and reflections from your coaching sessions.',
+                        file: 'audhd-session-notes.html',
+                        btnText: 'View Notes',
+                        alwaysUnlocked: true,
+                        statusWhenComplete: 'reference'
+                    },
+                    {
+                        icon: '⚖️',
+                        title: 'Decision Framework',
+                        description: 'Make decisions that honour both your autistic and ADHD needs.',
+                        file: files.decisionFramework || 'audhd-decision-framework.html',
+                        btnText: 'Open Framework',
+                        alwaysUnlocked: true,
+                        statusWhenComplete: 'ready'
+                    }
+                ];
+
+                container.innerHTML = audhdTools.map(tool => {
+                    return `
+                        <div class="tool-card">
+                            <div class="tool-icon">${tool.icon}</div>
+                            <h3>${tool.title}</h3>
+                            <span class="status-badge status-ready">${tool.badge || 'Ready'}</span>
+                            <p>${tool.description}</p>
+                            <a href="${tool.file}" class="tool-btn">${tool.btnText}</a>
+                        </div>
+                    `;
+                }).join('');
+                return;
+            }
+
+            // Career clients - original tools
             const isTestimonialClient = client.programmeType === 'testimonial-access';
             const agreementTitle = isTestimonialClient ? 'Testimonial Agreement' : 'Coaching Agreement';
             const agreementDesc = isTestimonialClient
                 ? 'Your signed testimonial access agreement with terms and conditions.'
                 : 'Your signed coaching agreement with programme details and terms.';
-            // Use client-specific file if available, otherwise fall back to generated name
             const agreementFile = files.agreement || (isTestimonialClient
                 ? `${folder}/${nameUnderscored}_Testimonial_Agreement.html`
                 : `${folder}/${nameUnderscored}_Coaching_Agreement.html`);
