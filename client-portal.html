@@ -1241,20 +1241,18 @@
                 programmeType: 'career',
                 agreementSigned: true,
                 files: {
-                    questionnaire: 'Raj_Samuel/Raj_Samuel_Questionnaire_Responses.html',
-                    insights: 'Raj_Samuel/Raj_Samuel_Career_Insights_Report.html',
-                    blueprint: 'Raj_Samuel/Raj_Samuel_Blueprint.html',
-                    cvBuilder: 'Raj_Samuel/Raj_Samuel_CV_Builder.html',
-                    mappingGuide: 'Raj_Samuel/Raj_Samuel_Mapping_Guide.html',
-                    decisionFramework: 'Raj_Samuel/Raj_Samuel_Decision_Framework.html'
+                    // Only list files that actually exist - add more as you create them
+                    questionnaireResponses: 'Raj_Samuel/Raj_Samuel_Questionnaire_Responses.html'
+                    // insights: 'Raj_Samuel/Raj_Samuel_Career_Insights_Report.html',  // Add when created
+                    // blueprint: 'Raj_Samuel/Raj_Samuel_Blueprint.html',              // Add when created
                 },
                 prompts: {
                     week1: "",
                     week2: "",
                     week3: "",
                     week4: ""
-                },
-                blueprintProgress: 0
+                }
+                // blueprintProgress removed - now auto-calculated
             },
             'simon@boothlucking.com': {
                 name: 'Simon Booth-Lucking',
@@ -1264,13 +1262,14 @@
                 agreementSigned: false,
                 programmeType: 'testimonial-access',
                 files: {
+                    // Only list files that actually exist
                     agreement: 'Simon_Booth_Lucking/Simon_Booth_Lucking_Testimonial_Agreement.html',
                     questionnaire: 'Simon_Booth_Lucking/Simon_Booth_Lucking_Discovery_Questionnaire.html',
-                    insights: 'Simon_Booth_Lucking/Simon_Booth_Lucking_Career_Insights_Report.html',
-                    blueprint: 'Simon_Booth_Lucking/Simon_Booth_Lucking_Blueprint.html',
                     cvBuilder: 'Simon_Booth_Lucking/Simon_Booth_Lucking_CV_Builder.html',
                     mappingGuide: 'Simon_Booth_Lucking/Simon_Booth_Lucking_Mapping_Guide.html',
                     decisionFramework: 'Simon_Booth_Lucking/Simon_Booth_Lucking_Decision_Framework.html'
+                    // insights: 'Simon_Booth_Lucking/Simon_Booth_Lucking_Career_Insights_Report.html',  // Add when created
+                    // blueprint: 'Simon_Booth_Lucking/Simon_Booth_Lucking_Blueprint.html',              // Add when created
                 },
                 prompts: {
                     week1: "",
@@ -1278,8 +1277,8 @@
                     week3: "",
                     week4: ""
                 },
-                blueprintProgress: 0,
                 isTestimonialClient: true  // Flag for different UI treatment if needed
+                // blueprintProgress removed - now auto-calculated
             },
             'chloe@thisiscal.com': {
                 name: 'Chloe Cal',
@@ -1289,8 +1288,8 @@
                 agreementSigned: false,
                 programmeType: 'audhd',
                 files: {
+                    // Files that exist
                     agreement: 'Chloe_Cal/Chloe_Cal_AuDHD_Coaching_Agreement.html',
-                    questionnaire: 'Chloe_Cal/Chloe_Cal_Discovery_Questionnaire.html',
                     insights: 'Chloe_Cal/Chloe_Cal_Career_Insights_Report.html',
                     blueprint: 'Chloe_Cal/Chloe_Cal_Career_Blueprint.html',
                     cvBuilder: 'Chloe_Cal/Chloe_Cal_CV_Builder.html',
@@ -1302,8 +1301,8 @@
                     week2: "",
                     week3: "",
                     week4: ""
-                },
-                blueprintProgress: 0
+                }
+                // blueprintProgress removed - now auto-calculated
             },
             'deborah_armstrong@hotmail.com': {
                 name: 'Deb Briggs',
@@ -1313,21 +1312,16 @@
                 agreementSigned: false,
                 programmeType: 'audhd',
                 files: {
-                    agreement: 'Deb_Briggs/Deb_Briggs_AuDHD_Coaching_Agreement.html',
-                    questionnaire: 'Deb_Briggs/Deb_Briggs_Discovery_Questionnaire.html',
-                    insights: 'Deb_Briggs/Deb_Briggs_Insights_Report.html',
-                    blueprint: 'Deb_Briggs/Deb_Briggs_Blueprint.html',
-                    cvBuilder: 'Deb_Briggs/Deb_Briggs_CV_Builder.html',
-                    mappingGuide: 'Deb_Briggs/Deb_Briggs_Mapping_Guide.html',
-                    decisionFramework: 'Deb_Briggs/Deb_Briggs_Decision_Framework.html'
+                    // Only files that exist - add more as created
+                    agreement: 'Deb_Briggs/Deb_Briggs_AuDHD_Coaching_Agreement.html'
                 },
                 prompts: {
                     week1: "",
                     week2: "",
                     week3: "",
                     week4: ""
-                },
-                blueprintProgress: 0
+                }
+                // blueprintProgress removed - now auto-calculated
             }
         };
 
@@ -2025,6 +2019,56 @@
             return targetWeekIndex < currentWeekIndex || clientStatus === 'complete';
         }
 
+        // Calculate Blueprint Progress automatically based on actual progress
+        function calculateBlueprintProgress(client) {
+            let progress = 0;
+            const status = client.status || 'pre-programme';
+            const files = client.files || {};
+            const folder = client.folder;
+            const nameUnderscored = client.name?.replace(/\s+/g, '_') || '';
+
+            // Base progress from programme stage (max 60%)
+            const stageProgress = {
+                'pre-programme': 5,    // Just signed up
+                'week-1': 15,          // Started week 1
+                'week-2': 35,          // Questionnaire done, in week 2
+                'week-3': 50,          // Building positioning
+                'week-4': 70,          // Implementation phase
+                'complete': 85         // Programme finished
+            };
+            progress += stageProgress[status] || 0;
+
+            // Bonus for key files existing (max 15%)
+            // Check if questionnaire responses exist
+            if (files.questionnaireResponses || files.questionnaire) {
+                progress += 5;
+            }
+
+            // Check if insights report exists
+            if (files.insights) {
+                progress += 5;
+            }
+
+            // Check if blueprint exists
+            if (files.blueprint) {
+                progress += 5;
+            }
+
+            // Bonus for homework completion (max 25%)
+            const completion = getHomeworkCompletion(client.email);
+            const allTasks = [];
+            Object.values(WEEKLY_HOMEWORK).forEach(week => {
+                week.tasks.forEach(task => allTasks.push(task.id));
+            });
+
+            const completedTasks = allTasks.filter(taskId => completion[taskId]).length;
+            const homeworkProgress = Math.round((completedTasks / allTasks.length) * 25);
+            progress += homeworkProgress;
+
+            // Cap at 100%
+            return Math.min(progress, 100);
+        }
+
         // Render week tabs
         function renderWeekTabs(client) {
             const container = document.getElementById('weekTabs');
@@ -2076,8 +2120,8 @@
             const weekNum = weekId.replace('week-', '');
             document.getElementById('currentWeekBadge').textContent = `Week ${weekNum}: ${weekData.title}`;
 
-            // Update blueprint progress
-            const progress = client.blueprintProgress || 0;
+            // Update blueprint progress (auto-calculated based on actual progress)
+            const progress = calculateBlueprintProgress(client);
             document.getElementById('blueprintProgressText').textContent = `${progress}% Complete`;
             document.getElementById('blueprintProgressBar').style.width = `${progress}%`;
 
