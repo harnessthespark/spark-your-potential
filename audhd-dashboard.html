@@ -669,10 +669,50 @@
         <div class="journey-progress">
             <div class="journey-title">
                 📍 Your Journey Progress
-                <span style="font-size: 0.7em; color: #888; margin-left: auto;">Session <span id="currentSession">1</span> of <span id="totalSessions">8</span></span>
+                <span style="font-size: 0.7em; color: #888; margin-left: auto;">
+                    Session <span id="currentSession">1</span> of <span id="totalSessions">8</span>
+                    <button id="customiseJourneyBtn" onclick="openJourneyEditor()" style="display: none; margin-left: 15px; background: linear-gradient(135deg, #8B5CF6 0%, #6D28D9 100%); color: white; border: none; padding: 6px 12px; border-radius: 6px; font-size: 0.85em; cursor: pointer;">✏️ Customise</button>
+                </span>
             </div>
             <div class="session-grid" id="sessionGrid">
                 <!-- Sessions populated by JS -->
+            </div>
+        </div>
+
+        <!-- Journey Editor Modal (Coach Only) -->
+        <div id="journeyEditorModal" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.7); z-index: 1000; padding: 20px; overflow-y: auto;">
+            <div style="max-width: 800px; margin: 20px auto; background: white; border-radius: 20px; padding: 30px; max-height: 90vh; overflow-y: auto;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                    <h2 style="color: #2d1b4e; margin: 0;">✏️ Customise Client Journey</h2>
+                    <button onclick="closeJourneyEditor()" style="background: none; border: none; font-size: 1.5em; cursor: pointer; color: #888;">×</button>
+                </div>
+
+                <!-- Template Selector -->
+                <div style="margin-bottom: 25px; padding: 20px; background: #f8f9fa; border-radius: 12px;">
+                    <label style="display: block; color: #555; font-weight: 600; margin-bottom: 10px;">Start from template:</label>
+                    <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                        <button onclick="loadTemplate(4)" class="template-btn" style="padding: 10px 20px; border: 2px solid #e0e0e0; border-radius: 8px; background: white; cursor: pointer; font-weight: 600;">4 Sessions</button>
+                        <button onclick="loadTemplate(8)" class="template-btn" style="padding: 10px 20px; border: 2px solid #e0e0e0; border-radius: 8px; background: white; cursor: pointer; font-weight: 600;">8 Sessions</button>
+                        <button onclick="loadTemplate(12)" class="template-btn" style="padding: 10px 20px; border: 2px solid #e0e0e0; border-radius: 8px; background: white; cursor: pointer; font-weight: 600;">12 Sessions</button>
+                        <button onclick="loadTemplate('current')" class="template-btn" style="padding: 10px 20px; border: 2px solid #8B5CF6; border-radius: 8px; background: #f5f3ff; cursor: pointer; font-weight: 600; color: #6D28D9;">Load Current</button>
+                    </div>
+                </div>
+
+                <!-- Sessions Editor -->
+                <div id="sessionsEditorList" style="margin-bottom: 20px;">
+                    <!-- Sessions populated by JS -->
+                </div>
+
+                <!-- Add Session Button -->
+                <button onclick="addNewSession()" style="width: 100%; padding: 15px; border: 2px dashed #ccc; border-radius: 12px; background: #fafafa; cursor: pointer; color: #666; font-size: 1em; margin-bottom: 20px;">
+                    ➕ Add New Session
+                </button>
+
+                <!-- Save Buttons -->
+                <div style="display: flex; gap: 10px; justify-content: flex-end;">
+                    <button onclick="closeJourneyEditor()" style="padding: 12px 25px; border: 2px solid #e0e0e0; border-radius: 8px; background: white; cursor: pointer; font-weight: 600;">Cancel</button>
+                    <button onclick="saveCustomJourney()" style="padding: 12px 25px; border: none; border-radius: 8px; background: linear-gradient(135deg, #10B981 0%, #059669 100%); color: white; cursor: pointer; font-weight: 600;">💾 Save Journey</button>
+                </div>
             </div>
         </div>
 
@@ -1093,9 +1133,11 @@
 
         function renderSessions() {
             const grid = document.getElementById('sessionGrid');
-            const sessions = SESSION_TEMPLATES[selectedProgramme];
+            // Use custom sessions if available, otherwise use template
+            const sessions = clientData.customSessions || SESSION_TEMPLATES[selectedProgramme];
+            const totalSessions = sessions.length;
 
-            document.getElementById('totalSessions').textContent = selectedProgramme;
+            document.getElementById('totalSessions').textContent = totalSessions;
             document.getElementById('currentSession').textContent = clientData.currentSession;
 
             grid.innerHTML = sessions.map((session, index) => {
@@ -1109,13 +1151,154 @@
                 else if (isLocked) statusClass = 'locked';
 
                 return `
-                    <div class="session-card ${statusClass}" onclick="${!isLocked ? `openSession(${session.num})` : ''}">
-                        <div class="session-number">${isComplete ? '✓' : session.num}</div>
+                    <div class="session-card ${statusClass}" onclick="${!isLocked ? `openSession(${index + 1})` : ''}">
+                        <div class="session-number">${isComplete ? '✓' : index + 1}</div>
                         <div style="font-size: 0.85em; color: #555; margin-top: 5px;">${session.label}</div>
                         <div class="session-type ${session.type}">${session.type === 'worksheet' ? '📝 Worksheet' : '💬 Conversation'}</div>
                     </div>
                 `;
             }).join('');
+        }
+
+        // ============================================
+        // JOURNEY EDITOR (Coach Only)
+        // ============================================
+
+        let editorSessions = [];
+
+        function openJourneyEditor() {
+            // Load current sessions into editor
+            editorSessions = JSON.parse(JSON.stringify(
+                clientData.customSessions || SESSION_TEMPLATES[selectedProgramme]
+            ));
+            renderEditorSessions();
+            document.getElementById('journeyEditorModal').style.display = 'block';
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeJourneyEditor() {
+            document.getElementById('journeyEditorModal').style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+
+        function loadTemplate(templateKey) {
+            if (templateKey === 'current') {
+                editorSessions = JSON.parse(JSON.stringify(
+                    clientData.customSessions || SESSION_TEMPLATES[selectedProgramme]
+                ));
+            } else {
+                editorSessions = JSON.parse(JSON.stringify(SESSION_TEMPLATES[templateKey]));
+            }
+            renderEditorSessions();
+        }
+
+        function renderEditorSessions() {
+            const container = document.getElementById('sessionsEditorList');
+
+            const domainOptions = [
+                { value: 'executive', label: '🧩 Executive Functioning' },
+                { value: 'communication', label: '💬 Communication' },
+                { value: 'energy', label: '⚡ Energy' },
+                { value: 'emotional', label: '💙 Emotional' },
+                { value: 'processing', label: '🔄 Processing' },
+                { value: 'relationships', label: '🤝 Relationships' }
+            ];
+
+            container.innerHTML = editorSessions.map((session, index) => `
+                <div style="display: flex; gap: 10px; align-items: center; padding: 15px; background: #f8f9fa; border-radius: 12px; margin-bottom: 10px; border: 2px solid #e0e0e0;">
+                    <!-- Drag Handle & Number -->
+                    <div style="display: flex; flex-direction: column; align-items: center; gap: 5px;">
+                        <span style="color: #888; cursor: grab;">⋮⋮</span>
+                        <span style="width: 30px; height: 30px; background: linear-gradient(135deg, #8B5CF6 0%, #6D28D9 100%); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.9em;">${index + 1}</span>
+                    </div>
+
+                    <!-- Session Details -->
+                    <div style="flex: 1; display: grid; gap: 10px; grid-template-columns: 1fr 120px 150px;">
+                        <input type="text" value="${session.label}" onchange="updateSessionLabel(${index}, this.value)"
+                               style="padding: 10px; border: 1px solid #ddd; border-radius: 8px; font-size: 0.95em;" placeholder="Session title">
+
+                        <select onchange="updateSessionType(${index}, this.value)" style="padding: 10px; border: 1px solid #ddd; border-radius: 8px;">
+                            <option value="worksheet" ${session.type === 'worksheet' ? 'selected' : ''}>📝 Worksheet</option>
+                            <option value="conversation" ${session.type === 'conversation' ? 'selected' : ''}>💬 Conversation</option>
+                        </select>
+
+                        <select onchange="updateSessionDomain(${index}, this.value)" style="padding: 10px; border: 1px solid #ddd; border-radius: 8px;">
+                            ${domainOptions.map(opt => `<option value="${opt.value}" ${session.domain === opt.value ? 'selected' : ''}>${opt.label}</option>`).join('')}
+                        </select>
+                    </div>
+
+                    <!-- Actions -->
+                    <div style="display: flex; gap: 5px;">
+                        <button onclick="moveSession(${index}, -1)" style="padding: 8px; border: none; background: #e0e0e0; border-radius: 6px; cursor: pointer;" title="Move up" ${index === 0 ? 'disabled' : ''}>↑</button>
+                        <button onclick="moveSession(${index}, 1)" style="padding: 8px; border: none; background: #e0e0e0; border-radius: 6px; cursor: pointer;" title="Move down" ${index === editorSessions.length - 1 ? 'disabled' : ''}>↓</button>
+                        <button onclick="removeSession(${index})" style="padding: 8px; border: none; background: #fee2e2; color: #dc2626; border-radius: 6px; cursor: pointer;" title="Remove">🗑️</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function updateSessionLabel(index, value) {
+            editorSessions[index].label = value;
+        }
+
+        function updateSessionType(index, value) {
+            editorSessions[index].type = value;
+        }
+
+        function updateSessionDomain(index, value) {
+            editorSessions[index].domain = value;
+        }
+
+        function moveSession(index, direction) {
+            const newIndex = index + direction;
+            if (newIndex < 0 || newIndex >= editorSessions.length) return;
+
+            const temp = editorSessions[index];
+            editorSessions[index] = editorSessions[newIndex];
+            editorSessions[newIndex] = temp;
+
+            renderEditorSessions();
+        }
+
+        function removeSession(index) {
+            if (editorSessions.length <= 1) {
+                alert('You must have at least one session.');
+                return;
+            }
+            if (confirm(`Remove session ${index + 1}: "${editorSessions[index].label}"?`)) {
+                editorSessions.splice(index, 1);
+                renderEditorSessions();
+            }
+        }
+
+        function addNewSession() {
+            editorSessions.push({
+                num: editorSessions.length + 1,
+                type: 'conversation',
+                label: 'New Session',
+                domain: 'communication'
+            });
+            renderEditorSessions();
+
+            // Scroll to bottom
+            const container = document.getElementById('sessionsEditorList');
+            container.scrollTop = container.scrollHeight;
+        }
+
+        function saveCustomJourney() {
+            // Renumber sessions
+            editorSessions = editorSessions.map((s, i) => ({ ...s, num: i + 1 }));
+
+            // Save to client data
+            clientData.customSessions = editorSessions;
+            clientData.programme = editorSessions.length;
+            selectedProgramme = editorSessions.length;
+
+            saveClientData();
+            renderSessions();
+            closeJourneyEditor();
+
+            alert(`✅ Journey saved!\n\n${editorSessions.length} sessions configured for this client.`);
         }
 
         function updateDomainStatuses() {
@@ -1185,36 +1368,66 @@
         }
 
         // ============================================
-        // BOOKING FUNCTIONS
+        // BOOKING FUNCTIONS (Google Calendar)
         // ============================================
 
-        // Your Cal.com or Calendly link - UPDATE THIS
-        const BOOKING_LINKS = {
-            morning: 'https://calendly.com/lisa-harnessthespark/audhd-morning', // Replace with your actual link
-            afternoon: 'https://calendly.com/lisa-harnessthespark/audhd-afternoon',
-            evening: 'https://calendly.com/lisa-harnessthespark/audhd-evening'
-        };
-
         function openBooking(timeSlot) {
-            // Open booking in popup or new tab
-            const bookingUrl = BOOKING_LINKS[timeSlot];
+            // Get client name for the event
+            const clientName = currentUser.name || currentUser.email || 'Client';
 
-            // For now, show instructions if links not set up
-            if (bookingUrl.includes('your-')) {
-                showBookingSetup();
-                return;
-            }
+            // Session details based on time slot
+            const sessionDetails = {
+                morning: {
+                    title: `AuDHD Coaching - ${clientName} (Morning)`,
+                    description: 'AuDHD Life Coaching Session\\n\\nBest for: High energy tasks, foundations work, new concepts\\n\\nPlease join the Zoom link that will be sent in the calendar invite.',
+                    startHour: 9,
+                    endHour: 10
+                },
+                afternoon: {
+                    title: `AuDHD Coaching - ${clientName} (Afternoon)`,
+                    description: 'AuDHD Life Coaching Session\\n\\nBest for: Conversations, reflection, lighter processing\\n\\nPlease join the Zoom link that will be sent in the calendar invite.',
+                    startHour: 14,
+                    endHour: 15
+                },
+                evening: {
+                    title: `AuDHD Coaching - ${clientName} (Evening)`,
+                    description: 'AuDHD Life Coaching Session\\n\\nBest for: Evening owls, post-work decompression\\n\\nPlease join the Zoom link that will be sent in the calendar invite.',
+                    startHour: 17,
+                    endHour: 18
+                }
+            };
 
-            // Open Calendly/Cal.com in popup
-            window.open(bookingUrl, 'booking', 'width=600,height=700');
-        }
+            const session = sessionDetails[timeSlot];
 
-        function showBookingSetup() {
-            alert(`📅 Booking Setup Required\n\nTo enable booking:\n\n1. Create a free Cal.com account (or use Calendly)\n2. Create 3 event types:\n   - Morning Sessions (9am-12pm)\n   - Afternoon Sessions (1pm-4pm)\n   - Evening Sessions (5pm-7pm)\n3. Update BOOKING_LINKS in the code with your URLs`);
+            // Create date for next available day (tomorrow)
+            const tomorrow = new Date();
+            tomorrow.setDate(tomorrow.getDate() + 1);
+
+            // Format dates for Google Calendar
+            const startDate = new Date(tomorrow);
+            startDate.setHours(session.startHour, 0, 0, 0);
+
+            const endDate = new Date(tomorrow);
+            endDate.setHours(session.endHour, 0, 0, 0);
+
+            // Format as YYYYMMDDTHHMMSS
+            const formatDate = (date) => {
+                return date.toISOString().replace(/[-:]/g, '').replace(/\.\d{3}/, '');
+            };
+
+            // Build Google Calendar URL
+            const googleCalUrl = `https://calendar.google.com/calendar/render?action=TEMPLATE` +
+                `&text=${encodeURIComponent(session.title)}` +
+                `&details=${encodeURIComponent(session.description)}` +
+                `&dates=${formatDate(startDate)}/${formatDate(endDate)}` +
+                `&add=lisa@harnessthespark.com`;
+
+            // Open Google Calendar in new tab
+            window.open(googleCalUrl, '_blank');
         }
 
         function setupCalendar() {
-            alert(`🗓️ Calendar Integration\n\nOptions:\n\n1. Cal.com (Recommended - free tier)\n   - Unlimited event types\n   - Multiple calendar sync\n   - Embeddable widgets\n\n2. Calendly\n   - Familiar interface\n   - Good free tier\n   - Easy setup\n\nBoth integrate with Google/Outlook calendars.`);
+            alert(`🗓️ Google Calendar Integration\n\nClicking a booking slot will:\n\n1. Open Google Calendar\n2. Pre-fill session details\n3. Add Lisa as a guest\n4. You choose the exact date\n\nLisa will receive the invite and add Zoom details.`);
         }
 
         // Show coach calendar if staff
@@ -1229,6 +1442,7 @@
                 document.getElementById('coachNotes').style.display = 'block';
                 document.getElementById('coachCalendar').style.display = 'block';
                 document.getElementById('sessionNotesTool').style.display = 'block';
+                document.getElementById('customiseJourneyBtn').style.display = 'inline-block';
             }
 
             renderSessions();
