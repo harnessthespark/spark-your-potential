@@ -1451,6 +1451,7 @@
                     <div style="display: grid; gap: 10px;">
                         <a href="${clientFolder}/${clientFolder}_Discovery_Questionnaire.html" target="_blank" class="action-btn">📝 Send Questionnaire Link</a>
                         <button onclick="openClientQuestionnaire('${client.email}')" class="action-btn">👁️ View Responses</button>
+                        <button onclick="openQuestionnaireEditor('${client.id}')" class="action-btn" style="background: linear-gradient(135deg, #7c3aed 0%, #a855f7 100%); color: white;">✏️ Edit Responses (PostgreSQL)</button>
                         <button onclick="advanceClient('${client.email}', 'week-1')" class="action-btn advance">✅ Mark Questionnaire Complete → Week 1</button>
                     </div>
                 `,
@@ -1903,6 +1904,15 @@
             } else {
                 window.open('ability-recognition-visual.html', '_blank');
             }
+        }
+
+        // Open PostgreSQL-backed questionnaire editor
+        function openQuestionnaireEditor(clientId) {
+            if (!clientId || clientId === 'undefined' || clientId === 'null') {
+                alert('This client does not have a PostgreSQL ID yet. Please use the static View Responses option.');
+                return;
+            }
+            window.open(`questionnaire-editor.html?client_id=${clientId}`, '_blank');
         }
 
         function openClientBlueprint(email) {
