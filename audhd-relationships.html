@@ -635,6 +635,45 @@
                 <textarea id="values-statement" placeholder="e.g., I am someone who values honesty above all — I would rather hear a hard truth than a comfortable lie. I need freedom to be myself, and I give that same respect to others. Connection matters to me, but only when it's genuine."></textarea>
             </div>
 
+            <!-- What I Bring to Relationships -->
+            <div style="background: linear-gradient(135deg, #fdf4ff 0%, #f5d0fe 100%); border-radius: 16px; padding: 25px; margin-top: 25px; border: 2px solid #E91E78;">
+                <h4 style="color: #86198f; margin-bottom: 15px; display: flex; align-items: center; gap: 10px;">🌟 What I Bring to Relationships</h4>
+                <p style="color: #a21caf; font-size: 0.9em; margin-bottom: 20px;">AuDHD brains often focus on what's "wrong" with them. But you bring unique gifts that neurotypical people simply can't offer. Own these.</p>
+
+                <div class="audhd-insight" style="background: rgba(255,255,255,0.7); margin-bottom: 20px;">
+                    <h4>🧠 AuDHD Superpowers in Relationships</h4>
+                    <p>Your <strong>autism</strong> brings loyalty, honesty, deep focus on people you care about, and pattern recognition. Your <strong>ADHD</strong> brings enthusiasm, creativity, spontaneity, and the ability to make things FUN. Together? You're unforgettable.</p>
+                </div>
+
+                <div class="boundary-grid">
+                    <div class="boundary-card" style="background: white;">
+                        <h4>💪 My Strengths in Relationships</h4>
+                        <p class="prompt">What do you do well? What do people appreciate about you?</p>
+                        <textarea id="strengths-relationships" placeholder="e.g., I'm fiercely loyal. I remember details about people. I'm genuinely enthusiastic. I give honest feedback. I'm creative at problem-solving. I make people feel special when they're my focus..."></textarea>
+                    </div>
+                    <div class="boundary-card" style="background: white;">
+                        <h4>🎁 Unique Gifts I Offer</h4>
+                        <p class="prompt">What can you offer that others can't? What makes you YOU?</p>
+                        <textarea id="gifts-relationships" placeholder="e.g., My hyperfocus means when I care, I REALLY care. My pattern recognition helps me understand people. My intensity makes experiences memorable. My honesty means people can trust me..."></textarea>
+                    </div>
+                </div>
+
+                <div class="boundary-card" style="background: white; margin-top: 15px;">
+                    <h4>✨ Compliments I've Received</h4>
+                    <p class="prompt">What positive things have people said about you? (Write them down — we forget these!)</p>
+                    <textarea id="compliments-received" placeholder="e.g., 'You always remember the little things.' 'Talking to you is never boring.' 'You're the most loyal friend I have.' 'You see things no one else notices.'..."></textarea>
+                </div>
+
+                <div style="background: white; border-radius: 12px; padding: 20px; margin-top: 15px;">
+                    <h4 style="color: #86198f; margin-bottom: 12px;">🔮 The Kind of Friend/Partner/Colleague I Am</h4>
+                    <p style="color: #666; font-size: 0.9em; margin-bottom: 12px;">Complete this sentence as a reminder of your worth:</p>
+                    <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+                        <span style="color: #86198f; font-weight: 600;">"People are lucky to have me because..."</span>
+                    </div>
+                    <textarea id="lucky-to-have" style="width: 100%; min-height: 80px; border: 2px solid #E91E78; border-radius: 10px; padding: 12px; font-family: inherit; font-size: 0.95em; margin-top: 10px;" placeholder="e.g., I show up with my whole heart. I bring energy and ideas. I'm honest when others aren't. I notice when something's wrong. I make ordinary moments fun..."></textarea>
+                </div>
+            </div>
+
             <div class="save-section">
                 <button class="save-btn" onclick="saveAll()">💾 Save My Values</button>
                 <div class="save-status" id="saveStatus0"></div>
@@ -1114,7 +1153,12 @@
                     top3: document.getElementById('value-top3')?.value || '',
                     honoured: document.getElementById('values-honoured')?.value || '',
                     violated: document.getElementById('values-violated')?.value || '',
-                    statement: document.getElementById('values-statement')?.value || ''
+                    statement: document.getElementById('values-statement')?.value || '',
+                    // What I Bring
+                    strengths: document.getElementById('strengths-relationships')?.value || '',
+                    gifts: document.getElementById('gifts-relationships')?.value || '',
+                    compliments: document.getElementById('compliments-received')?.value || '',
+                    luckyToHave: document.getElementById('lucky-to-have')?.value || ''
                 },
                 // Boundaries
                 boundaries: {
@@ -1190,6 +1234,11 @@
                 if (data.values.honoured) document.getElementById('values-honoured').value = data.values.honoured;
                 if (data.values.violated) document.getElementById('values-violated').value = data.values.violated;
                 if (data.values.statement) document.getElementById('values-statement').value = data.values.statement;
+                // What I Bring
+                if (data.values.strengths) document.getElementById('strengths-relationships').value = data.values.strengths;
+                if (data.values.gifts) document.getElementById('gifts-relationships').value = data.values.gifts;
+                if (data.values.compliments) document.getElementById('compliments-received').value = data.values.compliments;
+                if (data.values.luckyToHave) document.getElementById('lucky-to-have').value = data.values.luckyToHave;
             }
 
             // Boundaries

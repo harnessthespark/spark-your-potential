@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AuDHD Coaching Agreement - Chloe Allan - Harness the Spark</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #f8f9fa;
+            color: #333;
+            line-height: 1.7;
+        }
+        .document-container {
+            max-width: 800px;
+            margin: 40px auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 40px;
+            text-align: center;
+            color: white;
+        }
+        .logo {
+            font-size: 1.5em;
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+        .logo span { color: #FFD700; }
+        .header h1 {
+            font-size: 2em;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+        .header .subtitle {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+        .content {
+            padding: 40px;
+        }
+        .intro-letter {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-left: 4px solid #667eea;
+            padding: 25px;
+            border-radius: 0 8px 8px 0;
+            margin-bottom: 30px;
+            font-style: italic;
+        }
+        .intro-letter p {
+            margin-bottom: 15px;
+        }
+        .intro-letter .signature {
+            font-style: normal;
+            font-weight: 600;
+            color: #667eea;
+            margin-top: 20px;
+        }
+        .commitment-box {
+            background: #fff3cd;
+            border-radius: 8px;
+            padding: 25px;
+            margin-bottom: 30px;
+        }
+        .commitment-box h3 {
+            color: #856404;
+            margin-bottom: 15px;
+        }
+        .commitment-box ul {
+            margin-left: 20px;
+        }
+        .commitment-box li {
+            margin-bottom: 8px;
+            color: #856404;
+        }
+        .client-info {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 25px;
+            margin-bottom: 30px;
+        }
+        .client-info-row {
+            display: flex;
+            margin-bottom: 12px;
+        }
+        .client-info-row:last-child { margin-bottom: 0; }
+        .client-info-label {
+            font-weight: 600;
+            color: #666;
+            width: 180px;
+            flex-shrink: 0;
+        }
+        .client-info-value {
+            color: #333;
+            font-weight: 500;
+        }
+        h2 {
+            color: #667eea;
+            font-size: 1.2em;
+            margin: 30px 0 15px 0;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #667eea;
+        }
+        h2:first-of-type { margin-top: 0; }
+        p { margin-bottom: 15px; }
+        ul {
+            margin: 15px 0 15px 25px;
+        }
+        li {
+            margin-bottom: 10px;
+        }
+        .section-number {
+            background: #667eea;
+            color: white;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.85em;
+            font-weight: 600;
+            margin-right: 10px;
+        }
+        .important-note {
+            background: #e7f3ff;
+            border-left: 4px solid #667eea;
+            padding: 15px 20px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        .signature-section {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 10px;
+            margin-top: 30px;
+            text-align: center;
+        }
+        .signature-section h3 {
+            margin-bottom: 20px;
+            font-size: 1.3em;
+        }
+        .signature-section p {
+            margin-bottom: 20px;
+            opacity: 0.9;
+        }
+        .signature-box {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        .signature-input {
+            width: 100%;
+            padding: 15px;
+            border: 2px dashed #ccc;
+            border-radius: 8px;
+            font-size: 1.2em;
+            font-family: 'Brush Script MT', cursive;
+            text-align: center;
+            background: #fafafa;
+            margin-bottom: 10px;
+        }
+        .signature-input:focus {
+            outline: none;
+            border-color: #667eea;
+            background: white;
+        }
+        .date-input {
+            width: 200px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: 1em;
+            text-align: center;
+        }
+        .accept-btn {
+            background: #FFD700;
+            color: #1a1a2e;
+            border: none;
+            padding: 15px 40px;
+            border-radius: 8px;
+            font-size: 1.1em;
+            font-weight: 700;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: all 0.2s;
+        }
+        .accept-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(255, 215, 0, 0.4);
+        }
+        .accept-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+        .success-message {
+            display: none;
+            background: #d4edda;
+            color: #155724;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 20px;
+            text-align: center;
+        }
+        .checkbox-container {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            text-align: left;
+            color: #333;
+        }
+        .checkbox-container input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            margin-top: 2px;
+            flex-shrink: 0;
+        }
+        @media print {
+            body { background: white; }
+            .document-container { box-shadow: none; margin: 0; }
+            .accept-btn, .signature-input, .date-input { display: none; }
+        }
+        @media (max-width: 600px) {
+            .content { padding: 25px; }
+            .header { padding: 30px 20px; }
+            .client-info-row { flex-direction: column; }
+            .client-info-label { width: 100%; margin-bottom: 4px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="document-container">
+        <div class="header">
+            <div class="logo">Harness the <span>Spark</span> ✨</div>
+            <h1>AuDHD Coaching Agreement</h1>
+            <div class="subtitle">5-Week Coaching Programme</div>
+        </div>
+
+        <div class="content">
+            <!-- Personal Letter -->
+            <div class="intro-letter">
+                <p>Dear Chloe,</p>
+                <p>Congratulations on taking the first step toward changing your life! Change isn't easy, but it is possible, and I'm here to help you along the way.</p>
+                <p>By accepting these terms of engagement, you commit to doing the work. Years from now, you will look back on this experience and realize it was the best investment you could have made for yourself.</p>
+                <p>My commitment is to tirelessly serve you. I commit to walking beside you, guiding you toward a better future.</p>
+                <p>I can't wait to get started!</p>
+                <div class="signature">
+                    Lisa Gills<br>
+                    Lisa Gills Coaching
+                </div>
+            </div>
+
+            <!-- Commitment Box -->
+            <div class="commitment-box">
+                <h3>Your Commitment to Harness Your Spark</h3>
+                <ul>
+                    <li>An open mindset</li>
+                    <li>Asking for help when you struggle</li>
+                    <li>Celebrating when you are successful</li>
+                    <li>Providing compassion to yourself when you aren't successful</li>
+                    <li>A growth mindset</li>
+                    <li>Being honest with yourself and your coach</li>
+                </ul>
+            </div>
+
+            <!-- Client Info -->
+            <div class="client-info">
+                <div class="client-info-row">
+                    <span class="client-info-label">Client:</span>
+                    <span class="client-info-value">Chloe Allan</span>
+                </div>
+                <div class="client-info-row">
+                    <span class="client-info-label">Email:</span>
+                    <span class="client-info-value">chloe@example.com</span>
+                </div>
+                <div class="client-info-row">
+                    <span class="client-info-label">Programme:</span>
+                    <span class="client-info-value">5-Week Coaching Programme</span>
+                </div>
+                <div class="client-info-row">
+                    <span class="client-info-label">Commencement Date:</span>
+                    <span class="client-info-value">To be confirmed</span>
+                </div>
+            </div>
+
+            <p><em>Here are the finer terms of this agreement.</em></p>
+
+            <!-- Section 1 -->
+            <h2><span class="section-number">1</span>What Coaching Is (and Isn't)</h2>
+            <p>Coaching is a collaborative process. It's designed to help you develop insight, build strategies, and make meaningful change. I'll ask questions, share tools, and offer structure — but ultimately, you're responsible for what you take from it and how you use it.</p>
+            <div class="important-note">
+                <strong>Important:</strong> This is not therapy or medical advice. I don't diagnose or treat mental health conditions. If you feel you need therapeutic or clinical support, I'll help signpost you to it — but it's outside the scope of this coaching.
+            </div>
+
+            <!-- Section 2 -->
+            <h2><span class="section-number">2</span>Programme & Services</h2>
+            <p>This agreement covers the following programme:</p>
+            <ul>
+                <li><strong>5-Week Booster Programme</strong></li>
+                <li>4 x 1-hour sessions over 4 weeks</li>
+                <li>Sessions will take place online (Google Meet or Zoom) at mutually agreed times</li>
+            </ul>
+
+            <!-- Section 3 -->
+            <h2><span class="section-number">3</span>Cancellation & Rescheduling</h2>
+            <ul>
+                <li>If you're more than 15 minutes late or miss a session without 24 hours' notice, the session may be forfeited unless it's an emergency — but I'll always do my best to be flexible where possible.</li>
+                <li>If I need to reschedule, I'll give as much notice as I can (ideally 24 hours).</li>
+                <li>You're free to pause or stop coaching at any time — just let me know, and we'll handle that properly.</li>
+            </ul>
+
+            <!-- Section 4 -->
+            <h2><span class="section-number">4</span>Payment Terms</h2>
+            <p><strong>There is no payment required for these coaching sessions.</strong></p>
+
+            <!-- Section 5 -->
+            <h2><span class="section-number">5</span>Confidentiality</h2>
+            <p>Everything shared in sessions is confidential. I operate within the spirit of the ICF Code of Ethics.</p>
+            <p>The only exceptions are:</p>
+            <ul>
+                <li>If I'm concerned about your safety or someone else's</li>
+                <li>If you give permission for me to discuss something (e.g. with Access to Work or an employer)</li>
+            </ul>
+            <p>Sessions may be recorded for internal training or accreditation purposes — but only with your consent. You can withdraw that consent at any time.</p>
+
+            <!-- Section 6 -->
+            <h2><span class="section-number">6</span>Intellectual Property & Tool Usage</h2>
+            <p>The AI questionnaire tool, methodology, frameworks, and any materials I provide remain my intellectual property. You're welcome to use insights and outputs from the coaching for your own development, but please don't copy, reproduce, or share the tool structure or methodology itself.</p>
+            <p>The content you create (your personal insights, action plans, etc.) is yours to use as you wish.</p>
+
+            <!-- Section 7 -->
+            <h2><span class="section-number">7</span>Liability & Boundaries</h2>
+            <p>You're responsible for your own actions, choices, and results from coaching. I'm not liable for any outcomes, decisions, or impacts of the coaching process.</p>
+
+            <!-- Section 8 -->
+            <h2><span class="section-number">8</span>The Legal Bit</h2>
+            <p>This agreement is governed by the laws of England and Wales. If a disagreement arises, we agree to try to resolve it through conversation and mediation first. If it becomes a legal matter, the party who wins may recover legal costs.</p>
+
+            <!-- Signature Section -->
+            <div class="signature-section">
+                <h3>Accept This Agreement</h3>
+                <p>By checking "Accept" below, you acknowledge that you understand and agree to all of the aforementioned terms, including those related to programme structure, confidentiality, and intellectual property.</p>
+
+                <div class="checkbox-container">
+                    <input type="checkbox" id="agreeTerms" onchange="checkForm()">
+                    <label for="agreeTerms">I, <strong>Chloe Allan</strong>, hereby accept these terms and commit to the coaching programme.</label>
+                </div>
+
+                <div class="signature-box">
+                    <input type="text" class="signature-input" id="signatureInput" placeholder="Type your full name as signature" oninput="checkForm()">
+                    <p style="color: #666; font-size: 0.9em; margin: 0;">Date: <input type="date" class="date-input" id="dateInput" onchange="checkForm()"></p>
+                </div>
+
+                <button class="accept-btn" id="acceptBtn" disabled onclick="submitAgreement()">
+                    ✓ I Accept This Agreement
+                </button>
+
+                <div class="success-message" id="successMessage">
+                    <h3>✅ Agreement Accepted!</h3>
+                    <p>Thank you, Chloe. Your coaching agreement has been recorded.</p>
+                    <p>Lisa will be in touch shortly to schedule your first session.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function checkForm() {
+            const agreed = document.getElementById('agreeTerms').checked;
+            const signature = document.getElementById('signatureInput').value.trim();
+            const date = document.getElementById('dateInput').value;
+
+            const btn = document.getElementById('acceptBtn');
+            btn.disabled = !(agreed && signature.length > 2 && date);
+        }
+
+        function submitAgreement() {
+            const signature = document.getElementById('signatureInput').value;
+            const date = document.getElementById('dateInput').value;
+
+            // Store locally
+            const agreementData = {
+                client: 'Chloe Allan',
+                email: 'chloe@example.com',
+                programme: '5-Week AuDHD Coaching Programme',
+                signature: signature,
+                date: date,
+                acceptedAt: new Date().toISOString()
+            };
+
+            localStorage.setItem('chloe_audhd_agreement', JSON.stringify(agreementData));
+
+            // Show success
+            document.getElementById('acceptBtn').style.display = 'none';
+            document.getElementById('successMessage').style.display = 'block';
+            document.querySelector('.checkbox-container').style.display = 'none';
+            document.querySelector('.signature-box').innerHTML = `
+                <p style="color: #333; font-size: 1.1em;"><strong>Signed:</strong> ${signature}</p>
+                <p style="color: #666;"><strong>Date:</strong> ${new Date(date).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })}</p>
+            `;
+
+            // Redirect to AuDHD dashboard after 2 seconds
+            setTimeout(() => {
+                window.location.href = '../audhd-dashboard.html';
+            }, 2000);
+        }
+
+        // Set today's date as default
+        document.getElementById('dateInput').valueAsDate = new Date();
+    </script>
+</body>
+</html>
