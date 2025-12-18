@@ -962,12 +962,12 @@
             }
         };
 
-        function showDashboard() {
+        async function showDashboard() {
             document.getElementById('userName').textContent = `Welcome, ${currentUser.name || currentUser.email}`;
             document.getElementById('userEmail').textContent = currentUser.email;
 
-            // Load client data
-            loadClientData();
+            // Load client data from PostgreSQL (syncs with coach portal)
+            await loadClientData();
 
             // Show coach notes if Lisa
             if (currentUser.isStaff) {
@@ -978,12 +978,52 @@
             updateDomainStatuses();
         }
 
-        function loadClientData() {
-            // Try to load from localStorage
-            const saved = localStorage.getItem('audhd_client_' + currentUser.id);
-            if (saved) {
-                clientData = JSON.parse(saved);
-                selectedProgramme = clientData.programme;
+        async function loadClientData() {
+            const token = localStorage.getItem('syp_token');
+
+            // Try to load from PostgreSQL first (syncs with coach portal)
+            if (token) {
+                try {
+                    const response = await fetch('https://sparkhub-be-qtmmb.ondigitalocean.app/api/crm/syp/clients/me/', {
+                        headers: {
+                            'Authorization': `Token ${token}`,
+                            'Content-Type': 'application/json'
+                        }
+                    });
+
+                    if (response.ok) {
+                        const data = await response.json();
+                        console.log('Loaded client data from PostgreSQL:', data);
+
+                        // Update clientData from server
+                        clientData.currentSession = data.current_session || 1;
+                        clientData.programme = data.total_sessions || 4;
+                        selectedProgramme = clientData.programme;
+
+                        // Load gamification data from server
+                        if (data.gamification_data && Object.keys(data.gamification_data).length > 0) {
+                            Object.assign(gamificationData, data.gamification_data);
+                        }
+
+                        // Also cache locally for offline use
+                        localStorage.setItem('audhd_client_' + currentUser.id, JSON.stringify(clientData));
+                    }
+                } catch (error) {
+                    console.error('Error loading from PostgreSQL:', error);
+                    // Fall back to localStorage
+                    const saved = localStorage.getItem('audhd_client_' + currentUser.id);
+                    if (saved) {
+                        clientData = JSON.parse(saved);
+                        selectedProgramme = clientData.programme;
+                    }
+                }
+            } else {
+                // No token - use localStorage
+                const saved = localStorage.getItem('audhd_client_' + currentUser.id);
+                if (saved) {
+                    clientData = JSON.parse(saved);
+                    selectedProgramme = clientData.programme;
+                }
             }
 
             // Update programme selector
@@ -992,8 +1032,37 @@
             });
         }
 
-        function saveClientData() {
+        async function saveClientData() {
+            // Always save to localStorage (for offline backup)
             localStorage.setItem('audhd_client_' + currentUser.id, JSON.stringify(clientData));
+
+            // Save to PostgreSQL (syncs with coach portal)
+            const token = localStorage.getItem('syp_token');
+            if (token) {
+                try {
+                    const response = await fetch('https://sparkhub-be-qtmmb.ondigitalocean.app/api/crm/syp/clients/update-progress/', {
+                        method: 'PATCH',
+                        headers: {
+                            'Authorization': `Token ${token}`,
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            total_sessions: clientData.programme,
+                            current_session: clientData.currentSession,
+                            gamification_data: gamificationData
+                        })
+                    });
+
+                    if (response.ok) {
+                        const data = await response.json();
+                        console.log('✅ Saved to PostgreSQL:', data.message);
+                    } else {
+                        console.error('Failed to save to PostgreSQL:', response.status);
+                    }
+                } catch (error) {
+                    console.error('Error saving to PostgreSQL:', error);
+                }
+            }
         }
 
         function selectProgramme(sessions) {
@@ -1212,9 +1281,28 @@
             }
         }
 
-        function saveGamificationData() {
+        async function saveGamificationData() {
             const key = currentUser.isStaff ? 'coach_gamification' : 'audhd_gamification_' + currentUser.id;
             localStorage.setItem(key, JSON.stringify(gamificationData));
+
+            // Also save to PostgreSQL (syncs with coach portal)
+            const token = localStorage.getItem('syp_token');
+            if (token && !currentUser.isStaff) {
+                try {
+                    await fetch('https://sparkhub-be-qtmmb.ondigitalocean.app/api/crm/syp/clients/update-progress/', {
+                        method: 'PATCH',
+                        headers: {
+                            'Authorization': `Token ${token}`,
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            gamification_data: gamificationData
+                        })
+                    });
+                } catch (error) {
+                    console.error('Error saving gamification to PostgreSQL:', error);
+                }
+            }
         }
 
         function getMonday(date) {
