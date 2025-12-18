@@ -1022,25 +1022,33 @@
 
         // Load Clients from PostgreSQL
         async function loadClients() {
+            console.log('🔄 Loading clients from PostgreSQL...');
+            console.log('🔑 Token:', authToken ? authToken.substring(0, 20) + '...' : 'NONE');
+
             try {
                 const response = await fetch(`${API_BASE}/api/crm/syp/coach/clients/`, {
                     headers: {
-                        'Authorization': `Token ${authToken}`,
+                        'Authorization': `Bearer ${authToken}`,
                         'Content-Type': 'application/json'
                     }
                 });
 
+                console.log('📡 Response status:', response.status);
+
                 if (response.ok) {
                     const data = await response.json();
+                    console.log('📦 Raw data:', data);
                     clients = Array.isArray(data) ? data : (data.results || []);
+                    console.log('✅ Loaded', clients.length, 'clients');
                     document.getElementById('dataBadge').className = 'data-badge live';
                     document.getElementById('dataBadge').textContent = 'PostgreSQL';
                 } else {
-                    console.error('API error:', response.status);
+                    const errorText = await response.text();
+                    console.error('❌ API error:', response.status, errorText);
                     clients = [];
                 }
             } catch (error) {
-                console.error('Load clients error:', error);
+                console.error('❌ Load clients error:', error);
                 clients = [];
             }
 
@@ -1054,14 +1062,16 @@
 
         // Render Clients by Section
         function renderClients() {
+            console.log('🎨 Rendering clients:', clients.length);
             const pipeline = [];
             const active = [];
             const completed = [];
 
             clients.forEach(client => {
                 const status = client.programme_status || client.status || 'enrolled';
+                console.log(`  - ${client.full_name}: ${status}`);
 
-                if (status === 'completed') {
+                if (status === 'completed' || status === 'complete') {
                     completed.push(client);
                 } else if (status === 'lead' || status === 'pipeline') {
                     pipeline.push(client);
@@ -1069,6 +1079,8 @@
                     active.push(client);
                 }
             });
+
+            console.log(`📊 Pipeline: ${pipeline.length}, Active: ${active.length}, Completed: ${completed.length}`);
 
             // Render each section
             renderSection('pipelineGrid', 'pipelineCount', pipeline, '🌱');
@@ -1105,15 +1117,20 @@
 
             const stageLabels = {
                 'enrolled': 'Week 1',
+                'session_1': 'Session 1',
+                'session_2': 'Session 2',
+                'session_3': 'Session 3',
+                'session_4': 'Session 4',
                 'week-1': 'Week 1',
                 'week-2': 'Week 2',
                 'week-3': 'Week 3',
                 'week-4': 'Week 4',
+                'complete': 'Complete',
                 'completed': 'Complete'
             };
 
             const stageLabel = stageLabels[status] || status;
-            const isComplete = status === 'completed';
+            const isComplete = status === 'completed' || status === 'complete';
 
             return `
                 <div class="client-card ${programmeType}" onclick="openClientPanel(${client.id})">
@@ -1156,10 +1173,15 @@
             const progressMap = {
                 'lead': 0,
                 'enrolled': 10,
+                'session_1': 25,
+                'session_2': 50,
+                'session_3': 75,
+                'session_4': 90,
                 'week-1': 25,
                 'week-2': 50,
                 'week-3': 75,
                 'week-4': 90,
+                'complete': 100,
                 'completed': 100
             };
             return progressMap[status] || 10;
