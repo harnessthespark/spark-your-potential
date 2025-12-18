@@ -1073,38 +1073,13 @@
         </div>
         <div class="panel-content">
             <div class="panel-section">
-                <h4>📝 Session Notes</h4>
-                <div id="panelNotes">
-                    <div class="panel-item" onclick="openNotes()">
-                        <div>
-                            <div class="panel-item-title">View/Add Notes</div>
-                            <div class="panel-item-meta">Click to manage session notes</div>
-                        </div>
-                        <span>→</span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="panel-section">
                 <h4>📁 Documents</h4>
                 <div id="panelDocs">
                     <!-- Populated dynamically based on programme type -->
                 </div>
             </div>
 
-            <div class="panel-section">
-                <h4>📅 Schedule</h4>
-                <div id="panelSchedule">
-                    <div class="panel-item">
-                        <div>
-                            <div class="panel-item-title">Next Session</div>
-                            <div class="panel-item-meta" id="panelNextSession">Not scheduled</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- View Full Profile button removed - page doesn't exist yet -->
+            <!-- Schedule section coming soon -->
         </div>
     </div>
 
@@ -1458,26 +1433,19 @@
             const panelDocs = document.getElementById('panelDocs');
 
             if (programmeType === 'audhd' || programmeType === 'nd') {
-                // AuDHD/ND Coaching documents
+                // AuDHD/ND Coaching documents - only show what exists
                 panelDocs.innerHTML = `
-                    <div class="panel-item" onclick="openDoc('paradox')">
-                        <div>
-                            <div class="panel-item-title">🧠 Paradox Domains</div>
-                            <div class="panel-item-meta">View AuDHD profile</div>
-                        </div>
-                        <span>→</span>
-                    </div>
-                    <div class="panel-item" onclick="openDoc('session-notes')">
-                        <div>
-                            <div class="panel-item-title">📝 Session Notes</div>
-                            <div class="panel-item-meta">View session summaries</div>
-                        </div>
-                        <span>→</span>
-                    </div>
                     <div class="panel-item" onclick="openDoc('agreement')">
                         <div>
-                            <div class="panel-item-title">Coaching Agreement</div>
+                            <div class="panel-item-title">📄 Coaching Agreement</div>
                             <div class="panel-item-meta">View signed agreement</div>
+                        </div>
+                        <span>→</span>
+                    </div>
+                    <div class="panel-item" onclick="openDoc('dashboard')">
+                        <div>
+                            <div class="panel-item-title">📊 Client Dashboard</div>
+                            <div class="panel-item-meta">View session progress</div>
                         </div>
                         <span>→</span>
                     </div>
@@ -1538,11 +1506,10 @@
             let docs = {};
 
             if (programmeType === 'audhd' || programmeType === 'nd') {
-                // AuDHD/ND documents
+                // AuDHD/ND documents - use correct filename pattern
                 docs = {
-                    'paradox': `audhd-dashboard.html?client_id=${selectedClient.id}`,
-                    'session-notes': `${folder}/${folder}_Session_Notes.html`,
-                    'agreement': `${folder}/${folder}_Coaching_Agreement.html`
+                    'agreement': `${folder}/${folder}_AuDHD_Coaching_Agreement.html`,
+                    'dashboard': `audhd-dashboard.html`
                 };
             } else {
                 // Career documents

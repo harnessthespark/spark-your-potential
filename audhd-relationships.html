@@ -493,8 +493,156 @@
             <button class="nav-tab" onclick="showSection('relationships')">👥 Relationship Types</button>
         </div>
 
-        <!-- Section 1: My Boundaries -->
-        <div id="boundaries" class="section-card active">
+        <!-- Section 1: My Values -->
+        <div id="values" class="section-card active">
+            <h3 class="section-title">💎 My Values</h3>
+            <p class="section-intro">Your values are the foundation of effective communication. When you're clear on what matters most to you, setting boundaries becomes easier and your relationships become more authentic.</p>
+
+            <div class="audhd-insight">
+                <h4>🧠 AuDHD Insight</h4>
+                <p><strong>Autism</strong> often gives you strong, unwavering values (justice, honesty, logic). <strong>ADHD</strong> can make those values feel inconsistent because you forget to act on them or get distracted. Writing them down creates accountability to yourself.</p>
+            </div>
+
+            <!-- Core Values Identification -->
+            <h4 style="color: #2d1b4e; margin-bottom: 15px;">🎯 Identify Your Core Values</h4>
+            <p style="color: #666; margin-bottom: 20px; font-size: 0.95em;">Select the 5-7 values that resonate most deeply with you. These are non-negotiables — things that, when violated, feel genuinely wrong.</p>
+
+            <div class="values-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 10px; margin-bottom: 25px;">
+                <label class="value-chip"><input type="checkbox" name="value" value="authenticity"> Authenticity</label>
+                <label class="value-chip"><input type="checkbox" name="value" value="honesty"> Honesty</label>
+                <label class="value-chip"><input type="checkbox" name="value" value="loyalty"> Loyalty</label>
+                <label class="value-chip"><input type="checkbox" name="value" value="fairness"> Fairness</label>
+                <label class="value-chip"><input type="checkbox" name="value" value="independence"> Independence</label>
+                <label class="value-chip"><input type="checkbox" name="value" value="connection"> Connection</label>
+                <label class="value-chip"><input type="checkbox" name="value" value="creativity"> Creativity</label>
+                <label class="value-chip"><input type="checkbox" name="value" value="knowledge"> Knowledge</label>
+                <label class="value-chip"><input type="checkbox" name="value" value="growth"> Growth</label>
+                <label class="value-chip"><input type="checkbox" name="value" value="stability"> Stability</label>
+                <label class="value-chip"><input type="checkbox" name="value" value="adventure"> Adventure</label>
+                <label class="value-chip"><input type="checkbox" name="value" value="security"> Security</label>
+                <label class="value-chip"><input type="checkbox" name="value" value="freedom"> Freedom</label>
+                <label class="value-chip"><input type="checkbox" name="value" value="kindness"> Kindness</label>
+                <label class="value-chip"><input type="checkbox" name="value" value="respect"> Respect</label>
+                <label class="value-chip"><input type="checkbox" name="value" value="responsibility"> Responsibility</label>
+                <label class="value-chip"><input type="checkbox" name="value" value="excellence"> Excellence</label>
+                <label class="value-chip"><input type="checkbox" name="value" value="compassion"> Compassion</label>
+                <label class="value-chip"><input type="checkbox" name="value" value="justice"> Justice</label>
+                <label class="value-chip"><input type="checkbox" name="value" value="privacy"> Privacy</label>
+                <label class="value-chip"><input type="checkbox" name="value" value="simplicity"> Simplicity</label>
+                <label class="value-chip"><input type="checkbox" name="value" value="humour"> Humour</label>
+                <label class="value-chip"><input type="checkbox" name="value" value="peace"> Peace</label>
+                <label class="value-chip"><input type="checkbox" name="value" value="purpose"> Purpose</label>
+            </div>
+
+            <style>
+                .value-chip {
+                    display: flex;
+                    align-items: center;
+                    gap: 8px;
+                    padding: 12px 15px;
+                    background: #f8f9fa;
+                    border: 2px solid #e0e0e0;
+                    border-radius: 10px;
+                    cursor: pointer;
+                    transition: all 0.2s;
+                    font-size: 0.9em;
+                    color: #555;
+                }
+                .value-chip:hover {
+                    border-color: #E91E78;
+                    background: #fdf4ff;
+                }
+                .value-chip input {
+                    accent-color: #E91E78;
+                    width: 18px;
+                    height: 18px;
+                }
+                .value-chip:has(input:checked) {
+                    background: linear-gradient(135deg, #fdf4ff 0%, #fce7f3 100%);
+                    border-color: #E91E78;
+                    color: #2d1b4e;
+                    font-weight: 600;
+                }
+            </style>
+
+            <!-- Other Values -->
+            <div class="boundary-card" style="margin-bottom: 25px;">
+                <h4>✨ Other Values Not Listed</h4>
+                <p class="prompt">Add any values that are important to you that weren't in the list above</p>
+                <textarea id="values-other" placeholder="e.g., Curiosity, Nature, Art, Animals, Solitude, Order, Spontaneity..."></textarea>
+            </div>
+
+            <!-- Top 3 Priority -->
+            <div class="balance-section" style="background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%); margin-bottom: 25px;">
+                <h4 style="color: #92400e;">⭐ Your Top 3 Non-Negotiable Values</h4>
+                <p style="color: #78350f; font-size: 0.9em; margin-bottom: 15px;">If you could only keep 3 values, which would they be? These are your absolute core.</p>
+                <div style="display: grid; gap: 15px;">
+                    <div>
+                        <label style="display: block; color: #78350f; font-weight: 600; margin-bottom: 5px;">1️⃣ Most Important</label>
+                        <input type="text" id="value-top1" placeholder="e.g., Honesty" style="width: 100%; padding: 12px 15px; border: 2px solid #fbbf24; border-radius: 10px; font-size: 1em; background: white;">
+                    </div>
+                    <div>
+                        <label style="display: block; color: #78350f; font-weight: 600; margin-bottom: 5px;">2️⃣ Second Most Important</label>
+                        <input type="text" id="value-top2" placeholder="e.g., Freedom" style="width: 100%; padding: 12px 15px; border: 2px solid #fbbf24; border-radius: 10px; font-size: 1em; background: white;">
+                    </div>
+                    <div>
+                        <label style="display: block; color: #78350f; font-weight: 600; margin-bottom: 5px;">3️⃣ Third Most Important</label>
+                        <input type="text" id="value-top3" placeholder="e.g., Authenticity" style="width: 100%; padding: 12px 15px; border: 2px solid #fbbf24; border-radius: 10px; font-size: 1em; background: white;">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Values in Relationships -->
+            <h4 style="color: #2d1b4e; margin-bottom: 15px;">🔗 How Your Values Show Up in Relationships</h4>
+            <div class="boundary-grid">
+                <div class="boundary-card">
+                    <h4>✅ When My Values Are Honoured</h4>
+                    <p class="prompt">How do you feel when people respect your values? What does that look like?</p>
+                    <textarea id="values-honoured" placeholder="e.g., I feel safe and can be myself. I don't have to explain or justify. I feel energised after spending time with them..."></textarea>
+                </div>
+                <div class="boundary-card">
+                    <h4>❌ When My Values Are Violated</h4>
+                    <p class="prompt">What happens when people cross your values? How do you react?</p>
+                    <textarea id="values-violated" placeholder="e.g., I shut down and can't explain why. I feel physically uncomfortable. I withdraw and need recovery time. I might mask resentment..."></textarea>
+                </div>
+            </div>
+
+            <!-- Values-Based Communication -->
+            <div class="masking-scale" style="background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%); margin-top: 25px;">
+                <h4 style="color: #065f46;">💬 Communicating Your Values</h4>
+                <p style="color: #047857; font-size: 0.9em; margin-bottom: 15px;">When people understand your values, they understand your boundaries. Practice saying these out loud.</p>
+
+                <div class="quick-ref-grid">
+                    <div class="quick-ref-card">
+                        <h5>🗣️ "I" Statement Template</h5>
+                        <p>"<strong>[Value]</strong> is really important to me. When <strong>[behaviour]</strong> happens, I feel <strong>[emotion]</strong> because it goes against what I believe."</p>
+                    </div>
+                    <div class="quick-ref-card">
+                        <h5>🤝 Setting Expectations</h5>
+                        <p>"Something you should know about me: I really value <strong>[value]</strong>, so I might <strong>[behaviour that reflects it]</strong>."</p>
+                    </div>
+                    <div class="quick-ref-card">
+                        <h5>🚫 Declining Based on Values</h5>
+                        <p>"That doesn't align with what's important to me, so I'm going to pass."</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Personal Values Statement -->
+            <div class="boundary-card" style="margin-top: 25px;">
+                <h4>📜 My Personal Values Statement</h4>
+                <p class="prompt">Write a short statement (2-3 sentences) that captures who you are and what you stand for. This is your anchor when relationships get confusing.</p>
+                <textarea id="values-statement" placeholder="e.g., I am someone who values honesty above all — I would rather hear a hard truth than a comfortable lie. I need freedom to be myself, and I give that same respect to others. Connection matters to me, but only when it's genuine."></textarea>
+            </div>
+
+            <div class="save-section">
+                <button class="save-btn" onclick="saveAll()">💾 Save My Values</button>
+                <div class="save-status" id="saveStatus0"></div>
+            </div>
+        </div>
+
+        <!-- Section 2: My Boundaries -->
+        <div id="boundaries" class="section-card">
             <h3 class="section-title">🛡️ My Boundaries</h3>
             <p class="section-intro">Boundaries aren't walls — they're the rules of engagement for how people get to interact with you. AuDHD brains often struggle with boundaries because we might not notice when they're crossed until we're already overwhelmed.</p>
 
@@ -950,7 +1098,24 @@
 
         // Collect all data
         function collectData() {
+            // Get checked values
+            const checkedValues = [];
+            document.querySelectorAll('input[name="value"]:checked').forEach(cb => {
+                checkedValues.push(cb.value);
+            });
+
             return {
+                // Values
+                values: {
+                    selected: checkedValues,
+                    other: document.getElementById('values-other')?.value || '',
+                    top1: document.getElementById('value-top1')?.value || '',
+                    top2: document.getElementById('value-top2')?.value || '',
+                    top3: document.getElementById('value-top3')?.value || '',
+                    honoured: document.getElementById('values-honoured')?.value || '',
+                    violated: document.getElementById('values-violated')?.value || '',
+                    statement: document.getElementById('values-statement')?.value || ''
+                },
                 // Boundaries
                 boundaries: {
                     time: document.getElementById('boundary-time')?.value || '',
@@ -1007,6 +1172,25 @@
         // Populate form from saved data
         function populateForm(data) {
             if (!data) return;
+
+            // Values
+            if (data.values) {
+                // Check the selected values
+                if (data.values.selected && Array.isArray(data.values.selected)) {
+                    data.values.selected.forEach(value => {
+                        const checkbox = document.querySelector(`input[name="value"][value="${value}"]`);
+                        if (checkbox) checkbox.checked = true;
+                    });
+                }
+                // Other text fields
+                if (data.values.other) document.getElementById('values-other').value = data.values.other;
+                if (data.values.top1) document.getElementById('value-top1').value = data.values.top1;
+                if (data.values.top2) document.getElementById('value-top2').value = data.values.top2;
+                if (data.values.top3) document.getElementById('value-top3').value = data.values.top3;
+                if (data.values.honoured) document.getElementById('values-honoured').value = data.values.honoured;
+                if (data.values.violated) document.getElementById('values-violated').value = data.values.violated;
+                if (data.values.statement) document.getElementById('values-statement').value = data.values.statement;
+            }
 
             // Boundaries
             if (data.boundaries) {
