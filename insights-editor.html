@@ -3,83 +3,150 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Career Insights Editor | Coach Hub</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <title>Insights Report Editor | Coach Hub</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
             font-family: 'Inter', sans-serif;
-            background: linear-gradient(135deg, #1e1b4b 0%, #312e81 100%);
+            background: #f8fafc;
             min-height: 100vh;
-            padding: 20px;
-        }
-
-        .container {
-            max-width: 1000px;
-            margin: 0 auto;
+            color: #1e293b;
         }
 
         .header {
-            background: white;
-            padding: 25px 30px;
-            border-radius: 15px;
-            margin-bottom: 20px;
+            background: linear-gradient(135deg, #7c3aed 0%, #a855f7 100%);
+            color: white;
+            padding: 20px 30px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
 
         .header h1 {
-            color: #7c3aed;
-            font-size: 1.5em;
+            font-size: 1.4em;
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
 
-        .client-name {
-            color: #6b7280;
-            font-weight: 400;
+        .header-actions {
+            display: flex;
+            gap: 10px;
         }
 
-        .status-badge {
-            padding: 8px 16px;
-            border-radius: 20px;
-            font-size: 0.85em;
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
             font-weight: 600;
+            cursor: pointer;
+            font-size: 0.9em;
+            transition: all 0.2s;
         }
 
-        .status-badge.draft { background: #fef3c7; color: #92400e; }
-        .status-badge.published { background: #d1fae5; color: #065f46; }
+        .btn-secondary {
+            background: rgba(255,255,255,0.2);
+            color: white;
+        }
 
-        .editor-card {
+        .btn-secondary:hover {
+            background: rgba(255,255,255,0.3);
+        }
+
+        .btn-primary {
+            background: #fbbf24;
+            color: #1e293b;
+        }
+
+        .btn-primary:hover {
+            background: #fcd34d;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 30px;
+            display: grid;
+            grid-template-columns: 1fr 400px;
+            gap: 30px;
+        }
+
+        @media (max-width: 1024px) {
+            .container {
+                grid-template-columns: 1fr;
+            }
+            .reference-panel {
+                order: -1;
+            }
+        }
+
+        .editor-panel {
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+        }
+
+        .section-card {
             background: white;
-            border-radius: 15px;
-            padding: 25px;
-            margin-bottom: 20px;
+            border-radius: 16px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+            overflow: hidden;
         }
 
-        .editor-card h2 {
+        .section-header {
+            background: linear-gradient(135deg, #7c3aed15 0%, #a855f715 100%);
+            padding: 15px 20px;
+            border-bottom: 1px solid #e2e8f0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section-header h2 {
+            font-size: 1.1em;
             color: #7c3aed;
-            font-size: 1.2em;
-            margin-bottom: 15px;
-            padding-bottom: 10px;
-            border-bottom: 2px solid #e5e7eb;
         }
 
-        .form-group {
+        .section-header .icon {
+            font-size: 1.2em;
+        }
+
+        .section-content {
+            padding: 20px;
+        }
+
+        .field-group {
             margin-bottom: 20px;
         }
 
-        .form-group label {
+        .field-group:last-child {
+            margin-bottom: 0;
+        }
+
+        .field-label {
             display: block;
             font-weight: 600;
-            color: #374151;
             margin-bottom: 8px;
+            color: #475569;
+            font-size: 0.9em;
         }
 
-        .form-group textarea {
+        .field-hint {
+            font-size: 0.8em;
+            color: #94a3b8;
+            margin-bottom: 8px;
+            font-style: italic;
+        }
+
+        textarea {
             width: 100%;
-            padding: 15px;
-            border: 2px solid #e5e7eb;
+            padding: 12px 15px;
+            border: 2px solid #e2e8f0;
             border-radius: 10px;
             font-family: inherit;
             font-size: 0.95em;
@@ -88,356 +155,754 @@
             transition: border-color 0.2s;
         }
 
-        .form-group textarea:focus {
+        textarea:focus {
             outline: none;
             border-color: #7c3aed;
         }
 
-        .form-group textarea.small { min-height: 80px; }
-        .form-group textarea.medium { min-height: 150px; }
-        .form-group textarea.large { min-height: 250px; }
-
-        .help-text {
-            font-size: 0.85em;
-            color: #6b7280;
-            margin-top: 5px;
+        textarea.large {
+            min-height: 150px;
         }
 
-        .actions {
-            display: flex;
-            gap: 15px;
-            justify-content: flex-end;
-            padding: 20px;
-            background: white;
-            border-radius: 15px;
+        textarea.medium {
+            min-height: 100px;
+        }
+
+        textarea.small {
+            min-height: 60px;
+        }
+
+        /* Reference Panel */
+        .reference-panel {
             position: sticky;
-            bottom: 20px;
-            box-shadow: 0 -5px 20px rgba(0,0,0,0.1);
+            top: 90px;
+            max-height: calc(100vh - 120px);
+            overflow-y: auto;
         }
 
-        .btn {
-            padding: 12px 25px;
-            border: none;
-            border-radius: 10px;
+        .reference-card {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+            overflow: hidden;
+        }
+
+        .reference-header {
+            background: #22c55e;
+            color: white;
+            padding: 15px 20px;
             font-weight: 600;
+        }
+
+        .reference-content {
+            padding: 15px;
+            max-height: 500px;
+            overflow-y: auto;
+        }
+
+        .quote-box {
+            background: #f0fdf4;
+            border-left: 3px solid #22c55e;
+            padding: 12px 15px;
+            margin-bottom: 12px;
+            border-radius: 0 8px 8px 0;
+            font-size: 0.85em;
+            line-height: 1.6;
+        }
+
+        .quote-label {
+            font-weight: 600;
+            color: #166534;
+            font-size: 0.75em;
+            text-transform: uppercase;
+            margin-bottom: 5px;
+        }
+
+        .tabs {
+            display: flex;
+            border-bottom: 1px solid #e2e8f0;
+            background: #f8fafc;
+        }
+
+        .tab {
+            padding: 12px 16px;
+            border: none;
+            background: none;
             cursor: pointer;
+            font-weight: 500;
+            color: #64748b;
+            font-size: 0.85em;
+            border-bottom: 2px solid transparent;
             transition: all 0.2s;
         }
 
-        .btn-secondary {
-            background: #f3f4f6;
-            color: #374151;
+        .tab.active {
+            color: #7c3aed;
+            border-bottom-color: #7c3aed;
         }
 
-        .btn-primary {
-            background: linear-gradient(135deg, #7c3aed, #a855f7);
-            color: white;
+        .tab:hover {
+            color: #7c3aed;
         }
 
-        .btn-success {
-            background: #22c55e;
-            color: white;
-        }
-
-        .btn:hover { opacity: 0.9; transform: translateY(-1px); }
-
-        .save-status {
-            padding: 10px 20px;
-            background: #d1fae5;
-            color: #065f46;
-            border-radius: 10px;
+        .tab-content {
             display: none;
         }
 
-        .save-status.visible { display: block; }
-
-        .toggle-group {
-            display: flex;
-            align-items: center;
-            gap: 10px;
+        .tab-content.active {
+            display: block;
         }
 
-        .toggle {
-            width: 50px;
-            height: 26px;
-            background: #e5e7eb;
-            border-radius: 13px;
-            position: relative;
-            cursor: pointer;
-            transition: background 0.2s;
-        }
-
-        .toggle.active { background: #22c55e; }
-
-        .toggle::after {
-            content: '';
-            position: absolute;
-            width: 22px;
-            height: 22px;
-            background: white;
-            border-radius: 50%;
-            top: 2px;
-            left: 2px;
-            transition: left 0.2s;
-        }
-
-        .toggle.active::after { left: 26px; }
-
-        .loading {
-            text-align: center;
-            padding: 50px;
+        /* Save indicator */
+        .save-indicator {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #22c55e;
             color: white;
-            font-size: 1.2em;
-        }
-
-        .error-msg {
-            background: #fef2f2;
-            color: #dc2626;
-            padding: 15px;
+            padding: 12px 20px;
             border-radius: 10px;
-            margin-bottom: 20px;
+            font-weight: 500;
+            box-shadow: 0 4px 15px rgba(34, 197, 94, 0.3);
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.3s;
+            z-index: 1000;
         }
 
-        @media (max-width: 768px) {
-            .header { flex-direction: column; gap: 15px; text-align: center; }
-            .actions { flex-direction: column; }
+        .save-indicator.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Client selector */
+        .client-selector {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 25px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+        }
+
+        .client-selector select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            font-size: 1em;
+            font-family: inherit;
+        }
+
+        .client-selector select:focus {
+            outline: none;
+            border-color: #7c3aed;
+        }
+
+        .client-info {
+            margin-top: 15px;
+            padding: 15px;
+            background: #f8fafc;
+            border-radius: 8px;
+            font-size: 0.9em;
+        }
+
+        .client-info strong {
+            color: #7c3aed;
         }
     </style>
 </head>
 <body>
+    <header class="header">
+        <h1>💡 Insights Report Editor</h1>
+        <div class="header-actions">
+            <button class="btn btn-secondary" onclick="window.location.href='coach-hub.html'">← Back to Hub</button>
+            <button class="btn btn-secondary" onclick="openQuestionnaire()">📝 Questionnaire</button>
+            <button class="btn btn-secondary" onclick="previewReport()">👁️ Preview</button>
+            <button class="btn btn-primary" onclick="saveAndExport()">💾 Save & Export</button>
+        </div>
+    </header>
+
     <div class="container">
-        <div class="loading" id="loadingState">Loading report...</div>
-
-        <div id="editorContent" style="display: none;">
-            <div class="header">
-                <div>
-                    <h1>Career Insights Report</h1>
-                    <span class="client-name" id="clientName">Loading...</span>
-                </div>
-                <div class="status-badge draft" id="statusBadge">Draft</div>
-            </div>
-
-            <div class="error-msg" id="errorMsg" style="display: none;"></div>
-
-            <div class="editor-card">
-                <h2>Executive Summary</h2>
-                <div class="form-group">
-                    <label>Core Pattern</label>
-                    <textarea id="executiveSummary" class="medium" placeholder="Write the client's core pattern - what do they consistently do across all their outcomes?"></textarea>
-                    <p class="help-text">This is the main insight that ties everything together.</p>
+        <div class="editor-panel">
+            <!-- Client Selector -->
+            <div class="client-selector">
+                <label class="field-label">Select Client</label>
+                <select id="clientSelect" onchange="loadClientData()">
+                    <option value="">Choose a client...</option>
+                    <option value="raj">Raj Samuel</option>
+                    <option value="donald">Donald Pirie</option>
+                </select>
+                <div class="client-info" id="clientInfo" style="display: none;">
+                    <strong id="clientName">Client Name</strong><br>
+                    <span id="clientEmail">email@example.com</span> • <span id="clientStage">Week 2</span>
                 </div>
             </div>
 
-            <div class="editor-card">
-                <h2>Pattern Analysis</h2>
-                <div class="form-group">
-                    <label>Analysis of the 5 Outcomes</label>
-                    <textarea id="patternAnalysis" class="large" placeholder="Break down how the pattern shows up in each of their 5 outcomes. What's consistent? What's the sequence?"></textarea>
+            <!-- Executive Summary -->
+            <div class="section-card">
+                <div class="section-header">
+                    <span class="icon">📊</span>
+                    <h2>Executive Summary</h2>
+                </div>
+                <div class="section-content">
+                    <div class="field-group">
+                        <label class="field-label">Core Pattern (One powerful sentence)</label>
+                        <div class="field-hint">What does this person consistently do that's unique?</div>
+                        <textarea id="corePattern" class="small" placeholder="e.g. You don't fix strategies. You restore belief systems."></textarea>
+                    </div>
+                    <div class="field-group">
+                        <label class="field-label">Pattern Explanation</label>
+                        <div class="field-hint">How does this pattern show up across their outcomes?</div>
+                        <textarea id="patternExplanation" class="medium" placeholder="Expand on the pattern - the sequence that appears in their work..."></textarea>
+                    </div>
+                    <div class="field-group">
+                        <label class="field-label">What This Means For Their Career</label>
+                        <div class="field-hint">Connect the pattern to their current situation</div>
+                        <textarea id="careerImplication" class="medium" placeholder="What environments will let them thrive vs frustrate them?"></textarea>
+                    </div>
                 </div>
             </div>
 
-            <div class="editor-card">
-                <h2>Key Strengths</h2>
-                <div class="form-group">
-                    <label>Identified Strengths</label>
-                    <textarea id="keyStrengths" class="medium" placeholder="List the key strengths identified from their responses (one per line)"></textarea>
+            <!-- Unique Thread -->
+            <div class="section-card">
+                <div class="section-header">
+                    <span class="icon">🧵</span>
+                    <h2>The Unique Thread</h2>
+                </div>
+                <div class="section-content">
+                    <div class="field-group">
+                        <label class="field-label">Your Analysis of Their Thread</label>
+                        <div class="field-hint">What makes their approach distinctive?</div>
+                        <textarea id="threadAnalysis" class="medium" placeholder="What's their signature move? What do they do that others don't?"></textarea>
+                    </div>
+                    <div class="field-group">
+                        <label class="field-label">The Thread in One Phrase</label>
+                        <div class="field-hint">Summarise in a memorable phrase</div>
+                        <textarea id="threadPhrase" class="small" placeholder="e.g. Making the invisible visible"></textarea>
+                    </div>
+                    <div class="field-group">
+                        <label class="field-label">Connection to Current Situation</label>
+                        <textarea id="threadConnection" class="medium" placeholder="How does this thread connect to what they should be looking for?"></textarea>
+                    </div>
                 </div>
             </div>
 
-            <div class="editor-card">
-                <h2>Career Directions</h2>
-                <div class="form-group">
-                    <label>Recommended Paths</label>
-                    <textarea id="careerDirections" class="medium" placeholder="What career directions does this pattern suggest? What roles would leverage their strengths?"></textarea>
+            <!-- Superpowers Analysis -->
+            <div class="section-card">
+                <div class="section-header">
+                    <span class="icon">⚡</span>
+                    <h2>Superpowers Analysis</h2>
+                </div>
+                <div class="section-content">
+                    <div class="field-group">
+                        <label class="field-label">Superpower 1 Analysis</label>
+                        <textarea id="superpower1" class="small" placeholder="Your analysis of their first superpower..."></textarea>
+                    </div>
+                    <div class="field-group">
+                        <label class="field-label">Superpower 2 Analysis</label>
+                        <textarea id="superpower2" class="small" placeholder="Your analysis of their second superpower..."></textarea>
+                    </div>
+                    <div class="field-group">
+                        <label class="field-label">Superpower 3 Analysis</label>
+                        <textarea id="superpower3" class="small" placeholder="Your analysis of their third superpower..."></textarea>
+                    </div>
+                    <div class="field-group">
+                        <label class="field-label">Superpower 4 Analysis</label>
+                        <textarea id="superpower4" class="small" placeholder="Your analysis of their fourth superpower..."></textarea>
+                    </div>
+                    <div class="field-group">
+                        <label class="field-label">Connection to Current Situation</label>
+                        <textarea id="superpowerConnection" class="medium" placeholder="How should these superpowers inform what they look for next?"></textarea>
+                    </div>
                 </div>
             </div>
 
-            <div class="editor-card">
-                <h2>Next Steps</h2>
-                <div class="form-group">
-                    <label>Action Items</label>
-                    <textarea id="nextSteps" class="medium" placeholder="What should the client do next? Specific actions they can take."></textarea>
+            <!-- Underestimated Ability -->
+            <div class="section-card">
+                <div class="section-header">
+                    <span class="icon">✨</span>
+                    <h2>Underestimated Ability</h2>
+                </div>
+                <div class="section-content">
+                    <div class="field-group">
+                        <label class="field-label">What They've Been Underselling</label>
+                        <textarea id="underselling" class="medium" placeholder="What have they been underselling and how should they reframe it?"></textarea>
+                    </div>
+                    <div class="field-group">
+                        <label class="field-label">The Reframe</label>
+                        <div class="field-hint">Who they really are vs how they've been positioning</div>
+                        <textarea id="reframe" class="small" placeholder="e.g. You're not a strategist, you're a cultural transformation architect"></textarea>
+                    </div>
                 </div>
             </div>
 
-            <div class="editor-card">
-                <h2>Coach Notes</h2>
-                <div class="form-group">
-                    <label>Internal Notes (not shown to client)</label>
-                    <textarea id="coachNotes" class="small" placeholder="Private notes for your reference only..."></textarea>
-                    <p class="help-text">These notes are NOT visible to the client.</p>
+            <!-- Current Crossroads -->
+            <div class="section-card">
+                <div class="section-header">
+                    <span class="icon">🔄</span>
+                    <h2>Current Crossroads</h2>
+                </div>
+                <div class="section-content">
+                    <div class="field-group">
+                        <label class="field-label">Career Arc So Far</label>
+                        <textarea id="careerArc" class="large" placeholder="Map their journey - what does the arc tell us?"></textarea>
+                    </div>
+                    <div class="field-group">
+                        <label class="field-label">What Drains Them</label>
+                        <textarea id="drains" class="medium" placeholder="List what environments/situations drain them..."></textarea>
+                    </div>
+                    <div class="field-group">
+                        <label class="field-label">What Charges Them</label>
+                        <textarea id="charges" class="medium" placeholder="List what environments/situations energise them..."></textarea>
+                    </div>
+                    <div class="field-group">
+                        <label class="field-label">The Real Question They're Asking</label>
+                        <textarea id="realQuestion" class="medium" placeholder="What's the real question beneath the surface?"></textarea>
+                    </div>
                 </div>
             </div>
 
-            <div class="editor-card">
-                <h2>Full HTML Content (Advanced)</h2>
-                <div class="form-group">
-                    <label>Custom HTML Report</label>
-                    <textarea id="htmlContent" class="large" placeholder="Paste the full HTML content of the report here if you want to use a custom template..."></textarea>
-                    <p class="help-text">Optional: For advanced customization. Leave empty to use structured fields above.</p>
+            <!-- Session 2 Questions -->
+            <div class="section-card">
+                <div class="section-header">
+                    <span class="icon">❓</span>
+                    <h2>Key Questions for Session 2</h2>
+                </div>
+                <div class="section-content">
+                    <div class="field-group">
+                        <label class="field-label">Question 1</label>
+                        <textarea id="question1" class="small" placeholder="First key question to explore..."></textarea>
+                    </div>
+                    <div class="field-group">
+                        <label class="field-label">Question 2</label>
+                        <textarea id="question2" class="small" placeholder="Second key question..."></textarea>
+                    </div>
+                    <div class="field-group">
+                        <label class="field-label">Question 3</label>
+                        <textarea id="question3" class="small" placeholder="Third key question..."></textarea>
+                    </div>
+                    <div class="field-group">
+                        <label class="field-label">The Bigger Question</label>
+                        <textarea id="biggerQuestion" class="medium" placeholder="The underlying question about their future direction..."></textarea>
+                    </div>
                 </div>
             </div>
 
-            <div class="actions">
-                <span class="save-status" id="saveStatus">Saved!</span>
-
-                <div class="toggle-group">
-                    <span>Publish to client:</span>
-                    <div class="toggle" id="publishToggle" onclick="togglePublish()"></div>
+            <!-- Homework -->
+            <div class="section-card">
+                <div class="section-header">
+                    <span class="icon">📝</span>
+                    <h2>Homework Tasks</h2>
                 </div>
+                <div class="section-content">
+                    <div class="field-group">
+                        <label class="field-label">Homework Task 1</label>
+                        <textarea id="homework1" class="small" placeholder="First homework task..."></textarea>
+                    </div>
+                    <div class="field-group">
+                        <label class="field-label">Homework Task 2</label>
+                        <textarea id="homework2" class="small" placeholder="Second homework task..."></textarea>
+                    </div>
+                    <div class="field-group">
+                        <label class="field-label">Homework Task 3</label>
+                        <textarea id="homework3" class="small" placeholder="Third homework task..."></textarea>
+                    </div>
+                    <div class="field-group">
+                        <label class="field-label">Homework Task 4</label>
+                        <textarea id="homework4" class="small" placeholder="Fourth homework task..."></textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-                <button class="btn btn-secondary" onclick="window.location.href='coach-hub.html'">Back to Hub</button>
-                <button class="btn btn-primary" onclick="saveReport()">Save Report</button>
+        <!-- Reference Panel -->
+        <div class="reference-panel">
+            <div class="reference-card">
+                <div class="reference-header">
+                    📋 Client Quotes (Reference)
+                </div>
+                <div class="tabs">
+                    <button class="tab active" onclick="showTab('thread')">Thread</button>
+                    <button class="tab" onclick="showTab('superpowers')">Powers</button>
+                    <button class="tab" onclick="showTab('problems')">Problems</button>
+                    <button class="tab" onclick="showTab('perception')">Perception</button>
+                </div>
+                <div class="reference-content">
+                    <div id="tab-thread" class="tab-content active">
+                        <div class="quote-box" id="quoteThread">
+                            <div class="quote-label">Their Thread</div>
+                            Select a client to see their quotes...
+                        </div>
+                    </div>
+                    <div id="tab-superpowers" class="tab-content">
+                        <div class="quote-box" id="quotePowers">
+                            <div class="quote-label">What Feels Easy</div>
+                            Select a client to see their quotes...
+                        </div>
+                    </div>
+                    <div id="tab-problems" class="tab-content">
+                        <div class="quote-box" id="quoteProblems">
+                            <div class="quote-label">What Finds Them</div>
+                            Select a client to see their quotes...
+                        </div>
+                    </div>
+                    <div id="tab-perception" class="tab-content">
+                        <div class="quote-box" id="quotePerception">
+                            <div class="quote-label">How Others See Them</div>
+                            Select a client to see their quotes...
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 
+    <div class="save-indicator" id="saveIndicator">✅ Saved!</div>
+
     <script>
-        const API_BASE = 'https://sparkhub-be-qtmmb.ondigitalocean.app';
-        let clientId = null;
-        let isPublished = false;
+        let selectedClient = null;
+        let autoSaveTimeout = null;
 
-        // Get client ID from URL
-        const params = new URLSearchParams(window.location.search);
-        clientId = params.get('client_id');
+        // Client data
+        const clientData = {
+            'raj': {
+                name: 'Raj Samuel',
+                email: 'rs@rajsamuel.net',
+                stage: 'Week 2',
+                folder: 'Raj_Samuel',
+                clientId: 2,
+                quotes: {
+                    thread: `"I spot the cultural-emotional truth hiding beneath the business problem - the thing people sense but can't articulate yet. Then I make that truth tangible. Sometimes through strategic reframing, sometimes through research that reveals invisible patterns, sometimes through creating proof that builds belief."`,
+                    powers: `"I walk into a room, hear the brief, and I just see where the mismatch is. Doesn't feel like heavy analysis - more like pattern recognition. Pop culture, human behavior, brand problems, entertainment - I weave these together without thinking about it."`,
+                    problems: `"People bring me problems that aren't really about what they say they're about. They say 'we need a digital strategy' but what they actually mean is 'we feel culturally stuck and don't know how to catch up.'"`,
+                    perception: `"Call Raj when you're culturally stuck and don't know why. He makes the complex stuff simple. He gives you permission to try the scary thing. He spots the pattern we were all missing."`,
+                    underselling: `"My ability to bridge external and internal culture - spotting where culture's already moved outside, then transforming how organisations operate inside to match it. I've been underselling cultural transformation as strategy delivery."`
+                }
+            },
+            'donald': {
+                name: 'Donald Pirie',
+                email: 'donaldpirie111@hotmail.co.uk',
+                stage: 'Complete',
+                folder: 'Donald_Pirie',
+                clientId: 9,
+                quotes: {
+                    thread: `"My ability to see a bigger story than the one I've been asked to tell - to tell it, then build the teams and capabilities to make it real. I don't just spot the disconnect between what something is and what it could be - I figure out how to close that gap."`,
+                    powers: `"Making sense of complexity. I can walk into a dense business problem and instinctively find the through-line. Synthesizing the noise into a clear, motivating story feels so natural I sometimes forget it's a skill."`,
+                    problems: `"People come to me when things feel stuck. When the story doesn't add up, when teams are circling without progress, when team members feel lost, or when the business knows what it does—but can't articulate why it matters."`,
+                    perception: `"People see me as the person who brings clarity when things are murky. They describe me as thoughtful, calm, sharp, and unfailingly grounded—the strategist who can turn complexity into something simple, human, and motivating."`,
+                    underselling: `"My underestimated ability is how powerfully I can shift belief—not just thinking. I don't just clarify; I change how people feel about the work, each other, and what's possible."`
+                }
+            }
+        };
 
-        if (!clientId) {
-            document.getElementById('loadingState').innerHTML =
-                '<div class="error-msg">No client ID provided. Add ?client_id=X to the URL.</div>';
-        } else {
-            loadReport();
-        }
+        // Initialise
+        window.onload = function() {
+            setupAutoSave();
 
-        function getAuthToken() {
-            return localStorage.getItem('syp_token');
-        }
+            // Check URL for client
+            const urlParams = new URLSearchParams(window.location.search);
+            const clientId = urlParams.get('client_id');
+            if (clientId) {
+                // Map numeric IDs to client keys
+                const clientMap = { '1': 'donald', '2': 'raj' };
+                const key = clientMap[clientId] || clientId;
+                if (clientData[key]) {
+                    document.getElementById('clientSelect').value = key;
+                    loadClientData();
+                }
+            }
+        };
 
-        async function loadReport() {
-            const token = getAuthToken();
-            if (!token) {
-                showError('Not logged in. Please log in via coach-hub first.');
+        function loadClientData() {
+            const clientKey = document.getElementById('clientSelect').value;
+            if (!clientKey || !clientData[clientKey]) {
+                document.getElementById('clientInfo').style.display = 'none';
                 return;
             }
 
-            try {
-                const response = await fetch(`${API_BASE}/api/crm/syp/coach/insights-reports/by-client/${clientId}/`, {
-                    headers: {
-                        'Authorization': `Bearer ${token}`,
-                        'Content-Type': 'application/json'
-                    }
+            selectedClient = clientData[clientKey];
+
+            // Show client info
+            document.getElementById('clientInfo').style.display = 'block';
+            document.getElementById('clientName').textContent = selectedClient.name;
+            document.getElementById('clientEmail').textContent = selectedClient.email;
+            document.getElementById('clientStage').textContent = selectedClient.stage;
+
+            // Load saved insights from localStorage
+            const savedData = localStorage.getItem(`insights_${clientKey}`);
+            if (savedData) {
+                const data = JSON.parse(savedData);
+                Object.keys(data).forEach(key => {
+                    const el = document.getElementById(key);
+                    if (el) el.value = data[key];
                 });
-
-                if (response.ok) {
-                    const data = await response.json();
-                    populateForm(data);
-                    document.getElementById('loadingState').style.display = 'none';
-                    document.getElementById('editorContent').style.display = 'block';
-                } else {
-                    const err = await response.json();
-                    showError(err.detail || err.error || 'Failed to load report');
-                }
-            } catch (error) {
-                showError('Connection error: ' + error.message);
-            }
-        }
-
-        function populateForm(data) {
-            document.getElementById('clientName').textContent = data.client_name || 'Unknown Client';
-            document.getElementById('executiveSummary').value = data.executive_summary || '';
-            document.getElementById('patternAnalysis').value = data.pattern_analysis || '';
-            document.getElementById('keyStrengths').value = data.key_strengths || '';
-            document.getElementById('careerDirections').value = data.career_directions || '';
-            document.getElementById('nextSteps').value = data.next_steps || '';
-            document.getElementById('coachNotes').value = data.coach_notes || '';
-            document.getElementById('htmlContent').value = data.html_content || '';
-
-            isPublished = data.is_published || false;
-            updatePublishUI();
-        }
-
-        function togglePublish() {
-            isPublished = !isPublished;
-            updatePublishUI();
-        }
-
-        function updatePublishUI() {
-            const toggle = document.getElementById('publishToggle');
-            const badge = document.getElementById('statusBadge');
-
-            if (isPublished) {
-                toggle.classList.add('active');
-                badge.textContent = 'Published';
-                badge.className = 'status-badge published';
             } else {
-                toggle.classList.remove('active');
-                badge.textContent = 'Draft';
-                badge.className = 'status-badge draft';
+                // Clear all fields
+                document.querySelectorAll('textarea').forEach(ta => ta.value = '');
             }
+
+            // Load client quotes for reference
+            const quotes = selectedClient.quotes;
+            document.getElementById('quoteThread').innerHTML = `<div class="quote-label">Their Thread</div>${quotes.thread}`;
+            document.getElementById('quotePowers').innerHTML = `<div class="quote-label">What Feels Easy</div>${quotes.powers}`;
+            document.getElementById('quoteProblems').innerHTML = `<div class="quote-label">What Finds Them</div>${quotes.problems}`;
+            document.getElementById('quotePerception').innerHTML = `<div class="quote-label">How Others See Them</div>${quotes.perception}`;
         }
 
-        async function saveReport() {
-            const token = getAuthToken();
-            if (!token) {
-                showError('Not logged in');
+        function setupAutoSave() {
+            document.querySelectorAll('textarea').forEach(textarea => {
+                textarea.addEventListener('input', () => {
+                    clearTimeout(autoSaveTimeout);
+                    autoSaveTimeout = setTimeout(saveData, 1000);
+                });
+            });
+        }
+
+        function saveData() {
+            const clientKey = document.getElementById('clientSelect').value;
+            if (!clientKey) return;
+
+            const data = {};
+            const fields = [
+                'corePattern', 'patternExplanation', 'careerImplication',
+                'threadAnalysis', 'threadPhrase', 'threadConnection',
+                'superpower1', 'superpower2', 'superpower3', 'superpower4', 'superpowerConnection',
+                'underselling', 'reframe',
+                'careerArc', 'drains', 'charges', 'realQuestion',
+                'question1', 'question2', 'question3', 'biggerQuestion',
+                'homework1', 'homework2', 'homework3', 'homework4'
+            ];
+
+            fields.forEach(field => {
+                const el = document.getElementById(field);
+                if (el) data[field] = el.value;
+            });
+
+            localStorage.setItem(`insights_${clientKey}`, JSON.stringify(data));
+            showSaveIndicator();
+        }
+
+        function showSaveIndicator() {
+            const indicator = document.getElementById('saveIndicator');
+            indicator.classList.add('show');
+            setTimeout(() => indicator.classList.remove('show'), 2000);
+        }
+
+        function showTab(tabName) {
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+
+            event.target.classList.add('active');
+            document.getElementById(`tab-${tabName}`).classList.add('active');
+        }
+
+        function previewReport() {
+            if (!selectedClient) {
+                alert('Please select a client first');
                 return;
             }
 
-            const data = {
-                executive_summary: document.getElementById('executiveSummary').value,
-                pattern_analysis: document.getElementById('patternAnalysis').value,
-                key_strengths: document.getElementById('keyStrengths').value,
-                career_directions: document.getElementById('careerDirections').value,
-                next_steps: document.getElementById('nextSteps').value,
-                coach_notes: document.getElementById('coachNotes').value,
-                html_content: document.getElementById('htmlContent').value,
-                is_published: isPublished
-            };
+            window.open(`${selectedClient.folder}/${selectedClient.folder}_Career_Insights_Report.html`, '_blank');
+        }
 
-            try {
-                const response = await fetch(`${API_BASE}/api/crm/syp/coach/insights-reports/by-client/${clientId}/`, {
-                    method: 'POST',
-                    headers: {
-                        'Authorization': `Bearer ${token}`,
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(data)
-                });
-
-                if (response.ok) {
-                    showSaveStatus('Saved to PostgreSQL!');
-                    console.log('Report saved to PostgreSQL');
-                } else {
-                    const err = await response.json();
-                    showError(err.detail || 'Failed to save');
-                }
-            } catch (error) {
-                showError('Save failed: ' + error.message);
+        function openQuestionnaire() {
+            if (!selectedClient) {
+                alert('Please select a client first');
+                return;
             }
+
+            window.open(`questionnaire-editor.html?client_id=${selectedClient.clientId}`, '_blank');
         }
 
-        function showSaveStatus(msg) {
-            const status = document.getElementById('saveStatus');
-            status.textContent = msg;
-            status.classList.add('visible');
-            setTimeout(() => status.classList.remove('visible'), 3000);
+        function saveAndExport() {
+            if (!selectedClient) {
+                alert('Please select a client first');
+                return;
+            }
+
+            saveData();
+
+            // Get saved data
+            const clientKey = document.getElementById('clientSelect').value;
+            const savedData = JSON.parse(localStorage.getItem(`insights_${clientKey}`) || '{}');
+
+            // Generate HTML
+            const htmlContent = generateInsightsHTML(selectedClient, savedData);
+
+            // Create download
+            const blob = new Blob([htmlContent], { type: 'text/html' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `${selectedClient.folder}_Career_Insights_Report.html`;
+            a.click();
+            URL.revokeObjectURL(url);
+
+            alert(`✅ Report saved!\n\nDownloaded: ${selectedClient.folder}_Career_Insights_Report.html\n\nMove this file to the ${selectedClient.folder}/ folder to replace the existing report.`);
         }
 
-        function showError(msg) {
-            const errEl = document.getElementById('errorMsg');
-            errEl.textContent = msg;
-            errEl.style.display = 'block';
-            document.getElementById('loadingState').style.display = 'none';
-            document.getElementById('editorContent').style.display = 'block';
-        }
+        function generateInsightsHTML(client, data) {
+            const quotes = client.quotes;
 
-        // Auto-save on changes
-        let autoSaveTimeout;
-        document.querySelectorAll('textarea').forEach(el => {
-            el.addEventListener('input', () => {
-                clearTimeout(autoSaveTimeout);
-                autoSaveTimeout = setTimeout(saveReport, 3000);
-            });
-        });
+            return `<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>${client.name} - Career Insights Report | Session 2</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; line-height: 1.6; color: #2c3e50; background: linear-gradient(135deg, #7c3aed 0%, #a855f7 100%); padding: 40px 20px; }
+        .container { max-width: 900px; margin: 0 auto; background: white; border-radius: 20px; box-shadow: 0 20px 60px rgba(0,0,0,0.3); overflow: hidden; }
+        .header { background: linear-gradient(135deg, #7c3aed 0%, #a855f7 100%); color: white; padding: 60px 40px; text-align: center; }
+        .header h1 { font-size: 2.5em; font-weight: 700; margin-bottom: 10px; }
+        .header .subtitle { font-size: 1.2em; opacity: 0.9; }
+        .content { padding: 50px 40px; }
+        .section { margin-bottom: 50px; }
+        .section-title { font-size: 1.8em; font-weight: 700; color: #7c3aed; margin-bottom: 20px; padding-bottom: 10px; border-bottom: 3px solid #7c3aed; }
+        .insight-box { background: linear-gradient(135deg, #7c3aed15 0%, #a855f715 100%); padding: 30px; border-radius: 15px; border-left: 5px solid #7c3aed; margin: 20px 0; }
+        .insight-box h4 { color: #7c3aed; font-size: 1.2em; margin-bottom: 15px; }
+        .insight-box p { line-height: 1.8; margin-bottom: 10px; }
+        .highlight { background: #fff3cd; padding: 20px; border-radius: 10px; border-left: 4px solid #ffc107; margin: 20px 0; }
+        .highlight strong { color: #856404; }
+        .quote { font-style: italic; color: #7f8c8d; border-left: 3px solid #a855f7; padding-left: 15px; margin: 15px 0; }
+        .two-column { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin: 20px 0; }
+        .column-box { background: #f8f9fa; padding: 20px; border-radius: 10px; }
+        .column-box h4 { color: #a855f7; margin-bottom: 12px; }
+        .column-box.drains { background: #ffe0e0; }
+        .column-box.drains h4 { color: #c0392b; }
+        .column-box.charges { background: #e0ffe0; }
+        .column-box.charges h4 { color: #27ae60; }
+        ul, ol { margin-left: 20px; margin-top: 10px; }
+        li { margin-bottom: 8px; }
+        .key-question { background: linear-gradient(to right, #f093fb15, #f5576c15); padding: 20px; border-radius: 10px; margin: 15px 0; border-left: 4px solid #f5576c; }
+        .key-question strong { color: #f5576c; }
+        .connection-box { background: #f8f9fa; padding: 25px; border-radius: 10px; margin: 20px 0; border: 2px solid #7c3aed; }
+        .connection-box h4 { color: #7c3aed; margin-bottom: 12px; }
+        @media print { body { background: white; padding: 0; } .container { box-shadow: none; } }
+        @media (max-width: 768px) { .two-column { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>${client.name}</h1>
+            <div class="subtitle">Career Insights Report - Session 2</div>
+            <div class="subtitle" style="font-size: 0.9em; margin-top: 10px;">Pattern Analysis & Career Direction Framework</div>
+        </div>
+        <div class="content">
+            <div class="section">
+                <h2 class="section-title">📊 Executive Summary</h2>
+                <div class="insight-box">
+                    <h4>Your Core Pattern</h4>
+                    <p style="font-size: 1.1em; font-weight: 600; margin-bottom: 15px;">${data.corePattern || '[Core pattern]'}</p>
+                    <p>${data.patternExplanation || '[Pattern explanation]'}</p>
+                </div>
+                <div class="highlight">
+                    <strong>What This Means For Your Career:</strong>
+                    <p style="margin-top: 10px;">${data.careerImplication || '[Career implication]'}</p>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2 class="section-title">💡 Key Insights From Your Responses</h2>
+                <h3 style="font-size: 1.3em; color: #a855f7; margin: 25px 0 15px 0;">1. Your Unique Thread</h3>
+                <div class="insight-box">
+                    <p class="quote">${quotes.thread}</p>
+                    <p style="margin-top: 15px;">${data.threadAnalysis || '[Thread analysis]'}</p>
+                    <p style="margin-top: 15px;"><strong>The thread is:</strong> ${data.threadPhrase || '[Thread phrase]'}</p>
+                </div>
+                <div class="connection-box">
+                    <h4>🔗 Connection to Your Current Situation:</h4>
+                    <p>${data.threadConnection || '[Connection]'}</p>
+                </div>
+
+                <h3 style="font-size: 1.3em; color: #a855f7; margin: 25px 0 15px 0;">2. Your Effortless Superpowers</h3>
+                <div class="two-column">
+                    <div class="column-box"><h4>Superpower 1</h4><p>${data.superpower1 || '[Analysis]'}</p></div>
+                    <div class="column-box"><h4>Superpower 2</h4><p>${data.superpower2 || '[Analysis]'}</p></div>
+                </div>
+                <div class="two-column">
+                    <div class="column-box"><h4>Superpower 3</h4><p>${data.superpower3 || '[Analysis]'}</p></div>
+                    <div class="column-box"><h4>Superpower 4</h4><p>${data.superpower4 || '[Analysis]'}</p></div>
+                </div>
+                <div class="connection-box">
+                    <h4>🔗 Connection to Your Current Situation:</h4>
+                    <p>${data.superpowerConnection || '[Connection]'}</p>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2 class="section-title">✨ Your Underestimated Ability</h2>
+                <div class="insight-box">
+                    <p class="quote">${quotes.underselling}</p>
+                    <p style="margin-top: 15px;">${data.underselling || '[Analysis]'}</p>
+                </div>
+                <div class="highlight">
+                    <strong>The Reframe:</strong>
+                    <p style="margin-top: 10px;">${data.reframe || '[Reframe]'}</p>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2 class="section-title">🔄 Connecting to Your Current Crossroads</h2>
+                <div class="insight-box">
+                    <h4>Your Career Arc So Far:</h4>
+                    <p>${data.careerArc || '[Career arc]'}</p>
+                </div>
+                <h3 style="font-size: 1.3em; color: #a855f7; margin: 25px 0 15px 0;">The Core Tension</h3>
+                <div class="two-column">
+                    <div class="column-box drains"><h4>What Drains You</h4><p>${data.drains || '[What drains]'}</p></div>
+                    <div class="column-box charges"><h4>What Charges You</h4><p>${data.charges || '[What charges]'}</p></div>
+                </div>
+                <div class="highlight">
+                    <strong>The Question You're Really Asking:</strong>
+                    <p style="margin-top: 10px;">${data.realQuestion || '[Real question]'}</p>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2 class="section-title">❓ Key Questions For Session 2</h2>
+                <div class="key-question"><strong>1.</strong> ${data.question1 || '[Question 1]'}</div>
+                <div class="key-question"><strong>2.</strong> ${data.question2 || '[Question 2]'}</div>
+                <div class="key-question"><strong>3.</strong> ${data.question3 || '[Question 3]'}</div>
+                <div class="key-question"><strong>4. The Bigger Question:</strong> ${data.biggerQuestion || '[Bigger question]'}</div>
+            </div>
+
+            <div class="section">
+                <h2 class="section-title">📝 Homework Before Session 2</h2>
+                <div class="insight-box">
+                    <h4>1. ${data.homework1 || 'Task 1'}</h4>
+                    <h4 style="margin-top: 20px;">2. ${data.homework2 || 'Task 2'}</h4>
+                    <h4 style="margin-top: 20px;">3. ${data.homework3 || 'Task 3'}</h4>
+                    <h4 style="margin-top: 20px;">4. ${data.homework4 || 'Task 4'}</h4>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2 class="section-title">🚀 What's Next</h2>
+                <div class="connection-box">
+                    <h4>In Session 2 We'll:</h4>
+                    <ol>
+                        <li><strong>Review this report together</strong> - What resonates? What surprises you?</li>
+                        <li><strong>Walk through your homework</strong> - Explore your reflections</li>
+                        <li><strong>Build your positioning</strong> - How to articulate your unique value</li>
+                        <li><strong>Identify your deal-breakers</strong> - What's non-negotiable?</li>
+                        <li><strong>Map the path forward</strong> - Concrete next steps</li>
+                    </ol>
+                    <p style="margin-top: 20px; font-weight: 600;">By the end of Session 2, you'll have clarity on your positioning and a direction you feel excited about.</p>
+                </div>
+            </div>
+        </div>
+        <div style="text-align: center; padding: 30px; background: #f8f9fa; color: #7f8c8d; font-size: 0.9em;">
+            <p>Career Booster Programme with Lisa Gills | Harness the Spark</p>
+            <p style="margin-top: 5px;">Session 2 Preparation Document</p>
+        </div>
+    </div>
+</body>
+</html>`;
+        }
     </script>
 </body>
 </html>
