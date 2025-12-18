@@ -1,86 +1,45 @@
 <!DOCTYPE html>
-<html lang="en-GB">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CV Builder - Spark Your Potential</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Inter', sans-serif; background: #f5f5f5; min-height: 100vh; }
-
-        .app-container { display: flex; min-height: 100vh; }
-
-        /* Control Panel */
-        .control-panel {
-            width: 320px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            padding: 25px;
-            color: white;
-            overflow-y: auto;
-            position: fixed;
-            height: 100vh;
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            padding: 20px;
         }
-        .control-header { margin-bottom: 20px; }
-        .control-header h1 { font-size: 1.3em; margin-bottom: 5px; }
-        .control-header p { opacity: 0.8; font-size: 0.85em; }
-        .back-link {
-            color: #FFB627;
-            text-decoration: none;
-            font-size: 0.85em;
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            gap: 24px;
         }
-        .back-link:hover { text-decoration: underline; }
-
-        .control-section { margin-bottom: 20px; }
-        .control-title {
-            font-size: 0.75em;
-            font-weight: 700;
-            color: #FFB627;
-            margin-bottom: 10px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .export-buttons {
-            display: flex;
-            gap: 8px;
-            margin-bottom: 20px;
-            flex-wrap: wrap;
-        }
-        .export-btn {
-            flex: 1;
-            min-width: 80px;
-            padding: 10px;
-            border: 2px solid white;
-            background: transparent;
-            color: white;
-            border-radius: 6px;
-            font-weight: 600;
-            cursor: pointer;
-            font-size: 0.85em;
-            transition: all 0.2s;
-        }
-        .export-btn:hover {
+        /* Sidebar */
+        .sidebar {
             background: white;
-            color: #667eea;
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            height: fit-content;
+            position: sticky;
+            top: 20px;
         }
-        .export-btn.primary {
-            background: #FFB627;
-            border-color: #FFB627;
+        .sidebar h2 {
+            font-size: 18px;
             color: #1a1a2e;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
-        .export-btn.primary:hover {
-            background: #ffc84d;
-            border-color: #ffc84d;
-        }
-
-        /* CV Versions Section */
-        .cv-versions-section {
-            background: rgba(255,255,255,0.1);
-            border-radius: 12px;
-            padding: 15px;
-            margin-bottom: 20px;
-        }
+        /* CV Version Manager */
+        .cv-versions { margin-bottom: 24px; }
         .cv-versions-header {
             display: flex;
             justify-content: space-between;
@@ -88,647 +47,607 @@
             margin-bottom: 12px;
         }
         .cv-versions-count {
-            font-size: 0.75em;
-            opacity: 0.8;
+            font-size: 12px;
+            color: #666;
+            background: #f0f0f0;
+            padding: 4px 8px;
+            border-radius: 12px;
         }
         .cv-version-list {
             display: flex;
             flex-direction: column;
             gap: 8px;
-            margin-bottom: 12px;
+            max-height: 200px;
+            overflow-y: auto;
         }
         .cv-version-item {
             display: flex;
             align-items: center;
             gap: 8px;
             padding: 10px 12px;
-            background: rgba(255,255,255,0.1);
+            background: #f8f9fa;
             border-radius: 8px;
             cursor: pointer;
             transition: all 0.2s;
+            border: 2px solid transparent;
         }
-        .cv-version-item:hover {
-            background: rgba(255,255,255,0.2);
+        .cv-version-item:hover { background: #e9ecef; }
+        .cv-version-item.selected {
+            background: #667eea15;
+            border-color: #667eea;
         }
-        .cv-version-item.active {
-            background: rgba(255,182,39,0.3);
-            border: 1px solid #FFB627;
-        }
-        .cv-version-item .star {
-            font-size: 1em;
+        .cv-version-item.primary::before {
+            content: '⭐';
+            font-size: 12px;
         }
         .cv-version-name {
             flex: 1;
-            font-size: 0.85em;
+            font-size: 14px;
             font-weight: 500;
-        }
-        .cv-version-name input {
-            background: transparent;
-            border: none;
-            color: white;
-            font-size: 0.85em;
-            font-weight: 500;
-            width: 100%;
-            padding: 2px;
-        }
-        .cv-version-name input:focus {
-            outline: none;
-            background: rgba(255,255,255,0.2);
-            border-radius: 4px;
         }
         .cv-version-actions {
             display: flex;
             gap: 4px;
         }
-        .cv-version-btn {
-            background: transparent;
+        .cv-version-actions button {
+            background: none;
             border: none;
-            color: white;
             cursor: pointer;
             padding: 4px;
-            font-size: 0.85em;
-            opacity: 0.7;
+            font-size: 14px;
+            opacity: 0.6;
             transition: opacity 0.2s;
         }
-        .cv-version-btn:hover {
-            opacity: 1;
-        }
-        .new-cv-btn {
+        .cv-version-actions button:hover { opacity: 1; }
+        .btn-create-cv {
             width: 100%;
             padding: 10px;
-            background: rgba(255,255,255,0.15);
-            border: 2px dashed rgba(255,255,255,0.4);
+            background: #667eea;
             color: white;
+            border: none;
             border-radius: 8px;
-            font-size: 0.85em;
+            font-weight: 600;
             cursor: pointer;
-            transition: all 0.2s;
+            margin-top: 8px;
+            transition: background 0.2s;
         }
-        .new-cv-btn:hover {
-            background: rgba(255,255,255,0.25);
-            border-color: rgba(255,255,255,0.6);
-        }
-        .new-cv-btn:disabled {
-            opacity: 0.5;
+        .btn-create-cv:hover { background: #5a6fd6; }
+        .btn-create-cv:disabled {
+            background: #ccc;
             cursor: not-allowed;
         }
-
+        /* Export Buttons */
+        .export-section {
+            border-top: 1px solid #e9ecef;
+            padding-top: 20px;
+            margin-top: 20px;
+        }
+        .export-section h3 {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 12px;
+        }
+        .export-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .btn-export {
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: all 0.2s;
+        }
+        .btn-export.word {
+            background: #2b579a;
+            color: white;
+        }
+        .btn-export.word:hover { background: #1e3f6f; }
+        .btn-export.pdf {
+            background: #d32f2f;
+            color: white;
+        }
+        .btn-export.pdf:hover { background: #b71c1c; }
         /* Data Source Indicator */
         .data-source {
-            display: inline-flex;
+            display: flex;
             align-items: center;
-            gap: 5px;
-            padding: 4px 10px;
-            border-radius: 12px;
-            font-size: 0.7em;
-            font-weight: 600;
+            gap: 6px;
+            font-size: 12px;
+            padding: 6px 10px;
+            border-radius: 20px;
+            margin-bottom: 16px;
         }
         .data-source.live {
-            background: rgba(34, 197, 94, 0.2);
-            color: #4ade80;
+            background: #d4edda;
+            color: #155724;
         }
         .data-source.cached {
-            background: rgba(251, 191, 36, 0.2);
-            color: #fbbf24;
+            background: #fff3cd;
+            color: #856404;
         }
-        .data-source .dot {
-            width: 6px;
-            height: 6px;
+        .data-source::before {
+            content: '';
+            width: 8px;
+            height: 8px;
             border-radius: 50%;
-            animation: pulse 2s infinite;
         }
-        .data-source.live .dot { background: #4ade80; }
-        .data-source.cached .dot { background: #fbbf24; }
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.5; }
-        }
-
-        .hint-box {
-            background: rgba(255,255,255,0.15);
-            padding: 12px;
-            border-radius: 8px;
-            font-size: 0.8em;
-            line-height: 1.5;
-            margin-top: 15px;
-        }
-
+        .data-source.live::before { background: #28a745; }
+        .data-source.cached::before { background: #ffc107; }
         /* Main Content */
         .main-content {
-            flex: 1;
-            padding: 30px;
-            margin-left: 320px;
-            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
         }
-
-        /* CV Preview - Two Column Layout */
-        .cv-preview {
+        .card {
             background: white;
-            max-width: 900px;
-            margin: 0 auto;
-            box-shadow: 0 5px 30px rgba(0,0,0,0.15);
-            display: grid;
-            grid-template-columns: 280px 1fr;
-            min-height: 1200px;
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
         }
-
-        /* Left Column - Dark */
-        .cv-left {
-            background: #1a1a2e;
-            color: white;
-            padding: 40px 25px;
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
         }
-
-        .cv-name {
-            font-size: 1.8em;
-            font-weight: 800;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            line-height: 1.2;
-            margin-bottom: 5px;
-        }
-        .cv-title {
-            color: #FFB627;
-            font-size: 1em;
-            font-weight: 600;
-            margin-bottom: 25px;
-        }
-
-        .cv-contact-info {
-            font-size: 0.85em;
-            margin-bottom: 30px;
-            line-height: 1.8;
-            opacity: 0.9;
-        }
-        .cv-contact-info div { margin-bottom: 5px; }
-
-        .cv-left-section {
-            margin-bottom: 25px;
-        }
-        .cv-left-title {
-            font-size: 0.75em;
+        .card-title {
+            font-size: 20px;
             font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            color: #FFB627;
-            margin-bottom: 12px;
-            padding-bottom: 8px;
-            border-bottom: 1px solid rgba(255,255,255,0.2);
+            color: #1a1a2e;
         }
-
-        .cv-profile-text {
-            font-size: 0.9em;
-            line-height: 1.7;
-            opacity: 0.95;
+        /* Form Grid */
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
         }
-
-        .cv-highlights-list {
-            list-style: none;
-            font-size: 0.85em;
-            line-height: 1.6;
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
         }
-        .cv-highlights-list li {
-            margin-bottom: 12px;
-            padding-left: 15px;
+        .form-group.full-width {
+            grid-column: 1 / -1;
+        }
+        .form-group label {
+            font-size: 13px;
+            font-weight: 600;
+            color: #555;
+        }
+        .form-group input,
+        .form-group textarea {
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 14px;
+            font-family: inherit;
+            transition: border-color 0.2s;
+        }
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        .form-group textarea {
+            min-height: 80px;
+            resize: vertical;
+        }
+        /* Case Studies Section */
+        .case-studies-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 16px;
+        }
+        .case-study-card {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 16px;
+            border-left: 4px solid #667eea;
             position: relative;
         }
-        .cv-highlights-list li::before {
-            content: "→";
-            position: absolute;
-            left: 0;
-            color: #FFB627;
+        .case-study-card.hidden {
+            opacity: 0.5;
+            border-left-color: #ccc;
         }
-
-        .cv-skills-list {
+        .case-study-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 12px;
+        }
+        .case-study-title {
+            font-weight: 600;
+            color: #1a1a2e;
+        }
+        .case-study-client {
+            font-size: 13px;
+            color: #667eea;
+        }
+        .case-study-actions {
+            display: flex;
+            gap: 8px;
+        }
+        .case-study-actions button {
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 4px;
+            font-size: 16px;
+            opacity: 0.6;
+            transition: opacity 0.2s;
+        }
+        .case-study-actions button:hover { opacity: 1; }
+        .case-study-field {
+            margin-bottom: 8px;
+        }
+        .case-study-field-label {
+            font-size: 11px;
+            color: #666;
+            text-transform: uppercase;
+            font-weight: 600;
+        }
+        .case-study-field-value {
+            font-size: 13px;
+            color: #333;
+        }
+        .case-study-results {
+            color: #28a745;
+            font-weight: 600;
+        }
+        .btn-add-case-study {
+            padding: 16px;
+            border: 2px dashed #667eea;
+            border-radius: 12px;
+            background: transparent;
+            color: #667eea;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: all 0.2s;
+            min-height: 120px;
+        }
+        .btn-add-case-study:hover {
+            background: #667eea10;
+            border-style: solid;
+        }
+        /* Skills */
+        .skills-container {
             display: flex;
             flex-wrap: wrap;
             gap: 8px;
         }
-        .cv-skill-tag {
-            background: rgba(255,182,39,0.2);
-            color: #FFB627;
-            padding: 5px 10px;
-            border-radius: 4px;
-            font-size: 0.75em;
+        .skill-tag {
+            background: #667eea15;
+            color: #667eea;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 13px;
             font-weight: 500;
         }
-
-        .cv-categories-list {
-            font-size: 0.8em;
-            line-height: 1.6;
-            opacity: 0.9;
-        }
-
-        /* Right Column - Light */
-        .cv-right {
-            padding: 40px 30px;
-            background: white;
-        }
-
-        .cv-right-section {
-            margin-bottom: 30px;
-        }
-        .cv-right-title {
-            font-size: 0.7em;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            color: #667eea;
-            margin-bottom: 15px;
-            padding-bottom: 8px;
-            border-bottom: 2px solid #667eea;
-        }
-
-        /* Career Entry */
-        .career-entry {
-            margin-bottom: 25px;
-        }
-        .career-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: baseline;
-            margin-bottom: 8px;
-        }
-        .career-company {
-            font-weight: 700;
-            color: #1a1a2e;
-            font-size: 1em;
-        }
-        .career-title-role {
-            color: #667eea;
-            font-weight: 600;
-            font-size: 0.9em;
-        }
-        .career-dates {
-            color: #888;
-            font-size: 0.85em;
-        }
-        .career-intro {
-            font-style: italic;
-            color: #666;
-            margin-bottom: 10px;
-            font-size: 0.9em;
-        }
-        .career-bullets {
-            list-style: none;
-            padding: 0;
-        }
-        .career-bullets li {
-            margin-bottom: 8px;
-            padding-left: 18px;
-            position: relative;
-            font-size: 0.9em;
-            line-height: 1.5;
-            color: #444;
-        }
-        .career-bullets li::before {
-            content: "•";
-            position: absolute;
-            left: 0;
-            color: #667eea;
-            font-weight: bold;
-        }
-
-        /* Brand highlights inline */
-        .brand-highlight {
-            font-weight: 600;
-            color: #1a1a2e;
-        }
-
-        /* Education & Training */
-        .education-entry {
-            margin-bottom: 15px;
-        }
-        .education-title {
-            font-weight: 600;
-            color: #1a1a2e;
-            font-size: 0.9em;
-        }
-        .education-detail {
-            color: #666;
-            font-size: 0.85em;
-        }
-
-        /* Awards */
-        .awards-list {
-            list-style: none;
-        }
-        .awards-list li {
-            margin-bottom: 10px;
-            font-size: 0.9em;
-            color: #444;
-        }
-        .award-name {
-            font-weight: 600;
-            color: #1a1a2e;
-        }
-
-        /* Testimonials */
-        .testimonial {
-            background: #f8f9fa;
-            padding: 15px;
-            border-left: 3px solid #667eea;
-            margin-bottom: 15px;
-            border-radius: 0 8px 8px 0;
-        }
-        .testimonial-quote {
-            font-style: italic;
-            color: #444;
-            font-size: 0.9em;
-            line-height: 1.6;
-            margin-bottom: 8px;
-        }
-        .testimonial-author {
-            font-size: 0.8em;
-            color: #888;
-        }
-
-        /* Cultural Interests */
-        .interests-text {
-            font-size: 0.9em;
-            color: #555;
-            line-height: 1.6;
-        }
-
-        /* Editable styling */
-        [contenteditable="true"] {
-            border: 1px dashed transparent;
-            padding: 3px;
-            margin: -3px;
-            border-radius: 4px;
-            transition: all 0.2s;
-        }
-        [contenteditable="true"]:hover {
-            border-color: rgba(102, 126, 234, 0.4);
-            background: rgba(102, 126, 234, 0.03);
-        }
-        [contenteditable="true"]:focus {
-            outline: none;
-            border-color: #667eea;
-            background: rgba(102, 126, 234, 0.05);
-        }
-
-        /* Loading overlay */
-        .loading-overlay {
+        /* Modal */
+        .modal-overlay {
+            display: none;
             position: fixed;
             top: 0;
             left: 0;
             right: 0;
             bottom: 0;
             background: rgba(0,0,0,0.5);
-            display: flex;
-            align-items: center;
-            justify-content: center;
             z-index: 1000;
+            justify-content: center;
+            align-items: center;
         }
-        .loading-overlay.hidden { display: none; }
-        .loading-spinner {
-            width: 50px;
-            height: 50px;
-            border: 4px solid rgba(255,255,255,0.3);
-            border-top-color: #FFB627;
+        .modal-overlay.active { display: flex; }
+        .modal {
+            background: white;
+            border-radius: 16px;
+            padding: 24px;
+            width: 90%;
+            max-width: 600px;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .modal-title {
+            font-size: 20px;
+            font-weight: 700;
+        }
+        .btn-close {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: #666;
+        }
+        .modal-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid #e9ecef;
+        }
+        .btn {
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .btn-primary {
+            background: #667eea;
+            color: white;
+            border: none;
+        }
+        .btn-primary:hover { background: #5a6fd6; }
+        .btn-secondary {
+            background: white;
+            color: #666;
+            border: 1px solid #ddd;
+        }
+        .btn-secondary:hover { background: #f5f5f5; }
+        /* Loading Overlay */
+        .loading-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(255,255,255,0.9);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            gap: 16px;
+        }
+        .loading-overlay.active { display: flex; }
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #667eea;
             border-radius: 50%;
             animation: spin 1s linear infinite;
         }
         @keyframes spin {
-            to { transform: rotate(360deg); }
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
-
+        /* Back Button */
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 500;
+            margin-bottom: 20px;
+        }
+        .back-link:hover { text-decoration: underline; }
+        /* Responsive */
+        @media (max-width: 900px) {
+            .container {
+                grid-template-columns: 1fr;
+            }
+            .sidebar {
+                position: relative;
+                top: 0;
+            }
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+        }
         /* Print Styles */
         @media print {
-            .control-panel { display: none; }
-            .main-content { margin-left: 0; padding: 0; }
-            .cv-preview { box-shadow: none; max-width: none; }
-            [contenteditable="true"] { border: none !important; }
-        }
-
-        /* Responsive */
-        @media (max-width: 1000px) {
-            .app-container { flex-direction: column; }
-            .control-panel { position: relative; width: 100%; height: auto; }
-            .main-content { margin-left: 0; }
-            .cv-preview { grid-template-columns: 1fr; }
+            body { background: white; padding: 0; }
+            .sidebar, .btn-add-case-study, .case-study-actions, .back-link { display: none !important; }
+            .container { display: block; }
+            .card { box-shadow: none; border: none; padding: 0; margin-bottom: 20px; }
+            .case-study-card.hidden { display: none; }
         }
     </style>
 </head>
 <body>
-    <div class="loading-overlay" id="loadingOverlay">
-        <div class="loading-spinner"></div>
-    </div>
+    <a href="client-portal.html" class="back-link">← Back to Client Portal</a>
 
-    <div class="app-container">
-        <!-- Control Panel -->
-        <div class="control-panel">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
-                <a href="client-portal.html" class="back-link">← Back to Portal</a>
-                <span id="dataSource" class="data-source cached">
-                    <span class="dot"></span>
-                    <span>Cached</span>
-                </span>
+    <div class="container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="data-source live" id="dataSource">
+                <span>Live</span>
             </div>
 
-            <div class="control-header">
-                <h1>📝 CV Builder</h1>
-                <p>Multi-Version CV Manager</p>
-            </div>
-
-            <!-- CV Versions Manager -->
-            <div class="cv-versions-section">
+            <!-- CV Versions -->
+            <div class="cv-versions">
                 <div class="cv-versions-header">
-                    <div class="control-title" style="margin: 0;">📁 My CV Versions</div>
-                    <div class="cv-versions-count" id="versionCount">0/5</div>
+                    <h2>📁 My CVs</h2>
+                    <span class="cv-versions-count" id="cvCount">0/5</span>
                 </div>
                 <div class="cv-version-list" id="cvVersionList">
-                    <!-- CV versions will be loaded here -->
+                    <!-- CV versions will be populated here -->
                 </div>
-                <button class="new-cv-btn" id="newCvBtn" onclick="createNewCV()">
-                    + Create New CV Version
+                <button class="btn-create-cv" id="btnCreateCv" onclick="createNewCV()">
+                    + Create New CV
                 </button>
             </div>
 
-            <div class="export-buttons">
-                <button class="export-btn primary" onclick="exportWord()">📥 Word</button>
-                <button class="export-btn" onclick="exportPDF()">📄 PDF</button>
-                <button class="export-btn" onclick="saveCV()">💾 Save</button>
-            </div>
-
-            <div class="control-section">
-                <div class="control-title">✨ How to use</div>
-                <div class="hint-box">
-                    <strong>Click any text</strong> on the CV to edit it directly.<br><br>
-                    Create multiple CV versions for different roles. Mark one as ⭐ Primary.<br><br>
-                    <strong>Tip:</strong> Use Word export for recruiters and PDF for applications.
+            <!-- Export Section -->
+            <div class="export-section">
+                <h3>Export Options</h3>
+                <div class="export-buttons">
+                    <button class="btn-export word" onclick="exportWord()">
+                        📥 Download Word
+                    </button>
+                    <button class="btn-export pdf" onclick="window.print()">
+                        📄 Print / Save PDF
+                    </button>
                 </div>
             </div>
 
-            <div class="control-section">
-                <div class="control-title">📋 Sections included</div>
-                <div style="font-size: 0.8em; line-height: 1.8; opacity: 0.9;">
-                    ✓ Profile & Contact<br>
-                    ✓ Career Highlights<br>
-                    ✓ Skills & Categories<br>
-                    ✓ Career History<br>
-                    ✓ Brand Highlights<br>
-                    ✓ Academic Leadership<br>
-                    ✓ Awards & Training<br>
-                    ✓ Testimonials
-                </div>
-            </div>
-
-            <button onclick="logout()" style="width: 100%; background: rgba(255,255,255,0.15); color: white; border: 1px solid rgba(255,255,255,0.3); padding: 10px; border-radius: 8px; font-size: 0.85em; cursor: pointer; margin-top: 20px;">
-                Log out
+            <!-- Save Button -->
+            <button class="btn-primary" style="width: 100%; margin-top: 16px;" onclick="saveCV()">
+                💾 Save Changes
             </button>
-        </div>
+        </aside>
 
         <!-- Main Content -->
-        <div class="main-content">
-            <div class="cv-preview" id="cvPreview">
-                <!-- LEFT COLUMN -->
-                <div class="cv-left">
-                    <div class="cv-name" contenteditable="true" data-field="name">YOUR<br>NAME</div>
-                    <div class="cv-title" contenteditable="true" data-field="roleIdentity">ENTER YOUR TITLE</div>
-
-                    <div class="cv-contact-info" contenteditable="true" data-field="contact">
-                        <div>📞 +44 7XXX XXX XXX</div>
-                        <div>📧 your@email.com</div>
-                        <div>📍 Town, County, Post Code</div>
-                        <div>🔗 linkedin.com/in/yourprofile</div>
-                    </div>
-
-                    <div class="cv-left-section">
-                        <div class="cv-left-title">My Profile</div>
-                        <div class="cv-profile-text" contenteditable="true" data-field="fullProposition">
-                            [Write 2-3 sentences about who you are, what you do, and what makes you unique. This is your elevator pitch - make it count!]
-                        </div>
-                    </div>
-
-                    <div class="cv-left-section">
-                        <div class="cv-left-title">Career Highlights</div>
-                        <ul class="cv-highlights-list" contenteditable="true" data-field="careerBackground">
-                            <li>Wrote 9/10 pitch winning strategies at [Agency] resulting in [£X] revenue</li>
-                            <li>Building a new type of loyalty programme for [Brand]</li>
-                            <li>Created new behavioural cues for [Brand] driving [X]% ROI</li>
-                            <li>Developed DE&I programme for emerging strategy talent</li>
-                        </ul>
-                    </div>
-
-                    <div class="cv-left-section">
-                        <div class="cv-left-title">Skills</div>
-                        <div class="cv-skills-list" contenteditable="true" data-field="skills">
-                            <span class="cv-skill-tag">Brand Strategy</span>
-                            <span class="cv-skill-tag">Comms Planning</span>
-                            <span class="cv-skill-tag">Quant / Qual</span>
-                            <span class="cv-skill-tag">Team Leadership</span>
-                            <span class="cv-skill-tag">Client Relations</span>
-                            <span class="cv-skill-tag">Pitch Winning</span>
-                        </div>
-                    </div>
-
-                    <div class="cv-left-section">
-                        <div class="cv-left-title">Categories</div>
-                        <div class="cv-categories-list" contenteditable="true" data-field="whoYouServe">
-                            FMCG • Automotive • Tech • Finance • Retail • Beauty • Drinks • Telco
-                        </div>
-                    </div>
-
-                    <div class="cv-left-section">
-                        <div class="cv-left-title">Cultural Interests</div>
-                        <div class="interests-text" contenteditable="true" data-field="interests" style="font-size: 0.85em; opacity: 0.9;">
-                            [e.g., I'm a freshwater swimmer, have a passion for 70s folk music and run a local community hub]
-                        </div>
-                    </div>
+        <main class="main-content">
+            <!-- Profile Section -->
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">Profile & Positioning</h2>
                 </div>
-
-                <!-- RIGHT COLUMN -->
-                <div class="cv-right">
-                    <!-- CAREER -->
-                    <div class="cv-right-section">
-                        <div class="cv-right-title">Career</div>
-                        <div contenteditable="true" data-field="careerHistory">
-                            <div class="career-entry">
-                                <div class="career-header">
-                                    <span class="career-company">[COMPANY NAME] - <span class="career-title-role">[Title]</span></span>
-                                    <span class="career-dates">[Date] - Present</span>
-                                </div>
-                                <div class="career-intro">An opportunity to [describe why you took this role]</div>
-                                <ul class="career-bullets">
-                                    <li><span class="brand-highlight">[BRAND]</span> - Rebranding and developing their [campaign/strategy]</li>
-                                    <li><span class="brand-highlight">[BRAND]</span> - Developed acquisition and retention strategy</li>
-                                    <li><span class="brand-highlight">[BRAND]</span> - Global planning lead, catalysing disruptive campaign</li>
-                                </ul>
-                            </div>
-
-                            <div class="career-entry">
-                                <div class="career-header">
-                                    <span class="career-company">[PREVIOUS COMPANY] - <span class="career-title-role">[Title]</span></span>
-                                    <span class="career-dates">[Date] - [Date]</span>
-                                </div>
-                                <div class="career-intro">I was hired to lead the following accounts:</div>
-                                <ul class="career-bullets">
-                                    <li><span class="brand-highlight">[BRAND]</span> - [Achievement and result]</li>
-                                    <li><span class="brand-highlight">[BRAND]</span> - [Achievement and result]</li>
-                                </ul>
-                            </div>
-
-                            <div class="career-entry">
-                                <div class="career-header">
-                                    <span class="career-company">EARLY CAREER</span>
-                                    <span class="career-dates">[Year] - [Year]</span>
-                                </div>
-                                <ul class="career-bullets">
-                                    <li>[COMPANY] - [COMPANY] - [COMPANY]</li>
-                                </ul>
-                            </div>
-                        </div>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>Role Identity / Headline</label>
+                        <input type="text" id="roleIdentity" placeholder="e.g., Creative Strategy Director">
                     </div>
-
-                    <!-- BRAND HIGHLIGHTS -->
-                    <div class="cv-right-section">
-                        <div class="cv-right-title">Brand Highlights</div>
-                        <ul class="career-bullets" contenteditable="true" data-field="engineCapabilities">
-                            <li>Disrupting the [X] market through [approach] resulting in [outcome]</li>
-                            <li>Building a new type of loyalty programme for [Brand]</li>
-                            <li>Uncovering insight which led to breakthrough cultural change</li>
-                        </ul>
+                    <div class="form-group">
+                        <label>Who You Serve</label>
+                        <input type="text" id="whoYouServe" placeholder="e.g., creative teams and brands">
                     </div>
-
-                    <!-- EDUCATION -->
-                    <div class="cv-right-section">
-                        <div class="cv-right-title">Education & Training</div>
-                        <div contenteditable="true" data-field="education">
-                            <div class="education-entry">
-                                <div class="education-title">[Degree] [Subject]</div>
-                                <div class="education-detail">[University/Institution]</div>
-                            </div>
-                            <div class="education-entry">
-                                <div class="education-title">[Course Name]</div>
-                                <div class="education-detail">[Provider] • [Year]</div>
-                            </div>
-                        </div>
+                    <div class="form-group full-width">
+                        <label>What You Do</label>
+                        <textarea id="whatYouDo" placeholder="What you do for your clients/employers"></textarea>
                     </div>
-
-                    <!-- AWARDS -->
-                    <div class="cv-right-section">
-                        <div class="cv-right-title">Awards</div>
-                        <ul class="awards-list" contenteditable="true" data-field="awards">
-                            <li><span class="award-name">[Award Name]</span> - [Year]</li>
-                            <li><span class="award-name">Effies UK</span> - [Brand]: [Level]</li>
-                        </ul>
+                    <div class="form-group full-width">
+                        <label>Unique Approach</label>
+                        <textarea id="uniqueApproach" placeholder="What makes you different"></textarea>
                     </div>
-
-                    <!-- TESTIMONIALS -->
-                    <div class="cv-right-section">
-                        <div class="cv-right-title">Testimonials</div>
-                        <div contenteditable="true" data-field="testimonials">
-                            <div class="testimonial">
-                                <div class="testimonial-quote">"[Quote about your work and impact]"</div>
-                                <div class="testimonial-author">— [Name], [Title], [Company]</div>
-                            </div>
-                        </div>
+                    <div class="form-group full-width">
+                        <label>Career Background</label>
+                        <textarea id="background" placeholder="Your career journey summary"></textarea>
+                    </div>
+                    <div class="form-group full-width">
+                        <label>Where You're Heading</label>
+                        <textarea id="whereHeading" placeholder="Your aspirations and next chapter"></textarea>
                     </div>
                 </div>
             </div>
+
+            <!-- Contact Section -->
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">Contact Information</h2>
+                </div>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>Email</label>
+                        <input type="email" id="email" placeholder="your@email.com">
+                    </div>
+                    <div class="form-group">
+                        <label>Phone</label>
+                        <input type="tel" id="phone" placeholder="+44 7XXX XXX XXX">
+                    </div>
+                    <div class="form-group full-width">
+                        <label>LinkedIn URL</label>
+                        <input type="url" id="linkedin" placeholder="linkedin.com/in/yourprofile">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Skills Section -->
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">Key Skills</h2>
+                </div>
+                <div class="form-group">
+                    <label>Skills (comma-separated)</label>
+                    <input type="text" id="skills" placeholder="Strategic Planning, Team Leadership, Brand Strategy...">
+                </div>
+                <div class="skills-container" id="skillsPreview" style="margin-top: 12px;">
+                    <!-- Skills preview will appear here -->
+                </div>
+            </div>
+
+            <!-- Case Studies Section -->
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">Case Studies</h2>
+                </div>
+                <div class="case-studies-grid" id="caseStudiesGrid">
+                    <!-- Case studies will be populated here -->
+                    <button class="btn-add-case-study" onclick="openAddCaseStudyModal()">
+                        ➕ Add New Case Study
+                    </button>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Add Case Study Modal -->
+    <div class="modal-overlay" id="addCaseStudyModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 class="modal-title">Add New Case Study</h3>
+                <button class="btn-close" onclick="closeAddCaseStudyModal()">×</button>
+            </div>
+            <div class="form-grid">
+                <div class="form-group">
+                    <label>Client / Company Name *</label>
+                    <input type="text" id="csClientName" placeholder="e.g., Nike, Spotify">
+                </div>
+                <div class="form-group">
+                    <label>Project Title</label>
+                    <input type="text" id="csProjectTitle" placeholder="e.g., Brand Transformation">
+                </div>
+                <div class="form-group full-width">
+                    <label>Brief</label>
+                    <textarea id="csBrief" placeholder="What was the challenge or brief?"></textarea>
+                </div>
+                <div class="form-group full-width">
+                    <label>Research</label>
+                    <textarea id="csResearch" placeholder="What research did you conduct?"></textarea>
+                </div>
+                <div class="form-group full-width">
+                    <label>Insight</label>
+                    <textarea id="csInsight" placeholder="What key insight emerged?"></textarea>
+                </div>
+                <div class="form-group full-width">
+                    <label>Strategy</label>
+                    <textarea id="csStrategy" placeholder="What was your strategic approach?"></textarea>
+                </div>
+                <div class="form-group full-width">
+                    <label>Proposition</label>
+                    <textarea id="csProposition" placeholder="What was the core proposition?"></textarea>
+                </div>
+                <div class="form-group full-width">
+                    <label>Campaign / Execution</label>
+                    <textarea id="csCampaign" placeholder="How was it executed?"></textarea>
+                </div>
+                <div class="form-group full-width">
+                    <label>Results *</label>
+                    <textarea id="csResults" placeholder="What were the measurable outcomes?"></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeAddCaseStudyModal()">Cancel</button>
+                <button class="btn btn-primary" onclick="addCaseStudy()">Add Case Study</button>
+            </div>
         </div>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="spinner"></div>
+        <p>Loading...</p>
     </div>
 
     <script>
@@ -739,26 +658,38 @@
         // State
         let cvVersions = [];
         let selectedCvId = null;
+        let caseStudies = [];
         let isLiveData = false;
 
-        // Initialize
-        window.onload = async function() {
-            // Check authentication
-            const savedUser = localStorage.getItem('syp_user');
-            const token = localStorage.getItem('syp_token');
+        // Get token from localStorage
+        function getToken() {
+            return localStorage.getItem('syp_token');
+        }
 
-            if (!savedUser || !token) {
-                window.location.href = 'login.html';
+        // Show/hide loading
+        function showLoading() {
+            document.getElementById('loadingOverlay').classList.add('active');
+        }
+        function hideLoading() {
+            document.getElementById('loadingOverlay').classList.remove('active');
+        }
+
+        // Update data source indicator
+        function updateDataSource(live) {
+            isLiveData = live;
+            const el = document.getElementById('dataSource');
+            el.className = 'data-source ' + (live ? 'live' : 'cached');
+            el.querySelector('span').textContent = live ? 'Live' : 'Cached';
+        }
+
+        // Load CV versions from API
+        async function loadCvVersions() {
+            const token = getToken();
+            if (!token) {
+                console.log('No token, using cached data');
+                loadFromCache();
                 return;
             }
-
-            await loadCvVersions();
-            hideLoading();
-        };
-
-        // Load CV versions from PostgreSQL
-        async function loadCvVersions() {
-            const token = localStorage.getItem('syp_token');
 
             try {
                 const response = await fetch(`${API_SERVER}/api/crm/syp/blueprints/all/`, {
@@ -771,67 +702,72 @@
                 if (response.ok) {
                     const data = await response.json();
                     cvVersions = data.blueprints || [];
-                    isLiveData = true;
-                    updateDataSourceIndicator(true);
+                    updateDataSource(true);
+                    renderCvVersions();
 
-                    // Cache for offline
+                    // Cache locally
                     localStorage.setItem('syp_cv_versions', JSON.stringify(cvVersions));
+
+                    // Load selected or primary CV
+                    if (cvVersions.length > 0) {
+                        const primary = cvVersions.find(cv => cv.is_primary);
+                        selectedCvId = primary ? primary.id : cvVersions[0].id;
+                        loadCvData(selectedCvId);
+                    }
                 } else {
                     throw new Error('API error');
                 }
             } catch (error) {
-                console.warn('Failed to load from API, using cache:', error);
-                const cached = localStorage.getItem('syp_cv_versions');
-                cvVersions = cached ? JSON.parse(cached) : [];
-                isLiveData = false;
-                updateDataSourceIndicator(false);
-            }
-
-            renderCvVersions();
-
-            // Load the primary or first CV
-            const primary = cvVersions.find(cv => cv.is_primary) || cvVersions[0];
-            if (primary) {
-                await selectCV(primary.id);
+                console.error('Failed to load from API:', error);
+                loadFromCache();
             }
         }
 
-        // Render CV versions list
+        // Load from localStorage cache
+        function loadFromCache() {
+            updateDataSource(false);
+            const cached = localStorage.getItem('syp_cv_versions');
+            if (cached) {
+                cvVersions = JSON.parse(cached);
+                renderCvVersions();
+                if (cvVersions.length > 0) {
+                    selectedCvId = cvVersions[0].id;
+                    loadCvData(selectedCvId);
+                }
+            }
+        }
+
+        // Render CV version list
         function renderCvVersions() {
             const list = document.getElementById('cvVersionList');
-            const countEl = document.getElementById('versionCount');
-            const newBtn = document.getElementById('newCvBtn');
-
-            countEl.textContent = `${cvVersions.length}/${MAX_CV_VERSIONS}`;
-            newBtn.disabled = cvVersions.length >= MAX_CV_VERSIONS;
-
-            if (cvVersions.length === 0) {
-                list.innerHTML = '<div style="text-align: center; opacity: 0.7; font-size: 0.85em; padding: 15px;">No CV versions yet. Create your first one!</div>';
-                return;
-            }
+            document.getElementById('cvCount').textContent = `${cvVersions.length}/${MAX_CV_VERSIONS}`;
+            document.getElementById('btnCreateCv').disabled = cvVersions.length >= MAX_CV_VERSIONS;
 
             list.innerHTML = cvVersions.map(cv => `
-                <div class="cv-version-item ${cv.id === selectedCvId ? 'active' : ''}" onclick="selectCV(${cv.id})">
-                    <span class="star" onclick="event.stopPropagation(); setPrimary(${cv.id})">${cv.is_primary ? '⭐' : '☆'}</span>
-                    <div class="cv-version-name">
-                        <span id="cvName_${cv.id}">${cv.name}</span>
-                    </div>
+                <div class="cv-version-item ${cv.id === selectedCvId ? 'selected' : ''} ${cv.is_primary ? 'primary' : ''}"
+                     onclick="selectCv(${cv.id})">
+                    <span class="cv-version-name">${cv.name}</span>
                     <div class="cv-version-actions">
-                        <button class="cv-version-btn" onclick="event.stopPropagation(); renameCV(${cv.id})" title="Rename">✏️</button>
-                        <button class="cv-version-btn" onclick="event.stopPropagation(); duplicateCV(${cv.id})" title="Duplicate">📋</button>
-                        ${!cv.is_primary ? `<button class="cv-version-btn" onclick="event.stopPropagation(); deleteCV(${cv.id})" title="Delete">🗑️</button>` : ''}
+                        <button onclick="event.stopPropagation(); renameCv(${cv.id})" title="Rename">✏️</button>
+                        <button onclick="event.stopPropagation(); duplicateCv(${cv.id})" title="Duplicate">📋</button>
+                        ${!cv.is_primary ? `<button onclick="event.stopPropagation(); deleteCv(${cv.id})" title="Delete">🗑️</button>` : ''}
+                        ${!cv.is_primary ? `<button onclick="event.stopPropagation(); setPrimary(${cv.id})" title="Set as Primary">⭐</button>` : ''}
                     </div>
                 </div>
             `).join('');
         }
 
         // Select a CV version
-        async function selectCV(cvId) {
-            showLoading();
+        async function selectCv(cvId) {
             selectedCvId = cvId;
             renderCvVersions();
+            await loadCvData(cvId);
+        }
 
-            const token = localStorage.getItem('syp_token');
+        // Load CV data for editing
+        async function loadCvData(cvId) {
+            showLoading();
+            const token = getToken();
 
             try {
                 const response = await fetch(`${API_SERVER}/api/crm/syp/blueprints/${cvId}/`, {
@@ -842,64 +778,305 @@
                 });
 
                 if (response.ok) {
-                    const cvData = await response.json();
-                    loadCvDataIntoEditor(cvData);
+                    const data = await response.json();
+                    populateForm(data);
+                    localStorage.setItem(`syp_cv_data_${cvId}`, JSON.stringify(data));
+                } else {
+                    throw new Error('Failed to load CV');
                 }
             } catch (error) {
-                console.error('Error loading CV:', error);
+                console.error('Load CV error:', error);
+                // Try cache
+                const cached = localStorage.getItem(`syp_cv_data_${cvId}`);
+                if (cached) {
+                    populateForm(JSON.parse(cached));
+                }
             }
 
             hideLoading();
         }
 
-        // Load CV data into the editor
-        function loadCvDataIntoEditor(cvData) {
-            // Map API fields to editor fields
-            const fieldMappings = {
-                'name': cvData.name || 'YOUR NAME',
-                'roleIdentity': cvData.role_identity || 'ENTER YOUR TITLE',
-                'fullProposition': cvData.full_proposition || '',
-                'careerBackground': cvData.career_background || '',
-                'skills': cvData.skills ? cvData.skills.join(', ') : '',
-                'whoYouServe': cvData.who_you_serve || '',
-                'engineCapabilities': cvData.engine_capabilities ? cvData.engine_capabilities.join('\n') : '',
-            };
+        // Populate form with CV data
+        function populateForm(data) {
+            document.getElementById('roleIdentity').value = data.role_identity || '';
+            document.getElementById('whatYouDo').value = data.what_you_do || '';
+            document.getElementById('whoYouServe').value = data.who_you_serve || '';
+            document.getElementById('uniqueApproach').value = data.unique_approach || '';
+            document.getElementById('background').value = data.career_background || '';
+            document.getElementById('whereHeading').value = data.where_heading || '';
 
-            // Update editable fields
-            document.querySelectorAll('[data-field]').forEach(el => {
-                const field = el.getAttribute('data-field');
-                if (fieldMappings[field]) {
-                    el.innerHTML = fieldMappings[field];
-                }
-            });
+            // Skills
+            const skills = data.skills || [];
+            document.getElementById('skills').value = skills.join(', ');
+            renderSkillsPreview();
 
-            // Load full HTML content if available
-            const savedHtml = localStorage.getItem(`syp_cv_html_${cvData.id}`);
-            if (savedHtml) {
-                document.getElementById('cvPreview').innerHTML = savedHtml;
+            // Case studies from career_evidence
+            caseStudies = (data.career_evidence || []).map((e, i) => ({
+                id: e.id || `evidence-${i}`,
+                clientName: e.company || '',
+                projectTitle: e.role_title || `${e.company} Project`,
+                brief: e.challenge || '',
+                results: e.result || '',
+                isVisible: true
+            }));
+
+            renderCaseStudies();
+        }
+
+        // Render skills preview
+        function renderSkillsPreview() {
+            const input = document.getElementById('skills').value;
+            const skills = input.split(',').map(s => s.trim()).filter(s => s);
+            document.getElementById('skillsPreview').innerHTML = skills.map(s =>
+                `<span class="skill-tag">${s}</span>`
+            ).join('');
+        }
+
+        // Add event listener for skills input
+        document.getElementById('skills').addEventListener('input', renderSkillsPreview);
+
+        // Render case studies
+        function renderCaseStudies() {
+            const grid = document.getElementById('caseStudiesGrid');
+            const cards = caseStudies.map((cs, index) => `
+                <div class="case-study-card ${cs.isVisible ? '' : 'hidden'}">
+                    <div class="case-study-header">
+                        <div>
+                            <div class="case-study-title">${cs.projectTitle || cs.clientName}</div>
+                            <div class="case-study-client">${cs.clientName}</div>
+                        </div>
+                        <div class="case-study-actions">
+                            <button onclick="toggleCaseStudyVisibility(${index})" title="${cs.isVisible ? 'Hide' : 'Show'}">
+                                ${cs.isVisible ? '👁️' : '👁️‍🗨️'}
+                            </button>
+                            <button onclick="deleteCaseStudy(${index})" title="Delete">🗑️</button>
+                        </div>
+                    </div>
+                    ${cs.brief ? `<div class="case-study-field"><span class="case-study-field-label">Brief</span><div class="case-study-field-value">${cs.brief}</div></div>` : ''}
+                    ${cs.insight ? `<div class="case-study-field"><span class="case-study-field-label">Insight</span><div class="case-study-field-value">${cs.insight}</div></div>` : ''}
+                    ${cs.strategy ? `<div class="case-study-field"><span class="case-study-field-label">Strategy</span><div class="case-study-field-value">${cs.strategy}</div></div>` : ''}
+                    ${cs.campaign ? `<div class="case-study-field"><span class="case-study-field-label">Campaign</span><div class="case-study-field-value">${cs.campaign}</div></div>` : ''}
+                    ${cs.results ? `<div class="case-study-field"><span class="case-study-field-label">Results</span><div class="case-study-field-value case-study-results">${cs.results}</div></div>` : ''}
+                </div>
+            `).join('');
+
+            grid.innerHTML = cards + `
+                <button class="btn-add-case-study" onclick="openAddCaseStudyModal()">
+                    ➕ Add New Case Study
+                </button>
+            `;
+        }
+
+        // Toggle case study visibility
+        function toggleCaseStudyVisibility(index) {
+            caseStudies[index].isVisible = !caseStudies[index].isVisible;
+            renderCaseStudies();
+        }
+
+        // Delete case study
+        function deleteCaseStudy(index) {
+            if (confirm('Delete this case study?')) {
+                caseStudies.splice(index, 1);
+                renderCaseStudies();
             }
         }
 
-        // Save current CV
-        async function saveCV() {
-            if (!selectedCvId) {
-                alert('Please select or create a CV first');
+        // Open add case study modal
+        function openAddCaseStudyModal() {
+            document.getElementById('addCaseStudyModal').classList.add('active');
+            // Clear form
+            ['csClientName', 'csProjectTitle', 'csBrief', 'csResearch', 'csInsight',
+             'csStrategy', 'csProposition', 'csCampaign', 'csResults'].forEach(id => {
+                document.getElementById(id).value = '';
+            });
+        }
+
+        // Close add case study modal
+        function closeAddCaseStudyModal() {
+            document.getElementById('addCaseStudyModal').classList.remove('active');
+        }
+
+        // Add case study
+        function addCaseStudy() {
+            const clientName = document.getElementById('csClientName').value.trim();
+            if (!clientName) {
+                alert('Please enter a client/company name');
                 return;
             }
 
+            const newCaseStudy = {
+                id: `custom-${Date.now()}`,
+                clientName: clientName,
+                projectTitle: document.getElementById('csProjectTitle').value.trim() || clientName,
+                brief: document.getElementById('csBrief').value.trim(),
+                research: document.getElementById('csResearch').value.trim(),
+                insight: document.getElementById('csInsight').value.trim(),
+                strategy: document.getElementById('csStrategy').value.trim(),
+                proposition: document.getElementById('csProposition').value.trim(),
+                campaign: document.getElementById('csCampaign').value.trim(),
+                results: document.getElementById('csResults').value.trim(),
+                isVisible: true
+            };
+
+            caseStudies.push(newCaseStudy);
+            renderCaseStudies();
+            closeAddCaseStudyModal();
+        }
+
+        // Create new CV
+        async function createNewCV() {
+            const name = prompt('Enter a name for your new CV (e.g., "Tech Industry CV"):');
+            if (!name || !name.trim()) return;
+
             showLoading();
-            const token = localStorage.getItem('syp_token');
-            const cvContent = document.getElementById('cvPreview').innerHTML;
+            const token = getToken();
 
-            // Save HTML to localStorage
-            localStorage.setItem(`syp_cv_html_${selectedCvId}`, cvContent);
+            try {
+                const response = await fetch(`${API_SERVER}/api/crm/syp/blueprints/`, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ name: name.trim() })
+                });
 
-            // Extract data from editor
+                if (response.ok) {
+                    await loadCvVersions();
+                } else {
+                    const data = await response.json();
+                    alert(data.error || 'Failed to create CV');
+                }
+            } catch (error) {
+                console.error('Create CV error:', error);
+                alert('Failed to create CV. Please try again.');
+            }
+
+            hideLoading();
+        }
+
+        // Rename CV
+        async function renameCv(cvId) {
+            const cv = cvVersions.find(v => v.id === cvId);
+            const newName = prompt('Enter new name:', cv?.name || '');
+            if (!newName || !newName.trim()) return;
+
+            showLoading();
+            const token = getToken();
+
+            try {
+                const response = await fetch(`${API_SERVER}/api/crm/syp/blueprints/${cvId}/rename/`, {
+                    method: 'PATCH',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ name: newName.trim() })
+                });
+
+                if (response.ok) {
+                    await loadCvVersions();
+                } else {
+                    alert('Failed to rename CV');
+                }
+            } catch (error) {
+                console.error('Rename error:', error);
+            }
+
+            hideLoading();
+        }
+
+        // Duplicate CV
+        async function duplicateCv(cvId) {
+            showLoading();
+            const token = getToken();
+
+            try {
+                const response = await fetch(`${API_SERVER}/api/crm/syp/blueprints/${cvId}/duplicate/`, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                if (response.ok) {
+                    await loadCvVersions();
+                } else {
+                    alert('Failed to duplicate CV');
+                }
+            } catch (error) {
+                console.error('Duplicate error:', error);
+            }
+
+            hideLoading();
+        }
+
+        // Delete CV
+        async function deleteCv(cvId) {
+            if (!confirm('Delete this CV version? This cannot be undone.')) return;
+
+            showLoading();
+            const token = getToken();
+
+            try {
+                const response = await fetch(`${API_SERVER}/api/crm/syp/blueprints/${cvId}/`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+
+                if (response.ok) {
+                    await loadCvVersions();
+                } else {
+                    alert('Failed to delete CV');
+                }
+            } catch (error) {
+                console.error('Delete error:', error);
+            }
+
+            hideLoading();
+        }
+
+        // Set CV as primary
+        async function setPrimary(cvId) {
+            showLoading();
+            const token = getToken();
+
+            try {
+                const response = await fetch(`${API_SERVER}/api/crm/syp/blueprints/${cvId}/set-primary/`, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+
+                if (response.ok) {
+                    await loadCvVersions();
+                } else {
+                    alert('Failed to set as primary');
+                }
+            } catch (error) {
+                console.error('Set primary error:', error);
+            }
+
+            hideLoading();
+        }
+
+        // Save CV
+        async function saveCV() {
+            showLoading();
+            const token = getToken();
+
             const cvData = {
-                role_identity: document.querySelector('[data-field="roleIdentity"]')?.innerText || '',
-                full_proposition: document.querySelector('[data-field="fullProposition"]')?.innerText || '',
-                career_background: document.querySelector('[data-field="careerBackground"]')?.innerText || '',
-                who_you_serve: document.querySelector('[data-field="whoYouServe"]')?.innerText || '',
+                role_identity: document.getElementById('roleIdentity').value,
+                what_you_do: document.getElementById('whatYouDo').value,
+                who_you_serve: document.getElementById('whoYouServe').value,
+                unique_approach: document.getElementById('uniqueApproach').value,
+                career_background: document.getElementById('background').value,
+                where_heading: document.getElementById('whereHeading').value,
+                skills: document.getElementById('skills').value.split(',').map(s => s.trim()).filter(s => s)
             };
 
             try {
@@ -913,272 +1090,125 @@
                 });
 
                 if (response.ok) {
-                    alert('✓ CV saved to PostgreSQL!');
+                    alert('CV saved successfully!');
+                    // Update cache
+                    localStorage.setItem(`syp_cv_data_${selectedCvId}`, JSON.stringify(cvData));
                 } else {
-                    throw new Error('Save failed');
+                    alert('Failed to save CV');
                 }
             } catch (error) {
                 console.error('Save error:', error);
-                alert('✓ CV saved locally (offline mode)');
+                alert('Failed to save. Changes cached locally.');
+                localStorage.setItem(`syp_cv_data_${selectedCvId}`, JSON.stringify(cvData));
             }
 
             hideLoading();
         }
 
-        // Create new CV
-        async function createNewCV() {
-            if (cvVersions.length >= MAX_CV_VERSIONS) {
-                alert(`Maximum ${MAX_CV_VERSIONS} CV versions allowed`);
-                return;
-            }
-
-            const name = prompt('Enter a name for your new CV:', `CV Version ${cvVersions.length + 1}`);
-            if (!name) return;
-
-            showLoading();
-            const token = localStorage.getItem('syp_token');
-
-            try {
-                const response = await fetch(`${API_SERVER}/api/crm/syp/blueprints/create-new/`, {
-                    method: 'POST',
-                    headers: {
-                        'Authorization': `Bearer ${token}`,
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ name })
-                });
-
-                if (response.ok) {
-                    const newCv = await response.json();
-                    cvVersions.push(newCv);
-                    localStorage.setItem('syp_cv_versions', JSON.stringify(cvVersions));
-                    await selectCV(newCv.id);
-                    renderCvVersions();
-                } else {
-                    throw new Error('Create failed');
-                }
-            } catch (error) {
-                console.error('Create error:', error);
-                alert('Failed to create CV. Please try again.');
-            }
-
-            hideLoading();
-        }
-
-        // Rename CV
-        async function renameCV(cvId) {
-            const cv = cvVersions.find(c => c.id === cvId);
-            const newName = prompt('Enter new name:', cv?.name || '');
-            if (!newName || newName === cv?.name) return;
-
-            showLoading();
-            const token = localStorage.getItem('syp_token');
-
-            try {
-                const response = await fetch(`${API_SERVER}/api/crm/syp/blueprints/${cvId}/rename/`, {
-                    method: 'PATCH',
-                    headers: {
-                        'Authorization': `Bearer ${token}`,
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ name: newName })
-                });
-
-                if (response.ok) {
-                    const updated = await response.json();
-                    const index = cvVersions.findIndex(c => c.id === cvId);
-                    if (index >= 0) cvVersions[index] = updated;
-                    localStorage.setItem('syp_cv_versions', JSON.stringify(cvVersions));
-                    renderCvVersions();
-                }
-            } catch (error) {
-                console.error('Rename error:', error);
-            }
-
-            hideLoading();
-        }
-
-        // Duplicate CV
-        async function duplicateCV(cvId) {
-            if (cvVersions.length >= MAX_CV_VERSIONS) {
-                alert(`Maximum ${MAX_CV_VERSIONS} CV versions allowed`);
-                return;
-            }
-
-            const cv = cvVersions.find(c => c.id === cvId);
-            const newName = prompt('Enter name for the copy:', `${cv?.name || 'CV'} (Copy)`);
-            if (!newName) return;
-
-            showLoading();
-            const token = localStorage.getItem('syp_token');
-
-            try {
-                const response = await fetch(`${API_SERVER}/api/crm/syp/blueprints/${cvId}/duplicate/`, {
-                    method: 'POST',
-                    headers: {
-                        'Authorization': `Bearer ${token}`,
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ name: newName })
-                });
-
-                if (response.ok) {
-                    const newCv = await response.json();
-                    cvVersions.push(newCv);
-                    localStorage.setItem('syp_cv_versions', JSON.stringify(cvVersions));
-                    renderCvVersions();
-                }
-            } catch (error) {
-                console.error('Duplicate error:', error);
-            }
-
-            hideLoading();
-        }
-
-        // Delete CV
-        async function deleteCV(cvId) {
-            const cv = cvVersions.find(c => c.id === cvId);
-            if (!confirm(`Are you sure you want to delete "${cv?.name}"?`)) return;
-
-            showLoading();
-            const token = localStorage.getItem('syp_token');
-
-            try {
-                const response = await fetch(`${API_SERVER}/api/crm/syp/blueprints/${cvId}/`, {
-                    method: 'DELETE',
-                    headers: {
-                        'Authorization': `Bearer ${token}`
-                    }
-                });
-
-                if (response.ok) {
-                    cvVersions = cvVersions.filter(c => c.id !== cvId);
-                    localStorage.setItem('syp_cv_versions', JSON.stringify(cvVersions));
-                    localStorage.removeItem(`syp_cv_html_${cvId}`);
-
-                    if (selectedCvId === cvId) {
-                        selectedCvId = cvVersions[0]?.id || null;
-                        if (selectedCvId) await selectCV(selectedCvId);
-                    }
-                    renderCvVersions();
-                }
-            } catch (error) {
-                console.error('Delete error:', error);
-            }
-
-            hideLoading();
-        }
-
-        // Set primary CV
-        async function setPrimary(cvId) {
-            showLoading();
-            const token = localStorage.getItem('syp_token');
-
-            try {
-                const response = await fetch(`${API_SERVER}/api/crm/syp/blueprints/${cvId}/set-primary/`, {
-                    method: 'POST',
-                    headers: {
-                        'Authorization': `Bearer ${token}`,
-                        'Content-Type': 'application/json'
-                    }
-                });
-
-                if (response.ok) {
-                    cvVersions.forEach(cv => cv.is_primary = (cv.id === cvId));
-                    localStorage.setItem('syp_cv_versions', JSON.stringify(cvVersions));
-                    renderCvVersions();
-                }
-            } catch (error) {
-                console.error('Set primary error:', error);
-            }
-
-            hideLoading();
-        }
-
-        // Export as Word
+        // Export to Word
         function exportWord() {
-            const cvContent = document.getElementById('cvPreview').innerHTML;
-            const cv = cvVersions.find(c => c.id === selectedCvId);
-            const cvName = cv?.name?.replace(/\s+/g, '_') || 'CV';
+            const visibleCaseStudies = caseStudies.filter(cs => cs.isVisible);
+            const roleIdentity = document.getElementById('roleIdentity').value;
+            const whatYouDo = document.getElementById('whatYouDo').value;
+            const whoYouServe = document.getElementById('whoYouServe').value;
+            const uniqueApproach = document.getElementById('uniqueApproach').value;
+            const background = document.getElementById('background').value;
+            const whereHeading = document.getElementById('whereHeading').value;
+            const email = document.getElementById('email').value;
+            const phone = document.getElementById('phone').value;
+            const linkedin = document.getElementById('linkedin').value;
+            const skillsInput = document.getElementById('skills').value;
+            const skills = skillsInput.split(',').map(s => s.trim()).filter(s => s);
 
-            const html = `
-                <html xmlns:o="urn:schemas-microsoft-com:office:office"
-                      xmlns:w="urn:schemas-microsoft-com:office:word"
-                      xmlns="http://www.w3.org/TR/REC-html40">
-                <head>
-                    <meta charset="utf-8">
-                    <title>${cvName}</title>
-                    <style>
-                        body { font-family: 'Calibri', sans-serif; }
-                        .cv-preview { display: block; }
-                        .cv-left { background: #1a1a2e; color: white; padding: 30px; }
-                        .cv-right { padding: 30px; }
-                        .cv-name { font-size: 24pt; font-weight: bold; }
-                        .cv-title { color: #FFB627; font-size: 14pt; }
-                        .cv-left-title, .cv-right-title { font-weight: bold; margin-top: 20px; color: #667eea; border-bottom: 1px solid #667eea; }
-                        .career-company { font-weight: bold; }
-                        .cv-skill-tag { background: #f0f0f0; padding: 2px 8px; margin: 2px; display: inline-block; }
-                        .testimonial { background: #f8f9fa; padding: 15px; border-left: 3px solid #667eea; margin: 10px 0; }
-                    </style>
-                </head>
-                <body>
-                    ${cvContent}
-                </body>
-                </html>
-            `;
+            const fullProfile = `I'm a ${roleIdentity} who ${whatYouDo} for ${whoYouServe}. I ${uniqueApproach}. After ${background}, I'm now ${whereHeading}.`;
 
-            const blob = new Blob([html], { type: 'application/msword' });
+            const wordHtml = `
+<!DOCTYPE html>
+<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word" xmlns="http://www.w3.org/TR/REC-html40">
+<head>
+<meta charset="utf-8">
+<title>CV</title>
+<!--[if gte mso 9]>
+<xml>
+<w:WordDocument>
+<w:View>Print</w:View>
+<w:Zoom>100</w:Zoom>
+</w:WordDocument>
+</xml>
+<![endif]-->
+<style>
+  @page { margin: 2cm; }
+  body { font-family: 'Calibri', sans-serif; font-size: 11pt; line-height: 1.5; color: #333; }
+  h1 { font-size: 24pt; margin-bottom: 0; color: #1a1a1a; }
+  h2 { font-size: 14pt; color: #667eea; border-bottom: 2px solid #667eea; padding-bottom: 4pt; margin-top: 18pt; }
+  h3 { font-size: 12pt; color: #1a1a1a; margin-bottom: 4pt; }
+  .headline { font-size: 12pt; color: #667eea; margin-bottom: 8pt; }
+  .contact { font-size: 10pt; color: #666; margin-bottom: 16pt; }
+  .profile { font-size: 11pt; line-height: 1.6; margin-bottom: 16pt; }
+  .case-study { margin-bottom: 16pt; padding: 12pt; background: #f9f9f9; border-left: 3px solid #667eea; }
+  .case-study-title { font-weight: bold; color: #1a1a1a; }
+  .case-study-client { color: #667eea; font-size: 10pt; }
+  .result { color: #28a745; font-weight: bold; }
+</style>
+</head>
+<body>
+<h1>${roleIdentity}</h1>
+<p class="headline">${whatYouDo} for ${whoYouServe}</p>
+<p class="contact">📧 ${email} | 📱 ${phone} | 🔗 ${linkedin}</p>
+
+<h2>Profile</h2>
+<p class="profile">${fullProfile}</p>
+
+<h2>Key Skills</h2>
+<p>${skills.join(' • ')}</p>
+
+<h2>Case Studies</h2>
+${visibleCaseStudies.map(cs => `
+<div class="case-study">
+  <p class="case-study-title">${cs.projectTitle}</p>
+  <p class="case-study-client">${cs.clientName}</p>
+  ${cs.brief ? `<p><strong>Brief:</strong> ${cs.brief}</p>` : ''}
+  ${cs.research ? `<p><strong>Research:</strong> ${cs.research}</p>` : ''}
+  ${cs.insight ? `<p><strong>Insight:</strong> ${cs.insight}</p>` : ''}
+  ${cs.strategy ? `<p><strong>Strategy:</strong> ${cs.strategy}</p>` : ''}
+  ${cs.proposition ? `<p><strong>Proposition:</strong> ${cs.proposition}</p>` : ''}
+  ${cs.campaign ? `<p><strong>Campaign:</strong> ${cs.campaign}</p>` : ''}
+  ${cs.results ? `<p><strong>Results:</strong> <span class="result">${cs.results}</span></p>` : ''}
+</div>
+`).join('')}
+</body>
+</html>`;
+
+            const blob = new Blob([wordHtml], { type: 'application/msword' });
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = `${cvName}.doc`;
+
+            // Include CV version name in filename
+            const selectedCv = cvVersions.find(cv => cv.id === selectedCvId);
+            const cvName = selectedCv ? selectedCv.name.replace(/\s+/g, '_') : 'CV';
+            a.download = `${cvName}_CV.doc`;
+
             document.body.appendChild(a);
             a.click();
             document.body.removeChild(a);
             URL.revokeObjectURL(url);
         }
 
-        // Export as PDF
-        function exportPDF() {
-            document.querySelector('.control-panel').style.display = 'none';
-            document.querySelector('.main-content').style.marginLeft = '0';
-
-            window.print();
-
-            setTimeout(() => {
-                document.querySelector('.control-panel').style.display = 'block';
-                document.querySelector('.main-content').style.marginLeft = '320px';
-            }, 100);
-        }
-
-        // Update data source indicator
-        function updateDataSourceIndicator(isLive) {
-            const indicator = document.getElementById('dataSource');
-            if (isLive) {
-                indicator.className = 'data-source live';
-                indicator.innerHTML = '<span class="dot"></span><span>Live</span>';
-            } else {
-                indicator.className = 'data-source cached';
-                indicator.innerHTML = '<span class="dot"></span><span>Cached</span>';
+        // Initialize on page load
+        window.onload = function() {
+            const token = getToken();
+            if (!token) {
+                // Check if we should redirect to login
+                const clientEmail = localStorage.getItem('syp_client_email');
+                if (!clientEmail) {
+                    window.location.href = 'login.html';
+                    return;
+                }
             }
-        }
 
-        // Loading helpers
-        function showLoading() {
-            document.getElementById('loadingOverlay').classList.remove('hidden');
-        }
-        function hideLoading() {
-            document.getElementById('loadingOverlay').classList.add('hidden');
-        }
-
-        // Logout
-        function logout() {
-            if (confirm('Are you sure you want to log out?')) {
-                localStorage.removeItem('syp_user');
-                localStorage.removeItem('syp_token');
-                window.location.href = 'login.html';
-            }
-        }
+            loadCvVersions();
+        };
     </script>
 </body>
 </html>
