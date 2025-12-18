@@ -824,7 +824,15 @@
 
         let data = {};
 
-        // Get user ID from localStorage
+        // PostgreSQL sync utility
+        const API_BASE = 'https://sparkhub-be-qtmmb.ondigitalocean.app';
+        const EXERCISE_TYPE = 'energy';
+
+        function getAuthToken() {
+            return localStorage.getItem('syp_token');
+        }
+
+        // Get user ID from localStorage (for backwards compatibility)
         function getUserId() {
             const user = localStorage.getItem('syp_user');
             if (user) {
@@ -833,28 +841,61 @@
             return 'anonymous';
         }
 
-        // Load saved data
-        function loadSavedData() {
+        // Load saved data from PostgreSQL (with localStorage fallback)
+        async function loadSavedData() {
+            const token = getAuthToken();
+
+            // Try PostgreSQL first
+            if (token) {
+                try {
+                    const response = await fetch(`${API_BASE}/api/crm/syp/exercises/${EXERCISE_TYPE}/`, {
+                        method: 'GET',
+                        headers: {
+                            'Authorization': `Bearer ${token}`,
+                            'Content-Type': 'application/json'
+                        }
+                    });
+
+                    if (response.ok) {
+                        const result = await response.json();
+                        const parsed = result.data || {};
+                        applyLoadedData(parsed);
+                        // Update localStorage cache
+                        localStorage.setItem('fuelling_spark_' + getUserId(), JSON.stringify(parsed));
+                        console.log('✅ Energy data loaded from PostgreSQL');
+                        return;
+                    }
+                } catch (error) {
+                    console.log('⚠️ PostgreSQL unavailable, using localStorage:', error.message);
+                }
+            }
+
+            // Fallback to localStorage
             const saved = localStorage.getItem('fuelling_spark_' + getUserId());
             if (saved) {
                 const parsed = JSON.parse(saved);
-                if (parsed.slots) slots = parsed.slots;
-                if (parsed.data) data = parsed.data;
-                if (parsed.categories) {
-                    document.getElementById('drainsList').value = parsed.categories.drains || '';
-                    document.getElementById('costsList').value = parsed.categories.costs || '';
-                    document.getElementById('fuelsList').value = parsed.categories.fuels || '';
-                }
-                if (parsed.failsafes) {
-                    document.getElementById('failsafe1').value = parsed.failsafes[0] || '';
-                    document.getElementById('failsafe2').value = parsed.failsafes[1] || '';
-                    document.getElementById('failsafe3').value = parsed.failsafes[2] || '';
-                }
+                applyLoadedData(parsed);
+                console.log('📦 Energy data loaded from localStorage cache');
             }
         }
 
-        // Save data
-        function saveDay() {
+        function applyLoadedData(parsed) {
+            if (parsed.slots) slots = parsed.slots;
+            if (parsed.data) data = parsed.data;
+            if (parsed.categories) {
+                document.getElementById('drainsList').value = parsed.categories.drains || '';
+                document.getElementById('costsList').value = parsed.categories.costs || '';
+                document.getElementById('fuelsList').value = parsed.categories.fuels || '';
+            }
+            if (parsed.failsafes) {
+                document.getElementById('failsafe1').value = parsed.failsafes[0] || '';
+                document.getElementById('failsafe2').value = parsed.failsafes[1] || '';
+                document.getElementById('failsafe3').value = parsed.failsafes[2] || '';
+            }
+        }
+
+        // Save data to PostgreSQL (with localStorage backup)
+        async function saveDay() {
             const saveData = {
                 slots: slots,
                 data: data,
@@ -870,11 +911,37 @@
                 ],
                 savedAt: new Date().toISOString()
             };
+
+            // Always save to localStorage first
             localStorage.setItem('fuelling_spark_' + getUserId(), JSON.stringify(saveData));
 
-            // Show save status
             const status = document.getElementById('saveStatus');
-            status.textContent = '✓ Saved!';
+            const token = getAuthToken();
+
+            if (token) {
+                try {
+                    const response = await fetch(`${API_BASE}/api/crm/syp/exercises/${EXERCISE_TYPE}/`, {
+                        method: 'POST',
+                        headers: {
+                            'Authorization': `Bearer ${token}`,
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ data: saveData })
+                    });
+
+                    if (response.ok) {
+                        console.log('✅ Energy data saved to PostgreSQL');
+                        status.textContent = '✓ Saved to cloud!';
+                        setTimeout(() => { status.textContent = ''; }, 2000);
+                        return;
+                    }
+                } catch (error) {
+                    console.log('⚠️ PostgreSQL save failed:', error.message);
+                }
+            }
+
+            // Show local save status
+            status.textContent = '✓ Saved locally';
             setTimeout(() => { status.textContent = ''; }, 2000);
         }
 

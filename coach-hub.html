@@ -1364,6 +1364,70 @@
         </div>
     </div>
 
+    <!-- Client Notes Modal -->
+    <div class="modal-overlay" id="notesModal">
+        <div class="modal" style="max-width: 600px;">
+            <h2>📝 Session Notes</h2>
+            <p style="color: var(--text-muted); margin-bottom: 15px;">
+                Notes for <strong id="notesClientName">Client</strong>
+            </p>
+            <div class="form-group">
+                <label>Session Notes</label>
+                <textarea id="clientNotes" placeholder="Add notes from your coaching sessions..." style="min-height: 200px; width: 100%; padding: 12px; border: 2px solid #e0e0e0; border-radius: 10px; font-family: inherit; resize: vertical;"></textarea>
+            </div>
+            <div class="form-group">
+                <label>Key Insights</label>
+                <textarea id="clientInsights" placeholder="What patterns or insights have you noticed?" style="min-height: 100px; width: 100%; padding: 12px; border: 2px solid #e0e0e0; border-radius: 10px; font-family: inherit; resize: vertical;"></textarea>
+            </div>
+            <div class="form-group">
+                <label>Next Steps</label>
+                <textarea id="clientNextSteps" placeholder="Actions or goals for next session..." style="min-height: 80px; width: 100%; padding: 12px; border: 2px solid #e0e0e0; border-radius: 10px; font-family: inherit; resize: vertical;"></textarea>
+            </div>
+            <div class="modal-actions">
+                <button class="btn-cancel" onclick="closeNotesModal()">Cancel</button>
+                <button class="btn-save" onclick="saveClientNotes()">💾 Save Notes</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Client Modal -->
+    <div class="modal-overlay" id="editClientModal">
+        <div class="modal">
+            <h2>✏️ Edit Client</h2>
+            <div class="form-group">
+                <label>Full Name</label>
+                <input type="text" id="editClientName" placeholder="e.g. John Smith">
+            </div>
+            <div class="form-group">
+                <label>Email</label>
+                <input type="email" id="editClientEmail" placeholder="e.g. john@example.com">
+            </div>
+            <div class="form-group">
+                <label>Programme</label>
+                <select id="editClientProgramme">
+                    <option value="career">💼 Career Booster</option>
+                    <option value="audhd">🧠 AuDHD Coaching</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Current Stage</label>
+                <select id="editClientStage">
+                    <option value="discovery">Discovery</option>
+                    <option value="week-1">Week 1</option>
+                    <option value="week-2">Week 2</option>
+                    <option value="week-3">Week 3</option>
+                    <option value="week-4">Week 4</option>
+                    <option value="complete">Complete</option>
+                </select>
+            </div>
+            <input type="hidden" id="editClientId">
+            <div class="modal-actions">
+                <button class="btn-cancel" onclick="closeEditClientModal()">Cancel</button>
+                <button class="btn-save" onclick="saveEditedClient()">💾 Save Changes</button>
+            </div>
+        </div>
+    </div>
+
     <script>
         // Config
         const API_BASE = 'https://sparkhub-be-qtmmb.ondigitalocean.app';
@@ -1763,9 +1827,44 @@
 
         function openNotes(clientId) {
             const client = clients.find(c => c.id === clientId) || selectedClient;
-            if (client) {
-                alert('Notes feature coming soon for ' + (client.full_name || client.name));
+            if (!client) return;
+
+            selectedClient = client;
+            document.getElementById('notesClientName').textContent = client.full_name || client.name;
+
+            // Load saved notes from localStorage
+            const savedNotes = localStorage.getItem(`coach_notes_${clientId}`);
+            if (savedNotes) {
+                const notes = JSON.parse(savedNotes);
+                document.getElementById('clientNotes').value = notes.notes || '';
+                document.getElementById('clientInsights').value = notes.insights || '';
+                document.getElementById('clientNextSteps').value = notes.nextSteps || '';
+            } else {
+                document.getElementById('clientNotes').value = '';
+                document.getElementById('clientInsights').value = '';
+                document.getElementById('clientNextSteps').value = '';
             }
+
+            document.getElementById('notesModal').classList.add('active');
+        }
+
+        function closeNotesModal() {
+            document.getElementById('notesModal').classList.remove('active');
+        }
+
+        function saveClientNotes() {
+            if (!selectedClient) return;
+
+            const notes = {
+                notes: document.getElementById('clientNotes').value,
+                insights: document.getElementById('clientInsights').value,
+                nextSteps: document.getElementById('clientNextSteps').value,
+                updatedAt: new Date().toISOString()
+            };
+
+            localStorage.setItem(`coach_notes_${selectedClient.id}`, JSON.stringify(notes));
+            closeNotesModal();
+            alert('✅ Notes saved for ' + (selectedClient.full_name || selectedClient.name));
         }
 
         function openDocs(clientId) {
@@ -1777,16 +1876,90 @@
 
         function openSchedule(clientId) {
             const client = clients.find(c => c.id === clientId) || selectedClient;
-            if (client) {
-                alert('Schedule feature coming soon for ' + (client.full_name || client.name));
-            }
+            if (!client) return;
+
+            selectedClient = client;
+
+            // Open schedule modal with client pre-selected
+            const select = document.getElementById('sessionClient');
+            select.value = clientId;
+
+            // Set default date to tomorrow
+            const tomorrow = new Date();
+            tomorrow.setDate(tomorrow.getDate() + 1);
+            document.getElementById('sessionDate').value = tomorrow.toISOString().split('T')[0];
+
+            document.getElementById('scheduleModal').classList.add('active');
         }
 
         function editClient(clientId) {
             const client = clients.find(c => c.id === clientId);
-            if (client) {
-                alert('Edit feature coming soon for ' + (client.full_name || client.name));
+            if (!client) return;
+
+            selectedClient = client;
+
+            // Populate form
+            document.getElementById('editClientId').value = client.id;
+            document.getElementById('editClientName').value = client.full_name || client.name || '';
+            document.getElementById('editClientEmail').value = client.email || '';
+            document.getElementById('editClientProgramme').value = client.programme_type || 'career';
+            document.getElementById('editClientStage').value = client.stage || 'discovery';
+
+            document.getElementById('editClientModal').classList.add('active');
+        }
+
+        function closeEditClientModal() {
+            document.getElementById('editClientModal').classList.remove('active');
+        }
+
+        async function saveEditedClient() {
+            const clientId = document.getElementById('editClientId').value;
+            const name = document.getElementById('editClientName').value.trim();
+            const email = document.getElementById('editClientEmail').value.trim();
+            const programme = document.getElementById('editClientProgramme').value;
+            const stage = document.getElementById('editClientStage').value;
+
+            if (!name || !email) {
+                alert('Please fill in name and email');
+                return;
             }
+
+            // Update locally
+            const clientIndex = clients.findIndex(c => c.id == clientId);
+            if (clientIndex > -1) {
+                clients[clientIndex].full_name = name;
+                clients[clientIndex].name = name;
+                clients[clientIndex].email = email;
+                clients[clientIndex].programme_type = programme;
+                clients[clientIndex].stage = stage;
+            }
+
+            // Try to save to API
+            try {
+                const response = await fetch(`${API_BASE}/api/crm/syp/clients/${clientId}/`, {
+                    method: 'PATCH',
+                    headers: {
+                        'Authorization': `Token ${authToken}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        full_name: name,
+                        email: email,
+                        programme_type: programme,
+                        stage: stage
+                    })
+                });
+
+                if (!response.ok) {
+                    console.log('API update failed, saved locally');
+                }
+            } catch (error) {
+                console.log('API unavailable, saved locally');
+            }
+
+            closeEditClientModal();
+            renderClients();
+            alert('✅ Client updated!');
         }
 
         // Add Client Modal
