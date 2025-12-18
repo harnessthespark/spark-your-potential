@@ -1973,16 +1973,7 @@
             progressFill.style.width = '0%';
 
             try {
-                // For now, since this is a static site, we'll create download links
-                // In production, you'd upload to the backend API
-
-                // Simulate progress
-                for (let i = 0; i <= 100; i += 10) {
-                    progressFill.style.width = i + '%';
-                    await new Promise(resolve => setTimeout(resolve, 100));
-                }
-
-                // Create the expected filename
+                // Document type labels for filenames
                 const docTypeLabels = {
                     'agreement': 'Coaching_Agreement',
                     'notes': 'Session_Notes',
@@ -1990,13 +1981,56 @@
                     'cv': 'Interactive_CV_Builder',
                     'decision': 'Decision_Framework',
                     'mapping': 'Mapping_Guide',
+                    'questionnaire': 'Questionnaire_Responses',
                     'other': 'Document'
                 };
 
                 const expectedFilename = `${folder}_${docTypeLabels[docType]}`;
+                let uploadedCount = 0;
 
-                // For static site, create download links for the files
-                // In production, this would upload to backend
+                for (const file of uploadedFiles) {
+                    // Read file content for small files (HTML, text)
+                    let fileContent = '';
+                    if (file.size < 500000 && (file.name.endsWith('.html') || file.name.endsWith('.txt'))) {
+                        fileContent = await readFileAsText(file);
+                    }
+
+                    // Upload to PostgreSQL API
+                    try {
+                        const response = await fetch(`${API_BASE}/api/crm/syp/coach/client-documents/`, {
+                            method: 'POST',
+                            headers: {
+                                'Authorization': `Token ${authToken}`,
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify({
+                                client_id: selectedClient.id,
+                                document_type: docType,
+                                original_filename: file.name,
+                                stored_filename: `${expectedFilename}.${file.name.split('.').pop()}`,
+                                file_path: `${folder}/${expectedFilename}.${file.name.split('.').pop()}`,
+                                file_size: file.size,
+                                mime_type: file.type || 'application/octet-stream',
+                                file_content: fileContent,
+                                description: `Uploaded via Coach Hub on ${new Date().toLocaleDateString('en-GB')}`
+                            })
+                        });
+
+                        if (response.ok) {
+                            uploadedCount++;
+                            console.log('✅ Document saved to PostgreSQL:', file.name);
+                        } else {
+                            console.error('❌ Failed to save to PostgreSQL:', await response.text());
+                        }
+                    } catch (apiError) {
+                        console.error('API error:', apiError);
+                    }
+
+                    // Update progress
+                    progressFill.style.width = `${(uploadedCount / uploadedFiles.length) * 100}%`;
+                }
+
+                // Also create local download for the file
                 uploadedFiles.forEach(file => {
                     // Store file info in localStorage for reference
                     const uploads = JSON.parse(localStorage.getItem('syp_uploads') || '[]');
@@ -2007,26 +2041,16 @@
                         docType: docType,
                         originalName: file.name,
                         expectedPath: `${folder}/${expectedFilename}.${file.name.split('.').pop()}`,
-                        uploadedAt: new Date().toISOString()
+                        uploadedAt: new Date().toISOString(),
+                        savedToPostgres: true
                     });
                     localStorage.setItem('syp_uploads', JSON.stringify(uploads));
 
-                    // Create a download link so user can save the file
-                    const blob = file;
-                    const url = URL.createObjectURL(blob);
+                    // Create a download link so user can save the file locally too
+                    const url = URL.createObjectURL(file);
                     const a = document.createElement('a');
                     a.href = url;
                     a.download = `${expectedFilename}.${file.name.split('.').pop()}`;
-
-                    // Show instructions
-                    document.getElementById('uploadSuccessMessage').innerHTML = `
-                        File ready! Save it to:<br>
-                        <code style="background: #E5E7EB; padding: 4px 8px; border-radius: 4px; font-size: 0.85em;">
-                            ${folder}/${expectedFilename}.${file.name.split('.').pop()}
-                        </code>
-                    `;
-
-                    // Auto-download the renamed file
                     document.body.appendChild(a);
                     a.click();
                     document.body.removeChild(a);
@@ -2036,6 +2060,10 @@
                 // Show success
                 document.getElementById('uploadProgress').classList.remove('active');
                 document.getElementById('uploadSuccess').classList.add('active');
+                document.getElementById('uploadSuccessMessage').innerHTML = `
+                    ✅ Saved to PostgreSQL!<br>
+                    <small>Also downloaded for local backup</small>
+                `;
 
                 // Close modal after delay
                 setTimeout(() => {
@@ -2048,6 +2076,16 @@
                 document.getElementById('uploadProgress').classList.remove('active');
                 document.getElementById('uploadSubmitBtn').disabled = false;
             }
+        }
+
+        // Helper to read file as text
+        function readFileAsText(file) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onload = (e) => resolve(e.target.result);
+                reader.onerror = (e) => reject(e);
+                reader.readAsText(file);
+            });
         }
 
         // Drag and drop support
