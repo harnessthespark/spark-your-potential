@@ -1278,6 +1278,96 @@
         saveIndicator.textContent = '✓ Saved';
         document.body.appendChild(saveIndicator);
 
+        // Client-specific data - load pre-filled responses for known clients
+        const CLIENT_DATA = {
+            'rs@rajsamuel.net': {
+                'Outcome #1': `AMV/BBDO was the biggest agency in the UK - but they were getting systematically locked out of digital pitches. Clients saw them as TV craft specialists. Great at TV. Shit at digital. BT Digital was one of the rare pitches they even got invited to. They brought me in as a freelance planning director specifically for that pitch. We won it.
+
+And then the real work started - because we'd promised digital capabilities we didn't actually have yet. We had to build them while delivering. What agency leadership couldn't see at first was that the real threat wasn't "we don't have digital departments" - it was that we'd stopped living in culture while everyone else was already there.
+
+After the BT win, I became Board Account Planner, then Co-Innovation Director. Spent five years building what we'd promised: new departments, new ways of working, shifting our pitch pipeline from 90% TV to 60% integrated/digital.`,
+                'Outcome #2': `Fallon brought me in to do the digital strategy for Cadbury. The creative team had come up with this absolutely insane idea - a drumming gorilla. No chocolate. No bite. Just a gorilla, Phil Collins' "In the Air Tonight," and pure joy. The client was terrified.
+
+They kept saying this would make Cadbury a "content company" - which sounded adventurous but they didn't actually know what that meant. So I reframed it. I told them: this ad isn't the content strategy. It's an invitation. It's a promise that says "we have more fun like this coming" - and people will come searching for it.
+
+The workshop created belief. Showed them proof of what could happen. Gave them the courage to actually run the thing. And then yeah, the ad became one of the most famous campaigns of the 2000s.`,
+                'Outcome #3': `2020-2022. Joined Arley's as Brand Director - plant-based food startup, crowded market, needed to build the entire brand from zero.
+
+What I uncovered through research across five markets was the "comfort paradox": 73% of flexitarian consumers actually wanted familiarity over innovation. Everyone in the category was chasing "the future" when the real opportunity was "the familiar, but better."
+
+What came naturally was doing the cultural research that revealed this counterintuitive insight, then translating it into a brand story that investors and retailers immediately understood. We weren't selling disruption - we were selling comfort you could feel good about. Secured listings with three major retailers in 12 months and attracted £1.2M in pre-launch revenue.`,
+                'Outcome #4': `Malice Arts - 2014-2019. First one was Malice in Wonderland - took the original story and turned it into a horror experience. The Malice name stuck. The idea was always about adding darkness to existing themes, twisting things people knew into something new.
+
+Ten immersive events. 5,000+ guests across the series. 85% return rates. Secured brand sponsorships. Genuine press coverage.
+
+What I proved was that when you create worlds people want to enter - not just events they attend - they come back and bring friends. Audiences don't just want to be entertained, they want to be transported. They're hungry for experiences that respect their intelligence and give them agency within a crafted narrative.`,
+                'Outcome #5': `Lemons.life - Met Alex. Her husband had died young - suddenly faced with sorting out wills, financial planning, all of it while grieving. The system was broken, especially for women. We decided to co-found something to fix it.
+
+I went and found a wills company that does white labelling. Game changer. Because now we could own the customer data. This was our saving grace. Now we had a reason to build a real brand and own the customer relationship.
+
+What I noticed early - and what others initially missed - was that the real story wasn't about death at all. It was about women's financial vulnerability. The massive gaps in planning for life transitions. The Quilter partnership came through and now the mission feels complete. Quilter's investing. They're providing female financial advisers. Women selling to women.`,
+                'The Thread': `I spot the cultural-emotional truth hiding beneath the business problem - the thing people sense but can't articulate yet.
+
+Everyone else sees the surface. I see what's actually underneath:
+• AMV: "We need digital departments" → No, you've stopped living in culture
+• Cadbury: "We're becoming a content company" → No, this ad is an invitation for more
+• Arley's: "Plant-based = the future" → No, flexitarians want the familiar, done better
+
+Then I make that truth tangible. Sometimes through strategic reframing, sometimes through research that reveals invisible patterns, sometimes through creating proof that builds belief.
+
+The unlock is always about giving people permission - permission to be brave, to reframe the problem, to see a bigger opportunity than they thought existed. I'm making the invisible visible.`,
+                'When You Knew Before You Knew': `AMV/BT pitch. I'm transitioning from account management to planner - trying to prove myself in a new role. And we're going after BT's first big digital account.
+
+I'm looking at BT and something just clicks. They're a tech company stuck in the old days - calls are still massive revenue, so they're clinging to it. But their own broadband users are doing way bigger things than BT is doing as a brand.
+
+In the pitch, I showed them where the world was heading. Then showed them the moment they'd become irrelevant if they didn't shift. We were up against pure digital agencies. We won.
+
+I knew before I could prove it that BT's problem wasn't needing digital tactics - it was being culturally stuck while their own customers had already moved on.`,
+                'The Questions Only You Ask': `I'm always asking about culture, emotion, play, and fun - looking for opportunities to leverage these that others don't see.
+
+The questions that come up for me:
+• "How can we make this about the audience, not just the brand?"
+• "Where's the opportunity for play and interaction here?"
+• "What would this look like if we gave people agency instead of just messaging at them?"
+• "What's the cultural truth underneath this business problem?"
+• "Where has culture already moved that this brand hasn't caught up to yet?"`,
+                'What You Notice First': `The gap between what's being said and what's actually true. The disconnect between where people think they are and where culture has already moved to.
+
+I notice when someone's stuck and hasn't realised it yet. I notice when a brief is about the wrong problem. I notice when there's a bigger opportunity hiding underneath what's been asked for.
+
+In a room, I notice who's actually engaged versus performing engagement. I notice the idea that scared people - because that's usually the one worth fighting for.`,
+                'What Feels Easy to You': `Pattern recognition. I walk into a room, hear the brief, and I just see where the mismatch is. Doesn't feel like heavy analysis - more like pattern recognition.
+
+Connecting disparate things. Pop culture, human behaviour, brand problems, entertainment - I weave these together without thinking about it.
+
+Translating complex stuff into simple stuff. Once I see the pattern, making it obvious to everyone else feels straightforward. I don't overcomplicate - I clarify.
+
+Giving people permission. The unlock is always about showing them they can be braver than they thought.`,
+                'The "Of Course" Moments': `After we won the BT pitch and the agency started transforming: "Of course we needed to live in culture, not just hire digital people."
+
+After Gorilla launched: "Of course this was an invitation, not just an ad."
+
+After the Arley's research: "Of course flexitarians want comfort, not disruption."
+
+After Lemons reframed: "Of course the opportunity is women's financial security, not just wills."
+
+Every time, the insight feels inevitable afterwards. But it wasn't visible until I made it visible.`,
+                'Before': `Stuck. Something feels off but they can't name it. They're solving the wrong problem, or they've got courage but no clear direction, or they're seeing the surface when the opportunity is underneath.`,
+                'After': `Clarity. Permission. Belief. They see what was invisible before - and more importantly, they can now act on it. The path forward becomes obvious.`
+            }
+        };
+
+        // Check if user is a known client and load their data
+        const clientEmail = localStorage.getItem('syp_client_email');
+        if (clientEmail && CLIENT_DATA[clientEmail]) {
+            const data = CLIENT_DATA[clientEmail];
+            // Store in localStorage so form fields pick it up
+            Object.keys(data).forEach(key => {
+                localStorage.setItem('ability_' + key, data[key]);
+            });
+            console.log('Loaded data for client:', clientEmail);
+        }
+
         // Auto-save to localStorage with visual feedback
         document.querySelectorAll('textarea, input').forEach(element => {
             element.addEventListener('input', function() {
