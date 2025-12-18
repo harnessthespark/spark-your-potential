@@ -708,6 +708,13 @@
                     <button class="tool-btn" onclick="openTool('ignition')">Open First Aid Kit</button>
                 </div>
 
+                <!-- Boundaries & Communication Toolkit -->
+                <div class="tool-card" style="border: 2px solid #10B981;">
+                    <h4>🤝 Boundaries & Communication</h4>
+                    <p>Define your values, set boundaries, and get scripts for tricky conversations. Navigate relationships as your authentic self.</p>
+                    <button class="tool-btn" onclick="openTool('relationships')" style="background: linear-gradient(135deg, #10B981 0%, #059669 100%);">Open Toolkit</button>
+                </div>
+
                 <!-- Session Notes - Coach Only -->
                 <div class="tool-card coach-only" id="sessionNotesTool" style="display: none; border: 2px solid #8B5CF6;">
                     <h4>📝 Session Notes</h4>
@@ -942,13 +949,14 @@
             if (savedUser) {
                 currentUser = JSON.parse(savedUser);
 
-                // Check if user has AuDHD access (career users also allowed)
-                const hasAccess = currentUser.programme_access === 'audhd' ||
-                                 currentUser.programme_access === 'both' ||
-                                 currentUser.programme_access === 'career' ||
-                                 currentUser.isStaff;
+                // Check if user has access - coaches (is_staff) or AuDHD clients
+                const isCoach = currentUser.is_staff || currentUser.isStaff || currentUser.is_superuser;
+                const programmeType = currentUser.programme_type || currentUser.programme_access;
+                const hasClientAccess = programmeType === 'audhd' ||
+                                       programmeType === 'both' ||
+                                       programmeType === 'career';
 
-                if (hasAccess) {
+                if (isCoach || hasClientAccess) {
                     showDashboard();
                 } else {
                     // No access - clear and redirect
@@ -962,15 +970,20 @@
             }
         };
 
+        // Helper to check if user is coach (handles both snake_case and camelCase)
+        function isCoachUser() {
+            return currentUser && (currentUser.is_staff || currentUser.isStaff || currentUser.is_superuser);
+        }
+
         async function showDashboard() {
-            document.getElementById('userName').textContent = `Welcome, ${currentUser.name || currentUser.email}`;
+            document.getElementById('userName').textContent = `Welcome, ${currentUser.name || currentUser.firstName || currentUser.email}`;
             document.getElementById('userEmail').textContent = currentUser.email;
 
             // Load client data from PostgreSQL (syncs with coach portal)
             await loadClientData();
 
             // Show coach notes if Lisa
-            if (currentUser.isStaff) {
+            if (isCoachUser()) {
                 document.getElementById('coachNotes').style.display = 'block';
             }
 
@@ -1212,7 +1225,7 @@
             loadClientData();
 
             // Show coach features if Lisa
-            if (currentUser.isStaff) {
+            if (isCoachUser()) {
                 document.getElementById('coachNotes').style.display = 'block';
                 document.getElementById('coachCalendar').style.display = 'block';
                 document.getElementById('sessionNotesTool').style.display = 'block';
@@ -1257,7 +1270,7 @@
         };
 
         function loadGamificationData() {
-            const key = currentUser.isStaff ? 'coach_gamification' : 'audhd_gamification_' + currentUser.id;
+            const key = isCoachUser() ? 'coach_gamification' : 'audhd_gamification_' + currentUser.id;
             const saved = localStorage.getItem(key);
             if (saved) {
                 gamificationData = JSON.parse(saved);
@@ -1275,19 +1288,19 @@
             updateGamificationUI();
 
             // Show coach accountability if staff
-            if (currentUser.isStaff) {
+            if (isCoachUser()) {
                 document.getElementById('coachAccountability').style.display = 'block';
                 updateCoachStats();
             }
         }
 
         async function saveGamificationData() {
-            const key = currentUser.isStaff ? 'coach_gamification' : 'audhd_gamification_' + currentUser.id;
+            const key = isCoachUser() ? 'coach_gamification' : 'audhd_gamification_' + currentUser.id;
             localStorage.setItem(key, JSON.stringify(gamificationData));
 
             // Also save to PostgreSQL (syncs with coach portal)
             const token = localStorage.getItem('syp_token');
-            if (token && !currentUser.isStaff) {
+            if (token && !isCoachUser()) {
                 try {
                     await fetch('https://sparkhub-be-qtmmb.ondigitalocean.app/api/crm/syp/clients/update-progress/', {
                         method: 'PATCH',
@@ -1597,6 +1610,10 @@
                     window.open('spark-ignition.html', '_blank');
                     addSparks(2, 'Used Spark Ignition');
                     break;
+                case 'relationships':
+                    window.open('audhd-relationships.html', '_blank');
+                    addSparks(3, 'Explored Boundaries & Communication');
+                    break;
                 case 'braindump':
                     window.open('audhd-braindump.html', '_blank');
                     addSparks(3, 'Used Brain Dump Box');
@@ -1621,7 +1638,7 @@
             addSparks(10, 'Completed a session');
 
             // Update coach stats
-            if (currentUser.isStaff) {
+            if (isCoachUser()) {
                 gamificationData.coachStats.sessionsThisWeek++;
                 saveGamificationData();
                 updateCoachStats();
@@ -1634,7 +1651,7 @@
             saveClientData();
 
             // Track coach notes
-            if (currentUser.isStaff) {
+            if (isCoachUser()) {
                 gamificationData.coachStats.notesWritten++;
                 saveGamificationData();
                 updateCoachStats();

@@ -1286,8 +1286,14 @@
 
             // Auto-save on input change (debounced)
             let saveTimeout;
-            document.querySelectorAll('textarea, input[type="range"]').forEach(el => {
+            document.querySelectorAll('textarea, input[type="range"], input[type="text"], input[type="checkbox"]').forEach(el => {
                 el.addEventListener('input', () => {
+                    clearTimeout(saveTimeout);
+                    saveTimeout = setTimeout(() => {
+                        localStorage.setItem(STORAGE_KEY, JSON.stringify(collectData()));
+                    }, 1000);
+                });
+                el.addEventListener('change', () => {
                     clearTimeout(saveTimeout);
                     saveTimeout = setTimeout(() => {
                         localStorage.setItem(STORAGE_KEY, JSON.stringify(collectData()));
