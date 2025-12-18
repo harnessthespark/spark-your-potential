@@ -497,6 +497,9 @@
     </div>
 
     <script>
+        // API Configuration
+        const API_BASE = 'https://sparkhub-be-qtmmb.ondigitalocean.app';
+
         // Data structure
         let data = {
             unsorted: [],
@@ -506,25 +509,97 @@
             delete: []
         };
 
-        // Load saved data
-        function loadData() {
+        // Get auth token from localStorage
+        function getAuthToken() {
+            return localStorage.getItem('syp_token');
+        }
+
+        // Load saved data from PostgreSQL (with localStorage fallback)
+        async function loadData() {
+            const token = getAuthToken();
+
+            // Try PostgreSQL first
+            if (token) {
+                try {
+                    const response = await fetch(`${API_BASE}/api/crm/syp/braindump/`, {
+                        method: 'GET',
+                        headers: {
+                            'Authorization': `Token ${token}`,
+                            'Content-Type': 'application/json'
+                        }
+                    });
+
+                    if (response.ok) {
+                        const result = await response.json();
+                        // Map snake_case from API to camelCase for frontend
+                        data = {
+                            unsorted: result.unsorted || [],
+                            doNow: result.do_now || [],
+                            doLater: result.do_later || [],
+                            delegate: result.delegate || [],
+                            delete: result.delete || []
+                        };
+                        // Update localStorage cache
+                        localStorage.setItem('audhd_braindump', JSON.stringify(data));
+                        console.log('✅ Brain dump loaded from PostgreSQL');
+                        renderAll();
+                        return;
+                    }
+                } catch (error) {
+                    console.log('⚠️ PostgreSQL unavailable, using localStorage:', error.message);
+                }
+            }
+
+            // Fallback to localStorage
             const saved = localStorage.getItem('audhd_braindump');
             if (saved) {
                 data = JSON.parse(saved);
+                console.log('📦 Brain dump loaded from localStorage cache');
                 renderAll();
             }
         }
 
-        // Save data
-        function saveData() {
+        // Save data to PostgreSQL (with localStorage backup)
+        async function saveData() {
+            // Always save to localStorage first (instant, reliable)
             localStorage.setItem('audhd_braindump', JSON.stringify(data));
-            showSaveConfirmation();
+
+            const token = getAuthToken();
+            if (token) {
+                try {
+                    const response = await fetch(`${API_BASE}/api/crm/syp/braindump/`, {
+                        method: 'POST',
+                        headers: {
+                            'Authorization': `Token ${token}`,
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            unsorted: data.unsorted,
+                            doNow: data.doNow,
+                            doLater: data.doLater,
+                            delegate: data.delegate,
+                            delete: data.delete
+                        })
+                    });
+
+                    if (response.ok) {
+                        console.log('✅ Brain dump saved to PostgreSQL');
+                        showSaveConfirmation('✅ Saved to cloud!');
+                        return;
+                    }
+                } catch (error) {
+                    console.log('⚠️ PostgreSQL save failed, data cached locally:', error.message);
+                }
+            }
+
+            // Show local save confirmation
+            showSaveConfirmation('💾 Saved locally');
         }
 
-        function showSaveConfirmation() {
+        function showSaveConfirmation(message = '✅ Saved!') {
             const btn = document.querySelector('.action-btn.save');
             const originalText = btn.innerHTML;
-            btn.innerHTML = '✅ Saved!';
+            btn.innerHTML = message;
             btn.style.background = '#16a34a';
             setTimeout(() => {
                 btn.innerHTML = originalText;

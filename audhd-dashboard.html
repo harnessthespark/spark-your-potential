@@ -716,6 +716,68 @@
             </div>
         </div>
 
+        <!-- Actions & Goals Section -->
+        <div class="actions-goals-section" style="background: white; border-radius: 16px; padding: 25px; margin-bottom: 25px; box-shadow: 0 2px 10px rgba(0,0,0,0.08);">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                <h3 style="color: #2d1b4e; margin: 0; font-size: 1.2em;">🎯 My Actions & Goals</h3>
+                <button id="addActionBtn" onclick="openActionEditor()" style="display: none; background: linear-gradient(135deg, #8B5CF6 0%, #6D28D9 100%); color: white; border: none; padding: 8px 16px; border-radius: 8px; font-size: 0.85em; cursor: pointer;">➕ Add</button>
+            </div>
+
+            <!-- Session Summaries -->
+            <div id="sessionSummaries">
+                <!-- Populated by JS -->
+            </div>
+
+            <!-- Empty State -->
+            <div id="emptyActionsState" style="text-align: center; padding: 30px; color: #888;">
+                <div style="font-size: 2em; margin-bottom: 10px;">📋</div>
+                <p style="margin: 0;">Your actions and goals from each session will appear here.</p>
+                <p style="margin: 5px 0 0 0; font-size: 0.9em;">Complete sessions to unlock your personalised action plan!</p>
+            </div>
+        </div>
+
+        <!-- Action Editor Modal (Coach Only) -->
+        <div id="actionEditorModal" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.7); z-index: 1000; padding: 20px; overflow-y: auto;">
+            <div style="max-width: 600px; margin: 40px auto; background: white; border-radius: 20px; padding: 30px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                    <h2 style="color: #2d1b4e; margin: 0;">📝 Add Session Summary</h2>
+                    <button onclick="closeActionEditor()" style="background: none; border: none; font-size: 1.5em; cursor: pointer; color: #888;">×</button>
+                </div>
+
+                <!-- Session Selector -->
+                <div style="margin-bottom: 20px;">
+                    <label style="display: block; color: #555; font-weight: 600; margin-bottom: 8px;">Session:</label>
+                    <select id="actionSessionSelect" style="width: 100%; padding: 12px; border: 2px solid #e0e0e0; border-radius: 10px; font-size: 1em;">
+                        <!-- Populated by JS -->
+                    </select>
+                </div>
+
+                <!-- Key Takeaways -->
+                <div style="margin-bottom: 20px;">
+                    <label style="display: block; color: #555; font-weight: 600; margin-bottom: 8px;">💡 Key Takeaways:</label>
+                    <textarea id="actionTakeaways" placeholder="What were the main insights from this session?" style="width: 100%; min-height: 80px; padding: 12px; border: 2px solid #e0e0e0; border-radius: 10px; font-family: inherit; resize: vertical;"></textarea>
+                </div>
+
+                <!-- Actions -->
+                <div style="margin-bottom: 20px;">
+                    <label style="display: block; color: #555; font-weight: 600; margin-bottom: 8px;">✅ Actions (one per line):</label>
+                    <textarea id="actionActions" placeholder="Try the 5-minute timer technique&#10;Use the Brain Dump Box when overwhelmed&#10;Schedule 2 breaks in your calendar" style="width: 100%; min-height: 100px; padding: 12px; border: 2px solid #e0e0e0; border-radius: 10px; font-family: inherit; resize: vertical;"></textarea>
+                </div>
+
+                <!-- Goals -->
+                <div style="margin-bottom: 20px;">
+                    <label style="display: block; color: #555; font-weight: 600; margin-bottom: 8px;">🎯 Goals for Next Session:</label>
+                    <textarea id="actionGoals" placeholder="What do you want to have achieved by next session?" style="width: 100%; min-height: 80px; padding: 12px; border: 2px solid #e0e0e0; border-radius: 10px; font-family: inherit; resize: vertical;"></textarea>
+                </div>
+
+                <!-- Save Button -->
+                <div style="display: flex; gap: 10px; justify-content: flex-end;">
+                    <button onclick="closeActionEditor()" style="padding: 12px 25px; border: 2px solid #e0e0e0; border-radius: 8px; background: white; cursor: pointer; font-weight: 600;">Cancel</button>
+                    <button onclick="saveSessionSummary()" style="padding: 12px 25px; border: none; border-radius: 8px; background: linear-gradient(135deg, #10B981 0%, #059669 100%); color: white; cursor: pointer; font-weight: 600;">💾 Save Summary</button>
+                </div>
+            </div>
+        </div>
+
         <!-- Tools Section -->
         <div class="tools-section">
             <div class="tools-title">🧰 Your AuDHD Toolkit</div>
@@ -1301,6 +1363,183 @@
             alert(`✅ Journey saved!\n\n${editorSessions.length} sessions configured for this client.`);
         }
 
+        // ============================================
+        // ACTIONS & GOALS SYSTEM
+        // ============================================
+
+        function renderSessionSummaries() {
+            const container = document.getElementById('sessionSummaries');
+            const emptyState = document.getElementById('emptyActionsState');
+            const addBtn = document.getElementById('addActionBtn');
+
+            // Initialize session summaries if not exists
+            if (!clientData.sessionSummaries) {
+                clientData.sessionSummaries = {};
+            }
+
+            // Show add button for coaches
+            if (isCoachUser()) {
+                addBtn.style.display = 'inline-block';
+            }
+
+            // Get sessions with summaries
+            const summaries = clientData.sessionSummaries;
+            const hasSummaries = Object.keys(summaries).length > 0;
+
+            if (!hasSummaries) {
+                emptyState.style.display = 'block';
+                container.innerHTML = '';
+                return;
+            }
+
+            emptyState.style.display = 'none';
+
+            // Get session labels
+            const sessions = clientData.customSessions || SESSION_TEMPLATES[selectedProgramme];
+
+            // Render summaries
+            container.innerHTML = Object.keys(summaries).sort((a, b) => parseInt(a) - parseInt(b)).map(sessionNum => {
+                const summary = summaries[sessionNum];
+                const sessionInfo = sessions[parseInt(sessionNum) - 1] || { label: `Session ${sessionNum}` };
+                const actions = summary.actions ? summary.actions.split('\n').filter(a => a.trim()) : [];
+
+                return `
+                    <div style="background: linear-gradient(135deg, #f8f9fa 0%, #f0f0f5 100%); border-radius: 12px; padding: 20px; margin-bottom: 15px; border-left: 4px solid #8B5CF6;">
+                        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 15px;">
+                            <div>
+                                <span style="background: linear-gradient(135deg, #8B5CF6 0%, #6D28D9 100%); color: white; padding: 4px 12px; border-radius: 20px; font-size: 0.8em; font-weight: 600;">Session ${sessionNum}</span>
+                                <h4 style="color: #2d1b4e; margin: 10px 0 0 0; font-size: 1.1em;">${sessionInfo.label}</h4>
+                            </div>
+                            ${isCoachUser() ? `<button onclick="editSessionSummary(${sessionNum})" style="background: none; border: none; color: #8B5CF6; cursor: pointer; font-size: 0.9em;">✏️ Edit</button>` : ''}
+                        </div>
+
+                        ${summary.takeaways ? `
+                            <div style="margin-bottom: 15px;">
+                                <div style="font-size: 0.85em; color: #666; font-weight: 600; margin-bottom: 5px;">💡 Key Takeaways</div>
+                                <p style="color: #444; font-size: 0.95em; line-height: 1.5; margin: 0; white-space: pre-line;">${summary.takeaways}</p>
+                            </div>
+                        ` : ''}
+
+                        ${actions.length > 0 ? `
+                            <div style="margin-bottom: 15px;">
+                                <div style="font-size: 0.85em; color: #666; font-weight: 600; margin-bottom: 8px;">✅ Actions</div>
+                                <div style="display: flex; flex-direction: column; gap: 8px;">
+                                    ${actions.map((action, idx) => `
+                                        <label style="display: flex; align-items: flex-start; gap: 10px; cursor: pointer;">
+                                            <input type="checkbox" ${summary.completedActions && summary.completedActions.includes(idx) ? 'checked' : ''}
+                                                   onchange="toggleAction(${sessionNum}, ${idx})"
+                                                   style="margin-top: 3px; accent-color: #10B981; width: 18px; height: 18px;">
+                                            <span style="color: #333; font-size: 0.95em; ${summary.completedActions && summary.completedActions.includes(idx) ? 'text-decoration: line-through; color: #888;' : ''}">${action}</span>
+                                        </label>
+                                    `).join('')}
+                                </div>
+                            </div>
+                        ` : ''}
+
+                        ${summary.goals ? `
+                            <div style="background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%); border-radius: 8px; padding: 12px;">
+                                <div style="font-size: 0.85em; color: #92400e; font-weight: 600; margin-bottom: 5px;">🎯 Goals for Next Session</div>
+                                <p style="color: #78350f; font-size: 0.95em; line-height: 1.5; margin: 0; white-space: pre-line;">${summary.goals}</p>
+                            </div>
+                        ` : ''}
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function toggleAction(sessionNum, actionIdx) {
+            if (!clientData.sessionSummaries[sessionNum].completedActions) {
+                clientData.sessionSummaries[sessionNum].completedActions = [];
+            }
+
+            const completed = clientData.sessionSummaries[sessionNum].completedActions;
+            const idx = completed.indexOf(actionIdx);
+
+            if (idx > -1) {
+                completed.splice(idx, 1);
+            } else {
+                completed.push(actionIdx);
+            }
+
+            saveClientData();
+            renderSessionSummaries();
+
+            // Award sparks for completing actions
+            if (completed.includes(actionIdx)) {
+                addSparks(1, 'Completed an action item');
+            }
+        }
+
+        function openActionEditor(sessionNum = null) {
+            const select = document.getElementById('actionSessionSelect');
+            const sessions = clientData.customSessions || SESSION_TEMPLATES[selectedProgramme];
+
+            // Populate session dropdown
+            select.innerHTML = sessions.map((s, i) => `
+                <option value="${i + 1}">${i + 1}. ${s.label}</option>
+            `).join('');
+
+            // If editing existing, load data
+            if (sessionNum && clientData.sessionSummaries && clientData.sessionSummaries[sessionNum]) {
+                const summary = clientData.sessionSummaries[sessionNum];
+                select.value = sessionNum;
+                document.getElementById('actionTakeaways').value = summary.takeaways || '';
+                document.getElementById('actionActions').value = summary.actions || '';
+                document.getElementById('actionGoals').value = summary.goals || '';
+            } else {
+                // Default to current session
+                select.value = clientData.currentSession;
+                document.getElementById('actionTakeaways').value = '';
+                document.getElementById('actionActions').value = '';
+                document.getElementById('actionGoals').value = '';
+            }
+
+            document.getElementById('actionEditorModal').style.display = 'block';
+            document.body.style.overflow = 'hidden';
+        }
+
+        function editSessionSummary(sessionNum) {
+            openActionEditor(sessionNum);
+        }
+
+        function closeActionEditor() {
+            document.getElementById('actionEditorModal').style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+
+        function saveSessionSummary() {
+            const sessionNum = document.getElementById('actionSessionSelect').value;
+            const takeaways = document.getElementById('actionTakeaways').value.trim();
+            const actions = document.getElementById('actionActions').value.trim();
+            const goals = document.getElementById('actionGoals').value.trim();
+
+            if (!takeaways && !actions && !goals) {
+                alert('Please add at least one item (takeaways, actions, or goals).');
+                return;
+            }
+
+            if (!clientData.sessionSummaries) {
+                clientData.sessionSummaries = {};
+            }
+
+            // Preserve completed actions if editing
+            const existingCompleted = clientData.sessionSummaries[sessionNum]?.completedActions || [];
+
+            clientData.sessionSummaries[sessionNum] = {
+                takeaways,
+                actions,
+                goals,
+                completedActions: existingCompleted,
+                updatedAt: new Date().toISOString()
+            };
+
+            saveClientData();
+            renderSessionSummaries();
+            closeActionEditor();
+
+            alert('✅ Session summary saved!');
+        }
+
         function updateDomainStatuses() {
             Object.keys(clientData.domains).forEach(domain => {
                 const card = document.querySelector(`.domain-card.${domain}`);
@@ -1446,6 +1685,7 @@
             }
 
             renderSessions();
+            renderSessionSummaries();
             updateDomainStatuses();
             loadGamificationData();
         }
