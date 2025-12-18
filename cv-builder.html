@@ -454,6 +454,48 @@
                 grid-template-columns: 1fr;
             }
         }
+        /* Career History Entries */
+        .career-entry {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 12px;
+            border-left: 4px solid #28a745;
+        }
+        .career-entry-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 8px;
+        }
+        .career-entry-company {
+            font-weight: 700;
+            color: #1a1a2e;
+            font-size: 16px;
+        }
+        .career-entry-role {
+            color: #667eea;
+            font-weight: 600;
+            font-size: 14px;
+        }
+        .career-entry-dates {
+            color: #666;
+            font-size: 13px;
+        }
+        .career-entry-actions {
+            display: flex;
+            gap: 8px;
+        }
+        .career-entry-actions button {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            opacity: 0.6;
+            transition: opacity 0.2s;
+        }
+        .career-entry-actions button:hover { opacity: 1; }
+
         /* Print Styles */
         @media print {
             body { background: white; padding: 0; }
@@ -577,6 +619,48 @@
                 </div>
             </div>
 
+            <!-- Career Highlights Section -->
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">Career Highlights</h2>
+                </div>
+                <div class="form-group">
+                    <label>Key achievements (one per line)</label>
+                    <textarea id="highlights" rows="5" placeholder="• Created $2.5m incremental revenue...&#10;• Led team to win Cannes Lion..."></textarea>
+                </div>
+                <ul class="highlights-preview" id="highlightsPreview" style="margin-top: 12px; padding-left: 20px; color: #333;"></ul>
+            </div>
+
+            <!-- Career History Section -->
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">Career History</h2>
+                </div>
+                <div id="careerHistoryContainer">
+                    <!-- Career entries will be rendered here -->
+                </div>
+                <button class="btn-add-case-study" style="margin-top: 16px;" onclick="addCareerEntry()">
+                    ➕ Add Career Entry
+                </button>
+            </div>
+
+            <!-- Education & Awards Section -->
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">Education & Awards</h2>
+                </div>
+                <div class="form-grid">
+                    <div class="form-group full-width">
+                        <label>Education</label>
+                        <textarea id="education" rows="3" placeholder="BA Hons Modern History, Oxford University, 1991-1994&#10;MBA, London Business School, 2000"></textarea>
+                    </div>
+                    <div class="form-group full-width">
+                        <label>Awards (comma-separated)</label>
+                        <input type="text" id="awards" placeholder="Cannes Lions, IPA Effectiveness Awards, Euro Effies...">
+                    </div>
+                </div>
+            </div>
+
             <!-- Case Studies Section -->
             <div class="card">
                 <div class="card-header">
@@ -655,11 +739,89 @@
         const API_SERVER = 'https://sparkhub-be-qtmmb.ondigitalocean.app';
         const MAX_CV_VERSIONS = 5;
 
+        // Donald's existing CV data - pre-populated from his previous CV
+        const DONALD_CV_DATA = {
+            name: 'Donald Pirie',
+            role_identity: 'Transformational Strategist | Restoring belief and building brand platforms that last',
+            what_you_do: 'deliver strategic thinking across financial services, B2B tech and complex global brands including UBS, AMD and UPS',
+            who_you_serve: 'brands that have lost confidence in what makes them special',
+            unique_approach: 'connect insight, ideas, infrastructure and people—and stay until it\'s embedded',
+            career_background: `I'm a Senior Strategist with 20+ years experience delivering strategic thinking across financial services, B2B tech and complex global brands including UBS, AMD and UPS. I am passionate about brand transformation that results in creative work which wins awards and moves the needle. My thread is connecting insight, ideas, infrastructure and people—and staying until it's embedded.`,
+            where_heading: 'seeking roles where I can lead transformational brand work',
+            email: 'donaldpirie111@hotmail.co.uk',
+            phone: '+44 (0)7958 398 954',
+            linkedin: 'linkedin.com/in/donaldpirie',
+            skills: ['Brand Strategy', 'Transformation', 'Campaign Development', 'Research', 'Workshops', 'C-Suite Engagement', 'Team Leadership', 'Effectiveness'],
+            case_studies: [
+                {
+                    id: 'ubs',
+                    clientName: 'UBS',
+                    projectTitle: 'Banking is our Craft',
+                    brief: 'Reposition UBS digital presence for new generation of HNWIs',
+                    research: '',
+                    insight: 'UBS had lost confidence in what made them special—the human craft behind banking',
+                    strategy: 'Reconnect brand with craft narrative, elevating human intelligence and care',
+                    proposition: '',
+                    campaign: 'UBS.com transformation enabling new purpose, content and journey frameworks',
+                    results: '$2.5m incremental revenue, increased leads, restored belief internally and externally',
+                    isVisible: true
+                },
+                {
+                    id: 'ups',
+                    clientName: 'UPS',
+                    projectTitle: 'United Problem Solvers',
+                    brief: 'Revitalise UPS brand positioning globally',
+                    research: '',
+                    insight: 'UPS\'s real value is human ingenuity in solving business problems, not just delivery',
+                    strategy: 'Reframe brand as creative problem-solving partner for business growth',
+                    proposition: '',
+                    campaign: 'New global platform "United Problem Solvers"',
+                    results: '+20% EMEA penetration, transformed employee pride for 400,000 staff',
+                    isVisible: true
+                },
+                {
+                    id: 'amd',
+                    clientName: 'AMD',
+                    projectTitle: 'Together We Advance',
+                    brief: 'Create new brand platform to compete beyond specs',
+                    research: '',
+                    insight: 'AMD could lead on vision and progress, not just performance metrics',
+                    strategy: 'Shift from promoting specs to shaping progress narrative',
+                    proposition: '',
+                    campaign: 'New brand platform "Together We Advance" across all divisions',
+                    results: 'New competitive positioning, multi-audience impact, building market share',
+                    isVisible: true
+                }
+            ],
+            career_history: [
+                { company: 'The Effectiveness Partnership', role: 'Consultant Strategist', dates: 'Dec 2024 – Present' },
+                { company: 'Digitas / UBS', role: 'Strategy Partner (Freelance)', dates: 'May 2022 – Nov 2024' },
+                { company: 'TBWA / AMD', role: 'Strategy Partner', dates: 'Mar 2021 – Apr 2022' },
+                { company: 'McCann Worldgroup / Aramco', role: 'Global Strategy Director', dates: 'May 2019 – Aug 2020' },
+                { company: 'Wunderman Thompson / Vype', role: 'Global Strategy Director', dates: 'Sep 2017 – May 2019' },
+                { company: 'Ogilvy Group', role: 'Strategy Director', dates: 'Aug 2010 – Feb 2017' }
+            ],
+            education: [
+                { title: 'BA Hons Modern History', institution: 'Oxford University', year: '1991-1994' },
+                { title: 'APG Planning & Strategy Course', institution: '', year: '' },
+                { title: 'IPA Effectiveness Training', institution: '', year: '' }
+            ],
+            awards: ['Cannes Lions', 'BTAA', 'OneShow', 'DMA Awards', 'IPA Effectiveness Awards', 'Euro Effies Grand Prix'],
+            highlights: [
+                'Created $2.5m incremental revenue at UBS through .com transformation',
+                'Co-created "United Problem Solvers" – grew UPS EMEA penetration +20%',
+                'Launched AMD\'s "Together We Advance" platform across all divisions',
+                'Creative award winner at Cannes, BTAA, OneShow, DMA',
+                'IPA Effectiveness Awards, Euro Effies Grand Prix'
+            ]
+        };
+
         // State
         let cvVersions = [];
         let selectedCvId = null;
         let caseStudies = [];
         let isLiveData = false;
+        let usingDefaultData = false;
 
         // Get token from localStorage
         function getToken() {
@@ -686,8 +848,8 @@
         async function loadCvVersions() {
             const token = getToken();
             if (!token) {
-                console.log('No token, using cached data');
-                loadFromCache();
+                console.log('No token, using default Donald data');
+                loadDefaultData();
                 return;
             }
 
@@ -702,6 +864,14 @@
                 if (response.ok) {
                     const data = await response.json();
                     cvVersions = data.blueprints || [];
+
+                    // If API returns empty, use default data
+                    if (cvVersions.length === 0) {
+                        console.log('No CVs in database, loading Donald\'s default data');
+                        loadDefaultData();
+                        return;
+                    }
+
                     updateDataSource(true);
                     renderCvVersions();
 
@@ -709,32 +879,156 @@
                     localStorage.setItem('syp_cv_versions', JSON.stringify(cvVersions));
 
                     // Load selected or primary CV
-                    if (cvVersions.length > 0) {
-                        const primary = cvVersions.find(cv => cv.is_primary);
-                        selectedCvId = primary ? primary.id : cvVersions[0].id;
-                        loadCvData(selectedCvId);
-                    }
+                    const primary = cvVersions.find(cv => cv.is_primary);
+                    selectedCvId = primary ? primary.id : cvVersions[0].id;
+                    loadCvData(selectedCvId);
                 } else {
                     throw new Error('API error');
                 }
             } catch (error) {
                 console.error('Failed to load from API:', error);
-                loadFromCache();
+                loadDefaultData();
+            }
+        }
+
+        // Load Donald's default data when no API data exists
+        function loadDefaultData() {
+            usingDefaultData = true;
+            updateDataSource(false);
+
+            // Create a default CV version
+            cvVersions = [{
+                id: 'default',
+                name: 'My CV',
+                is_primary: true
+            }];
+            selectedCvId = 'default';
+
+            renderCvVersions();
+            populateFormWithDefaults();
+        }
+
+        // Career history state
+        let careerHistory = [];
+
+        // Populate form with Donald's default data
+        function populateFormWithDefaults() {
+            document.getElementById('roleIdentity').value = DONALD_CV_DATA.role_identity;
+            document.getElementById('whatYouDo').value = DONALD_CV_DATA.what_you_do;
+            document.getElementById('whoYouServe').value = DONALD_CV_DATA.who_you_serve;
+            document.getElementById('uniqueApproach').value = DONALD_CV_DATA.unique_approach;
+            document.getElementById('background').value = DONALD_CV_DATA.career_background;
+            document.getElementById('whereHeading').value = DONALD_CV_DATA.where_heading;
+            document.getElementById('email').value = DONALD_CV_DATA.email;
+            document.getElementById('phone').value = DONALD_CV_DATA.phone;
+            document.getElementById('linkedin').value = DONALD_CV_DATA.linkedin;
+            document.getElementById('skills').value = DONALD_CV_DATA.skills.join(', ');
+
+            // Load highlights
+            document.getElementById('highlights').value = DONALD_CV_DATA.highlights.join('\n');
+            renderHighlightsPreview();
+
+            // Load career history
+            careerHistory = [...DONALD_CV_DATA.career_history];
+            renderCareerHistory();
+
+            // Load education and awards
+            const eduText = DONALD_CV_DATA.education.map(e =>
+                e.institution ? `${e.title}, ${e.institution}${e.year ? ', ' + e.year : ''}` : e.title
+            ).join('\n');
+            document.getElementById('education').value = eduText;
+            document.getElementById('awards').value = DONALD_CV_DATA.awards.join(', ');
+
+            // Load case studies
+            caseStudies = [...DONALD_CV_DATA.case_studies];
+
+            renderSkillsPreview();
+            renderCaseStudies();
+            hideLoading();
+        }
+
+        // Render highlights preview
+        function renderHighlightsPreview() {
+            const text = document.getElementById('highlights').value;
+            const items = text.split('\n').filter(s => s.trim());
+            document.getElementById('highlightsPreview').innerHTML = items.map(item =>
+                `<li style="margin-bottom: 6px;">${item.replace(/^[•\-]\s*/, '')}</li>`
+            ).join('');
+        }
+
+        // Add event listener for highlights
+        document.getElementById('highlights').addEventListener('input', renderHighlightsPreview);
+
+        // Render career history
+        function renderCareerHistory() {
+            const container = document.getElementById('careerHistoryContainer');
+            container.innerHTML = careerHistory.map((entry, index) => `
+                <div class="career-entry">
+                    <div class="career-entry-header">
+                        <div>
+                            <div class="career-entry-company">${entry.company}</div>
+                            <div class="career-entry-role">${entry.role}</div>
+                            <div class="career-entry-dates">${entry.dates}</div>
+                        </div>
+                        <div class="career-entry-actions">
+                            <button onclick="editCareerEntry(${index})" title="Edit">✏️</button>
+                            <button onclick="deleteCareerEntry(${index})" title="Delete">🗑️</button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Add career entry
+        function addCareerEntry() {
+            const company = prompt('Company name:');
+            if (!company) return;
+            const role = prompt('Role/Title:');
+            if (!role) return;
+            const dates = prompt('Dates (e.g., "Jan 2020 – Present"):');
+            if (!dates) return;
+
+            careerHistory.push({ company, role, dates });
+            renderCareerHistory();
+        }
+
+        // Edit career entry
+        function editCareerEntry(index) {
+            const entry = careerHistory[index];
+            const company = prompt('Company name:', entry.company);
+            if (company === null) return;
+            const role = prompt('Role/Title:', entry.role);
+            if (role === null) return;
+            const dates = prompt('Dates:', entry.dates);
+            if (dates === null) return;
+
+            careerHistory[index] = { company: company || entry.company, role: role || entry.role, dates: dates || entry.dates };
+            renderCareerHistory();
+        }
+
+        // Delete career entry
+        function deleteCareerEntry(index) {
+            if (confirm('Delete this career entry?')) {
+                careerHistory.splice(index, 1);
+                renderCareerHistory();
             }
         }
 
         // Load from localStorage cache
         function loadFromCache() {
-            updateDataSource(false);
             const cached = localStorage.getItem('syp_cv_versions');
             if (cached) {
                 cvVersions = JSON.parse(cached);
-                renderCvVersions();
                 if (cvVersions.length > 0) {
+                    updateDataSource(false);
+                    renderCvVersions();
                     selectedCvId = cvVersions[0].id;
                     loadCvData(selectedCvId);
+                    return;
                 }
             }
+            // No cache, use default data
+            loadDefaultData();
         }
 
         // Render CV version list
@@ -1119,8 +1413,12 @@
             const linkedin = document.getElementById('linkedin').value;
             const skillsInput = document.getElementById('skills').value;
             const skills = skillsInput.split(',').map(s => s.trim()).filter(s => s);
-
-            const fullProfile = `I'm a ${roleIdentity} who ${whatYouDo} for ${whoYouServe}. I ${uniqueApproach}. After ${background}, I'm now ${whereHeading}.`;
+            const highlightsText = document.getElementById('highlights').value;
+            const highlights = highlightsText.split('\n').filter(s => s.trim());
+            const educationText = document.getElementById('education').value;
+            const education = educationText.split('\n').filter(s => s.trim());
+            const awardsInput = document.getElementById('awards').value;
+            const awards = awardsInput.split(',').map(s => s.trim()).filter(s => s);
 
             const wordHtml = `
 <!DOCTYPE html>
@@ -1149,6 +1447,10 @@
   .case-study-title { font-weight: bold; color: #1a1a1a; }
   .case-study-client { color: #667eea; font-size: 10pt; }
   .result { color: #28a745; font-weight: bold; }
+  .career-entry { margin-bottom: 12pt; }
+  .career-company { font-weight: bold; color: #1a1a1a; }
+  .career-role { color: #667eea; }
+  .career-dates { color: #666; font-size: 10pt; }
 </style>
 </head>
 <body>
@@ -1157,10 +1459,30 @@
 <p class="contact">📧 ${email} | 📱 ${phone} | 🔗 ${linkedin}</p>
 
 <h2>Profile</h2>
-<p class="profile">${fullProfile}</p>
+<p class="profile">${background}</p>
+
+<h2>Career Highlights</h2>
+<ul>
+${highlights.map(h => `<li>${h.replace(/^[•\-]\s*/, '')}</li>`).join('\n')}
+</ul>
 
 <h2>Key Skills</h2>
 <p>${skills.join(' • ')}</p>
+
+<h2>Career History</h2>
+${careerHistory.map(entry => `
+<div class="career-entry">
+  <p><span class="career-company">${entry.company}</span> <span class="career-dates">${entry.dates}</span></p>
+  <p class="career-role">${entry.role}</p>
+</div>
+`).join('')}
+
+<h2>Education & Awards</h2>
+<p><strong>Education:</strong></p>
+<ul>
+${education.map(e => `<li>${e}</li>`).join('\n')}
+</ul>
+<p><strong>Awards:</strong> ${awards.join(' • ')}</p>
 
 <h2>Case Studies</h2>
 ${visibleCaseStudies.map(cs => `
