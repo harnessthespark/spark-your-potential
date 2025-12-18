@@ -1437,7 +1437,7 @@
                         title: 'Complete Your CV',
                         description: 'Use the CV Builder with content from your Blueprint',
                         linkText: 'Open CV Builder',
-                        linkKey: 'cvBuilder'
+                        linkFile: 'cv-builder.html'
                     },
                     {
                         id: 'w4-linkedin-headline',
@@ -1903,10 +1903,10 @@
                 {
                     icon: '📄',
                     title: 'CV Builder',
-                    description: 'Build your CV with fields pre-filled from your Blueprint. Edit and refine your positioning.',
-                    file: files.cvBuilder || `${folder}/${nameUnderscored}_CV_Builder.html`,
+                    description: 'Build your CV with fields pre-filled from your Blueprint. Create multiple versions and export to Word.',
+                    file: 'cv-builder.html',
                     btnText: 'Open Builder',
-                    secondaryBtn: 'Export PDF',
+                    secondaryBtn: 'Export Word',
                     unlockStage: 3,
                     statusWhenComplete: 'ready'
                 },
@@ -2158,7 +2158,9 @@
                 const checkboxClass = `homework-checkbox${isChecked ? ' checked' : ''}`;
 
                 let linkHtml = '';
-                if (task.linkKey && files[task.linkKey]) {
+                if (task.linkFile) {
+                    linkHtml = `<a href="${task.linkFile}" target="_blank" class="homework-link">${task.linkText} →</a>`;
+                } else if (task.linkKey && files[task.linkKey]) {
                     linkHtml = `<a href="${files[task.linkKey]}" target="_blank" class="homework-link">${task.linkText} →</a>`;
                 }
 
