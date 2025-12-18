@@ -705,6 +705,189 @@
             opacity: 0.5;
         }
 
+        /* Calendar Styles */
+        .calendar-section {
+            background: white;
+            border-radius: 16px;
+            padding: 25px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+            border: 1px solid var(--warm-border);
+        }
+
+        .calendar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .calendar-nav {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .calendar-nav button {
+            background: #F3F4F6;
+            border: none;
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1.1em;
+            transition: all 0.2s;
+        }
+
+        .calendar-nav button:hover {
+            background: var(--purple-light);
+            color: white;
+        }
+
+        .calendar-nav span {
+            font-weight: 600;
+            min-width: 180px;
+            text-align: center;
+        }
+
+        .week-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 10px;
+        }
+
+        .day-column {
+            min-height: 200px;
+        }
+
+        .day-header {
+            text-align: center;
+            padding: 10px;
+            background: linear-gradient(135deg, var(--purple-light) 0%, var(--purple-main) 100%);
+            color: white;
+            border-radius: 10px 10px 0 0;
+            font-size: 0.85em;
+        }
+
+        .day-header.today {
+            background: linear-gradient(135deg, var(--gold) 0%, var(--gold-light) 100%);
+            color: var(--text-dark);
+        }
+
+        .day-header .day-name {
+            font-weight: 600;
+        }
+
+        .day-header .day-date {
+            font-size: 1.3em;
+            font-weight: 700;
+        }
+
+        .day-slots {
+            background: #FAFAFA;
+            border: 1px solid #E5E7EB;
+            border-top: none;
+            border-radius: 0 0 10px 10px;
+            min-height: 150px;
+            padding: 8px;
+        }
+
+        .calendar-event {
+            background: white;
+            border-left: 3px solid var(--purple-main);
+            padding: 8px 10px;
+            border-radius: 6px;
+            margin-bottom: 6px;
+            font-size: 0.8em;
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .calendar-event:hover {
+            transform: translateX(3px);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+        }
+
+        .calendar-event.career {
+            border-left-color: var(--gold);
+        }
+
+        .calendar-event.audhd {
+            border-left-color: var(--purple-main);
+        }
+
+        .event-time {
+            font-weight: 600;
+            color: var(--purple-main);
+            font-size: 0.9em;
+        }
+
+        .event-client {
+            font-weight: 500;
+            margin-top: 2px;
+        }
+
+        .event-type {
+            color: var(--text-muted);
+            font-size: 0.85em;
+        }
+
+        .add-session-btn {
+            width: 100%;
+            background: transparent;
+            border: 2px dashed #D1D5DB;
+            border-radius: 6px;
+            padding: 10px;
+            color: var(--text-muted);
+            cursor: pointer;
+            font-size: 0.85em;
+            transition: all 0.2s;
+        }
+
+        .add-session-btn:hover {
+            border-color: var(--purple-light);
+            color: var(--purple-main);
+            background: #F5F3FF;
+        }
+
+        .calendar-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .calendar-action-btn {
+            background: #F3F4F6;
+            border: none;
+            padding: 10px 16px;
+            border-radius: 8px;
+            font-size: 0.9em;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s;
+        }
+
+        .calendar-action-btn:hover {
+            background: var(--purple-light);
+            color: white;
+        }
+
+        .calendar-action-btn.primary {
+            background: var(--purple-main);
+            color: white;
+        }
+
+        /* Schedule Session Modal */
+        .schedule-modal .time-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
         /* Mobile Responsive */
         @media (max-width: 768px) {
             .header {
@@ -795,6 +978,55 @@
                         <div class="today-item" onclick="refreshClients()" style="cursor: pointer;">
                             <span>🔄 Refresh data</span>
                         </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Calendar Section -->
+            <section class="calendar-section">
+                <div class="calendar-header">
+                    <h2 class="section-title">📆 My Schedule</h2>
+                    <div class="calendar-nav">
+                        <button onclick="toggleCalendarView()" id="calendarViewToggle" title="Toggle view">📋</button>
+                        <span id="calendarViewLabel" style="font-size: 0.85em; color: var(--text-muted);">Google Calendar</span>
+                    </div>
+                </div>
+
+                <!-- Google Calendar Embed View -->
+                <div id="googleCalendarView">
+                    <div id="googleCalendarEmbed" style="border-radius: 12px; overflow: hidden; min-height: 500px;">
+                        <p style="text-align: center; padding: 40px; color: var(--text-muted);">
+                            Click "Connect Google Calendar" to embed your calendar here.
+                        </p>
+                    </div>
+                    <div class="calendar-actions">
+                        <button class="calendar-action-btn primary" onclick="connectGoogleCalendar()">
+                            🔗 Connect Google Calendar
+                        </button>
+                        <button class="calendar-action-btn" onclick="openGoogleCalendar()">
+                            ↗️ Open in Google Calendar
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Manual Schedule View (hidden by default) -->
+                <div id="manualCalendarView" style="display: none;">
+                    <div class="calendar-nav" style="margin-bottom: 15px;">
+                        <button onclick="prevWeek()">←</button>
+                        <span id="weekLabel">Loading...</span>
+                        <button onclick="nextWeek()">→</button>
+                        <button onclick="goToToday()" style="width: auto; padding: 8px 16px; margin-left: 10px;">Today</button>
+                    </div>
+                    <div class="week-grid" id="weekGrid">
+                        <!-- Generated by JavaScript -->
+                    </div>
+                    <div class="calendar-actions">
+                        <button class="calendar-action-btn primary" onclick="openScheduleModal()">
+                            ➕ Schedule Session
+                        </button>
+                        <button class="calendar-action-btn" onclick="exportCalendar()">
+                            📤 Export to Calendar
+                        </button>
                     </div>
                 </div>
             </section>
@@ -893,6 +1125,51 @@
             </div>
 
             <button class="view-full-btn" onclick="openFullProfile()">View Full Profile →</button>
+        </div>
+    </div>
+
+    <!-- Schedule Session Modal -->
+    <div class="modal-overlay" id="scheduleModal">
+        <div class="modal">
+            <h2>📅 Schedule Session</h2>
+            <div class="form-group">
+                <label>Client</label>
+                <select id="sessionClient">
+                    <option value="">Select a client...</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Date</label>
+                <input type="date" id="sessionDate">
+            </div>
+            <div class="form-group">
+                <label>Time</label>
+                <input type="time" id="sessionTime" value="10:00">
+            </div>
+            <div class="form-group">
+                <label>Duration</label>
+                <select id="sessionDuration">
+                    <option value="60">1 hour</option>
+                    <option value="90">1.5 hours</option>
+                    <option value="30">30 minutes</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Session Type</label>
+                <select id="sessionType">
+                    <option value="coaching">💼 Coaching Session</option>
+                    <option value="discovery">🔍 Discovery Call</option>
+                    <option value="review">📋 Review/Catch-up</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Notes (optional)</label>
+                <input type="text" id="sessionNotes" placeholder="Any notes for this session...">
+            </div>
+            <div class="modal-actions">
+                <button class="btn-cancel" onclick="closeScheduleModal()">Cancel</button>
+                <button class="btn-save" onclick="saveSession()">Schedule</button>
+            </div>
         </div>
     </div>
 
@@ -1314,8 +1591,343 @@
             if (e.key === 'Escape') {
                 closePanel();
                 closeAddClientModal();
+                closeScheduleModal();
             }
         });
+
+        // ========== CALENDAR FUNCTIONALITY ==========
+
+        let currentWeekStart = getMonday(new Date());
+        let scheduledSessions = JSON.parse(localStorage.getItem('syp_sessions') || '[]');
+
+        function getMonday(d) {
+            const date = new Date(d);
+            const day = date.getDay();
+            const diff = date.getDate() - day + (day === 0 ? -6 : 1);
+            return new Date(date.setDate(diff));
+        }
+
+        function formatDateKey(date) {
+            return date.toISOString().split('T')[0];
+        }
+
+        function renderCalendar() {
+            const weekGrid = document.getElementById('weekGrid');
+            const weekLabel = document.getElementById('weekLabel');
+
+            // Calculate week range
+            const weekEnd = new Date(currentWeekStart);
+            weekEnd.setDate(weekEnd.getDate() + 6);
+
+            weekLabel.textContent = `${currentWeekStart.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' })} - ${weekEnd.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })}`;
+
+            const days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+
+            let html = '';
+
+            for (let i = 0; i < 7; i++) {
+                const dayDate = new Date(currentWeekStart);
+                dayDate.setDate(dayDate.getDate() + i);
+                const dateKey = formatDateKey(dayDate);
+                const isToday = dayDate.getTime() === today.getTime();
+
+                // Get sessions for this day
+                const daySessions = scheduledSessions.filter(s => s.date === dateKey);
+
+                html += `
+                    <div class="day-column">
+                        <div class="day-header ${isToday ? 'today' : ''}">
+                            <div class="day-name">${days[i]}</div>
+                            <div class="day-date">${dayDate.getDate()}</div>
+                        </div>
+                        <div class="day-slots">
+                            ${daySessions.map(session => `
+                                <div class="calendar-event ${session.programmeType || 'career'}" onclick="viewSession('${session.id}')">
+                                    <div class="event-time">${session.time}</div>
+                                    <div class="event-client">${session.clientName}</div>
+                                    <div class="event-type">${getSessionTypeLabel(session.type)}</div>
+                                </div>
+                            `).join('')}
+                            <button class="add-session-btn" onclick="quickAddSession('${dateKey}')">+ Add</button>
+                        </div>
+                    </div>
+                `;
+            }
+
+            weekGrid.innerHTML = html;
+        }
+
+        function getSessionTypeLabel(type) {
+            const labels = {
+                'coaching': '💼 Coaching',
+                'discovery': '🔍 Discovery',
+                'review': '📋 Review'
+            };
+            return labels[type] || type;
+        }
+
+        function prevWeek() {
+            currentWeekStart.setDate(currentWeekStart.getDate() - 7);
+            renderCalendar();
+        }
+
+        function nextWeek() {
+            currentWeekStart.setDate(currentWeekStart.getDate() + 7);
+            renderCalendar();
+        }
+
+        function goToToday() {
+            currentWeekStart = getMonday(new Date());
+            renderCalendar();
+        }
+
+        // Schedule Modal Functions
+        function openScheduleModal(presetDate) {
+            // Populate client dropdown
+            const select = document.getElementById('sessionClient');
+            select.innerHTML = '<option value="">Select a client...</option>';
+            clients.forEach(c => {
+                select.innerHTML += `<option value="${c.id}" data-type="${c.programme_type || 'career'}">${c.full_name || c.name}</option>`;
+            });
+
+            // Set date if provided
+            if (presetDate) {
+                document.getElementById('sessionDate').value = presetDate;
+            } else {
+                document.getElementById('sessionDate').value = formatDateKey(new Date());
+            }
+
+            document.getElementById('scheduleModal').classList.add('active');
+        }
+
+        function closeScheduleModal() {
+            document.getElementById('scheduleModal').classList.remove('active');
+            // Reset form
+            document.getElementById('sessionClient').value = '';
+            document.getElementById('sessionTime').value = '10:00';
+            document.getElementById('sessionNotes').value = '';
+        }
+
+        function quickAddSession(dateKey) {
+            openScheduleModal(dateKey);
+        }
+
+        function saveSession() {
+            const clientId = document.getElementById('sessionClient').value;
+            const clientSelect = document.getElementById('sessionClient');
+            const selectedOption = clientSelect.options[clientSelect.selectedIndex];
+            const clientName = selectedOption.text;
+            const programmeType = selectedOption.dataset.type || 'career';
+            const date = document.getElementById('sessionDate').value;
+            const time = document.getElementById('sessionTime').value;
+            const duration = document.getElementById('sessionDuration').value;
+            const type = document.getElementById('sessionType').value;
+            const notes = document.getElementById('sessionNotes').value;
+
+            if (!clientId || !date) {
+                alert('Please select a client and date');
+                return;
+            }
+
+            const session = {
+                id: 'session_' + Date.now(),
+                clientId,
+                clientName,
+                programmeType,
+                date,
+                time,
+                duration,
+                type,
+                notes,
+                createdAt: new Date().toISOString()
+            };
+
+            scheduledSessions.push(session);
+            localStorage.setItem('syp_sessions', JSON.stringify(scheduledSessions));
+
+            closeScheduleModal();
+            renderCalendar();
+            updateTodaySessions();
+        }
+
+        function viewSession(sessionId) {
+            const session = scheduledSessions.find(s => s.id === sessionId);
+            if (session) {
+                const action = confirm(
+                    `📅 ${session.clientName}\n` +
+                    `${session.date} at ${session.time}\n` +
+                    `${getSessionTypeLabel(session.type)}\n` +
+                    `${session.notes ? 'Notes: ' + session.notes : ''}\n\n` +
+                    `Click OK to delete this session, Cancel to close.`
+                );
+
+                if (action) {
+                    scheduledSessions = scheduledSessions.filter(s => s.id !== sessionId);
+                    localStorage.setItem('syp_sessions', JSON.stringify(scheduledSessions));
+                    renderCalendar();
+                    updateTodaySessions();
+                }
+            }
+        }
+
+        function updateTodaySessions() {
+            const todayKey = formatDateKey(new Date());
+            const todaySessions = scheduledSessions.filter(s => s.date === todayKey);
+
+            const container = document.getElementById('todaySessions');
+
+            if (todaySessions.length === 0) {
+                container.innerHTML = '<div class="empty-state">No sessions scheduled today</div>';
+            } else {
+                container.innerHTML = todaySessions.map(s => `
+                    <div class="today-item">
+                        <span>${s.clientName}</span>
+                        <span class="today-time">${s.time}</span>
+                    </div>
+                `).join('');
+            }
+        }
+
+        // ========== GOOGLE CALENDAR INTEGRATION ==========
+
+        let googleCalendarId = localStorage.getItem('syp_google_calendar_id') || null;
+        let calendarViewMode = localStorage.getItem('syp_calendar_view') || 'google';
+
+        function initGoogleCalendar() {
+            if (googleCalendarId) {
+                embedGoogleCalendar(googleCalendarId);
+            }
+            updateCalendarViewToggle();
+        }
+
+        function connectGoogleCalendar() {
+            const calId = prompt(
+                "Enter your Google Calendar ID to embed your schedule.\n\n" +
+                "To find your Calendar ID:\n" +
+                "1. Open Google Calendar\n" +
+                "2. Click the 3 dots next to your calendar → Settings\n" +
+                "3. Scroll to 'Integrate calendar'\n" +
+                "4. Copy the Calendar ID (looks like: email@gmail.com or a long string)\n\n" +
+                "Or enter your Gmail address if you want your primary calendar:",
+                googleCalendarId || ''
+            );
+
+            if (calId && calId.trim()) {
+                googleCalendarId = calId.trim();
+                localStorage.setItem('syp_google_calendar_id', googleCalendarId);
+                embedGoogleCalendar(googleCalendarId);
+            }
+        }
+
+        function embedGoogleCalendar(calId) {
+            // Make calendar public embed URL
+            const embedUrl = `https://calendar.google.com/calendar/embed?src=${encodeURIComponent(calId)}&ctz=Europe%2FLondon&mode=WEEK&showTitle=0&showNav=1&showDate=1&showPrint=0&showTabs=0&showCalendars=0&showTz=0&bgcolor=%23FFFFFF`;
+
+            document.getElementById('googleCalendarEmbed').innerHTML = `
+                <iframe
+                    src="${embedUrl}"
+                    style="border: 0; width: 100%; height: 500px; border-radius: 12px;"
+                    frameborder="0"
+                    scrolling="no">
+                </iframe>
+                <p style="text-align: center; margin-top: 10px; font-size: 0.85em; color: var(--text-muted);">
+                    ✅ Connected to Google Calendar •
+                    <a href="#" onclick="disconnectGoogleCalendar(); return false;" style="color: var(--purple-main);">Disconnect</a>
+                </p>
+            `;
+        }
+
+        function disconnectGoogleCalendar() {
+            if (confirm('Disconnect Google Calendar?')) {
+                googleCalendarId = null;
+                localStorage.removeItem('syp_google_calendar_id');
+                document.getElementById('googleCalendarEmbed').innerHTML = `
+                    <p style="text-align: center; padding: 40px; color: var(--text-muted);">
+                        Click "Connect Google Calendar" to embed your calendar here.
+                    </p>
+                `;
+            }
+        }
+
+        function openGoogleCalendar() {
+            if (googleCalendarId) {
+                window.open(`https://calendar.google.com/calendar/r?cid=${encodeURIComponent(googleCalendarId)}`, '_blank');
+            } else {
+                window.open('https://calendar.google.com', '_blank');
+            }
+        }
+
+        function toggleCalendarView() {
+            const googleView = document.getElementById('googleCalendarView');
+            const manualView = document.getElementById('manualCalendarView');
+            const toggle = document.getElementById('calendarViewToggle');
+            const label = document.getElementById('calendarViewLabel');
+
+            if (calendarViewMode === 'google') {
+                calendarViewMode = 'manual';
+                googleView.style.display = 'none';
+                manualView.style.display = 'block';
+                toggle.textContent = '📆';
+                label.textContent = 'Manual Schedule';
+                renderCalendar();
+            } else {
+                calendarViewMode = 'google';
+                googleView.style.display = 'block';
+                manualView.style.display = 'none';
+                toggle.textContent = '📋';
+                label.textContent = 'Google Calendar';
+            }
+
+            localStorage.setItem('syp_calendar_view', calendarViewMode);
+        }
+
+        function updateCalendarViewToggle() {
+            if (calendarViewMode === 'manual') {
+                toggleCalendarView(); // Switch to manual view
+                toggleCalendarView(); // This will set it back to manual correctly
+            }
+        }
+
+        function exportCalendar() {
+            // Generate ICS file
+            let ics = 'BEGIN:VCALENDAR\nVERSION:2.0\nPRODID:-//Spark Your Potential//Coach Hub//EN\n';
+
+            scheduledSessions.forEach(session => {
+                const startDate = session.date.replace(/-/g, '');
+                const startTime = session.time.replace(':', '') + '00';
+                const endHour = parseInt(session.time.split(':')[0]) + Math.floor(parseInt(session.duration) / 60);
+                const endMin = parseInt(session.time.split(':')[1]) + (parseInt(session.duration) % 60);
+                const endTime = String(endHour).padStart(2, '0') + String(endMin).padStart(2, '0') + '00';
+
+                ics += `BEGIN:VEVENT
+DTSTART:${startDate}T${startTime}
+DTEND:${startDate}T${endTime}
+SUMMARY:${getSessionTypeLabel(session.type)} - ${session.clientName}
+DESCRIPTION:${session.notes || 'Coaching session'}
+END:VEVENT
+`;
+            });
+
+            ics += 'END:VCALENDAR';
+
+            const blob = new Blob([ics], { type: 'text/calendar' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'syp-schedule.ics';
+            a.click();
+        }
+
+        // Initialise calendar on dashboard load
+        const originalShowDashboard = showDashboard;
+        showDashboard = async function() {
+            await originalShowDashboard();
+            initGoogleCalendar();
+            renderCalendar();
+            updateTodaySessions();
+        };
     </script>
 </body>
 </html>
