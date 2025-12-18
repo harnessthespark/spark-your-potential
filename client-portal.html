@@ -1625,7 +1625,13 @@
                     return;
                 }
 
-                // Regular coaching agreement
+                // Check if AuDHD client with custom agreement file - redirect to their specific agreement
+                if (client.programmeType === 'audhd' && client.files && client.files.agreement) {
+                    window.location.href = client.files.agreement;
+                    return;
+                }
+
+                // Regular coaching agreement (Career Booster)
                 document.getElementById('agreementSection').classList.add('visible');
                 document.getElementById('testimonialAgreementSection').classList.remove('visible');
                 document.getElementById('portalContent').classList.remove('visible');
@@ -2411,6 +2417,20 @@
                     const data = JSON.parse(localSigned);
                     if (data.signed) return true;
                 } catch (e) {}
+            }
+
+            // Check AuDHD-specific agreement keys
+            if (client.programmeType === 'audhd') {
+                // Check for Deb's specific agreement key
+                if (client.email === 'deborah_armstrong@hotmail.com') {
+                    const debAgreement = localStorage.getItem('deb_audhd_agreement');
+                    if (debAgreement) return true;
+                }
+                // Check for Chloe's specific agreement key
+                if (client.email === 'chloe@example.com') {
+                    const chloeAgreement = localStorage.getItem('chloe_audhd_agreement');
+                    if (chloeAgreement) return true;
+                }
             }
 
             // Check client data from API

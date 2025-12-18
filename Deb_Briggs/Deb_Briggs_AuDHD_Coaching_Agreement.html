@@ -411,6 +411,11 @@
                 <p style="color: #333; font-size: 1.1em;"><strong>Signed:</strong> ${signature}</p>
                 <p style="color: #666;"><strong>Date:</strong> ${new Date(date).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })}</p>
             `;
+
+            // Redirect to AuDHD dashboard after 2 seconds
+            setTimeout(() => {
+                window.location.href = '../audhd-dashboard.html';
+            }, 2000);
         }
 
         // Set today's date as default
