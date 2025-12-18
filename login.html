@@ -446,12 +446,17 @@
 
                 if (response.ok && data.token) {
                     // Success - store user data
+                    // Use programme_type from API if available (from SYPClient profile)
+                    const programmeType = data.user?.programme_type || 'career';
+
                     const userData = {
                         id: data.user?.id || 1,
                         email: data.user?.email || email,
                         name: data.user?.first_name || data.user?.username || email.split('@')[0],
                         isStaff: data.user?.is_staff || false,
-                        programme_access: data.user?.is_staff ? 'all' : 'career'
+                        programme_type: programmeType,
+                        programme_status: data.user?.programme_status,
+                        programme_access: data.user?.is_staff ? 'all' : programmeType
                     };
 
                     localStorage.setItem('syp_user', JSON.stringify(userData));
@@ -461,7 +466,7 @@
                     successDiv.textContent = 'Login successful!';
                     successDiv.style.display = 'block';
 
-                    // Redirect - staff go to coach hub, clients go to their portal
+                    // Redirect - staff go to coach hub, clients go to their programme-specific portal
                     setTimeout(() => {
                         if (userData.isStaff) {
                             window.location.href = 'dashboard.html';
