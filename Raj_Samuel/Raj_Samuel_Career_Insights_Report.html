@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Raj Samuel - Career Insights Report | Session 2</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            line-height: 1.6;
+            color: #2c3e50;
+            background: linear-gradient(135deg, #7c3aed 0%, #a855f7 100%);
+            padding: 40px 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #7c3aed 0%, #a855f7 100%);
+            color: white;
+            padding: 60px 40px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .header .subtitle {
+            font-size: 1.2em;
+            opacity: 0.9;
+            font-weight: 300;
+        }
+
+        .content {
+            padding: 50px 40px;
+        }
+
+        .section {
+            margin-bottom: 50px;
+            page-break-inside: avoid;
+        }
+
+        .section-title {
+            font-size: 1.8em;
+            font-weight: 700;
+            color: #7c3aed;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #7c3aed;
+        }
+
+        .subsection-title {
+            font-size: 1.3em;
+            font-weight: 600;
+            color: #a855f7;
+            margin: 25px 0 15px 0;
+        }
+
+        .insight-box {
+            background: linear-gradient(135deg, #7c3aed15 0%, #a855f715 100%);
+            padding: 30px;
+            border-radius: 15px;
+            border-left: 5px solid #7c3aed;
+            margin: 20px 0;
+        }
+
+        .insight-box h4 {
+            color: #7c3aed;
+            font-size: 1.2em;
+            margin-bottom: 15px;
+        }
+
+        .insight-box p {
+            line-height: 1.8;
+        }
+
+        .highlight {
+            background: #fff3cd;
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 4px solid #ffc107;
+            margin: 20px 0;
+        }
+
+        .highlight strong {
+            color: #856404;
+        }
+
+        .connection-box {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border: 2px solid #7c3aed;
+        }
+
+        .connection-box h4 {
+            color: #7c3aed;
+            margin-bottom: 12px;
+        }
+
+        .two-column {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .column-box {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+        }
+
+        .column-box h4 {
+            color: #a855f7;
+            margin-bottom: 12px;
+            font-size: 1.1em;
+        }
+
+        ul, ol {
+            margin-left: 20px;
+            margin-top: 10px;
+        }
+
+        li {
+            margin-bottom: 8px;
+        }
+
+        .key-question {
+            background: linear-gradient(to right, #f093fb15, #f5576c15);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 15px 0;
+            border-left: 4px solid #f5576c;
+        }
+
+        .key-question strong {
+            color: #f5576c;
+            font-size: 1.1em;
+        }
+
+        .placeholder {
+            background: #fef3c7;
+            border: 2px dashed #f59e0b;
+            padding: 15px;
+            border-radius: 8px;
+            color: #92400e;
+            font-style: italic;
+            margin: 10px 0;
+        }
+
+        .raj-quote {
+            background: #f0fdf4;
+            border-left: 4px solid #22c55e;
+            padding: 15px 20px;
+            margin: 15px 0;
+            border-radius: 0 8px 8px 0;
+            font-style: italic;
+            color: #166534;
+        }
+
+        @media print {
+            body {
+                background: white;
+                padding: 0;
+            }
+            .container {
+                box-shadow: none;
+                max-width: 100%;
+            }
+            .placeholder {
+                border: 1px solid #ccc;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .two-column {
+                grid-template-columns: 1fr;
+            }
+            .content {
+                padding: 30px 20px;
+            }
+            .header {
+                padding: 40px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Raj Samuel</h1>
+            <div class="subtitle">Career Insights Report - Session 2</div>
+            <div class="subtitle" style="font-size: 0.9em; margin-top: 10px;">Pattern Analysis & Career Direction Framework</div>
+        </div>
+
+        <div class="content">
+            <!-- EXECUTIVE SUMMARY -->
+            <div class="section">
+                <h2 class="section-title">📊 Executive Summary</h2>
+                <div class="insight-box">
+                    <h4>Your Core Pattern</h4>
+                    <div class="placeholder">[LISA: Write Raj's core pattern in one powerful sentence - what does he consistently do?]</div>
+
+                    <p style="margin-top: 15px;">
+                        <div class="placeholder">[LISA: Expand on the pattern - how does it show up across his 5 outcomes? What's the consistent sequence?]</div>
+                    </p>
+                </div>
+
+                <div class="highlight">
+                    <strong>What This Means For His Career:</strong>
+                    <div class="placeholder">[LISA: What does this pattern mean for Raj's next move? What environments will let him thrive vs. frustrate him?]</div>
+                </div>
+            </div>
+
+            <!-- KEY INSIGHTS FROM YOUR RESPONSES -->
+            <div class="section">
+                <h2 class="section-title">💡 Key Insights From Your Responses</h2>
+
+                <h3 class="subsection-title">1. Your Unique Thread</h3>
+                <div class="insight-box">
+                    <div class="raj-quote">"I spot the cultural-emotional truth hiding beneath the business problem - the thing people sense but can't articulate yet."</div>
+
+                    <div class="placeholder">[LISA: Your analysis of Raj's unique thread - what makes him different? What's his signature move?]</div>
+
+                    <p style="margin-top: 15px;"><strong>The thread is:</strong></p>
+                    <div class="placeholder">[LISA: Summarise his thread in a memorable phrase]</div>
+                </div>
+
+                <div class="connection-box">
+                    <h4>🔗 Connection to His Current Situation:</h4>
+                    <div class="placeholder">[LISA: How does this thread connect to where Raj is now and what he should be looking for?]</div>
+                </div>
+
+                <h3 class="subsection-title">2. Your Effortless Superpowers</h3>
+                <div class="two-column">
+                    <div class="column-box">
+                        <h4>Cultural Pattern Recognition</h4>
+                        <div class="raj-quote">"I walk into a room, hear the brief, and I just see where the mismatch is. Doesn't feel like heavy analysis - more like pattern recognition."</div>
+                        <div class="placeholder">[LISA: Your analysis]</div>
+                    </div>
+                    <div class="column-box">
+                        <h4>Permission Giving</h4>
+                        <div class="raj-quote">"The unlock is always about giving people permission - permission to be brave, to reframe the problem, to see a bigger opportunity."</div>
+                        <div class="placeholder">[LISA: Your analysis]</div>
+                    </div>
+                </div>
+
+                <div class="two-column">
+                    <div class="column-box">
+                        <h4>Reframing Complex to Simple</h4>
+                        <div class="raj-quote">"Once I see the pattern, making it obvious to everyone else feels straightforward. I don't overcomplicate - I clarify."</div>
+                        <div class="placeholder">[LISA: Your analysis]</div>
+                    </div>
+                    <div class="column-box">
+                        <h4>Connecting Disparate Worlds</h4>
+                        <div class="raj-quote">"Pop culture, human behavior, brand problems, entertainment - I weave these together without thinking about it."</div>
+                        <div class="placeholder">[LISA: Your analysis]</div>
+                    </div>
+                </div>
+
+                <div class="connection-box">
+                    <h4>🔗 Connection to His Current Situation:</h4>
+                    <div class="placeholder">[LISA: How should these superpowers inform what Raj looks for next?]</div>
+                </div>
+
+                <h3 class="subsection-title">3. Your "Of Course" Moments</h3>
+                <div class="insight-box">
+                    <p><strong>Raj creates these breakthrough reframes:</strong></p>
+                    <ul style="margin-left: 20px; margin-top: 10px;">
+                        <li><strong>AMV:</strong> "Of course it wasn't about needing digital departments, we'd stopped living in culture."</li>
+                        <li><strong>Cadbury:</strong> "Of course this ad is an invitation for more content, not just a one-off."</li>
+                        <li><strong>Arley's:</strong> "Of course flexitarians want the familiar done better, not futuristic innovation."</li>
+                        <li><strong>Lemons:</strong> "Of course it's about women's financial vulnerability, not just wills."</li>
+                        <li><strong>BT:</strong> "Of course we should make the soap opera interactive and let people drive the story."</li>
+                    </ul>
+
+                    <div class="placeholder" style="margin-top: 20px;">[LISA: What do these "of course" moments tell us about how Raj works? What's the pattern?]</div>
+                </div>
+
+                <h3 class="subsection-title">4. What Finds You (The Problem Magnet)</h3>
+                <div class="insight-box">
+                    <div class="raj-quote">"People bring me problems that aren't really about what they say they're about. They say 'we need a digital strategy' but what they actually mean is 'we feel culturally stuck and don't know how to catch up.'"</div>
+
+                    <p style="margin-top: 15px;"><strong>The problems Raj attracts:</strong></p>
+                    <ul style="margin-left: 20px; margin-top: 10px;">
+                        <li>Cultural disconnect problems</li>
+                        <li>Transformation problems ("we need to evolve but don't know how")</li>
+                        <li>Courage problems ("make the scary thing feel doable")</li>
+                        <li>Brands that feel emotionally flat</li>
+                        <li>Gaps between where the brand is and where culture's already gone</li>
+                    </ul>
+
+                    <div class="placeholder" style="margin-top: 20px;">[LISA: Your analysis of what this means for Raj's positioning and ideal clients]</div>
+                </div>
+
+                <h3 class="subsection-title">5. How Others See You</h3>
+                <div class="insight-box">
+                    <div class="raj-quote">"Call Raj when you're culturally stuck and don't know why. He makes the complex stuff simple. He gives you permission to try the scary thing. He spots the pattern we were all missing."</div>
+
+                    <p style="margin-top: 15px;">People think of Raj when:</p>
+                    <ul style="margin-left: 20px; margin-top: 10px;">
+                        <li>A brand feels disconnected from where culture's actually gone</li>
+                        <li>They need to do something bold but need someone to make it feel doable</li>
+                        <li>There's a transformation problem that feels stuck</li>
+                        <li>They want strategic thinking that doesn't feel corporate</li>
+                    </ul>
+
+                    <div class="placeholder" style="margin-top: 20px;">[LISA: Your analysis - what does this external perception tell us about his value?]</div>
+                </div>
+            </div>
+
+            <!-- YOUR UNDERESTIMATED ABILITY -->
+            <div class="section">
+                <h2 class="section-title">✨ Your Underestimated Ability</h2>
+                <div class="insight-box">
+                    <div class="raj-quote">"My ability to bridge external and internal culture - spotting where culture's already moved outside, then transforming how organisations operate inside to match it. I've been underselling cultural transformation as strategy delivery."</div>
+
+                    <div class="placeholder">[LISA: Your analysis of what Raj has been underselling and how he should reframe it]</div>
+                </div>
+
+                <div class="highlight">
+                    <strong>The Reframe:</strong>
+                    <div class="placeholder">[LISA: Write the powerful reframe of who Raj really is - similar to "You're not a strategist, you're a belief architect"]</div>
+                </div>
+            </div>
+
+            <!-- CONNECTING TO HIS CURRENT CROSSROADS -->
+            <div class="section">
+                <h2 class="section-title">🔄 Connecting to Your Current Crossroads</h2>
+
+                <div class="insight-box">
+                    <h4>Your Career Arc So Far:</h4>
+                    <div class="placeholder">[LISA: Map Raj's journey - AMV/BBDO period, Arley's client-side, Malice Arts experiments, Lemons.life entrepreneurship. What does the arc tell us?]</div>
+                </div>
+
+                <h3 class="subsection-title">The Core Tension</h3>
+                <div class="two-column">
+                    <div class="column-box" style="background: #ffe0e0;">
+                        <h4 style="color: #c0392b;">What Drains Him</h4>
+                        <div class="placeholder">[LISA: List what environments/situations drain Raj based on his responses]</div>
+                    </div>
+                    <div class="column-box" style="background: #e0ffe0;">
+                        <h4 style="color: #27ae60;">What Charges Him</h4>
+                        <div class="placeholder">[LISA: List what environments/situations energise Raj based on his responses]</div>
+                    </div>
+                </div>
+
+                <div class="highlight">
+                    <strong>The Question He's Really Asking:</strong>
+                    <div class="placeholder">[LISA: What's the real question Raj is wrestling with beneath the surface?]</div>
+                </div>
+            </div>
+
+            <!-- KEY QUESTIONS FOR SESSION 2 -->
+            <div class="section">
+                <h2 class="section-title">❓ Key Questions For Session 2</h2>
+                <p style="margin-bottom: 20px;">We'll explore these together to build clarity:</p>
+
+                <div class="key-question">
+                    <strong>1. Question 1:</strong>
+                    <div class="placeholder">[LISA: First key question to explore in Session 2]</div>
+                </div>
+
+                <div class="key-question">
+                    <strong>2. Question 2:</strong>
+                    <div class="placeholder">[LISA: Second key question to explore]</div>
+                </div>
+
+                <div class="key-question">
+                    <strong>3. Question 3:</strong>
+                    <div class="placeholder">[LISA: Third key question to explore]</div>
+                </div>
+
+                <div class="key-question">
+                    <strong>4. The Bigger Question:</strong>
+                    <div class="placeholder">[LISA: The underlying question about Raj's future direction]</div>
+                </div>
+            </div>
+
+            <!-- HOMEWORK FOR SESSION 2 -->
+            <div class="section">
+                <h2 class="section-title">📝 Homework Before Session 2</h2>
+                <div class="insight-box">
+                    <h4>1. Task 1</h4>
+                    <div class="placeholder">[LISA: First homework task for Raj]</div>
+
+                    <h4 style="margin-top: 20px;">2. Task 2</h4>
+                    <div class="placeholder">[LISA: Second homework task]</div>
+
+                    <h4 style="margin-top: 20px;">3. Task 3</h4>
+                    <div class="placeholder">[LISA: Third homework task]</div>
+
+                    <h4 style="margin-top: 20px;">4. Task 4</h4>
+                    <div class="placeholder">[LISA: Fourth homework task]</div>
+                </div>
+            </div>
+
+            <!-- WHAT'S NEXT -->
+            <div class="section">
+                <h2 class="section-title">🚀 What's Next</h2>
+                <div class="connection-box">
+                    <h4>In Session 2 We'll:</h4>
+                    <ol>
+                        <li><strong>Review this report together</strong> - What resonates? What surprises you?</li>
+                        <li><strong>Walk through your homework</strong> - Explore your reflections</li>
+                        <li><strong>Build your decision-making framework</strong> - Create criteria for evaluating opportunities</li>
+                        <li><strong>Identify your deal-breakers</strong> - What's non-negotiable?</li>
+                        <li><strong>Begin emotional + rational clarity</strong> - Move toward conviction about your path</li>
+                    </ol>
+
+                    <p style="margin-top: 20px; font-weight: 600;">By the end of Session 2, you'll have clear criteria for making decisions—and potentially options you haven't considered yet.</p>
+                </div>
+            </div>
+        </div>
+
+        <div style="text-align: center; padding: 30px; background: #f8f9fa; color: #7f8c8d; font-size: 0.9em;">
+            <p>Career Booster Programme with Lisa Gills | Harness the Spark</p>
+            <p style="margin-top: 5px;">Session 2 Preparation Document</p>
+        </div>
+    </div>
+</body>
+</html>
