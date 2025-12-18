@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Career Insights Report | Spark Your Potential</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #faf5ff 0%, #ede9fe 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #7c3aed, #a855f7);
+            padding: 50px 40px;
+            border-radius: 20px;
+            color: white;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .header .subtitle {
+            opacity: 0.9;
+            font-size: 1.1em;
+        }
+
+        .report-section {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        }
+
+        .section-title {
+            font-size: 1.5em;
+            color: #7c3aed;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #ede9fe;
+        }
+
+        .section-content {
+            color: #374151;
+            line-height: 1.8;
+            font-size: 1.05em;
+            white-space: pre-wrap;
+        }
+
+        .empty-section {
+            color: #9ca3af;
+            font-style: italic;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 100px 20px;
+            color: #6b7280;
+            font-size: 1.2em;
+        }
+
+        .error-state {
+            text-align: center;
+            padding: 100px 20px;
+            background: white;
+            border-radius: 15px;
+            margin: 20px;
+        }
+
+        .error-state h2 {
+            color: #7c3aed;
+            margin-bottom: 15px;
+        }
+
+        .error-state p {
+            color: #6b7280;
+            margin-bottom: 20px;
+        }
+
+        .back-btn {
+            display: inline-block;
+            padding: 12px 25px;
+            background: linear-gradient(135deg, #7c3aed, #a855f7);
+            color: white;
+            text-decoration: none;
+            border-radius: 10px;
+            font-weight: 600;
+        }
+
+        .strengths-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .strengths-list li {
+            padding: 12px 15px;
+            background: #f9fafb;
+            border-radius: 8px;
+            margin-bottom: 8px;
+            border-left: 4px solid #a855f7;
+        }
+
+        .html-content {
+            /* For custom HTML templates */
+        }
+
+        .html-content h1, .html-content h2, .html-content h3 {
+            color: #7c3aed;
+            margin: 20px 0 10px;
+        }
+
+        .html-content p { margin-bottom: 15px; line-height: 1.8; }
+        .html-content ul, .html-content ol { margin-left: 25px; margin-bottom: 15px; }
+        .html-content li { margin-bottom: 8px; }
+
+        @media print {
+            body { background: white; }
+            .header { break-after: avoid; }
+            .report-section { break-inside: avoid; }
+        }
+
+        @media (max-width: 768px) {
+            .container { padding: 10px; }
+            .header { padding: 30px 20px; }
+            .header h1 { font-size: 1.8em; }
+            .report-section { padding: 20px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="loading" id="loadingState">Loading your career insights...</div>
+
+        <div id="reportContent" style="display: none;">
+            <div class="header">
+                <h1 id="clientName">Career Insights Report</h1>
+                <div class="subtitle">Session Analysis & Career Direction</div>
+            </div>
+
+            <!-- Custom HTML Section (if provided) -->
+            <div id="htmlSection" style="display: none;">
+                <div class="report-section">
+                    <div class="html-content" id="htmlContent"></div>
+                </div>
+            </div>
+
+            <!-- Structured Sections -->
+            <div id="structuredSections">
+                <div class="report-section" id="summarySection" style="display: none;">
+                    <h2 class="section-title">📊 Executive Summary</h2>
+                    <div class="section-content" id="executiveSummary"></div>
+                </div>
+
+                <div class="report-section" id="patternSection" style="display: none;">
+                    <h2 class="section-title">🔍 Pattern Analysis</h2>
+                    <div class="section-content" id="patternAnalysis"></div>
+                </div>
+
+                <div class="report-section" id="strengthsSection" style="display: none;">
+                    <h2 class="section-title">💪 Key Strengths</h2>
+                    <ul class="strengths-list" id="keyStrengths"></ul>
+                </div>
+
+                <div class="report-section" id="directionsSection" style="display: none;">
+                    <h2 class="section-title">🧭 Career Directions</h2>
+                    <div class="section-content" id="careerDirections"></div>
+                </div>
+
+                <div class="report-section" id="nextStepsSection" style="display: none;">
+                    <h2 class="section-title">📋 Next Steps</h2>
+                    <div class="section-content" id="nextSteps"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="error-state" id="errorState" style="display: none;">
+            <h2>Report Not Available Yet</h2>
+            <p id="errorMessage">Your Career Insights Report is being prepared. Please check back soon!</p>
+            <a href="client-portal.html" class="back-btn">← Back to Portal</a>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE = 'https://sparkhub-be-qtmmb.ondigitalocean.app';
+
+        // Get auth token from localStorage
+        function getAuthToken() {
+            return localStorage.getItem('syp_token');
+        }
+
+        async function loadReport() {
+            const token = getAuthToken();
+
+            if (!token) {
+                // Try to load static file as fallback
+                loadStaticFile();
+                return;
+            }
+
+            try {
+                const response = await fetch(`${API_BASE}/api/crm/syp/insights-report/`, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    displayReport(data);
+                } else if (response.status === 404) {
+                    // No published report yet - try static file
+                    loadStaticFile();
+                } else {
+                    showError('Unable to load your report. Please try again later.');
+                }
+            } catch (error) {
+                console.log('API error, trying static file:', error.message);
+                loadStaticFile();
+            }
+        }
+
+        function loadStaticFile() {
+            // Get file path from URL params
+            const params = new URLSearchParams(window.location.search);
+            const file = params.get('file');
+
+            if (file) {
+                // Redirect to static file
+                window.location.href = file;
+            } else {
+                showError('Your Career Insights Report is being prepared by your coach.');
+            }
+        }
+
+        function displayReport(data) {
+            document.getElementById('loadingState').style.display = 'none';
+            document.getElementById('reportContent').style.display = 'block';
+
+            // Set client name
+            if (data.client_name) {
+                document.getElementById('clientName').textContent = data.client_name;
+            }
+
+            // If custom HTML content provided, show that
+            if (data.html_content && data.html_content.trim()) {
+                document.getElementById('htmlSection').style.display = 'block';
+                document.getElementById('htmlContent').innerHTML = data.html_content;
+                document.getElementById('structuredSections').style.display = 'none';
+                return;
+            }
+
+            // Otherwise show structured sections
+            if (data.executive_summary) {
+                document.getElementById('summarySection').style.display = 'block';
+                document.getElementById('executiveSummary').textContent = data.executive_summary;
+            }
+
+            if (data.pattern_analysis) {
+                document.getElementById('patternSection').style.display = 'block';
+                document.getElementById('patternAnalysis').textContent = data.pattern_analysis;
+            }
+
+            if (data.key_strengths) {
+                document.getElementById('strengthsSection').style.display = 'block';
+                const strengths = data.key_strengths.split('\n').filter(s => s.trim());
+                const list = document.getElementById('keyStrengths');
+                list.innerHTML = strengths.map(s => `<li>${s.trim()}</li>`).join('');
+            }
+
+            if (data.career_directions) {
+                document.getElementById('directionsSection').style.display = 'block';
+                document.getElementById('careerDirections').textContent = data.career_directions;
+            }
+
+            if (data.next_steps) {
+                document.getElementById('nextStepsSection').style.display = 'block';
+                document.getElementById('nextSteps').textContent = data.next_steps;
+            }
+
+            // If no structured content, show message
+            if (!data.executive_summary && !data.pattern_analysis && !data.key_strengths &&
+                !data.career_directions && !data.next_steps) {
+                showError('Your Career Insights Report is being prepared by your coach.');
+            }
+        }
+
+        function showError(message) {
+            document.getElementById('loadingState').style.display = 'none';
+            document.getElementById('errorState').style.display = 'block';
+            document.getElementById('errorMessage').textContent = message;
+        }
+
+        // Load on page load
+        loadReport();
+    </script>
+</body>
+</html>

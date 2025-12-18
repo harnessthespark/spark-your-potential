@@ -1734,6 +1734,13 @@
                         </div>
                         <span>→</span>
                     </div>
+                    <div class="panel-item" onclick="openDoc('insights')">
+                        <div>
+                            <div class="panel-item-title">💡 Insights Report</div>
+                            <div class="panel-item-meta">Career insights editor</div>
+                        </div>
+                        <span>→</span>
+                    </div>
                     <div class="panel-item" onclick="openDoc('blueprint')">
                         <div>
                             <div class="panel-item-title">🎯 Career Blueprint</div>
@@ -1810,6 +1817,7 @@
                 // Career documents - all standard naming conventions
                 docs = {
                     'questionnaire': `questionnaire-editor.html?client_id=${selectedClient.id}`,
+                    'insights': `insights-editor.html?client_id=${selectedClient.id}`,
                     'blueprint': `${folder}/${folder}_Blueprint.html`,
                     'cv-builder': `${folder}/${folder}_Interactive_CV_Builder.html`,
                     'decision': `${folder}/${folder}_Decision_Framework.html`,

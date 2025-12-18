@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Career Insights Editor | Coach Hub</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #1e1b4b 0%, #312e81 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .header {
+            background: white;
+            padding: 25px 30px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header h1 {
+            color: #7c3aed;
+            font-size: 1.5em;
+        }
+
+        .client-name {
+            color: #6b7280;
+            font-weight: 400;
+        }
+
+        .status-badge {
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: 600;
+        }
+
+        .status-badge.draft { background: #fef3c7; color: #92400e; }
+        .status-badge.published { background: #d1fae5; color: #065f46; }
+
+        .editor-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 20px;
+        }
+
+        .editor-card h2 {
+            color: #7c3aed;
+            font-size: 1.2em;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #e5e7eb;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 8px;
+        }
+
+        .form-group textarea {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e5e7eb;
+            border-radius: 10px;
+            font-family: inherit;
+            font-size: 0.95em;
+            line-height: 1.6;
+            resize: vertical;
+            transition: border-color 0.2s;
+        }
+
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #7c3aed;
+        }
+
+        .form-group textarea.small { min-height: 80px; }
+        .form-group textarea.medium { min-height: 150px; }
+        .form-group textarea.large { min-height: 250px; }
+
+        .help-text {
+            font-size: 0.85em;
+            color: #6b7280;
+            margin-top: 5px;
+        }
+
+        .actions {
+            display: flex;
+            gap: 15px;
+            justify-content: flex-end;
+            padding: 20px;
+            background: white;
+            border-radius: 15px;
+            position: sticky;
+            bottom: 20px;
+            box-shadow: 0 -5px 20px rgba(0,0,0,0.1);
+        }
+
+        .btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-secondary {
+            background: #f3f4f6;
+            color: #374151;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #7c3aed, #a855f7);
+            color: white;
+        }
+
+        .btn-success {
+            background: #22c55e;
+            color: white;
+        }
+
+        .btn:hover { opacity: 0.9; transform: translateY(-1px); }
+
+        .save-status {
+            padding: 10px 20px;
+            background: #d1fae5;
+            color: #065f46;
+            border-radius: 10px;
+            display: none;
+        }
+
+        .save-status.visible { display: block; }
+
+        .toggle-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .toggle {
+            width: 50px;
+            height: 26px;
+            background: #e5e7eb;
+            border-radius: 13px;
+            position: relative;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .toggle.active { background: #22c55e; }
+
+        .toggle::after {
+            content: '';
+            position: absolute;
+            width: 22px;
+            height: 22px;
+            background: white;
+            border-radius: 50%;
+            top: 2px;
+            left: 2px;
+            transition: left 0.2s;
+        }
+
+        .toggle.active::after { left: 26px; }
+
+        .loading {
+            text-align: center;
+            padding: 50px;
+            color: white;
+            font-size: 1.2em;
+        }
+
+        .error-msg {
+            background: #fef2f2;
+            color: #dc2626;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .header { flex-direction: column; gap: 15px; text-align: center; }
+            .actions { flex-direction: column; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="loading" id="loadingState">Loading report...</div>
+
+        <div id="editorContent" style="display: none;">
+            <div class="header">
+                <div>
+                    <h1>Career Insights Report</h1>
+                    <span class="client-name" id="clientName">Loading...</span>
+                </div>
+                <div class="status-badge draft" id="statusBadge">Draft</div>
+            </div>
+
+            <div class="error-msg" id="errorMsg" style="display: none;"></div>
+
+            <div class="editor-card">
+                <h2>Executive Summary</h2>
+                <div class="form-group">
+                    <label>Core Pattern</label>
+                    <textarea id="executiveSummary" class="medium" placeholder="Write the client's core pattern - what do they consistently do across all their outcomes?"></textarea>
+                    <p class="help-text">This is the main insight that ties everything together.</p>
+                </div>
+            </div>
+
+            <div class="editor-card">
+                <h2>Pattern Analysis</h2>
+                <div class="form-group">
+                    <label>Analysis of the 5 Outcomes</label>
+                    <textarea id="patternAnalysis" class="large" placeholder="Break down how the pattern shows up in each of their 5 outcomes. What's consistent? What's the sequence?"></textarea>
+                </div>
+            </div>
+
+            <div class="editor-card">
+                <h2>Key Strengths</h2>
+                <div class="form-group">
+                    <label>Identified Strengths</label>
+                    <textarea id="keyStrengths" class="medium" placeholder="List the key strengths identified from their responses (one per line)"></textarea>
+                </div>
+            </div>
+
+            <div class="editor-card">
+                <h2>Career Directions</h2>
+                <div class="form-group">
+                    <label>Recommended Paths</label>
+                    <textarea id="careerDirections" class="medium" placeholder="What career directions does this pattern suggest? What roles would leverage their strengths?"></textarea>
+                </div>
+            </div>
+
+            <div class="editor-card">
+                <h2>Next Steps</h2>
+                <div class="form-group">
+                    <label>Action Items</label>
+                    <textarea id="nextSteps" class="medium" placeholder="What should the client do next? Specific actions they can take."></textarea>
+                </div>
+            </div>
+
+            <div class="editor-card">
+                <h2>Coach Notes</h2>
+                <div class="form-group">
+                    <label>Internal Notes (not shown to client)</label>
+                    <textarea id="coachNotes" class="small" placeholder="Private notes for your reference only..."></textarea>
+                    <p class="help-text">These notes are NOT visible to the client.</p>
+                </div>
+            </div>
+
+            <div class="editor-card">
+                <h2>Full HTML Content (Advanced)</h2>
+                <div class="form-group">
+                    <label>Custom HTML Report</label>
+                    <textarea id="htmlContent" class="large" placeholder="Paste the full HTML content of the report here if you want to use a custom template..."></textarea>
+                    <p class="help-text">Optional: For advanced customization. Leave empty to use structured fields above.</p>
+                </div>
+            </div>
+
+            <div class="actions">
+                <span class="save-status" id="saveStatus">Saved!</span>
+
+                <div class="toggle-group">
+                    <span>Publish to client:</span>
+                    <div class="toggle" id="publishToggle" onclick="togglePublish()"></div>
+                </div>
+
+                <button class="btn btn-secondary" onclick="window.location.href='coach-hub.html'">Back to Hub</button>
+                <button class="btn btn-primary" onclick="saveReport()">Save Report</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE = 'https://sparkhub-be-qtmmb.ondigitalocean.app';
+        let clientId = null;
+        let isPublished = false;
+
+        // Get client ID from URL
+        const params = new URLSearchParams(window.location.search);
+        clientId = params.get('client_id');
+
+        if (!clientId) {
+            document.getElementById('loadingState').innerHTML =
+                '<div class="error-msg">No client ID provided. Add ?client_id=X to the URL.</div>';
+        } else {
+            loadReport();
+        }
+
+        function getAuthToken() {
+            return localStorage.getItem('syp_token');
+        }
+
+        async function loadReport() {
+            const token = getAuthToken();
+            if (!token) {
+                showError('Not logged in. Please log in via coach-hub first.');
+                return;
+            }
+
+            try {
+                const response = await fetch(`${API_BASE}/api/crm/syp/coach/insights-reports/by-client/${clientId}/`, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    populateForm(data);
+                    document.getElementById('loadingState').style.display = 'none';
+                    document.getElementById('editorContent').style.display = 'block';
+                } else {
+                    const err = await response.json();
+                    showError(err.detail || err.error || 'Failed to load report');
+                }
+            } catch (error) {
+                showError('Connection error: ' + error.message);
+            }
+        }
+
+        function populateForm(data) {
+            document.getElementById('clientName').textContent = data.client_name || 'Unknown Client';
+            document.getElementById('executiveSummary').value = data.executive_summary || '';
+            document.getElementById('patternAnalysis').value = data.pattern_analysis || '';
+            document.getElementById('keyStrengths').value = data.key_strengths || '';
+            document.getElementById('careerDirections').value = data.career_directions || '';
+            document.getElementById('nextSteps').value = data.next_steps || '';
+            document.getElementById('coachNotes').value = data.coach_notes || '';
+            document.getElementById('htmlContent').value = data.html_content || '';
+
+            isPublished = data.is_published || false;
+            updatePublishUI();
+        }
+
+        function togglePublish() {
+            isPublished = !isPublished;
+            updatePublishUI();
+        }
+
+        function updatePublishUI() {
+            const toggle = document.getElementById('publishToggle');
+            const badge = document.getElementById('statusBadge');
+
+            if (isPublished) {
+                toggle.classList.add('active');
+                badge.textContent = 'Published';
+                badge.className = 'status-badge published';
+            } else {
+                toggle.classList.remove('active');
+                badge.textContent = 'Draft';
+                badge.className = 'status-badge draft';
+            }
+        }
+
+        async function saveReport() {
+            const token = getAuthToken();
+            if (!token) {
+                showError('Not logged in');
+                return;
+            }
+
+            const data = {
+                executive_summary: document.getElementById('executiveSummary').value,
+                pattern_analysis: document.getElementById('patternAnalysis').value,
+                key_strengths: document.getElementById('keyStrengths').value,
+                career_directions: document.getElementById('careerDirections').value,
+                next_steps: document.getElementById('nextSteps').value,
+                coach_notes: document.getElementById('coachNotes').value,
+                html_content: document.getElementById('htmlContent').value,
+                is_published: isPublished
+            };
+
+            try {
+                const response = await fetch(`${API_BASE}/api/crm/syp/coach/insights-reports/by-client/${clientId}/`, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                });
+
+                if (response.ok) {
+                    showSaveStatus('Saved to PostgreSQL!');
+                    console.log('Report saved to PostgreSQL');
+                } else {
+                    const err = await response.json();
+                    showError(err.detail || 'Failed to save');
+                }
+            } catch (error) {
+                showError('Save failed: ' + error.message);
+            }
+        }
+
+        function showSaveStatus(msg) {
+            const status = document.getElementById('saveStatus');
+            status.textContent = msg;
+            status.classList.add('visible');
+            setTimeout(() => status.classList.remove('visible'), 3000);
+        }
+
+        function showError(msg) {
+            const errEl = document.getElementById('errorMsg');
+            errEl.textContent = msg;
+            errEl.style.display = 'block';
+            document.getElementById('loadingState').style.display = 'none';
+            document.getElementById('editorContent').style.display = 'block';
+        }
+
+        // Auto-save on changes
+        let autoSaveTimeout;
+        document.querySelectorAll('textarea').forEach(el => {
+            el.addEventListener('input', () => {
+                clearTimeout(autoSaveTimeout);
+                autoSaveTimeout = setTimeout(saveReport, 3000);
+            });
+        });
+    </script>
+</body>
+</html>
