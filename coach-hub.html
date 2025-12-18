@@ -1088,27 +1088,7 @@
             <div class="panel-section">
                 <h4>📁 Documents</h4>
                 <div id="panelDocs">
-                    <div class="panel-item" onclick="openDoc('questionnaire')">
-                        <div>
-                            <div class="panel-item-title">Questionnaire Responses</div>
-                            <div class="panel-item-meta">View/edit responses</div>
-                        </div>
-                        <span>→</span>
-                    </div>
-                    <div class="panel-item" onclick="openDoc('blueprint')">
-                        <div>
-                            <div class="panel-item-title">Career Blueprint</div>
-                            <div class="panel-item-meta">View blueprint</div>
-                        </div>
-                        <span>→</span>
-                    </div>
-                    <div class="panel-item" onclick="openDoc('agreement')">
-                        <div>
-                            <div class="panel-item-title">Coaching Agreement</div>
-                            <div class="panel-item-meta">View signed agreement</div>
-                        </div>
-                        <span>→</span>
-                    </div>
+                    <!-- Populated dynamically based on programme type -->
                 </div>
             </div>
 
@@ -1124,7 +1104,7 @@
                 </div>
             </div>
 
-            <button class="view-full-btn" onclick="openFullProfile()">View Full Profile →</button>
+            <!-- View Full Profile button removed - page doesn't exist yet -->
         </div>
     </div>
 
@@ -1473,6 +1453,62 @@
             document.getElementById('panelClientName').textContent = selectedClient.full_name || selectedClient.name;
             document.getElementById('panelClientEmail').textContent = selectedClient.email;
 
+            // Update documents based on programme type
+            const programmeType = selectedClient.programme_type || 'career';
+            const panelDocs = document.getElementById('panelDocs');
+
+            if (programmeType === 'audhd' || programmeType === 'nd') {
+                // AuDHD/ND Coaching documents
+                panelDocs.innerHTML = `
+                    <div class="panel-item" onclick="openDoc('paradox')">
+                        <div>
+                            <div class="panel-item-title">🧠 Paradox Domains</div>
+                            <div class="panel-item-meta">View AuDHD profile</div>
+                        </div>
+                        <span>→</span>
+                    </div>
+                    <div class="panel-item" onclick="openDoc('session-notes')">
+                        <div>
+                            <div class="panel-item-title">📝 Session Notes</div>
+                            <div class="panel-item-meta">View session summaries</div>
+                        </div>
+                        <span>→</span>
+                    </div>
+                    <div class="panel-item" onclick="openDoc('agreement')">
+                        <div>
+                            <div class="panel-item-title">Coaching Agreement</div>
+                            <div class="panel-item-meta">View signed agreement</div>
+                        </div>
+                        <span>→</span>
+                    </div>
+                `;
+            } else {
+                // Career Coaching documents
+                panelDocs.innerHTML = `
+                    <div class="panel-item" onclick="openDoc('questionnaire')">
+                        <div>
+                            <div class="panel-item-title">Questionnaire Responses</div>
+                            <div class="panel-item-meta">View/edit responses</div>
+                        </div>
+                        <span>→</span>
+                    </div>
+                    <div class="panel-item" onclick="openDoc('blueprint')">
+                        <div>
+                            <div class="panel-item-title">Career Blueprint</div>
+                            <div class="panel-item-meta">View blueprint</div>
+                        </div>
+                        <span>→</span>
+                    </div>
+                    <div class="panel-item" onclick="openDoc('agreement')">
+                        <div>
+                            <div class="panel-item-title">Coaching Agreement</div>
+                            <div class="panel-item-meta">View signed agreement</div>
+                        </div>
+                        <span>→</span>
+                    </div>
+                `;
+            }
+
             document.getElementById('panelOverlay').classList.add('active');
             document.getElementById('slidePanel').classList.add('active');
         }
@@ -1497,15 +1533,30 @@
             if (!selectedClient) return;
 
             const folder = selectedClient.full_name?.replace(/\s+/g, '_') || 'Unknown';
+            const programmeType = selectedClient.programme_type || 'career';
 
-            const docs = {
-                'questionnaire': `questionnaire-editor.html?client_id=${selectedClient.id}`,
-                'blueprint': `${folder}/${folder}_Blueprint.html`,
-                'agreement': `${folder}/${folder}_Coaching_Agreement.html`
-            };
+            let docs = {};
+
+            if (programmeType === 'audhd' || programmeType === 'nd') {
+                // AuDHD/ND documents
+                docs = {
+                    'paradox': `audhd-dashboard.html?client_id=${selectedClient.id}`,
+                    'session-notes': `${folder}/${folder}_Session_Notes.html`,
+                    'agreement': `${folder}/${folder}_Coaching_Agreement.html`
+                };
+            } else {
+                // Career documents
+                docs = {
+                    'questionnaire': `questionnaire-editor.html?client_id=${selectedClient.id}`,
+                    'blueprint': `${folder}/${folder}_Blueprint.html`,
+                    'agreement': `${folder}/${folder}_Coaching_Agreement.html`
+                };
+            }
 
             if (docs[type]) {
                 window.open(docs[type], '_blank');
+            } else {
+                alert(`Document "${type}" not yet available for ${selectedClient.full_name}`);
             }
         }
 
