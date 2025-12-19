@@ -1349,16 +1349,6 @@
                         linkKey: 'questionnaire'
                     },
                     {
-                        id: 'w1-belief-moments',
-                        title: 'Identify 3-5 Belief Moments',
-                        description: 'Stories from your career that prove your value - times when you made a real difference'
-                    },
-                    {
-                        id: 'w1-achievements',
-                        title: 'List Your Top 5 Achievements',
-                        description: 'What are you most proud of? These will fuel your positioning'
-                    },
-                    {
                         id: 'w1-review-insights',
                         title: 'Review Your Career Insights Report',
                         description: 'Lisa will create this after your session - your patterns and unique thread revealed',
@@ -2160,8 +2150,15 @@
                 let linkHtml = '';
                 if (task.linkFile) {
                     linkHtml = `<a href="${task.linkFile}" target="_blank" class="homework-link">${task.linkText} →</a>`;
-                } else if (task.linkKey && files[task.linkKey]) {
-                    linkHtml = `<a href="${files[task.linkKey]}" target="_blank" class="homework-link">${task.linkText} →</a>`;
+                } else if (task.linkKey) {
+                    // Handle questionnaire key - fallback to questionnaireResponses
+                    let fileUrl = files[task.linkKey];
+                    if (!fileUrl && task.linkKey === 'questionnaire') {
+                        fileUrl = files.questionnaireResponses;
+                    }
+                    if (fileUrl) {
+                        linkHtml = `<a href="${fileUrl}" target="_blank" class="homework-link">${task.linkText} →</a>`;
+                    }
                 }
 
                 return `
