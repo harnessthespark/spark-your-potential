@@ -583,6 +583,33 @@
                     underselling: `"My ability to bridge external and internal culture - spotting where culture's already moved outside, then transforming how organisations operate inside to match it. I've been underselling cultural transformation as strategy delivery."`,
                     transformation: `"I help people and organisations see the cultural truth they couldn't articulate, then give them permission to act on it with confidence. It's not just delivering insights - it's creating belief and making the scary thing feel doable."`,
                     permission: `"I don't just do strategy - I create transformation. I'm a cultural translator who spots where culture's already gone and makes the path visible so brands can get there."`
+                },
+                defaults: {
+                    corePattern: `Raj shifts thinking away from the obvious and has a unique knack for turning the ordinary into extraordinary by bringing cultural reference to the forefront of strategy and beyond.`,
+                    patternExplanation: `Being able to take digital strategy and articulate that it's a vehicle to carry messaging. He reframes context in cultural familiarity.`,
+                    careerImplication: `Space to teach and educate. Freedom to create and explore.`,
+                    threadAnalysis: `He's digging in the places others aren't. He's uncovering human truths in unconventional ways, he's not afraid to be curious and go down rabbit holes.`,
+                    threadPhrase: `Ahead of the curve, he makes the invisible visible - spotting where culture has already moved before brands catch up.`,
+                    threadConnection: `Very important he is somewhere where they recognise importance of culture above all else.`,
+                    superpower1: `What Feels Easy: "I'm not forcing anything. I'm spotting what's already there - the cultural truth hiding in plain sight - and finding the simplest way to make it visible."`,
+                    superpower2: `What You Notice First: "I see the mismatches early. The thing people are saying out loud vs. the emotional truth underneath. The place where culture's already gone that the brand hasn't caught up to yet."`,
+                    superpower3: `Questions Only You Ask: "I'm always asking about culture, emotion, play, and fun - looking for opportunities to leverage these that others don't see."`,
+                    superpower4: `"Of Course" Moments: "I show people something that was already there but they couldn't articulate yet. Once they see it, they can't unsee it. It feels obvious in hindsight - but only because I made it visible first."`,
+                    superpowerConnection: `"Call Raj when you're culturally stuck and don't know why. He makes complex stuff simple. He gives you permission to try the scary thing. He spots the pattern we were all missing. Operates between big brand credibility and underground experiential instincts; strategic but not stuffy."`,
+                    underselling: `Pattern Recognised: "My ability to bridge external and internal culture - spotting where culture's already moved outside, then transforming how organisations operate inside to match it. I've been underselling cultural transformation as strategy delivery."\n\nTransformation You Enable: "I help people and organisations see the cultural truth they couldn't articulate, then give them permission to act on it with confidence. It's not just delivering insights - it's creating belief and making the scary thing feel doable."\n\nPermission You're Giving Yourself: "I don't just do strategy - I create transformation. I'm a cultural translator who spots where culture's already gone and makes the path visible so brands can get there."`,
+                    reframe: `Beyond the Strategist, Raj encapsulates 'hindsight' before it's even happened.`,
+                    careerArc: `Rich Awareness → Unique Perspective → Detail Detection → Pattern Spotting\n\nAwareness feeds perspective, which sharpens detection, which enables pattern spotting. This is how you process - and why you see what others miss.`,
+                    drains: `• Brands culturally stuck and resistant to seeing it\n• Solving the wrong problem (when people won't shift)\n• Passive, TV-only thinking - no interactivity\n• Being boxed into "digital strategist"`,
+                    charges: `• The "Of Course" moment - when people finally see it\n• Revealing what was there all along\n• Adding play, interactivity, participation\n• Giving people permission to be brave`,
+                    realQuestion: `How do I get recognised for cultural transformation - not just strategy delivery? Where can I do this work at the scale it deserves?`,
+                    question1: `What does "recognised for cultural transformation" actually look like for you? In-house? Consultancy? Something else?`,
+                    question2: `What environments have let you thrive vs. frustrated you? What's the pattern?`,
+                    question3: `If you could design your ideal role, what would you be doing day-to-day?`,
+                    biggerQuestion: `What's the transformation you want to be known for enabling?`,
+                    homework1: `Validate the Drains & Charges - Review the "What Drains You / What Charges You" section. Add, remove, or refine based on what feels true.`,
+                    homework2: `List 3-5 Dream Companies - Organisations where your cultural transformation abilities would be valued. Don't filter - include the ambitious ones.`,
+                    homework3: `The "Hell Yes" Criteria - What would make an opportunity feel like an absolute yes? What are your non-negotiables?`,
+                    homework4: `The Reframe Test - Try introducing yourself using "hindsight before it's happened" framing. How does it feel? What reactions do you get?`
                 }
             },
             'donald': {
@@ -634,13 +661,19 @@
             document.getElementById('clientEmail').textContent = selectedClient.email;
             document.getElementById('clientStage').textContent = selectedClient.stage;
 
-            // Load saved insights from localStorage
+            // Load saved insights from localStorage, or use defaults
             const savedData = localStorage.getItem(`insights_${clientKey}`);
             if (savedData) {
                 const data = JSON.parse(savedData);
                 Object.keys(data).forEach(key => {
                     const el = document.getElementById(key);
                     if (el) el.value = data[key];
+                });
+            } else if (selectedClient.defaults) {
+                // Load defaults for this client
+                Object.keys(selectedClient.defaults).forEach(key => {
+                    const el = document.getElementById(key);
+                    if (el) el.value = selectedClient.defaults[key];
                 });
             } else {
                 // Clear all fields
