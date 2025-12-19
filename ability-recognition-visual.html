@@ -1153,6 +1153,169 @@
 
 
     <script>
+        // =============================================
+        // LOAD RESPONSES FROM POSTGRESQL ON PAGE LOAD
+        // =============================================
+        async function loadFromPostgreSQL() {
+            const clientEmail = localStorage.getItem('syp_client_email');
+            if (!clientEmail) {
+                console.log('No client email - skipping PostgreSQL load');
+                return;
+            }
+
+            console.log('🔄 Loading questionnaire from PostgreSQL for:', clientEmail);
+
+            try {
+                // Get user first
+                const userResponse = await fetch('/api/user', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email: clientEmail })
+                });
+                const userData = await userResponse.json();
+
+                if (!userData.success || !userData.user) {
+                    console.log('No user found in PostgreSQL');
+                    return;
+                }
+
+                // Get their blueprint (which contains questionnaire_responses)
+                const blueprintResponse = await fetch(`/api/blueprint/${userData.user.id}`);
+                if (!blueprintResponse.ok) {
+                    console.log('No blueprint found in PostgreSQL');
+                    return;
+                }
+
+                const blueprintData = await blueprintResponse.json();
+                if (!blueprintData.success || !blueprintData.blueprint) {
+                    console.log('No blueprint data');
+                    return;
+                }
+
+                const responses = blueprintData.blueprint.questionnaire_responses;
+                if (!responses) {
+                    console.log('No questionnaire responses in blueprint');
+                    return;
+                }
+
+                console.log('✅ Found questionnaire responses in PostgreSQL:', Object.keys(responses));
+
+                // Populate form fields with saved responses
+                populateFormFields(responses);
+
+            } catch (error) {
+                console.warn('⚠️ PostgreSQL load error:', error.message);
+            }
+        }
+
+        // Populate form fields with saved data
+        function populateFormFields(responses) {
+            // Client name
+            if (responses.clientName) {
+                const nameField = document.getElementById('clientName');
+                if (nameField) nameField.value = responses.clientName;
+            }
+
+            // Outcomes (array of 5)
+            if (responses.outcomes && Array.isArray(responses.outcomes)) {
+                responses.outcomes.forEach((outcome, i) => {
+                    const field = document.getElementById(`outcome${i + 1}`);
+                    if (field && outcome) field.value = outcome;
+                });
+            }
+
+            // Thread
+            if (responses.thread) {
+                const threadField = document.querySelector('textarea[placeholder*="connecting thread"]');
+                if (threadField) threadField.value = responses.thread;
+            }
+
+            // Intuition
+            if (responses.intuition) {
+                const field = document.querySelector('textarea[placeholder*="gut feeling"]');
+                if (field) field.value = responses.intuition;
+            }
+
+            // Questions
+            if (responses.questions) {
+                const field = document.querySelector('textarea[placeholder*="questions do you find"]');
+                if (field) field.value = responses.questions;
+            }
+
+            // Noticing
+            if (responses.noticing) {
+                const field = document.querySelector('textarea[placeholder*="notice about people"]');
+                if (field) field.value = responses.noticing;
+            }
+
+            // What feels easy
+            if (responses.whatFeelsEasy) {
+                const field = document.querySelector('textarea[placeholder*="effortless for you"]');
+                if (field) field.value = responses.whatFeelsEasy;
+            }
+
+            // Of course moments
+            if (responses.ofCourseMoments) {
+                const field = document.querySelector('textarea[placeholder*="Of course"]');
+                if (field) field.value = responses.ofCourseMoments;
+            }
+
+            // Client before
+            if (responses.clientBefore) {
+                const field = document.querySelector('textarea[placeholder*="typically stuck"]');
+                if (field) field.value = responses.clientBefore;
+            }
+
+            // Client after
+            if (responses.clientAfter) {
+                const field = document.querySelector('textarea[placeholder*="walk away"]');
+                if (field) field.value = responses.clientAfter;
+            }
+
+            // Problem magnet
+            if (responses.problemMagnet) {
+                const field = document.querySelector('textarea[placeholder*="types of problems"]');
+                if (field) field.value = responses.problemMagnet;
+            }
+
+            // How others see you
+            if (responses.howOthersSeeYou) {
+                const field = document.querySelector('textarea[placeholder*="would they say"]');
+                if (field) field.value = responses.howOthersSeeYou;
+            }
+
+            // Underestimated ability
+            if (responses.underestimatedAbility) {
+                const field = document.querySelector('textarea[placeholder*="underestimating"]');
+                if (field) field.value = responses.underestimatedAbility;
+            }
+
+            // Pattern recognised
+            if (responses.patternRecognised) {
+                const field = document.querySelector('textarea[placeholder*="pattern I now see"]');
+                if (field) field.value = responses.patternRecognised;
+            }
+
+            // Transformation enabled
+            if (responses.transformationEnabled) {
+                const field = document.querySelector('textarea[placeholder*="transformation I enable"]');
+                if (field) field.value = responses.transformationEnabled;
+            }
+
+            // Permission
+            if (responses.permission) {
+                const field = document.querySelector('textarea[placeholder*="permission"]');
+                if (field) field.value = responses.permission;
+            }
+
+            console.log('✅ Form populated with saved responses');
+        }
+
+        // Load on page ready
+        document.addEventListener('DOMContentLoaded', function() {
+            loadFromPostgreSQL();
+        });
+
         // Add subtle interactions
         document.querySelectorAll('.evidence-box').forEach(box => {
             box.addEventListener('click', function() {

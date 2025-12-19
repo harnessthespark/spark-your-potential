@@ -674,21 +674,24 @@ Generate a complete Career Blueprint JSON.`;
 // Get all clients (for Coach Hub)
 app.get('/api/clients', async (req, res) => {
     try {
-        // Get all users from database
-        const users = await db.getAllUsers();
+        // Get all users from database with full details
+        const result = await db.pool.query(
+            'SELECT id, email, name, full_name, programme_access, programme_status, created_at, last_login FROM users ORDER BY created_at DESC'
+        );
+        const users = result.rows;
 
         // Transform to client format expected by coach-hub
         const clients = users.map(user => ({
             id: user.id,
-            full_name: user.name || user.email.split('@')[0],
-            name: user.name || user.email.split('@')[0],
+            full_name: user.full_name || user.name || user.email.split('@')[0],
+            name: user.full_name || user.name || user.email.split('@')[0],
             email: user.email,
             programme_type: user.programme_access || 'career',
-            programme_status: 'enrolled', // Default, can be enhanced later
-            status: 'enrolled',
+            programme_status: user.programme_status || 'enrolled',
+            status: user.programme_status || 'enrolled',
             enrolled_date: user.created_at,
             last_login: user.last_login,
-            folder: (user.name || user.email.split('@')[0]).replace(/\s+/g, '_')
+            folder: (user.full_name || user.name || user.email.split('@')[0]).replace(/\s+/g, '_')
         }));
 
         console.log(`📋 Returning ${clients.length} clients from PostgreSQL`);
@@ -721,15 +724,15 @@ app.get('/api/clients/:email', async (req, res) => {
 
         const client = {
             id: user.id,
-            full_name: user.name || user.email.split('@')[0],
-            name: user.name || user.email.split('@')[0],
+            full_name: user.full_name || user.name || user.email.split('@')[0],
+            name: user.full_name || user.name || user.email.split('@')[0],
             email: user.email,
             programme_type: user.programme_access || 'career',
-            programme_status: 'enrolled',
-            status: 'enrolled',
+            programme_status: user.programme_status || 'enrolled',
+            status: user.programme_status || 'enrolled',
             enrolled_date: user.created_at,
             last_login: user.last_login,
-            folder: (user.name || user.email.split('@')[0]).replace(/\s+/g, '_'),
+            folder: (user.full_name || user.name || user.email.split('@')[0]).replace(/\s+/g, '_'),
             blueprint: blueprint,
             homework: homework
         };
@@ -745,7 +748,9 @@ app.get('/api/clients/:email', async (req, res) => {
 app.patch('/api/clients/:email', async (req, res) => {
     try {
         const { email } = req.params;
-        const { programme_status, programme_type, name } = req.body;
+        const { programme_status, programme_type, name, full_name } = req.body;
+
+        console.log(`📝 Updating client ${email}:`, { programme_status, programme_type, name, full_name });
 
         // Find user
         const userResult = await db.pool.query(
@@ -759,20 +764,36 @@ app.patch('/api/clients/:email', async (req, res) => {
 
         const userId = userResult.rows[0].id;
 
-        // Update user
+        // Update user - build dynamic UPDATE query
         const updates = [];
         const values = [];
         let paramCount = 1;
 
+        // Update name
         if (name) {
             updates.push(`name = $${paramCount}`);
             values.push(name);
             paramCount++;
         }
 
+        // Update full_name
+        if (full_name) {
+            updates.push(`full_name = $${paramCount}`);
+            values.push(full_name);
+            paramCount++;
+        }
+
+        // Update programme_type (stored as programme_access)
         if (programme_type) {
             updates.push(`programme_access = $${paramCount}`);
             values.push(programme_type);
+            paramCount++;
+        }
+
+        // Update programme_status - THIS WAS MISSING!
+        if (programme_status) {
+            updates.push(`programme_status = $${paramCount}`);
+            values.push(programme_status);
             paramCount++;
         }
 
@@ -780,10 +801,10 @@ app.patch('/api/clients/:email', async (req, res) => {
             updates.push(`updated_at = NOW()`);
             values.push(userId);
 
-            await db.pool.query(
-                `UPDATE users SET ${updates.join(', ')} WHERE id = $${paramCount}`,
-                values
-            );
+            const query = `UPDATE users SET ${updates.join(', ')} WHERE id = $${paramCount}`;
+            console.log(`📝 SQL: ${query}`, values);
+
+            await db.pool.query(query, values);
         }
 
         console.log(`✅ Updated client: ${email}`);

@@ -78,6 +78,17 @@ async function initDatabase() {
             ALTER TABLE users ADD COLUMN IF NOT EXISTS programme_access VARCHAR(50) DEFAULT 'career';
         `);
 
+        // Add programme_status column (migration) - stores client's current stage
+        // Values: 'discovery', 'week-1', 'week-2', 'week-3', 'week-4', 'complete'
+        await client.query(`
+            ALTER TABLE users ADD COLUMN IF NOT EXISTS programme_status VARCHAR(50) DEFAULT 'enrolled';
+        `);
+
+        // Add full_name column for display name
+        await client.query(`
+            ALTER TABLE users ADD COLUMN IF NOT EXISTS full_name VARCHAR(255);
+        `);
+
         // Create blueprints table
         await client.query(`
             CREATE TABLE IF NOT EXISTS blueprints (
