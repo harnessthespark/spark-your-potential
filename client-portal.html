@@ -2211,7 +2211,18 @@
             if (!weekData) return;
 
             const completion = await getHomeworkCompletion(client.email);
-            const files = client.files || {};
+
+            // ALWAYS get files from CLIENTS constant (the source of truth for file paths)
+            const localClientConfig = CLIENTS[client.email.toLowerCase()] || {};
+            const files = localClientConfig.files || client.files || {};
+
+            console.log('📋 Rendering homework for', client.email, ':', {
+                weekId,
+                status: client.status,
+                hasFiles: Object.keys(files),
+                hasHomework: !!files.homework
+            });
+
             const isUnlocked = isWeekUnlocked(weekId, client.status);
             const isCompleted = isWeekCompleted(weekId, client.status);
 
@@ -2258,6 +2269,7 @@
                     if (!fileUrl && task.linkKey === 'questionnaire') {
                         fileUrl = files.questionnaireResponses;
                     }
+                    console.log('🔗 Task link:', task.id, 'linkKey:', task.linkKey, 'fileUrl:', fileUrl);
                     if (fileUrl) {
                         linkHtml = `<a href="${fileUrl}" target="_blank" class="homework-link">${task.linkText} →</a>`;
                     }

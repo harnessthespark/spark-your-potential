@@ -1209,106 +1209,219 @@
         }
 
         // Populate form fields with saved data
+        // Data is saved using h3 titles as keys (e.g., "The Problem Magnet", "Before", "After")
         function populateFormFields(responses) {
-            // Client name
-            if (responses.clientName) {
-                const nameField = document.getElementById('clientName');
-                if (nameField) nameField.value = responses.clientName;
+            console.log('📋 Populating fields from responses:', Object.keys(responses));
+
+            // =============================================
+            // SECTION 1: EVIDENCE COLLECTION (Outcomes 1-5)
+            // =============================================
+            for (let i = 1; i <= 5; i++) {
+                const key = `Outcome #${i}`;
+                if (responses[key]) {
+                    const field = document.getElementById(`outcome${i}`);
+                    if (field) {
+                        field.value = responses[key];
+                        console.log(`✅ Loaded ${key}`);
+                    }
+                }
             }
 
-            // Outcomes (array of 5)
-            if (responses.outcomes && Array.isArray(responses.outcomes)) {
-                responses.outcomes.forEach((outcome, i) => {
-                    const field = document.getElementById(`outcome${i + 1}`);
-                    if (field && outcome) field.value = outcome;
+            // Thread (id="threadText")
+            if (responses['The Connecting Thread'] || responses['thread']) {
+                const field = document.getElementById('threadText');
+                if (field) {
+                    field.value = responses['The Connecting Thread'] || responses['thread'];
+                    console.log('✅ Loaded Thread');
+                }
+            }
+
+            // =============================================
+            // SECTION 2: INSTINCT RADAR (3 questions)
+            // =============================================
+            // When You Knew Before You Knew
+            const intuitionKey = 'When You Knew Before You Knew';
+            if (responses[intuitionKey] || responses.intuition) {
+                const field = document.querySelector('textarea[placeholder*="gut feeling"]');
+                if (field) {
+                    field.value = responses[intuitionKey] || responses.intuition;
+                    console.log('✅ Loaded Intuition');
+                }
+            }
+
+            // The Questions Only You Ask
+            const questionsKey = 'The Questions Only You Ask';
+            if (responses[questionsKey] || responses.questions) {
+                const field = document.querySelector('textarea[placeholder*="questions do you find"]');
+                if (field) {
+                    field.value = responses[questionsKey] || responses.questions;
+                    console.log('✅ Loaded Questions');
+                }
+            }
+
+            // What You Notice First
+            const noticingKey = 'What You Notice First';
+            if (responses[noticingKey] || responses.noticing) {
+                const field = document.querySelector('textarea[placeholder*="notice about people"]');
+                if (field) {
+                    field.value = responses[noticingKey] || responses.noticing;
+                    console.log('✅ Loaded Noticing');
+                }
+            }
+
+            // =============================================
+            // SECTION 3: EFFORTLESS ABILITY (2 questions)
+            // =============================================
+            // What Feels Easy to You
+            const easyKey = 'What Feels Easy to You';
+            if (responses[easyKey] || responses.whatFeelsEasy) {
+                const field = document.querySelector('textarea[placeholder*="feels so natural"]');
+                if (field) {
+                    field.value = responses[easyKey] || responses.whatFeelsEasy;
+                    console.log('✅ Loaded What Feels Easy');
+                }
+            }
+
+            // The "Of Course" Moments
+            const ofCourseKey = 'The "Of Course" Moments';
+            if (responses[ofCourseKey] || responses.ofCourseMoments) {
+                const field = document.querySelector('textarea[placeholder*="of course"]');
+                if (field) {
+                    field.value = responses[ofCourseKey] || responses.ofCourseMoments;
+                    console.log('✅ Loaded Of Course Moments');
+                }
+            }
+
+            // =============================================
+            // SECTION 4: TRANSFORMATION MIRROR (Before/After)
+            // =============================================
+            // Before - "Who were they before?"
+            if (responses['Before'] || responses.clientBefore) {
+                const field = document.querySelector('textarea[placeholder*="Who were they before"]');
+                if (field) {
+                    field.value = responses['Before'] || responses.clientBefore;
+                    console.log('✅ Loaded Before');
+                }
+            }
+
+            // After - "Who are they now?"
+            if (responses['After'] || responses.clientAfter) {
+                const field = document.querySelector('textarea[placeholder*="Who are they now"]');
+                if (field) {
+                    field.value = responses['After'] || responses.clientAfter;
+                    console.log('✅ Loaded After');
+                }
+            }
+
+            // Unlock Moment (if present)
+            if (responses['unlockMoment']) {
+                const field = document.getElementById('unlockMoment');
+                if (field) {
+                    field.value = responses['unlockMoment'];
+                    console.log('✅ Loaded Unlock Moment');
+                }
+            }
+
+            // =============================================
+            // SECTION 5: WHAT FINDS YOU (2 questions)
+            // =============================================
+            // The Problem Magnet
+            const problemKey = 'The Problem Magnet';
+            if (responses[problemKey] || responses.problemMagnet) {
+                const field = document.querySelector('textarea[placeholder*="types of problems"]');
+                if (field) {
+                    field.value = responses[problemKey] || responses.problemMagnet;
+                    console.log('✅ Loaded Problem Magnet');
+                }
+            }
+
+            // How Others See You
+            const othersKey = 'How Others See You';
+            if (responses[othersKey] || responses.howOthersSeeYou) {
+                const field = document.querySelector('textarea[placeholder*="When people refer others"]');
+                if (field) {
+                    field.value = responses[othersKey] || responses.howOthersSeeYou;
+                    console.log('✅ Loaded How Others See You');
+                }
+            }
+
+            // =============================================
+            // RECOGNITION SUMMARY (5 inputs)
+            // =============================================
+            // Client Name
+            if (responses['Your name (optional):'] || responses.clientName) {
+                const field = document.getElementById('clientName');
+                if (field) {
+                    field.value = responses['Your name (optional):'] || responses.clientName;
+                    console.log('✅ Loaded Client Name');
+                }
+            }
+
+            // The ability I've been underestimating
+            const abilityKey = "The ability I've been underestimating:";
+            if (responses[abilityKey] || responses.underestimatedAbility) {
+                const items = document.querySelectorAll('.summary-item');
+                items.forEach(item => {
+                    const strong = item.querySelector('strong');
+                    if (strong && strong.textContent.includes('underestimating')) {
+                        const input = item.querySelector('input');
+                        if (input) {
+                            input.value = responses[abilityKey] || responses.underestimatedAbility;
+                            console.log('✅ Loaded Underestimated Ability');
+                        }
+                    }
                 });
             }
 
-            // Thread
-            if (responses.thread) {
-                const threadField = document.querySelector('textarea[placeholder*="connecting thread"]');
-                if (threadField) threadField.value = responses.thread;
+            // The pattern I now see
+            const patternKey = 'The pattern I now see:';
+            if (responses[patternKey] || responses.patternRecognised) {
+                const items = document.querySelectorAll('.summary-item');
+                items.forEach(item => {
+                    const strong = item.querySelector('strong');
+                    if (strong && strong.textContent.includes('pattern I now see')) {
+                        const input = item.querySelector('input');
+                        if (input) {
+                            input.value = responses[patternKey] || responses.patternRecognised;
+                            console.log('✅ Loaded Pattern');
+                        }
+                    }
+                });
             }
 
-            // Intuition
-            if (responses.intuition) {
-                const field = document.querySelector('textarea[placeholder*="gut feeling"]');
-                if (field) field.value = responses.intuition;
+            // The transformation I enable
+            const transformKey = 'The transformation I enable:';
+            if (responses[transformKey] || responses.transformationEnabled) {
+                const items = document.querySelectorAll('.summary-item');
+                items.forEach(item => {
+                    const strong = item.querySelector('strong');
+                    if (strong && strong.textContent.includes('transformation I enable')) {
+                        const input = item.querySelector('input');
+                        if (input) {
+                            input.value = responses[transformKey] || responses.transformationEnabled;
+                            console.log('✅ Loaded Transformation');
+                        }
+                    }
+                });
             }
 
-            // Questions
-            if (responses.questions) {
-                const field = document.querySelector('textarea[placeholder*="questions do you find"]');
-                if (field) field.value = responses.questions;
+            // The permission I'm giving myself
+            const permissionKey = "The permission I'm giving myself:";
+            if (responses[permissionKey] || responses.permission) {
+                const items = document.querySelectorAll('.summary-item');
+                items.forEach(item => {
+                    const strong = item.querySelector('strong');
+                    if (strong && strong.textContent.includes('permission')) {
+                        const input = item.querySelector('input');
+                        if (input) {
+                            input.value = responses[permissionKey] || responses.permission;
+                            console.log('✅ Loaded Permission');
+                        }
+                    }
+                });
             }
 
-            // Noticing
-            if (responses.noticing) {
-                const field = document.querySelector('textarea[placeholder*="notice about people"]');
-                if (field) field.value = responses.noticing;
-            }
-
-            // What feels easy
-            if (responses.whatFeelsEasy) {
-                const field = document.querySelector('textarea[placeholder*="effortless for you"]');
-                if (field) field.value = responses.whatFeelsEasy;
-            }
-
-            // Of course moments
-            if (responses.ofCourseMoments) {
-                const field = document.querySelector('textarea[placeholder*="Of course"]');
-                if (field) field.value = responses.ofCourseMoments;
-            }
-
-            // Client before
-            if (responses.clientBefore) {
-                const field = document.querySelector('textarea[placeholder*="typically stuck"]');
-                if (field) field.value = responses.clientBefore;
-            }
-
-            // Client after
-            if (responses.clientAfter) {
-                const field = document.querySelector('textarea[placeholder*="walk away"]');
-                if (field) field.value = responses.clientAfter;
-            }
-
-            // Problem magnet
-            if (responses.problemMagnet) {
-                const field = document.querySelector('textarea[placeholder*="types of problems"]');
-                if (field) field.value = responses.problemMagnet;
-            }
-
-            // How others see you
-            if (responses.howOthersSeeYou) {
-                const field = document.querySelector('textarea[placeholder*="would they say"]');
-                if (field) field.value = responses.howOthersSeeYou;
-            }
-
-            // Underestimated ability
-            if (responses.underestimatedAbility) {
-                const field = document.querySelector('textarea[placeholder*="underestimating"]');
-                if (field) field.value = responses.underestimatedAbility;
-            }
-
-            // Pattern recognised
-            if (responses.patternRecognised) {
-                const field = document.querySelector('textarea[placeholder*="pattern I now see"]');
-                if (field) field.value = responses.patternRecognised;
-            }
-
-            // Transformation enabled
-            if (responses.transformationEnabled) {
-                const field = document.querySelector('textarea[placeholder*="transformation I enable"]');
-                if (field) field.value = responses.transformationEnabled;
-            }
-
-            // Permission
-            if (responses.permission) {
-                const field = document.querySelector('textarea[placeholder*="permission"]');
-                if (field) field.value = responses.permission;
-            }
-
-            console.log('✅ Form populated with saved responses');
+            console.log('✅ Form population complete');
         }
 
         // Load on page ready
