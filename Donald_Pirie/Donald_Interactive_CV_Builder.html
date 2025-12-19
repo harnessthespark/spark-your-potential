@@ -93,6 +93,40 @@
             font-size: 0.75em;
             opacity: 0.8;
         }
+        .version-btn.active {
+            background: rgba(255,215,0,0.3);
+            border-color: #FFD700;
+        }
+        .tailor-tips {
+            background: rgba(0,0,0,0.2);
+            border-radius: 10px;
+            padding: 15px;
+            margin-top: 15px;
+        }
+        .tailor-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 12px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid rgba(255,255,255,0.2);
+        }
+        .tailor-tips ul {
+            list-style: none;
+            font-size: 0.85em;
+            line-height: 1.6;
+        }
+        .tailor-tips li {
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        .tailor-tips li:last-child {
+            border-bottom: none;
+        }
+        .tailor-tips li::before {
+            content: "→ ";
+            color: #FFD700;
+        }
 
         .hint-box {
             background: rgba(255,255,255,0.15);
@@ -943,23 +977,34 @@
             </div>
 
             <div class="control-section">
-                <div class="control-title">📋 CV Versions</div>
+                <div class="control-title">📋 Tailor For Role Type</div>
                 <div class="version-buttons">
-                    <button class="version-btn" onclick="createVersion('executive')">
-                        <span>👔</span> Executive Summary
-                        <small>1-page leadership focus</small>
+                    <button class="version-btn" onclick="tailorCV('executive')" id="btn-executive">
+                        <span>👔</span> Executive/Board
+                        <small>Leadership & governance</small>
                     </button>
-                    <button class="version-btn" onclick="createVersion('consulting')">
-                        <span>💼</span> Consulting Focus
+                    <button class="version-btn" onclick="tailorCV('consulting')" id="btn-consulting">
+                        <span>💼</span> Consulting
                         <small>Strategy & transformation</small>
                     </button>
-                    <button class="version-btn" onclick="createVersion('brand')">
-                        <span>🎨</span> Brand & Creative
+                    <button class="version-btn" onclick="tailorCV('brand')" id="btn-brand">
+                        <span>🎨</span> Brand/Creative
                         <small>Creative leadership</small>
                     </button>
-                    <button class="version-btn" onclick="createVersion('interim')">
+                    <button class="version-btn" onclick="tailorCV('interim')" id="btn-interim">
                         <span>⚡</span> Interim/Contract
-                        <small>Project-based focus</small>
+                        <small>Project delivery</small>
+                    </button>
+                </div>
+                <div id="tailorTips" class="tailor-tips" style="display: none;">
+                    <div class="tailor-header">
+                        <span id="tailorIcon">👔</span>
+                        <strong id="tailorTitle">Tailoring Tips</strong>
+                        <button onclick="closeTailorTips()" style="background:none;border:none;color:white;cursor:pointer;font-size:1.2em;">×</button>
+                    </div>
+                    <ul id="tailorList"></ul>
+                    <button class="export-btn" style="width:100%;margin-top:10px;" onclick="exportTailoredVersion()">
+                        📄 Export This Version
                     </button>
                 </div>
             </div>
@@ -1586,42 +1631,92 @@
             a.click();
         }
 
-        function createVersion(type) {
-            const versions = {
-                'executive': {
-                    name: 'Executive Summary',
-                    filename: 'Donald_Pirie_CV_Executive.doc',
-                    description: 'One-page leadership-focused CV',
-                    sections: ['profile', 'experience', 'education'],
-                    focusAreas: ['Leadership', 'Strategy', 'Transformation', 'Board-level experience']
-                },
-                'consulting': {
-                    name: 'Consulting Focus',
-                    filename: 'Donald_Pirie_CV_Consulting.doc',
-                    description: 'Strategy and transformation consulting CV',
-                    sections: ['profile', 'experience', 'case-studies', 'skills'],
-                    focusAreas: ['Strategy', 'Transformation', 'Change Management', 'Stakeholder Engagement']
-                },
-                'brand': {
-                    name: 'Brand & Creative',
-                    filename: 'Donald_Pirie_CV_Brand.doc',
-                    description: 'Creative and brand leadership CV',
-                    sections: ['profile', 'experience', 'case-studies', 'skills'],
-                    focusAreas: ['Brand Strategy', 'Creative Direction', 'Storytelling', 'Campaign Leadership']
-                },
-                'interim': {
-                    name: 'Interim/Contract',
-                    filename: 'Donald_Pirie_CV_Interim.doc',
-                    description: 'Project-based and interim roles CV',
-                    sections: ['profile', 'key-projects', 'experience', 'skills'],
-                    focusAreas: ['Project Delivery', 'Rapid Impact', 'Transformation', 'Interim Leadership']
-                }
-            };
+        // Store current tailoring selection
+        let currentTailorType = null;
 
-            const version = versions[type];
-            if (!version) return;
+        // Tailoring guidance for each role type
+        const tailorGuide = {
+            'executive': {
+                icon: '👔',
+                name: 'Executive/Board Roles',
+                tips: [
+                    '<strong>Profile:</strong> Lead with strategic vision and P&L responsibility',
+                    '<strong>Experience:</strong> Emphasise board-level decisions and governance',
+                    '<strong>Metrics:</strong> Include revenue, team size, and business impact figures',
+                    '<strong>Achievements:</strong> Focus on organisational transformation',
+                    '<strong>Tone:</strong> Confident, strategic, results-driven'
+                ],
+                exportName: 'Donald_Pirie_CV_Executive.doc'
+            },
+            'consulting': {
+                icon: '💼',
+                name: 'Consulting Roles',
+                tips: [
+                    '<strong>Profile:</strong> Highlight client-facing experience and advisory skills',
+                    '<strong>Case Studies:</strong> Add specific transformation projects with outcomes',
+                    '<strong>Skills:</strong> Emphasise frameworks, methodologies, stakeholder management',
+                    '<strong>Sectors:</strong> List industry expertise and cross-sector experience',
+                    '<strong>Tone:</strong> Analytical, solution-focused, collaborative'
+                ],
+                exportName: 'Donald_Pirie_CV_Consulting.doc'
+            },
+            'brand': {
+                icon: '🎨',
+                name: 'Brand & Creative Roles',
+                tips: [
+                    '<strong>Profile:</strong> Lead with creative vision and brand transformation',
+                    '<strong>Portfolio:</strong> Reference major campaigns and brand repositioning',
+                    '<strong>Achievements:</strong> Include award wins, brand metrics, market impact',
+                    '<strong>Skills:</strong> Creative direction, storytelling, agency collaboration',
+                    '<strong>Tone:</strong> Visionary, creative, culturally aware'
+                ],
+                exportName: 'Donald_Pirie_CV_Brand.doc'
+            },
+            'interim': {
+                icon: '⚡',
+                name: 'Interim/Contract Roles',
+                tips: [
+                    '<strong>Profile:</strong> Emphasise rapid onboarding and immediate impact',
+                    '<strong>Projects:</strong> List as distinct engagements with clear deliverables',
+                    '<strong>Timeframes:</strong> Show what you achieved in each engagement period',
+                    '<strong>Flexibility:</strong> Highlight adaptability across sectors and challenges',
+                    '<strong>Tone:</strong> Action-oriented, delivery-focused, pragmatic'
+                ],
+                exportName: 'Donald_Pirie_CV_Interim.doc'
+            }
+        };
 
-            // Generate version-specific content
+        function tailorCV(type) {
+            const guide = tailorGuide[type];
+            if (!guide) return;
+
+            currentTailorType = type;
+
+            // Update button states
+            document.querySelectorAll('.version-btn').forEach(btn => btn.classList.remove('active'));
+            document.getElementById('btn-' + type).classList.add('active');
+
+            // Show tips panel
+            const tipsPanel = document.getElementById('tailorTips');
+            document.getElementById('tailorIcon').textContent = guide.icon;
+            document.getElementById('tailorTitle').textContent = guide.name;
+            document.getElementById('tailorList').innerHTML = guide.tips.map(tip => `<li>${tip}</li>`).join('');
+            tipsPanel.style.display = 'block';
+
+            // Scroll tips into view
+            tipsPanel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+
+        function closeTailorTips() {
+            document.getElementById('tailorTips').style.display = 'none';
+            document.querySelectorAll('.version-btn').forEach(btn => btn.classList.remove('active'));
+            currentTailorType = null;
+        }
+
+        function exportTailoredVersion() {
+            if (!currentTailorType) return;
+            const guide = tailorGuide[currentTailorType];
+
             const cvContent = document.getElementById('cvPreview').innerHTML;
 
             const wordContent = `
@@ -1629,7 +1724,7 @@
 <html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word">
 <head>
     <meta charset="UTF-8">
-    <title>Donald Pirie - ${version.name}</title>
+    <title>Donald Pirie - ${guide.name}</title>
     <style>
         body { font-family: Calibri, Arial, sans-serif; font-size: 11pt; line-height: 1.4; margin: 1in; }
         h1 { font-size: 24pt; color: #1a1a2e; margin-bottom: 5pt; }
@@ -1638,29 +1733,18 @@
         p { margin-bottom: 8pt; }
         ul { margin-left: 20pt; margin-bottom: 10pt; }
         li { margin-bottom: 4pt; }
-        .version-header { background: #f5f5f5; padding: 10pt; margin-bottom: 15pt; border-left: 3pt solid #1a1a2e; }
-        .focus-areas { color: #666; font-style: italic; }
     </style>
 </head>
 <body>
-    <div class="version-header">
-        <strong>${version.name} Version</strong><br>
-        <span class="focus-areas">Focus: ${version.focusAreas.join(' • ')}</span>
-    </div>
     ${cvContent}
-    <p style="color: #999; font-size: 9pt; margin-top: 30pt; border-top: 1pt solid #ddd; padding-top: 10pt;">
-        Generated from Donald Pirie's Interactive CV Builder - ${version.description}
-    </p>
 </body>
 </html>`;
 
             const blob = new Blob([wordContent], { type: 'application/msword' });
             const a = document.createElement('a');
             a.href = URL.createObjectURL(blob);
-            a.download = version.filename;
+            a.download = guide.exportName;
             a.click();
-
-            alert(`✅ ${version.name} version downloaded!\n\nFile: ${version.filename}\n\nTip: Open in Word and customise the content to emphasise ${version.focusAreas[0]} and ${version.focusAreas[1]}.`);
         }
 
         // =============================================
