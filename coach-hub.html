@@ -1583,7 +1583,7 @@
             try {
                 const response = await fetch(`${API_BASE}/api/crm/syp/coach/clients/`, {
                     headers: {
-                        'Authorization': `Bearer ${authToken}`,
+                        'Authorization': `Token ${authToken}`,
                         'Content-Type': 'application/json'
                     }
                 });
