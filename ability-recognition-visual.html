@@ -1715,7 +1715,7 @@ People see me as someone who operates between worlds - big brand credibility but
                     throw new Error(data.error || 'Analysis failed');
                 }
 
-                const aiInsight = data.analysis;
+                const aiInsight = data.analysis.raw_analysis || data.analysis;
 
                 // Display the insights with nice formatting
                 analysisDiv.innerHTML = aiInsight.split('\n\n').map(paragraph =>
@@ -1808,7 +1808,7 @@ People see me as someone who operates between worlds - big brand credibility but
                     throw new Error(data.error || 'Analysis failed');
                 }
 
-                const aiInsight = data.analysis;
+                const aiInsight = data.analysis.raw_analysis || data.analysis;
 
                 // Display the insights with nice formatting
                 analysisDiv.innerHTML = aiInsight.split('\n\n').map(paragraph =>
