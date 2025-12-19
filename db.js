@@ -152,12 +152,27 @@ async function initDatabase() {
             )
         `);
 
+        // Create homework table for storing client homework responses
+        await client.query(`
+            CREATE TABLE IF NOT EXISTS homework (
+                id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+                user_id UUID REFERENCES users(id) ON DELETE CASCADE,
+                homework_type VARCHAR(50) NOT NULL,
+                responses JSONB DEFAULT '{}',
+                progress INTEGER DEFAULT 0,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                UNIQUE(user_id, homework_type)
+            )
+        `);
+
         // Create indexes
         await client.query(`
             CREATE INDEX IF NOT EXISTS idx_blueprints_user_id ON blueprints(user_id);
             CREATE INDEX IF NOT EXISTS idx_cv_data_user_id ON cv_data(user_id);
             CREATE INDEX IF NOT EXISTS idx_cv_data_blueprint_id ON cv_data(blueprint_id);
             CREATE INDEX IF NOT EXISTS idx_decision_frameworks_user_id ON decision_frameworks(user_id);
+            CREATE INDEX IF NOT EXISTS idx_homework_user_id ON homework(user_id);
         `);
 
         console.log('✅ Database tables initialised');
@@ -474,6 +489,72 @@ async function getCVData(userId) {
     return result.rows[0] || null;
 }
 
+/**
+ * Save homework responses (upsert - creates or updates)
+ * @param {string} userEmail - Client email address
+ * @param {string} homeworkType - Type of homework (e.g., 'week2')
+ * @param {object} responses - Homework responses object
+ */
+async function saveHomework(userEmail, homeworkType, responses) {
+    // First, get the user by email
+    const userResult = await pool.query(
+        'SELECT id FROM users WHERE email = $1',
+        [userEmail]
+    );
+
+    if (userResult.rows.length === 0) {
+        throw new Error('User not found: ' + userEmail);
+    }
+
+    const userId = userResult.rows[0].id;
+    const progress = responses.progress || 0;
+
+    // Upsert homework record
+    const query = `
+        INSERT INTO homework (user_id, homework_type, responses, progress, updated_at)
+        VALUES ($1, $2, $3, $4, NOW())
+        ON CONFLICT (user_id, homework_type)
+        DO UPDATE SET
+            responses = $3,
+            progress = $4,
+            updated_at = NOW()
+        RETURNING *
+    `;
+
+    const result = await pool.query(query, [userId, homeworkType, JSON.stringify(responses), progress]);
+    return result.rows[0];
+}
+
+/**
+ * Get homework responses for a client
+ * @param {string} userEmail - Client email address
+ * @param {string} homeworkType - Type of homework (e.g., 'week2')
+ */
+async function getHomework(userEmail, homeworkType) {
+    const query = `
+        SELECT h.* FROM homework h
+        JOIN users u ON h.user_id = u.id
+        WHERE u.email = $1 AND h.homework_type = $2
+    `;
+    const result = await pool.query(query, [userEmail, homeworkType]);
+    return result.rows[0] || null;
+}
+
+/**
+ * Get all homework for a client
+ * @param {string} userEmail - Client email address
+ */
+async function getAllHomework(userEmail) {
+    const query = `
+        SELECT h.* FROM homework h
+        JOIN users u ON h.user_id = u.id
+        WHERE u.email = $1
+        ORDER BY h.updated_at DESC
+    `;
+    const result = await pool.query(query, [userEmail]);
+    return result.rows;
+}
+
 module.exports = {
     pool,
     initDatabase,
@@ -488,5 +569,8 @@ module.exports = {
     updateClient,
     deleteClient,
     saveCVData,
-    getCVData
+    getCVData,
+    saveHomework,
+    getHomework,
+    getAllHomework
 };

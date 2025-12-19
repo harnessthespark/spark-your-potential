@@ -668,6 +668,68 @@ Generate a complete Career Blueprint JSON.`;
 });
 
 // ============================================
+// HOMEWORK ENDPOINTS
+// ============================================
+
+// Save homework responses (POST)
+app.post('/api/homework', async (req, res) => {
+    try {
+        const { client_email, homework_type, responses } = req.body;
+
+        if (!client_email || !homework_type || !responses) {
+            return res.status(400).json({
+                success: false,
+                error: 'client_email, homework_type, and responses are required'
+            });
+        }
+
+        const homework = await db.saveHomework(client_email, homework_type, responses);
+        console.log(`✅ Homework saved: ${client_email} - ${homework_type} (${responses.progress || 0}% complete)`);
+
+        res.json({ success: true, homework });
+    } catch (error) {
+        console.error('Homework save error:', error);
+        res.status(500).json({ success: false, error: error.message });
+    }
+});
+
+// Get homework responses (GET)
+app.get('/api/homework/:clientEmail/:homeworkType', async (req, res) => {
+    try {
+        const { clientEmail, homeworkType } = req.params;
+
+        const homework = await db.getHomework(clientEmail, homeworkType);
+
+        if (!homework) {
+            return res.json({
+                success: true,
+                homework: null,
+                message: 'No homework found for this client and type'
+            });
+        }
+
+        res.json({ success: true, homework });
+    } catch (error) {
+        console.error('Homework fetch error:', error);
+        res.status(500).json({ success: false, error: error.message });
+    }
+});
+
+// Get all homework for a client (GET)
+app.get('/api/homework/:clientEmail', async (req, res) => {
+    try {
+        const { clientEmail } = req.params;
+
+        const homeworkList = await db.getAllHomework(clientEmail);
+
+        res.json({ success: true, homework: homeworkList });
+    } catch (error) {
+        console.error('Homework list error:', error);
+        res.status(500).json({ success: false, error: error.message });
+    }
+});
+
+// ============================================
 // EMERGENCY SUPPORT ENDPOINT
 // ============================================
 
@@ -769,6 +831,8 @@ async function startServer() {
         console.log(`   GET  /api/blueprint/:userId → Get blueprint`);
         console.log(`   POST /api/cv     → Save CV data`);
         console.log(`   GET  /api/cv/:userId → Get CV data`);
+        console.log(`   POST /api/homework → Save homework responses`);
+        console.log(`   GET  /api/homework/:email/:type → Get homework`);
         console.log(`   POST /api/analyze → AI analysis`);
         console.log(`   GET  /health     → Health check\n`);
     });

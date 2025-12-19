@@ -1608,10 +1608,13 @@
             await loadClients();
         }
 
-        // Load Clients from PostgreSQL
+        // Load Clients from PostgreSQL - MERGE with DEFAULT_CLIENTS
         async function loadClients() {
             console.log('🔄 Loading clients from PostgreSQL...');
             console.log('🔑 Token:', authToken ? authToken.substring(0, 20) + '...' : 'NONE');
+
+            let apiClients = [];
+            let apiSuccess = false;
 
             try {
                 const response = await fetch(`${API_BASE}/api/crm/syp/coach/clients/`, {
@@ -1625,25 +1628,56 @@
 
                 if (response.ok) {
                     const data = await response.json();
-                    console.log('📦 Raw data:', data);
-                    clients = Array.isArray(data) ? data : (data.results || []);
-                    console.log('✅ Loaded', clients.length, 'clients');
-                    document.getElementById('dataBadge').className = 'data-badge live';
-                    document.getElementById('dataBadge').textContent = 'PostgreSQL';
+                    console.log('📦 Raw API data:', data);
+                    apiClients = Array.isArray(data) ? data : (data.results || []);
+                    apiSuccess = true;
+                    console.log('✅ Loaded', apiClients.length, 'clients from API');
                 } else {
                     const errorText = await response.text();
                     console.error('❌ API error:', response.status, errorText);
-                    clients = [];
                 }
             } catch (error) {
                 console.error('❌ Load clients error:', error);
-                clients = [];
             }
 
-            // Use DEFAULT_CLIENTS as fallback if API returned empty
-            if (clients.length === 0) {
-                console.log('📋 Using DEFAULT_CLIENTS fallback');
-                clients = [...DEFAULT_CLIENTS];
+            // ALWAYS merge DEFAULT_CLIENTS with API data
+            // API data takes precedence for matching clients (by email)
+            console.log('🔀 Merging DEFAULT_CLIENTS with API data...');
+
+            // Start with DEFAULT_CLIENTS as base
+            const mergedMap = new Map();
+
+            // Add all DEFAULT_CLIENTS first
+            DEFAULT_CLIENTS.forEach(client => {
+                const key = (client.email || '').toLowerCase();
+                mergedMap.set(key, { ...client });
+                console.log(`  📋 Added default: ${client.full_name} (${key})`);
+            });
+
+            // Override with API data where available (API is source of truth)
+            apiClients.forEach(apiClient => {
+                const key = (apiClient.email || '').toLowerCase();
+                if (mergedMap.has(key)) {
+                    // Merge: API data takes precedence, but keep local fields not in API
+                    const existing = mergedMap.get(key);
+                    mergedMap.set(key, { ...existing, ...apiClient });
+                    console.log(`  🔄 Updated from API: ${apiClient.full_name} (${key})`);
+                } else {
+                    // New client from API not in defaults
+                    mergedMap.set(key, apiClient);
+                    console.log(`  ➕ Added from API: ${apiClient.full_name} (${key})`);
+                }
+            });
+
+            // Convert map back to array
+            clients = Array.from(mergedMap.values());
+            console.log(`✅ Total merged clients: ${clients.length}`);
+
+            // Update badge based on API success
+            if (apiSuccess && apiClients.length > 0) {
+                document.getElementById('dataBadge').className = 'data-badge live';
+                document.getElementById('dataBadge').textContent = 'PostgreSQL';
+            } else {
                 document.getElementById('dataBadge').className = 'data-badge cached';
                 document.getElementById('dataBadge').textContent = 'Local';
             }

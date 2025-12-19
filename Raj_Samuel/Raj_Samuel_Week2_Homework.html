@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Raj Samuel - Week 2 Homework | Spark Your Potential</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            line-height: 1.6;
+            color: #2c3e50;
+            background: linear-gradient(135deg, #7c3aed 0%, #a855f7 100%);
+            padding: 40px 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #7c3aed 0%, #a855f7 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2em;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .header .subtitle {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+
+        .content {
+            padding: 40px;
+        }
+
+        .intro {
+            background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+            padding: 25px;
+            border-radius: 15px;
+            border-left: 5px solid #22c55e;
+            margin-bottom: 40px;
+        }
+
+        .intro h3 {
+            color: #166534;
+            margin-bottom: 10px;
+        }
+
+        .intro p {
+            color: #15803d;
+        }
+
+        .section {
+            margin-bottom: 40px;
+        }
+
+        .section-title {
+            font-size: 1.5em;
+            font-weight: 700;
+            color: #7c3aed;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #7c3aed;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .question-card {
+            background: #f8fafc;
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 20px;
+            border: 2px solid #e2e8f0;
+            transition: border-color 0.3s ease;
+        }
+
+        .question-card:focus-within {
+            border-color: #7c3aed;
+        }
+
+        .question-card h4 {
+            color: #1e293b;
+            font-size: 1.1em;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+        }
+
+        .question-number {
+            background: #7c3aed;
+            color: white;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9em;
+            flex-shrink: 0;
+        }
+
+        .question-card .hint {
+            font-size: 0.9em;
+            color: #64748b;
+            font-style: italic;
+            margin-bottom: 15px;
+        }
+
+        textarea {
+            width: 100%;
+            min-height: 120px;
+            padding: 15px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-family: inherit;
+            font-size: 1em;
+            line-height: 1.6;
+            resize: vertical;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        textarea:focus {
+            outline: none;
+            border-color: #7c3aed;
+            box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.1);
+        }
+
+        textarea::placeholder {
+            color: #94a3b8;
+        }
+
+        .homework-card {
+            background: linear-gradient(135deg, #fefce8 0%, #fef9c3 100%);
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 20px;
+            border-left: 5px solid #eab308;
+        }
+
+        .homework-card h4 {
+            color: #854d0e;
+            font-size: 1.1em;
+            margin-bottom: 10px;
+        }
+
+        .homework-card p {
+            color: #713f12;
+            margin-bottom: 15px;
+        }
+
+        .save-indicator {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: #22c55e;
+            color: white;
+            padding: 12px 20px;
+            border-radius: 10px;
+            font-weight: 600;
+            box-shadow: 0 4px 15px rgba(34, 197, 94, 0.4);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: 1000;
+        }
+
+        .save-indicator.visible {
+            opacity: 1;
+        }
+
+        .progress-bar {
+            background: #e2e8f0;
+            height: 8px;
+            border-radius: 4px;
+            margin-bottom: 30px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            background: linear-gradient(90deg, #7c3aed, #a855f7);
+            height: 100%;
+            border-radius: 4px;
+            transition: width 0.5s ease;
+        }
+
+        .progress-text {
+            text-align: center;
+            color: #64748b;
+            font-size: 0.9em;
+            margin-bottom: 10px;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 40px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 15px 30px;
+            border-radius: 10px;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            transition: all 0.3s ease;
+            font-family: inherit;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #7c3aed 0%, #a855f7 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(124, 58, 237, 0.4);
+        }
+
+        .btn-secondary {
+            background: white;
+            color: #7c3aed;
+            border: 2px solid #7c3aed;
+        }
+
+        .btn-secondary:hover {
+            background: #f5f3ff;
+        }
+
+        .context-box {
+            background: #f0f9ff;
+            border-left: 4px solid #0ea5e9;
+            padding: 20px;
+            border-radius: 0 10px 10px 0;
+            margin-bottom: 20px;
+        }
+
+        .context-box h5 {
+            color: #0369a1;
+            margin-bottom: 8px;
+        }
+
+        .context-box p {
+            color: #0c4a6e;
+            font-size: 0.95em;
+        }
+
+        @media print {
+            body {
+                background: white;
+                padding: 0;
+            }
+            .container {
+                box-shadow: none;
+            }
+            .save-indicator, .action-buttons {
+                display: none;
+            }
+            textarea {
+                border: 1px solid #ccc;
+                min-height: 80px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .content {
+                padding: 25px;
+            }
+            .action-buttons {
+                flex-direction: column;
+            }
+            .btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📝 Week 2 Homework</h1>
+            <div class="subtitle">Raj Samuel | Career Booster Programme</div>
+        </div>
+
+        <div class="content">
+            <div class="intro">
+                <h3>✨ Great Session Today!</h3>
+                <p>Take your time with these questions. There are no wrong answers - this is about getting clear on what matters to you. Your answers will shape our work in Session 3.</p>
+            </div>
+
+            <div class="progress-text">Progress: <span id="progressPercent">0</span>% complete</div>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+            </div>
+
+            <!-- KEY QUESTIONS SECTION -->
+            <div class="section">
+                <h2 class="section-title">❓ Key Questions to Reflect On</h2>
+                <p style="color: #64748b; margin-bottom: 25px;">These build on what we explored in session. Take your time - there's no rush.</p>
+
+                <div class="question-card">
+                    <h4>
+                        <span class="question-number">1</span>
+                        What does "recognised for cultural transformation" actually look like for you?
+                    </h4>
+                    <p class="hint">In-house? Consultancy? Agency? Something else entirely? What's the shape of this?</p>
+                    <textarea id="q1" placeholder="Write your thoughts here... Consider: What would success look like? Who would you be working with? What would your title be?"></textarea>
+                </div>
+
+                <div class="question-card">
+                    <h4>
+                        <span class="question-number">2</span>
+                        What environments have let you thrive vs. frustrated you?
+                    </h4>
+                    <p class="hint">Think about AMV, Fallon, Arley's, Malice Arts, Lemons - what made each work or not work?</p>
+                    <textarea id="q2" placeholder="Write your thoughts here... What patterns do you notice? What conditions do you need to do your best work?"></textarea>
+                </div>
+
+                <div class="question-card">
+                    <h4>
+                        <span class="question-number">3</span>
+                        If you could design your ideal role, what would you be doing day-to-day?
+                    </h4>
+                    <p class="hint">Not job title - actual activities. What does a great Monday look like?</p>
+                    <textarea id="q3" placeholder="Write your thoughts here... Morning, afternoon, the kind of conversations you'd be having, the problems you'd be solving..."></textarea>
+                </div>
+
+                <div class="question-card">
+                    <h4>
+                        <span class="question-number">4</span>
+                        The Bigger Question: What's the transformation you want to be known for enabling?
+                    </h4>
+                    <p class="hint">Your legacy. When people talk about Raj Samuel's work in 10 years, what do they say?</p>
+                    <textarea id="q4" placeholder="Write your thoughts here... This is the big one. What's the change you want to create in the world?"></textarea>
+                </div>
+            </div>
+
+            <!-- HOMEWORK TASKS SECTION -->
+            <div class="section">
+                <h2 class="section-title">📋 Homework Tasks</h2>
+                <p style="color: #64748b; margin-bottom: 25px;">Complete these before our next session.</p>
+
+                <div class="homework-card">
+                    <h4>1. Validate the Drains & Charges</h4>
+                    <p>Review the "What Drains You / What Charges You" section in your Insights Report. Add, remove, or refine based on what feels true.</p>
+                    <textarea id="hw1" placeholder="What drains you? What charges you? Add any that are missing, remove any that don't feel right..."></textarea>
+                </div>
+
+                <div class="homework-card">
+                    <h4>2. List 3-5 Dream Companies</h4>
+                    <p>Organisations where your cultural transformation abilities would be valued. Don't filter - include the ambitious ones.</p>
+                    <textarea id="hw2" placeholder="1.
+2.
+3.
+4.
+5.
+
+Why these? What draws you to each?"></textarea>
+                </div>
+
+                <div class="homework-card">
+                    <h4>3. The "Hell Yes" Criteria</h4>
+                    <p>What would make an opportunity feel like an absolute yes? What are your non-negotiables?</p>
+                    <textarea id="hw3" placeholder="The opportunity MUST have:
+-
+-
+-
+
+Deal-breakers (I will NOT accept):
+-
+- "></textarea>
+                </div>
+
+                <div class="homework-card">
+                    <h4>4. The Reframe Test</h4>
+                    <p>Try introducing yourself using "hindsight before it's happened" framing. How does it feel? What reactions do you get?</p>
+                    <textarea id="hw4" placeholder="Write out your new introduction here. Then note: Who did you try it on? What was their reaction? How did it feel to say it?"></textarea>
+                </div>
+            </div>
+
+            <!-- CONTEXT REMINDER -->
+            <div class="context-box">
+                <h5>💡 Your Pattern Reminder</h5>
+                <p>"I spot the cultural-emotional truth hiding beneath the business problem, then make it tangible so people can act on it. The unlock is always about giving permission - to be brave, to reframe, to see bigger opportunities."</p>
+            </div>
+
+            <div class="action-buttons">
+                <button class="btn btn-primary" onclick="saveProgress()">💾 Save Progress</button>
+                <button class="btn btn-secondary" onclick="emailToLisa()">📧 Email to Lisa</button>
+                <button class="btn btn-secondary" onclick="window.print()">🖨️ Print</button>
+            </div>
+        </div>
+
+        <div style="text-align: center; padding: 30px; background: #f8f9fa; color: #7f8c8d; font-size: 0.9em;">
+            <p>Career Booster Programme with Lisa Gills | Harness the Spark</p>
+            <p style="margin-top: 5px;">Due before Session 3</p>
+        </div>
+    </div>
+
+    <div class="save-indicator" id="saveIndicator">✓ Progress Saved</div>
+
+    <script>
+        // PostgreSQL API Configuration
+        const API_BASE = 'https://stingray-app-7kg9p.ondigitalocean.app';
+        const CLIENT_EMAIL = 'rs@rajsamuel.net';
+        const HOMEWORK_TYPE = 'week2';
+
+        const textareas = document.querySelectorAll('textarea');
+        let saveTimeout = null;
+
+        // Load saved data on page load
+        window.onload = function() {
+            loadProgress();
+            updateProgressBar();
+        };
+
+        // Auto-save on input with debounce
+        textareas.forEach(textarea => {
+            textarea.addEventListener('input', function() {
+                updateProgressBar();
+                // Debounce: save after 2 seconds of no typing
+                clearTimeout(saveTimeout);
+                saveTimeout = setTimeout(() => {
+                    saveProgress(true); // silent save
+                }, 2000);
+            });
+        });
+
+        async function saveProgress(silent = false) {
+            const data = {};
+            textareas.forEach(textarea => {
+                data[textarea.id] = textarea.value;
+            });
+            data.lastSaved = new Date().toISOString();
+            data.progress = calculateProgress();
+
+            // Save to PostgreSQL via API
+            try {
+                const response = await fetch(`${API_BASE}/api/homework`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        client_email: CLIENT_EMAIL,
+                        homework_type: HOMEWORK_TYPE,
+                        responses: data
+                    })
+                });
+
+                if (response.ok) {
+                    console.log('✅ Saved to PostgreSQL');
+                    if (!silent) {
+                        showSaveIndicator('✓ Saved to Database');
+                    }
+                } else {
+                    throw new Error('API error');
+                }
+            } catch (error) {
+                console.warn('PostgreSQL save failed, using localStorage fallback:', error);
+                // Fallback to localStorage
+                localStorage.setItem('raj_week2_homework', JSON.stringify(data));
+                if (!silent) {
+                    showSaveIndicator('✓ Saved Locally');
+                }
+            }
+        }
+
+        async function loadProgress() {
+            // Try to load from PostgreSQL first
+            try {
+                const response = await fetch(`${API_BASE}/api/homework/${CLIENT_EMAIL}/${HOMEWORK_TYPE}`);
+                if (response.ok) {
+                    const result = await response.json();
+                    if (result.success && result.homework && result.homework.responses) {
+                        // Parse responses if it's a string (from JSONB)
+                        const data = typeof result.homework.responses === 'string'
+                            ? JSON.parse(result.homework.responses)
+                            : result.homework.responses;
+                        textareas.forEach(textarea => {
+                            if (data[textarea.id]) {
+                                textarea.value = data[textarea.id];
+                            }
+                        });
+                        console.log('✅ Loaded from PostgreSQL');
+                        updateProgressBar();
+                        return;
+                    }
+                }
+            } catch (error) {
+                console.warn('PostgreSQL load failed:', error);
+            }
+
+            // Fallback to localStorage
+            const saved = localStorage.getItem('raj_week2_homework');
+            if (saved) {
+                const data = JSON.parse(saved);
+                textareas.forEach(textarea => {
+                    if (data[textarea.id]) {
+                        textarea.value = data[textarea.id];
+                    }
+                });
+                console.log('📋 Loaded from localStorage');
+            }
+        }
+
+        function calculateProgress() {
+            let filled = 0;
+            textareas.forEach(textarea => {
+                if (textarea.value.trim().length > 20) {
+                    filled++;
+                }
+            });
+            return Math.round((filled / textareas.length) * 100);
+        }
+
+        function showSaveIndicator(message = '✓ Progress Saved') {
+            const indicator = document.getElementById('saveIndicator');
+            indicator.textContent = message;
+            indicator.classList.add('visible');
+            setTimeout(() => {
+                indicator.classList.remove('visible');
+            }, 2000);
+        }
+
+        function updateProgressBar() {
+            let filled = 0;
+            textareas.forEach(textarea => {
+                if (textarea.value.trim().length > 20) {
+                    filled++;
+                }
+            });
+
+            const percent = Math.round((filled / textareas.length) * 100);
+            document.getElementById('progressPercent').textContent = percent;
+            document.getElementById('progressFill').style.width = percent + '%';
+        }
+
+        function emailToLisa() {
+            let body = "WEEK 2 HOMEWORK - Raj Samuel\n";
+            body += "=" .repeat(40) + "\n\n";
+
+            body += "KEY QUESTIONS\n";
+            body += "-".repeat(20) + "\n\n";
+
+            const questions = [
+                "1. What does 'recognised for cultural transformation' look like?",
+                "2. Environments that let you thrive vs. frustrated you?",
+                "3. Ideal role - what would you be doing day-to-day?",
+                "4. The transformation you want to be known for?"
+            ];
+
+            const qIds = ['q1', 'q2', 'q3', 'q4'];
+            questions.forEach((q, i) => {
+                body += q + "\n";
+                body += document.getElementById(qIds[i]).value || "(Not yet answered)";
+                body += "\n\n";
+            });
+
+            body += "\nHOMEWORK TASKS\n";
+            body += "-".repeat(20) + "\n\n";
+
+            const hwTasks = [
+                "1. Drains & Charges validation",
+                "2. Dream Companies",
+                "3. Hell Yes Criteria",
+                "4. Reframe Test"
+            ];
+
+            const hwIds = ['hw1', 'hw2', 'hw3', 'hw4'];
+            hwTasks.forEach((task, i) => {
+                body += task + "\n";
+                body += document.getElementById(hwIds[i]).value || "(Not yet completed)";
+                body += "\n\n";
+            });
+
+            const subject = encodeURIComponent("Week 2 Homework - Raj Samuel");
+            const mailto = `mailto:lisa@harnessthespark.com?subject=${subject}&body=${encodeURIComponent(body)}`;
+            window.location.href = mailto;
+        }
+    </script>
+</body>
+</html>
