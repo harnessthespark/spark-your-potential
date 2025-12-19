@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Raj Samuel - Decision-Making Framework</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            line-height: 1.6;
+            color: #2c3e50;
+            background: linear-gradient(135deg, #7c3aed 0%, #a855f7 50%, #c026d3 100%);
+            padding: 40px 20px;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+        .header {
+            background: linear-gradient(135deg, #7c3aed 0%, #a855f7 50%, #c026d3 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+        .header h1 { font-size: 2.2em; margin-bottom: 10px; }
+        .header .subtitle { font-size: 1.1em; opacity: 0.9; }
+        .content { padding: 50px 40px; }
+        .intro {
+            background: linear-gradient(135deg, #7c3aed15 0%, #a855f715 100%);
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 40px;
+            border-left: 5px solid #7c3aed;
+        }
+        .section { margin-bottom: 40px; }
+        .section-title {
+            font-size: 1.5em;
+            font-weight: 700;
+            color: #7c3aed;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #7c3aed;
+        }
+        .framework-box {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 15px;
+            margin: 20px 0;
+            border: 2px solid #7c3aed;
+        }
+        .framework-box h3 { color: #7c3aed; margin-bottom: 15px; }
+        .question-list { margin-left: 20px; margin-top: 10px; }
+        .question-list li { margin-bottom: 12px; }
+        table { width: 100%; border-collapse: collapse; margin: 20px 0; }
+        th {
+            background: linear-gradient(135deg, #7c3aed 0%, #a855f7 100%);
+            color: white;
+            padding: 15px;
+            text-align: left;
+        }
+        td { padding: 15px; border: 1px solid #e0e0e0; }
+        tr:nth-child(even) { background: #f8f9fa; }
+        .score-input {
+            width: 70px;
+            padding: 10px;
+            border: 2px solid #7c3aed;
+            border-radius: 5px;
+            text-align: center;
+            font-size: 1.1em;
+        }
+        .total-row { background: #7c3aed15 !important; font-weight: 700; }
+        .weight-indicator { font-size: 0.9em; color: #7f8c8d; font-style: italic; }
+        .note-box {
+            background: #fff3cd;
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 4px solid #ffc107;
+            margin: 20px 0;
+        }
+        .insight-box {
+            background: linear-gradient(135deg, #7c3aed15 0%, #a855f715 100%);
+            padding: 25px;
+            border-radius: 15px;
+            border-left: 5px solid #7c3aed;
+            margin: 20px 0;
+        }
+        .footer {
+            text-align: center;
+            padding: 30px;
+            background: #f8f9fa;
+            color: #666;
+            font-size: 0.9em;
+        }
+        @media print {
+            body { background: white; padding: 0; }
+            .container { box-shadow: none; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div style="margin-bottom: 20px; font-size: 1.2em;">⚡ Spark Your Potential</div>
+            <h1>Decision-Making Framework</h1>
+            <div class="subtitle">Evaluating Career Opportunities Against Your Patterns</div>
+        </div>
+
+        <div class="content">
+            <div class="intro">
+                <p style="font-size: 1.1em; font-weight: 600; margin-bottom: 10px;">📋 Your Reusable Framework</p>
+                <p style="margin-bottom: 10px;">This framework helps you evaluate ANY opportunity against your patterns. Use it whenever a new role emerges—whether agency, client-side, consultancy, or your own venture.</p>
+                <p><strong>Key insight from our work:</strong> You need environments that recognise the importance of culture above all else. You're not just doing strategy - you're creating cultural and organisational transformation.</p>
+            </div>
+
+            <!-- THE FOUR CORE TESTS -->
+            <div class="section">
+                <div class="section-title">The Four Core Tests</div>
+                <p style="margin-bottom: 20px;">Any opportunity should pass these tests to be worth your energy:</p>
+
+                <div class="framework-box">
+                    <h3>1. The Cultural Transformation Test</h3>
+                    <p style="margin-bottom: 10px;"><strong>Core Question:</strong> Will this let me do cultural transformation—not just strategy delivery?</p>
+                    <ul class="question-list">
+                        <li>Can I spot where culture's already moved and make the path visible?</li>
+                        <li>Will I be valued for making the invisible visible?</li>
+                        <li>Is this an environment that values cultural truth over surface solutions?</li>
+                        <li>Can I bridge external and internal culture (not just deliver decks)?</li>
+                        <li>Will I have space to dig in places others aren't looking?</li>
+                    </ul>
+                    <p style="margin-top: 15px; font-weight: 600; color: #7c3aed;">If you're boxed into "digital strategist" or just making ads without cultural depth, this fails the test.</p>
+                </div>
+
+                <div class="framework-box">
+                    <h3>2. The Permission Test</h3>
+                    <p style="margin-bottom: 10px;"><strong>Core Question:</strong> Will I be able to give people permission to be brave?</p>
+                    <ul class="question-list">
+                        <li>Can I ask questions about culture, emotion, play, and fun?</li>
+                        <li>Will my "Of Course" moments be valued - making people see what was already there?</li>
+                        <li>Can I help people reframe problems rather than just solve the stated brief?</li>
+                        <li>Will I have permission to show where culture's already gone?</li>
+                        <li>Is there appetite for the "scary thing" that feels obvious in hindsight?</li>
+                    </ul>
+                    <p style="margin-top: 15px; font-weight: 600; color: #7c3aed;">If you can't give permission or receive it, this fails the test.</p>
+                </div>
+
+                <div class="framework-box">
+                    <h3>3. The Space to Teach Test</h3>
+                    <p style="margin-bottom: 10px;"><strong>Core Question:</strong> Will I have space to teach and educate?</p>
+                    <ul class="question-list">
+                        <li>Can I run workshops that create belief (like Cadbury)?</li>
+                        <li>Will I have time to show people how content actually lives in the world now?</li>
+                        <li>Is there room to build capabilities in others, not just deliver?</li>
+                        <li>Can I help shift thinking, not just hand over strategy decks?</li>
+                        <li>Will people value learning to see patterns, not just receiving answers?</li>
+                    </ul>
+                    <p style="margin-top: 15px; font-weight: 600; color: #7c3aed;">If it's just delivery with no education element, this fails the test.</p>
+                </div>
+
+                <div class="framework-box">
+                    <h3>4. The Freedom to Create Test</h3>
+                    <p style="margin-bottom: 10px;"><strong>Core Question:</strong> Will I have freedom to create and explore?</p>
+                    <ul class="question-list">
+                        <li>Can I go down rabbit holes when I sense something interesting?</li>
+                        <li>Will experimentation be valued (like Malice Arts experiential approach)?</li>
+                        <li>Is there room for interactivity, participation, play?</li>
+                        <li>Can I add my own perspective rather than just execute others' visions?</li>
+                        <li>Will I have autonomy to spot opportunities others don't see?</li>
+                    </ul>
+                    <p style="margin-top: 15px; font-weight: 600; color: #7c3aed;">If everything is pre-defined with no room for curiosity, this fails the test.</p>
+                </div>
+            </div>
+
+            <!-- SCORING FRAMEWORK -->
+            <div class="section">
+                <div class="section-title">Opportunity Evaluation Scorecard</div>
+                <p style="margin-bottom: 20px;">Score each opportunity out of 10 for each criterion. Be honest—this is for you, not them.</p>
+
+                <div class="note-box">
+                    <strong>Scoring Guide:</strong>
+                    <ul style="margin-top: 10px; margin-left: 20px;">
+                        <li><strong>8-10:</strong> Clear strength / excellent fit</li>
+                        <li><strong>5-7:</strong> Acceptable / neutral</li>
+                        <li><strong>3-4:</strong> Concern / potential problem</li>
+                        <li><strong>0-2:</strong> Deal-breaker / major red flag</li>
+                    </ul>
+                </div>
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th style="width: 35%;">Criterion</th>
+                            <th style="width: 10%;">Weight</th>
+                            <th style="width: 13.75%;">Opp 1<br>/10</th>
+                            <th style="width: 13.75%;">Opp 2<br>/10</th>
+                            <th style="width: 13.75%;">Opp 3<br>/10</th>
+                            <th style="width: 13.75%;">Opp 4<br>/10</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td colspan="6" style="background: #7c3aed; color: white; font-weight: 600;">CULTURAL TRANSFORMATION</td></tr>
+                        <tr>
+                            <td>Can I do cultural transformation (not just strategy delivery)?</td>
+                            <td><span class="weight-indicator">High</span></td>
+                            <td><input type="number" min="0" max="10" class="score-input" placeholder="0-10"></td>
+                            <td><input type="number" min="0" max="10" class="score-input" placeholder="0-10"></td>
+                            <td><input type="number" min="0" max="10" class="score-input" placeholder="0-10"></td>
+                            <td><input type="number" min="0" max="10" class="score-input" placeholder="0-10"></td>
+                        </tr>
+                        <tr>
+                            <td>Do they recognise the importance of culture above all else?</td>
+                            <td><span class="weight-indicator">High</span></td>
+                            <td><input type="number" min="0" max="10" class="score-input" placeholder="0-10"></td>
+                            <td><input type="number" min="0" max="10" class="score-input" placeholder="0-10"></td>
+                            <td><input type="number" min="0" max="10" class="score-input" placeholder="0-10"></td>
+                            <td><input type="number" min="0" max="10" class="score-input" placeholder="0-10"></td>
+                        </tr>
+                        <tr>
+                            <td>Can I bridge external culture → internal organisation?</td>
+                            <td><span class="weight-indicator">High</span></td>
+                            <td><input type="number" min="0" max="10" class="score-input" placeholder="0-10"></td>
+                            <td><input type="number" min="0" max="10" class="score-input" placeholder="0-10"></td>
+                            <td><input type="number" min="0" max="10" class="score-input" placeholder="0-10"></td>
+                            <td><input type="number" min="0" max="10" class="score-input" placeholder="0-10"></td>
+                        </tr>
+                        <tr>
+                            <td>Will I be valued for making the invisible visible?</td>
+                            <td><span class="weight-indicator">High</span></td>
+                            <td><input type="number" min="0" max="10" class="score-input" placeholder="0-10"></td>
+                            <td><input type="number" min="0" max="10" class="score-input" placeholder="0-10"></td>
+                            <td><input type="number" min="0" max="10" class="score-input" placeholder="0-10"></td>
+                            <td><input type="number" min="0" max="10" class="score-input" placeholder="0-10"></td>
+                        </tr>
+
+                        <tr><td colspan="6" style="background: #a855f7; color: white; font-weight: 600;">PERMISSION & COURAGE</td></tr>
+                        <tr>
+                            <td>Can I give people permission to be brave?</td>
+                            <td><span class="weight-indicator">High</span></td>
+                            <td><input type="number" min="0" max="10" class="score-input" placeholder="0-10"></td>
+                            <td><input type="number" min="0" max="10" class="score-input" placeholder="0-10"></td>
+                            <td><input type="number" min="0" max="10" class="score-input" placeholder="0-10"></td>
+                            <td><input type="number" min="0" max="10" class="score-input" placeholder="0-10"></td>
+                        </tr>
+                        <tr>
+                            <td>Will they value reframing problems, not just solving briefs?</td>
+                            <td><span class="weight-indicator">High</span></td>
+                            <td><input type="number" min="0" max="10" class="score-input" placeholder="0-10"></td>
+                            <td><input type="number" min="0" max="10" class="score-input" placeholder="0-10"></td>
+                            <td><input type="number" min="0" max="10" class="score-input" placeholder="0-10"></td>
+                            <td><input type="number" min="0" max="10" class="score-input" placeholder="0-10"></td>
+                        </tr>
+                        <tr>
+                            <td>Is there appetite for "scary things" that feel obvious in hindsight?</td>
+                            <td><span class="weight-indicator">Med</span></td>
+                            <td><input type="number" min="0" max="10" class="score-input" placeholder="0-10"></td>
+                            <td><input type="number" min="0" max="10" class="score-input" placeholder="0-10"></td>
+                            <td><input type="number" min="0" max="10" class="score-input" placeholder="0-10"></td>
+                            <td><input type="number" min="0" max="10" class="score-input" placeholder="0-10"></td>
+                        </tr>
+                        <tr>
+                            <td>Can I ask about culture, emotion, play, and fun?</td>
+                            <td><span class="weight-indicator">Med</span></td>
+                            <td><input type="number" min="0" max="10" class="score-input" placeholder="0-10"></td>
+                            <td><input type="number" min="0" max="10" class="score-input" placeholder="0-10"></td>
+                            <td><input type="number" min="0" max="10" class="score-input" placeholder="0-10"></td>
+                            <td><input type="number" min="0" max="10" class="score-input" placeholder="0-10"></td>
+                        </tr>
+
+                        <tr><td colspan="6" style="background: #c026d3; color: white; font-weight: 600;">SPACE TO TEACH</td></tr>
+                        <tr>
+                            <td>Can I run workshops that create belief?</td>
+                            <td><span class="weight-indicator">High</span></td>
+                            <td><input type="number" min="0" max="10" class="score-input" placeholder="0-10"></td>
+                            <td><input type="number" min="0" max="10" class="score-input" placeholder="0-10"></td>
+                            <td><input type="number" min="0" max="10" class="score-input" placeholder="0-10"></td>
+                            <td><input type="number" min="0" max="10" class="score-input" placeholder="0-10"></td>
+                        </tr>
+                        <tr>
+                            <td>Is there room to build capabilities in others?</td>
+                            <td><span class="weight-indicator">Med</span></td>
+                            <td><input type="number" min="0" max="10" class="score-input" placeholder="0-10"></td>
+                            <td><input type="number" min="0" max="10" class="score-input" placeholder="0-10"></td>
+                            <td><input type="number" min="0" max="10" class="score-input" placeholder="0-10"></td>
+                            <td><input type="number" min="0" max="10" class="score-input" placeholder="0-10"></td>
+                        </tr>
+                        <tr>
+                            <td>Will people value learning to see patterns?</td>
+                            <td><span class="weight-indicator">Med</span></td>
+                            <td><input type="number" min="0" max="10" class="score-input" placeholder="0-10"></td>
+                            <td><input type="number" min="0" max="10" class="score-input" placeholder="0-10"></td>
+                            <td><input type="number" min="0" max="10" class="score-input" placeholder="0-10"></td>
+                            <td><input type="number" min="0" max="10" class="score-input" placeholder="0-10"></td>
+                        </tr>
+                        <tr>
+                            <td>Can I shift thinking, not just deliver decks?</td>
+                            <td><span class="weight-indicator">High</span></td>
+                            <td><input type="number" min="0" max="10" class="score-input" placeholder="0-10"></td>
+                            <td><input type="number" min="0" max="10" class="score-input" placeholder="0-10"></td>
+                            <td><input type="number" min="0" max="10" class="score-input" placeholder="0-10"></td>
+                            <td><input type="number" min="0" max="10" class="score-input" placeholder="0-10"></td>
+                        </tr>
+
+                        <tr><td colspan="6" style="background: #ec4899; color: white; font-weight: 600;">FREEDOM TO CREATE</td></tr>
+                        <tr>
+                            <td>Can I go down rabbit holes when I sense something?</td>
+                            <td><span class="weight-indicator">High</span></td>
+                            <td><input type="number" min="0" max="10" class="score-input" placeholder="0-10"></td>
+                            <td><input type="number" min="0" max="10" class="score-input" placeholder="0-10"></td>
+                            <td><input type="number" min="0" max="10" class="score-input" placeholder="0-10"></td>
+                            <td><input type="number" min="0" max="10" class="score-input" placeholder="0-10"></td>
+                        </tr>
+                        <tr>
+                            <td>Will experimentation and play be valued?</td>
+                            <td><span class="weight-indicator">Med</span></td>
+                            <td><input type="number" min="0" max="10" class="score-input" placeholder="0-10"></td>
+                            <td><input type="number" min="0" max="10" class="score-input" placeholder="0-10"></td>
+                            <td><input type="number" min="0" max="10" class="score-input" placeholder="0-10"></td>
+                            <td><input type="number" min="0" max="10" class="score-input" placeholder="0-10"></td>
+                        </tr>
+                        <tr>
+                            <td>Is there room for interactivity and participation?</td>
+                            <td><span class="weight-indicator">Med</span></td>
+                            <td><input type="number" min="0" max="10" class="score-input" placeholder="0-10"></td>
+                            <td><input type="number" min="0" max="10" class="score-input" placeholder="0-10"></td>
+                            <td><input type="number" min="0" max="10" class="score-input" placeholder="0-10"></td>
+                            <td><input type="number" min="0" max="10" class="score-input" placeholder="0-10"></td>
+                        </tr>
+                        <tr>
+                            <td>Can I spot opportunities others don't see?</td>
+                            <td><span class="weight-indicator">High</span></td>
+                            <td><input type="number" min="0" max="10" class="score-input" placeholder="0-10"></td>
+                            <td><input type="number" min="0" max="10" class="score-input" placeholder="0-10"></td>
+                            <td><input type="number" min="0" max="10" class="score-input" placeholder="0-10"></td>
+                            <td><input type="number" min="0" max="10" class="score-input" placeholder="0-10"></td>
+                        </tr>
+
+                        <tr class="total-row">
+                            <td><strong>TOTAL SCORE</strong></td>
+                            <td>/160</td>
+                            <td><strong id="total-1">0</strong></td>
+                            <td><strong id="total-2">0</strong></td>
+                            <td><strong id="total-3">0</strong></td>
+                            <td><strong id="total-4">0</strong></td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="insight-box">
+                    <p style="font-weight: 600; margin-bottom: 10px;">📊 Interpreting Your Scores:</p>
+                    <ul style="margin-left: 20px;">
+                        <li><strong>120+ (75%+):</strong> Strong fit — pursue with confidence</li>
+                        <li><strong>100-119 (62-74%):</strong> Good potential — investigate concerns</li>
+                        <li><strong>80-99 (50-61%):</strong> Significant concerns — proceed cautiously</li>
+                        <li><strong>Below 80:</strong> Major misalignment — probably not worth pursuing</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- RED FLAGS / GREEN FLAGS -->
+            <div class="section">
+                <div class="section-title">Your Manifesto: Green Lights & Red Flags</div>
+                <p style="margin-bottom: 20px; font-style: italic; color: #666;">These are starter thoughts based on your questionnaire - validate and refine based on what feels true.</p>
+
+                <div class="framework-box" style="border-color: #dc3545;">
+                    <h3 style="color: #dc3545;">🚩 Red Flags (What Drains You):</h3>
+                    <ul class="question-list">
+                        <li><strong>Brands culturally stuck and resistant:</strong> They sense something's wrong but won't shift</li>
+                        <li><strong>Solving the wrong problem:</strong> When people won't reframe, just want tactical execution</li>
+                        <li><strong>Passive, TV-only thinking:</strong> No interactivity, no participation, just broadcast</li>
+                        <li><strong>Being boxed into "digital strategist":</strong> When you're really a cultural translator</li>
+                        <li><strong>Deck-and-done environment:</strong> Deliver insights, move on, no transformation</li>
+                        <li><strong>No space for teaching:</strong> Just execute, don't educate</li>
+                        <li><strong>Culture as afterthought:</strong> They value "digital" but miss that culture is the point</li>
+                    </ul>
+                </div>
+
+                <div class="framework-box" style="border-color: #28a745;">
+                    <h3 style="color: #28a745;">✅ Green Lights (What Charges You):</h3>
+                    <ul class="question-list">
+                        <li><strong>The "Of Course" moment:</strong> When people finally see what was there all along</li>
+                        <li><strong>Revealing the invisible:</strong> Making cultural truths tangible</li>
+                        <li><strong>Adding play and interactivity:</strong> Turning passive into active, participation over broadcast</li>
+                        <li><strong>Giving permission to be brave:</strong> Helping people greenlight the scary thing</li>
+                        <li><strong>Space to teach and workshop:</strong> Creating belief, not just delivering decks</li>
+                        <li><strong>Culture-first environment:</strong> They understand culture above all else</li>
+                        <li><strong>Freedom to explore:</strong> Going down rabbit holes, spotting patterns others miss</li>
+                        <li><strong>Transformation recognition:</strong> Valued for cultural change, not just strategy delivery</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- INTERVIEW QUESTIONS -->
+            <div class="section">
+                <div class="section-title">Questions to Ask in Interviews</div>
+
+                <div class="framework-box">
+                    <h3>About Cultural Transformation:</h3>
+                    <ul class="question-list">
+                        <li>"How does this organisation view the relationship between culture and strategy?"</li>
+                        <li>"Can you give an example of when the team helped a brand catch up to where culture had already moved?"</li>
+                        <li>"Is this more about delivering strategies or transforming how people think?"</li>
+                        <li>"How much time is there to dig into cultural truths vs. just executing briefs?"</li>
+                    </ul>
+                </div>
+
+                <div class="framework-box">
+                    <h3>About Permission & Courage:</h3>
+                    <ul class="question-list">
+                        <li>"Tell me about a time when someone here helped a client do something brave - something that felt obvious in hindsight?"</li>
+                        <li>"What happens when a recommendation challenges the stated brief?"</li>
+                        <li>"How do you help clients see things they couldn't articulate before?"</li>
+                        <li>"Is there appetite for the 'scary thing' that needs doing?"</li>
+                    </ul>
+                </div>
+
+                <div class="framework-box">
+                    <h3>About Teaching & Creating:</h3>
+                    <ul class="question-list">
+                        <li>"How much of this role is about building capabilities in clients vs. just delivering?"</li>
+                        <li>"Is there space for workshops and education - or is it purely consulting?"</li>
+                        <li>"How does the team feel about going down rabbit holes when they sense something interesting?"</li>
+                        <li>"What role does play, interactivity, and experimentation have here?"</li>
+                    </ul>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="footer">
+            <p><strong>⚡ Spark Your Potential</strong> | Career Booster Programme</p>
+            <p>with Lisa Gills | December 2025</p>
+        </div>
+    </div>
+
+    <script>
+        document.querySelectorAll('.score-input').forEach(input => {
+            input.addEventListener('input', calculateTotals);
+        });
+
+        function calculateTotals() {
+            const rows = document.querySelectorAll('tbody tr:not(.total-row):not([style*="background"])');
+            let totals = [0, 0, 0, 0];
+
+            rows.forEach(row => {
+                const inputs = row.querySelectorAll('.score-input');
+                inputs.forEach((input, index) => {
+                    totals[index] += parseInt(input.value) || 0;
+                });
+            });
+
+            document.getElementById('total-1').textContent = totals[0];
+            document.getElementById('total-2').textContent = totals[1];
+            document.getElementById('total-3').textContent = totals[2];
+            document.getElementById('total-4').textContent = totals[3];
+        }
+    </script>
+</body>
+</html>
