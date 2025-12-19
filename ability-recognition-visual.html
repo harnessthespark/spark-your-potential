@@ -1371,7 +1371,8 @@ Every time, the insight feels inevitable afterwards. But it wasn't visible until
         // Auto-save to localStorage with visual feedback
         document.querySelectorAll('textarea, input').forEach(element => {
             element.addEventListener('input', function() {
-                const key = this.placeholder || this.closest('.evidence-box, .transform-box')?.querySelector('h3')?.textContent || 'input';
+                // Use h3 text FIRST (matches CLIENT_DATA keys), then placeholder
+                const key = this.closest('.evidence-box, .transform-box')?.querySelector('h3')?.textContent || this.placeholder || 'input';
                 try {
                     localStorage.setItem('ability_' + key, this.value);
 
@@ -1393,8 +1394,8 @@ Every time, the insight feels inevitable afterwards. But it wasn't visible until
                 }
             });
 
-            // Load saved data
-            const key = element.placeholder || element.closest('.evidence-box, .transform-box')?.querySelector('h3')?.textContent || 'input';
+            // Load saved data - check h3 text FIRST (matches CLIENT_DATA keys), then placeholder
+            const key = element.closest('.evidence-box, .transform-box')?.querySelector('h3')?.textContent || element.placeholder || 'input';
             const saved = localStorage.getItem('ability_' + key);
             if (saved) element.value = saved;
         });
