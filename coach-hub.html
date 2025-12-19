@@ -2100,17 +2100,20 @@
         }
 
         function editClient(clientId) {
-            const client = clients.find(c => c.id === clientId);
-            if (!client) return;
+            const client = clients.find(c => c.id === clientId || c.id == clientId);
+            if (!client) {
+                console.error('Client not found:', clientId);
+                return;
+            }
 
             selectedClient = client;
 
-            // Populate form
+            // Populate form - use programme_status (the correct field)
             document.getElementById('editClientId').value = client.id;
             document.getElementById('editClientName').value = client.full_name || client.name || '';
             document.getElementById('editClientEmail').value = client.email || '';
             document.getElementById('editClientProgramme').value = client.programme_type || 'career';
-            document.getElementById('editClientStage').value = client.stage || 'discovery';
+            document.getElementById('editClientStage').value = client.programme_status || client.status || 'discovery';
 
             document.getElementById('editClientModal').classList.add('active');
         }
@@ -2131,24 +2134,28 @@
                 return;
             }
 
+            // Get original email for API lookup (in case email changed)
+            const originalEmail = selectedClient?.email || email;
+
             // Update locally
-            const clientIndex = clients.findIndex(c => c.id == clientId);
+            const clientIndex = clients.findIndex(c => c.id == clientId || c.email === originalEmail);
             if (clientIndex > -1) {
                 clients[clientIndex].full_name = name;
                 clients[clientIndex].name = name;
                 clients[clientIndex].email = email;
                 clients[clientIndex].programme_type = programme;
-                clients[clientIndex].stage = stage;
+                clients[clientIndex].programme_status = stage;
+                clients[clientIndex].status = stage;
             }
 
-            // Try to save to API
+            let saved = false;
+
+            // Try SYP Express API first (uses email)
             try {
-                const response = await fetch(`${API_BASE}/api/crm/syp/clients/${clientId}/`, {
+                console.log('📡 Saving to SYP API...');
+                const sypResponse = await fetch(`${SYP_API}/api/clients/${encodeURIComponent(originalEmail)}`, {
                     method: 'PATCH',
-                    headers: {
-                        'Authorization': `Token ${authToken}`,
-                        'Content-Type': 'application/json'
-                    },
+                    headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
                         full_name: name,
                         email: email,
@@ -2157,16 +2164,49 @@
                     })
                 });
 
-                if (!response.ok) {
-                    console.log('API update failed, saved locally');
+                if (sypResponse.ok) {
+                    console.log('✅ Saved to SYP PostgreSQL');
+                    saved = true;
                 }
             } catch (error) {
-                console.log('API unavailable, saved locally');
+                console.log('SYP API unavailable');
+            }
+
+            // Also try SparkHub API (uses numeric ID)
+            if (!saved) {
+                try {
+                    console.log('📡 Trying SparkHub API...');
+                    const response = await fetch(`${SPARKHUB_API}/api/crm/syp/clients/${clientId}/`, {
+                        method: 'PATCH',
+                        headers: {
+                            'Authorization': `Token ${authToken}`,
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            full_name: name,
+                            email: email,
+                            programme_type: programme,
+                            programme_status: stage
+                        })
+                    });
+
+                    if (response.ok) {
+                        console.log('✅ Saved to SparkHub PostgreSQL');
+                        saved = true;
+                    }
+                } catch (error) {
+                    console.log('SparkHub API unavailable');
+                }
             }
 
             closeEditClientModal();
             renderClients();
-            alert('✅ Client updated!');
+
+            if (saved) {
+                alert('✅ Client updated and saved to database!');
+            } else {
+                alert('⚠️ Client updated locally (database unavailable)');
+            }
         }
 
         // Add Client Modal
