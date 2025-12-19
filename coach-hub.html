@@ -1804,6 +1804,20 @@
 
             const folder = selectedClient.full_name?.replace(/\s+/g, '_') || 'Unknown';
             const programmeType = selectedClient.programme_type || 'career';
+            const clientId = selectedClient.id;
+
+            // Document types that can be uploaded to PostgreSQL
+            const uploadableTypes = ['agreement', 'notes', 'blueprint', 'cv', 'decision', 'mapping'];
+
+            // Map menu type to PostgreSQL document_type
+            const typeMapping = {
+                'agreement': 'agreement',
+                'notes': 'notes',
+                'blueprint': 'blueprint',
+                'cv-builder': 'cv',
+                'decision': 'decision',
+                'mapping': 'mapping'
+            };
 
             let docs = {};
 
@@ -1816,8 +1830,8 @@
             } else {
                 // Career documents - all standard naming conventions
                 docs = {
-                    'questionnaire': `questionnaire-editor.html?client_id=${selectedClient.id}`,
-                    'insights': `insights-editor.html?client_id=${selectedClient.id}`,
+                    'questionnaire': `questionnaire-editor.html?client_id=${clientId}`,
+                    'insights': `insights-editor.html?client_id=${clientId}`,
                     'blueprint': `${folder}/${folder}_Blueprint.html`,
                     'cv-builder': `${folder}/${folder}_Interactive_CV_Builder.html`,
                     'decision': `${folder}/${folder}_Decision_Framework.html`,
@@ -1826,7 +1840,12 @@
                 };
             }
 
-            if (docs[type]) {
+            // For uploadable types, use document-viewer to check PostgreSQL first
+            if (typeMapping[type] && docs[type]) {
+                const pgType = typeMapping[type];
+                const fallback = encodeURIComponent(docs[type]);
+                window.open(`document-viewer.html?client_id=${clientId}&type=${pgType}&fallback=${fallback}`, '_blank');
+            } else if (docs[type]) {
                 window.open(docs[type], '_blank');
             } else {
                 alert(`Document "${type}" not yet available for ${selectedClient.full_name}`);

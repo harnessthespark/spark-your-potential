@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document Viewer | Coach Hub</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #f8fafc;
+            min-height: 100vh;
+        }
+        .header {
+            background: linear-gradient(135deg, #7c3aed 0%, #a855f7 100%);
+            color: white;
+            padding: 15px 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        .header h1 {
+            font-size: 1.2em;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            background: rgba(255,255,255,0.2);
+            color: white;
+            font-size: 0.9em;
+        }
+        .btn:hover { background: rgba(255,255,255,0.3); }
+        .loading {
+            text-align: center;
+            padding: 100px 20px;
+            color: #64748b;
+            font-size: 1.1em;
+        }
+        .error {
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 30px;
+            background: #fef2f2;
+            border-radius: 15px;
+            text-align: center;
+            color: #dc2626;
+        }
+        .error h2 { margin-bottom: 10px; }
+        .document-frame {
+            width: 100%;
+            min-height: calc(100vh - 60px);
+            border: none;
+            background: white;
+        }
+        .document-content {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 40px;
+            background: white;
+            min-height: calc(100vh - 60px);
+        }
+        .meta-info {
+            background: #f0fdf4;
+            padding: 15px 20px;
+            border-radius: 10px;
+            margin-bottom: 25px;
+            font-size: 0.9em;
+            color: #166534;
+        }
+        .meta-info strong { color: #15803d; }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <h1 id="docTitle">📄 Document Viewer</h1>
+        <button class="btn" onclick="window.close(); window.location.href='coach-hub.html';">← Back</button>
+    </header>
+
+    <div class="loading" id="loading">Loading document...</div>
+    <div class="error" id="error" style="display: none;">
+        <h2>Document Not Found</h2>
+        <p id="errorMsg">The requested document could not be loaded.</p>
+    </div>
+    <div id="documentContainer" style="display: none;"></div>
+
+    <script>
+        const API_BASE = 'https://sparkhub-be-qtmmb.ondigitalocean.app';
+
+        // Get params
+        const params = new URLSearchParams(window.location.search);
+        const clientId = params.get('client_id');
+        const docType = params.get('type');
+        const fallbackFile = params.get('fallback');
+
+        function getAuthToken() {
+            return localStorage.getItem('syp_token');
+        }
+
+        async function loadDocument() {
+            const token = getAuthToken();
+
+            if (!token) {
+                // No token - try fallback file
+                if (fallbackFile) {
+                    window.location.href = fallbackFile;
+                    return;
+                }
+                showError('Not authenticated. Please log in first.');
+                return;
+            }
+
+            if (!clientId || !docType) {
+                showError('Missing client_id or type parameter.');
+                return;
+            }
+
+            try {
+                // Fetch documents for this client
+                const response = await fetch(`${API_BASE}/api/crm/syp/coach/client-documents/by-client/${clientId}/`, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error('Failed to fetch documents');
+                }
+
+                const documents = await response.json();
+
+                // Find document of requested type
+                const doc = documents.find(d => d.document_type === docType);
+
+                if (doc && doc.file_content) {
+                    // Show document from PostgreSQL
+                    displayDocument(doc);
+                } else if (fallbackFile) {
+                    // No PostgreSQL doc - use fallback file
+                    window.location.href = fallbackFile;
+                } else {
+                    showError('Document not found in database and no fallback provided.');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                if (fallbackFile) {
+                    window.location.href = fallbackFile;
+                } else {
+                    showError('Error loading document: ' + error.message);
+                }
+            }
+        }
+
+        function displayDocument(doc) {
+            document.getElementById('loading').style.display = 'none';
+            document.getElementById('documentContainer').style.display = 'block';
+
+            // Update title
+            document.getElementById('docTitle').textContent = `📄 ${doc.document_type_display || doc.document_type}`;
+            document.title = `${doc.document_type_display} | ${doc.client_name}`;
+
+            // Check if content is HTML
+            const content = doc.file_content;
+            if (content.trim().startsWith('<!DOCTYPE') || content.trim().startsWith('<html')) {
+                // Full HTML document - use iframe
+                const iframe = document.createElement('iframe');
+                iframe.className = 'document-frame';
+                iframe.srcdoc = content;
+                document.getElementById('documentContainer').appendChild(iframe);
+            } else {
+                // Partial HTML or text - show in container
+                const container = document.createElement('div');
+                container.className = 'document-content';
+
+                const meta = document.createElement('div');
+                meta.className = 'meta-info';
+                meta.innerHTML = `
+                    <strong>Client:</strong> ${doc.client_name} &nbsp;|&nbsp;
+                    <strong>Type:</strong> ${doc.document_type_display} &nbsp;|&nbsp;
+                    <strong>Uploaded:</strong> ${new Date(doc.created_at).toLocaleDateString('en-GB')}
+                `;
+                container.appendChild(meta);
+
+                const contentDiv = document.createElement('div');
+                contentDiv.innerHTML = content;
+                container.appendChild(contentDiv);
+
+                document.getElementById('documentContainer').appendChild(container);
+            }
+        }
+
+        function showError(msg) {
+            document.getElementById('loading').style.display = 'none';
+            document.getElementById('error').style.display = 'block';
+            document.getElementById('errorMsg').textContent = msg;
+        }
+
+        // Load on page load
+        loadDocument();
+    </script>
+</body>
+</html>
