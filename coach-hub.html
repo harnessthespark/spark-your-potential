@@ -1936,17 +1936,51 @@
             document.getElementById('notesModal').classList.remove('active');
         }
 
-        function saveClientNotes() {
+        async function saveClientNotes() {
             if (!selectedClient) return;
 
+            const notesText = document.getElementById('clientNotes').value;
+            const insightsText = document.getElementById('clientInsights').value;
+            const nextStepsText = document.getElementById('clientNextSteps').value;
+
             const notes = {
-                notes: document.getElementById('clientNotes').value,
-                insights: document.getElementById('clientInsights').value,
-                nextSteps: document.getElementById('clientNextSteps').value,
+                notes: notesText,
+                insights: insightsText,
+                nextSteps: nextStepsText,
                 updatedAt: new Date().toISOString()
             };
 
+            // Save to localStorage as backup
             localStorage.setItem(`coach_notes_${selectedClient.id}`, JSON.stringify(notes));
+
+            // Also save to PostgreSQL if client has API ID
+            if (selectedClient.api_id || selectedClient.id) {
+                try {
+                    const clientId = selectedClient.api_id || selectedClient.id;
+                    // Combine notes into single coach_notes field for API
+                    const combinedNotes = `NOTES:\n${notesText}\n\nINSIGHTS:\n${insightsText}\n\nNEXT STEPS:\n${nextStepsText}`;
+
+                    const response = await fetch(`${API_BASE}/api/crm/syp/clients/${clientId}/`, {
+                        method: 'PATCH',
+                        headers: {
+                            'Authorization': `Token ${authToken}`,
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            coach_notes: combinedNotes
+                        })
+                    });
+
+                    if (response.ok) {
+                        console.log('✅ Notes saved to PostgreSQL');
+                    } else {
+                        console.log('API save failed, notes saved locally');
+                    }
+                } catch (error) {
+                    console.log('API unavailable, notes saved locally');
+                }
+            }
+
             closeNotesModal();
             alert('✅ Notes saved for ' + (selectedClient.full_name || selectedClient.name));
         }
@@ -2030,7 +2064,7 @@
                         full_name: name,
                         email: email,
                         programme_type: programme,
-                        stage: stage
+                        programme_status: stage
                     })
                 });
 
