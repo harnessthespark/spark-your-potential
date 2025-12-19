@@ -1432,6 +1432,43 @@
         // Config
         const API_BASE = 'https://sparkhub-be-qtmmb.ondigitalocean.app';
 
+        // Default clients for fallback when API unavailable
+        const DEFAULT_CLIENTS = [
+            {
+                id: 'raj-samuel',
+                full_name: 'Raj Samuel',
+                name: 'Raj Samuel',
+                email: 'rs@rajsamuel.net',
+                programme_type: 'career',
+                programme_status: 'week-2',
+                status: 'week-2',
+                enrolled_date: '2025-12-01',
+                folder: 'Raj_Samuel'
+            },
+            {
+                id: 'donald-pirie',
+                full_name: 'Donald Pirie',
+                name: 'Donald Pirie',
+                email: 'donaldpirie111@hotmail.co.uk',
+                programme_type: 'career',
+                programme_status: 'complete',
+                status: 'complete',
+                enrolled_date: '2024-10-01',
+                folder: 'Donald_Pirie'
+            },
+            {
+                id: 'simon-booth-lucking',
+                full_name: 'Simon Booth-Lucking',
+                name: 'Simon Booth-Lucking',
+                email: 'simon@boothlucking.com',
+                programme_type: 'career',
+                programme_status: 'discovery',
+                status: 'discovery',
+                enrolled_date: '2025-12-01',
+                folder: 'Simon_Booth_Lucking'
+            }
+        ];
+
         // State
         let authToken = null;
         let currentUser = null;
@@ -1556,6 +1593,14 @@
             } catch (error) {
                 console.error('❌ Load clients error:', error);
                 clients = [];
+            }
+
+            // Use DEFAULT_CLIENTS as fallback if API returned empty
+            if (clients.length === 0) {
+                console.log('📋 Using DEFAULT_CLIENTS fallback');
+                clients = [...DEFAULT_CLIENTS];
+                document.getElementById('dataBadge').className = 'data-badge cached';
+                document.getElementById('dataBadge').textContent = 'Local';
             }
 
             renderClients();
