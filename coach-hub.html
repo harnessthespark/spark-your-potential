@@ -1429,8 +1429,10 @@
     </div>
 
     <script>
-        // Config
-        const API_BASE = 'https://sparkhub-be-qtmmb.ondigitalocean.app';
+        // Config - Two backends
+        const SPARKHUB_API = 'https://sparkhub-be-qtmmb.ondigitalocean.app';  // Auth
+        const SYP_API = 'https://stingray-app-7kg9p.ondigitalocean.app';      // Client data
+        const API_BASE = SPARKHUB_API;  // For auth compatibility
 
         // Default clients for fallback when API unavailable
         const DEFAULT_CLIENTS = [
@@ -1485,8 +1487,8 @@
                 name: 'Chloe Cal',
                 email: 'chloe@thisiscal.com',
                 programme_type: 'audhd',
-                programme_status: 'pre-programme',
-                status: 'pre-programme',
+                programme_status: 'week-2',
+                status: 'week-2',
                 enrolled_date: '2025-12-01',
                 folder: 'Chloe_Cal'
             },
@@ -1496,8 +1498,8 @@
                 name: 'Deb Briggs',
                 email: 'deborah_armstrong@hotmail.com',
                 programme_type: 'audhd',
-                programme_status: 'pre-programme',
-                status: 'pre-programme',
+                programme_status: 'week-2',
+                status: 'week-2',
                 enrolled_date: '2025-12-01',
                 folder: 'Deb_Briggs'
             },
@@ -1608,78 +1610,95 @@
             await loadClients();
         }
 
-        // Load Clients from PostgreSQL - MERGE with DEFAULT_CLIENTS
+        // Load Clients from PostgreSQL - SYP API FIRST, then SparkHub, then DEFAULT_CLIENTS
         async function loadClients() {
             console.log('🔄 Loading clients from PostgreSQL...');
-            console.log('🔑 Token:', authToken ? authToken.substring(0, 20) + '...' : 'NONE');
 
             let apiClients = [];
             let apiSuccess = false;
+            let dataSource = 'Local';
 
+            // Step 1: Try SYP Express backend first (has homework, blueprints, etc.)
             try {
-                const response = await fetch(`${API_BASE}/api/crm/syp/coach/clients/`, {
-                    headers: {
-                        'Authorization': `Token ${authToken}`,
-                        'Content-Type': 'application/json'
+                console.log('📡 Trying SYP API...');
+                const sypResponse = await fetch(`${SYP_API}/api/clients`);
+
+                if (sypResponse.ok) {
+                    const sypData = await sypResponse.json();
+                    console.log('📦 SYP API data:', sypData);
+
+                    if (sypData.success && sypData.clients && sypData.clients.length > 0) {
+                        apiClients = sypData.clients;
+                        apiSuccess = true;
+                        dataSource = 'PostgreSQL (SYP)';
+                        console.log('✅ Loaded', apiClients.length, 'clients from SYP PostgreSQL');
                     }
-                });
-
-                console.log('📡 Response status:', response.status);
-
-                if (response.ok) {
-                    const data = await response.json();
-                    console.log('📦 Raw API data:', data);
-                    apiClients = Array.isArray(data) ? data : (data.results || []);
-                    apiSuccess = true;
-                    console.log('✅ Loaded', apiClients.length, 'clients from API');
-                } else {
-                    const errorText = await response.text();
-                    console.error('❌ API error:', response.status, errorText);
                 }
-            } catch (error) {
-                console.error('❌ Load clients error:', error);
+            } catch (sypError) {
+                console.warn('⚠️ SYP API error:', sypError.message);
             }
 
-            // ALWAYS merge DEFAULT_CLIENTS with API data
-            // API data takes precedence for matching clients (by email)
-            console.log('🔀 Merging DEFAULT_CLIENTS with API data...');
+            // Step 2: If SYP didn't work, try SparkHub API
+            if (!apiSuccess && authToken) {
+                try {
+                    console.log('📡 Trying SparkHub API...');
+                    const response = await fetch(`${SPARKHUB_API}/api/crm/syp/coach/clients/`, {
+                        headers: {
+                            'Authorization': `Token ${authToken}`,
+                            'Content-Type': 'application/json'
+                        }
+                    });
 
-            // Start with DEFAULT_CLIENTS as base
+                    if (response.ok) {
+                        const data = await response.json();
+                        const sparkClients = Array.isArray(data) ? data : (data.results || []);
+
+                        if (sparkClients.length > 0) {
+                            apiClients = sparkClients;
+                            apiSuccess = true;
+                            dataSource = 'PostgreSQL (SparkHub)';
+                            console.log('✅ Loaded', apiClients.length, 'clients from SparkHub');
+                        }
+                    }
+                } catch (error) {
+                    console.warn('⚠️ SparkHub API error:', error.message);
+                }
+            }
+
+            // Step 3: Merge with DEFAULT_CLIENTS (API data takes precedence)
+            console.log('🔀 Merging with DEFAULT_CLIENTS...');
             const mergedMap = new Map();
 
-            // Add all DEFAULT_CLIENTS first
+            // Add DEFAULT_CLIENTS first as base
             DEFAULT_CLIENTS.forEach(client => {
                 const key = (client.email || '').toLowerCase();
                 mergedMap.set(key, { ...client });
-                console.log(`  📋 Added default: ${client.full_name} (${key})`);
             });
 
-            // Override with API data where available (API is source of truth)
+            // Override with API data (API is source of truth for matching emails)
             apiClients.forEach(apiClient => {
                 const key = (apiClient.email || '').toLowerCase();
                 if (mergedMap.has(key)) {
-                    // Merge: API data takes precedence, but keep local fields not in API
                     const existing = mergedMap.get(key);
                     mergedMap.set(key, { ...existing, ...apiClient });
-                    console.log(`  🔄 Updated from API: ${apiClient.full_name} (${key})`);
+                    console.log(`  🔄 Updated from API: ${apiClient.full_name || apiClient.name}`);
                 } else {
-                    // New client from API not in defaults
                     mergedMap.set(key, apiClient);
-                    console.log(`  ➕ Added from API: ${apiClient.full_name} (${key})`);
+                    console.log(`  ➕ Added from API: ${apiClient.full_name || apiClient.name}`);
                 }
             });
 
-            // Convert map back to array
             clients = Array.from(mergedMap.values());
-            console.log(`✅ Total merged clients: ${clients.length}`);
+            console.log(`✅ Total clients: ${clients.length} (Source: ${dataSource})`);
 
-            // Update badge based on API success
-            if (apiSuccess && apiClients.length > 0) {
-                document.getElementById('dataBadge').className = 'data-badge live';
-                document.getElementById('dataBadge').textContent = 'PostgreSQL';
+            // Update badge
+            const badge = document.getElementById('dataBadge');
+            if (apiSuccess) {
+                badge.className = 'data-badge live';
+                badge.textContent = dataSource;
             } else {
-                document.getElementById('dataBadge').className = 'data-badge cached';
-                document.getElementById('dataBadge').textContent = 'Local';
+                badge.className = 'data-badge cached';
+                badge.textContent = 'Local';
             }
 
             renderClients();
@@ -1762,8 +1781,11 @@
             const stageLabel = stageLabels[status] || status;
             const isComplete = status === 'completed' || status === 'complete';
 
+            // Safely encode the client ID for use in onclick handlers
+            const safeId = JSON.stringify(client.id);
+
             return `
-                <div class="client-card ${programmeType}" onclick="openClientPanel(${client.id})">
+                <div class="client-card ${programmeType}" onclick="openClientPanel(${safeId})">
                     <div class="card-header">
                         <div class="client-info">
                             <h3>
@@ -1788,10 +1810,10 @@
                     </div>
 
                     <div class="card-actions" onclick="event.stopPropagation()">
-                        <button class="action-btn" onclick="openNotes(${client.id})">📝 Notes</button>
-                        <button class="action-btn" onclick="openDocs(${client.id})">📁 Docs</button>
-                        <button class="action-btn" onclick="openSchedule(${client.id})">📅 Schedule</button>
-                        <button class="action-btn" onclick="editClient(${client.id})">✏️ Edit</button>
+                        <button class="action-btn" onclick="openNotes(${safeId})">📝 Notes</button>
+                        <button class="action-btn" onclick="openDocs(${safeId})">📁 Docs</button>
+                        <button class="action-btn" onclick="openSchedule(${safeId})">📅 Schedule</button>
+                        <button class="action-btn" onclick="editClient(${safeId})">✏️ Edit</button>
                     </div>
                 </div>
             `;

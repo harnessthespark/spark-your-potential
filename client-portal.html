@@ -1557,49 +1557,63 @@
                     localStorage.setItem('syp_client_email', email);
                     localStorage.setItem('syp_token', token);
 
-                    // Get client data - check CLIENTS first, then fetch from API
-                    let client = CLIENTS[email];
+                    // POSTGRESQL FIRST - Always try API first, CLIENTS as fallback only
+                    let client = null;
 
-                    if (!client) {
-                        // Client not in hardcoded list - fetch from API or create default
-                        try {
-                            const clientResponse = await fetch(`${API_SERVER}/api/crm/syp/clients/me/`, {
-                                headers: {
-                                    'Authorization': `Bearer ${token}`,
-                                    'Content-Type': 'application/json'
-                                }
-                            });
-
-                            if (clientResponse.ok) {
-                                const clientData = await clientResponse.json();
-                                client = {
-                                    name: clientData.full_name || data.user?.first_name || email.split('@')[0],
-                                    email: email,
-                                    folder: clientData.folder || email.split('@')[0].replace(/[^a-zA-Z0-9]/g, '_'),
-                                    status: clientData.programme_stage || 'pre-programme',
-                                    agreementSigned: clientData.agreement_signed || false,
-                                    files: {},
-                                    prompts: {},
-                                    blueprintProgress: 0
-                                };
+                    // Step 1: Try PostgreSQL API first
+                    try {
+                        console.log('🔄 Fetching client data from PostgreSQL...');
+                        const clientResponse = await fetch(`${API_SERVER}/api/crm/syp/clients/me/`, {
+                            headers: {
+                                'Authorization': `Bearer ${token}`,
+                                'Content-Type': 'application/json'
                             }
-                        } catch (apiError) {
-                            console.log('Could not fetch client data from API, using defaults');
-                        }
+                        });
 
-                        // If still no client data, create minimal profile
-                        if (!client) {
+                        if (clientResponse.ok) {
+                            const clientData = await clientResponse.json();
+                            console.log('✅ Got client data from PostgreSQL:', clientData);
+
+                            // Merge with CLIENTS config for file mappings if available
+                            const localConfig = CLIENTS[email] || {};
+
                             client = {
-                                name: data.user?.first_name || email.split('@')[0],
+                                name: clientData.full_name || data.user?.first_name || email.split('@')[0],
                                 email: email,
-                                folder: email.split('@')[0].replace(/[^a-zA-Z0-9]/g, '_'),
-                                status: 'pre-programme',
-                                agreementSigned: false,
-                                files: {},
-                                prompts: {},
-                                blueprintProgress: 0
+                                folder: clientData.folder || localConfig.folder || email.split('@')[0].replace(/[^a-zA-Z0-9]/g, '_'),
+                                status: clientData.programme_stage || clientData.programme_status || localConfig.status || 'pre-programme',
+                                programmeType: clientData.programme_type || localConfig.programmeType || 'career',
+                                agreementSigned: clientData.agreement_signed || localConfig.agreementSigned || false,
+                                files: localConfig.files || {},  // File mappings from local config
+                                prompts: localConfig.prompts || {},
+                                blueprintProgress: clientData.blueprint_progress || localConfig.blueprintProgress || 0
                             };
+                        } else {
+                            console.warn('⚠️ PostgreSQL API returned:', clientResponse.status);
                         }
+                    } catch (apiError) {
+                        console.warn('⚠️ PostgreSQL API error:', apiError.message);
+                    }
+
+                    // Step 2: Fall back to CLIENTS constant only if PostgreSQL failed
+                    if (!client && CLIENTS[email]) {
+                        console.log('📋 Using CLIENTS fallback for:', email);
+                        client = CLIENTS[email];
+                    }
+
+                    // Step 3: Create minimal profile if nothing else worked
+                    if (!client) {
+                        console.log('📋 Creating minimal profile for:', email);
+                        client = {
+                            name: data.user?.first_name || email.split('@')[0],
+                            email: email,
+                            folder: email.split('@')[0].replace(/[^a-zA-Z0-9]/g, '_'),
+                            status: 'pre-programme',
+                            agreementSigned: false,
+                            files: {},
+                            prompts: {},
+                            blueprintProgress: 0
+                        };
                     }
 
                     showPortal(client);

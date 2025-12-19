@@ -668,6 +668,133 @@ Generate a complete Career Blueprint JSON.`;
 });
 
 // ============================================
+// CLIENT ENDPOINTS (Coach access)
+// ============================================
+
+// Get all clients (for Coach Hub)
+app.get('/api/clients', async (req, res) => {
+    try {
+        // Get all users from database
+        const users = await db.getAllUsers();
+
+        // Transform to client format expected by coach-hub
+        const clients = users.map(user => ({
+            id: user.id,
+            full_name: user.name || user.email.split('@')[0],
+            name: user.name || user.email.split('@')[0],
+            email: user.email,
+            programme_type: user.programme_access || 'career',
+            programme_status: 'enrolled', // Default, can be enhanced later
+            status: 'enrolled',
+            enrolled_date: user.created_at,
+            last_login: user.last_login,
+            folder: (user.name || user.email.split('@')[0]).replace(/\s+/g, '_')
+        }));
+
+        console.log(`📋 Returning ${clients.length} clients from PostgreSQL`);
+        res.json({ success: true, clients });
+    } catch (error) {
+        console.error('Get clients error:', error);
+        res.status(500).json({ success: false, error: error.message });
+    }
+});
+
+// Get single client by email
+app.get('/api/clients/:email', async (req, res) => {
+    try {
+        const { email } = req.params;
+
+        const result = await db.pool.query(
+            'SELECT * FROM users WHERE email = $1',
+            [email]
+        );
+
+        if (result.rows.length === 0) {
+            return res.status(404).json({ success: false, error: 'Client not found' });
+        }
+
+        const user = result.rows[0];
+
+        // Get their latest blueprint and homework
+        const blueprint = await db.getLatestBlueprint(user.id);
+        const homework = await db.getAllHomework(email);
+
+        const client = {
+            id: user.id,
+            full_name: user.name || user.email.split('@')[0],
+            name: user.name || user.email.split('@')[0],
+            email: user.email,
+            programme_type: user.programme_access || 'career',
+            programme_status: 'enrolled',
+            status: 'enrolled',
+            enrolled_date: user.created_at,
+            last_login: user.last_login,
+            folder: (user.name || user.email.split('@')[0]).replace(/\s+/g, '_'),
+            blueprint: blueprint,
+            homework: homework
+        };
+
+        res.json({ success: true, client });
+    } catch (error) {
+        console.error('Get client error:', error);
+        res.status(500).json({ success: false, error: error.message });
+    }
+});
+
+// Update client status
+app.patch('/api/clients/:email', async (req, res) => {
+    try {
+        const { email } = req.params;
+        const { programme_status, programme_type, name } = req.body;
+
+        // Find user
+        const userResult = await db.pool.query(
+            'SELECT id FROM users WHERE email = $1',
+            [email]
+        );
+
+        if (userResult.rows.length === 0) {
+            return res.status(404).json({ success: false, error: 'Client not found' });
+        }
+
+        const userId = userResult.rows[0].id;
+
+        // Update user
+        const updates = [];
+        const values = [];
+        let paramCount = 1;
+
+        if (name) {
+            updates.push(`name = $${paramCount}`);
+            values.push(name);
+            paramCount++;
+        }
+
+        if (programme_type) {
+            updates.push(`programme_access = $${paramCount}`);
+            values.push(programme_type);
+            paramCount++;
+        }
+
+        if (updates.length > 0) {
+            updates.push(`updated_at = NOW()`);
+            values.push(userId);
+
+            await db.pool.query(
+                `UPDATE users SET ${updates.join(', ')} WHERE id = $${paramCount}`,
+                values
+            );
+        }
+
+        console.log(`✅ Updated client: ${email}`);
+        res.json({ success: true, message: 'Client updated' });
+    } catch (error) {
+        console.error('Update client error:', error);
+        res.status(500).json({ success: false, error: error.message });
+    }
+});
+
+// ============================================
 // HOMEWORK ENDPOINTS
 // ============================================
 
