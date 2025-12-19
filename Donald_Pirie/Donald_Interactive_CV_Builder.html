@@ -63,6 +63,37 @@
             color: #D81B60;
         }
 
+        .version-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .version-btn {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            padding: 12px 15px;
+            border: 2px solid rgba(255,255,255,0.3);
+            background: rgba(255,255,255,0.1);
+            color: white;
+            border-radius: 8px;
+            cursor: pointer;
+            text-align: left;
+            transition: all 0.2s;
+        }
+        .version-btn:hover {
+            background: rgba(255,255,255,0.2);
+            border-color: #FFD700;
+        }
+        .version-btn span {
+            font-size: 1.1em;
+            margin-bottom: 2px;
+        }
+        .version-btn small {
+            font-size: 0.75em;
+            opacity: 0.8;
+        }
+
         .hint-box {
             background: rgba(255,255,255,0.15);
             padding: 12px;
@@ -906,8 +937,31 @@
             </div>
 
             <div class="export-buttons">
-                <button class="export-btn" onclick="exportPDF()">🖨️ Print / PDF</button>
-                <button class="export-btn" onclick="downloadAsHTML()">💾 Download</button>
+                <button class="export-btn" onclick="exportPDF()">🖨️ PDF</button>
+                <button class="export-btn" onclick="exportToWord()">📄 Word</button>
+                <button class="export-btn" onclick="downloadAsHTML()">💾 HTML</button>
+            </div>
+
+            <div class="control-section">
+                <div class="control-title">📋 CV Versions</div>
+                <div class="version-buttons">
+                    <button class="version-btn" onclick="createVersion('executive')">
+                        <span>👔</span> Executive Summary
+                        <small>1-page leadership focus</small>
+                    </button>
+                    <button class="version-btn" onclick="createVersion('consulting')">
+                        <span>💼</span> Consulting Focus
+                        <small>Strategy & transformation</small>
+                    </button>
+                    <button class="version-btn" onclick="createVersion('brand')">
+                        <span>🎨</span> Brand & Creative
+                        <small>Creative leadership</small>
+                    </button>
+                    <button class="version-btn" onclick="createVersion('interim')">
+                        <span>⚡</span> Interim/Contract
+                        <small>Project-based focus</small>
+                    </button>
+                </div>
             </div>
 
             <div class="control-section">
@@ -1488,6 +1542,125 @@
             a.href = URL.createObjectURL(blob);
             a.download = 'Donald_Pirie_CV.html';
             a.click();
+        }
+
+        function exportToWord() {
+            const cvContent = document.getElementById('cvPreview').innerHTML;
+            const wordContent = `
+<!DOCTYPE html>
+<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word" xmlns="http://www.w3.org/TR/REC-html40">
+<head>
+    <meta charset="UTF-8">
+    <title>Donald Pirie CV</title>
+    <!--[if gte mso 9]>
+    <xml>
+        <w:WordDocument>
+            <w:View>Print</w:View>
+            <w:Zoom>100</w:Zoom>
+        </w:WordDocument>
+    </xml>
+    <![endif]-->
+    <style>
+        body { font-family: Calibri, Arial, sans-serif; font-size: 11pt; line-height: 1.4; margin: 1in; }
+        h1 { font-size: 24pt; color: #1a1a2e; margin-bottom: 5pt; }
+        h2 { font-size: 14pt; color: #1a1a2e; margin-top: 15pt; margin-bottom: 8pt; border-bottom: 1pt solid #1a1a2e; padding-bottom: 3pt; }
+        h3 { font-size: 12pt; color: #333; margin-top: 10pt; margin-bottom: 5pt; }
+        p { margin-bottom: 8pt; }
+        ul { margin-left: 20pt; margin-bottom: 10pt; }
+        li { margin-bottom: 4pt; }
+        .profile { font-size: 11pt; color: #444; margin-bottom: 15pt; }
+        .job-title { font-weight: bold; }
+        .company { color: #666; }
+        .dates { color: #888; font-size: 10pt; }
+    </style>
+</head>
+<body>
+    ${cvContent}
+</body>
+</html>`;
+
+            const blob = new Blob([wordContent], { type: 'application/msword' });
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = 'Donald_Pirie_CV.doc';
+            a.click();
+        }
+
+        function createVersion(type) {
+            const versions = {
+                'executive': {
+                    name: 'Executive Summary',
+                    filename: 'Donald_Pirie_CV_Executive.doc',
+                    description: 'One-page leadership-focused CV',
+                    sections: ['profile', 'experience', 'education'],
+                    focusAreas: ['Leadership', 'Strategy', 'Transformation', 'Board-level experience']
+                },
+                'consulting': {
+                    name: 'Consulting Focus',
+                    filename: 'Donald_Pirie_CV_Consulting.doc',
+                    description: 'Strategy and transformation consulting CV',
+                    sections: ['profile', 'experience', 'case-studies', 'skills'],
+                    focusAreas: ['Strategy', 'Transformation', 'Change Management', 'Stakeholder Engagement']
+                },
+                'brand': {
+                    name: 'Brand & Creative',
+                    filename: 'Donald_Pirie_CV_Brand.doc',
+                    description: 'Creative and brand leadership CV',
+                    sections: ['profile', 'experience', 'case-studies', 'skills'],
+                    focusAreas: ['Brand Strategy', 'Creative Direction', 'Storytelling', 'Campaign Leadership']
+                },
+                'interim': {
+                    name: 'Interim/Contract',
+                    filename: 'Donald_Pirie_CV_Interim.doc',
+                    description: 'Project-based and interim roles CV',
+                    sections: ['profile', 'key-projects', 'experience', 'skills'],
+                    focusAreas: ['Project Delivery', 'Rapid Impact', 'Transformation', 'Interim Leadership']
+                }
+            };
+
+            const version = versions[type];
+            if (!version) return;
+
+            // Generate version-specific content
+            const cvContent = document.getElementById('cvPreview').innerHTML;
+
+            const wordContent = `
+<!DOCTYPE html>
+<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word">
+<head>
+    <meta charset="UTF-8">
+    <title>Donald Pirie - ${version.name}</title>
+    <style>
+        body { font-family: Calibri, Arial, sans-serif; font-size: 11pt; line-height: 1.4; margin: 1in; }
+        h1 { font-size: 24pt; color: #1a1a2e; margin-bottom: 5pt; }
+        h2 { font-size: 14pt; color: #1a1a2e; margin-top: 15pt; margin-bottom: 8pt; border-bottom: 1pt solid #1a1a2e; padding-bottom: 3pt; }
+        h3 { font-size: 12pt; color: #333; margin-top: 10pt; margin-bottom: 5pt; }
+        p { margin-bottom: 8pt; }
+        ul { margin-left: 20pt; margin-bottom: 10pt; }
+        li { margin-bottom: 4pt; }
+        .version-header { background: #f5f5f5; padding: 10pt; margin-bottom: 15pt; border-left: 3pt solid #1a1a2e; }
+        .focus-areas { color: #666; font-style: italic; }
+    </style>
+</head>
+<body>
+    <div class="version-header">
+        <strong>${version.name} Version</strong><br>
+        <span class="focus-areas">Focus: ${version.focusAreas.join(' • ')}</span>
+    </div>
+    ${cvContent}
+    <p style="color: #999; font-size: 9pt; margin-top: 30pt; border-top: 1pt solid #ddd; padding-top: 10pt;">
+        Generated from Donald Pirie's Interactive CV Builder - ${version.description}
+    </p>
+</body>
+</html>`;
+
+            const blob = new Blob([wordContent], { type: 'application/msword' });
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = version.filename;
+            a.click();
+
+            alert(`✅ ${version.name} version downloaded!\n\nFile: ${version.filename}\n\nTip: Open in Word and customise the content to emphasise ${version.focusAreas[0]} and ${version.focusAreas[1]}.`);
         }
 
         // =============================================
