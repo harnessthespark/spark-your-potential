@@ -1246,7 +1246,8 @@
                     questionnaireResponses: 'Raj_Samuel/Raj_Samuel_Questionnaire_Responses.html',
                     insights: 'Raj_Samuel/Raj_Samuel_Career_Insights_Report.html',
                     blueprint: 'Raj_Samuel/Raj_Samuel_Career_Blueprint.html',
-                    decisionFramework: 'Raj_Samuel/Raj_Samuel_Decision_Framework.html'
+                    decisionFramework: 'Raj_Samuel/Raj_Samuel_Decision_Framework.html',
+                    homework: 'Raj_Samuel/Raj_Samuel_Week2_Homework.html'  // PostgreSQL-connected homework sheet
                 },
                 prompts: {
                     week1: "",
@@ -1382,6 +1383,13 @@
                 title: 'Career Direction',
                 subtitle: 'Opportunities & Confidence',
                 tasks: [
+                    {
+                        id: 'w2-homework',
+                        title: '📝 Complete Week 2 Homework',
+                        description: 'Answer key questions and complete homework tasks - saves automatically to your profile',
+                        linkText: 'Open Homework Sheet',
+                        linkKey: 'homework'
+                    },
                     {
                         id: 'w2-vision',
                         title: 'Define Your Ideal Role Vision',
@@ -2004,30 +2012,86 @@
         }
 
         // =============================================
-        // HOMEWORK SYSTEM
+        // HOMEWORK SYSTEM - POSTGRESQL FIRST
         // =============================================
 
-        // Get homework completion from localStorage
-        function getHomeworkCompletion(clientEmail) {
+        const SYP_HOMEWORK_API = 'https://stingray-app-7kg9p.ondigitalocean.app';
+        let homeworkCache = {};  // Cache for homework completion
+
+        // Get homework completion - PostgreSQL first, localStorage fallback
+        async function getHomeworkCompletion(clientEmail) {
+            // Return from cache if available
+            if (homeworkCache[clientEmail]) {
+                return homeworkCache[clientEmail];
+            }
+
+            // Try PostgreSQL first
+            try {
+                const response = await fetch(`${SYP_HOMEWORK_API}/api/homework/${clientEmail}/checklist`);
+                if (response.ok) {
+                    const data = await response.json();
+                    if (data.success && data.homework && data.homework.responses) {
+                        const completion = typeof data.homework.responses === 'string'
+                            ? JSON.parse(data.homework.responses)
+                            : data.homework.responses;
+                        homeworkCache[clientEmail] = completion;
+                        console.log('✅ Loaded homework completion from PostgreSQL');
+                        return completion;
+                    }
+                }
+            } catch (error) {
+                console.warn('⚠️ PostgreSQL homework load failed:', error.message);
+            }
+
+            // Fallback to localStorage
             const key = `syp_homework_${clientEmail}`;
             const stored = localStorage.getItem(key);
-            return stored ? JSON.parse(stored) : {};
+            const completion = stored ? JSON.parse(stored) : {};
+            homeworkCache[clientEmail] = completion;
+            return completion;
         }
 
-        // Save homework completion to localStorage
-        function saveHomeworkCompletion(clientEmail, taskId, completed) {
-            const key = `syp_homework_${clientEmail}`;
-            const current = getHomeworkCompletion(clientEmail);
-            current[taskId] = completed;
-            localStorage.setItem(key, JSON.stringify(current));
+        // Save homework completion - PostgreSQL first, localStorage fallback
+        async function saveHomeworkCompletion(clientEmail, taskId, completed) {
+            // Update cache immediately (optimistic UI)
+            if (!homeworkCache[clientEmail]) {
+                homeworkCache[clientEmail] = {};
+            }
+            homeworkCache[clientEmail][taskId] = completed;
+
+            const completionData = homeworkCache[clientEmail];
+
+            // Save to PostgreSQL
+            try {
+                const response = await fetch(`${SYP_HOMEWORK_API}/api/homework`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        client_email: clientEmail,
+                        homework_type: 'checklist',
+                        responses: completionData
+                    })
+                });
+
+                if (response.ok) {
+                    console.log('✅ Saved homework completion to PostgreSQL');
+                } else {
+                    throw new Error('API error');
+                }
+            } catch (error) {
+                console.warn('⚠️ PostgreSQL save failed, using localStorage:', error.message);
+                // Fallback to localStorage
+                const key = `syp_homework_${clientEmail}`;
+                localStorage.setItem(key, JSON.stringify(completionData));
+            }
         }
 
         // Toggle homework item
-        function toggleHomework(taskId) {
+        async function toggleHomework(taskId) {
             if (!currentClient) return;
-            const completion = getHomeworkCompletion(currentClient.email);
+            const completion = await getHomeworkCompletion(currentClient.email);
             const newState = !completion[taskId];
-            saveHomeworkCompletion(currentClient.email, taskId, newState);
+            await saveHomeworkCompletion(currentClient.email, taskId, newState);
             renderHomework(currentClient, selectedWeek);
         }
 
@@ -2055,7 +2119,7 @@
         }
 
         // Calculate Blueprint Progress automatically based on actual progress
-        function calculateBlueprintProgress(client) {
+        async function calculateBlueprintProgress(client) {
             let progress = 0;
             const status = client.status || 'pre-programme';
             const files = client.files || {};
@@ -2090,7 +2154,7 @@
             }
 
             // Bonus for homework completion (max 25%)
-            const completion = getHomeworkCompletion(client.email);
+            const completion = await getHomeworkCompletion(client.email);
             const allTasks = [];
             Object.values(WEEKLY_HOMEWORK).forEach(week => {
                 week.tasks.forEach(task => allTasks.push(task.id));
@@ -2142,11 +2206,11 @@
         }
 
         // Render homework section
-        function renderHomework(client, weekId) {
+        async function renderHomework(client, weekId) {
             const weekData = WEEKLY_HOMEWORK[weekId];
             if (!weekData) return;
 
-            const completion = getHomeworkCompletion(client.email);
+            const completion = await getHomeworkCompletion(client.email);
             const files = client.files || {};
             const isUnlocked = isWeekUnlocked(weekId, client.status);
             const isCompleted = isWeekCompleted(weekId, client.status);
@@ -2156,7 +2220,7 @@
             document.getElementById('currentWeekBadge').textContent = `Week ${weekNum}: ${weekData.title}`;
 
             // Update blueprint progress (auto-calculated based on actual progress)
-            const progress = calculateBlueprintProgress(client);
+            const progress = await calculateBlueprintProgress(client);
             document.getElementById('blueprintProgressText').textContent = `${progress}% Complete`;
             document.getElementById('blueprintProgressBar').style.width = `${progress}%`;
 
