@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CV Builder - George Jones</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        @page { size: A4; margin: 0; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background: #f5f5f5; min-height: 100vh; }
+
+        .cv-container { display: grid; grid-template-columns: 320px 1fr; max-width: 900px; margin: 40px auto; background: white; box-shadow: 0 20px 60px rgba(0,0,0,0.15); overflow: hidden; }
+
+        .left-column { background: linear-gradient(180deg, #1a1a2e 0%, #16213e 100%); color: white; padding: 40px 30px; }
+
+        .profile-section { text-align: center; margin-bottom: 35px; padding-bottom: 25px; border-bottom: 1px solid rgba(255,255,255,0.1); }
+        .profile-photo { width: 120px; height: 120px; border-radius: 50%; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; font-size: 3em; }
+        .profile-name { font-size: 1.6em; font-weight: 700; margin-bottom: 8px; }
+        .profile-title { color: #FFB627; font-size: 1em; font-weight: 500; }
+        .demo-badge { display: inline-block; background: #667eea; padding: 4px 12px; border-radius: 12px; font-size: 0.75em; margin-top: 10px; }
+
+        .left-section { margin-bottom: 30px; }
+        .left-section-title { font-size: 0.85em; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; color: #FFB627; margin-bottom: 15px; display: flex; align-items: center; gap: 8px; }
+        .left-section-title::after { content: ''; flex: 1; height: 1px; background: rgba(255,255,255,0.2); }
+
+        .contact-item { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; font-size: 0.9em; }
+        .contact-icon { width: 32px; height: 32px; background: rgba(255,255,255,0.1); border-radius: 8px; display: flex; align-items: center; justify-content: center; }
+
+        .skill-tag { display: inline-block; background: rgba(255,255,255,0.1); padding: 6px 12px; border-radius: 15px; font-size: 0.85em; margin: 3px; border: 1px solid rgba(255,255,255,0.2); }
+
+        .highlight-box { background: rgba(255,182,39,0.15); border-left: 3px solid #FFB627; padding: 15px; border-radius: 0 10px 10px 0; margin-top: 15px; }
+        .highlight-box p { font-size: 0.9em; line-height: 1.6; color: rgba(255,255,255,0.9); }
+
+        .right-column { padding: 40px; background: white; }
+
+        .right-section { margin-bottom: 35px; }
+        .right-section-title { font-size: 1.1em; font-weight: 700; color: #667eea; margin-bottom: 20px; padding-bottom: 10px; border-bottom: 2px solid #667eea; display: flex; align-items: center; gap: 10px; }
+
+        .career-item { margin-bottom: 25px; padding-left: 20px; border-left: 3px solid #e0e0e0; position: relative; }
+        .career-item::before { content: ''; position: absolute; left: -7px; top: 5px; width: 10px; height: 10px; background: #667eea; border-radius: 50%; }
+        .career-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px; flex-wrap: wrap; }
+        .career-role { font-weight: 700; font-size: 1.05em; color: #2c3e50; }
+        .career-company { color: #667eea; font-weight: 600; }
+        .career-date { color: #888; font-size: 0.85em; background: #f0f0f0; padding: 3px 10px; border-radius: 12px; }
+        .career-desc { color: #555; font-size: 0.95em; line-height: 1.7; margin-top: 10px; }
+        .career-achievement { display: flex; align-items: flex-start; gap: 8px; margin-top: 8px; font-size: 0.9em; color: #4CAF50; font-weight: 500; }
+
+        .case-study { background: #f8f9fa; border-radius: 12px; padding: 20px; margin-bottom: 20px; border: 1px solid #e0e0e0; }
+        .case-study-header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 15px 20px; margin: -20px -20px 20px -20px; border-radius: 12px 12px 0 0; }
+        .case-study-title { font-weight: 700; font-size: 1.1em; }
+        .case-study-role { font-size: 0.85em; opacity: 0.9; margin-top: 3px; }
+        .case-study-section { margin-bottom: 15px; }
+        .case-study-label { font-size: 0.8em; font-weight: 700; color: #667eea; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 5px; }
+        .case-study-text { font-size: 0.95em; color: #555; line-height: 1.6; }
+        .case-study-result { background: #e8f5e9; padding: 12px 15px; border-radius: 8px; color: #2e7d32; font-weight: 600; }
+
+        .education-item { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid #eee; }
+        .education-item:last-child { border-bottom: none; }
+        .education-degree { font-weight: 600; color: #2c3e50; }
+        .education-school { color: #666; font-size: 0.9em; }
+
+        @media print {
+            body { background: white; }
+            .cv-container { box-shadow: none; margin: 0; max-width: 100%; }
+            .left-column { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+            .case-study-header { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+        }
+
+        @media (max-width: 768px) {
+            .cv-container { grid-template-columns: 1fr; }
+            .career-header { flex-direction: column; gap: 5px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="cv-container">
+        <!-- Left Column -->
+        <div class="left-column">
+            <div class="profile-section">
+                <div class="profile-photo">GJ</div>
+                <div class="profile-name">George Jones</div>
+                <div class="profile-title">Head of Infrastructure</div>
+                <div class="demo-badge">Demo Client</div>
+            </div>
+
+            <div class="left-section">
+                <div class="left-section-title">Contact</div>
+                <div class="contact-item">
+                    <div class="contact-icon">&#9993;</div>
+                    <span>george.jones@demo.sparkhub.io</span>
+                </div>
+                <div class="contact-item">
+                    <div class="contact-icon">&#9742;</div>
+                    <span>07700 900123</span>
+                </div>
+                <div class="contact-item">
+                    <div class="contact-icon">&#127968;</div>
+                    <span>London, UK</span>
+                </div>
+                <div class="contact-item">
+                    <div class="contact-icon">&#128279;</div>
+                    <span>linkedin.com/in/georgejones</span>
+                </div>
+            </div>
+
+            <div class="left-section">
+                <div class="left-section-title">The Thread</div>
+                <div class="highlight-box">
+                    <p>I build infrastructure that enables others to succeed - reliable, scalable systems that become the foundation teams depend on.</p>
+                </div>
+            </div>
+
+            <div class="left-section">
+                <div class="left-section-title">Cloud &amp; Platform</div>
+                <span class="skill-tag">AWS</span>
+                <span class="skill-tag">Azure</span>
+                <span class="skill-tag">GCP</span>
+                <span class="skill-tag">Kubernetes</span>
+                <span class="skill-tag">Docker</span>
+                <span class="skill-tag">Terraform</span>
+                <span class="skill-tag">Ansible</span>
+                <span class="skill-tag">Helm</span>
+            </div>
+
+            <div class="left-section">
+                <div class="left-section-title">Infrastructure</div>
+                <span class="skill-tag">Linux Administration</span>
+                <span class="skill-tag">Networking (TCP/IP, DNS)</span>
+                <span class="skill-tag">VMware vSphere</span>
+                <span class="skill-tag">Storage (SAN/NAS)</span>
+                <span class="skill-tag">Load Balancing</span>
+                <span class="skill-tag">Firewalls &amp; Security</span>
+            </div>
+
+            <div class="left-section">
+                <div class="left-section-title">DevOps &amp; SRE</div>
+                <span class="skill-tag">CI/CD (Jenkins, GitLab)</span>
+                <span class="skill-tag">Observability</span>
+                <span class="skill-tag">Prometheus / Grafana</span>
+                <span class="skill-tag">Datadog</span>
+                <span class="skill-tag">PagerDuty</span>
+                <span class="skill-tag">Incident Management</span>
+            </div>
+
+            <div class="left-section">
+                <div class="left-section-title">Certifications</div>
+                <span class="skill-tag">AWS Solutions Architect Pro</span>
+                <span class="skill-tag">CKA (Kubernetes Admin)</span>
+                <span class="skill-tag">HashiCorp Terraform</span>
+                <span class="skill-tag">RHCE (Red Hat)</span>
+            </div>
+        </div>
+
+        <!-- Right Column -->
+        <div class="right-column">
+            <div class="right-section">
+                <div class="right-section-title">&#128188; Career History</div>
+
+                <div class="career-item">
+                    <div class="career-header">
+                        <div>
+                            <div class="career-role">Head of Cloud Infrastructure</div>
+                            <div class="career-company">Global Financial Services Plc</div>
+                        </div>
+                        <div class="career-date">2020 - 2024</div>
+                    </div>
+                    <div class="career-desc">
+                        Led cloud transformation programme migrating 200+ applications from on-premise data centres to AWS and Azure. Built and managed platform engineering team of 12. Established SRE practices including error budgets, SLOs, and blameless postmortems. Presented infrastructure strategy to C-suite and secured £12M investment.
+                    </div>
+                    <div class="career-achievement">&#10004; Achieved 99.99% uptime across all production systems</div>
+                    <div class="career-achievement">&#10004; £4.2M annual infrastructure cost reduction</div>
+                    <div class="career-achievement">&#10004; Deployment frequency: monthly to daily releases</div>
+                </div>
+
+                <div class="career-item">
+                    <div class="career-header">
+                        <div>
+                            <div class="career-role">Senior Infrastructure Engineer</div>
+                            <div class="career-company">InsureTech Solutions Ltd</div>
+                        </div>
+                        <div class="career-date">2017 - 2020</div>
+                    </div>
+                    <div class="career-desc">
+                        Designed and implemented Kubernetes platform from scratch for insurance claims processing. Led infrastructure-as-code initiative using Terraform. Established CI/CD pipelines with GitLab. On-call lead managing incident response for 24/7 production systems.
+                    </div>
+                    <div class="career-achievement">&#10004; Deployment time reduced from days to minutes</div>
+                    <div class="career-achievement">&#10004; Platform scaled to handle 2M daily transactions</div>
+                    <div class="career-achievement">&#10004; Mean time to recovery (MTTR): 4 hours to 15 minutes</div>
+                </div>
+
+                <div class="career-item">
+                    <div class="career-header">
+                        <div>
+                            <div class="career-role">Infrastructure Engineer</div>
+                            <div class="career-company">Retail Systems International</div>
+                        </div>
+                        <div class="career-date">2014 - 2017</div>
+                    </div>
+                    <div class="career-desc">
+                        Managed hybrid infrastructure across 3 UK data centres supporting point-of-sale systems for major retailers. Responsible for VMware virtualisation, SAN storage, network infrastructure, and disaster recovery. Led migration from physical servers to virtualised environment.
+                    </div>
+                    <div class="career-achievement">&#10004; Zero unplanned downtime across 2-year period</div>
+                    <div class="career-achievement">&#10004; 60% reduction in production incidents</div>
+                </div>
+            </div>
+
+            <div class="right-section">
+                <div class="right-section-title">&#127891; Key Projects</div>
+
+                <div class="case-study">
+                    <div class="case-study-header">
+                        <div class="case-study-title">Enterprise Cloud Migration</div>
+                        <div class="case-study-role">Global Financial Services | Head of Infrastructure</div>
+                    </div>
+                    <div class="case-study-section">
+                        <div class="case-study-label">Challenge</div>
+                        <div class="case-study-text">200+ applications running on ageing on-premise infrastructure. 6-week deployment cycles. High operational costs and frequent outages impacting customer experience.</div>
+                    </div>
+                    <div class="case-study-section">
+                        <div class="case-study-label">Solution</div>
+                        <div class="case-study-text">Multi-cloud strategy (AWS primary, Azure DR). Built Kubernetes platform with self-service developer portals. Implemented Terraform for infrastructure-as-code. Established SRE team with 24/7 on-call rotation and incident management processes.</div>
+                    </div>
+                    <div class="case-study-result">
+                        99.99% uptime | £4.2M annual savings | Daily deployments enabled
+                    </div>
+                </div>
+
+                <div class="case-study">
+                    <div class="case-study-header" style="background: linear-gradient(135deg, #FF6B35 0%, #FFB627 100%);">
+                        <div class="case-study-title">Black Friday Platform Scaling</div>
+                        <div class="case-study-role">InsureTech Solutions | Senior Engineer</div>
+                    </div>
+                    <div class="case-study-section">
+                        <div class="case-study-label">Challenge</div>
+                        <div class="case-study-text">E-commerce partner expected 400% traffic surge during Black Friday. Previous year saw outages and lost revenue. Platform needed to scale automatically without manual intervention.</div>
+                    </div>
+                    <div class="case-study-section">
+                        <div class="case-study-label">Solution</div>
+                        <div class="case-study-text">Implemented Kubernetes Horizontal Pod Autoscaler with custom metrics. Pre-warmed node pools. Load tested to 5x expected traffic. Established war room with real-time dashboards and runbooks.</div>
+                    </div>
+                    <div class="case-study-result">
+                        Zero downtime during peak | Platform handled 5x normal traffic | No on-call pages
+                    </div>
+                </div>
+            </div>
+
+            <div class="right-section">
+                <div class="right-section-title">&#127979; Education &amp; Certifications</div>
+                <div class="education-item">
+                    <div>
+                        <div class="education-degree">BSc Computer Science</div>
+                        <div class="education-school">University of Manchester</div>
+                    </div>
+                </div>
+                <div class="education-item">
+                    <div>
+                        <div class="education-degree">AWS Solutions Architect Professional</div>
+                        <div class="education-school">Amazon Web Services</div>
+                    </div>
+                </div>
+                <div class="education-item">
+                    <div>
+                        <div class="education-degree">Certified Kubernetes Administrator (CKA)</div>
+                        <div class="education-school">Cloud Native Computing Foundation</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

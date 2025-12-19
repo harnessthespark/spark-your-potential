@@ -1323,6 +1323,26 @@
                     week4: ""
                 }
                 // blueprintProgress removed - now auto-calculated
+            },
+            'george.jones@demo.sparkhub.io': {
+                name: 'George Jones',
+                email: 'george.jones@demo.sparkhub.io',
+                folder: 'George_Jones',
+                status: 'week-2',
+                agreementSigned: true,
+                isDemo: true,
+                programmeType: 'career',
+                files: {
+                    blueprint: 'George_Jones/George_Jones_Blueprint.html',
+                    cvBuilder: 'George_Jones/George_Jones_CV_Builder.html',
+                    decisionFramework: 'George_Jones/George_Jones_Decision_Framework.html'
+                },
+                prompts: {
+                    week1: "Your evidence shows you build infrastructure that enables others to succeed. Document 3 'making complexity invisible' moments.",
+                    week2: "Let's explore what 'platform engineering leadership' looks like for you. What are your non-negotiables for VP/CTO roles?",
+                    week3: "Time to craft your story. How do you introduce yourself as someone who builds foundations for velocity?",
+                    week4: "Final push! Does your CV and LinkedIn reflect your thread of enabling others through reliable infrastructure?"
+                }
             }
         };
 
@@ -1528,10 +1548,13 @@
 
                 const data = await response.json();
 
-                if (response.ok && data.token) {
+                // Backend returns tokens.access, not token
+                const token = data.token || data.tokens?.access;
+
+                if (response.ok && token) {
                     // Success - store auth data
                     localStorage.setItem('syp_client_email', email);
-                    localStorage.setItem('syp_token', data.token);
+                    localStorage.setItem('syp_token', token);
 
                     // Get client data - check CLIENTS first, then fetch from API
                     let client = CLIENTS[email];
@@ -1541,7 +1564,7 @@
                         try {
                             const clientResponse = await fetch(`${API_SERVER}/api/crm/syp/clients/me/`, {
                                 headers: {
-                                    'Authorization': `Token ${data.token}`,
+                                    'Authorization': `Bearer ${token}`,
                                     'Content-Type': 'application/json'
                                 }
                             });
