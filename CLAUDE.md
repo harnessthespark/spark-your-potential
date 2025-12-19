@@ -266,3 +266,52 @@ This document contains important context for Claude to remember across sessions 
 **Production URLs:**
 - Client Portal: https://stingray-app-7kg9p.ondigitalocean.app/client-portal.html
 - Coach Dashboard: https://stingray-app-7kg9p.ondigitalocean.app/dashboard.html
+
+### 19 December 2025 - PostgreSQL-First Architecture & Raj Week 2 Homework
+
+**Major Architecture Change: PostgreSQL-First**
+- All client data now loads from PostgreSQL first, with fallbacks only if API fails
+- Coach Hub tries SYP API → SparkHub API → DEFAULT_CLIENTS (in that order)
+- Client Portal tries PostgreSQL API first → CLIENTS fallback
+
+**New API Endpoints Added (server.js):**
+- `GET /api/clients` - Get all clients from PostgreSQL
+- `GET /api/clients/:email` - Get single client with blueprint & homework
+- `PATCH /api/clients/:email` - Update client status
+- `POST /api/homework` - Save homework to PostgreSQL
+- `GET /api/homework/:email/:type` - Get specific homework
+- `GET /api/homework/:email` - Get all homework for client
+
+**Database Changes (db.js):**
+- New `homework` table with JSONB responses
+- `saveHomework()`, `getHomework()`, `getAllHomework()` functions
+
+**Raj Samuel Week 2:**
+- Created `Raj_Samuel_Week2_Homework.html` - Interactive homework sheet
+- 4 key questions + 4 homework tasks with editable text areas
+- Auto-saves to PostgreSQL with localStorage fallback
+- Progress bar tracking completion percentage
+- Updated Career Insights Report: "cultural and organisational transformation"
+
+**Coach Hub Fixes:**
+- Fixed onclick handlers for client cards (was broken due to unquoted string IDs)
+- Added `SYP_API` constant for SYP Express backend
+- Badge now shows "PostgreSQL (SYP)" when data from database
+
+**Files Modified:**
+- `server.js` - Added 6 new API endpoints
+- `db.js` - Added homework table and functions
+- `coach-hub.html` - PostgreSQL-first loading, fixed onclick
+- `client-portal.html` - PostgreSQL-first client data
+- `Raj_Samuel/Raj_Samuel_Week2_Homework.html` - New file
+- `Raj_Samuel/Raj_Samuel_Career_Insights_Report.html` - Text update
+
+**Git Commits:** `8416ea2`, `ccfef59`, `6e97c94`
+
+**Data Flow:**
+```
+Client/Coach → SYP Express API → PostgreSQL Database
+                    ↓
+              (fallback only)
+           → CLIENTS/DEFAULT_CLIENTS
+```
