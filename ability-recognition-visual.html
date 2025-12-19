@@ -1692,8 +1692,8 @@ People see me as someone who operates between worlds - big brand credibility but
                 // Prepare outcomes data
                 const outcomeTexts = outcomes.map(o => o.content);
 
-                // Call backend API
-                const response = await fetch('/api/analyze', {
+                // Call SparkHub backend API
+                const response = await fetch('https://sparkhub-be-qtmmb.ondigitalocean.app/api/ai/analyze/', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
@@ -1785,8 +1785,8 @@ People see me as someone who operates between worlds - big brand credibility but
                     transformationOutcomes.push(`Unlock Moment: ${unlockMoment}`);
                 }
 
-                // Call backend API
-                const response = await fetch('/api/analyze', {
+                // Call SparkHub backend API
+                const response = await fetch('https://sparkhub-be-qtmmb.ondigitalocean.app/api/ai/analyze/', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
@@ -2334,8 +2334,8 @@ People see me as someone who operates between worlds - big brand credibility but
 
                 status.textContent = 'Analysing your patterns with AI...';
 
-                // Step 2: Generate Blueprint via AI
-                const aiResponse = await fetch('/api/analyze', {
+                // Step 2: Generate Blueprint via AI (SparkHub backend)
+                const aiResponse = await fetch('https://sparkhub-be-qtmmb.ondigitalocean.app/api/ai/analyze/', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
