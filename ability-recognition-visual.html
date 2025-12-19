@@ -1560,6 +1560,42 @@ People see me as someone who operates between worlds - big brand credibility but
                 // Also save locally as backup
                 localStorage.setItem('last_save_timestamp', new Date().toISOString());
 
+                // ALSO save to PostgreSQL for permanent storage
+                try {
+                    const clientEmail = localStorage.getItem('syp_client_email');
+                    const clientName = document.getElementById('clientName')?.value || data.clientName;
+
+                    if (clientEmail) {
+                        // Get or create user
+                        const userResponse = await fetch('/api/user', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ email: clientEmail, name: clientName })
+                        });
+                        const userData = await userResponse.json();
+
+                        if (userData.success && userData.user) {
+                            // Save questionnaire responses to PostgreSQL
+                            const blueprintData = {
+                                name: clientName,
+                                questionnaire_responses: responses
+                            };
+
+                            await fetch('/api/blueprint', {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify({
+                                    user_id: userData.user.id,
+                                    blueprint_data: blueprintData
+                                })
+                            });
+                            console.log('✅ Also saved to PostgreSQL database');
+                        }
+                    }
+                } catch (dbError) {
+                    console.warn('PostgreSQL save failed (Google Sheets save succeeded):', dbError);
+                }
+
                 setTimeout(() => {
                     button.style.background = 'linear-gradient(135deg, #7c3aed 0%, #a855f7 100%)';
                     button.textContent = 'Submit Answers';
