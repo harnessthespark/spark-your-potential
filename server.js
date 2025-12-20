@@ -680,21 +680,58 @@ app.get('/api/clients', async (req, res) => {
         );
         const users = result.rows;
 
-        // Transform to client format expected by coach-hub
-        const clients = users.map(user => ({
-            id: user.id,
-            full_name: user.full_name || user.name || user.email.split('@')[0],
-            name: user.full_name || user.name || user.email.split('@')[0],
-            email: user.email,
-            programme_type: user.programme_access || 'career',
-            programme_status: user.programme_status || 'enrolled',
-            status: user.programme_status || 'enrolled',
-            enrolled_date: user.created_at,
-            last_login: user.last_login,
-            folder: (user.full_name || user.name || user.email.split('@')[0]).replace(/\s+/g, '_')
-        }));
+        // Get homework for all clients
+        const homeworkResult = await db.pool.query(
+            `SELECT h.*, u.email
+             FROM homework h
+             JOIN users u ON h.user_id = u.id
+             ORDER BY h.updated_at DESC`
+        );
 
-        console.log(`📋 Returning ${clients.length} clients from PostgreSQL`);
+        // Create homework lookup by email
+        const homeworkByEmail = {};
+        homeworkResult.rows.forEach(hw => {
+            if (!homeworkByEmail[hw.email]) {
+                homeworkByEmail[hw.email] = [];
+            }
+            homeworkByEmail[hw.email].push(hw);
+        });
+
+        // Transform to client format expected by coach-hub
+        const clients = users.map(user => {
+            const clientHomework = homeworkByEmail[user.email] || [];
+
+            // Calculate homework progress
+            let homeworkProgress = 0;
+            let latestHomeworkUpdate = null;
+
+            clientHomework.forEach(hw => {
+                if (hw.progress > homeworkProgress) {
+                    homeworkProgress = hw.progress;
+                }
+                if (!latestHomeworkUpdate || new Date(hw.updated_at) > new Date(latestHomeworkUpdate)) {
+                    latestHomeworkUpdate = hw.updated_at;
+                }
+            });
+
+            return {
+                id: user.id,
+                full_name: user.full_name || user.name || user.email.split('@')[0],
+                name: user.full_name || user.name || user.email.split('@')[0],
+                email: user.email,
+                programme_type: user.programme_access || 'career',
+                programme_status: user.programme_status || 'enrolled',
+                status: user.programme_status || 'enrolled',
+                enrolled_date: user.created_at,
+                last_login: user.last_login,
+                folder: (user.full_name || user.name || user.email.split('@')[0]).replace(/\s+/g, '_'),
+                homework: clientHomework,
+                homework_progress: homeworkProgress,
+                homework_updated: latestHomeworkUpdate
+            };
+        });
+
+        console.log(`📋 Returning ${clients.length} clients with homework data from PostgreSQL`);
         res.json({ success: true, clients });
     } catch (error) {
         console.error('Get clients error:', error);

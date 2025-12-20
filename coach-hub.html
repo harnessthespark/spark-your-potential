@@ -343,6 +343,78 @@
             background: var(--success);
         }
 
+        /* Homework Badge */
+        .homework-badge {
+            font-size: 0.65em;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: 600;
+            background: #DBEAFE;
+            color: #1D4ED8;
+            margin-left: 4px;
+        }
+
+        .homework-badge.complete {
+            background: #D1FAE5;
+            color: #059669;
+        }
+
+        /* Client card with recent activity */
+        .client-card.has-activity {
+            box-shadow: 0 0 0 2px var(--gold), 0 8px 25px rgba(245, 158, 11, 0.2);
+        }
+
+        .client-card.has-activity::before {
+            content: '🔔';
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: var(--gold);
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            box-shadow: 0 2px 8px rgba(245, 158, 11, 0.4);
+        }
+
+        /* Activity item in Today section */
+        .activity-item {
+            background: white;
+            padding: 10px 12px;
+            border-radius: 8px;
+            margin-bottom: 8px;
+            font-size: 0.85em;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-left: 3px solid var(--gold);
+        }
+
+        .activity-item .activity-text {
+            flex: 1;
+        }
+
+        .activity-item .activity-name {
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+
+        .activity-item .activity-detail {
+            color: var(--text-muted);
+            font-size: 0.9em;
+        }
+
+        .activity-item .activity-time {
+            color: var(--purple-main);
+            font-size: 0.8em;
+            font-weight: 500;
+            white-space: nowrap;
+            margin-left: 10px;
+        }
+
         /* Progress Bar */
         .progress-section {
             margin: 15px 0;
@@ -1117,9 +1189,9 @@
                         </div>
                     </div>
                     <div class="today-card">
-                        <h3>📋 My Tasks</h3>
-                        <div id="todayTasks">
-                            <div class="empty-state">No tasks for today</div>
+                        <h3>📝 Client Activity</h3>
+                        <div id="recentActivity">
+                            <div class="empty-state">No recent activity</div>
                         </div>
                     </div>
                     <div class="today-card">
@@ -1735,6 +1807,66 @@
             renderSection('pipelineGrid', 'pipelineCount', pipeline, '🌱');
             renderSection('activeGrid', 'activeCount', active, '🔥');
             renderSection('completedGrid', 'completedCount', completed, '🏆');
+
+            // Update activity section with recent homework updates
+            updateActivitySection();
+        }
+
+        // Update the Client Activity section with recent homework updates
+        function updateActivitySection() {
+            const activityContainer = document.getElementById('recentActivity');
+            if (!activityContainer) return;
+
+            // Get all clients with recent homework activity (sorted by most recent)
+            const recentActivity = clients
+                .filter(c => c.homework_updated)
+                .sort((a, b) => new Date(b.homework_updated) - new Date(a.homework_updated))
+                .slice(0, 5); // Show top 5 most recent
+
+            if (recentActivity.length === 0) {
+                activityContainer.innerHTML = '<div class="empty-state">No recent activity</div>';
+                return;
+            }
+
+            activityContainer.innerHTML = recentActivity.map(client => {
+                const name = client.full_name || client.name || 'Unknown';
+                const progress = client.homework_progress || 0;
+                const updatedDate = new Date(client.homework_updated);
+                const timeAgo = getTimeAgo(updatedDate);
+
+                return `
+                    <div class="activity-item" onclick="openClientPanelByEmail('${client.email}')" style="cursor: pointer;">
+                        <div class="activity-text">
+                            <div class="activity-name">${name}</div>
+                            <div class="activity-detail">Homework ${progress}% complete</div>
+                        </div>
+                        <div class="activity-time">${timeAgo}</div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // Helper function to get time ago string
+        function getTimeAgo(date) {
+            const now = new Date();
+            const diff = now - date;
+            const minutes = Math.floor(diff / 60000);
+            const hours = Math.floor(diff / 3600000);
+            const days = Math.floor(diff / 86400000);
+
+            if (minutes < 1) return 'Just now';
+            if (minutes < 60) return `${minutes}m ago`;
+            if (hours < 24) return `${hours}h ago`;
+            if (days === 1) return 'Yesterday';
+            return `${days}d ago`;
+        }
+
+        // Open client panel by email (for activity clicks)
+        function openClientPanelByEmail(email) {
+            const client = clients.find(c => c.email === email);
+            if (client) {
+                openClientPanel(client.id);
+            }
         }
 
         function renderSection(gridId, countId, clientList, emptyIcon) {
@@ -1763,6 +1895,8 @@
             const programmeType = client.programme_type || 'career';
             const status = client.programme_status || client.status || 'enrolled';
             const progress = calculateProgress(client);
+            const homeworkProgress = client.homework_progress || 0;
+            const hasRecentHomework = client.homework_updated && isRecent(client.homework_updated);
 
             const stageLabels = {
                 'enrolled': 'Week 1',
@@ -1784,8 +1918,15 @@
             // Safely encode the client ID for use in onclick handlers
             const safeId = JSON.stringify(client.id);
 
+            // Homework indicator
+            const homeworkBadge = homeworkProgress > 0
+                ? `<span class="homework-badge ${homeworkProgress >= 100 ? 'complete' : ''}" title="Homework ${homeworkProgress}% complete">
+                     📝 ${homeworkProgress}%${hasRecentHomework ? ' 🔔' : ''}
+                   </span>`
+                : '';
+
             return `
-                <div class="client-card ${programmeType}" onclick="openClientPanel(${safeId})">
+                <div class="client-card ${programmeType} ${hasRecentHomework ? 'has-activity' : ''}" onclick="openClientPanel(${safeId})">
                     <div class="card-header">
                         <div class="client-info">
                             <h3>
@@ -1793,6 +1934,7 @@
                                 <span class="programme-badge ${programmeType}">
                                     ${programmeType === 'audhd' ? '🧠 AuDHD' : '💼 Career'}
                                 </span>
+                                ${homeworkBadge}
                             </h3>
                             <div class="client-email">${email}</div>
                         </div>
@@ -1817,6 +1959,15 @@
                     </div>
                 </div>
             `;
+        }
+
+        // Check if a date is recent (within last 24 hours)
+        function isRecent(dateStr) {
+            if (!dateStr) return false;
+            const date = new Date(dateStr);
+            const now = new Date();
+            const diff = now - date;
+            return diff < 24 * 60 * 60 * 1000; // 24 hours
         }
 
         // Calculate Progress
@@ -1872,11 +2023,24 @@
                 `;
             } else {
                 // Career Coaching documents
+                // Get homework progress for this client
+                const hwProgress = selectedClient.homework_progress || 0;
+                const hwUpdated = selectedClient.homework_updated
+                    ? new Date(selectedClient.homework_updated).toLocaleDateString('en-GB')
+                    : 'Not started';
+
                 panelDocs.innerHTML = `
                     <div class="panel-item" onclick="openDoc('questionnaire')">
                         <div>
                             <div class="panel-item-title">📝 Questionnaire Responses</div>
                             <div class="panel-item-meta">View/edit responses</div>
+                        </div>
+                        <span>→</span>
+                    </div>
+                    <div class="panel-item" onclick="openDoc('homework')" style="background: ${hwProgress > 0 ? '#FFFBEB' : ''}; border-left: 3px solid ${hwProgress > 0 ? '#F59E0B' : 'transparent'};">
+                        <div>
+                            <div class="panel-item-title">📋 Week 2 Homework ${hwProgress > 0 ? '<span style="font-size: 0.8em; background: #DBEAFE; color: #1D4ED8; padding: 2px 6px; border-radius: 4px; margin-left: 8px;">' + hwProgress + '%</span>' : ''}</div>
+                            <div class="panel-item-meta">${hwProgress > 0 ? 'Last updated: ' + hwUpdated : 'Not started yet'}</div>
                         </div>
                         <span>→</span>
                     </div>
@@ -1978,7 +2142,8 @@
                 docs = {
                     'questionnaire': `questionnaire-editor.html?client_id=${clientId}`,
                     'insights': `insights-editor.html?client_id=${clientId}`,
-                    'blueprint': `${folder}/${folder}_Blueprint.html`,
+                    'homework': `${folder}/${folder}_Week2_Homework.html`,
+                    'blueprint': `${folder}/${folder}_Career_Blueprint.html`,
                     'cv-builder': `${folder}/${folder}_Interactive_CV_Builder.html`,
                     'decision': `${folder}/${folder}_Decision_Framework.html`,
                     'mapping': `${folder}/${folder}_Mapping_Guide.html`,
