@@ -1992,9 +1992,14 @@
 
         // Open Client Panel
         function openClientPanel(clientId) {
-            selectedClient = clients.find(c => c.id === clientId);
+            // Use == for type-flexible comparison (API returns numbers, onclick passes strings)
+            selectedClient = clients.find(c => c.id == clientId || String(c.id) === String(clientId));
 
-            if (!selectedClient) return;
+            if (!selectedClient) {
+                console.error('❌ Client not found for ID:', clientId, 'Available IDs:', clients.map(c => c.id));
+                return;
+            }
+            console.log('✅ Opening panel for:', selectedClient.full_name);
 
             document.getElementById('panelClientName').textContent = selectedClient.full_name || selectedClient.name;
             document.getElementById('panelClientEmail').textContent = selectedClient.email;
@@ -2164,7 +2169,7 @@
         }
 
         function openNotes(clientId) {
-            const client = clients.find(c => c.id === clientId) || selectedClient;
+            const client = clients.find(c => c.id == clientId) || selectedClient;
             if (!client) return;
 
             selectedClient = client;
@@ -2240,14 +2245,14 @@
         }
 
         function openDocs(clientId) {
-            const client = clients.find(c => c.id === clientId);
+            const client = clients.find(c => c.id == clientId);
             if (client) {
                 openClientPanel(clientId);
             }
         }
 
         function openSchedule(clientId) {
-            const client = clients.find(c => c.id === clientId) || selectedClient;
+            const client = clients.find(c => c.id == clientId) || selectedClient;
             if (!client) return;
 
             selectedClient = client;
@@ -2265,7 +2270,7 @@
         }
 
         function editClient(clientId) {
-            const client = clients.find(c => c.id === clientId || c.id == clientId);
+            const client = clients.find(c => c.id == clientId);
             if (!client) {
                 console.error('Client not found:', clientId);
                 return;
