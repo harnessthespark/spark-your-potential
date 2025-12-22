@@ -315,3 +315,54 @@ Client/Coach → SYP Express API → PostgreSQL Database
               (fallback only)
            → CLIENTS/DEFAULT_CLIENTS
 ```
+
+### 22 December 2025 - Coach Hub Fix & AuDHD Client Login Setup
+
+**Coach Hub Client Click Fix:**
+- Fixed client card clicks not opening details panel
+- Root cause: Type mismatch between API IDs (numbers) and onclick handlers (strings)
+- Changed `===` to `==` for type-flexible comparison in `openClientPanel()` and related functions
+- Added debug logging for easier troubleshooting
+- Commit: `fc42f5a`
+
+**Files Modified:**
+- `coach-hub.html` - Fixed 4 instances of strict equality comparison
+
+**AuDHD Client Login Accounts Created:**
+- Created Django User accounts + SYPClient records for AuDHD clients
+- Both linked with `programme_type='audhd'` for correct portal routing
+
+| Client | Email | Username | Password | Programme |
+|--------|-------|----------|----------|-----------|
+| Chloe Cal | chloe@thisiscal.com | chloe | potential25! | audhd |
+| Deb Briggs | deborah_armstrong@hotmail.com | deb | potential25! | audhd |
+
+**Backend Changes (neurospark-be):**
+- Created `crm/management/commands/setup_audhd_clients.py` - Management command to create AuDHD clients
+- Applied missing database migrations (total_sessions, current_session, etc.)
+- Commits: `fa5833ae`, `fdd0c5d2`
+
+**Login Flow:**
+- **Login URL:** https://career.harnessthespark.com/login.html
+- AuDHD clients (`programme_type='audhd'`) → Redirect to `audhd-dashboard.html`
+- Career clients (`programme_type='career'`) → Redirect to `client-portal.html`
+- Staff users → Redirect to `dashboard.html` (Coach Hub)
+
+**Current SYP Clients in PostgreSQL:**
+```
+🧠 Chloe Cal      | chloe@thisiscal.com           | audhd  | User: ✅
+🧠 Deb Briggs     | deborah_armstrong@hotmail.com | audhd  | User: ✅
+💼 Donald Pirie   | donald@example.com            | career | User: ✅
+```
+
+**To Add More AuDHD Clients:**
+```bash
+python manage.py setup_audhd_clients --list  # View current clients
+python manage.py setup_audhd_clients         # Run setup
+```
+
+**Production URLs:**
+- **Login:** https://career.harnessthespark.com/login.html
+- **AuDHD Dashboard:** https://career.harnessthespark.com/audhd-dashboard.html
+- **Client Portal:** https://career.harnessthespark.com/client-portal.html
+- **Coach Hub:** https://career.harnessthespark.com/coach-hub.html
