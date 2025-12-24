@@ -366,3 +366,80 @@ python manage.py setup_audhd_clients         # Run setup
 - **AuDHD Dashboard:** https://career.harnessthespark.com/audhd-dashboard.html
 - **Client Portal:** https://career.harnessthespark.com/client-portal.html
 - **Coach Hub:** https://career.harnessthespark.com/coach-hub.html
+
+### 24 December 2025 - Unified Login System & PostgreSQL-First Architecture
+
+**Single Login for All Programmes:**
+- **One login URL:** https://career.harnessthespark.com/login.html
+- Smart routing based on `programme_type` from PostgreSQL SYPClient record
+- No separate login pages per programme - cleaner user experience
+
+**Login Routing Table:**
+| Programme Type | After Login Redirect |
+|----------------|---------------------|
+| `audhd` | `audhd-dashboard.html` |
+| `career` | `client-portal.html` |
+| Staff/Coach | `dashboard.html` (Coach Hub) |
+
+**100% PostgreSQL Architecture:**
+```
+User Login Request
+       ↓
+PostgreSQL: django.contrib.auth.models.User (authentication)
+       ↓
+PostgreSQL: crm.syp_models.SYPClient (get programme_type)
+       ↓
+Frontend: Smart redirect based on programme_type
+```
+
+**No localStorage for Auth:**
+- All authentication through PostgreSQL
+- All client data from PostgreSQL
+- All programme routing from PostgreSQL
+- localStorage only used for:
+  - JWT token storage (after successful auth)
+  - UI preferences (theme, settings)
+  - Offline cache (backup only)
+
+**Test Account Setup:**
+- Lisa's test account: `lisa.gills@icloud.com`
+- Can be set to any `programme_type` for testing different portals
+- Command to set up test account as AuDHD client:
+```bash
+python manage.py shell -c "
+from django.contrib.auth.models import User
+from crm.syp_models import SYPClient
+from django.utils import timezone
+
+user = User.objects.get(email='lisa.gills@icloud.com')
+client, created = SYPClient.objects.update_or_create(
+    user=user,
+    defaults={
+        'full_name': 'Lisa Gills (Test)',
+        'email': 'lisa.gills@icloud.com',
+        'programme_type': 'audhd',
+        'programme_status': 'enrolled',
+        'enrolled_date': timezone.now().date(),
+    }
+)
+print(f'Done: {client.full_name} → {client.programme_type}')
+"
+```
+
+**Production Setup Commands (run via DigitalOcean Console):**
+```bash
+# Create AuDHD client accounts
+python manage.py setup_audhd_clients
+
+# Set up Lisa's test account
+python manage.py shell -c "[command above]"
+```
+
+**All SYP Clients (PostgreSQL):**
+| Name | Email | Programme | Has Login |
+|------|-------|-----------|-----------|
+| Chloe Cal | chloe@thisiscal.com | audhd | ✅ |
+| Deb Briggs | deborah_armstrong@hotmail.com | audhd | ✅ |
+| Donald Pirie | donaldpirie111@hotmail.co.uk | career | ✅ |
+| Raj Samuel | rs@rajsamuel.net | career | ✅ |
+| Lisa Gills (Test) | lisa.gills@icloud.com | audhd | ✅ |
