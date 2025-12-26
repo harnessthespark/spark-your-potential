@@ -1156,10 +1156,24 @@
         // =============================================
         // LOAD RESPONSES FROM POSTGRESQL ON PAGE LOAD
         // =============================================
+        // Test/demo accounts that should NOT load from database (start fresh)
+        const SKIP_DB_LOAD_EMAILS = [
+            'lisa.gills@icloud.com',
+            'lisa@harnessthespark.com',
+            'test@test.com',
+            'demo@demo.com'
+        ];
+
         async function loadFromPostgreSQL() {
             const clientEmail = localStorage.getItem('syp_client_email');
             if (!clientEmail) {
                 console.log('No client email - skipping PostgreSQL load');
+                return;
+            }
+
+            // Skip loading for test/demo accounts
+            if (SKIP_DB_LOAD_EMAILS.includes(clientEmail.toLowerCase())) {
+                console.log('Test account detected - starting with fresh questionnaire');
                 return;
             }
 
