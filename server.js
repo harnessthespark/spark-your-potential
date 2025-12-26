@@ -1047,10 +1047,40 @@ app.post('/api/admin/clear-test-data', async (req, res) => {
 app.get('/api/admin/all-users', async (req, res) => {
     try {
         const result = await db.pool.query(
-            'SELECT id, email, name, created_at FROM users ORDER BY created_at DESC LIMIT 50'
+            'SELECT id, email, name, is_admin, created_at FROM users ORDER BY created_at DESC LIMIT 50'
         );
         res.json({ success: true, users: result.rows });
     } catch (error) {
+        res.status(500).json({ success: false, error: error.message });
+    }
+});
+
+// Set user as admin
+app.post('/api/admin/set-admin', async (req, res) => {
+    try {
+        const { email, isAdmin, adminKey } = req.body;
+
+        const expectedKey = process.env.ADMIN_KEY || 'sparkhub2025';
+        if (adminKey !== expectedKey) {
+            return res.status(401).json({ success: false, error: 'Invalid admin key' });
+        }
+
+        if (!email) {
+            return res.status(400).json({ success: false, error: 'Email required' });
+        }
+
+        const result = await db.pool.query(
+            'UPDATE users SET is_admin = $1, updated_at = NOW() WHERE email = $2 RETURNING id, email, name, is_admin',
+            [isAdmin !== false, email]
+        );
+
+        if (result.rows.length === 0) {
+            return res.status(404).json({ success: false, error: 'User not found' });
+        }
+
+        res.json({ success: true, user: result.rows[0] });
+    } catch (error) {
+        console.error('Set admin error:', error);
         res.status(500).json({ success: false, error: error.message });
     }
 });

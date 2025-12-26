@@ -394,44 +394,26 @@
     </div>
 
     <script>
-        // Configuration - Use SparkHub backend for authentication
-        const API_SERVER = 'https://sparkhub-be-qtmmb.ondigitalocean.app';
+        // Configuration - SYP Express backend ONLY (single backend)
+        // All auth and data in one place - PostgreSQL via Express
+        const API_SERVER = '';  // Same origin - no cross-origin needed
 
-        // Check if already logged in - VERIFY TOKEN FIRST
+        // Check if already logged in
         window.onload = async function() {
             const savedUser = localStorage.getItem('syp_user');
-            const savedToken = localStorage.getItem('syp_token');
 
-            // Only auto-redirect if we have both user data AND a token
-            if (savedUser && savedToken) {
+            if (savedUser) {
                 try {
-                    // Verify token is still valid with backend
-                    const response = await fetch(`${API_SERVER}/api/accounts/profile/`, {
-                        method: 'GET',
-                        headers: {
-                            'Authorization': `Token ${savedToken}`,
-                            'Content-Type': 'application/json'
-                        }
-                    });
+                    const user = JSON.parse(savedUser);
+                    console.log('✅ Found saved session, redirecting...');
 
-                    if (response.ok) {
-                        // Token is valid - proceed with redirect
-                        const user = JSON.parse(savedUser);
-                        console.log('✅ Token verified, redirecting...');
-
-                        if (user.isStaff) {
-                            window.location.href = 'dashboard.html';
-                        } else {
-                            redirectBasedOnAccess(user.programme_access || 'career');
-                        }
+                    if (user.is_admin) {
+                        window.location.href = 'coach-hub.html';
                     } else {
-                        // Token invalid/expired - clear and show login
-                        console.warn('⚠️ Token expired or invalid, clearing session...');
-                        clearSession();
+                        redirectBasedOnAccess(user.programme_access || 'career');
                     }
                 } catch (error) {
-                    // Network error - clear session to be safe
-                    console.error('❌ Token verification failed:', error.message);
+                    console.error('❌ Invalid saved session:', error.message);
                     clearSession();
                 }
             }
@@ -440,7 +422,6 @@
         // Clear all session data
         function clearSession() {
             localStorage.removeItem('syp_user');
-            localStorage.removeItem('syp_token');
             localStorage.removeItem('syp_client_email');
             console.log('🧹 Session cleared - showing login form');
         }
@@ -448,7 +429,7 @@
         async function handleLogin(event) {
             event.preventDefault();
 
-            const email = document.getElementById('email').value.trim();
+            const email = document.getElementById('email').value.trim().toLowerCase();
             const password = document.getElementById('password').value;
             const loginBtn = document.getElementById('loginBtn');
             const errorDiv = document.getElementById('errorMessage');
@@ -463,53 +444,46 @@
             loginBtn.innerHTML = '<span class="spinner"></span> Logging in...';
 
             try {
-                // Use SparkHub backend for authentication
-                const response = await fetch(`${API_SERVER}/api/accounts/login/`, {
+                // Use SYP Express backend for authentication
+                const response = await fetch('/api/login', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
                     },
-                    body: JSON.stringify({
-                        username: email,  // SparkHub uses username field
-                        password: password
-                    })
+                    body: JSON.stringify({ email, password })
                 });
 
                 const data = await response.json();
 
-                if (response.ok && data.token) {
+                if (data.success && data.user) {
                     // Success - store user data
-                    // Use programme_type from API if available (from SYPClient profile)
-                    const programmeType = data.user?.programme_type || 'career';
-
                     const userData = {
-                        id: data.user?.id || 1,
-                        email: data.user?.email || email,
-                        name: data.user?.first_name || data.user?.username || email.split('@')[0],
-                        isStaff: data.user?.is_staff || false,
-                        programme_type: programmeType,
-                        programme_status: data.user?.programme_status,
-                        programme_access: data.user?.is_staff ? 'all' : programmeType
+                        id: data.user.id,
+                        email: data.user.email,
+                        name: data.user.name || data.user.full_name || email.split('@')[0],
+                        is_admin: data.user.is_admin || false,
+                        programme_access: data.user.programme_access || 'career',
+                        programme_status: data.user.programme_status || 'enrolled'
                     };
 
                     localStorage.setItem('syp_user', JSON.stringify(userData));
-                    localStorage.setItem('syp_token', data.token);
+                    localStorage.setItem('syp_client_email', email);
 
                     // Show success
                     successDiv.textContent = 'Login successful!';
                     successDiv.style.display = 'block';
 
-                    // Redirect - staff go to coach hub, clients go to their programme-specific portal
+                    // Redirect - admin go to coach hub, clients go to their portal
                     setTimeout(() => {
-                        if (userData.isStaff) {
-                            window.location.href = 'dashboard.html';
+                        if (userData.is_admin) {
+                            window.location.href = 'coach-hub.html';
                         } else {
                             redirectBasedOnAccess(userData.programme_access);
                         }
                     }, 500);
 
                 } else {
-                    throw new Error(data.detail || data.error || 'Invalid email or password');
+                    throw new Error(data.error || 'Invalid email or password');
                 }
 
             } catch (error) {

@@ -1149,7 +1149,7 @@
     <div id="loginSection" class="login-section">
         <h2>🔥 Coach Hub</h2>
         <p>Sign in to manage your coaching clients</p>
-        <input type="text" id="usernameInput" class="login-input" placeholder="Username">
+        <input type="email" id="usernameInput" class="login-input" placeholder="Email address">
         <input type="password" id="passwordInput" class="login-input" placeholder="Password">
         <button onclick="login()" class="login-btn">Sign In</button>
         <div id="loginError" class="login-error"></div>
@@ -1501,10 +1501,10 @@
     </div>
 
     <script>
-        // Config - Two backends
-        const SPARKHUB_API = 'https://sparkhub-be-qtmmb.ondigitalocean.app';  // Auth
-        const SYP_API = 'https://stingray-app-7kg9p.ondigitalocean.app';      // Client data
-        const API_BASE = SPARKHUB_API;  // For auth compatibility
+        // Config - Single backend for auth (SYP Express), SparkHub for CRM
+        const SPARKHUB_API = 'https://sparkhub-be-qtmmb.ondigitalocean.app';  // CRM only
+        const SYP_API = '';  // Same origin for SYP Express
+        const API_BASE = SPARKHUB_API;  // For CRM compatibility
 
         // Default clients for fallback when API unavailable
         const DEFAULT_CLIENTS = [
@@ -1606,45 +1606,60 @@
             });
 
             // Check for saved session
-            const savedToken = localStorage.getItem('syp_token');
             const savedUser = localStorage.getItem('syp_user');
 
-            if (savedToken && savedUser) {
-                authToken = savedToken;
-                currentUser = JSON.parse(savedUser);
-                showDashboard();
+            if (savedUser) {
+                try {
+                    currentUser = JSON.parse(savedUser);
+                    // Only auto-login if user is admin
+                    if (currentUser.is_admin) {
+                        authToken = 'syp-session';
+                        showDashboard();
+                    }
+                } catch (e) {
+                    console.error('Invalid saved session');
+                    localStorage.removeItem('syp_user');
+                }
             }
         };
 
         // Login
         async function login() {
-            const username = document.getElementById('usernameInput').value.trim();
+            const email = document.getElementById('usernameInput').value.trim();
             const password = document.getElementById('passwordInput').value;
             const errorEl = document.getElementById('loginError');
 
             errorEl.style.display = 'none';
 
-            if (!username || !password) {
-                errorEl.textContent = 'Please enter username and password';
+            if (!email || !password) {
+                errorEl.textContent = 'Please enter email and password';
                 errorEl.style.display = 'block';
                 return;
             }
 
             try {
-                const response = await fetch(`${API_BASE}/api/accounts/login/`, {
+                // Use SYP Express for auth (single backend)
+                const response = await fetch('/api/login', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ username, password })
+                    body: JSON.stringify({ email: email.toLowerCase(), password })
                 });
 
                 const data = await response.json();
 
-                if (response.ok && data.token) {
-                    authToken = data.token;
-                    currentUser = data.user || { username };
+                if (data.success && data.user) {
+                    // Check if user is admin
+                    if (!data.user.is_admin) {
+                        errorEl.textContent = 'Access denied. Coach login required.';
+                        errorEl.style.display = 'block';
+                        return;
+                    }
 
-                    localStorage.setItem('syp_token', authToken);
+                    currentUser = data.user;
+                    authToken = 'syp-session';  // No token needed for SYP Express
+
                     localStorage.setItem('syp_user', JSON.stringify(currentUser));
+                    localStorage.setItem('syp_client_email', email);
 
                     showDashboard();
                 } else {

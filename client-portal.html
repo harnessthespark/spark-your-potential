@@ -1536,10 +1536,10 @@
             }
         };
 
-        // SparkHub API server for authentication
-        const API_SERVER = 'https://sparkhub-be-qtmmb.ondigitalocean.app';
+        // SYP Express API - single backend for auth and client data
+        const SPARKHUB_API = 'https://sparkhub-be-qtmmb.ondigitalocean.app';  // CRM fallback only
 
-        // Client login - authenticates against SparkHub PostgreSQL backend
+        // Client login - authenticates against SYP Express PostgreSQL
         async function clientLogin() {
             const email = document.getElementById('emailInput').value.trim().toLowerCase();
             const password = document.getElementById('passwordInput').value;
@@ -1564,53 +1564,42 @@
             errorEl.style.display = 'none';
 
             try {
-                // Authenticate against SparkHub PostgreSQL backend
-                const response = await fetch(`${API_SERVER}/api/accounts/login/`, {
+                // Authenticate against SYP Express (single backend)
+                const response = await fetch('/api/login', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        username: email,  // Backend accepts email as username
-                        password: password
-                    })
+                    body: JSON.stringify({ email, password })
                 });
 
                 const data = await response.json();
 
-                // Backend returns tokens.access, not token
-                const token = data.token || data.tokens?.access;
-
-                if (response.ok && token) {
+                if (data.success && data.user) {
                     // Success - store auth data
                     localStorage.setItem('syp_client_email', email);
-                    localStorage.setItem('syp_token', token);
+                    localStorage.setItem('syp_user', JSON.stringify(data.user));
 
-                    // POSTGRESQL FIRST - Always try API first, CLIENTS as fallback only
+                    // Get client data from SYP Express or CLIENTS fallback
                     let client = null;
 
-                    // Step 1: Try PostgreSQL API first
+                    // Step 1: Try SYP Express API first
                     try {
-                        console.log('🔄 Fetching client data from PostgreSQL...');
-                        const clientResponse = await fetch(`${API_SERVER}/api/crm/syp/clients/me/`, {
-                            headers: {
-                                'Authorization': `Bearer ${token}`,
-                                'Content-Type': 'application/json'
-                            }
-                        });
+                        console.log('🔄 Fetching client data from SYP Express...');
+                        const clientResponse = await fetch(`/api/clients/${encodeURIComponent(email)}`);
 
                         if (clientResponse.ok) {
                             const clientData = await clientResponse.json();
-                            console.log('✅ Got client data from PostgreSQL:', clientData);
+                            console.log('✅ Got client data from SYP Express:', clientData);
 
                             // Merge with CLIENTS config for file mappings if available
                             const localConfig = CLIENTS[email] || {};
 
                             client = {
-                                name: clientData.full_name || data.user?.first_name || email.split('@')[0],
+                                name: clientData.user?.name || data.user.name || email.split('@')[0],
                                 email: email,
-                                folder: clientData.folder || localConfig.folder || email.split('@')[0].replace(/[^a-zA-Z0-9]/g, '_'),
-                                status: clientData.programme_stage || clientData.programme_status || localConfig.status || 'pre-programme',
-                                programmeType: clientData.programme_type || localConfig.programmeType || 'career',
-                                agreementSigned: clientData.agreement_signed || localConfig.agreementSigned || false,
+                                folder: localConfig.folder || email.split('@')[0].replace(/[^a-zA-Z0-9]/g, '_'),
+                                status: data.user.programme_status || localConfig.status || 'pre-programme',
+                                programmeType: data.user.programme_access || localConfig.programmeType || 'career',
+                                agreementSigned: localConfig.agreementSigned || false,
                                 files: localConfig.files || {},  // File mappings from local config
                                 prompts: localConfig.prompts || {},
                                 blueprintProgress: clientData.blueprint_progress || localConfig.blueprintProgress || 0
@@ -1632,10 +1621,11 @@
                     if (!client) {
                         console.log('📋 Creating minimal profile for:', email);
                         client = {
-                            name: data.user?.first_name || email.split('@')[0],
+                            name: data.user.name || data.user.full_name || email.split('@')[0],
                             email: email,
                             folder: email.split('@')[0].replace(/[^a-zA-Z0-9]/g, '_'),
-                            status: 'pre-programme',
+                            status: data.user.programme_status || 'pre-programme',
+                            programmeType: data.user.programme_access || 'career',
                             agreementSigned: false,
                             files: {},
                             prompts: {},
@@ -1645,7 +1635,7 @@
 
                     showPortal(client);
                 } else {
-                    throw new Error(data.detail || data.message || 'Invalid credentials');
+                    throw new Error(data.error || data.detail || data.message || 'Invalid credentials');
                 }
 
             } catch (error) {
