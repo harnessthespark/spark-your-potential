@@ -1834,8 +1834,10 @@
                 const updatedDate = new Date(client.homework_updated);
                 const timeAgo = getTimeAgo(updatedDate);
 
+                // Escape email for onclick
+                const safeEmail = client.email.replace(/'/g, "\\'");
                 return `
-                    <div class="activity-item" onclick="openClientPanelByEmail('${client.email}')" style="cursor: pointer;">
+                    <div class="activity-item" onclick="openClientPanelByEmail('${safeEmail}')" style="cursor: pointer;">
                         <div class="activity-text">
                             <div class="activity-name">${name}</div>
                             <div class="activity-detail">Homework ${progress}% complete</div>
@@ -1916,7 +1918,10 @@
             const isComplete = status === 'completed' || status === 'complete';
 
             // Safely encode the client ID for use in onclick handlers
-            const safeId = JSON.stringify(client.id);
+            // For strings, use single quotes inside onclick; for numbers, use as-is
+            const safeId = typeof client.id === 'string'
+                ? `'${client.id.replace(/'/g, "\\'")}'`
+                : client.id;
 
             // Homework indicator
             const homeworkBadge = homeworkProgress > 0
