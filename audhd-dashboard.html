@@ -1044,33 +1044,64 @@
             ]
         };
 
-        // Initialize
-        window.onload = function() {
+        // Initialize - VERIFY TOKEN BEFORE SHOWING DASHBOARD
+        window.onload = async function() {
             const savedUser = localStorage.getItem('syp_user');
+            const savedToken = localStorage.getItem('syp_token');
 
-            if (savedUser) {
-                currentUser = JSON.parse(savedUser);
+            if (savedUser && savedToken) {
+                try {
+                    // Verify token is still valid with backend
+                    const response = await fetch('https://sparkhub-be-qtmmb.ondigitalocean.app/api/accounts/profile/', {
+                        method: 'GET',
+                        headers: {
+                            'Authorization': `Token ${savedToken}`,
+                            'Content-Type': 'application/json'
+                        }
+                    });
 
-                // Check if user has access - coaches (is_staff) or AuDHD clients
-                const isCoach = currentUser.is_staff || currentUser.isStaff || currentUser.is_superuser;
-                const programmeType = currentUser.programme_type || currentUser.programme_access;
-                const hasClientAccess = programmeType === 'audhd' ||
-                                       programmeType === 'both' ||
-                                       programmeType === 'career';
+                    if (!response.ok) {
+                        // Token invalid/expired - clear and redirect
+                        console.warn('⚠️ Token expired or invalid');
+                        clearSessionAndRedirect();
+                        return;
+                    }
 
-                if (isCoach || hasClientAccess) {
-                    showDashboard();
-                } else {
-                    // No access - clear and redirect
-                    alert('You do not have access to the AuDHD Coaching Portal.');
-                    localStorage.removeItem('syp_user');
-                    window.location.href = 'login.html';
+                    // Token valid - proceed with access check
+                    console.log('✅ Token verified');
+                    currentUser = JSON.parse(savedUser);
+
+                    // Check if user has access - coaches (is_staff) or AuDHD clients
+                    const isCoach = currentUser.is_staff || currentUser.isStaff || currentUser.is_superuser;
+                    const programmeType = currentUser.programme_type || currentUser.programme_access;
+                    const hasClientAccess = programmeType === 'audhd' ||
+                                           programmeType === 'both' ||
+                                           programmeType === 'career';
+
+                    if (isCoach || hasClientAccess) {
+                        showDashboard();
+                    } else {
+                        // No access - clear and redirect
+                        alert('You do not have access to the AuDHD Coaching Portal.');
+                        clearSessionAndRedirect();
+                    }
+                } catch (error) {
+                    console.error('❌ Token verification failed:', error.message);
+                    clearSessionAndRedirect();
                 }
             } else {
                 // Not logged in - redirect to login page
-                window.location.href = 'audhd-login.html';
+                window.location.href = 'login.html';
             }
         };
+
+        // Clear session and redirect to login
+        function clearSessionAndRedirect() {
+            localStorage.removeItem('syp_user');
+            localStorage.removeItem('syp_token');
+            localStorage.removeItem('syp_client_email');
+            window.location.href = 'login.html';
+        }
 
         // Helper to check if user is coach (handles both snake_case and camelCase)
         function isCoachUser() {
