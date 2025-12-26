@@ -984,6 +984,78 @@ This alert was sent automatically from the AuDHD Coaching Portal.
 });
 
 // ============================================
+// ADMIN: Clear test account data
+// ============================================
+app.post('/api/admin/clear-test-data', async (req, res) => {
+    try {
+        const { email, adminKey } = req.body;
+
+        // Simple admin key check (set in environment)
+        const expectedKey = process.env.ADMIN_KEY || 'sparkhub2025';
+        if (adminKey !== expectedKey) {
+            return res.status(401).json({ success: false, error: 'Invalid admin key' });
+        }
+
+        if (!email) {
+            return res.status(400).json({ success: false, error: 'Email required' });
+        }
+
+        console.log(`🧹 Clearing test data for: ${email}`);
+
+        // Find user
+        const userResult = await db.pool.query(
+            'SELECT id, email, name FROM users WHERE email = $1',
+            [email]
+        );
+
+        if (userResult.rows.length === 0) {
+            return res.json({ success: true, message: 'No user found - nothing to clear' });
+        }
+
+        const user = userResult.rows[0];
+        console.log(`   Found user: ${user.id}`);
+
+        // Delete blueprints
+        const blueprintResult = await db.pool.query(
+            'DELETE FROM blueprints WHERE user_id = $1 RETURNING id',
+            [user.id]
+        );
+        console.log(`   Deleted ${blueprintResult.rowCount} blueprints`);
+
+        // Delete homework
+        const homeworkResult = await db.pool.query(
+            'DELETE FROM homework WHERE user_id = $1 RETURNING id',
+            [user.id]
+        );
+        console.log(`   Deleted ${homeworkResult.rowCount} homework records`);
+
+        res.json({
+            success: true,
+            message: `Cleared data for ${email}`,
+            deleted: {
+                blueprints: blueprintResult.rowCount,
+                homework: homeworkResult.rowCount
+            }
+        });
+    } catch (error) {
+        console.error('Clear test data error:', error);
+        res.status(500).json({ success: false, error: error.message });
+    }
+});
+
+// Get all users (for debugging)
+app.get('/api/admin/all-users', async (req, res) => {
+    try {
+        const result = await db.pool.query(
+            'SELECT id, email, name, created_at FROM users ORDER BY created_at DESC LIMIT 50'
+        );
+        res.json({ success: true, users: result.rows });
+    } catch (error) {
+        res.status(500).json({ success: false, error: error.message });
+    }
+});
+
+// ============================================
 // START SERVER
 // ============================================
 const PORT = process.env.PORT || 8080;
