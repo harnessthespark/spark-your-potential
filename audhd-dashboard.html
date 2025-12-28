@@ -817,6 +817,13 @@
                     <button class="tool-btn" onclick="openTool('relationships')">Open Toolkit</button>
                 </div>
 
+                <!-- Spark Collector - Daily Wins -->
+                <div class="tool-card" style="border: 2px solid #FFD700;">
+                    <h4>✨ Spark Collector</h4>
+                    <p>Capture daily wins (even tiny ones!) and plan tomorrow's first step. Build evidence of your capability.</p>
+                    <button class="tool-btn" onclick="openTool('collector')" style="background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%); color: #1a1a2e;">Collect Sparks →</button>
+                </div>
+
                 <!-- Session Notes - Coach Only -->
                 <div class="tool-card coach-only" id="sessionNotesTool" style="display: none; border: 2px solid #8B5CF6;">
                     <h4>📝 Session Notes</h4>
@@ -2082,6 +2089,10 @@
                 case 'braindump':
                     window.open('audhd-braindump.html', '_blank');
                     addSparks(3, 'Used Brain Dump Box');
+                    break;
+                case 'collector':
+                    window.open('spark-collector.html', '_blank');
+                    addSparks(2, 'Opened Spark Collector');
                     break;
                 case 'session-notes':
                     window.open('audhd-session-notes.html', '_blank');
