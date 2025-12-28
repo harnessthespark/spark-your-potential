@@ -501,7 +501,7 @@
         let viewingDate = new Date();
 
         // Initialize
-        window.onload = function() {
+        window.onload = async function() {
             const savedUser = localStorage.getItem('syp_user');
 
             if (!savedUser) {
@@ -510,7 +510,7 @@
             }
 
             currentUser = JSON.parse(savedUser);
-            loadData();
+            await loadData();
             renderDate();
             renderWins();
             renderFirstStep();
@@ -563,16 +563,59 @@
             document.getElementById('nextBtn').disabled = formatDate(viewingDate) === formatDate(today);
         }
 
-        // Data management
-        function loadData() {
+        // Data management - PostgreSQL first, localStorage fallback
+        async function loadData() {
+            try {
+                // Try PostgreSQL first
+                const response = await fetch(`/api/spark-collector/${encodeURIComponent(currentUser.email)}`);
+                const result = await response.json();
+
+                if (result.success && result.data) {
+                    sparkData = {
+                        wins: result.data.wins || {},
+                        firstSteps: result.data.firstSteps || {},
+                        stats: result.data.stats || { totalWins: 0, bestStreak: 0, currentStreak: 0 }
+                    };
+                    console.log('✅ Loaded from PostgreSQL:', sparkData.stats.totalWins, 'total wins');
+
+                    // Cache locally
+                    localStorage.setItem('spark_collector_' + currentUser.id, JSON.stringify(sparkData));
+                    return;
+                }
+            } catch (error) {
+                console.warn('⚠️ PostgreSQL load failed, using localStorage:', error.message);
+            }
+
+            // Fallback to localStorage
             const saved = localStorage.getItem('spark_collector_' + currentUser.id);
             if (saved) {
                 sparkData = JSON.parse(saved);
+                console.log('📦 Loaded from localStorage');
             }
         }
 
-        function saveData() {
+        async function saveData() {
+            // Always save to localStorage (for offline backup)
             localStorage.setItem('spark_collector_' + currentUser.id, JSON.stringify(sparkData));
+
+            // Save to PostgreSQL
+            try {
+                const response = await fetch('/api/spark-collector', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        client_email: currentUser.email,
+                        data: sparkData
+                    })
+                });
+
+                const result = await response.json();
+                if (result.success) {
+                    console.log('✅ Saved to PostgreSQL');
+                }
+            } catch (error) {
+                console.warn('⚠️ PostgreSQL save failed:', error.message);
+            }
         }
 
         // Wins

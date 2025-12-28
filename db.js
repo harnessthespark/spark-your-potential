@@ -177,6 +177,20 @@ async function initDatabase() {
             )
         `);
 
+        // Create spark_collector table for daily wins tracking
+        await client.query(`
+            CREATE TABLE IF NOT EXISTS spark_collector (
+                id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+                user_id UUID REFERENCES users(id) ON DELETE CASCADE,
+                wins JSONB DEFAULT '{}',
+                first_steps JSONB DEFAULT '{}',
+                stats JSONB DEFAULT '{"totalWins": 0, "bestStreak": 0, "currentStreak": 0}',
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                UNIQUE(user_id)
+            )
+        `);
+
         // Create indexes
         await client.query(`
             CREATE INDEX IF NOT EXISTS idx_blueprints_user_id ON blueprints(user_id);
@@ -184,6 +198,7 @@ async function initDatabase() {
             CREATE INDEX IF NOT EXISTS idx_cv_data_blueprint_id ON cv_data(blueprint_id);
             CREATE INDEX IF NOT EXISTS idx_decision_frameworks_user_id ON decision_frameworks(user_id);
             CREATE INDEX IF NOT EXISTS idx_homework_user_id ON homework(user_id);
+            CREATE INDEX IF NOT EXISTS idx_spark_collector_user_id ON spark_collector(user_id);
         `);
 
         console.log('✅ Database tables initialised');
@@ -566,6 +581,73 @@ async function getAllHomework(userEmail) {
     return result.rows;
 }
 
+/**
+ * Save Spark Collector data (upsert)
+ * @param {string} userEmail - Client email address
+ * @param {object} data - { wins, firstSteps, stats }
+ */
+async function saveSparkCollector(userEmail, data) {
+    // First, get the user by email
+    const userResult = await pool.query(
+        'SELECT id FROM users WHERE email = $1',
+        [userEmail]
+    );
+
+    if (userResult.rows.length === 0) {
+        throw new Error('User not found: ' + userEmail);
+    }
+
+    const userId = userResult.rows[0].id;
+
+    // Upsert spark collector record
+    const query = `
+        INSERT INTO spark_collector (user_id, wins, first_steps, stats, updated_at)
+        VALUES ($1, $2, $3, $4, NOW())
+        ON CONFLICT (user_id)
+        DO UPDATE SET
+            wins = $2,
+            first_steps = $3,
+            stats = $4,
+            updated_at = NOW()
+        RETURNING *
+    `;
+
+    const result = await pool.query(query, [
+        userId,
+        JSON.stringify(data.wins || {}),
+        JSON.stringify(data.firstSteps || {}),
+        JSON.stringify(data.stats || { totalWins: 0, bestStreak: 0, currentStreak: 0 })
+    ]);
+    return result.rows[0];
+}
+
+/**
+ * Get Spark Collector data for a client
+ * @param {string} userEmail - Client email address
+ */
+async function getSparkCollector(userEmail) {
+    const query = `
+        SELECT sc.* FROM spark_collector sc
+        JOIN users u ON sc.user_id = u.id
+        WHERE u.email = $1
+    `;
+    const result = await pool.query(query, [userEmail]);
+
+    if (result.rows.length === 0) {
+        return null;
+    }
+
+    // Parse JSONB fields
+    const row = result.rows[0];
+    return {
+        id: row.id,
+        wins: row.wins || {},
+        firstSteps: row.first_steps || {},
+        stats: row.stats || { totalWins: 0, bestStreak: 0, currentStreak: 0 },
+        updatedAt: row.updated_at
+    };
+}
+
 module.exports = {
     pool,
     initDatabase,
@@ -583,5 +665,7 @@ module.exports = {
     getCVData,
     saveHomework,
     getHomework,
-    getAllHomework
+    getAllHomework,
+    saveSparkCollector,
+    getSparkCollector
 };

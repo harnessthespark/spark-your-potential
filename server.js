@@ -915,6 +915,49 @@ app.get('/api/homework/:clientEmail', async (req, res) => {
 });
 
 // ============================================
+// SPARK COLLECTOR ENDPOINTS
+// ============================================
+
+// Save Spark Collector data (POST)
+app.post('/api/spark-collector', async (req, res) => {
+    try {
+        const { client_email, data } = req.body;
+
+        if (!client_email || !data) {
+            return res.status(400).json({
+                success: false,
+                error: 'client_email and data are required'
+            });
+        }
+
+        const result = await db.saveSparkCollector(client_email, data);
+        console.log(`✨ Spark Collector saved: ${client_email} (${data.stats?.totalWins || 0} total wins)`);
+
+        res.json({ success: true, data: result });
+    } catch (error) {
+        console.error('Spark Collector save error:', error);
+        res.status(500).json({ success: false, error: error.message });
+    }
+});
+
+// Get Spark Collector data (GET)
+app.get('/api/spark-collector/:clientEmail', async (req, res) => {
+    try {
+        const { clientEmail } = req.params;
+
+        const data = await db.getSparkCollector(clientEmail);
+
+        res.json({
+            success: true,
+            data: data || { wins: {}, firstSteps: {}, stats: { totalWins: 0, bestStreak: 0, currentStreak: 0 } }
+        });
+    } catch (error) {
+        console.error('Spark Collector fetch error:', error);
+        res.status(500).json({ success: false, error: error.message });
+    }
+});
+
+// ============================================
 // EMERGENCY SUPPORT ENDPOINT
 // ============================================
 
