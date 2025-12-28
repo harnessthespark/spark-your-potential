@@ -1826,9 +1826,9 @@
         // Initialize
         function checkAuth() {
             const savedUser = localStorage.getItem('syp_user');
-            const savedToken = localStorage.getItem('syp_token');
-            if (!savedUser || !savedToken) {
-                window.location.href = 'audhd-login.html';
+            // Token check removed - using session only
+            if (!savedUser) {
+                window.location.href = 'login.html';
                 return false;
             }
             return true;
