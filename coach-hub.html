@@ -1375,7 +1375,7 @@
                 <label>Programme</label>
                 <select id="newClientProgramme">
                     <option value="career">💼 Career Booster</option>
-                    <option value="audhd">🧠 AuDHD Coaching</option>
+                    <option value="audhd">🧠 Spark Coaching</option>
                 </select>
             </div>
             <div class="modal-actions">
@@ -1478,7 +1478,7 @@
                 <label>Programme</label>
                 <select id="editClientProgramme">
                     <option value="career">💼 Career Booster</option>
-                    <option value="audhd">🧠 AuDHD Coaching</option>
+                    <option value="audhd">🧠 Spark Coaching</option>
                 </select>
             </div>
             <div class="form-group">
@@ -1952,7 +1952,7 @@
                             <h3>
                                 ${name}
                                 <span class="programme-badge ${programmeType}">
-                                    ${programmeType === 'audhd' ? '🧠 AuDHD' : '💼 Career'}
+                                    ${programmeType === 'audhd' ? '🧠 Spark' : '💼 Career'}
                                 </span>
                                 ${homeworkBadge}
                             </h3>
@@ -2029,7 +2029,7 @@
             const panelDocs = document.getElementById('panelDocs');
 
             if (programmeType === 'audhd' || programmeType === 'nd') {
-                // AuDHD/ND Coaching documents - only show what exists
+                // Spark/ND Coaching documents - only show what exists
                 panelDocs.innerHTML = `
                     <div class="panel-item" onclick="openDoc('agreement')">
                         <div>
@@ -2157,9 +2157,9 @@
             let docs = {};
 
             if (programmeType === 'audhd' || programmeType === 'nd') {
-                // AuDHD/ND documents - use correct filename pattern
+                // Spark/ND documents - use correct filename pattern
                 docs = {
-                    'agreement': `${folder}/${folder}_AuDHD_Coaching_Agreement.html`,
+                    'agreement': `${folder}/${folder}_Spark_Coaching_Agreement.html`,
                     'dashboard': `audhd-dashboard.html`
                 };
             } else {

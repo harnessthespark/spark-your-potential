@@ -979,7 +979,7 @@
         </div>
 
         <div class="footer">
-            AuDHD Coaching by Harness the Spark | harnessthespark.com
+            Spark Coaching by Harness the Spark | harnessthespark.com
         </div>
     </div>
 
@@ -1062,7 +1062,7 @@
                         showDashboard();
                     } else {
                         // No AuDHD access - redirect to appropriate portal
-                        alert('You do not have access to the AuDHD Coaching Portal.');
+                        alert('You do not have access to the Spark Coaching Portal.');
                         window.location.href = 'client-portal.html';
                     }
                 } catch (error) {
@@ -1628,19 +1628,19 @@
             // Session details based on time slot
             const sessionDetails = {
                 morning: {
-                    title: `AuDHD Coaching - ${clientName} (Morning)`,
+                    title: `Spark Coaching - ${clientName} (Morning)`,
                     description: 'AuDHD Life Coaching Session\\n\\nBest for: High energy tasks, foundations work, new concepts\\n\\nPlease join the Zoom link that will be sent in the calendar invite.',
                     startHour: 9,
                     endHour: 10
                 },
                 afternoon: {
-                    title: `AuDHD Coaching - ${clientName} (Afternoon)`,
+                    title: `Spark Coaching - ${clientName} (Afternoon)`,
                     description: 'AuDHD Life Coaching Session\\n\\nBest for: Conversations, reflection, lighter processing\\n\\nPlease join the Zoom link that will be sent in the calendar invite.',
                     startHour: 14,
                     endHour: 15
                 },
                 evening: {
-                    title: `AuDHD Coaching - ${clientName} (Evening)`,
+                    title: `Spark Coaching - ${clientName} (Evening)`,
                     description: 'AuDHD Life Coaching Session\\n\\nBest for: Evening owls, post-work decompression\\n\\nPlease join the Zoom link that will be sent in the calendar invite.',
                     startHour: 17,
                     endHour: 18
@@ -2183,7 +2183,7 @@
                 alertBtn.textContent = '✓ Alert Sent';
 
                 // Fallback: Open email client directly
-                const subject = encodeURIComponent('🆘 Emergency Support Request - AuDHD Coaching');
+                const subject = encodeURIComponent('🆘 Emergency Support Request - Spark Coaching');
                 const body = encodeURIComponent(`Client: ${currentUser?.name || 'Unknown'}\nEmail: ${currentUser?.email || 'Unknown'}\nTime: ${new Date().toLocaleString('en-GB')}\n\nClient has requested emergency support.`);
                 window.open(`mailto:lisa@harnessthespark.com?subject=${subject}&body=${body}`, '_blank');
             }

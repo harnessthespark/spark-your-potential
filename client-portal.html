@@ -1292,7 +1292,7 @@
                 programmeType: 'audhd',
                 files: {
                     // Files that exist
-                    agreement: 'Chloe_Cal/Chloe_Cal_AuDHD_Coaching_Agreement.html',
+                    agreement: 'Chloe_Cal/Chloe_Cal_Spark_Coaching_Agreement.html',
                     insights: 'Chloe_Cal/Chloe_Cal_Career_Insights_Report.html',
                     blueprint: 'Chloe_Cal/Chloe_Cal_Career_Blueprint.html',
                     cvBuilder: 'Chloe_Cal/Chloe_Cal_CV_Builder.html',
@@ -1316,7 +1316,7 @@
                 programmeType: 'audhd',
                 files: {
                     // Only files that exist - add more as created
-                    agreement: 'Deb_Briggs/Deb_Briggs_AuDHD_Coaching_Agreement.html'
+                    agreement: 'Deb_Briggs/Deb_Briggs_Spark_Coaching_Agreement.html'
                 },
                 prompts: {
                     week1: "",
@@ -1671,7 +1671,7 @@
                     return;
                 }
 
-                // Check if AuDHD client with custom agreement file - redirect to their specific agreement
+                // Check if Spark client with custom agreement file - redirect to their specific agreement
                 if (client.programmeType === 'audhd' && client.files && client.files.agreement) {
                     window.location.href = client.files.agreement;
                     return;
@@ -1699,8 +1699,8 @@
             document.getElementById('clientName').textContent = client.name.split(' ')[0];
 
             // Update portal title based on programme type
-            const isAuDHDClient = client.programmeType === 'audhd';
-            document.getElementById('portalTitle').textContent = isAuDHDClient ? 'Your AuDHD Toolkit' : 'Your Career Toolkit';
+            const isSparkClient = client.programmeType === 'audhd';
+            document.getElementById('portalTitle').textContent = isSparkClient ? 'Your Spark Toolkit' : 'Your Career Toolkit';
 
             // Calculate stats
             const stageIndex = STAGES.findIndex(s => s.id === client.status);
@@ -1845,17 +1845,17 @@
             // Use client-specific file paths if available, otherwise fall back to generated names
             const files = client.files || {};
 
-            // Check if AuDHD client
-            const isAuDHDClient = client.programmeType === 'audhd';
+            // Check if Spark client
+            const isSparkClient = client.programmeType === 'audhd';
 
-            // AuDHD clients get different tools
-            if (isAuDHDClient) {
+            // Spark clients get different tools
+            if (isSparkClient) {
                 const audhdTools = [
                     {
                         icon: '📋',
                         title: 'Coaching Agreement',
                         description: 'Your signed coaching agreement with programme details and terms.',
-                        file: files.agreement || `${folder}/${nameUnderscored}_AuDHD_Coaching_Agreement.html`,
+                        file: files.agreement || `${folder}/${nameUnderscored}_Spark_Coaching_Agreement.html`,
                         btnText: 'View Agreement',
                         alwaysUnlocked: true,
                         statusWhenComplete: 'signed'
@@ -1882,8 +1882,8 @@
                     },
                     {
                         icon: '🎯',
-                        title: 'AuDHD Foundations',
-                        description: 'Your personalised AuDHD foundations worksheets and reflections.',
+                        title: 'Spark Foundations',
+                        description: 'Your personalised Spark foundations worksheets and reflections.',
                         file: 'audhd-foundations.html',
                         btnText: 'Open Foundations',
                         alwaysUnlocked: true,
@@ -2542,7 +2542,7 @@
                 } catch (e) {}
             }
 
-            // Check AuDHD-specific agreement keys
+            // Check Spark-specific agreement keys
             if (client.programmeType === 'audhd') {
                 // Check for Deb's specific agreement key
                 if (client.email === 'deborah_armstrong@hotmail.com') {
