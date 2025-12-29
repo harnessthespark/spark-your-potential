@@ -24,7 +24,7 @@
 
         body {
             font-family: 'Inter', sans-serif;
-            background: linear-gradient(135deg, #1a1a2e 0%, #2d1b4e 100%);
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 30%, #fcd34d 60%, #fbbf24 100%);
             min-height: 100vh;
             color: #333;
         }
@@ -40,12 +40,13 @@
         .header {
             text-align: center;
             padding: 30px 0;
-            color: white;
+            color: #92400e;
         }
         .header h1 {
             font-size: 2em;
             font-weight: 800;
             margin-bottom: 8px;
+            color: #78350f;
         }
         .header .subtitle {
             opacity: 0.8;
@@ -126,7 +127,7 @@
             width: 100%;
             padding: 18px;
             margin-top: 25px;
-            background: linear-gradient(135deg, #E91E78 0%, #F97B4D 100%);
+            background: linear-gradient(135deg, #f97316 0%, #eab308 100%);
             color: white;
             border: none;
             border-radius: 12px;
@@ -137,7 +138,7 @@
         }
         .continue-btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 10px 30px rgba(233, 30, 120, 0.3);
+            box-shadow: 0 10px 30px rgba(249, 115, 22, 0.3);
         }
         .continue-btn:disabled {
             opacity: 0.5;
@@ -319,10 +320,10 @@
             transition: all 0.2s;
         }
         .category-tab:hover {
-            border-color: #E91E78;
+            border-color: #f97316;
         }
         .category-tab.active {
-            background: linear-gradient(135deg, #E91E78 0%, #F97B4D 100%);
+            background: linear-gradient(135deg, #f97316 0%, #eab308 100%);
             color: white;
             border-color: transparent;
         }
@@ -342,11 +343,11 @@
             transition: all 0.2s;
         }
         .intervention-item:hover {
-            border-color: #E91E78;
+            border-color: #f97316;
             transform: translateY(-2px);
         }
         .intervention-item.expanded {
-            border-color: #E91E78;
+            border-color: #f97316;
             background: #fef7f8;
         }
 
@@ -410,7 +411,7 @@
             width: 30px;
             height: 30px;
             border-radius: 50%;
-            background: linear-gradient(135deg, #E91E78 0%, #F97B4D 100%);
+            background: linear-gradient(135deg, #f97316 0%, #eab308 100%);
             color: white;
             font-weight: 700;
             font-size: 0.85em;
@@ -493,7 +494,7 @@
             transition: all 0.2s;
         }
         .help-option:hover {
-            border-color: #E91E78;
+            border-color: #f97316;
         }
         .help-option .icon {
             font-size: 2em;
@@ -684,6 +685,91 @@
             background: #f0fdf4;
             border-left: 3px solid #22c55e;
         }
+
+        /* Interactive Symptom Checker */
+        .symptom-checker {
+            background: #fff;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        .symptom-checker h5 {
+            color: #333;
+            margin-bottom: 15px;
+            font-size: 1em;
+        }
+        .symptom-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 12px 15px;
+            background: #fef2f2;
+            border-radius: 10px;
+            margin-bottom: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+        .symptom-item:hover {
+            border-color: #fca5a5;
+        }
+        .symptom-item.checked {
+            background: #f0fdf4;
+            border-color: #86efac;
+        }
+        .symptom-checkbox {
+            width: 22px;
+            height: 22px;
+            border: 2px solid #ddd;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            transition: all 0.2s;
+            background: white;
+        }
+        .symptom-item.checked .symptom-checkbox {
+            background: #22c55e;
+            border-color: #22c55e;
+            color: white;
+        }
+        .symptom-content {
+            flex: 1;
+        }
+        .symptom-label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 500;
+            color: #444;
+        }
+        .symptom-tip {
+            display: none;
+            margin-top: 10px;
+            padding: 12px;
+            background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%);
+            border-radius: 8px;
+            font-size: 0.9em;
+            color: #065f46;
+            animation: slideDown 0.3s ease;
+        }
+        .symptom-item.checked .symptom-tip {
+            display: block;
+        }
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .tip-label {
+            font-weight: 600;
+            color: #059669;
+            margin-bottom: 5px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
         @media (max-width: 600px) {
             .neuro-detail > div[style*="grid-template-columns"] {
                 display: block !important;
@@ -781,7 +867,7 @@
         }
         .prompt-chip:hover {
             background: linear-gradient(135deg, #ffe6cc 0%, #ffd699 100%);
-            border-color: #E91E78;
+            border-color: #f97316;
             transform: translateY(-2px);
         }
         .journal-textarea {
@@ -886,7 +972,7 @@
             border-radius: 10px;
             padding: 15px;
             margin-bottom: 12px;
-            border-left: 3px solid #E91E78;
+            border-left: 3px solid #f97316;
         }
         .entry-date {
             font-size: 0.8em;
@@ -1582,23 +1668,15 @@
                 colour: '#E91E63',
                 subtitle: 'The Motivation Molecule',
                 description: 'Dopamine is what makes you feel motivated and rewarded. It\'s released when you achieve something, experience pleasure, or even just anticipate something exciting. It\'s basically your brain\'s "yes!" chemical.',
-                deficiency: [
-                    { icon: '😴', text: 'Putting everything off' },
-                    { icon: '😔', text: 'Feeling rubbish about yourself' },
-                    { icon: '🔋', text: 'Zero motivation' },
-                    { icon: '⚡', text: 'Constantly tired' },
-                    { icon: '🎯', text: 'Can\'t focus on anything' },
-                    { icon: '😰', text: 'Anxious for no reason' },
-                    { icon: '💭', text: 'Everything feels pointless' },
-                    { icon: '🎭', text: 'Mood all over the place' }
-                ],
-                boost: [
-                    { icon: '✅', text: 'Make a list and tick things off' },
-                    { icon: '🎯', text: 'Set small, achievable goals' },
-                    { icon: '🧀', text: 'Eat protein (cheese, eggs, meat, fish)' },
-                    { icon: '🏃', text: 'Move your body' },
-                    { icon: '🎨', text: 'Create something (draw, write, make music)' },
-                    { icon: '🎮', text: 'Complete levels in a game you enjoy' }
+                symptoms: [
+                    { icon: '😴', text: 'Putting everything off?', tip: '✅ Make a tiny to-do list (3 items max) and tick them off' },
+                    { icon: '😔', text: 'Feeling rubbish about yourself?', tip: '🎨 Create something small - doodle, playlist, anything' },
+                    { icon: '🔋', text: 'Zero motivation?', tip: '🎮 Play a game where you can level up or complete tasks' },
+                    { icon: '⚡', text: 'Constantly tired?', tip: '🧀 Eat some protein - cheese, eggs, nuts, meat' },
+                    { icon: '🎯', text: 'Can\'t focus on anything?', tip: '🎯 Set one tiny goal you can finish in 5 mins' },
+                    { icon: '😰', text: 'Anxious for no reason?', tip: '🏃 Move your body - even a short walk helps' },
+                    { icon: '💭', text: 'Everything feels pointless?', tip: '✅ Do literally ONE small thing and celebrate it' },
+                    { icon: '🎭', text: 'Mood all over the place?', tip: '🧀 When did you last eat properly? Protein helps stabilise' }
                 ],
                 tip: 'Break homework or revision into tiny chunks so you get more "done it!" moments. Tick things off a list - your brain literally loves that.'
             },
@@ -1608,22 +1686,14 @@
                 colour: '#FF9800',
                 subtitle: 'The Connection Chemical',
                 description: 'Oxytocin is released when you bond with others - through hugs, laughing with friends, or even cuddling a pet. It makes you feel safe and connected.',
-                deficiency: [
-                    { icon: '😢', text: 'Feeling lonely' },
-                    { icon: '😓', text: 'Stressed out' },
-                    { icon: '🔋', text: 'Can\'t be bothered with anything' },
-                    { icon: '⚡', text: 'Low energy' },
-                    { icon: '💔', text: 'Feeling distant from friends/family' },
-                    { icon: '😰', text: 'Anxious' },
-                    { icon: '😴', text: 'Can\'t sleep properly' }
-                ],
-                boost: [
-                    { icon: '🤗', text: 'Hugs from people you trust' },
-                    { icon: '👥', text: 'Hang out with your favourite people' },
-                    { icon: '🐕', text: 'Pet cuddles (seriously effective!)' },
-                    { icon: '🎵', text: 'Listen to music that gives you feels' },
-                    { icon: '📱', text: 'Voice note a friend' },
-                    { icon: '🎮', text: 'Play games with friends online' }
+                symptoms: [
+                    { icon: '😢', text: 'Feeling lonely?', tip: '📱 Send a voice note to someone you like' },
+                    { icon: '😓', text: 'Stressed out?', tip: '🤗 Hug someone you trust (or a pillow/pet)' },
+                    { icon: '🔋', text: 'Can\'t be bothered with anything?', tip: '🎮 Play an online game with a friend' },
+                    { icon: '⚡', text: 'Low energy?', tip: '🐕 Pet cuddles if you can - seriously effective' },
+                    { icon: '💔', text: 'Feeling distant from people?', tip: '👥 Do something side-by-side (watch, game, craft together)' },
+                    { icon: '😰', text: 'Anxious?', tip: '🎵 Listen to music that gives you the feels' },
+                    { icon: '😴', text: 'Can\'t sleep properly?', tip: '🤗 Weighted blanket or tight hug before bed helps' }
                 ],
                 tip: 'If hanging out feels too much, try doing something side-by-side (gaming, watching something, crafting) instead of intense face-to-face chat. Pet time absolutely counts too!'
             },
@@ -1633,23 +1703,15 @@
                 colour: '#2196F3',
                 subtitle: 'The Chill Chemical',
                 description: 'Serotonin keeps your mood stable and helps you feel confident and calm. It also helps you sleep properly and controls your appetite.',
-                deficiency: [
-                    { icon: '😔', text: 'Feeling rubbish about yourself' },
-                    { icon: '💧', text: 'Everything feels like too much' },
-                    { icon: '😰', text: 'Anxiety or panic' },
-                    { icon: '🎭', text: 'Mood all over the place' },
-                    { icon: '💭', text: 'Negative thoughts on repeat' },
-                    { icon: '👥', text: 'Dreading social situations' },
-                    { icon: '🔄', text: 'Can\'t stop overthinking' },
-                    { icon: '😴', text: 'Sleep is a mess' }
-                ],
-                boost: [
-                    { icon: '🏃', text: 'Move your body (even a short walk)' },
-                    { icon: '☀️', text: 'Get outside in daylight' },
-                    { icon: '🍌', text: 'Eat properly (bananas, oats, cheese)' },
-                    { icon: '🎧', text: 'Listen to calming music' },
-                    { icon: '📝', text: 'Write down 3 good things' },
-                    { icon: '🛁', text: 'Warm bath or shower' }
+                symptoms: [
+                    { icon: '😔', text: 'Feeling rubbish about yourself?', tip: '📝 Write down 3 things you did well today, even tiny ones' },
+                    { icon: '💧', text: 'Everything feels like too much?', tip: '🛁 Warm bath or shower - let your body relax first' },
+                    { icon: '😰', text: 'Anxiety or panic?', tip: '🎧 Put on calming music and focus just on breathing' },
+                    { icon: '🎭', text: 'Mood all over the place?', tip: '🍌 Have you eaten? Try banana, oats, or cheese' },
+                    { icon: '💭', text: 'Negative thoughts on repeat?', tip: '🏃 Move your body - even a 5 min walk helps break the loop' },
+                    { icon: '👥', text: 'Dreading social stuff?', tip: '☀️ Get 10 mins outside in daylight first - it genuinely helps' },
+                    { icon: '🔄', text: 'Can\'t stop overthinking?', tip: '📝 Brain dump everything onto paper to get it out of your head' },
+                    { icon: '😴', text: 'Sleep is a mess?', tip: '☀️ Morning light helps reset your body clock - even through clouds' }
                 ],
                 tip: 'Getting outside in morning light (even 10 mins) massively helps. And you don\'t need a gym - walking, dancing in your room, or stretching all count.'
             },
@@ -1659,22 +1721,13 @@
                 colour: '#4CAF50',
                 subtitle: 'The Natural High',
                 description: 'Endorphins are your body\'s natural feel-good chemicals. They\'re released when you exercise, laugh really hard, or do something exciting. They literally make pain feel less painful!',
-                deficiency: [
-                    { icon: '😰', text: 'Feeling on edge' },
-                    { icon: '😔', text: 'Low mood' },
-                    { icon: '🎭', text: 'Mood swings' },
-                    { icon: '🤕', text: 'Random aches and tension' },
-                    { icon: '😴', text: 'Tired but wired' },
-                    { icon: '⚡', text: 'Wanting to do reckless things' }
-                ],
-                boost: [
-                    { icon: '😂', text: 'Watch something that makes you properly laugh' },
-                    { icon: '💃', text: 'Dance like nobody\'s watching' },
-                    { icon: '🍫', text: 'Dark chocolate (yes, really!)' },
-                    { icon: '🌶️', text: 'Spicy food' },
-                    { icon: '🏃', text: 'Any kind of exercise' },
-                    { icon: '🎵', text: 'Blast your favourite songs' },
-                    { icon: '🥶', text: 'Cold water on your face' }
+                symptoms: [
+                    { icon: '😰', text: 'Feeling on edge?', tip: '🥶 Splash cold water on your face - instant reset' },
+                    { icon: '😔', text: 'Low mood?', tip: '😂 Watch something that makes you properly laugh' },
+                    { icon: '🎭', text: 'Mood swings?', tip: '💃 Put on music and dance it out for 3 mins' },
+                    { icon: '🤕', text: 'Random aches and tension?', tip: '🏃 Any movement helps - stretch, walk, shake it off' },
+                    { icon: '😴', text: 'Tired but wired?', tip: '🍫 Dark chocolate (seriously!) or something spicy' },
+                    { icon: '⚡', text: 'Wanting to do something reckless?', tip: '🎵 Blast your favourite songs loud - safer adrenaline hit' }
                 ],
                 tip: 'When you feel like doing something risky, your brain might just be hunting for endorphins. Try a safer hit: blast music, eat something spicy, dance it out, or splash cold water on your face!'
             }
@@ -2020,34 +2073,37 @@
                 </h4>
                 <p style="color: #555; margin-bottom: 20px; line-height: 1.6;">${neuro.description}</p>
 
-                <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px;">
-                    <div class="neuro-detail-section deficiency">
-                        <h5>⚠️ When It's Low You Might Feel...</h5>
-                        <ul>
-                            ${neuro.deficiency.map(item => `
-                                <li><span>${item.icon}</span> ${item.text}</li>
-                            `).join('')}
-                        </ul>
-                    </div>
-
-                    <div class="neuro-detail-section boost">
-                        <h5>✨ Quick Ways to Top It Up</h5>
-                        <ul>
-                            ${neuro.boost.map(item => `
-                                <li><span>${item.icon}</span> ${item.text}</li>
-                            `).join('')}
-                        </ul>
-                    </div>
+                <div class="symptom-checker">
+                    <h5>🤔 Tick what you're feeling right now...</h5>
+                    ${neuro.symptoms.map((item, index) => `
+                        <div class="symptom-item" onclick="toggleSymptom(this)">
+                            <div class="symptom-checkbox">✓</div>
+                            <div class="symptom-content">
+                                <div class="symptom-label">
+                                    <span>${item.icon}</span>
+                                    <span>${item.text}</span>
+                                </div>
+                                <div class="symptom-tip">
+                                    <div class="tip-label">💡 Try this:</div>
+                                    ${item.tip}
+                                </div>
+                            </div>
+                        </div>
+                    `).join('')}
                 </div>
 
-                <div style="margin-top: 20px; padding: 15px; background: linear-gradient(135deg, #ddd6fe 0%, #c4b5fd 100%); border-radius: 10px; border-left: 4px solid #8b5cf6;">
-                    <h5 style="color: #5b21b6; margin-bottom: 8px; font-size: 0.9em;">💜 Pro Tip</h5>
-                    <p style="color: #6b21a8; font-size: 0.9em; margin: 0; line-height: 1.6;">${neuro.tip}</p>
+                <div style="margin-top: 20px; padding: 15px; background: linear-gradient(135deg, #fff7ed 0%, #ffedd5 100%); border-radius: 10px; border-left: 4px solid #f97316;">
+                    <h5 style="color: #c2410c; margin-bottom: 8px; font-size: 0.9em;">🧡 Pro Tip</h5>
+                    <p style="color: #9a3412; font-size: 0.9em; margin: 0; line-height: 1.6;">${neuro.tip}</p>
                 </div>
             `;
 
             detailDiv.classList.add('active');
             detailDiv.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+
+        function toggleSymptom(element) {
+            element.classList.toggle('checked');
         }
 
         function closeNeuroDetail() {
