@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Spark Ignition - Emotional Wellness Toolkit</title>
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🔥</text></svg>">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Patrick+Hand&display=swap" rel="stylesheet">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -693,7 +693,7 @@
             }
         }
 
-        /* Journal Section */
+        /* Journal Section - Notebook Style */
         .journal-section {
             margin-top: 30px;
             padding-top: 25px;
@@ -704,6 +704,52 @@
             margin-bottom: 10px;
             font-size: 1.2em;
             text-align: center;
+        }
+        .notebook-container {
+            background: linear-gradient(to right, #fef9f0 0%, #fef9f0 40px, #fff9f0 40px, #fff9f0 100%);
+            border-radius: 8px;
+            box-shadow:
+                0 4px 15px rgba(0,0,0,0.1),
+                inset 0 0 30px rgba(0,0,0,0.02);
+            position: relative;
+            overflow: hidden;
+        }
+        .notebook-container::before {
+            content: '';
+            position: absolute;
+            left: 38px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: linear-gradient(to bottom, #ffb3b3 0%, #ff9999 100%);
+            z-index: 1;
+        }
+        .notebook-spine {
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 12px;
+            background: linear-gradient(to right, #e8d4c4 0%, #d4c4b4 100%);
+            border-right: 1px solid #c4b4a4;
+        }
+        .notebook-rings {
+            position: absolute;
+            left: 4px;
+            top: 20px;
+            bottom: 20px;
+            width: 8px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-evenly;
+            z-index: 2;
+        }
+        .ring {
+            width: 8px;
+            height: 8px;
+            border: 2px solid #888;
+            border-radius: 50%;
+            background: #f5f5f5;
         }
         .journal-prompts {
             margin-bottom: 15px;
@@ -720,42 +766,67 @@
             flex-wrap: wrap;
             gap: 8px;
             justify-content: center;
+            margin-bottom: 15px;
         }
         .prompt-chip {
             padding: 8px 14px;
-            background: linear-gradient(135deg, #f0f0f0 0%, #e8e8e8 100%);
+            background: linear-gradient(135deg, #fff5e6 0%, #ffe6cc 100%);
             border-radius: 20px;
             font-size: 0.85em;
-            color: #555;
+            color: #8b6914;
             cursor: pointer;
             transition: all 0.2s;
             border: 2px solid transparent;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
         }
         .prompt-chip:hover {
-            background: linear-gradient(135deg, #e8e8e8 0%, #ddd 100%);
+            background: linear-gradient(135deg, #ffe6cc 0%, #ffd699 100%);
             border-color: #E91E78;
             transform: translateY(-2px);
         }
         .journal-textarea {
             width: 100%;
-            min-height: 150px;
-            padding: 15px;
-            border: 2px solid #e0e0e0;
-            border-radius: 12px;
-            font-family: inherit;
-            font-size: 1em;
+            min-height: 200px;
+            padding: 20px 20px 20px 55px;
+            border: none;
+            border-radius: 0 0 8px 8px;
+            font-family: 'Patrick Hand', 'Caveat', 'Comic Sans MS', cursive;
+            font-size: 1.15em;
             resize: vertical;
-            transition: border-color 0.2s;
+            background:
+                repeating-linear-gradient(
+                    transparent,
+                    transparent 27px,
+                    #e8e8e8 27px,
+                    #e8e8e8 28px
+                );
+            background-color: transparent;
+            line-height: 28px;
+            color: #333;
+        }
+        .journal-textarea::placeholder {
+            color: #aaa;
+            font-style: italic;
         }
         .journal-textarea:focus {
             outline: none;
-            border-color: #E91E78;
+            background:
+                repeating-linear-gradient(
+                    transparent,
+                    transparent 27px,
+                    #d8d8d8 27px,
+                    #d8d8d8 28px
+                );
+            background-color: transparent;
         }
         .journal-footer {
             display: flex;
             justify-content: space-between;
             align-items: center;
             margin-top: 10px;
+            padding: 10px 15px;
+            background: #f8f4f0;
+            border-radius: 0 0 8px 8px;
         }
         .save-status {
             font-size: 0.85em;
@@ -766,8 +837,8 @@
         }
         .clear-btn {
             padding: 8px 16px;
-            background: #f0f0f0;
-            border: none;
+            background: #fff;
+            border: 1px solid #ddd;
             border-radius: 8px;
             font-size: 0.85em;
             color: #666;
@@ -968,8 +1039,8 @@
 
                 <!-- Feelings Journal -->
                 <div class="journal-section">
-                    <h3>📝 How Are You Really Feeling?</h3>
-                    <p style="text-align: center; color: #666; margin-bottom: 20px; font-size: 0.9em;">Sometimes getting it out of your head helps. No one else sees this.</p>
+                    <h3>📓 My Journal</h3>
+                    <p style="text-align: center; color: #666; margin-bottom: 20px; font-size: 0.9em;">Sometimes getting it out of your head helps. This stays private - just for you.</p>
 
                     <div class="journal-prompts">
                         <span class="prompt-label">Try starting with:</span>
@@ -982,11 +1053,21 @@
                         </div>
                     </div>
 
-                    <textarea id="journalEntry" class="journal-textarea" placeholder="Write whatever's on your mind... this saves automatically and stays on your phone only."></textarea>
-
-                    <div class="journal-footer">
-                        <span class="save-status" id="saveStatus">✓ Saved</span>
-                        <button class="clear-btn" onclick="clearJournal()">Clear</button>
+                    <div class="notebook-container">
+                        <div class="notebook-spine"></div>
+                        <div class="notebook-rings">
+                            <div class="ring"></div>
+                            <div class="ring"></div>
+                            <div class="ring"></div>
+                            <div class="ring"></div>
+                            <div class="ring"></div>
+                            <div class="ring"></div>
+                        </div>
+                        <textarea id="journalEntry" class="journal-textarea" placeholder="Write whatever's on your mind..."></textarea>
+                        <div class="journal-footer">
+                            <span class="save-status" id="saveStatus">✓ Auto-saved</span>
+                            <button class="clear-btn" onclick="clearJournal()">Clear & Save</button>
+                        </div>
                     </div>
 
                     <div class="past-entries" id="pastEntries" style="display: none;">
