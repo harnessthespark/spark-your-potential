@@ -874,42 +874,42 @@
 
                 <div class="state-grid">
                     <div class="state-option ignited" onclick="selectState('ignited')">
-                        <div class="state-icon">🔥</div>
+                        <div class="state-icon">✨</div>
                         <div class="state-info">
-                            <h3>Ignited</h3>
-                            <p>I'm in my window. I can think, feel, and choose.</p>
+                            <h3>Feeling Good</h3>
+                            <p>I'm in a good headspace right now</p>
                         </div>
                     </div>
 
                     <div class="state-option dysreg-upper" onclick="selectState('dysreg-upper')">
-                        <div class="state-icon">📈</div>
+                        <div class="state-icon">😤</div>
                         <div class="state-info">
-                            <h3>Starting to Escalate</h3>
-                            <p>I'm noticing anxiety or agitation building. Not crisis yet.</p>
+                            <h3>Getting Wound Up</h3>
+                            <p>Something's bothering me, stress is building</p>
                         </div>
                     </div>
 
                     <div class="state-option hyper" onclick="selectState('hyper')">
-                        <div class="state-icon">⚡</div>
+                        <div class="state-icon">🌀</div>
                         <div class="state-info">
-                            <h3>Hyper-Aroused</h3>
-                            <p>Meltdown mode. Racing thoughts, can't stop the tornado.</p>
+                            <h3>Totally Overwhelmed</h3>
+                            <p>Too much right now, can't think straight</p>
                         </div>
                     </div>
 
                     <div class="state-option dysreg-lower" onclick="selectState('dysreg-lower')">
-                        <div class="state-icon">📉</div>
+                        <div class="state-icon">😔</div>
                         <div class="state-info">
-                            <h3>Starting to Collapse</h3>
-                            <p>I'm noticing overwhelm or disconnection starting. Still here.</p>
+                            <h3>Running on Empty</h3>
+                            <p>Energy's draining, starting to shut down</p>
                         </div>
                     </div>
 
                     <div class="state-option hypo" onclick="selectState('hypo')">
-                        <div class="state-icon">🥶</div>
+                        <div class="state-icon">🧊</div>
                         <div class="state-info">
-                            <h3>Hypo-Aroused</h3>
-                            <p>Shutdown mode. Numb, frozen, can't feel or move.</p>
+                            <h3>Completely Flat</h3>
+                            <p>Numb, can't feel anything, checked out</p>
                         </div>
                     </div>
                 </div>
@@ -1021,9 +1021,9 @@
 
         const STATES = {
             'ignited': {
-                icon: '🔥',
-                name: 'Ignited',
-                zone: 'Green Zone - Window of Tolerance',
+                icon: '✨',
+                name: 'Feeling Good',
+                zone: 'You\'re in a great place right now',
                 color: 'ignited',
                 experience: "You can access your full range right now. You can think clearly, feel your emotions without drowning in them, and make genuine choices. This is your baseline optimal state - not 'calm' necessarily, but regulated.",
                 neurology: "Your Default Mode Network (DMN - internal processing, reflection) and Task Positive Network (TPN - external focus, action) are both accessible. You can switch between them fluidly. This flexibility IS emotional regulation.",
@@ -1104,9 +1104,9 @@
                 ]
             },
             'hyper': {
-                icon: '⚡',
-                name: 'Hyper-Aroused',
-                zone: 'Red Zone - Activation Crisis',
+                icon: '🌀',
+                name: 'Totally Overwhelmed',
+                zone: 'Everything feels like too much right now',
                 color: 'hyper',
                 experience: "Your mind is racing. Thoughts spiral into worst-case scenarios. You might feel anxious, angry, panicked, or like you need to DO something RIGHT NOW. Everything feels urgent and catastrophic.",
                 neurology: "You're stuck in rumination spirals - your Default Mode Network (internal processing) is in overdrive, generating catastrophic thinking loops. You can't access calm external focus because your nervous system is in fight-or-flight.",
@@ -1219,9 +1219,9 @@
                 ]
             },
             'hypo': {
-                icon: '🥶',
-                name: 'Hypo-Aroused',
-                zone: 'Blue Zone - Deactivation Crisis',
+                icon: '🧊',
+                name: 'Completely Flat',
+                zone: 'Feeling numb and disconnected',
                 color: 'hypo',
                 experience: "You feel numb, empty, disconnected. It's hard to move or care about anything. You might feel frozen, exhausted beyond normal tired, or like you're watching life from behind glass. Everything feels pointless or too hard.",
                 neurology: "Both your internal and external focus networks have gone offline as a protective shutdown. Your nervous system has decided the overwhelm is too much and has collapsed into freeze/flop response. This is 'last resort' protection mode.",
@@ -1335,9 +1335,9 @@
                 ]
             },
             'dysreg-upper': {
-                icon: '📈',
-                name: 'Starting to Escalate',
-                zone: 'Yellow Zone - Trending Red',
+                icon: '😤',
+                name: 'Getting Wound Up',
+                zone: 'Stress is building up',
                 color: 'dysreg-upper',
                 experience: "You can feel it building. Anxiety is creeping up, thoughts are starting to race, patience is thinning. You're not in crisis yet, but you can feel the escalation starting. Your window is narrowing.",
                 neurology: "Your nervous system is beginning to mobilise for fight-or-flight, but you still have access to clear thinking. This is the CRITICAL intervention window - you can still think clearly enough to use tools. Once you tip over, it's much harder.",
@@ -1418,9 +1418,9 @@
                 ]
             },
             'dysreg-lower': {
-                icon: '📉',
-                name: 'Starting to Collapse',
-                zone: 'Purple Zone - Trending Blue',
+                icon: '😔',
+                name: 'Running on Empty',
+                zone: 'Energy is draining away',
                 color: 'dysreg-lower',
                 experience: "You can feel yourself pulling away, disconnecting. Overwhelm is building but instead of speeding up, you're slowing down. Motivation is draining. Focus is fuzzing. You're starting to feel foggy.",
                 neurology: "Your nervous system is beginning to move toward protective shutdown. You can still think and act, but the window is narrowing. Energy conservation mode is activating.",
