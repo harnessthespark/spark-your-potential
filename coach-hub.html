@@ -2420,27 +2420,34 @@
                 return;
             }
 
+            // Generate a temporary password for the new client
+            const tempPassword = 'Spark' + Math.random().toString(36).substring(2, 8) + '!';
+
             try {
-                const response = await fetch(`${API_BASE}/api/crm/syp/coach/clients/`, {
+                // Use SYP Express API (not SparkHub Django)
+                const response = await fetch('/api/admin/create-client', {
                     method: 'POST',
                     headers: {
-                        'Authorization': `Token ${authToken}`,
                         'Content-Type': 'application/json'
                     },
                     body: JSON.stringify({
-                        full_name: name,
                         email: email,
-                        programme_type: programme,
-                        programme_status: 'enrolled'
+                        name: name,
+                        password: tempPassword,
+                        programmeAccess: programme,
+                        adminKey: 'spark-admin-2025'
                     })
                 });
 
-                if (response.ok) {
+                const result = await response.json();
+
+                if (result.success) {
                     closeAddClientModal();
                     await loadClients();
+                    // Show the temporary password so coach can share with client
+                    alert(`✅ Client created successfully!\n\nEmail: ${email}\nTemporary Password: ${tempPassword}\n\nPlease share these credentials with the client.`);
                 } else {
-                    const error = await response.json();
-                    alert('Error: ' + (error.detail || 'Failed to add client'));
+                    alert('Error: ' + (result.error || 'Failed to add client'));
                 }
             } catch (error) {
                 console.error('Add client error:', error);
