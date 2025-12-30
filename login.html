@@ -508,8 +508,12 @@
             } else if (access === 'audhd') {
                 // Go to AuDHD Life Coaching portal
                 window.location.href = 'audhd-dashboard.html';
+            } else if (access === 'blended' || access === 'career') {
+                // Blended (Career + Mind) and Career Booster go to client portal
+                // Blended clients see both Career tools AND Mind Management tools
+                window.location.href = 'client-portal.html';
             } else {
-                // Default: Go to Career Booster client portal
+                // Default: client portal
                 window.location.href = 'client-portal.html';
             }
         }

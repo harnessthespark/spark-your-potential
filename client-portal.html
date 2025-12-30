@@ -1700,7 +1700,11 @@
 
             // Update portal title based on programme type
             const isSparkClient = client.programmeType === 'audhd';
-            document.getElementById('portalTitle').textContent = isSparkClient ? 'Your Spark Toolkit' : 'Your Career Toolkit';
+            const isBlendedClient = client.programmeType === 'blended';
+            let portalTitle = 'Your Career Toolkit';
+            if (isSparkClient) portalTitle = 'Your Spark Toolkit';
+            if (isBlendedClient) portalTitle = 'Your Complete Toolkit';
+            document.getElementById('portalTitle').textContent = portalTitle;
 
             // Calculate stats
             const stageIndex = STAGES.findIndex(s => s.id === client.status);
@@ -1845,10 +1849,64 @@
             // Use client-specific file paths if available, otherwise fall back to generated names
             const files = client.files || {};
 
-            // Check if Spark client
+            // Check if Spark client or Blended client
             const isSparkClient = client.programmeType === 'audhd';
+            const isBlendedClient = client.programmeType === 'blended';
 
-            // Spark clients get different tools
+            // Spark tools (for Spark-only and Blended clients)
+            const sparkTools = [
+                {
+                    icon: '🧠',
+                    title: 'Brain Dump',
+                    description: 'Capture thoughts, ideas, and tasks as they come. Get them out of your head.',
+                    file: 'audhd-braindump.html',
+                    btnText: 'Open Brain Dump',
+                    alwaysUnlocked: true,
+                    statusWhenComplete: 'ready',
+                    badge: '☁️ Syncs'
+                },
+                {
+                    icon: '⚡',
+                    title: 'Energy Tracker',
+                    description: 'Track your energy levels throughout the day. Spot patterns and plan around your peaks.',
+                    file: 'audhd-energy.html',
+                    btnText: 'Track Energy',
+                    alwaysUnlocked: true,
+                    statusWhenComplete: 'ready',
+                    badge: '☁️ Syncs'
+                },
+                {
+                    icon: '✨',
+                    title: 'Spark Collector',
+                    description: 'Track daily wins and plan your first step for tomorrow. Build momentum.',
+                    file: 'spark-collector.html',
+                    btnText: 'Collect Sparks',
+                    alwaysUnlocked: true,
+                    statusWhenComplete: 'ready',
+                    badge: '☁️ Syncs'
+                },
+                {
+                    icon: '🎯',
+                    title: 'Spark Foundations',
+                    description: 'Your personalised foundations worksheets and reflections.',
+                    file: 'audhd-foundations.html',
+                    btnText: 'Open Foundations',
+                    alwaysUnlocked: true,
+                    statusWhenComplete: 'ready',
+                    badge: '☁️ Syncs'
+                },
+                {
+                    icon: '📝',
+                    title: 'Session Notes',
+                    description: 'Notes and reflections from your coaching sessions.',
+                    file: 'audhd-session-notes.html',
+                    btnText: 'View Notes',
+                    alwaysUnlocked: true,
+                    statusWhenComplete: 'reference'
+                }
+            ];
+
+            // Spark clients get Spark tools only
             if (isSparkClient) {
                 const audhdTools = [
                     {
@@ -1974,6 +2032,66 @@
                     statusWhenComplete: 'ready'
                 }
             ];
+
+            // BLENDED CLIENTS: Show Career tools + Spark tools together
+            if (isBlendedClient) {
+                // Build combined tools array with section headers
+                let blendedHTML = '';
+
+                // Career Section Header
+                blendedHTML += `
+                    <div class="tools-section-header" style="grid-column: 1 / -1; margin: 20px 0 10px 0; padding-bottom: 10px; border-bottom: 2px solid var(--primary-gold);">
+                        <h3 style="color: var(--primary-gold); margin: 0; font-size: 1.1rem;">💼 Career Tools</h3>
+                    </div>
+                `;
+
+                // Career tools
+                blendedHTML += tools.map(tool => {
+                    const isUnlocked = tool.alwaysUnlocked || stageIndex >= tool.unlockStage || client.status === 'complete';
+                    let cardClass = 'tool-card';
+                    let statusClass = 'status-ready';
+                    let statusText = tool.badge || 'Ready';
+
+                    if (!isUnlocked) {
+                        cardClass += ' locked';
+                        statusClass = 'status-locked';
+                        statusText = '🔒 Locked';
+                    }
+
+                    return `
+                        <div class="${cardClass}">
+                            <div class="tool-icon">${tool.icon}</div>
+                            <h3>${tool.title}</h3>
+                            <span class="status-badge ${statusClass}">${statusText}</span>
+                            <p>${tool.description}</p>
+                            <a href="${isUnlocked ? tool.file : '#'}" class="tool-btn" ${!isUnlocked ? 'onclick="return false;"' : ''}>${tool.btnText}</a>
+                        </div>
+                    `;
+                }).join('');
+
+                // Mind Management Section Header
+                blendedHTML += `
+                    <div class="tools-section-header" style="grid-column: 1 / -1; margin: 30px 0 10px 0; padding-bottom: 10px; border-bottom: 2px solid var(--accent-purple, #8B5CF6);">
+                        <h3 style="color: var(--accent-purple, #8B5CF6); margin: 0; font-size: 1.1rem;">✨ Mind Management Tools</h3>
+                    </div>
+                `;
+
+                // Spark tools (all unlocked for blended clients)
+                blendedHTML += sparkTools.map(tool => {
+                    return `
+                        <div class="tool-card">
+                            <div class="tool-icon">${tool.icon}</div>
+                            <h3>${tool.title}</h3>
+                            <span class="status-badge status-ready">${tool.badge || 'Ready'}</span>
+                            <p>${tool.description}</p>
+                            <a href="${tool.file}" class="tool-btn">${tool.btnText}</a>
+                        </div>
+                    `;
+                }).join('');
+
+                container.innerHTML = blendedHTML;
+                return;
+            }
 
             container.innerHTML = tools.map(tool => {
                 const isUnlocked = tool.alwaysUnlocked || stageIndex >= tool.unlockStage || client.status === 'complete';
