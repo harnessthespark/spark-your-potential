@@ -3,8 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vibe Checker ✨</title>
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>✨</text></svg>">
+    <title>Vibe Checker</title>
+
+    <!-- PWA Meta Tags -->
+    <meta name="theme-color" content="#f97316">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="Vibe Check">
+    <meta name="description" content="Your feel-good toolkit - check in with yourself and find what helps">
+
+    <!-- PWA Manifest & Icons -->
+    <link rel="manifest" href="pwa/vibe-checker/manifest.json">
+    <link rel="icon" href="pwa/vibe-checker/icon-192.png" type="image/png">
+    <link rel="apple-touch-icon" href="pwa/vibe-checker/icon-192.png">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Patrick+Hand&display=swap" rel="stylesheet">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -2406,6 +2417,15 @@
         // Initialize - no auth check, just load data
         loadUserData();
         loadJournalData();
+
+        // Register service worker for PWA
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('pwa/vibe-checker/sw.js')
+                    .then(reg => console.log('Vibe Checker SW registered'))
+                    .catch(err => console.log('SW registration failed:', err));
+            });
+        }
     </script>
 </body>
 </html>

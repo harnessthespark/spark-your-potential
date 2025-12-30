@@ -1,0 +1,27 @@
+{
+  "name": "Vibe Checker",
+  "short_name": "Vibe Check",
+  "description": "Your feel-good toolkit - check in with yourself and find what helps",
+  "start_url": "/spark-ignition-standalone.html",
+  "display": "standalone",
+  "background_color": "#fef3c7",
+  "theme_color": "#f97316",
+  "orientation": "portrait-primary",
+  "lang": "en-GB",
+  "icons": [
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["health", "lifestyle", "utilities"],
+  "screenshots": []
+}
