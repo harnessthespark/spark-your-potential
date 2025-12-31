@@ -958,6 +958,50 @@ app.get('/api/spark-collector/:clientEmail', async (req, res) => {
 });
 
 // ============================================
+// AGREEMENT ENDPOINTS (PostgreSQL)
+// ============================================
+
+// Save signed agreement
+app.post('/api/agreement', async (req, res) => {
+    try {
+        const agreementData = req.body;
+
+        if (!agreementData.client_email || !agreementData.signature) {
+            return res.status(400).json({
+                success: false,
+                error: 'client_email and signature are required'
+            });
+        }
+
+        const result = await db.saveAgreement(agreementData);
+        console.log(`📝 Agreement signed: ${agreementData.client_name} (${agreementData.programme_type})`);
+
+        res.json({ success: true, agreement: result });
+    } catch (error) {
+        console.error('Agreement save error:', error);
+        res.status(500).json({ success: false, error: error.message });
+    }
+});
+
+// Get agreement by email
+app.get('/api/agreement/:clientEmail', async (req, res) => {
+    try {
+        const { clientEmail } = req.params;
+
+        const agreement = await db.getAgreement(clientEmail);
+
+        if (!agreement) {
+            return res.json({ success: true, agreement: null });
+        }
+
+        res.json({ success: true, agreement });
+    } catch (error) {
+        console.error('Agreement fetch error:', error);
+        res.status(500).json({ success: false, error: error.message });
+    }
+});
+
+// ============================================
 // EMERGENCY SUPPORT ENDPOINT
 // ============================================
 

@@ -648,6 +648,78 @@ async function getSparkCollector(userEmail) {
     };
 }
 
+// =============================================
+// AGREEMENT FUNCTIONS
+// =============================================
+
+async function saveAgreement(agreementData) {
+    // Ensure agreements table exists
+    await pool.query(`
+        CREATE TABLE IF NOT EXISTS agreements (
+            id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+            client_email VARCHAR(255) NOT NULL UNIQUE,
+            client_name VARCHAR(255),
+            programme_type VARCHAR(50),
+            signature TEXT,
+            signature_type VARCHAR(20),
+            signed_date DATE,
+            agreed_to_terms BOOLEAN DEFAULT false,
+            agreed_to_feedback BOOLEAN DEFAULT false,
+            consent_to_recording BOOLEAN DEFAULT false,
+            is_beta_tester BOOLEAN DEFAULT false,
+            fee_status VARCHAR(50),
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        )
+    `);
+
+    const result = await pool.query(`
+        INSERT INTO agreements (
+            client_email, client_name, programme_type, signature, signature_type,
+            signed_date, agreed_to_terms, agreed_to_feedback, consent_to_recording,
+            is_beta_tester, fee_status
+        ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)
+        ON CONFLICT (client_email) DO UPDATE SET
+            client_name = EXCLUDED.client_name,
+            programme_type = EXCLUDED.programme_type,
+            signature = EXCLUDED.signature,
+            signature_type = EXCLUDED.signature_type,
+            signed_date = EXCLUDED.signed_date,
+            agreed_to_terms = EXCLUDED.agreed_to_terms,
+            agreed_to_feedback = EXCLUDED.agreed_to_feedback,
+            consent_to_recording = EXCLUDED.consent_to_recording,
+            is_beta_tester = EXCLUDED.is_beta_tester,
+            fee_status = EXCLUDED.fee_status,
+            updated_at = CURRENT_TIMESTAMP
+        RETURNING *
+    `, [
+        agreementData.client_email,
+        agreementData.client_name,
+        agreementData.programme_type,
+        agreementData.signature,
+        agreementData.signature_type,
+        agreementData.signed_date,
+        agreementData.agreed_to_terms || false,
+        agreementData.agreed_to_feedback || false,
+        agreementData.consent_to_recording || false,
+        agreementData.is_beta_tester || false,
+        agreementData.fee_status || 'paid'
+    ]);
+
+    return result.rows[0];
+}
+
+async function getAgreement(clientEmail) {
+    const result = await pool.query(
+        'SELECT * FROM agreements WHERE client_email = $1',
+        [clientEmail]
+    );
+
+    if (result.rows.length === 0) return null;
+
+    return result.rows[0];
+}
+
 module.exports = {
     pool,
     initDatabase,
@@ -667,5 +739,7 @@ module.exports = {
     getHomework,
     getAllHomework,
     saveSparkCollector,
-    getSparkCollector
+    getSparkCollector,
+    saveAgreement,
+    getAgreement
 };
