@@ -108,6 +108,31 @@ app.post('/api/login', async (req, res) => {
     }
 });
 
+// Change password (used after first login with temp password)
+app.post('/api/change-password', async (req, res) => {
+    try {
+        const { email, newPassword } = req.body;
+        if (!email || !newPassword) {
+            return res.status(400).json({ success: false, error: 'Email and new password are required' });
+        }
+
+        // Validate password strength
+        if (newPassword.length < 8) {
+            return res.status(400).json({ success: false, error: 'Password must be at least 8 characters' });
+        }
+
+        const result = await db.changePassword(email, newPassword);
+        if (!result.success) {
+            return res.status(404).json(result);
+        }
+
+        res.json({ success: true, message: 'Password changed successfully' });
+    } catch (error) {
+        console.error('Change password error:', error);
+        res.status(500).json({ success: false, error: error.message });
+    }
+});
+
 // Legacy: Get or create user (simple email-based - for demo mode)
 app.post('/api/user', async (req, res) => {
     try {
@@ -195,6 +220,28 @@ app.post('/api/admin/reset-password', async (req, res) => {
         res.json({ success: true, user: { id: user.id, email: user.email } });
     } catch (error) {
         console.error('Reset password error:', error);
+        res.status(500).json({ success: false, error: error.message });
+    }
+});
+
+// Set must_change_password flag (admin only)
+app.post('/api/admin/set-must-change-password', async (req, res) => {
+    try {
+        const { email, mustChange, adminKey } = req.body;
+
+        const ADMIN_KEY = process.env.ADMIN_KEY || 'spark-admin-2025';
+        if (adminKey !== ADMIN_KEY) {
+            return res.status(403).json({ success: false, error: 'Invalid admin key' });
+        }
+
+        if (!email) {
+            return res.status(400).json({ success: false, error: 'Email is required' });
+        }
+
+        const result = await db.setMustChangePassword(email, mustChange !== false);
+        res.json(result);
+    } catch (error) {
+        console.error('Set must change password error:', error);
         res.status(500).json({ success: false, error: error.message });
     }
 });

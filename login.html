@@ -463,11 +463,23 @@
                         name: data.user.name || data.user.full_name || email.split('@')[0],
                         is_admin: data.user.is_admin || false,
                         programme_access: data.user.programme_access || 'career',
-                        programme_status: data.user.programme_status || 'enrolled'
+                        programme_status: data.user.programme_status || 'enrolled',
+                        must_change_password: data.user.must_change_password || false
                     };
 
                     localStorage.setItem('syp_user', JSON.stringify(userData));
                     localStorage.setItem('syp_client_email', email);
+
+                    // Check if user needs to change their password (first login with temp password)
+                    if (data.user.must_change_password) {
+                        localStorage.setItem('syp_pending_password_change', email);
+                        successDiv.textContent = 'Please set your password...';
+                        successDiv.style.display = 'block';
+                        setTimeout(() => {
+                            window.location.href = 'change-password.html';
+                        }, 500);
+                        return;
+                    }
 
                     // Show success
                     successDiv.textContent = 'Login successful!';

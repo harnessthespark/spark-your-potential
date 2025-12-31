@@ -84,6 +84,11 @@ async function initDatabase() {
             ALTER TABLE users ADD COLUMN IF NOT EXISTS programme_status VARCHAR(50) DEFAULT 'enrolled';
         `);
 
+        // Add must_change_password column - forces password change on first login
+        await client.query(`
+            ALTER TABLE users ADD COLUMN IF NOT EXISTS must_change_password BOOLEAN DEFAULT false;
+        `);
+
         // Add full_name column for display name
         await client.query(`
             ALTER TABLE users ADD COLUMN IF NOT EXISTS full_name VARCHAR(255);
@@ -341,8 +346,9 @@ async function loginUser(email, password) {
  * @param {string} name - Client name
  * @param {string} password - Client password
  * @param {string} programmeAccess - 'career', 'audhd', or 'both'
+ * @param {boolean} isTempPassword - If true, forces password change on first login
  */
-async function createClientAccount(email, name, password, programmeAccess = 'career') {
+async function createClientAccount(email, name, password, programmeAccess = 'career', isTempPassword = true) {
     // Check if user already exists
     const existing = await pool.query(
         'SELECT id FROM users WHERE email = $1',
@@ -353,10 +359,10 @@ async function createClientAccount(email, name, password, programmeAccess = 'car
         // Update existing user with password and programme access
         const hashedPassword = hashPassword(password);
         const result = await pool.query(
-            `UPDATE users SET name = COALESCE($2, name), password_hash = $3, programme_access = $4, updated_at = NOW()
+            `UPDATE users SET name = COALESCE($2, name), password_hash = $3, programme_access = $4, must_change_password = $5, updated_at = NOW()
              WHERE email = $1
              RETURNING *`,
-            [email, name, hashedPassword, programmeAccess]
+            [email, name, hashedPassword, programmeAccess, isTempPassword]
         );
         return result.rows[0];
     }
@@ -364,10 +370,10 @@ async function createClientAccount(email, name, password, programmeAccess = 'car
     // Create new user with password and programme access
     const hashedPassword = hashPassword(password);
     const result = await pool.query(
-        `INSERT INTO users (email, name, password_hash, programme_access, last_login)
-         VALUES ($1, $2, $3, $4, NOW())
+        `INSERT INTO users (email, name, password_hash, programme_access, must_change_password, last_login)
+         VALUES ($1, $2, $3, $4, $5, NOW())
          RETURNING *`,
-        [email, name, hashedPassword, programmeAccess]
+        [email, name, hashedPassword, programmeAccess, isTempPassword]
     );
     return result.rows[0];
 }
@@ -720,6 +726,48 @@ async function getAgreement(clientEmail) {
     return result.rows[0];
 }
 
+/**
+ * Change user password and clear must_change_password flag
+ * @param {string} email - User email
+ * @param {string} newPassword - New password
+ */
+async function changePassword(email, newPassword) {
+    const hashedPassword = hashPassword(newPassword);
+    const result = await pool.query(
+        `UPDATE users
+         SET password_hash = $2, must_change_password = false, updated_at = NOW()
+         WHERE email = $1
+         RETURNING id, email, name, must_change_password`,
+        [email, hashedPassword]
+    );
+
+    if (result.rows.length === 0) {
+        return { success: false, error: 'User not found' };
+    }
+
+    return { success: true, user: result.rows[0] };
+}
+
+/**
+ * Set must_change_password flag for a user
+ * @param {string} email - User email
+ * @param {boolean} mustChange - Whether password change is required
+ */
+async function setMustChangePassword(email, mustChange = true) {
+    const result = await pool.query(
+        `UPDATE users SET must_change_password = $2, updated_at = NOW()
+         WHERE email = $1
+         RETURNING *`,
+        [email, mustChange]
+    );
+
+    if (result.rows.length === 0) {
+        return { success: false, error: 'User not found' };
+    }
+
+    return { success: true, user: result.rows[0] };
+}
+
 module.exports = {
     pool,
     initDatabase,
@@ -741,5 +789,7 @@ module.exports = {
     saveSparkCollector,
     getSparkCollector,
     saveAgreement,
-    getAgreement
+    getAgreement,
+    changePassword,
+    setMustChangePassword
 };
