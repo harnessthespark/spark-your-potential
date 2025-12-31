@@ -482,4 +482,57 @@ python manage.py shell -c "[command above]"
 | Deb Briggs | deborah_armstrong@hotmail.com | audhd | ✅ |
 | Donald Pirie | donaldpirie111@hotmail.co.uk | career | ✅ |
 | Raj Samuel | rs@rajsamuel.net | career | ✅ |
+| Peter Morgan | pete_morgan69@hotmail.com | blended | ✅ |
 | Lisa Gills (Test) | lisa.gills@icloud.com | audhd | ✅ |
+
+### 31 December 2025 - Password Reset System & Client Portal Fixes
+
+**Automated Password Reset Email System:**
+- Implemented complete password reset flow with secure tokens
+- Added nodemailer for email sending
+- Tokens expire after 1 hour, single-use only
+
+**New Files Created:**
+- `reset-password.html` - Token verification and password reset form
+
+**New API Endpoints (server.js):**
+- `POST /api/request-password-reset` - Generates token, sends email
+- `POST /api/reset-password` - Validates token, changes password
+- `GET /api/verify-reset-token/:token` - Checks token validity
+
+**Database Changes (db.js):**
+- `password_reset_tokens` table for secure token storage
+- `createPasswordResetToken()` - Generate secure 64-char token
+- `verifyPasswordResetToken()` - Validate token exists, not used, not expired
+- `markTokenUsed()` - Invalidate token after use
+
+**SMTP Configuration (DigitalOcean Environment Variables):**
+| Variable | Value |
+|----------|-------|
+| `SMTP_HOST` | `smtp.gmail.com` |
+| `SMTP_PORT` | `587` |
+| `SMTP_USER` | `lisa@harnessthespark.com` |
+| `SMTP_PASS` | Gmail App Password |
+| `APP_URL` | `https://career.harnessthespark.com` |
+
+**Password Reset Flow:**
+1. User clicks "Forgot password?" on login.html
+2. Enters email on forgot-password.html
+3. System generates secure token, sends branded HTML email
+4. User clicks link → reset-password.html?token=xxx
+5. Page verifies token, shows password form
+6. User sets new password → redirects to login
+
+**Client Portal Fix:**
+- Added Spark Collector to AuDHD/Spark client tools (was missing)
+- Now appears between Energy Tracker and Spark Foundations
+
+**Peter Morgan Client Notes:**
+- **Programme:** Blended (Career + Mind Management)
+- **Personal Context:** Diagnosed OCD. Does NOT identify as neurodivergent (important to respect). Lisa observes some ND-adjacent traits alongside OCD.
+- **Approach:** Blended programme gives access to Spark tools without ND labelling - meeting him where he is.
+
+**Git Commits:**
+- `38815c6` - feat: add automated password reset email system
+- `c69e8f3` - fix: add Spark Collector to AuDHD client portal tools
+- `60b743b` - docs: update Peter Morgan client context
