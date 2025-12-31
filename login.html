@@ -97,6 +97,18 @@
         .form-group input::placeholder {
             color: #aaa;
         }
+        .forgot-link {
+            display: block;
+            text-align: right;
+            margin-top: 8px;
+            font-size: 0.85em;
+            color: #8B5CF6;
+            text-decoration: none;
+        }
+        .forgot-link:hover {
+            color: #A855F7;
+            text-decoration: underline;
+        }
 
         .login-btn {
             width: 100%;
@@ -326,6 +338,7 @@
                         required
                         autocomplete="current-password"
                     >
+                    <a href="forgot-password.html" class="forgot-link">Forgot password?</a>
                 </div>
 
                 <button type="submit" class="login-btn" id="loginBtn">
@@ -335,7 +348,6 @@
 
             <div class="help-text">
                 <p>New client? Lisa will set up your account.</p>
-                <p>Forgot password? <a href="mailto:lisa@harnessthespark.com">Contact Lisa</a></p>
             </div>
         </div>
 

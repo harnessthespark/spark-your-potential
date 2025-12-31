@@ -133,6 +133,26 @@ app.post('/api/change-password', async (req, res) => {
     }
 });
 
+// Request password reset (logs request - Lisa handles manually for now)
+app.post('/api/request-password-reset', async (req, res) => {
+    try {
+        const { email } = req.body;
+        if (!email) {
+            return res.status(400).json({ success: false, error: 'Email is required' });
+        }
+
+        // Log the reset request (in production, this would send an email)
+        console.log(`🔐 Password reset requested for: ${email} at ${new Date().toISOString()}`);
+
+        // Always return success (don't reveal if email exists for security)
+        res.json({ success: true, message: 'If this email exists, a reset link will be sent.' });
+    } catch (error) {
+        console.error('Password reset request error:', error);
+        // Still return success for security
+        res.json({ success: true, message: 'If this email exists, a reset link will be sent.' });
+    }
+});
+
 // Legacy: Get or create user (simple email-based - for demo mode)
 app.post('/api/user', async (req, res) => {
     try {
