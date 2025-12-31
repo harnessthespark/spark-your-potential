@@ -44,6 +44,23 @@ This document contains important context for Claude to remember across sessions 
   - Job Search Plan
   - 90-Day Action Plan
 
+### Blended Programme (Career + Mind Management)
+- **Price:** TBC (currently beta testing - gratis for testers)
+- **Audience:** People who need career clarity AND struggle with getting started
+- **Combines:**
+  - Career Discovery tools (Blueprint, CV Builder, Decision Framework)
+  - Mind Management tools (Brain Dump, Energy Tracker, Spark Collector, Foundations)
+- **Approach:** Build momentum with quick wins before deep career work
+- **Journey:**
+  1. Welcome Call — portal tour, tool demos
+  2. Quick Wins — Spark Collector + Energy Tracker (3-4 days)
+  3. Foundations — self-understanding worksheets
+  4. Career Discovery — questionnaire during peak energy
+  5. Integration — connect patterns
+  6. Blueprint & Positioning
+  7. Implementation — CV, LinkedIn
+- **Template:** `templates/Blended_Programme_Outline.html`
+
 ## Current Clients
 
 ### Donald Pirie
@@ -59,6 +76,7 @@ This document contains important context for Claude to remember across sessions 
 - **Email:** rs@rajsamuel.net
 - **Status:** Week 2 (Questionnaire complete)
 - **Programme:** 4-Week Career Booster
+- **Background:** Marketing/Brand
 - **Enrolled:** December 2025
 - **Folder:** `/Raj_Samuel/`
 - **Files created:**
@@ -68,6 +86,21 @@ This document contains important context for Claude to remember across sessions 
   - `Raj_Samuel_Discovery_Questionnaire.html` - Original form
 - **Progress:** Questionnaire complete, ready for Week 2 sessions
 
+### Peter Morgan (December 2025) — BETA TESTER
+- **Email:** pete_morgan69@hotmail.com
+- **Status:** Pre-programme (Welcome Call TBC)
+- **Programme:** Blended (Career + Mind Management) — GRATIS in exchange for feedback
+- **Background:** Systems Engineer at Kyndryl, on Lloyds Bank account
+- **Career Challenge:** Needs to pivot to stay relevant — exploring AI in his role
+- **Personal Challenge:** OCD traits, struggles with getting started
+- **Enrolled:** December 2025
+- **Folder:** `/Peter_Morgan/`
+- **Files created:**
+  - `Peter_Morgan_Coaching_Agreement.html` - Pending signature (notes gratis terms)
+  - `Peter_Morgan_Welcome_Call_Agenda.html` - 30-45 min intro call structure
+- **Approach:** Technical mindset — appreciates systems thinking, frameworks. Build momentum before deep career work.
+- **Progress:** Account created, awaiting Welcome Call
+
 ## Folder Structure
 ```
 /spark-your-potential/
@@ -75,12 +108,16 @@ This document contains important context for Claude to remember across sessions 
 ├── CLAUDE.md              # This file (Claude memory)
 ├── templates/             # Reusable templates
 │   ├── coaching_agreement.html
-│   └── programme_outline.html
-├── Donald/                # Donald Pirie's files
+│   ├── programme_outline.html
+│   └── Blended_Programme_Outline.html
+├── Donald/                # Donald Pirie's files (Career - Complete)
 │   └── [completed deliverables]
-└── Raj_Samuel/            # Raj Samuel's files
-    ├── Raj_Samuel_Coaching_Agreement.html
-    └── Raj_Samuel_Programme_Outline.html
+├── Raj_Samuel/            # Raj Samuel's files (Career - Week 2)
+│   ├── Raj_Samuel_Coaching_Agreement.html
+│   └── Raj_Samuel_Programme_Outline.html
+└── Peter_Morgan/          # Peter Morgan's files (Blended - Beta Tester)
+    ├── Peter_Morgan_Coaching_Agreement.html
+    └── Peter_Morgan_Welcome_Call_Agenda.html
 ```
 
 ## Authentication
