@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blended Programme Outline - Harness the Spark</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            color: #333;
+            line-height: 1.7;
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+        .logo {
+            font-size: 1.3em;
+            font-weight: 600;
+            color: #666;
+            margin-bottom: 20px;
+        }
+        .logo span { color: #8B5CF6; }
+        h1 {
+            font-size: 2.5em;
+            font-weight: 700;
+            background: linear-gradient(135deg, #8B5CF6 0%, #EC4899 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 15px;
+        }
+        .subtitle {
+            font-size: 1.2em;
+            color: #666;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        .intro-box {
+            background: white;
+            border-radius: 16px;
+            padding: 35px;
+            margin-bottom: 40px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            border-left: 5px solid #8B5CF6;
+        }
+        .intro-box h2 {
+            color: #8B5CF6;
+            margin-bottom: 15px;
+            font-size: 1.4em;
+        }
+        .intro-box p {
+            color: #555;
+            font-size: 1.05em;
+        }
+        .two-pillars {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+        .pillar {
+            background: white;
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+        }
+        .pillar.career {
+            border-top: 4px solid #F59E0B;
+        }
+        .pillar.mind {
+            border-top: 4px solid #8B5CF6;
+        }
+        .pillar-icon {
+            font-size: 2.5em;
+            margin-bottom: 15px;
+        }
+        .pillar h3 {
+            font-size: 1.3em;
+            margin-bottom: 15px;
+        }
+        .pillar.career h3 { color: #D97706; }
+        .pillar.mind h3 { color: #7C3AED; }
+        .pillar ul {
+            list-style: none;
+            padding: 0;
+        }
+        .pillar li {
+            padding: 8px 0;
+            padding-left: 25px;
+            position: relative;
+            color: #555;
+        }
+        .pillar li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: #10B981;
+            font-weight: bold;
+        }
+        .journey-section {
+            background: white;
+            border-radius: 16px;
+            padding: 40px;
+            margin-bottom: 40px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+        }
+        .journey-section h2 {
+            text-align: center;
+            font-size: 1.6em;
+            margin-bottom: 35px;
+            color: #333;
+        }
+        .journey-step {
+            display: flex;
+            gap: 25px;
+            margin-bottom: 30px;
+            padding-bottom: 30px;
+            border-bottom: 1px solid #eee;
+        }
+        .journey-step:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+        .step-number {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #8B5CF6 0%, #EC4899 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            font-size: 1.2em;
+            flex-shrink: 0;
+        }
+        .step-content h3 {
+            font-size: 1.2em;
+            color: #333;
+            margin-bottom: 8px;
+        }
+        .step-content p {
+            color: #666;
+            margin-bottom: 10px;
+        }
+        .step-tags {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        .tag {
+            font-size: 0.8em;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-weight: 500;
+        }
+        .tag.career {
+            background: #FEF3C7;
+            color: #D97706;
+        }
+        .tag.mind {
+            background: #EDE9FE;
+            color: #7C3AED;
+        }
+        .tag.both {
+            background: linear-gradient(135deg, #FEF3C7 0%, #EDE9FE 100%);
+            color: #6B21A8;
+        }
+        .toolkit-section {
+            background: white;
+            border-radius: 16px;
+            padding: 40px;
+            margin-bottom: 40px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+        }
+        .toolkit-section h2 {
+            text-align: center;
+            font-size: 1.6em;
+            margin-bottom: 35px;
+            color: #333;
+        }
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+        .tool-card {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+        }
+        .tool-card.career-tool {
+            border: 2px solid #FEF3C7;
+        }
+        .tool-card.mind-tool {
+            border: 2px solid #EDE9FE;
+        }
+        .tool-icon {
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+        .tool-card h4 {
+            font-size: 1em;
+            color: #333;
+            margin-bottom: 8px;
+        }
+        .tool-card p {
+            font-size: 0.85em;
+            color: #666;
+        }
+        .outcomes-section {
+            background: linear-gradient(135deg, #8B5CF6 0%, #EC4899 100%);
+            border-radius: 16px;
+            padding: 40px;
+            margin-bottom: 40px;
+            color: white;
+        }
+        .outcomes-section h2 {
+            text-align: center;
+            font-size: 1.6em;
+            margin-bottom: 30px;
+        }
+        .outcomes-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+        .outcome-item {
+            background: rgba(255,255,255,0.15);
+            border-radius: 12px;
+            padding: 20px;
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+        }
+        .outcome-icon {
+            font-size: 1.5em;
+        }
+        .outcome-text h4 {
+            font-size: 1em;
+            margin-bottom: 5px;
+        }
+        .outcome-text p {
+            font-size: 0.9em;
+            opacity: 0.9;
+        }
+        .cta-section {
+            background: white;
+            border-radius: 16px;
+            padding: 40px;
+            text-align: center;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+        }
+        .cta-section h2 {
+            font-size: 1.5em;
+            color: #333;
+            margin-bottom: 15px;
+        }
+        .cta-section p {
+            color: #666;
+            margin-bottom: 25px;
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .cta-btn {
+            display: inline-block;
+            background: linear-gradient(135deg, #8B5CF6 0%, #EC4899 100%);
+            color: white;
+            padding: 15px 40px;
+            border-radius: 10px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.1em;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .cta-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(139, 92, 246, 0.4);
+        }
+        .footer {
+            text-align: center;
+            padding: 30px;
+            color: #888;
+            font-size: 0.9em;
+        }
+        .footer a {
+            color: #8B5CF6;
+            text-decoration: none;
+        }
+        @media (max-width: 768px) {
+            .two-pillars {
+                grid-template-columns: 1fr;
+            }
+            .tools-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .outcomes-grid {
+                grid-template-columns: 1fr;
+            }
+            h1 { font-size: 2em; }
+        }
+        @media (max-width: 480px) {
+            .tools-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo">Harness the <span>Spark</span> ✨</div>
+            <h1>Blended Programme</h1>
+            <p class="subtitle">Career Discovery + Mind Management — designed for people who need clarity AND better ways to get started</p>
+        </div>
+
+        <div class="intro-box">
+            <h2>Why Blended?</h2>
+            <p>Some people know what they want but struggle to take action. Others take action easily but lack direction. If you need <strong>both</strong> — clarity on where you're heading AND practical tools to overcome getting-started resistance — this programme meets you where you are.</p>
+        </div>
+
+        <div class="two-pillars">
+            <div class="pillar career">
+                <div class="pillar-icon">💼</div>
+                <h3>Career Discovery</h3>
+                <ul>
+                    <li>Uncover your unique thread — what you naturally do</li>
+                    <li>Build your career narrative with evidence</li>
+                    <li>Create positioning that feels authentic</li>
+                    <li>Develop CV and LinkedIn content</li>
+                    <li>Decision framework for evaluating opportunities</li>
+                </ul>
+            </div>
+            <div class="pillar mind">
+                <div class="pillar-icon">✨</div>
+                <h3>Mind Management</h3>
+                <ul>
+                    <li>Capture thoughts before they overwhelm (Brain Dump)</li>
+                    <li>Track energy patterns to work with your rhythm</li>
+                    <li>Build momentum through daily wins (Spark Collector)</li>
+                    <li>Foundation worksheets for self-understanding</li>
+                    <li>Tools designed for minds that work differently</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="journey-section">
+            <h2>Your Journey</h2>
+
+            <div class="journey-step">
+                <div class="step-number">1</div>
+                <div class="step-content">
+                    <h3>Welcome Call — Getting Set Up</h3>
+                    <p>We'll walk through your portal together, explore the tools, and discuss what you're hoping to get from the programme. You'll leave with your first small action.</p>
+                    <div class="step-tags">
+                        <span class="tag both">Introduction</span>
+                        <span class="tag mind">Portal Tour</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="journey-step">
+                <div class="step-number">2</div>
+                <div class="step-content">
+                    <h3>Building Momentum — Quick Wins First</h3>
+                    <p>Before diving into deep career work, we'll use the Spark Collector and Energy Tracker for a few days. This builds the momentum muscle and helps identify your peak times for focused work.</p>
+                    <div class="step-tags">
+                        <span class="tag mind">Spark Collector</span>
+                        <span class="tag mind">Energy Tracker</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="journey-step">
+                <div class="step-number">3</div>
+                <div class="step-content">
+                    <h3>Foundations — Understanding Your Patterns</h3>
+                    <p>We'll work through foundation prompts together to uncover how you work best, what drains you, and what energises you. This self-knowledge informs everything else.</p>
+                    <div class="step-tags">
+                        <span class="tag mind">Foundations Worksheet</span>
+                        <span class="tag both">Self-Discovery</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="journey-step">
+                <div class="step-number">4</div>
+                <div class="step-content">
+                    <h3>Career Discovery — Your Questionnaire</h3>
+                    <p>Now with momentum and self-awareness, you'll complete the career discovery questionnaire. We'll schedule this during your peak energy time and break it into manageable chunks if needed.</p>
+                    <div class="step-tags">
+                        <span class="tag career">Discovery Questionnaire</span>
+                        <span class="tag career">Evidence Gathering</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="journey-step">
+                <div class="step-number">5</div>
+                <div class="step-content">
+                    <h3>Insights & Integration</h3>
+                    <p>We'll review your questionnaire insights together, connecting patterns from your foundations work. Your unique thread emerges — the thing you naturally do that others find valuable.</p>
+                    <div class="step-tags">
+                        <span class="tag career">Insights Report</span>
+                        <span class="tag both">Pattern Recognition</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="journey-step">
+                <div class="step-number">6</div>
+                <div class="step-content">
+                    <h3>Blueprint & Positioning</h3>
+                    <p>Your Career Blueprint becomes your source of truth — capturing your thread, evidence, and positioning. We'll craft language that feels authentic and compelling.</p>
+                    <div class="step-tags">
+                        <span class="tag career">Career Blueprint</span>
+                        <span class="tag career">Positioning</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="journey-step">
+                <div class="step-number">7</div>
+                <div class="step-content">
+                    <h3>Implementation — CV, LinkedIn & Beyond</h3>
+                    <p>Using your Blueprint, we'll build your CV content and LinkedIn positioning. The mind management tools continue supporting you through the implementation phase.</p>
+                    <div class="step-tags">
+                        <span class="tag career">CV Builder</span>
+                        <span class="tag career">LinkedIn</span>
+                        <span class="tag mind">Ongoing Support</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="toolkit-section">
+            <h2>Your Complete Toolkit</h2>
+            <div class="tools-grid">
+                <div class="tool-card career-tool">
+                    <div class="tool-icon">🎯</div>
+                    <h4>Career Blueprint</h4>
+                    <p>Your source of truth document</p>
+                </div>
+                <div class="tool-card career-tool">
+                    <div class="tool-icon">📄</div>
+                    <h4>CV Builder</h4>
+                    <p>Pre-filled from your Blueprint</p>
+                </div>
+                <div class="tool-card career-tool">
+                    <div class="tool-icon">⚖️</div>
+                    <h4>Decision Framework</h4>
+                    <p>Score opportunities objectively</p>
+                </div>
+                <div class="tool-card mind-tool">
+                    <div class="tool-icon">🧠</div>
+                    <h4>Brain Dump</h4>
+                    <p>Capture thoughts instantly</p>
+                </div>
+                <div class="tool-card mind-tool">
+                    <div class="tool-icon">⚡</div>
+                    <h4>Energy Tracker</h4>
+                    <p>Find your peak times</p>
+                </div>
+                <div class="tool-card mind-tool">
+                    <div class="tool-icon">✨</div>
+                    <h4>Spark Collector</h4>
+                    <p>Daily wins + first steps</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="outcomes-section">
+            <h2>What You'll Walk Away With</h2>
+            <div class="outcomes-grid">
+                <div class="outcome-item">
+                    <div class="outcome-icon">🧭</div>
+                    <div class="outcome-text">
+                        <h4>Clarity on Direction</h4>
+                        <p>Know what you're looking for and why it suits you</p>
+                    </div>
+                </div>
+                <div class="outcome-item">
+                    <div class="outcome-icon">💪</div>
+                    <div class="outcome-text">
+                        <h4>Momentum Habits</h4>
+                        <p>Daily practices that help you start and keep going</p>
+                    </div>
+                </div>
+                <div class="outcome-item">
+                    <div class="outcome-icon">📋</div>
+                    <div class="outcome-text">
+                        <h4>Ready-to-Use Materials</h4>
+                        <p>CV content, LinkedIn positioning, career narrative</p>
+                    </div>
+                </div>
+                <div class="outcome-item">
+                    <div class="outcome-icon">🔋</div>
+                    <div class="outcome-text">
+                        <h4>Self-Knowledge</h4>
+                        <p>Understanding of your patterns, energy, and rhythms</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="cta-section">
+            <h2>Ready to Begin?</h2>
+            <p>Your first step is signing the coaching agreement. Then we'll schedule your welcome call and get you set up in your portal.</p>
+            <a href="#" class="cta-btn" id="ctaButton">Sign Coaching Agreement →</a>
+        </div>
+
+        <div class="footer">
+            <p><strong>Harness the Spark</strong> — Lisa Gills</p>
+            <p><a href="mailto:lisa@harnessthespark.com">lisa@harnessthespark.com</a> · <a href="https://www.harnessthespark.com">www.harnessthespark.com</a></p>
+        </div>
+    </div>
+
+    <script>
+        // This is a template - customise the CTA link for each client
+        // Example: document.getElementById('ctaButton').href = 'Peter_Morgan/Peter_Morgan_Coaching_Agreement.html';
+
+        // For now, go back to portal
+        document.getElementById('ctaButton').addEventListener('click', function(e) {
+            e.preventDefault();
+            alert('This is a template. For each client, update the CTA link to their specific coaching agreement.');
+        });
+    </script>
+</body>
+</html>
