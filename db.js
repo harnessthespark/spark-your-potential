@@ -196,6 +196,18 @@ async function initDatabase() {
             )
         `);
 
+        // Create password_reset_tokens table
+        await client.query(`
+            CREATE TABLE IF NOT EXISTS password_reset_tokens (
+                id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+                user_email VARCHAR(255) NOT NULL,
+                token VARCHAR(255) NOT NULL UNIQUE,
+                expires_at TIMESTAMP NOT NULL,
+                used BOOLEAN DEFAULT false,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            )
+        `);
+
         // Create indexes
         await client.query(`
             CREATE INDEX IF NOT EXISTS idx_blueprints_user_id ON blueprints(user_id);
@@ -727,6 +739,74 @@ async function getAgreement(clientEmail) {
 }
 
 /**
+ * Create a password reset token
+ * @param {string} email - User email
+ * @returns {object} - { success, token, error }
+ */
+async function createPasswordResetToken(email) {
+    // First check if user exists
+    const userResult = await pool.query(
+        'SELECT id FROM users WHERE email = $1',
+        [email]
+    );
+
+    if (userResult.rows.length === 0) {
+        return { success: false, error: 'User not found' };
+    }
+
+    // Generate a secure random token
+    const token = crypto.randomBytes(32).toString('hex');
+
+    // Token expires in 1 hour
+    const expiresAt = new Date(Date.now() + 60 * 60 * 1000);
+
+    // Invalidate any existing tokens for this email
+    await pool.query(
+        'UPDATE password_reset_tokens SET used = true WHERE user_email = $1 AND used = false',
+        [email]
+    );
+
+    // Create new token
+    await pool.query(
+        `INSERT INTO password_reset_tokens (user_email, token, expires_at)
+         VALUES ($1, $2, $3)`,
+        [email, token, expiresAt]
+    );
+
+    return { success: true, token };
+}
+
+/**
+ * Verify and use a password reset token
+ * @param {string} token - The reset token
+ * @returns {object} - { success, email, error }
+ */
+async function verifyPasswordResetToken(token) {
+    const result = await pool.query(
+        `SELECT * FROM password_reset_tokens
+         WHERE token = $1 AND used = false AND expires_at > NOW()`,
+        [token]
+    );
+
+    if (result.rows.length === 0) {
+        return { success: false, error: 'Invalid or expired token' };
+    }
+
+    return { success: true, email: result.rows[0].user_email };
+}
+
+/**
+ * Mark a password reset token as used
+ * @param {string} token - The reset token
+ */
+async function markTokenUsed(token) {
+    await pool.query(
+        'UPDATE password_reset_tokens SET used = true WHERE token = $1',
+        [token]
+    );
+}
+
+/**
  * Change user password and clear must_change_password flag
  * @param {string} email - User email
  * @param {string} newPassword - New password
@@ -791,5 +871,8 @@ module.exports = {
     saveAgreement,
     getAgreement,
     changePassword,
-    setMustChangePassword
+    setMustChangePassword,
+    createPasswordResetToken,
+    verifyPasswordResetToken,
+    markTokenUsed
 };

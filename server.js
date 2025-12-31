@@ -6,9 +6,95 @@
 require('dotenv').config();
 const express = require('express');
 const path = require('path');
+const nodemailer = require('nodemailer');
 const db = require('./db');
 
 const app = express();
+
+// ============================================
+// EMAIL CONFIGURATION
+// ============================================
+
+// Configure nodemailer transporter
+// Uses SMTP settings from environment variables
+const emailTransporter = nodemailer.createTransport({
+    host: process.env.SMTP_HOST || 'smtp.gmail.com',
+    port: parseInt(process.env.SMTP_PORT || '587'),
+    secure: process.env.SMTP_SECURE === 'true', // true for 465, false for other ports
+    auth: {
+        user: process.env.SMTP_USER,
+        pass: process.env.SMTP_PASS
+    }
+});
+
+// Send password reset email
+async function sendPasswordResetEmail(toEmail, resetToken, clientName) {
+    const resetUrl = `${process.env.APP_URL || 'https://career.harnessthespark.com'}/reset-password.html?token=${resetToken}`;
+
+    const mailOptions = {
+        from: `"Harness the Spark" <${process.env.SMTP_USER || 'lisa@harnessthespark.com'}>`,
+        to: toEmail,
+        subject: 'Reset Your Password - Spark Your Potential',
+        html: `
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <style>
+        body { font-family: 'Inter', Arial, sans-serif; line-height: 1.6; color: #333; }
+        .container { max-width: 600px; margin: 0 auto; padding: 40px 20px; }
+        .header { text-align: center; margin-bottom: 30px; }
+        .header h1 { color: #2d1b4e; font-size: 24px; margin: 0; }
+        .content { background: #f8f9fa; border-radius: 12px; padding: 30px; margin-bottom: 30px; }
+        .button { display: inline-block; background: linear-gradient(135deg, #8B5CF6 0%, #EC4899 100%); color: white !important; text-decoration: none; padding: 15px 30px; border-radius: 8px; font-weight: 600; margin: 20px 0; }
+        .footer { text-align: center; color: #666; font-size: 14px; }
+        .warning { color: #dc2626; font-size: 13px; margin-top: 20px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Reset Your Password</h1>
+        </div>
+        <div class="content">
+            <p>Hi${clientName ? ` ${clientName}` : ''},</p>
+            <p>We received a request to reset your password for your Spark Your Potential account.</p>
+            <p>Click the button below to set a new password:</p>
+            <p style="text-align: center;">
+                <a href="${resetUrl}" class="button">Reset Password</a>
+            </p>
+            <p>Or copy and paste this link into your browser:</p>
+            <p style="word-break: break-all; color: #8B5CF6;">${resetUrl}</p>
+            <p class="warning">⏰ This link will expire in 1 hour for security reasons.</p>
+            <p>If you didn't request this password reset, you can safely ignore this email.</p>
+        </div>
+        <div class="footer">
+            <p>Harness the Spark<br>
+            <a href="mailto:lisa@harnessthespark.com">lisa@harnessthespark.com</a></p>
+        </div>
+    </div>
+</body>
+</html>
+        `,
+        text: `
+Hi${clientName ? ` ${clientName}` : ''},
+
+We received a request to reset your password for your Spark Your Potential account.
+
+Click the link below to set a new password:
+${resetUrl}
+
+This link will expire in 1 hour for security reasons.
+
+If you didn't request this password reset, you can safely ignore this email.
+
+Harness the Spark
+lisa@harnessthespark.com
+        `
+    };
+
+    return emailTransporter.sendMail(mailOptions);
+}
 
 // Middleware
 app.use(express.json());
@@ -133,7 +219,7 @@ app.post('/api/change-password', async (req, res) => {
     }
 });
 
-// Request password reset (logs request - Lisa handles manually for now)
+// Request password reset - generates token and sends email
 app.post('/api/request-password-reset', async (req, res) => {
     try {
         const { email } = req.body;
@@ -141,8 +227,32 @@ app.post('/api/request-password-reset', async (req, res) => {
             return res.status(400).json({ success: false, error: 'Email is required' });
         }
 
-        // Log the reset request (in production, this would send an email)
         console.log(`🔐 Password reset requested for: ${email} at ${new Date().toISOString()}`);
+
+        // Try to create a reset token (will fail silently if email doesn't exist)
+        const tokenResult = await db.createPasswordResetToken(email);
+
+        if (tokenResult.success) {
+            // Get client name for personalised email
+            const userResult = await db.pool.query(
+                'SELECT name, full_name FROM users WHERE email = $1',
+                [email]
+            );
+            const clientName = userResult.rows[0]?.full_name || userResult.rows[0]?.name || null;
+
+            // Send the reset email
+            try {
+                await sendPasswordResetEmail(email, tokenResult.token, clientName);
+                console.log(`✉️ Password reset email sent to: ${email}`);
+            } catch (emailError) {
+                console.error('❌ Failed to send password reset email:', emailError.message);
+                // Log for Lisa to handle manually
+                console.log(`📝 MANUAL RESET NEEDED for ${email} - Token: ${tokenResult.token}`);
+            }
+        } else {
+            // Email doesn't exist - log but don't reveal
+            console.log(`⚠️ Password reset requested for non-existent email: ${email}`);
+        }
 
         // Always return success (don't reveal if email exists for security)
         res.json({ success: true, message: 'If this email exists, a reset link will be sent.' });
@@ -150,6 +260,56 @@ app.post('/api/request-password-reset', async (req, res) => {
         console.error('Password reset request error:', error);
         // Still return success for security
         res.json({ success: true, message: 'If this email exists, a reset link will be sent.' });
+    }
+});
+
+// Reset password using token (from email link)
+app.post('/api/reset-password', async (req, res) => {
+    try {
+        const { token, newPassword } = req.body;
+
+        if (!token || !newPassword) {
+            return res.status(400).json({ success: false, error: 'Token and new password are required' });
+        }
+
+        // Validate password strength
+        if (newPassword.length < 8) {
+            return res.status(400).json({ success: false, error: 'Password must be at least 8 characters' });
+        }
+
+        // Verify the token
+        const tokenResult = await db.verifyPasswordResetToken(token);
+        if (!tokenResult.success) {
+            return res.status(400).json({ success: false, error: tokenResult.error });
+        }
+
+        // Change the password
+        const changeResult = await db.changePassword(tokenResult.email, newPassword);
+        if (!changeResult.success) {
+            return res.status(400).json({ success: false, error: changeResult.error });
+        }
+
+        // Mark the token as used
+        await db.markTokenUsed(token);
+
+        console.log(`✅ Password reset successful for: ${tokenResult.email}`);
+        res.json({ success: true, message: 'Password reset successful' });
+    } catch (error) {
+        console.error('Password reset error:', error);
+        res.status(500).json({ success: false, error: 'Failed to reset password' });
+    }
+});
+
+// Verify reset token (check if valid before showing form)
+app.get('/api/verify-reset-token/:token', async (req, res) => {
+    try {
+        const { token } = req.params;
+
+        const result = await db.verifyPasswordResetToken(token);
+        res.json({ success: result.success, error: result.error });
+    } catch (error) {
+        console.error('Token verification error:', error);
+        res.status(500).json({ success: false, error: 'Failed to verify token' });
     }
 });
 
