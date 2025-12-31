@@ -92,13 +92,15 @@ This document contains important context for Claude to remember across sessions 
 - **Programme:** Blended (Career + Mind Management) — GRATIS in exchange for feedback
 - **Background:** Systems Engineer at Kyndryl, on Lloyds Bank account
 - **Career Challenge:** Needs to pivot to stay relevant — exploring AI in his role
+- **Recognition Need:** Hasn't been promoted for years or had a decent pay rise — needs to articulate his value
 - **Personal Challenge:** OCD traits, struggles with getting started
 - **Enrolled:** December 2025
 - **Folder:** `/Peter_Morgan/`
 - **Files created:**
   - `Peter_Morgan_Coaching_Agreement.html` - Pending signature (notes gratis terms)
   - `Peter_Morgan_Welcome_Call_Agenda.html` - 30-45 min intro call structure
-- **Approach:** Technical mindset — appreciates systems thinking, frameworks. Build momentum before deep career work.
+  - `Peter_Morgan_Discovery_Questionnaire.html` - Systems Engineer Edition with recognition focus
+- **Approach:** Technical mindset — appreciates systems thinking, frameworks. Build momentum before deep career work. Focus on articulating measurable impact and value for career advancement.
 - **Progress:** Account created, awaiting Welcome Call
 
 ## Folder Structure
@@ -117,7 +119,8 @@ This document contains important context for Claude to remember across sessions 
 │   └── Raj_Samuel_Programme_Outline.html
 └── Peter_Morgan/          # Peter Morgan's files (Blended - Beta Tester)
     ├── Peter_Morgan_Coaching_Agreement.html
-    └── Peter_Morgan_Welcome_Call_Agenda.html
+    ├── Peter_Morgan_Welcome_Call_Agenda.html
+    └── Peter_Morgan_Discovery_Questionnaire.html
 ```
 
 ## Authentication
