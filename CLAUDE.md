@@ -93,7 +93,7 @@ This document contains important context for Claude to remember across sessions 
 - **Background:** Systems Engineer at Kyndryl, on Lloyds Bank account
 - **Career Challenge:** Needs to pivot to stay relevant — exploring AI in his role
 - **Recognition Need:** Hasn't been promoted for years or had a decent pay rise — needs to articulate his value
-- **Personal Challenge:** OCD traits, struggles with getting started
+- **Personal Context:** Diagnosed OCD. Does NOT identify as neurodivergent (important to respect). Lisa observes some ND-adjacent traits alongside OCD. Blended programme gives access to Spark tools without ND labelling.
 - **Enrolled:** December 2025
 - **Folder:** `/Peter_Morgan/`
 - **Files created:**
