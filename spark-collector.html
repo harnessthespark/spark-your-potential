@@ -398,7 +398,25 @@
     </style>
 </head>
 <body>
-    <button class="back-btn" onclick="window.location.href='audhd-dashboard.html'">← Back to Portal</button>
+    <button class="back-btn" onclick="goBackToPortal()">← Back to Portal</button>
+    <script>
+        function goBackToPortal() {
+            const savedUser = localStorage.getItem('syp_user');
+            if (savedUser) {
+                try {
+                    const user = JSON.parse(savedUser);
+                    const access = user.programme_access || user.programme_type || 'career';
+                    if (access === 'blended' || access === 'career') {
+                        window.location.href = 'client-portal.html';
+                    } else {
+                        window.location.href = 'audhd-dashboard.html';
+                    }
+                    return;
+                } catch(e) {}
+            }
+            window.location.href = 'client-portal.html';
+        }
+    </script>
 
     <div class="container">
         <div class="header">
