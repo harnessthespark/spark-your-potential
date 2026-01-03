@@ -1696,6 +1696,21 @@
 
         // Show portal
         function showPortal(client) {
+            // FIRST: Check if user needs to change password (catches ALL code paths)
+            const savedUser = localStorage.getItem('syp_user');
+            if (savedUser) {
+                try {
+                    const user = JSON.parse(savedUser);
+                    if (user.must_change_password === true) {
+                        localStorage.setItem('syp_pending_password_change', user.email || client.email);
+                        window.location.href = 'change-password.html';
+                        return;
+                    }
+                } catch (e) {
+                    console.error('Error checking password status:', e);
+                }
+            }
+
             currentClient = client;
             document.getElementById('loginSection').style.display = 'none';
 
