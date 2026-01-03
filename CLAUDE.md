@@ -599,3 +599,48 @@ function showPortal(client) {
 - `70d8cb3` - feat: add Spark Ignition tool to blended programme toolkit
 - `784616f` - fix: add must_change_password check inside showPortal - catches ALL paths
 - `f52bc60` - feat: strengthen password policy
+
+### 3 January 2026 - Smart Navigation & AuDHD Terminology Removal (Peter Morgan)
+
+**Context:** Peter is a blended user who doesn't identify as neurodivergent (has OCD).
+
+**Smart Back Navigation Added:**
+All tool pages now have smart `goBackToPortal()` navigation:
+- Blended/Career users → `client-portal.html`
+- AuDHD users → `audhd-dashboard.html`
+
+**Files Updated with Smart Navigation:**
+1. `audhd-braindump.html` - Brain Dump tool
+2. `audhd-energy.html` - Energy Tracker (also removed "ND Portal" text)
+3. `audhd-foundations.html` - Foundations tool (also removed "Spark Portal" text)
+4. `audhd-session-notes.html` - Session Notes tool
+
+**Previous fixes (same session):**
+- `spark-ignition.html` - Changed "AuDHD First Aid Kit" → "Mind Reset Toolkit"
+- `spark-ignition.html` - Changed "AuDHD-Specific Tip" → "Mind Management Tip"
+- `spark-ignition.html` - Changed "For AuDHD brains" → "For busy minds"
+- `client-portal.html` - Updated Decision Framework description to neutral language
+
+**goBackToPortal() Pattern:**
+```javascript
+function goBackToPortal() {
+    const savedUser = localStorage.getItem('syp_user');
+    if (savedUser) {
+        try {
+            const user = JSON.parse(savedUser);
+            const access = user.programme_access || user.programme_type || 'career';
+            if (access === 'blended' || access === 'career') {
+                window.location.href = 'client-portal.html';
+            } else {
+                window.location.href = 'audhd-dashboard.html';
+            }
+            return;
+        } catch(e) {}
+    }
+    window.location.href = 'client-portal.html';
+}
+```
+
+**Git Commits:**
+- `2ebef84` - fix: remove AuDHD terminology for blended users - use neutral language
+- `0fbd8ac` - fix: add smart back navigation for blended users in all tool pages
