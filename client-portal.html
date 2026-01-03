@@ -1529,6 +1529,21 @@
         // - syp_client_email: set by client-portal.html direct login
         // - syp_user: set by login.html (central login hub) which redirects here
         window.onload = function() {
+            // FIRST: Check if user needs to change their password (applies to ALL login methods)
+            const savedUser = localStorage.getItem('syp_user');
+            if (savedUser) {
+                try {
+                    const user = JSON.parse(savedUser);
+                    if (user.must_change_password) {
+                        localStorage.setItem('syp_pending_password_change', user.email);
+                        window.location.href = 'change-password.html';
+                        return;
+                    }
+                } catch (e) {
+                    console.error('Error parsing saved user:', e);
+                }
+            }
+
             // Check for direct client portal login
             const savedEmail = localStorage.getItem('syp_client_email');
             if (savedEmail && CLIENTS[savedEmail.toLowerCase()]) {
@@ -1537,18 +1552,9 @@
             }
 
             // Check for login.html redirect (stores user object with email)
-            const savedUser = localStorage.getItem('syp_user');
             if (savedUser) {
                 try {
                     const user = JSON.parse(savedUser);
-
-                    // Check if user needs to change their password first
-                    if (user.must_change_password) {
-                        localStorage.setItem('syp_pending_password_change', user.email);
-                        window.location.href = 'change-password.html';
-                        return;
-                    }
-
                     const email = user.email?.toLowerCase();
                     if (email && CLIENTS[email]) {
                         // Sync the client email for consistency
