@@ -876,6 +876,145 @@
         .sign-btn.success {
             background: linear-gradient(135deg, #27ae60 0%, #2ecc71 100%);
         }
+
+        /* ============================================
+           MOBILE RESPONSIVE STYLES
+           ============================================ */
+        @media (max-width: 600px) {
+            body {
+                padding: 15px 10px;
+            }
+            .container {
+                padding: 0 5px;
+            }
+
+            /* Header */
+            .header h1 {
+                font-size: 1.5em;
+            }
+            .header .subtitle {
+                font-size: 0.85em;
+            }
+            .header .welcome {
+                font-size: 0.95em;
+            }
+
+            /* Stats Bar - Stack vertically */
+            .stats-bar {
+                flex-direction: column;
+                gap: 15px;
+                padding: 15px;
+            }
+            .stat-item .stat-value {
+                font-size: 1.4em;
+            }
+            .stat-item .stat-label {
+                font-size: 0.8em;
+            }
+
+            /* Login Section */
+            .login-section {
+                padding: 25px 20px;
+                margin: 30px auto;
+            }
+            .login-section h2 {
+                font-size: 1.3em;
+            }
+
+            /* Tool Cards */
+            .tool-card {
+                padding: 18px;
+            }
+            .tool-card .tool-icon {
+                font-size: 2em;
+            }
+            .tool-card .tool-title {
+                font-size: 1em;
+            }
+            .tool-card .tool-description {
+                font-size: 0.85em;
+            }
+            .tool-card .tool-btn {
+                padding: 10px 16px;
+                font-size: 0.85em;
+            }
+
+            /* Journey Steps */
+            .journey-steps {
+                flex-wrap: wrap;
+                gap: 8px;
+            }
+            .journey-step {
+                flex: 1 1 45%;
+                min-width: 120px;
+                padding: 10px;
+            }
+            .journey-step .icon {
+                font-size: 1.3em;
+            }
+            .journey-step .label {
+                font-size: 0.75em;
+            }
+
+            /* Transformation Flow */
+            .step-card {
+                padding: 15px;
+            }
+            .step-card h4 {
+                font-size: 0.95em;
+            }
+            .step-card p {
+                font-size: 0.8em;
+            }
+
+            /* Section Headers */
+            .tools-section-header {
+                font-size: 1em;
+            }
+
+            /* Agreement Section */
+            .agreement-content {
+                padding: 20px 15px;
+            }
+            .agreement-content h2 {
+                font-size: 1.3em;
+            }
+            .agreement-content h3 {
+                font-size: 1.1em;
+            }
+            .agreement-content p,
+            .agreement-content li {
+                font-size: 0.9em;
+            }
+
+            /* Signature Area */
+            .signature-canvas {
+                height: 120px;
+            }
+            .sign-btn {
+                padding: 14px;
+                font-size: 1em;
+            }
+        }
+
+        /* Extra small devices */
+        @media (max-width: 400px) {
+            body {
+                padding: 10px 5px;
+            }
+            .header h1 {
+                font-size: 1.3em;
+            }
+            .journey-step {
+                flex: 1 1 100%;
+            }
+            .tool-card {
+                padding: 15px;
+            }
+            .stats-bar {
+                padding: 12px;
+            }
+        }
     </style>
 </head>
 <body>
