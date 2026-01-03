@@ -536,3 +536,49 @@ python manage.py shell -c "[command above]"
 - `38815c6` - feat: add automated password reset email system
 - `c69e8f3` - fix: add Spark Collector to AuDHD client portal tools
 - `60b743b` - docs: update Peter Morgan client context
+
+### 3 January 2026 - Password Change Flow Fix & Spark Ignition
+
+**Critical Bug Fix - must_change_password Not Working:**
+- Peter Morgan was bypassing password change screen, going straight to coaching agreement
+- Root cause: Multiple code paths to showPortal() - only some had the check
+- Solution: Added must_change_password check INSIDE showPortal() function itself
+- Now catches ALL entry paths: direct login, saved email, saved user, any other route
+
+**Code Changes (client-portal.html):**
+```javascript
+function showPortal(client) {
+    // FIRST: Check if user needs to change password (catches ALL code paths)
+    const savedUser = localStorage.getItem('syp_user');
+    if (savedUser) {
+        const user = JSON.parse(savedUser);
+        if (user.must_change_password === true) {
+            localStorage.setItem('syp_pending_password_change', user.email || client.email);
+            window.location.href = 'change-password.html';
+            return;
+        }
+    }
+    // ... rest of function
+}
+```
+
+**Spark Ignition Tool Added:**
+- Added to Peter's blended portal toolkit
+- Icon: 🔥
+- Title: "Spark Ignition"
+- File: spark-ignition.html
+- Quick tools and strategies for when feeling stuck, overwhelmed, or needing a reset
+
+**Git Commits:**
+- `70d8cb3` - feat: add Spark Ignition tool to blended programme toolkit
+- `784616f` - fix: add must_change_password check inside showPortal - catches ALL paths
+
+**Password Change Flow (Complete):**
+1. Client logs in with temp password
+2. API returns `must_change_password: true`
+3. User data saved to localStorage
+4. showPortal() checks must_change_password FIRST
+5. Redirects to change-password.html
+6. Client sets new password
+7. API clears must_change_password flag
+8. Client redirected to their portal (career/audhd/blended based on programme_access)

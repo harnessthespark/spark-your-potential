@@ -194,6 +194,17 @@ app.post('/api/login', async (req, res) => {
     }
 });
 
+// Password validation helper
+function validatePasswordStrength(password) {
+    const errors = [];
+    if (password.length < 8) errors.push('at least 8 characters');
+    if (!/[A-Z]/.test(password)) errors.push('an uppercase letter');
+    if (!/[a-z]/.test(password)) errors.push('a lowercase letter');
+    if (!/[0-9]/.test(password)) errors.push('a number');
+    if (!/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(password)) errors.push('a special character');
+    return errors;
+}
+
 // Change password (used after first login with temp password)
 app.post('/api/change-password', async (req, res) => {
     try {
@@ -203,8 +214,12 @@ app.post('/api/change-password', async (req, res) => {
         }
 
         // Validate password strength
-        if (newPassword.length < 8) {
-            return res.status(400).json({ success: false, error: 'Password must be at least 8 characters' });
+        const passwordErrors = validatePasswordStrength(newPassword);
+        if (passwordErrors.length > 0) {
+            return res.status(400).json({
+                success: false,
+                error: `Password must include: ${passwordErrors.join(', ')}`
+            });
         }
 
         const result = await db.changePassword(email, newPassword);
@@ -273,8 +288,12 @@ app.post('/api/reset-password', async (req, res) => {
         }
 
         // Validate password strength
-        if (newPassword.length < 8) {
-            return res.status(400).json({ success: false, error: 'Password must be at least 8 characters' });
+        const passwordErrors = validatePasswordStrength(newPassword);
+        if (passwordErrors.length > 0) {
+            return res.status(400).json({
+                success: false,
+                error: `Password must include: ${passwordErrors.join(', ')}`
+            });
         }
 
         // Verify the token
