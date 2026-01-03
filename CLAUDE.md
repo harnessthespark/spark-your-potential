@@ -582,3 +582,20 @@ function showPortal(client) {
 6. Client sets new password
 7. API clears must_change_password flag
 8. Client redirected to their portal (career/audhd/blended based on programme_access)
+
+**Strengthened Password Policy (Peter's suggestion):**
+- At least 8 characters
+- At least one uppercase letter (A-Z)
+- At least one lowercase letter (a-z)
+- At least one number (0-9)
+- At least one special character (!@#$%^&*)
+
+**Password validation applied to:**
+- change-password.html (first login temp password change)
+- reset-password.html (forgot password flow)
+- server.js API endpoints (backend enforcement)
+
+**Git Commits (all):**
+- `70d8cb3` - feat: add Spark Ignition tool to blended programme toolkit
+- `784616f` - fix: add must_change_password check inside showPortal - catches ALL paths
+- `f52bc60` - feat: strengthen password policy
