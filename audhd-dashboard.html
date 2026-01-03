@@ -780,7 +780,7 @@
 
         <!-- Tools Section -->
         <div class="tools-section">
-            <div class="tools-title">🧰 Your AuDHD Toolkit</div>
+            <div class="tools-title">🧰 Your Spark Toolkit</div>
             <div class="tools-grid">
                 <!-- Laying the Foundations -->
                 <div class="tool-card">
@@ -806,7 +806,7 @@
                 <!-- Spark Ignition - First Aid Kit -->
                 <div class="tool-card" style="border: 2px solid #E91E78;">
                     <h4>🔥 Spark Ignition</h4>
-                    <p>Your AuDHD first aid kit. Identify your nervous system state and access tailored interventions.</p>
+                    <p>Your Spark first aid kit. Identify your nervous system state and access tailored interventions.</p>
                     <button class="tool-btn" onclick="openTool('ignition')">Open First Aid Kit</button>
                 </div>
 
@@ -1636,19 +1636,19 @@
             const sessionDetails = {
                 morning: {
                     title: `Spark Coaching - ${clientName} (Morning)`,
-                    description: 'AuDHD Life Coaching Session\\n\\nBest for: High energy tasks, foundations work, new concepts\\n\\nPlease join the Zoom link that will be sent in the calendar invite.',
+                    description: 'Spark Coaching Session\\n\\nBest for: High energy tasks, foundations work, new concepts\\n\\nPlease join the Zoom link that will be sent in the calendar invite.',
                     startHour: 9,
                     endHour: 10
                 },
                 afternoon: {
                     title: `Spark Coaching - ${clientName} (Afternoon)`,
-                    description: 'AuDHD Life Coaching Session\\n\\nBest for: Conversations, reflection, lighter processing\\n\\nPlease join the Zoom link that will be sent in the calendar invite.',
+                    description: 'Spark Coaching Session\\n\\nBest for: Conversations, reflection, lighter processing\\n\\nPlease join the Zoom link that will be sent in the calendar invite.',
                     startHour: 14,
                     endHour: 15
                 },
                 evening: {
                     title: `Spark Coaching - ${clientName} (Evening)`,
-                    description: 'AuDHD Life Coaching Session\\n\\nBest for: Evening owls, post-work decompression\\n\\nPlease join the Zoom link that will be sent in the calendar invite.',
+                    description: 'Spark Coaching Session\\n\\nBest for: Evening owls, post-work decompression\\n\\nPlease join the Zoom link that will be sent in the calendar invite.',
                     startHour: 17,
                     endHour: 18
                 }
@@ -1722,7 +1722,7 @@
             celebration_king: { emoji: '👑', name: 'Celebration Royalty', desc: 'Logged 10 celebrations' },
             spark_collector: { emoji: '💎', name: 'Spark Collector', desc: 'Earned 50 total sparks' },
             paradox_explorer: { emoji: '🔮', name: 'Paradox Explorer', desc: 'Explored all 6 domains' },
-            tool_master: { emoji: '🧰', name: 'Tool Master', desc: 'Used all AuDHD tools' }
+            tool_master: { emoji: '🧰', name: 'Tool Master', desc: 'Used all Spark tools' }
         };
 
         let gamificationData = {
@@ -2015,7 +2015,7 @@
             const clients = JSON.parse(localStorage.getItem('audhd_clients') || '{}');
 
             if (Object.keys(clients).length === 0) {
-                container.innerHTML = '<p style="color: #888;">No AuDHD clients yet. Add clients from the main dashboard.</p>';
+                container.innerHTML = '<p style="color: #888;">No Spark clients yet. Add clients from the main dashboard.</p>';
                 return;
             }
 
