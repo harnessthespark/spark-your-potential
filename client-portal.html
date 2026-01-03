@@ -999,7 +999,7 @@
                     <label for="agreeTestimonialTerms">I have read and agree to all terms of this Testimonial Access Agreement.</label>
                 </div>
 
-                <p style="font-size: 0.85em; color: #666; margin-bottom: 10px;">Type your name or draw your signature below:</p>
+                <p style="font-size: 0.85em; color: #666; margin-bottom: 10px;">Type your name and draw your signature below:</p>
                 <input type="text" class="signature-input" id="testimonialSignatureInput" placeholder="Type your full name">
 
                 <div class="signature-canvas-container">
@@ -1070,7 +1070,7 @@
                     <label for="agreeRecording">I consent to sessions being recorded for training/accreditation purposes (optional)</label>
                 </div>
 
-                <p style="font-size: 0.85em; color: #666; margin-bottom: 10px;">Type your name or draw your signature below:</p>
+                <p style="font-size: 0.85em; color: #666; margin-bottom: 10px;">Type your name and draw your signature below:</p>
                 <input type="text" class="signature-input" id="signatureInput" placeholder="Type your full name">
 
                 <div class="signature-canvas-container">
@@ -2612,8 +2612,8 @@
             const signatureInput = document.getElementById('signatureInput').value.trim();
             const signBtn = document.getElementById('signBtn');
 
-            // Must agree to terms AND have either typed or drawn signature
-            const hasSignature = signatureInput.length > 0 || hasDrawnSignature;
+            // Must agree to terms AND have BOTH typed name AND drawn signature
+            const hasSignature = signatureInput.length > 0 && hasDrawnSignature;
             const isValid = agreeTerms && hasSignature;
 
             signBtn.disabled = !isValid;
