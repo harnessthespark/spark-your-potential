@@ -1665,6 +1665,13 @@
                         };
                     }
 
+                    // Check if user needs to change their password first
+                    if (data.user.must_change_password) {
+                        localStorage.setItem('syp_pending_password_change', email);
+                        window.location.href = 'change-password.html';
+                        return;
+                    }
+
                     showPortal(client);
                 } else {
                     throw new Error(data.error || data.detail || data.message || 'Invalid credentials');
