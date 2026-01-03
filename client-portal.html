@@ -1606,6 +1606,19 @@
                 const data = await response.json();
 
                 if (data.success && data.user) {
+                    console.log('🔐 LOGIN SUCCESS - Full user object:', JSON.stringify(data.user, null, 2));
+                    console.log('🔐 must_change_password value:', data.user.must_change_password);
+                    console.log('🔐 must_change_password type:', typeof data.user.must_change_password);
+
+                    // CRITICAL: Check password change IMMEDIATELY before anything else
+                    if (data.user.must_change_password === true) {
+                        console.log('🔐 PASSWORD CHANGE REQUIRED - Redirecting NOW!');
+                        localStorage.setItem('syp_pending_password_change', email);
+                        localStorage.setItem('syp_user', JSON.stringify(data.user));
+                        window.location.href = 'change-password.html';
+                        return;
+                    }
+
                     // Success - store auth data
                     localStorage.setItem('syp_client_email', email);
                     localStorage.setItem('syp_user', JSON.stringify(data.user));
@@ -1663,13 +1676,6 @@
                             prompts: {},
                             blueprintProgress: 0
                         };
-                    }
-
-                    // Check if user needs to change their password first
-                    if (data.user.must_change_password) {
-                        localStorage.setItem('syp_pending_password_change', email);
-                        window.location.href = 'change-password.html';
-                        return;
                     }
 
                     showPortal(client);
