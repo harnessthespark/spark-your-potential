@@ -453,6 +453,19 @@
             color: #555;
             margin-bottom: 20px;
         }
+        /* Mobile fix for back button */
+        @media (max-width: 600px) {
+            .back-btn {
+                position: relative;
+                top: auto;
+                left: auto;
+                display: block;
+                margin: 10px auto 20px;
+                text-align: center;
+                width: fit-content;
+            }
+        }
+
         .back-btn:hover {
             background: #e0e0e0;
         }

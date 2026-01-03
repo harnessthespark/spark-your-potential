@@ -1060,10 +1060,10 @@
                     currentUser = JSON.parse(savedUser);
                     console.log('✅ Session found for:', currentUser.email);
 
-                    // Check if user has AuDHD access
+                    // Check if user has AuDHD/Spark access
                     const isCoach = currentUser.is_admin || currentUser.is_staff;
                     const programmeType = currentUser.programme_type || currentUser.programme_access;
-                    const hasAuDHDAccess = programmeType === 'audhd' || programmeType === 'both';
+                    const hasAuDHDAccess = programmeType === 'audhd' || programmeType === 'both' || programmeType === 'blended';
 
                     if (isCoach || hasAuDHDAccess) {
                         showDashboard();

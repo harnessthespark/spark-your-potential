@@ -460,6 +460,19 @@
             align-items: center;
             gap: 8px;
         }
+        /* Mobile fix for back button */
+        @media (max-width: 600px) {
+            .back-btn {
+                position: relative;
+                top: auto;
+                left: auto;
+                display: block;
+                margin: 10px auto 20px;
+                text-align: center;
+                width: fit-content;
+            }
+        }
+
         .back-btn:hover {
             background: rgba(255,255,255,0.3);
         }
