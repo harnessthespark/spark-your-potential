@@ -1,0 +1,2728 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Elisa's Spark - Pain, Energy & Wellbeing Check</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            /* Warm, calming colour palette for healing */
+            --balanced: #22c55e;
+            --balanced-light: #dcfce7;
+            --pain-flaring: #f97316;
+            --pain-flaring-light: #ffedd5;
+            --exhausted: #8b5cf6;
+            --exhausted-light: #ede9fe;
+            --overwhelmed: #ef4444;
+            --overwhelmed-light: #fee2e2;
+            --low: #6366f1;
+            --low-light: #e0e7ff;
+
+            --bg-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --card-bg: #ffffff;
+            --text-primary: #1f2937;
+            --text-secondary: #6b7280;
+            --text-muted: #9ca3af;
+            --border: #e5e7eb;
+            --shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+            --shadow-sm: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-gradient);
+            min-height: 100vh;
+            color: var(--text-primary);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Header */
+        .header {
+            text-align: center;
+            padding: 30px 20px;
+            color: white;
+        }
+
+        .header h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .header p {
+            font-size: 1rem;
+            opacity: 0.9;
+        }
+
+        .greeting {
+            font-size: 1.1rem;
+            margin-bottom: 5px;
+            opacity: 0.95;
+        }
+
+        /* Cards */
+        .card {
+            background: var(--card-bg);
+            border-radius: 24px;
+            padding: 30px;
+            margin-bottom: 20px;
+            box-shadow: var(--shadow);
+        }
+
+        .card-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: var(--text-primary);
+        }
+
+        /* State Selection */
+        .state-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 15px;
+        }
+
+        .state-btn {
+            padding: 20px 15px;
+            border: 2px solid var(--border);
+            border-radius: 16px;
+            background: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .state-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .state-btn.selected {
+            border-width: 3px;
+        }
+
+        .state-btn[data-state="balanced"] { border-color: var(--balanced); }
+        .state-btn[data-state="balanced"].selected { background: var(--balanced-light); }
+        .state-btn[data-state="pain-flaring"] { border-color: var(--pain-flaring); }
+        .state-btn[data-state="pain-flaring"].selected { background: var(--pain-flaring-light); }
+        .state-btn[data-state="exhausted"] { border-color: var(--exhausted); }
+        .state-btn[data-state="exhausted"].selected { background: var(--exhausted-light); }
+        .state-btn[data-state="overwhelmed"] { border-color: var(--overwhelmed); }
+        .state-btn[data-state="overwhelmed"].selected { background: var(--overwhelmed-light); }
+        .state-btn[data-state="low"] { border-color: var(--low); }
+        .state-btn[data-state="low"].selected { background: var(--low-light); }
+
+        .state-emoji {
+            font-size: 2rem;
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        .state-label {
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: var(--text-primary);
+        }
+
+        /* State Detail View */
+        .state-detail {
+            display: none;
+        }
+
+        .state-detail.active {
+            display: block;
+        }
+
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 20px;
+            background: #f3f4f6;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 0.95rem;
+            font-weight: 500;
+            color: var(--text-secondary);
+            margin-bottom: 20px;
+            transition: all 0.2s;
+        }
+
+        .back-btn:hover {
+            background: #e5e7eb;
+        }
+
+        .state-header {
+            padding: 25px;
+            border-radius: 16px;
+            margin-bottom: 25px;
+        }
+
+        .state-header[data-state="balanced"] { background: var(--balanced-light); border-left: 4px solid var(--balanced); }
+        .state-header[data-state="pain-flaring"] { background: var(--pain-flaring-light); border-left: 4px solid var(--pain-flaring); }
+        .state-header[data-state="exhausted"] { background: var(--exhausted-light); border-left: 4px solid var(--exhausted); }
+        .state-header[data-state="overwhelmed"] { background: var(--overwhelmed-light); border-left: 4px solid var(--overwhelmed); }
+        .state-header[data-state="low"] { background: var(--low-light); border-left: 4px solid var(--low); }
+
+        .state-header h2 {
+            font-size: 1.5rem;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .state-header p {
+            color: var(--text-secondary);
+            font-size: 1rem;
+            line-height: 1.7;
+        }
+
+        .validation-box {
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+            border-left: 4px solid #f59e0b;
+        }
+
+        .validation-box p {
+            color: #92400e;
+            font-size: 0.95rem;
+            font-style: italic;
+        }
+
+        /* Pain Scale */
+        .pain-scale {
+            margin: 25px 0;
+        }
+
+        .pain-scale-label {
+            font-weight: 600;
+            margin-bottom: 12px;
+            display: block;
+        }
+
+        .pain-scale-track {
+            display: flex;
+            gap: 8px;
+        }
+
+        .pain-level {
+            flex: 1;
+            padding: 12px 8px;
+            text-align: center;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+
+        .pain-level:hover {
+            transform: scale(1.05);
+        }
+
+        .pain-level.selected {
+            color: white;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .pain-level[data-level="1"],
+        .pain-level[data-level="2"] { background: #dcfce7; }
+        .pain-level[data-level="1"].selected,
+        .pain-level[data-level="2"].selected { background: #22c55e; }
+
+        .pain-level[data-level="3"],
+        .pain-level[data-level="4"] { background: #fef3c7; }
+        .pain-level[data-level="3"].selected,
+        .pain-level[data-level="4"].selected { background: #f59e0b; }
+
+        .pain-level[data-level="5"],
+        .pain-level[data-level="6"] { background: #ffedd5; }
+        .pain-level[data-level="5"].selected,
+        .pain-level[data-level="6"].selected { background: #f97316; }
+
+        .pain-level[data-level="7"],
+        .pain-level[data-level="8"] { background: #fee2e2; }
+        .pain-level[data-level="7"].selected,
+        .pain-level[data-level="8"].selected { background: #ef4444; }
+
+        .pain-level[data-level="9"],
+        .pain-level[data-level="10"] { background: #fecaca; }
+        .pain-level[data-level="9"].selected,
+        .pain-level[data-level="10"].selected { background: #dc2626; }
+
+        /* Category Tabs */
+        .category-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .category-tab {
+            padding: 10px 18px;
+            border: 2px solid var(--border);
+            border-radius: 25px;
+            background: white;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+
+        .category-tab:hover {
+            border-color: #a855f7;
+        }
+
+        .category-tab.active {
+            background: linear-gradient(135deg, #a855f7 0%, #7c3aed 100%);
+            color: white;
+            border-color: transparent;
+        }
+
+        /* Tools List */
+        .tools-section h3 {
+            font-size: 1.1rem;
+            margin-bottom: 15px;
+            color: var(--text-primary);
+        }
+
+        .tool-item {
+            background: #f9fafb;
+            border-radius: 12px;
+            margin-bottom: 12px;
+            overflow: hidden;
+            border: 1px solid var(--border);
+        }
+
+        .tool-header {
+            padding: 16px 20px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: background 0.2s;
+        }
+
+        .tool-header:hover {
+            background: #f3f4f6;
+        }
+
+        .tool-title {
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .tool-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .tool-action-btn {
+            padding: 6px 12px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            transition: all 0.2s;
+        }
+
+        .fav-btn {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .fav-btn.active {
+            background: #fbbf24;
+            color: white;
+        }
+
+        .tried-btn {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .tried-btn.active {
+            background: #22c55e;
+            color: white;
+        }
+
+        .tool-content {
+            display: none;
+            padding: 0 20px 20px;
+            border-top: 1px solid var(--border);
+        }
+
+        .tool-content.expanded {
+            display: block;
+        }
+
+        .tool-steps {
+            padding: 15px 0;
+        }
+
+        .tool-steps ol {
+            padding-left: 20px;
+        }
+
+        .tool-steps li {
+            margin-bottom: 10px;
+            color: var(--text-secondary);
+        }
+
+        .tool-tip {
+            background: #eff6ff;
+            border-radius: 8px;
+            padding: 12px 15px;
+            margin-top: 12px;
+            font-size: 0.9rem;
+            color: #1e40af;
+        }
+
+        .tool-tip strong {
+            color: #1e3a8a;
+        }
+
+        /* Body Map */
+        .body-map-section {
+            margin: 25px 0;
+        }
+
+        .body-map {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .body-area {
+            padding: 15px;
+            background: #f9fafb;
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 0.9rem;
+        }
+
+        .body-area:hover {
+            border-color: #f97316;
+        }
+
+        .body-area.selected {
+            background: var(--pain-flaring-light);
+            border-color: var(--pain-flaring);
+        }
+
+        .body-area-emoji {
+            font-size: 1.5rem;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        /* Journal */
+        .journal-section {
+            margin-top: 30px;
+        }
+
+        .journal-textarea {
+            width: 100%;
+            min-height: 150px;
+            padding: 20px;
+            border: 2px solid var(--border);
+            border-radius: 16px;
+            font-family: inherit;
+            font-size: 1rem;
+            resize: vertical;
+            background: #fffbeb;
+            background-image: repeating-linear-gradient(
+                transparent,
+                transparent 31px,
+                #fef3c7 31px,
+                #fef3c7 32px
+            );
+            line-height: 32px;
+        }
+
+        .journal-textarea:focus {
+            outline: none;
+            border-color: #a855f7;
+        }
+
+        /* Voice Recording */
+        .voice-section {
+            margin-bottom: 20px;
+        }
+
+        .voice-record-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            width: 100%;
+            padding: 20px;
+            border: 3px dashed #e5e7eb;
+            border-radius: 16px;
+            background: #fafafa;
+            cursor: pointer;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            transition: all 0.3s;
+        }
+
+        .voice-record-btn:hover {
+            border-color: #a855f7;
+            background: #fdf4ff;
+            color: #a855f7;
+        }
+
+        .voice-record-btn.recording {
+            border-color: #ef4444;
+            background: #fee2e2;
+            color: #ef4444;
+            animation: pulse-recording 1.5s ease-in-out infinite;
+        }
+
+        @keyframes pulse-recording {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+        }
+
+        .voice-record-icon {
+            font-size: 1.5rem;
+        }
+
+        .recorded-notes {
+            margin-top: 20px;
+        }
+
+        .recorded-note {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 15px;
+            background: #f3f4f6;
+            border-radius: 12px;
+            margin-bottom: 10px;
+        }
+
+        .recorded-note audio {
+            flex: 1;
+            height: 40px;
+        }
+
+        .delete-note-btn {
+            padding: 8px 12px;
+            background: #fee2e2;
+            color: #991b1b;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.85rem;
+        }
+
+        .note-date {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        .note-transcript {
+            background: #fffbeb;
+            border-radius: 10px;
+            padding: 12px 15px;
+            margin-top: 10px;
+            font-size: 0.95rem;
+            line-height: 1.6;
+            color: var(--text-primary);
+            border-left: 3px solid #f59e0b;
+        }
+
+        .transcript-label {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--text-muted);
+            margin-bottom: 6px;
+            display: block;
+        }
+
+        .live-transcript {
+            background: #fef3c7;
+            border-radius: 12px;
+            padding: 15px;
+            margin-top: 15px;
+            font-style: italic;
+            color: #92400e;
+            display: none;
+        }
+
+        .live-transcript.active {
+            display: block;
+            animation: pulse 1.5s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.8; }
+            50% { opacity: 1; }
+        }
+
+        .recorded-note {
+            flex-direction: column;
+            align-items: stretch;
+        }
+
+        .recorded-note-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .recorded-note audio {
+            flex: 1;
+            height: 40px;
+        }
+
+        .no-transcript {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            font-style: italic;
+            margin-top: 8px;
+        }
+
+        .or-divider {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin: 20px 0;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        .or-divider::before,
+        .or-divider::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: var(--border);
+        }
+
+        .journal-prompts {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 15px;
+        }
+
+        .prompt-chip {
+            padding: 8px 14px;
+            background: #f3f4f6;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .prompt-chip:hover {
+            background: #e5e7eb;
+        }
+
+        /* Quick Access */
+        .quick-access {
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+            border-radius: 16px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+
+        .quick-access h3 {
+            font-size: 1rem;
+            margin-bottom: 15px;
+            color: #92400e;
+        }
+
+        .favourites-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .fav-item {
+            padding: 10px 16px;
+            background: white;
+            border-radius: 10px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .fav-item:hover {
+            transform: translateY(-2px);
+        }
+
+        /* History */
+        .history-section {
+            margin-top: 25px;
+        }
+
+        .history-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .history-state {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .history-date {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }
+
+        /* Nerve Pain Info */
+        .nerve-info {
+            background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+            border-radius: 16px;
+            padding: 25px;
+            margin: 25px 0;
+            border-left: 4px solid #3b82f6;
+        }
+
+        .nerve-info h3 {
+            color: #1e40af;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .nerve-info p {
+            color: #1e3a8a;
+            font-size: 0.95rem;
+            margin-bottom: 10px;
+        }
+
+        .nerve-info ul {
+            padding-left: 20px;
+            color: #1e3a8a;
+        }
+
+        .nerve-info li {
+            margin-bottom: 6px;
+        }
+
+        /* Emergency Section */
+        .emergency-section {
+            background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
+            border-radius: 16px;
+            padding: 20px;
+            margin-top: 20px;
+            border: 2px solid #ef4444;
+        }
+
+        .emergency-section h3 {
+            color: #991b1b;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .emergency-section p {
+            color: #991b1b;
+            font-size: 0.95rem;
+        }
+
+        .emergency-contacts {
+            display: grid;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .emergency-contact {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 15px;
+            background: white;
+            border-radius: 10px;
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 30px 20px;
+            color: white;
+            opacity: 0.8;
+            font-size: 0.9rem;
+        }
+
+        /* Hidden */
+        .hidden {
+            display: none !important;
+        }
+
+        /* Desktop enhancements */
+        @media (min-width: 1024px) {
+            .container {
+                padding: 30px;
+            }
+
+            .card {
+                padding: 40px;
+            }
+
+            .header h1 {
+                font-size: 2.5rem;
+            }
+
+            .state-grid {
+                grid-template-columns: repeat(5, 1fr);
+                gap: 20px;
+            }
+
+            .state-btn {
+                padding: 25px 20px;
+            }
+
+            .state-emoji {
+                font-size: 2.5rem;
+            }
+
+            .tool-header {
+                padding: 20px 25px;
+            }
+
+            .category-tabs {
+                gap: 15px;
+            }
+
+            .category-tab {
+                padding: 12px 24px;
+                font-size: 1rem;
+            }
+        }
+
+        /* Tablet */
+        @media (max-width: 1023px) and (min-width: 601px) {
+            .state-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+
+            .body-map {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        /* Mobile - Enhanced */
+        @media (max-width: 600px) {
+            .container {
+                padding: 12px;
+            }
+
+            .card {
+                padding: 20px;
+                border-radius: 20px;
+            }
+
+            .header {
+                padding: 20px 15px;
+            }
+
+            .header h1 {
+                font-size: 1.4rem;
+            }
+
+            .header p {
+                font-size: 0.9rem;
+            }
+
+            .greeting {
+                font-size: 1rem;
+            }
+
+            .card-title {
+                font-size: 1.1rem;
+            }
+
+            .state-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 12px;
+            }
+
+            .state-btn {
+                padding: 18px 12px;
+            }
+
+            .state-emoji {
+                font-size: 1.8rem;
+            }
+
+            .state-label {
+                font-size: 0.85rem;
+            }
+
+            /* Touch-friendly buttons */
+            .back-btn {
+                padding: 12px 20px;
+                font-size: 1rem;
+            }
+
+            .category-tabs {
+                gap: 8px;
+                overflow-x: auto;
+                padding-bottom: 10px;
+                -webkit-overflow-scrolling: touch;
+            }
+
+            .category-tab {
+                padding: 10px 16px;
+                font-size: 0.85rem;
+                white-space: nowrap;
+                flex-shrink: 0;
+            }
+
+            .pain-scale-track {
+                flex-wrap: wrap;
+                gap: 6px;
+            }
+
+            .pain-level {
+                flex: 0 0 calc(20% - 5px);
+                padding: 10px 6px;
+                font-size: 0.8rem;
+            }
+
+            .body-map {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 8px;
+            }
+
+            .body-area {
+                padding: 12px 10px;
+                font-size: 0.85rem;
+            }
+
+            .body-area-emoji {
+                font-size: 1.3rem;
+            }
+
+            /* Tool items - touch friendly */
+            .tool-header {
+                padding: 14px 16px;
+            }
+
+            .tool-title {
+                font-size: 0.95rem;
+            }
+
+            .tool-actions {
+                flex-direction: column;
+                gap: 6px;
+            }
+
+            .tool-action-btn {
+                padding: 8px 12px;
+                font-size: 0.75rem;
+            }
+
+            .tool-content {
+                padding: 0 16px 16px;
+            }
+
+            .tool-steps li {
+                font-size: 0.9rem;
+            }
+
+            .tool-tip {
+                font-size: 0.85rem;
+                padding: 10px 12px;
+            }
+
+            /* State headers */
+            .state-header {
+                padding: 20px;
+            }
+
+            .state-header h2 {
+                font-size: 1.3rem;
+            }
+
+            .state-header p {
+                font-size: 0.9rem;
+            }
+
+            /* Validation box */
+            .validation-box {
+                padding: 16px;
+            }
+
+            .validation-box p {
+                font-size: 0.9rem;
+            }
+
+            /* Self compassion */
+            .self-compassion {
+                padding: 18px;
+            }
+
+            .self-compassion p {
+                font-size: 0.9rem;
+            }
+
+            /* Nerve info */
+            .nerve-info {
+                padding: 18px;
+            }
+
+            .nerve-info p,
+            .nerve-info li {
+                font-size: 0.9rem;
+            }
+
+            /* Emergency section */
+            .emergency-section {
+                padding: 16px;
+            }
+
+            .emergency-contact {
+                padding: 10px 12px;
+                font-size: 0.9rem;
+            }
+
+            /* Breathing circle */
+            .breathing-circle {
+                width: 120px;
+                height: 120px;
+                font-size: 1rem;
+            }
+
+            .breathing-btn {
+                padding: 12px 25px;
+                font-size: 0.95rem;
+            }
+
+            /* Affirmation */
+            .affirmation-card {
+                padding: 20px;
+            }
+
+            .affirmation-text {
+                font-size: 1.05rem;
+            }
+
+            /* Journal */
+            .journal-textarea {
+                min-height: 120px;
+                padding: 16px;
+                font-size: 1rem;
+                line-height: 28px;
+                background-image: repeating-linear-gradient(
+                    transparent,
+                    transparent 27px,
+                    #fef3c7 27px,
+                    #fef3c7 28px
+                );
+            }
+
+            .journal-prompts {
+                gap: 6px;
+            }
+
+            .prompt-chip {
+                padding: 8px 12px;
+                font-size: 0.8rem;
+            }
+
+            /* Quick access */
+            .quick-access {
+                padding: 16px;
+            }
+
+            .fav-item {
+                padding: 10px 14px;
+                font-size: 0.85rem;
+            }
+
+            /* History */
+            .history-item {
+                padding: 10px 0;
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 4px;
+            }
+
+            .history-date {
+                font-size: 0.8rem;
+            }
+
+            /* Footer */
+            .footer {
+                padding: 25px 15px;
+                font-size: 0.85rem;
+            }
+        }
+
+        /* Very small phones */
+        @media (max-width: 350px) {
+            .state-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .pain-level {
+                flex: 0 0 calc(20% - 4px);
+                padding: 8px 4px;
+                font-size: 0.75rem;
+            }
+
+            .body-map {
+                grid-template-columns: 1fr;
+            }
+
+            .tool-actions {
+                flex-direction: row;
+            }
+        }
+
+        /* Ensure touch targets are large enough */
+        @media (pointer: coarse) {
+            .state-btn,
+            .category-tab,
+            .tool-header,
+            .pain-level,
+            .body-area,
+            .prompt-chip,
+            .fav-item {
+                min-height: 44px;
+            }
+        }
+
+        /* Gentle animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .card {
+            animation: fadeIn 0.4s ease-out;
+        }
+
+        /* Breathing exercise */
+        .breathing-circle {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #a855f7 0%, #7c3aed 100%);
+            margin: 30px auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+
+        .breathing-circle.breathing {
+            animation: breathe 8s ease-in-out infinite;
+        }
+
+        @keyframes breathe {
+            0%, 100% { transform: scale(1); }
+            25% { transform: scale(1.3); }
+            50% { transform: scale(1.3); }
+            75% { transform: scale(1); }
+        }
+
+        .breathing-controls {
+            text-align: center;
+            margin-top: 15px;
+        }
+
+        .breathing-btn {
+            padding: 12px 30px;
+            background: linear-gradient(135deg, #a855f7 0%, #7c3aed 100%);
+            color: white;
+            border: none;
+            border-radius: 25px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .breathing-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 25px rgba(168, 85, 247, 0.4);
+        }
+
+        /* Affirmation cards */
+        .affirmation-card {
+            background: linear-gradient(135deg, #fdf4ff 0%, #fae8ff 100%);
+            border-radius: 16px;
+            padding: 25px;
+            text-align: center;
+            margin: 20px 0;
+            border: 2px solid #e879f9;
+        }
+
+        .affirmation-text {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #86198f;
+            font-style: italic;
+            line-height: 1.6;
+        }
+
+        .affirmation-btn {
+            margin-top: 15px;
+            padding: 10px 20px;
+            background: #e879f9;
+            color: white;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.9rem;
+        }
+
+        /* Self-compassion */
+        .self-compassion {
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+            border-radius: 16px;
+            padding: 25px;
+            margin: 20px 0;
+        }
+
+        .self-compassion h4 {
+            color: #92400e;
+            margin-bottom: 12px;
+        }
+
+        .self-compassion p {
+            color: #78350f;
+            font-size: 0.95rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <p class="greeting" id="greeting">Good morning, Elisa</p>
+            <h1>Your Spark Check-In</h1>
+            <p>How are you feeling right now?</p>
+        </header>
+
+        <!-- Main Selection View -->
+        <div id="main-view">
+            <div class="card">
+                <h2 class="card-title">Check in with yourself</h2>
+                <p style="color: var(--text-secondary); margin-bottom: 20px;">
+                    There's no right or wrong answer. Just notice where you are right now.
+                </p>
+
+                <div class="state-grid">
+                    <button class="state-btn" data-state="balanced" onclick="showStateDetail('balanced')">
+                        <span class="state-emoji">🌟</span>
+                        <span class="state-label">Good Day</span>
+                    </button>
+                    <button class="state-btn" data-state="pain-flaring" onclick="showStateDetail('pain-flaring')">
+                        <span class="state-emoji">🔥</span>
+                        <span class="state-label">Pain Flaring</span>
+                    </button>
+                    <button class="state-btn" data-state="exhausted" onclick="showStateDetail('exhausted')">
+                        <span class="state-emoji">🪫</span>
+                        <span class="state-label">Exhausted</span>
+                    </button>
+                    <button class="state-btn" data-state="overwhelmed" onclick="showStateDetail('overwhelmed')">
+                        <span class="state-emoji">🌊</span>
+                        <span class="state-label">Overwhelmed</span>
+                    </button>
+                    <button class="state-btn" data-state="low" onclick="showStateDetail('low')">
+                        <span class="state-emoji">🌧️</span>
+                        <span class="state-label">Low / Flat</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Quick Access Favourites -->
+            <div class="card quick-access" id="quick-access">
+                <h3>⭐ Your Favourite Tools</h3>
+                <div class="favourites-list" id="favourites-list">
+                    <p style="color: #92400e; font-size: 0.9rem;">Tools you star will appear here for quick access</p>
+                </div>
+            </div>
+
+            <!-- Recent Check-ins -->
+            <div class="card">
+                <h3 class="card-title">📅 Recent Check-ins</h3>
+                <div class="history-section" id="history-list">
+                    <p style="color: var(--text-muted); font-size: 0.9rem;">Your check-in history will appear here</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- State Detail Views -->
+
+        <!-- BALANCED / GOOD DAY -->
+        <div id="detail-balanced" class="state-detail card">
+            <button class="back-btn" onclick="showMainView()">← Back</button>
+
+            <div class="state-header" data-state="balanced">
+                <h2>🌟 A Good Day</h2>
+                <p>Your pain is manageable today and you have some energy. This is wonderful, Elisa. Let's make the most of this without overdoing it.</p>
+            </div>
+
+            <div class="validation-box">
+                <p>"Good days are precious. You don't need to 'make up' for harder days - just enjoy this one gently."</p>
+            </div>
+
+            <div class="self-compassion">
+                <h4>💛 A Gentle Reminder</h4>
+                <p>On good days, it's tempting to do everything you couldn't do on harder days. But pacing yourself today helps protect your energy for tomorrow. You deserve rest even on good days.</p>
+            </div>
+
+            <div class="tools-section">
+                <h3>Tools for Good Days</h3>
+
+                <div class="category-tabs">
+                    <button class="category-tab active" onclick="selectCategory(this, 'balanced')">All</button>
+                    <button class="category-tab" onclick="selectCategory(this, 'balanced', 'savour')">Savouring</button>
+                    <button class="category-tab" onclick="selectCategory(this, 'balanced', 'joy')">Joy & Connection</button>
+                </div>
+
+                <div id="tools-balanced">
+                    <div class="tool-item" data-category="savour">
+                        <div class="tool-header" onclick="toggleTool(this)">
+                            <span class="tool-title">🪟 Window Gazing</span>
+                            <div class="tool-actions">
+                                <button class="tool-action-btn fav-btn" onclick="event.stopPropagation(); toggleFav(this, 'window-gazing')">⭐</button>
+                                <button class="tool-action-btn tried-btn" onclick="event.stopPropagation(); toggleTried(this, 'window-gazing')">✓ Tried</button>
+                            </div>
+                        </div>
+                        <div class="tool-content">
+                            <div class="tool-steps">
+                                <ol>
+                                    <li>Sit where you can see outside</li>
+                                    <li>Just watch - clouds, birds, trees, people passing</li>
+                                    <li>No need to do anything, just observe</li>
+                                    <li>Let the world exist without needing anything from you</li>
+                                </ol>
+                            </div>
+                            <div class="tool-tip">
+                                <strong>Zero Effort:</strong> This costs nothing. Just being, watching, existing.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="tool-item" data-category="savour">
+                        <div class="tool-header" onclick="toggleTool(this)">
+                            <span class="tool-title">🎧 Something Good to Listen To</span>
+                            <div class="tool-actions">
+                                <button class="tool-action-btn fav-btn" onclick="event.stopPropagation(); toggleFav(this, 'listen')">⭐</button>
+                                <button class="tool-action-btn tried-btn" onclick="event.stopPropagation(); toggleTried(this, 'listen')">✓ Tried</button>
+                            </div>
+                        </div>
+                        <div class="tool-content">
+                            <div class="tool-steps">
+                                <ol>
+                                    <li>Put on something you enjoy - radio, music, audiobook, podcast</li>
+                                    <li>Close your eyes if it feels right</li>
+                                    <li>Let the sounds take you somewhere else</li>
+                                    <li>Your body is here, but your mind can travel</li>
+                                </ol>
+                            </div>
+                            <div class="tool-tip">
+                                <strong>Mental Holiday:</strong> You can't go places right now, but your mind can.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="tool-item" data-category="joy">
+                        <div class="tool-header" onclick="toggleTool(this)">
+                            <span class="tool-title">☕ Mindful Cuppa</span>
+                            <div class="tool-actions">
+                                <button class="tool-action-btn fav-btn" onclick="event.stopPropagation(); toggleFav(this, 'mindful-cuppa')">⭐</button>
+                                <button class="tool-action-btn tried-btn" onclick="event.stopPropagation(); toggleTried(this, 'mindful-cuppa')">✓ Tried</button>
+                            </div>
+                        </div>
+                        <div class="tool-content">
+                            <div class="tool-steps">
+                                <ol>
+                                    <li>Make yourself a cup of tea or coffee</li>
+                                    <li>Sit somewhere comfortable with a nice view</li>
+                                    <li>Hold the warm cup and feel the heat</li>
+                                    <li>Take slow sips, noticing the taste</li>
+                                    <li>Just be present for 10 minutes - no tasks</li>
+                                </ol>
+                            </div>
+                            <div class="tool-tip">
+                                <strong>You've Earned This:</strong> Taking a peaceful moment is not lazy - it's essential self-care.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="tool-item" data-category="joy">
+                        <div class="tool-header" onclick="toggleTool(this)">
+                            <span class="tool-title">📞 Connect with Someone</span>
+                            <div class="tool-actions">
+                                <button class="tool-action-btn fav-btn" onclick="event.stopPropagation(); toggleFav(this, 'connect-someone')">⭐</button>
+                                <button class="tool-action-btn tried-btn" onclick="event.stopPropagation(); toggleTried(this, 'connect-someone')">✓ Tried</button>
+                            </div>
+                        </div>
+                        <div class="tool-content">
+                            <div class="tool-steps">
+                                <ol>
+                                    <li>Think of someone you'd enjoy hearing from</li>
+                                    <li>Send a quick text or give them a short call</li>
+                                    <li>Share something good about your day</li>
+                                    <li>Keep it light and enjoyable</li>
+                                </ol>
+                            </div>
+                            <div class="tool-tip">
+                                <strong>Connection Matters:</strong> You give so much to others. It's okay to receive too.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- PAIN FLARING -->
+        <div id="detail-pain-flaring" class="state-detail card">
+            <button class="back-btn" onclick="showMainView()">← Back</button>
+
+            <div class="state-header" data-state="pain-flaring">
+                <h2>🔥 Pain is Loud</h2>
+                <p>The pain is making itself known. You don't have all the answers yet, and that uncertainty is hard. You're doing your best while waiting to understand what's happening in your body.</p>
+            </div>
+
+            <div class="validation-box">
+                <p>"Not having a diagnosis doesn't mean the pain isn't real. Your struggle is valid - even without a name for it yet."</p>
+            </div>
+
+            <div class="self-compassion">
+                <h4>💛 Living in Limbo</h4>
+                <p>Waiting for answers is exhausting. Not knowing what's wrong adds fear on top of pain. You're carrying so much right now - the pain itself, the uncertainty, the worry. That's an enormous weight. Be gentle with yourself.</p>
+            </div>
+
+            <div class="tools-section">
+                <h3>Mind Tools for Pain Days</h3>
+
+                <div class="category-tabs">
+                    <button class="category-tab active" onclick="selectCategory(this, 'pain-flaring')">All</button>
+                    <button class="category-tab" onclick="selectCategory(this, 'pain-flaring', 'calm')">Calming the Mind</button>
+                    <button class="category-tab" onclick="selectCategory(this, 'pain-flaring', 'distraction')">Mental Escape</button>
+                    <button class="category-tab" onclick="selectCategory(this, 'pain-flaring', 'acceptance')">Acceptance</button>
+                </div>
+
+                <div id="tools-pain-flaring">
+                    <div class="tool-item" data-category="calm">
+                        <div class="tool-header" onclick="toggleTool(this)">
+                            <span class="tool-title">🧠 Separating You from the Pain</span>
+                            <div class="tool-actions">
+                                <button class="tool-action-btn fav-btn" onclick="event.stopPropagation(); toggleFav(this, 'separate-pain')">⭐</button>
+                                <button class="tool-action-btn tried-btn" onclick="event.stopPropagation(); toggleTried(this, 'separate-pain')">✓ Tried</button>
+                            </div>
+                        </div>
+                        <div class="tool-content">
+                            <div class="tool-steps">
+                                <ol>
+                                    <li>Close your eyes and notice where the pain is</li>
+                                    <li>Now imagine stepping back from it - like you're observing it from a distance</li>
+                                    <li>Say to yourself: "There is pain in my body. I am noticing the pain."</li>
+                                    <li>You are the observer, not the pain itself</li>
+                                    <li>The pain is weather passing through - you are the sky</li>
+                                </ol>
+                            </div>
+                            <div class="tool-tip">
+                                <strong>Why This Matters:</strong> When we fuse with pain ("I AM in pain"), it feels all-consuming. Creating space ("I NOTICE pain") gives your mind room to breathe.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="tool-item" data-category="calm">
+                        <div class="tool-header" onclick="toggleTool(this)">
+                            <span class="tool-title">💭 Talking to the Pain</span>
+                            <div class="tool-actions">
+                                <button class="tool-action-btn fav-btn" onclick="event.stopPropagation(); toggleFav(this, 'talk-pain')">⭐</button>
+                                <button class="tool-action-btn tried-btn" onclick="event.stopPropagation(); toggleTried(this, 'talk-pain')">✓ Tried</button>
+                            </div>
+                        </div>
+                        <div class="tool-content">
+                            <div class="tool-steps">
+                                <ol>
+                                    <li>Acknowledge the pain: "I know you're there."</li>
+                                    <li>Don't fight it: "I'm not going to battle with you today."</li>
+                                    <li>Set a boundary: "You can be here, but you don't get to control my whole day."</li>
+                                    <li>Remind yourself: "I've survived every pain day before this one."</li>
+                                </ol>
+                            </div>
+                            <div class="tool-tip">
+                                <strong>Not Giving In:</strong> Accepting the pain is here isn't the same as giving up. It's choosing not to waste energy fighting what you can't change right now.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="tool-item" data-category="calm">
+                        <div class="tool-header" onclick="toggleTool(this)">
+                            <span class="tool-title">💨 Soften, Soothe, Allow</span>
+                            <div class="tool-actions">
+                                <button class="tool-action-btn fav-btn" onclick="event.stopPropagation(); toggleFav(this, 'soften-soothe')">⭐</button>
+                                <button class="tool-action-btn tried-btn" onclick="event.stopPropagation(); toggleTried(this, 'soften-soothe')">✓ Tried</button>
+                            </div>
+                        </div>
+                        <div class="tool-content">
+                            <div class="tool-steps">
+                                <ol>
+                                    <li><strong>Soften:</strong> Notice where you're tensing against the pain. Gently soften those muscles if you can.</li>
+                                    <li><strong>Soothe:</strong> Place a hand somewhere comforting - your heart, your cheek. Speak kindly to yourself.</li>
+                                    <li><strong>Allow:</strong> Let the pain be there without trying to push it away. Just for this moment.</li>
+                                </ol>
+                            </div>
+                            <div class="tool-tip">
+                                <strong>Self-Compassion:</strong> This practice comes from research on chronic pain. Fighting pain creates tension; allowing it can sometimes ease suffering.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="tool-item" data-category="distraction">
+                        <div class="tool-header" onclick="toggleTool(this)">
+                            <span class="tool-title">🎧 Audio Escape</span>
+                            <div class="tool-actions">
+                                <button class="tool-action-btn fav-btn" onclick="event.stopPropagation(); toggleFav(this, 'audio-escape')">⭐</button>
+                                <button class="tool-action-btn tried-btn" onclick="event.stopPropagation(); toggleTried(this, 'audio-escape')">✓ Tried</button>
+                            </div>
+                        </div>
+                        <div class="tool-content">
+                            <div class="tool-steps">
+                                <ol>
+                                    <li>Put on headphones</li>
+                                    <li>Choose something that fully absorbs your attention - an audiobook, podcast, or music you love</li>
+                                    <li>Let your mind travel somewhere else</li>
+                                    <li>Your body is here, but your mind can take a holiday</li>
+                                </ol>
+                            </div>
+                            <div class="tool-tip">
+                                <strong>Mental Escape is Valid:</strong> You're not ignoring the pain - you're giving your mind a break from focusing on it. That's healthy.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="tool-item" data-category="distraction">
+                        <div class="tool-header" onclick="toggleTool(this)">
+                            <span class="tool-title">🧩 Absorbing Activity</span>
+                            <div class="tool-actions">
+                                <button class="tool-action-btn fav-btn" onclick="event.stopPropagation(); toggleFav(this, 'absorbing-activity')">⭐</button>
+                                <button class="tool-action-btn tried-btn" onclick="event.stopPropagation(); toggleTried(this, 'absorbing-activity')">✓ Tried</button>
+                            </div>
+                        </div>
+                        <div class="tool-content">
+                            <div class="tool-steps">
+                                <ol>
+                                    <li>Find something that requires just enough concentration to occupy your mind</li>
+                                    <li>Ideas: puzzles, word games, colouring, knitting, watching something gripping</li>
+                                    <li>Nothing too demanding - just enough to redirect your attention</li>
+                                    <li>Even 20 minutes of mental escape is a win</li>
+                                </ol>
+                            </div>
+                            <div class="tool-tip">
+                                <strong>Your Brain Has Limited Bandwidth:</strong> When your mind is engaged elsewhere, there's less space for pain to dominate your thoughts.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="tool-item" data-category="distraction">
+                        <div class="tool-header" onclick="toggleTool(this)">
+                            <span class="tool-title">📱 Connect with Someone</span>
+                            <div class="tool-actions">
+                                <button class="tool-action-btn fav-btn" onclick="event.stopPropagation(); toggleFav(this, 'connect-pain')">⭐</button>
+                                <button class="tool-action-btn tried-btn" onclick="event.stopPropagation(); toggleTried(this, 'connect-pain')">✓ Tried</button>
+                            </div>
+                        </div>
+                        <div class="tool-content">
+                            <div class="tool-steps">
+                                <ol>
+                                    <li>Text or call someone - even briefly</li>
+                                    <li>You don't have to talk about the pain</li>
+                                    <li>Just hearing another voice or having a chat can shift your focus</li>
+                                    <li>Connection reminds you there's a world beyond the pain</li>
+                                </ol>
+                            </div>
+                            <div class="tool-tip">
+                                <strong>You're Not a Burden:</strong> People who care about you want to hear from you. A quick chat isn't asking too much.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="tool-item" data-category="acceptance">
+                        <div class="tool-header" onclick="toggleTool(this)">
+                            <span class="tool-title">📅 This is a Pain Day</span>
+                            <div class="tool-actions">
+                                <button class="tool-action-btn fav-btn" onclick="event.stopPropagation(); toggleFav(this, 'pain-day')">⭐</button>
+                                <button class="tool-action-btn tried-btn" onclick="event.stopPropagation(); toggleTried(this, 'pain-day')">✓ Tried</button>
+                            </div>
+                        </div>
+                        <div class="tool-content">
+                            <div class="tool-steps">
+                                <ol>
+                                    <li>Say it: "Today is a pain day. That's what it is."</li>
+                                    <li>Lower the bar completely - survival is success today</li>
+                                    <li>Cross everything off your mental to-do list except rest</li>
+                                    <li>Tomorrow might be different. Today is this.</li>
+                                </ol>
+                            </div>
+                            <div class="tool-tip">
+                                <strong>Permission Granted:</strong> On pain days, doing nothing IS doing something. You're getting through.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="tool-item" data-category="acceptance">
+                        <div class="tool-header" onclick="toggleTool(this)">
+                            <span class="tool-title">🕯️ The Grief of Chronic Pain</span>
+                            <div class="tool-actions">
+                                <button class="tool-action-btn fav-btn" onclick="event.stopPropagation(); toggleFav(this, 'grief-pain')">⭐</button>
+                                <button class="tool-action-btn tried-btn" onclick="event.stopPropagation(); toggleTried(this, 'grief-pain')">✓ Tried</button>
+                            </div>
+                        </div>
+                        <div class="tool-content">
+                            <div class="tool-steps">
+                                <ol>
+                                    <li>It's okay to grieve what pain has taken from you</li>
+                                    <li>The things you used to do easily. The energy you used to have.</li>
+                                    <li>Acknowledge the loss - don't pretend it's fine</li>
+                                    <li>Grief and acceptance can exist together</li>
+                                </ol>
+                            </div>
+                            <div class="tool-tip">
+                                <strong>It's Real Loss:</strong> Chronic pain changes life. You're allowed to be sad about that, even while you keep going.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="tool-item" data-category="acceptance">
+                        <div class="tool-header" onclick="toggleTool(this)">
+                            <span class="tool-title">💪 You're Still Here</span>
+                            <div class="tool-actions">
+                                <button class="tool-action-btn fav-btn" onclick="event.stopPropagation(); toggleFav(this, 'still-here')">⭐</button>
+                                <button class="tool-action-btn tried-btn" onclick="event.stopPropagation(); toggleTried(this, 'still-here')">✓ Tried</button>
+                            </div>
+                        </div>
+                        <div class="tool-content">
+                            <div class="tool-steps">
+                                <ol>
+                                    <li>You have lived through every single pain day so far</li>
+                                    <li>100% survival rate</li>
+                                    <li>This one will pass too</li>
+                                    <li>You are stronger than you feel right now</li>
+                                </ol>
+                            </div>
+                            <div class="tool-tip">
+                                <strong>Track Record:</strong> Every difficult day you've survived is proof that you can survive this one too.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- EXHAUSTED -->
+        <div id="detail-exhausted" class="state-detail card">
+            <button class="back-btn" onclick="showMainView()">← Back</button>
+
+            <div class="state-header" data-state="exhausted">
+                <h2>🪫 Exhausted</h2>
+                <p>Your energy is completely depleted, Elisa. Your body is fighting so many battles right now. Of course you're exhausted.</p>
+            </div>
+
+            <div class="validation-box">
+                <p>"You're not lazy. You're not weak. Your body is dealing with so much - things that would exhaust anyone. Rest is not optional, it's necessary."</p>
+            </div>
+
+            <div class="self-compassion">
+                <h4>💛 When Everything is Hard</h4>
+                <p>When even small things feel impossible, that's not you failing - that's your body telling you it has nothing left to give. Listen to it. Rest isn't giving up. It's what your body needs right now.</p>
+            </div>
+
+            <div class="tools-section">
+                <h3>Energy Conservation Tools</h3>
+
+                <div class="category-tabs">
+                    <button class="category-tab active" onclick="selectCategory(this, 'exhausted')">All</button>
+                    <button class="category-tab" onclick="selectCategory(this, 'exhausted', 'rest')">Deep Rest</button>
+                    <button class="category-tab" onclick="selectCategory(this, 'exhausted', 'micro')">Micro-Rests</button>
+                    <button class="category-tab" onclick="selectCategory(this, 'exhausted', 'nourish')">Gentle Nourishment</button>
+                </div>
+
+                <div id="tools-exhausted">
+                    <div class="tool-item" data-category="rest">
+                        <div class="tool-header" onclick="toggleTool(this)">
+                            <span class="tool-title">🛏️ Permission to Rest</span>
+                            <div class="tool-actions">
+                                <button class="tool-action-btn fav-btn" onclick="event.stopPropagation(); toggleFav(this, 'permission-rest')">⭐</button>
+                                <button class="tool-action-btn tried-btn" onclick="event.stopPropagation(); toggleTried(this, 'permission-rest')">✓ Tried</button>
+                            </div>
+                        </div>
+                        <div class="tool-content">
+                            <div class="tool-steps">
+                                <ol>
+                                    <li>Say to yourself: "I am allowed to rest"</li>
+                                    <li>Lie down somewhere comfortable</li>
+                                    <li>Set a timer for 20-30 minutes if worried about sleeping too long</li>
+                                    <li>Close your eyes - you don't have to sleep, just rest</li>
+                                    <li>Let go of what isn't done. It can wait.</li>
+                                </ol>
+                            </div>
+                            <div class="tool-tip">
+                                <strong>Rest Is Productive:</strong> Rest helps your body cope. It's not doing nothing - it's healing.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="tool-item" data-category="rest">
+                        <div class="tool-header" onclick="toggleTool(this)">
+                            <span class="tool-title">😴 Just Existing</span>
+                            <div class="tool-actions">
+                                <button class="tool-action-btn fav-btn" onclick="event.stopPropagation(); toggleFav(this, 'just-existing')">⭐</button>
+                                <button class="tool-action-btn tried-btn" onclick="event.stopPropagation(); toggleTried(this, 'just-existing')">✓ Tried</button>
+                            </div>
+                        </div>
+                        <div class="tool-content">
+                            <div class="tool-steps">
+                                <ol>
+                                    <li>Stay exactly where you are</li>
+                                    <li>You don't need to do anything</li>
+                                    <li>You don't need to achieve anything</li>
+                                    <li>Just existing right now is enough</li>
+                                    <li>Breathe. That's all.</li>
+                                </ol>
+                            </div>
+                            <div class="tool-tip">
+                                <strong>Permission:</strong> Some days, simply getting through is the achievement. This is one of those days.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="tool-item" data-category="micro">
+                        <div class="tool-header" onclick="toggleTool(this)">
+                            <span class="tool-title">⏱️ 5-Minute Micro-Rest</span>
+                            <div class="tool-actions">
+                                <button class="tool-action-btn fav-btn" onclick="event.stopPropagation(); toggleFav(this, 'micro-rest')">⭐</button>
+                                <button class="tool-action-btn tried-btn" onclick="event.stopPropagation(); toggleTried(this, 'micro-rest')">✓ Tried</button>
+                            </div>
+                        </div>
+                        <div class="tool-content">
+                            <div class="tool-steps">
+                                <ol>
+                                    <li>Sit in your most comfortable chair</li>
+                                    <li>Close your eyes</li>
+                                    <li>Take 5 slow, deep breaths</li>
+                                    <li>Let your shoulders drop</li>
+                                    <li>Stay here for just 5 minutes - it makes a difference</li>
+                                </ol>
+                            </div>
+                            <div class="tool-tip">
+                                <strong>Little Rests Add Up:</strong> Several 5-minute rests throughout the day can be as helpful as one long rest.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="tool-item" data-category="micro">
+                        <div class="tool-header" onclick="toggleTool(this)">
+                            <span class="tool-title">😌 Sit While You Wait</span>
+                            <div class="tool-actions">
+                                <button class="tool-action-btn fav-btn" onclick="event.stopPropagation(); toggleFav(this, 'sit-wait')">⭐</button>
+                                <button class="tool-action-btn tried-btn" onclick="event.stopPropagation(); toggleTried(this, 'sit-wait')">✓ Tried</button>
+                            </div>
+                        </div>
+                        <div class="tool-content">
+                            <div class="tool-steps">
+                                <ol>
+                                    <li>Whenever you're waiting for something (kettle, microwave, washing machine)</li>
+                                    <li>Sit down instead of standing</li>
+                                    <li>Use a perching stool in the kitchen if standing is required</li>
+                                    <li>Every moment of sitting saves energy</li>
+                                </ol>
+                            </div>
+                            <div class="tool-tip">
+                                <strong>Energy Banking:</strong> Sitting for tasks you'd normally stand for deposits energy into your reserve.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="tool-item" data-category="nourish">
+                        <div class="tool-header" onclick="toggleTool(this)">
+                            <span class="tool-title">🍵 Warm Nourishment</span>
+                            <div class="tool-actions">
+                                <button class="tool-action-btn fav-btn" onclick="event.stopPropagation(); toggleFav(this, 'warm-nourishment')">⭐</button>
+                                <button class="tool-action-btn tried-btn" onclick="event.stopPropagation(); toggleTried(this, 'warm-nourishment')">✓ Tried</button>
+                            </div>
+                        </div>
+                        <div class="tool-content">
+                            <div class="tool-steps">
+                                <ol>
+                                    <li>When exhausted, simple nourishment is best</li>
+                                    <li>A warm cup of soup, tea with honey, or warm milk</li>
+                                    <li>Something easy that doesn't require cooking</li>
+                                    <li>Sip slowly and let the warmth comfort you</li>
+                                </ol>
+                            </div>
+                            <div class="tool-tip">
+                                <strong>Keep It Simple:</strong> On exhausted days, toast is a perfectly acceptable meal. Nourishment doesn't have to be complicated.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="tool-item" data-category="nourish">
+                        <div class="tool-header" onclick="toggleTool(this)">
+                            <span class="tool-title">💧 Hydration Check</span>
+                            <div class="tool-actions">
+                                <button class="tool-action-btn fav-btn" onclick="event.stopPropagation(); toggleFav(this, 'hydration')">⭐</button>
+                                <button class="tool-action-btn tried-btn" onclick="event.stopPropagation(); toggleTried(this, 'hydration')">✓ Tried</button>
+                            </div>
+                        </div>
+                        <div class="tool-content">
+                            <div class="tool-steps">
+                                <ol>
+                                    <li>Dehydration makes exhaustion worse</li>
+                                    <li>Keep a water bottle or glass within reach</li>
+                                    <li>Take small sips throughout the day</li>
+                                    <li>Herbal teas and diluted squash count too!</li>
+                                </ol>
+                            </div>
+                            <div class="tool-tip">
+                                <strong>Easy Reminder:</strong> Every time you sit down, take a sip of water.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- OVERWHELMED -->
+        <div id="detail-overwhelmed" class="state-detail card">
+            <button class="back-btn" onclick="showMainView()">← Back</button>
+
+            <div class="state-header" data-state="overwhelmed">
+                <h2>🌊 Overwhelmed</h2>
+                <p>Everything feels like too much right now. The pain, the caring responsibilities, the tasks that never end. This feeling is valid, Elisa.</p>
+            </div>
+
+            <div class="validation-box">
+                <p>"You are carrying so much. It's okay to feel overwhelmed. This doesn't mean you're failing - it means you're human."</p>
+            </div>
+
+            <div class="emergency-section">
+                <h3>🆘 If You're In Crisis</h3>
+                <p>If you're feeling unable to cope, please reach out:</p>
+                <div class="emergency-contacts">
+                    <div class="emergency-contact">
+                        <span>Samaritans (free, 24/7)</span>
+                        <strong>116 123</strong>
+                    </div>
+                    <div class="emergency-contact">
+                        <span>Carers UK Helpline</span>
+                        <strong>0808 808 7777</strong>
+                    </div>
+                    <div class="emergency-contact">
+                        <span>NHS Mental Health</span>
+                        <strong>111 (option 2)</strong>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tools-section">
+                <h3>Calming Tools</h3>
+
+                <div class="category-tabs">
+                    <button class="category-tab active" onclick="selectCategory(this, 'overwhelmed')">All</button>
+                    <button class="category-tab" onclick="selectCategory(this, 'overwhelmed', 'immediate')">Right Now</button>
+                    <button class="category-tab" onclick="selectCategory(this, 'overwhelmed', 'grounding')">Grounding</button>
+                    <button class="category-tab" onclick="selectCategory(this, 'overwhelmed', 'release')">Release</button>
+                </div>
+
+                <div id="tools-overwhelmed">
+                    <div class="tool-item" data-category="immediate">
+                        <div class="tool-header" onclick="toggleTool(this)">
+                            <span class="tool-title">🧊 Cold Water Reset</span>
+                            <div class="tool-actions">
+                                <button class="tool-action-btn fav-btn" onclick="event.stopPropagation(); toggleFav(this, 'cold-water')">⭐</button>
+                                <button class="tool-action-btn tried-btn" onclick="event.stopPropagation(); toggleTried(this, 'cold-water')">✓ Tried</button>
+                            </div>
+                        </div>
+                        <div class="tool-content">
+                            <div class="tool-steps">
+                                <ol>
+                                    <li>Run cold water over your wrists for 30 seconds</li>
+                                    <li>Or splash cold water on your face</li>
+                                    <li>Or hold something cold (ice cube, frozen peas)</li>
+                                    <li>The cold interrupts the overwhelm response</li>
+                                </ol>
+                            </div>
+                            <div class="tool-tip">
+                                <strong>Why Cold Works:</strong> Cold activates your body's "dive reflex" which naturally slows your heart rate and calms you.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="tool-item" data-category="immediate">
+                        <div class="tool-header" onclick="toggleTool(this)">
+                            <span class="tool-title">💨 Box Breathing</span>
+                            <div class="tool-actions">
+                                <button class="tool-action-btn fav-btn" onclick="event.stopPropagation(); toggleFav(this, 'box-breathing')">⭐</button>
+                                <button class="tool-action-btn tried-btn" onclick="event.stopPropagation(); toggleTried(this, 'box-breathing')">✓ Tried</button>
+                            </div>
+                        </div>
+                        <div class="tool-content">
+                            <div class="breathing-circle" id="breathing-circle">
+                                Breathe
+                            </div>
+                            <div class="breathing-controls">
+                                <button class="breathing-btn" onclick="startBreathing()">Start Guided Breathing</button>
+                            </div>
+                            <div class="tool-steps" style="margin-top: 20px;">
+                                <ol>
+                                    <li>Breathe IN for 4 counts</li>
+                                    <li>HOLD for 4 counts</li>
+                                    <li>Breathe OUT for 4 counts</li>
+                                    <li>HOLD for 4 counts</li>
+                                    <li>Repeat 4 times</li>
+                                </ol>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="tool-item" data-category="grounding">
+                        <div class="tool-header" onclick="toggleTool(this)">
+                            <span class="tool-title">👀 5-4-3-2-1 Senses</span>
+                            <div class="tool-actions">
+                                <button class="tool-action-btn fav-btn" onclick="event.stopPropagation(); toggleFav(this, '54321')">⭐</button>
+                                <button class="tool-action-btn tried-btn" onclick="event.stopPropagation(); toggleTried(this, '54321')">✓ Tried</button>
+                            </div>
+                        </div>
+                        <div class="tool-content">
+                            <div class="tool-steps">
+                                <ol>
+                                    <li><strong>5 things you can SEE</strong> - look around and name them</li>
+                                    <li><strong>4 things you can TOUCH</strong> - feel the chair, your clothes</li>
+                                    <li><strong>3 things you can HEAR</strong> - listen carefully</li>
+                                    <li><strong>2 things you can SMELL</strong> - or imagine pleasant smells</li>
+                                    <li><strong>1 thing you can TASTE</strong> - or take a sip of water</li>
+                                </ol>
+                            </div>
+                            <div class="tool-tip">
+                                <strong>Grounding:</strong> This brings you back to the present moment and out of the spiral of overwhelm.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="tool-item" data-category="grounding">
+                        <div class="tool-header" onclick="toggleTool(this)">
+                            <span class="tool-title">🦶 Feet on the Ground</span>
+                            <div class="tool-actions">
+                                <button class="tool-action-btn fav-btn" onclick="event.stopPropagation(); toggleFav(this, 'feet-ground')">⭐</button>
+                                <button class="tool-action-btn tried-btn" onclick="event.stopPropagation(); toggleTried(this, 'feet-ground')">✓ Tried</button>
+                            </div>
+                        </div>
+                        <div class="tool-content">
+                            <div class="tool-steps">
+                                <ol>
+                                    <li>Sit in a chair with both feet flat on the floor</li>
+                                    <li>Press your feet into the ground</li>
+                                    <li>Feel the solid earth beneath you</li>
+                                    <li>Say: "I am here. I am safe. This moment will pass."</li>
+                                </ol>
+                            </div>
+                            <div class="tool-tip">
+                                <strong>You Are Supported:</strong> The ground is always there to hold you. Let it.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="tool-item" data-category="release">
+                        <div class="tool-header" onclick="toggleTool(this)">
+                            <span class="tool-title">📝 Brain Dump</span>
+                            <div class="tool-actions">
+                                <button class="tool-action-btn fav-btn" onclick="event.stopPropagation(); toggleFav(this, 'brain-dump')">⭐</button>
+                                <button class="tool-action-btn tried-btn" onclick="event.stopPropagation(); toggleTried(this, 'brain-dump')">✓ Tried</button>
+                            </div>
+                        </div>
+                        <div class="tool-content">
+                            <div class="tool-steps">
+                                <ol>
+                                    <li>Get a piece of paper (or use the journal below)</li>
+                                    <li>Write down everything that's swirling in your head</li>
+                                    <li>Don't organise, just dump it out</li>
+                                    <li>Getting it out of your head can reduce the pressure</li>
+                                </ol>
+                            </div>
+                            <div class="tool-tip">
+                                <strong>Not To-Do:</strong> This isn't a to-do list. You don't have to do anything with it. Just release it.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="tool-item" data-category="release">
+                        <div class="tool-header" onclick="toggleTool(this)">
+                            <span class="tool-title">😢 Permission to Cry</span>
+                            <div class="tool-actions">
+                                <button class="tool-action-btn fav-btn" onclick="event.stopPropagation(); toggleFav(this, 'cry')">⭐</button>
+                                <button class="tool-action-btn tried-btn" onclick="event.stopPropagation(); toggleTried(this, 'cry')">✓ Tried</button>
+                            </div>
+                        </div>
+                        <div class="tool-content">
+                            <div class="tool-steps">
+                                <ol>
+                                    <li>Find a private spot</li>
+                                    <li>Let the tears come if they need to</li>
+                                    <li>Crying is not weakness - it releases stress hormones</li>
+                                    <li>Afterwards, drink some water and be gentle with yourself</li>
+                                </ol>
+                            </div>
+                            <div class="tool-tip">
+                                <strong>Science Says:</strong> Emotional tears actually contain stress hormones. Crying literally releases them from your body.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- LOW / FLAT -->
+        <div id="detail-low" class="state-detail card">
+            <button class="back-btn" onclick="showMainView()">← Back</button>
+
+            <div class="state-header" data-state="low">
+                <h2>🌧️ Low / Flat</h2>
+                <p>You're feeling emotionally flat or low today. Sometimes chronic pain and caring responsibilities can drain your spirit as well as your body.</p>
+            </div>
+
+            <div class="validation-box">
+                <p>"Feeling low doesn't mean you're ungrateful or weak. It means you're human and you've been carrying a lot for a long time."</p>
+            </div>
+
+            <div class="affirmation-card">
+                <p class="affirmation-text" id="affirmation-text">"I am doing my best, and my best is enough."</p>
+                <button class="affirmation-btn" onclick="newAffirmation()">✨ New Affirmation</button>
+            </div>
+
+            <div class="self-compassion">
+                <h4>💛 A Word About Low Days</h4>
+                <p>Living with chronic pain can lead to low mood - this is very common and not your fault. If low days are happening often, please consider speaking to your GP. You don't have to struggle alone, and there is help available.</p>
+            </div>
+
+            <div class="tools-section">
+                <h3>Gentle Mood Lifters</h3>
+
+                <div class="category-tabs">
+                    <button class="category-tab active" onclick="selectCategory(this, 'low')">All</button>
+                    <button class="category-tab" onclick="selectCategory(this, 'low', 'small')">Tiny Steps</button>
+                    <button class="category-tab" onclick="selectCategory(this, 'low', 'comfort')">Comfort</button>
+                    <button class="category-tab" onclick="selectCategory(this, 'low', 'light')">Light & Nature</button>
+                </div>
+
+                <div id="tools-low">
+                    <div class="tool-item" data-category="small">
+                        <div class="tool-header" onclick="toggleTool(this)">
+                            <span class="tool-title">✅ One Tiny Thing</span>
+                            <div class="tool-actions">
+                                <button class="tool-action-btn fav-btn" onclick="event.stopPropagation(); toggleFav(this, 'one-thing')">⭐</button>
+                                <button class="tool-action-btn tried-btn" onclick="event.stopPropagation(); toggleTried(this, 'one-thing')">✓ Tried</button>
+                            </div>
+                        </div>
+                        <div class="tool-content">
+                            <div class="tool-steps">
+                                <ol>
+                                    <li>Choose ONE tiny thing you can do</li>
+                                    <li>Something that takes less than 2 minutes</li>
+                                    <li>Ideas: Brush your teeth, open a curtain, take your medication</li>
+                                    <li>That's enough. Well done.</li>
+                                </ol>
+                            </div>
+                            <div class="tool-tip">
+                                <strong>Progress Not Perfection:</strong> On low days, one tiny thing IS an achievement. Don't minimise it.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="tool-item" data-category="small">
+                        <div class="tool-header" onclick="toggleTool(this)">
+                            <span class="tool-title">🪟 Open a Curtain</span>
+                            <div class="tool-actions">
+                                <button class="tool-action-btn fav-btn" onclick="event.stopPropagation(); toggleFav(this, 'curtain')">⭐</button>
+                                <button class="tool-action-btn tried-btn" onclick="event.stopPropagation(); toggleTried(this, 'curtain')">✓ Tried</button>
+                            </div>
+                        </div>
+                        <div class="tool-content">
+                            <div class="tool-steps">
+                                <ol>
+                                    <li>Open a curtain or blind</li>
+                                    <li>Let natural light into your space</li>
+                                    <li>Sit near the window for a few minutes</li>
+                                    <li>Natural light genuinely helps mood</li>
+                                </ol>
+                            </div>
+                            <div class="tool-tip">
+                                <strong>Light Therapy:</strong> Even grey daylight is brighter than indoor lighting and helps regulate your mood hormones.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="tool-item" data-category="comfort">
+                        <div class="tool-header" onclick="toggleTool(this)">
+                            <span class="tool-title">🧸 Comfort Object</span>
+                            <div class="tool-actions">
+                                <button class="tool-action-btn fav-btn" onclick="event.stopPropagation(); toggleFav(this, 'comfort-object')">⭐</button>
+                                <button class="tool-action-btn tried-btn" onclick="event.stopPropagation(); toggleTried(this, 'comfort-object')">✓ Tried</button>
+                            </div>
+                        </div>
+                        <div class="tool-content">
+                            <div class="tool-steps">
+                                <ol>
+                                    <li>Find something soft or comforting to hold</li>
+                                    <li>A cushion, blanket, soft toy, or pet if you have one</li>
+                                    <li>Hold it close</li>
+                                    <li>There's no shame in needing comfort</li>
+                                </ol>
+                            </div>
+                            <div class="tool-tip">
+                                <strong>You're Never Too Old:</strong> Adults need comfort objects too. It's completely normal and helps.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="tool-item" data-category="comfort">
+                        <div class="tool-header" onclick="toggleTool(this)">
+                            <span class="tool-title">📺 Familiar Comfort</span>
+                            <div class="tool-actions">
+                                <button class="tool-action-btn fav-btn" onclick="event.stopPropagation(); toggleFav(this, 'familiar')">⭐</button>
+                                <button class="tool-action-btn tried-btn" onclick="event.stopPropagation(); toggleTried(this, 'familiar')">✓ Tried</button>
+                            </div>
+                        </div>
+                        <div class="tool-content">
+                            <div class="tool-steps">
+                                <ol>
+                                    <li>Put on a programme you've watched before and loved</li>
+                                    <li>Or music that reminds you of happy times</li>
+                                    <li>Familiar, comforting things are soothing to the brain</li>
+                                    <li>This isn't "wasting time" - it's self-care</li>
+                                </ol>
+                            </div>
+                            <div class="tool-tip">
+                                <strong>Why Re-watching Works:</strong> Familiar shows require less mental energy and provide predictable comfort.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="tool-item" data-category="light">
+                        <div class="tool-header" onclick="toggleTool(this)">
+                            <span class="tool-title">🌳 Window Nature</span>
+                            <div class="tool-actions">
+                                <button class="tool-action-btn fav-btn" onclick="event.stopPropagation(); toggleFav(this, 'window-nature')">⭐</button>
+                                <button class="tool-action-btn tried-btn" onclick="event.stopPropagation(); toggleTried(this, 'window-nature')">✓ Tried</button>
+                            </div>
+                        </div>
+                        <div class="tool-content">
+                            <div class="tool-steps">
+                                <ol>
+                                    <li>Sit by a window</li>
+                                    <li>Look outside at the sky, trees, birds, clouds</li>
+                                    <li>Just observe for a few minutes</li>
+                                    <li>If you can, open the window for fresh air</li>
+                                </ol>
+                            </div>
+                            <div class="tool-tip">
+                                <strong>Nature Heals:</strong> Even looking at nature through a window has been shown to reduce stress and improve mood.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="tool-item" data-category="light">
+                        <div class="tool-header" onclick="toggleTool(this)">
+                            <span class="tool-title">🚪 Step Outside (If Able)</span>
+                            <div class="tool-actions">
+                                <button class="tool-action-btn fav-btn" onclick="event.stopPropagation(); toggleFav(this, 'step-outside')">⭐</button>
+                                <button class="tool-action-btn tried-btn" onclick="event.stopPropagation(); toggleTried(this, 'step-outside')">✓ Tried</button>
+                            </div>
+                        </div>
+                        <div class="tool-content">
+                            <div class="tool-steps">
+                                <ol>
+                                    <li>If your pain allows, step outside your front or back door</li>
+                                    <li>Just stand there for 2 minutes</li>
+                                    <li>Feel the air on your skin</li>
+                                    <li>You don't have to go anywhere - just be outside briefly</li>
+                                </ol>
+                            </div>
+                            <div class="tool-tip">
+                                <strong>Low Bar, Big Reward:</strong> Even 2 minutes outside can shift your mood. That's all you need.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Journal Section (always visible) -->
+        <div class="card journal-section" id="journal-section">
+            <h3 class="card-title">📓 Your Private Space</h3>
+            <p style="color: var(--text-secondary); margin-bottom: 15px;">Record a voice note or write - whatever is easier. Everything stays on your device only.</p>
+
+            <!-- Voice Recording - BIG button, easy to tap -->
+            <div class="voice-section">
+                <button class="voice-record-btn" id="voice-record-btn" onclick="toggleRecording()">
+                    <span class="voice-record-icon" id="record-icon">🎙️</span>
+                    <span id="record-text">Tap to Record a Voice Note</span>
+                </button>
+                <p id="recording-status" style="text-align: center; margin-top: 10px; color: var(--text-muted); font-size: 0.9rem;"></p>
+                <!-- Live transcript shows what you're saying -->
+                <div class="live-transcript" id="live-transcript">
+                    <span class="transcript-label">📝 What you're saying:</span>
+                    <span id="live-transcript-text"></span>
+                </div>
+            </div>
+
+            <!-- Saved Voice Notes -->
+            <div class="recorded-notes" id="recorded-notes"></div>
+
+            <div class="or-divider">or write if you prefer</div>
+
+            <textarea class="journal-textarea" id="journal-entry" placeholder="How are you feeling today, Elisa?..." oninput="autoSaveJournal()"></textarea>
+
+            <div class="journal-prompts">
+                <span class="prompt-chip" onclick="addPrompt('Today I noticed...')">Today I noticed...</span>
+                <span class="prompt-chip" onclick="addPrompt('I\'m finding it hard to...')">I'm finding it hard to...</span>
+                <span class="prompt-chip" onclick="addPrompt('One small win today was...')">One small win today was...</span>
+            </div>
+
+            <p style="color: var(--text-muted); font-size: 0.85rem; margin-top: 15px;">💾 Auto-saved to your device</p>
+        </div>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>Made with 💜 for Elisa</p>
+            <p style="margin-top: 8px; font-size: 0.85rem;">Your wellbeing matters. You are not alone.</p>
+        </footer>
+    </div>
+
+    <script>
+        // Data storage
+        const STORAGE_KEY = 'elisas_spark_data';
+        let userData = {
+            favourites: [],
+            tried: [],
+            history: [],
+            journalEntries: [],
+            currentJournal: '',
+            painLevels: []
+        };
+
+        // Affirmations
+        const affirmations = [
+            "I am doing my best, and my best is enough.",
+            "My pain does not define my worth.",
+            "I deserve rest and gentleness.",
+            "I am stronger than I sometimes feel.",
+            "Taking care of myself helps me care for others.",
+            "It's okay to ask for help.",
+            "This moment will pass.",
+            "I am allowed to have difficult days.",
+            "My feelings are valid.",
+            "I am worthy of comfort and care.",
+            "Progress, not perfection.",
+            "I am doing something incredibly hard, and that matters.",
+            "Rest is not laziness; it's necessary.",
+            "I can only do what I can do today.",
+            "My body is doing its best to carry me through."
+        ];
+
+        // State labels
+        const stateLabels = {
+            'balanced': '🌟 Good Day',
+            'pain-flaring': '🔥 Pain Flaring',
+            'exhausted': '🪫 Exhausted',
+            'overwhelmed': '🌊 Overwhelmed',
+            'low': '🌧️ Low / Flat'
+        };
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            loadUserData();
+            updateGreeting();
+            updateFavourites();
+            updateHistory();
+            loadJournal();
+        });
+
+        // Greeting based on time
+        function updateGreeting() {
+            const hour = new Date().getHours();
+            let greeting;
+            if (hour < 12) greeting = 'Good morning, Elisa';
+            else if (hour < 17) greeting = 'Good afternoon, Elisa';
+            else greeting = 'Good evening, Elisa';
+            document.getElementById('greeting').textContent = greeting;
+        }
+
+        // Load/Save data
+        function loadUserData() {
+            const saved = localStorage.getItem(STORAGE_KEY);
+            if (saved) {
+                userData = JSON.parse(saved);
+            }
+        }
+
+        function saveUserData() {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(userData));
+        }
+
+        // Show state detail
+        function showStateDetail(state) {
+            // Hide main view
+            document.getElementById('main-view').classList.add('hidden');
+            document.getElementById('journal-section').classList.add('hidden');
+
+            // Show selected state detail
+            document.querySelectorAll('.state-detail').forEach(el => el.classList.remove('active'));
+            document.getElementById(`detail-${state}`).classList.add('active');
+
+            // Log to history
+            addToHistory(state);
+
+            // Scroll to top
+            window.scrollTo(0, 0);
+        }
+
+        function showMainView() {
+            document.getElementById('main-view').classList.remove('hidden');
+            document.getElementById('journal-section').classList.remove('hidden');
+            document.querySelectorAll('.state-detail').forEach(el => el.classList.remove('active'));
+            window.scrollTo(0, 0);
+        }
+
+        // Category tabs
+        function selectCategory(tab, state, category = null) {
+            // Update active tab
+            tab.parentElement.querySelectorAll('.category-tab').forEach(t => t.classList.remove('active'));
+            tab.classList.add('active');
+
+            // Filter tools
+            const toolsContainer = document.getElementById(`tools-${state}`);
+            const tools = toolsContainer.querySelectorAll('.tool-item');
+
+            tools.forEach(tool => {
+                if (!category || tool.dataset.category === category) {
+                    tool.style.display = 'block';
+                } else {
+                    tool.style.display = 'none';
+                }
+            });
+        }
+
+        // Toggle tool expansion
+        function toggleTool(header) {
+            const content = header.nextElementSibling;
+            content.classList.toggle('expanded');
+        }
+
+        // Favourites
+        function toggleFav(btn, toolId) {
+            btn.classList.toggle('active');
+            if (btn.classList.contains('active')) {
+                if (!userData.favourites.includes(toolId)) {
+                    userData.favourites.push(toolId);
+                }
+            } else {
+                userData.favourites = userData.favourites.filter(id => id !== toolId);
+            }
+            saveUserData();
+            updateFavourites();
+        }
+
+        function updateFavourites() {
+            const list = document.getElementById('favourites-list');
+            if (userData.favourites.length === 0) {
+                list.innerHTML = '<p style="color: #92400e; font-size: 0.9rem;">Tools you star will appear here for quick access</p>';
+            } else {
+                list.innerHTML = userData.favourites.map(id => {
+                    const name = id.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+                    return `<div class="fav-item">${name}</div>`;
+                }).join('');
+            }
+        }
+
+        // Tried
+        function toggleTried(btn, toolId) {
+            btn.classList.toggle('active');
+            if (btn.classList.contains('active')) {
+                if (!userData.tried.includes(toolId)) {
+                    userData.tried.push(toolId);
+                }
+            } else {
+                userData.tried = userData.tried.filter(id => id !== toolId);
+            }
+            saveUserData();
+        }
+
+        // History
+        function addToHistory(state) {
+            const entry = {
+                state: state,
+                timestamp: new Date().toISOString()
+            };
+            userData.history.unshift(entry);
+            userData.history = userData.history.slice(0, 10); // Keep last 10
+            saveUserData();
+            updateHistory();
+        }
+
+        function updateHistory() {
+            const list = document.getElementById('history-list');
+            if (userData.history.length === 0) {
+                list.innerHTML = '<p style="color: var(--text-muted); font-size: 0.9rem;">Your check-in history will appear here</p>';
+            } else {
+                list.innerHTML = userData.history.map(entry => {
+                    const date = new Date(entry.timestamp);
+                    const dateStr = date.toLocaleDateString('en-GB', {
+                        weekday: 'short',
+                        day: 'numeric',
+                        month: 'short',
+                        hour: '2-digit',
+                        minute: '2-digit'
+                    });
+                    return `
+                        <div class="history-item">
+                            <div class="history-state">${stateLabels[entry.state]}</div>
+                            <div class="history-date">${dateStr}</div>
+                        </div>
+                    `;
+                }).join('');
+            }
+        }
+
+        // Pain level tracking
+        function selectPainLevel(el) {
+            el.parentElement.querySelectorAll('.pain-level').forEach(p => p.classList.remove('selected'));
+            el.classList.add('selected');
+
+            userData.painLevels.push({
+                level: el.dataset.level,
+                timestamp: new Date().toISOString()
+            });
+            saveUserData();
+        }
+
+        // Body map
+        function toggleBodyArea(el) {
+            el.classList.toggle('selected');
+        }
+
+        // Journal
+        function loadJournal() {
+            const textarea = document.getElementById('journal-entry');
+            textarea.value = userData.currentJournal || '';
+        }
+
+        let journalTimeout;
+        function autoSaveJournal() {
+            clearTimeout(journalTimeout);
+            journalTimeout = setTimeout(() => {
+                userData.currentJournal = document.getElementById('journal-entry').value;
+                saveUserData();
+            }, 500);
+        }
+
+        function addPrompt(prompt) {
+            const textarea = document.getElementById('journal-entry');
+            if (textarea.value && !textarea.value.endsWith('\n')) {
+                textarea.value += '\n\n';
+            }
+            textarea.value += prompt + ' ';
+            textarea.focus();
+            autoSaveJournal();
+        }
+
+        // Affirmations
+        function newAffirmation() {
+            const text = document.getElementById('affirmation-text');
+            const randomIndex = Math.floor(Math.random() * affirmations.length);
+            text.textContent = `"${affirmations[randomIndex]}"`;
+        }
+
+        // Breathing exercise
+        let breathingInterval;
+        let breathingPhase = 0;
+        const phases = ['Breathe In...', 'Hold...', 'Breathe Out...', 'Hold...'];
+
+        function startBreathing() {
+            const circle = document.getElementById('breathing-circle');
+            const btn = event.target;
+
+            if (circle.classList.contains('breathing')) {
+                // Stop
+                circle.classList.remove('breathing');
+                clearInterval(breathingInterval);
+                circle.textContent = 'Breathe';
+                btn.textContent = 'Start Guided Breathing';
+            } else {
+                // Start
+                circle.classList.add('breathing');
+                btn.textContent = 'Stop';
+                breathingPhase = 0;
+                circle.textContent = phases[0];
+
+                breathingInterval = setInterval(() => {
+                    breathingPhase = (breathingPhase + 1) % 4;
+                    circle.textContent = phases[breathingPhase];
+                }, 4000);
+
+                // Stop after 2 minutes
+                setTimeout(() => {
+                    if (circle.classList.contains('breathing')) {
+                        circle.classList.remove('breathing');
+                        clearInterval(breathingInterval);
+                        circle.textContent = 'Well done 💜';
+                        btn.textContent = 'Start Again';
+                    }
+                }, 120000);
+            }
+        }
+
+        // Voice Recording with Speech-to-Text
+        let mediaRecorder;
+        let audioChunks = [];
+        let isRecording = false;
+        let recognition;
+        let currentTranscript = '';
+        const VOICE_STORAGE_KEY = 'elisas_voice_notes';
+
+        // Set up Speech Recognition (for voice-to-text)
+        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+
+        if (SpeechRecognition) {
+            recognition = new SpeechRecognition();
+            recognition.continuous = true;
+            recognition.interimResults = true;
+            recognition.lang = 'en-GB';
+
+            recognition.onresult = (event) => {
+                let transcript = '';
+                for (let i = 0; i < event.results.length; i++) {
+                    transcript += event.results[i][0].transcript;
+                }
+                currentTranscript = transcript;
+
+                // Show live transcript while speaking
+                const liveTranscriptEl = document.getElementById('live-transcript');
+                const liveTextEl = document.getElementById('live-transcript-text');
+                liveTranscriptEl.classList.add('active');
+                liveTextEl.textContent = transcript || 'Listening...';
+            };
+
+            recognition.onerror = (event) => {
+                console.log('Speech recognition error:', event.error);
+                // Don't show error to user - audio recording still works
+            };
+        }
+
+        // Load voice notes on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            loadVoiceNotes();
+        });
+
+        function toggleRecording() {
+            if (isRecording) {
+                stopRecording();
+            } else {
+                startRecording();
+            }
+        }
+
+        async function startRecording() {
+            try {
+                currentTranscript = '';
+                const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                mediaRecorder = new MediaRecorder(stream);
+                audioChunks = [];
+
+                mediaRecorder.ondataavailable = (event) => {
+                    audioChunks.push(event.data);
+                };
+
+                mediaRecorder.onstop = () => {
+                    const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
+                    saveVoiceNote(audioBlob, currentTranscript);
+                    stream.getTracks().forEach(track => track.stop());
+                };
+
+                mediaRecorder.start();
+
+                // Start speech recognition simultaneously
+                if (recognition) {
+                    try {
+                        recognition.start();
+                    } catch (e) {
+                        console.log('Speech recognition already started or not available');
+                    }
+                }
+
+                isRecording = true;
+                updateRecordingUI(true);
+                document.getElementById('recording-status').textContent = 'Recording... Tap again to stop';
+
+            } catch (err) {
+                console.error('Microphone access denied:', err);
+                document.getElementById('recording-status').textContent =
+                    '⚠️ Please allow microphone access to record voice notes';
+            }
+        }
+
+        function stopRecording() {
+            if (mediaRecorder && isRecording) {
+                mediaRecorder.stop();
+
+                // Stop speech recognition
+                if (recognition) {
+                    try {
+                        recognition.stop();
+                    } catch (e) {
+                        console.log('Speech recognition stop error');
+                    }
+                }
+
+                isRecording = false;
+                updateRecordingUI(false);
+
+                // Hide live transcript
+                document.getElementById('live-transcript').classList.remove('active');
+
+                document.getElementById('recording-status').textContent = '✓ Voice note saved!';
+                setTimeout(() => {
+                    document.getElementById('recording-status').textContent = '';
+                }, 3000);
+            }
+        }
+
+        function updateRecordingUI(recording) {
+            const btn = document.getElementById('voice-record-btn');
+            const icon = document.getElementById('record-icon');
+            const text = document.getElementById('record-text');
+
+            if (recording) {
+                btn.classList.add('recording');
+                icon.textContent = '⏹️';
+                text.textContent = 'Tap to Stop Recording';
+            } else {
+                btn.classList.remove('recording');
+                icon.textContent = '🎙️';
+                text.textContent = 'Tap to Record a Voice Note';
+            }
+        }
+
+        function saveVoiceNote(blob, transcript) {
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                const base64data = reader.result;
+                let voiceNotes = JSON.parse(localStorage.getItem(VOICE_STORAGE_KEY) || '[]');
+
+                voiceNotes.unshift({
+                    id: Date.now(),
+                    data: base64data,
+                    transcript: transcript || '',
+                    date: new Date().toISOString()
+                });
+
+                // Keep last 20 notes (to manage storage)
+                voiceNotes = voiceNotes.slice(0, 20);
+
+                try {
+                    localStorage.setItem(VOICE_STORAGE_KEY, JSON.stringify(voiceNotes));
+                    loadVoiceNotes();
+                } catch (e) {
+                    console.error('Storage full:', e);
+                    document.getElementById('recording-status').textContent =
+                        '⚠️ Storage full - delete old notes to save new ones';
+                }
+            };
+            reader.readAsDataURL(blob);
+        }
+
+        function loadVoiceNotes() {
+            const container = document.getElementById('recorded-notes');
+            const voiceNotes = JSON.parse(localStorage.getItem(VOICE_STORAGE_KEY) || '[]');
+
+            if (voiceNotes.length === 0) {
+                container.innerHTML = '';
+                return;
+            }
+
+            container.innerHTML = '<h4 style="margin-bottom: 15px; color: var(--text-secondary);">🎧 Your Voice Notes</h4>' +
+                voiceNotes.map(note => {
+                    const date = new Date(note.date);
+                    const dateStr = date.toLocaleDateString('en-GB', {
+                        weekday: 'short',
+                        day: 'numeric',
+                        month: 'short',
+                        hour: '2-digit',
+                        minute: '2-digit'
+                    });
+
+                    // Show transcript if available
+                    const transcriptHtml = note.transcript
+                        ? `<div class="note-transcript">
+                               <span class="transcript-label">📝 Transcript</span>
+                               ${note.transcript}
+                           </div>`
+                        : '<p class="no-transcript">No transcript available</p>';
+
+                    return `
+                        <div class="recorded-note">
+                            <div class="recorded-note-header">
+                                <audio controls src="${note.data}"></audio>
+                                <div>
+                                    <div class="note-date">${dateStr}</div>
+                                    <button class="delete-note-btn" onclick="deleteVoiceNote(${note.id})">Delete</button>
+                                </div>
+                            </div>
+                            ${transcriptHtml}
+                        </div>
+                    `;
+                }).join('');
+        }
+
+        function deleteVoiceNote(id) {
+            let voiceNotes = JSON.parse(localStorage.getItem(VOICE_STORAGE_KEY) || '[]');
+            voiceNotes = voiceNotes.filter(note => note.id !== id);
+            localStorage.setItem(VOICE_STORAGE_KEY, JSON.stringify(voiceNotes));
+            loadVoiceNotes();
+        }
+    </script>
+</body>
+</html>
