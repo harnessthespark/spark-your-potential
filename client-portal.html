@@ -1541,6 +1541,14 @@
             if (savedUser) {
                 try {
                     const user = JSON.parse(savedUser);
+
+                    // Check if user needs to change their password first
+                    if (user.must_change_password) {
+                        localStorage.setItem('syp_pending_password_change', user.email);
+                        window.location.href = 'change-password.html';
+                        return;
+                    }
+
                     const email = user.email?.toLowerCase();
                     if (email && CLIENTS[email]) {
                         // Sync the client email for consistency
