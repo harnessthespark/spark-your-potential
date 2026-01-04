@@ -1833,8 +1833,8 @@
             }
         }
 
-        // Show portal
-        function showPortal(client) {
+        // Show portal (async to check agreement status from PostgreSQL)
+        async function showPortal(client) {
             // FIRST: Check if user needs to change password (catches ALL code paths)
             const savedUser = localStorage.getItem('syp_user');
             if (savedUser) {
@@ -1853,8 +1853,9 @@
             currentClient = client;
             document.getElementById('loginSection').style.display = 'none';
 
-            // Check if agreement is signed
-            if (!hasSignedAgreement(client)) {
+            // Check if agreement is signed (async - checks PostgreSQL first for cross-device persistence)
+            const agreementSigned = await hasSignedAgreement(client);
+            if (!agreementSigned) {
                 // Check if this is a testimonial-access client
                 if (client.programmeType === 'testimonial-access') {
                     // Show testimonial agreement section
@@ -2868,9 +2869,32 @@
             }
         }
 
-        // Check if client has already signed agreement
-        function hasSignedAgreement(client) {
-            // Check localStorage first
+        // Check if client has already signed agreement (async version - checks PostgreSQL first)
+        async function checkAgreementFromAPI(email) {
+            try {
+                const response = await fetch(`${SPARKHUB_API}/api/crm/syp/public/check-agreement/?email=${encodeURIComponent(email)}`);
+                if (response.ok) {
+                    const data = await response.json();
+                    if (data.signed) {
+                        // Cache the result in localStorage for offline access
+                        localStorage.setItem(`syp_agreement_${email}`, JSON.stringify({
+                            signed: true,
+                            signedDate: data.signed_date,
+                            clientName: data.client_name
+                        }));
+                        console.log(`✅ Agreement signed (PostgreSQL): ${email}`);
+                        return true;
+                    }
+                }
+            } catch (error) {
+                console.log('API check failed, falling back to localStorage:', error.message);
+            }
+            return false;
+        }
+
+        // Check if client has already signed agreement (sync fallback for localStorage)
+        function hasSignedAgreementLocal(client) {
+            // Check localStorage
             const localSigned = localStorage.getItem(`syp_agreement_${client.email}`);
             if (localSigned) {
                 try {
@@ -2893,10 +2917,20 @@
                 }
             }
 
-            // Check client data from API
+            // Check client data from API response
             if (client.agreementSigned) return true;
 
             return false;
+        }
+
+        // Main agreement check - PostgreSQL first, then localStorage fallback
+        async function hasSignedAgreement(client) {
+            // 1. Check PostgreSQL first (cross-device persistence)
+            const apiSigned = await checkAgreementFromAPI(client.email);
+            if (apiSigned) return true;
+
+            // 2. Fall back to localStorage (device-specific)
+            return hasSignedAgreementLocal(client);
         }
 
         // Setup form event listeners
