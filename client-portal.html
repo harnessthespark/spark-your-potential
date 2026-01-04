@@ -2871,23 +2871,43 @@
 
         // Check if client has already signed agreement (async version - checks PostgreSQL first)
         async function checkAgreementFromAPI(email) {
+            // Try SYP Express API first (where personalized agreements are stored)
+            try {
+                const response = await fetch(`${SYP_HOMEWORK_API}/api/agreement/${encodeURIComponent(email)}`);
+                if (response.ok) {
+                    const data = await response.json();
+                    if (data.success && data.agreement && data.agreement.signature) {
+                        // Cache the result in localStorage for offline access
+                        localStorage.setItem(`syp_agreement_${email}`, JSON.stringify({
+                            signed: true,
+                            signedDate: data.agreement.signed_date,
+                            clientName: data.agreement.client_name
+                        }));
+                        console.log(`✅ Agreement signed (SYP PostgreSQL): ${email}`);
+                        return true;
+                    }
+                }
+            } catch (error) {
+                console.log('SYP API check failed:', error.message);
+            }
+
+            // Fallback to SparkHub Django API (for inline agreements)
             try {
                 const response = await fetch(`${SPARKHUB_API}/api/crm/syp/public/check-agreement/?email=${encodeURIComponent(email)}`);
                 if (response.ok) {
                     const data = await response.json();
                     if (data.signed) {
-                        // Cache the result in localStorage for offline access
                         localStorage.setItem(`syp_agreement_${email}`, JSON.stringify({
                             signed: true,
                             signedDate: data.signed_date,
                             clientName: data.client_name
                         }));
-                        console.log(`✅ Agreement signed (PostgreSQL): ${email}`);
+                        console.log(`✅ Agreement signed (Django PostgreSQL): ${email}`);
                         return true;
                     }
                 }
             } catch (error) {
-                console.log('API check failed, falling back to localStorage:', error.message);
+                console.log('Django API check failed, falling back to localStorage:', error.message);
             }
             return false;
         }
