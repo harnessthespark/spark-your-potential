@@ -1870,8 +1870,9 @@
                     return;
                 }
 
-                // Check if Spark client with custom agreement file - redirect to their specific agreement
-                if (client.programmeType === 'audhd' && client.files && client.files.agreement) {
+                // Check if client has a custom agreement file - redirect to their specific agreement
+                // (Works for any programme type: audhd, blended, career, etc.)
+                if (client.files && client.files.agreement) {
                     window.location.href = client.files.agreement;
                     return;
                 }
