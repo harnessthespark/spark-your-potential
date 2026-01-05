@@ -305,6 +305,70 @@
         }
 
         /* ============================================
+           RESOURCES FROM COACH
+           ============================================ */
+        .resources-section {
+            margin-top: 30px;
+            background: linear-gradient(135deg, #1e1e3f 0%, #2d2d5a 100%);
+            border-radius: 16px;
+            padding: 25px;
+            border: 1px solid rgba(124, 58, 237, 0.3);
+        }
+        .resources-header {
+            color: #a78bfa;
+            font-size: 1.2em;
+            margin-bottom: 8px;
+        }
+        .resources-intro {
+            color: #94a3b8;
+            font-size: 0.9em;
+            margin-bottom: 20px;
+        }
+        .resources-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 15px;
+        }
+        .resource-card {
+            background: linear-gradient(135deg, #2a2a4a 0%, #1e1e3f 100%);
+            border-radius: 12px;
+            padding: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.2s ease;
+            cursor: pointer;
+            text-decoration: none;
+            display: block;
+        }
+        .resource-card:hover {
+            transform: translateY(-2px);
+            border-color: #a78bfa;
+            box-shadow: 0 4px 20px rgba(124, 58, 237, 0.2);
+        }
+        .resource-card .icon {
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+        .resource-card .title {
+            color: #fff;
+            font-weight: 600;
+            font-size: 1em;
+            margin-bottom: 6px;
+        }
+        .resource-card .description {
+            color: #94a3b8;
+            font-size: 0.85em;
+            line-height: 1.5;
+        }
+        .resource-card .meta {
+            color: #64748b;
+            font-size: 0.75em;
+            margin-top: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* ============================================
            SUPPORTING TOOLS GRID
            ============================================ */
         .tools-section {
@@ -1314,6 +1378,15 @@
                 </div>
             </div>
 
+            <!-- Resources from Coach -->
+            <div class="resources-section" id="resourcesSection" style="display: none;">
+                <h3 class="resources-header">📚 Resources from Lisa</h3>
+                <p class="resources-intro">Documents and examples to help guide your journey</p>
+                <div class="resources-grid" id="resourcesGrid">
+                    <!-- Populated by JavaScript -->
+                </div>
+            </div>
+
             <!-- Supporting Tools -->
             <div class="tools-section">
                 <h3 class="tools-section-header">🧰 Your Career Tools</h3>
@@ -1935,6 +2008,96 @@
 
             // Render supporting tools
             renderTools(client);
+
+            // Render coach resources
+            renderCoachResources(client);
+        }
+
+        // Fetch and render documents uploaded by coach
+        async function renderCoachResources(client) {
+            const resourcesSection = document.getElementById('resourcesSection');
+            const resourcesGrid = document.getElementById('resourcesGrid');
+
+            // Get local client config for static files
+            const localConfig = CLIENTS[client.email.toLowerCase()] || {};
+            const files = localConfig.files || client.files || {};
+
+            let documents = [];
+
+            // First, try to fetch from API
+            try {
+                const authToken = localStorage.getItem('syp_token') || localStorage.getItem('token');
+                if (authToken) {
+                    const API_BASE = 'https://sparkhub-be-qtmmb.ondigitalocean.app';
+                    const response = await fetch(`${API_BASE}/api/crm/syp/coach/client-documents/?client_email=${encodeURIComponent(client.email)}`, {
+                        headers: {
+                            'Authorization': `Token ${authToken}`,
+                            'Content-Type': 'application/json'
+                        }
+                    });
+
+                    if (response.ok) {
+                        const data = await response.json();
+                        documents = data.documents || data || [];
+                    }
+                }
+            } catch (error) {
+                console.log('📚 API fetch failed, using static files:', error);
+            }
+
+            // Add static example files from client config
+            if (files.exampleResponses) {
+                documents.push({
+                    document_type: 'example',
+                    description: 'Example Questionnaire Responses',
+                    file_path: files.exampleResponses,
+                    created_at: new Date().toISOString()
+                });
+            }
+
+            if (!documents.length) {
+                console.log('📚 No coach resources found');
+                return;
+            }
+
+                // Document type icons and descriptions
+                const docTypeInfo = {
+                    'example': { icon: '📋', label: 'Example', desc: 'Reference example to guide your work' },
+                    'questionnaire': { icon: '📝', label: 'Questionnaire', desc: 'Discovery questionnaire' },
+                    'blueprint': { icon: '📘', label: 'Blueprint', desc: 'Your career blueprint' },
+                    'agreement': { icon: '📄', label: 'Agreement', desc: 'Coaching agreement' },
+                    'notes': { icon: '🗒️', label: 'Session Notes', desc: 'Notes from your sessions' },
+                    'cv': { icon: '📑', label: 'CV Builder', desc: 'Interactive CV builder' },
+                    'other': { icon: '📎', label: 'Document', desc: 'Uploaded resource' }
+                };
+
+                // Render resource cards
+                resourcesGrid.innerHTML = documents.map(doc => {
+                    const typeInfo = docTypeInfo[doc.document_type] || docTypeInfo['other'];
+                    const uploadDate = doc.created_at ? new Date(doc.created_at).toLocaleDateString('en-GB') : '';
+
+                    // Determine the link - use file_path if available, otherwise construct from stored_filename
+                    let docUrl = doc.file_path || doc.stored_filename || '#';
+
+                    return `
+                        <a href="${docUrl}" target="_blank" class="resource-card">
+                            <div class="icon">${typeInfo.icon}</div>
+                            <div class="title">${doc.description || doc.original_filename || typeInfo.label}</div>
+                            <div class="description">${typeInfo.desc}</div>
+                            <div class="meta">
+                                <span>📅 ${uploadDate}</span>
+                            </div>
+                        </a>
+                    `;
+                }).join('');
+
+                // Show the section
+                resourcesSection.style.display = 'block';
+                console.log('📚 Rendered', documents.length, 'coach resources');
+
+            } catch (error) {
+                console.error('📚 Error fetching coach resources:', error);
+            }
         }
 
         function getToolsUnlocked(stageIndex) {
