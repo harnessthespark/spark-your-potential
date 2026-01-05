@@ -478,7 +478,22 @@
                    class="first-step-input"
                    id="firstStepInput"
                    placeholder="e.g. Open laptop and look at inbox"
-                   onchange="saveFirstStep()">
+                   onkeypress="if(event.key==='Enter') saveFirstStep()">
+
+            <div style="display: flex; gap: 10px; align-items: center; margin-top: 12px;">
+                <button type="button" onclick="saveFirstStep()" style="
+                    background: white;
+                    color: #059669;
+                    border: none;
+                    padding: 12px 24px;
+                    border-radius: 8px;
+                    font-weight: 600;
+                    font-size: 1em;
+                    cursor: pointer;
+                    transition: all 0.2s;
+                ">🚀 Set First Step</button>
+                <span id="firstStepStatus" style="font-size: 0.9em; opacity: 0.9;"></span>
+            </div>
 
             <div class="first-step-tip">
                 <strong>💡 First Step Magic</strong>
@@ -746,14 +761,22 @@
             const dateKey = formatDate(tomorrow);
 
             const text = document.getElementById('firstStepInput').value.trim();
+            const status = document.getElementById('firstStepStatus');
 
             if (text) {
                 sparkData.firstSteps[dateKey] = text;
+                status.textContent = '✓ First step set!';
+                status.style.color = '#ffffff';
             } else {
                 delete sparkData.firstSteps[dateKey];
+                status.textContent = '✓ Cleared';
+                status.style.color = 'rgba(255,255,255,0.7)';
             }
 
             saveData();
+
+            // Clear status after 3 seconds
+            setTimeout(() => { status.textContent = ''; }, 3000);
         }
 
         // Stats
