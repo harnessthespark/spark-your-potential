@@ -469,11 +469,98 @@
 
         /* Mobile */
         @media (max-width: 768px) {
-            .header h1 { font-size: 1.8em; }
-            .client-header { flex-direction: column; gap: 15px; align-items: flex-start; }
-            .client-badges { flex-wrap: wrap; }
-            .details-grid { grid-template-columns: 1fr; }
-            .client-quick-stats { grid-template-columns: repeat(2, 1fr); }
+            body { padding: 15px 10px; }
+            .container { max-width: 100%; }
+
+            .header h1 { font-size: 1.6em; }
+            .header .subtitle { font-size: 0.95em; }
+
+            /* Quick stats - 2x2 grid on mobile */
+            .quick-stats {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 10px;
+            }
+            .stat-card { padding: 15px; }
+            .stat-card .number { font-size: 1.6em; }
+            .stat-card .label { font-size: 0.8em; }
+
+            /* Filter tabs - scrollable */
+            .filter-tabs {
+                overflow-x: auto;
+                flex-wrap: nowrap;
+                -webkit-overflow-scrolling: touch;
+                padding-bottom: 5px;
+            }
+            .filter-tab {
+                flex-shrink: 0;
+                padding: 10px 16px;
+            }
+
+            /* Client cards */
+            .client-card { margin-bottom: 12px; }
+            .client-header {
+                flex-direction: column;
+                gap: 15px;
+                align-items: flex-start;
+                padding: 15px;
+            }
+            .client-info { width: 100%; }
+            .client-avatar {
+                width: 45px;
+                height: 45px;
+                font-size: 1.1em;
+            }
+            .client-name-section h3 { font-size: 1em; }
+            .client-email { font-size: 0.8em; }
+
+            .client-badges {
+                flex-wrap: wrap;
+                width: 100%;
+                justify-content: flex-start;
+            }
+            .badge { font-size: 0.7em; padding: 4px 8px; }
+            .expand-icon {
+                position: absolute;
+                right: 15px;
+                top: 15px;
+            }
+            .client-header { position: relative; }
+
+            /* Expanded details */
+            .client-details { padding: 0 15px 15px; }
+            .details-grid { grid-template-columns: 1fr; gap: 15px; }
+            .detail-section { padding: 12px; }
+            .detail-section h4 { font-size: 0.85em; }
+
+            /* Quick stats in card */
+            .client-quick-stats { grid-template-columns: repeat(2, 1fr); gap: 8px; }
+            .quick-stat { padding: 8px; }
+            .quick-stat .num { font-size: 1.1em; }
+            .quick-stat .lbl { font-size: 0.7em; }
+
+            /* Sessions timeline */
+            .session-item { padding: 6px 0; gap: 8px; }
+            .session-icon { width: 20px; height: 20px; font-size: 0.7em; }
+            .session-name { font-size: 0.85em; }
+            .session-date { font-size: 0.8em; }
+
+            /* Notes */
+            .notes-textarea {
+                font-size: 16px; /* Prevent iOS zoom */
+                min-height: 100px;
+            }
+            .notes-actions { flex-direction: column; }
+            .notes-actions .btn { width: 100%; justify-content: center; }
+
+            /* Footer */
+            .footer { font-size: 0.8em; margin-top: 30px; }
+        }
+
+        /* Small phones */
+        @media (max-width: 400px) {
+            .header h1 { font-size: 1.4em; }
+            .quick-stats { grid-template-columns: repeat(2, 1fr); }
+            .stat-card .number { font-size: 1.4em; }
         }
     </style>
 </head>

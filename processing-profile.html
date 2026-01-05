@@ -253,16 +253,69 @@
             margin-bottom: 20px;
         }
         .back-link:hover { opacity: 1; }
+
+        /* Data Source Indicator */
+        .data-source {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.75em;
+            font-weight: 600;
+            margin-top: 10px;
+        }
+        .data-source.live {
+            background: rgba(34, 197, 94, 0.2);
+            color: #22c55e;
+        }
+        .data-source.cached {
+            background: rgba(251, 191, 36, 0.2);
+            color: #fbbf24;
+        }
+
+        /* Enhanced Mobile Responsive */
+        @media (max-width: 768px) {
+            body { padding: 20px 10px; }
+            .container { max-width: 100%; }
+
+            .header h1 { font-size: 1.6em; }
+            .header p { font-size: 0.95em; }
+
+            .card { padding: 20px 15px; border-radius: 16px; }
+            .card h2 { font-size: 1.15em; }
+
+            .slider-labels {
+                flex-direction: column;
+                gap: 5px;
+                text-align: center;
+            }
+            .slider-labels span { max-width: 100%; text-align: center; }
+
+            .option { padding: 12px; }
+            .option-label { font-size: 0.95em; }
+            .option-desc { font-size: 0.8em; }
+
+            .profile-visual { grid-template-columns: 1fr; }
+
+            .btn { width: 100%; margin-bottom: 10px; }
+
+            /* Prevent iOS zoom on inputs */
+            input[type="range"] { font-size: 16px; }
+        }
     </style>
 </head>
 <body>
     <div class="container">
-        <a href="portal.html" class="back-link">← Back to Toolkit</a>
+        <a href="#" onclick="goBackToPortal(); return false;" class="back-link">← Back to Toolkit</a>
 
         <div class="header">
             <img src="White.png" alt="Harness the Spark">
             <h1>🧠 My Processing Profile</h1>
             <p>Discover how your brain likes to work</p>
+            <div class="data-source cached" id="dataSource">
+                <span>💾</span> <span id="dataSourceText">Cached</span>
+            </div>
         </div>
 
         <!-- SECTION 1: Processing Paradoxes -->
@@ -491,10 +544,178 @@
     </div>
 
     <script>
+        // API Configuration - PostgreSQL-first sync
+        const API_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+            ? 'http://localhost:8080'
+            : 'https://stingray-app-7kg9p.ondigitalocean.app';
+
+        // Get current user
+        const currentUser = JSON.parse(localStorage.getItem('syp_user') || '{}');
+        const STORAGE_KEY = 'syp_processing_profile_' + (currentUser.id || 'anonymous');
+
         let answers = {
             paradoxes: {},
             styles: {}
         };
+
+        // Smart back navigation based on programme type
+        function goBackToPortal() {
+            const savedUser = localStorage.getItem('syp_user');
+            if (savedUser) {
+                try {
+                    const user = JSON.parse(savedUser);
+                    const access = user.programme_access || user.programme_type || 'career';
+                    if (access === 'blended' || access === 'career') {
+                        window.location.href = 'client-portal.html';
+                    } else {
+                        window.location.href = 'audhd-dashboard.html';
+                    }
+                    return;
+                } catch(e) {}
+            }
+            window.location.href = 'client-portal.html';
+        }
+
+        // Data source indicator
+        function updateDataSource(isLive) {
+            const indicator = document.getElementById('dataSource');
+            if (isLive) {
+                indicator.className = 'data-source live';
+                indicator.innerHTML = '<span>☁️</span> <span id="dataSourceText">Synced</span>';
+            } else {
+                indicator.className = 'data-source cached';
+                indicator.innerHTML = '<span>💾</span> <span id="dataSourceText">Cached</span>';
+            }
+        }
+
+        // Get user email for API calls
+        function getUserEmail() {
+            if (currentUser) {
+                return currentUser.email || currentUser.username;
+            }
+            return null;
+        }
+
+        // Load profile from PostgreSQL first
+        async function loadProfileData() {
+            const email = getUserEmail();
+            if (!email) return;
+
+            try {
+                const response = await fetch(`${API_URL}/api/homework/${encodeURIComponent(email)}/processing-profile`);
+                if (response.ok) {
+                    const data = await response.json();
+                    if (data && data.responses) {
+                        // Load saved answers
+                        if (data.responses.paradoxes) {
+                            answers.paradoxes = data.responses.paradoxes;
+                            // Update sliders to match saved values
+                            Object.keys(data.responses.paradoxes).forEach(key => {
+                                const slider = document.getElementById(key);
+                                if (slider) {
+                                    slider.value = data.responses.paradoxes[key];
+                                    updateSliderValue(key, data.responses.paradoxes[key]);
+                                }
+                            });
+                        }
+                        if (data.responses.styles) {
+                            answers.styles = data.responses.styles;
+                            // Update radio buttons to match saved values
+                            Object.keys(data.responses.styles).forEach(group => {
+                                const value = data.responses.styles[group];
+                                const radio = document.querySelector(`input[name="${group}"][value="${value}"]`);
+                                if (radio) {
+                                    radio.checked = true;
+                                    radio.closest('.option').classList.add('selected');
+                                }
+                            });
+                        }
+                        // Update localStorage cache
+                        localStorage.setItem(STORAGE_KEY, JSON.stringify(data.responses));
+                        updateDataSource(true);
+                        console.log('✅ Processing profile loaded from PostgreSQL');
+                        return;
+                    }
+                }
+            } catch (error) {
+                console.log('⚠️ PostgreSQL unavailable, using localStorage cache');
+            }
+
+            // Fallback to localStorage
+            const saved = localStorage.getItem(STORAGE_KEY);
+            if (saved) {
+                try {
+                    const data = JSON.parse(saved);
+                    if (data.paradoxes) {
+                        answers.paradoxes = data.paradoxes;
+                        Object.keys(data.paradoxes).forEach(key => {
+                            const slider = document.getElementById(key);
+                            if (slider) {
+                                slider.value = data.paradoxes[key];
+                                updateSliderValue(key, data.paradoxes[key]);
+                            }
+                        });
+                    }
+                    if (data.styles) {
+                        answers.styles = data.styles;
+                        Object.keys(data.styles).forEach(group => {
+                            const value = data.styles[group];
+                            const radio = document.querySelector(`input[name="${group}"][value="${value}"]`);
+                            if (radio) {
+                                radio.checked = true;
+                                radio.closest('.option').classList.add('selected');
+                            }
+                        });
+                    }
+                    updateDataSource(false);
+                    console.log('📦 Processing profile loaded from localStorage');
+                } catch (e) {
+                    console.error('Error loading saved data:', e);
+                }
+            }
+        }
+
+        // Save profile to PostgreSQL
+        async function saveProfileData() {
+            const email = getUserEmail();
+
+            const profileData = {
+                date: new Date().toISOString(),
+                paradoxes: answers.paradoxes,
+                styles: answers.styles
+            };
+
+            // Always save to localStorage first (instant)
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(profileData));
+
+            if (!email) {
+                updateDataSource(false);
+                return;
+            }
+
+            // Then sync to PostgreSQL
+            try {
+                const response = await fetch(`${API_URL}/api/homework`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        email: email,
+                        type: 'processing-profile',
+                        responses: profileData
+                    })
+                });
+
+                if (response.ok) {
+                    updateDataSource(true);
+                    console.log('✅ Processing profile synced to PostgreSQL');
+                } else {
+                    updateDataSource(false);
+                }
+            } catch (error) {
+                console.log('⚠️ PostgreSQL sync failed, data cached locally');
+                updateDataSource(false);
+            }
+        }
 
         // Slider value labels
         const sliderLabels = {
@@ -661,22 +882,13 @@
 
             document.getElementById('insightText').innerHTML = insights.join('<br><br>');
 
-            // Save to localStorage
-            saveToLocal();
+            // Save to PostgreSQL
+            saveProfileData();
         }
 
-        function saveToLocal() {
-            const profile = {
-                date: new Date().toISOString(),
-                paradoxes: answers.paradoxes,
-                styles: answers.styles
-            };
-            localStorage.setItem('syp_processing_profile', JSON.stringify(profile));
-        }
-
-        function saveProfile() {
-            saveToLocal();
-            alert('Profile saved! You can access it anytime from your toolkit.');
+        async function saveProfile() {
+            await saveProfileData();
+            alert('Profile saved! You can access it on any device.');
         }
 
         function printProfile() {
@@ -696,13 +908,9 @@
             document.getElementById('section1').style.display = 'block';
         }
 
-        // Load saved profile on page load
-        window.onload = function() {
-            const saved = localStorage.getItem('syp_processing_profile');
-            if (saved) {
-                const profile = JSON.parse(saved);
-                // Could offer to load previous results
-            }
+        // Load saved profile on page load - PostgreSQL first
+        window.onload = async function() {
+            await loadProfileData();
         };
     </script>
 </body>

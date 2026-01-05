@@ -437,6 +437,108 @@
             font-size: 0.9em;
         }
 
+        /* Data Source Indicator */
+        .data-source {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.75em;
+            font-weight: 600;
+            margin-top: 10px;
+        }
+        .data-source.live {
+            background: rgba(34, 197, 94, 0.2);
+            color: #22c55e;
+        }
+        .data-source.cached {
+            background: rgba(251, 191, 36, 0.2);
+            color: #fbbf24;
+        }
+
+        /* Enhanced Mobile Responsive */
+        @media (max-width: 768px) {
+            body { padding: 15px 10px; }
+            .container { max-width: 100%; }
+
+            .nav-bar {
+                flex-direction: column;
+                gap: 10px;
+                align-items: flex-start;
+            }
+
+            .header h1 { font-size: 1.6em; }
+            .header .subtitle { font-size: 1em; }
+
+            .section {
+                padding: 20px 15px;
+                border-radius: 16px;
+                margin-bottom: 15px;
+            }
+            .section-icon { font-size: 1.5em; }
+            .section-title { font-size: 1.2em; }
+            .section-intro { font-size: 0.9em; }
+
+            /* Decision textarea */
+            .decision-textarea {
+                font-size: 16px; /* Prevent iOS zoom */
+                min-height: 100px;
+            }
+
+            /* Paradox check grid - single column on mobile */
+            .paradox-check-grid { grid-template-columns: 1fr; }
+            .paradox-check { padding: 15px; }
+            .paradox-check-question { font-size: 0.9em; }
+
+            .check-options {
+                flex-direction: row;
+            }
+            .check-option {
+                padding: 12px 8px;
+                font-size: 0.85em;
+            }
+
+            /* Energy matrix - single column */
+            .energy-matrix { grid-template-columns: 1fr; }
+            .energy-box { padding: 15px; }
+            .energy-list input {
+                font-size: 16px; /* Prevent iOS zoom */
+            }
+
+            /* Alignment grid - 2 columns on mobile */
+            .alignment-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 10px;
+            }
+            .alignment-card {
+                padding: 15px 10px;
+            }
+            .alignment-card .icon { font-size: 1.5em; }
+            .alignment-card .label { font-size: 0.85em; }
+            .alignment-card .description { font-size: 0.75em; }
+
+            /* Result section */
+            .result-section { padding: 20px 15px; }
+            .result-verdict { font-size: 2.5em; }
+            .result-title { font-size: 1.2em; }
+            .result-breakdown { padding: 15px; }
+            .result-item { padding: 10px 0; }
+
+            /* Action buttons - stack on mobile */
+            .action-buttons {
+                flex-direction: column;
+                gap: 10px;
+            }
+            .action-btn {
+                width: 100%;
+                padding: 15px 20px;
+            }
+
+            /* Masking slider */
+            .masking-label { flex-direction: column; gap: 5px; }
+        }
+
         /* Print */
         @media print {
             body { background: white; padding: 20px; }
@@ -458,6 +560,9 @@
         <div class="header">
             <h1>🎯 Paradox <span>Decision Framework</span></h1>
             <div class="subtitle">Career Decisions Through Your AuDHD Lens</div>
+            <div id="dataSource" class="data-source cached">
+                <span>💾</span> Checking...
+            </div>
         </div>
 
         <!-- Decision Input -->
@@ -714,8 +819,14 @@
     </div>
 
     <script>
+        // API Configuration
+        const API_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+            ? 'http://localhost:8080'
+            : 'https://stingray-app-7kg9p.ondigitalocean.app';
+
         // State
         let currentUser = null;
+        let isLiveData = false;
         let decisionData = {
             decision: '',
             paradoxChecks: {},
@@ -724,6 +835,14 @@
             maskingLevel: 50,
             alignments: []
         };
+
+        // Update data source indicator
+        function updateDataSource(live) {
+            isLiveData = live;
+            const el = document.getElementById('dataSource');
+            el.className = `data-source ${live ? 'live' : 'cached'}`;
+            el.innerHTML = live ? '<span>☁️</span> Synced' : '<span>💾</span> Cached';
+        }
 
         // Initialize
         window.onload = function() {
@@ -734,16 +853,21 @@
             }
             currentUser = JSON.parse(savedUser);
 
-            // Check access
+            // Check access - now more permissive for blended users too
             const hasAccess = currentUser.programme_access === 'audhd-career' ||
+                             currentUser.programme_access === 'audhd' ||
+                             currentUser.programme_access === 'blended' ||
                              currentUser.programme_access === 'all' ||
                              currentUser.isStaff;
 
             if (!hasAccess) {
-                alert('You do not have access to AuDHD Executive Career tools.');
+                alert('You do not have access to this tool.');
                 window.location.href = 'index.html';
                 return;
             }
+
+            // Load saved decisions
+            loadSavedDecisions();
         };
 
         function selectCheck(element) {
@@ -1045,13 +1169,59 @@
             `).join('');
         }
 
-        function saveDecision() {
-            const decisions = JSON.parse(localStorage.getItem('audhd_decisions_' + currentUser.id) || '[]');
-            decisions.push({
+        async function loadSavedDecisions() {
+            // Try to load from PostgreSQL first
+            const email = currentUser.email;
+            if (email) {
+                try {
+                    const response = await fetch(`${API_URL}/api/decisions/${encodeURIComponent(email)}`);
+                    if (response.ok) {
+                        const result = await response.json();
+                        if (result.success && result.data) {
+                            localStorage.setItem('audhd_decisions_' + currentUser.id, JSON.stringify(result.data));
+                            updateDataSource(true);
+                            console.log('✅ Loaded decisions from PostgreSQL');
+                            return;
+                        }
+                    }
+                } catch (error) {
+                    console.log('⚠️ Could not load from API:', error.message);
+                }
+            }
+            updateDataSource(false);
+        }
+
+        async function saveDecision() {
+            const entry = {
                 ...decisionData,
                 date: new Date().toISOString(),
                 id: Date.now()
-            });
+            };
+
+            // Try to save to PostgreSQL first
+            const email = currentUser.email;
+            if (email) {
+                try {
+                    const response = await fetch(`${API_URL}/api/decisions/${encodeURIComponent(email)}`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ data: entry })
+                    });
+                    if (response.ok) {
+                        console.log('✅ Decision saved to PostgreSQL');
+                        updateDataSource(true);
+                    } else {
+                        throw new Error('API error');
+                    }
+                } catch (error) {
+                    console.log('⚠️ Could not save to API, using localStorage:', error.message);
+                    updateDataSource(false);
+                }
+            }
+
+            // Always save to localStorage as cache
+            const decisions = JSON.parse(localStorage.getItem('audhd_decisions_' + currentUser.id) || '[]');
+            decisions.push(entry);
             localStorage.setItem('audhd_decisions_' + currentUser.id, JSON.stringify(decisions));
             alert('Decision saved! You can review your past decisions anytime.');
         }

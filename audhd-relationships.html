@@ -477,6 +477,137 @@
             background: rgba(255,255,255,0.3);
         }
 
+        /* Data Source Indicator */
+        .data-source {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.75em;
+            font-weight: 600;
+            margin-top: 10px;
+        }
+        .data-source.live {
+            background: rgba(34, 197, 94, 0.2);
+            color: #22c55e;
+        }
+        .data-source.cached {
+            background: rgba(251, 191, 36, 0.2);
+            color: #fbbf24;
+        }
+
+        /* Enhanced Mobile Responsive */
+        @media (max-width: 768px) {
+            body { padding: 15px 10px; }
+            .container { max-width: 100%; }
+
+            .header h1 { font-size: 1.6em; }
+            .header .subtitle { font-size: 0.95em; }
+            .paradox-reminder { padding: 12px 15px; font-size: 0.9em; }
+
+            /* Navigation tabs scrollable */
+            .nav-tabs {
+                overflow-x: auto;
+                flex-wrap: nowrap;
+                justify-content: flex-start;
+                padding-bottom: 10px;
+                -webkit-overflow-scrolling: touch;
+            }
+            .nav-tab {
+                flex-shrink: 0;
+                padding: 10px 16px;
+                font-size: 0.85em;
+            }
+
+            /* Section cards */
+            .section-card {
+                padding: 20px 15px;
+                border-radius: 16px;
+            }
+            .section-title { font-size: 1.2em; }
+            .section-intro { font-size: 0.9em; }
+
+            /* Spark insight boxes */
+            .audhd-insight { padding: 15px; }
+            .audhd-insight h4 { font-size: 0.85em; }
+            .audhd-insight p { font-size: 0.9em; }
+
+            /* Boundary grid single column */
+            .boundary-grid { grid-template-columns: 1fr; gap: 15px; }
+            .boundary-card { padding: 15px; }
+            .boundary-card h4 { font-size: 0.95em; }
+            .boundary-card textarea {
+                font-size: 16px; /* Prevent iOS zoom */
+                min-height: 100px;
+            }
+
+            /* Values grid smaller */
+            .values-grid { grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 8px; }
+            .value-chip { padding: 10px 12px; font-size: 0.85em; }
+
+            /* Scripts */
+            .script-card { padding: 15px; }
+            .script-card h4 { font-size: 1em; }
+            .script-example { padding: 12px; }
+            .script-your-version textarea {
+                font-size: 16px; /* Prevent iOS zoom */
+            }
+
+            /* Masking section */
+            .masking-scale { padding: 20px 15px; }
+            .masking-slider-container label { font-size: 0.85em; }
+
+            /* Balance section */
+            .balance-section { padding: 20px 15px; }
+            .balance-column li { padding: 8px 12px; font-size: 0.85em; }
+
+            /* Reflection accordions */
+            .reflection-header { padding: 15px; }
+            .reflection-header h4 { font-size: 0.95em; }
+            .reflection-content { padding: 0 15px 15px 15px; }
+            .reflection-question textarea {
+                font-size: 16px; /* Prevent iOS zoom */
+            }
+
+            /* Quick reference grid */
+            .quick-ref-grid { grid-template-columns: 1fr; }
+            .quick-ref-card { padding: 15px; }
+            .quick-ref-card h5 { font-size: 0.9em; }
+            .quick-ref-card p { padding: 10px; font-size: 0.85em; }
+
+            /* Save button sticky on mobile */
+            .save-section {
+                position: fixed;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                background: linear-gradient(135deg, #1a1a2e 0%, #2d1b4e 100%);
+                padding: 15px 20px;
+                margin: 0;
+                border-top: none;
+                box-shadow: 0 -4px 20px rgba(0,0,0,0.3);
+                z-index: 100;
+            }
+            .save-btn {
+                width: 100%;
+                padding: 15px;
+            }
+
+            /* Add padding at bottom for sticky button */
+            .section-card { padding-bottom: 100px; }
+
+            /* Top value inputs */
+            .balance-section input[type="text"] {
+                font-size: 16px; /* Prevent iOS zoom */
+            }
+
+            /* Lucky to have textarea */
+            #lucky-to-have {
+                font-size: 16px; /* Prevent iOS zoom */
+            }
+        }
+
         /* Print Styles */
         @media print {
             body { background: white; padding: 20px; }
@@ -486,7 +617,7 @@
     </style>
 </head>
 <body>
-    <a href="audhd-dashboard.html" class="back-btn">← Back to Dashboard</a>
+    <a href="#" onclick="goBackToPortal(); return false;" class="back-btn">← Back to Dashboard</a>
 
     <div class="container">
         <div class="header">
@@ -494,6 +625,9 @@
             <div class="subtitle">Navigate relationships as your authentic Spark self</div>
             <div class="paradox-reminder">
                 "ADHD overshares, autism undershares — finding YOUR balance"
+            </div>
+            <div class="data-source cached" id="dataSource">
+                <span>💾</span> <span id="dataSourceText">Cached</span>
             </div>
         </div>
 
@@ -1131,6 +1265,36 @@
             return localStorage.getItem('syp_token');
         }
 
+        // Smart back navigation based on programme type
+        function goBackToPortal() {
+            const savedUser = localStorage.getItem('syp_user');
+            if (savedUser) {
+                try {
+                    const user = JSON.parse(savedUser);
+                    const access = user.programme_access || user.programme_type || 'career';
+                    if (access === 'blended' || access === 'career') {
+                        window.location.href = 'client-portal.html';
+                    } else {
+                        window.location.href = 'audhd-dashboard.html';
+                    }
+                    return;
+                } catch(e) {}
+            }
+            window.location.href = 'client-portal.html';
+        }
+
+        // Data source indicator
+        function updateDataSource(isLive) {
+            const indicator = document.getElementById('dataSource');
+            if (isLive) {
+                indicator.className = 'data-source live';
+                indicator.innerHTML = '<span>☁️</span> <span id="dataSourceText">Synced</span>';
+            } else {
+                indicator.className = 'data-source cached';
+                indicator.innerHTML = '<span>💾</span> <span id="dataSourceText">Cached</span>';
+            }
+        }
+
         // Section navigation
         function showSection(sectionId) {
             // Hide all sections
@@ -1346,9 +1510,13 @@
                     if (response.ok) {
                         console.log('✅ Relationships data saved to PostgreSQL');
                         saveMessage = '✓ Saved to cloud!';
+                        updateDataSource(true);
+                    } else {
+                        updateDataSource(false);
                     }
                 } catch (error) {
                     console.log('⚠️ PostgreSQL save failed:', error.message);
+                    updateDataSource(false);
                 }
             }
 
@@ -1388,6 +1556,7 @@
                             populateForm(result.data);
                             localStorage.setItem(STORAGE_KEY, JSON.stringify(result.data));
                             console.log('✅ Relationships data loaded from PostgreSQL');
+                            updateDataSource(true);
                         }
                         setupAutoSave();
                         return;
@@ -1404,6 +1573,7 @@
                     const data = JSON.parse(saved);
                     populateForm(data);
                     console.log('📦 Relationships data loaded from localStorage');
+                    updateDataSource(false);
                 } catch (e) {
                     console.error('Error loading saved data:', e);
                 }

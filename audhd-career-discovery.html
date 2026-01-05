@@ -374,12 +374,103 @@
             font-size: 0.9em;
         }
 
-        /* Responsive */
-        @media (max-width: 600px) {
-            body { padding: 20px; }
-            .header h1 { font-size: 1.7em; }
-            .nav-buttons { flex-direction: column; }
-            .checkbox-grid { grid-template-columns: 1fr; }
+        /* Data Source Indicator */
+        .data-source {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.75em;
+            font-weight: 600;
+            margin-top: 10px;
+        }
+        .data-source.live {
+            background: rgba(34, 197, 94, 0.2);
+            color: #22c55e;
+        }
+        .data-source.cached {
+            background: rgba(251, 191, 36, 0.2);
+            color: #fbbf24;
+        }
+
+        /* Enhanced Mobile Responsive */
+        @media (max-width: 768px) {
+            body { padding: 15px 10px; }
+            .container { max-width: 100%; }
+
+            .nav-bar {
+                flex-direction: column;
+                gap: 10px;
+                align-items: flex-start;
+            }
+
+            .header h1 { font-size: 1.6em; }
+            .header .subtitle { font-size: 0.95em; }
+            .header .name { font-size: 1.1em; }
+
+            .progress-container { padding: 15px; }
+
+            .section-card {
+                padding: 20px 15px;
+                border-radius: 16px;
+            }
+            .section-icon { font-size: 2em; }
+            .section-title { font-size: 1.2em; }
+            .section-paradox { padding: 12px 15px; font-size: 0.95em; }
+            .section-intro { font-size: 0.9em; }
+
+            /* Question blocks */
+            .question-block {
+                padding: 15px;
+                margin-bottom: 15px;
+            }
+            .question-label { font-size: 0.95em; }
+
+            /* Textarea mobile */
+            .question-textarea {
+                font-size: 16px; /* Prevent iOS zoom */
+                min-height: 100px;
+            }
+
+            /* Checkbox grid single column */
+            .checkbox-grid { grid-template-columns: 1fr; gap: 8px; }
+            .checkbox-option {
+                padding: 15px 12px;
+                font-size: 0.9em;
+            }
+
+            /* Slider labels stacked */
+            .slider-labels {
+                flex-direction: column;
+                text-align: center;
+                gap: 8px;
+            }
+            .slider-labels span { max-width: 100%; }
+
+            /* Navigation buttons */
+            .nav-buttons {
+                flex-direction: column;
+                gap: 10px;
+            }
+            .nav-btn {
+                width: 100%;
+                padding: 15px 20px;
+            }
+
+            /* Results section */
+            .results-card { padding: 20px 15px; }
+            .paradox-result { padding: 15px; }
+            .paradox-result h4 { font-size: 1em; }
+
+            .action-buttons {
+                flex-direction: column;
+                gap: 10px;
+            }
+            .action-btn {
+                width: 100%;
+                text-align: center;
+            }
         }
 
         @media print {
@@ -403,6 +494,9 @@
             <h1>🧠 Paradox <span>Discovery</span></h1>
             <div class="subtitle">Understanding Your AuDHD Career Patterns</div>
             <div class="name" id="userName">Loading...</div>
+            <div class="data-source cached" id="dataSource">
+                <span>💾</span> <span id="dataSourceText">Cached</span>
+            </div>
         </div>
 
         <!-- Progress Bar -->
@@ -839,10 +933,16 @@
     </div>
 
     <script>
+        // API Configuration
+        const API_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+            ? 'http://localhost:8080'
+            : 'https://stingray-app-7kg9p.ondigitalocean.app';
+
         // State
         let currentSection = 0;
         const totalSections = 7; // 0-6 + results
         let currentUser = null;
+        let isLiveData = false;
         let responses = {
             communication: {},
             executive: {},
@@ -852,8 +952,100 @@
             relationships: {}
         };
 
+        // Data source indicator
+        function updateDataSource(isLive) {
+            isLiveData = isLive;
+            const indicator = document.getElementById('dataSource');
+            const text = document.getElementById('dataSourceText');
+            if (isLive) {
+                indicator.className = 'data-source live';
+                indicator.innerHTML = '<span>☁️</span> <span id="dataSourceText">Synced</span>';
+            } else {
+                indicator.className = 'data-source cached';
+                indicator.innerHTML = '<span>💾</span> <span id="dataSourceText">Cached</span>';
+            }
+        }
+
+        // Get user email for API calls
+        function getUserEmail() {
+            if (currentUser) {
+                return currentUser.email || currentUser.username;
+            }
+            return null;
+        }
+
+        // Load discovery data from PostgreSQL first
+        async function loadDiscoveryData() {
+            const email = getUserEmail();
+            if (!email) return;
+
+            const storageKey = 'audhd_career_discovery_' + currentUser.id;
+
+            try {
+                const response = await fetch(`${API_URL}/api/homework/${encodeURIComponent(email)}/career-discovery`);
+                if (response.ok) {
+                    const data = await response.json();
+                    if (data && data.responses) {
+                        responses = data.responses;
+                        // Update localStorage cache
+                        localStorage.setItem(storageKey, JSON.stringify(responses));
+                        updateDataSource(true);
+                        console.log('✅ Loaded discovery data from PostgreSQL');
+                        return;
+                    }
+                }
+            } catch (error) {
+                console.log('⚠️ PostgreSQL unavailable, using localStorage cache');
+            }
+
+            // Fallback to localStorage
+            const saved = localStorage.getItem(storageKey);
+            if (saved) {
+                try {
+                    responses = JSON.parse(saved);
+                    updateDataSource(false);
+                } catch (e) {
+                    console.error('Error parsing cached data:', e);
+                }
+            }
+        }
+
+        // Save discovery data to PostgreSQL
+        async function saveDiscoveryData() {
+            const email = getUserEmail();
+            if (!email) return;
+
+            const storageKey = 'audhd_career_discovery_' + currentUser.id;
+
+            // Always save to localStorage first (instant)
+            localStorage.setItem(storageKey, JSON.stringify(responses));
+
+            // Then sync to PostgreSQL
+            try {
+                const response = await fetch(`${API_URL}/api/homework`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        email: email,
+                        type: 'career-discovery',
+                        responses: responses
+                    })
+                });
+
+                if (response.ok) {
+                    updateDataSource(true);
+                    console.log('✅ Discovery data synced to PostgreSQL');
+                } else {
+                    updateDataSource(false);
+                }
+            } catch (error) {
+                console.log('⚠️ PostgreSQL sync failed, data cached locally');
+                updateDataSource(false);
+            }
+        }
+
         // Initialize
-        window.onload = function() {
+        window.onload = async function() {
             const savedUser = localStorage.getItem('syp_user');
             if (!savedUser) {
                 window.location.href = 'exec-login.html';
@@ -874,11 +1066,8 @@
 
             document.getElementById('userName').textContent = currentUser.name || currentUser.email;
 
-            // Load saved responses
-            const saved = localStorage.getItem('audhd_career_discovery_' + currentUser.id);
-            if (saved) {
-                responses = JSON.parse(saved);
-            }
+            // Load saved responses (PostgreSQL-first)
+            await loadDiscoveryData();
 
             updateProgress();
         };
@@ -926,8 +1115,8 @@
         }
 
         function saveCurrentSection() {
-            // Save to localStorage as we go
-            localStorage.setItem('audhd_career_discovery_' + currentUser.id, JSON.stringify(responses));
+            // Save to PostgreSQL (with localStorage fallback)
+            saveDiscoveryData();
         }
 
         function toggleCheckbox(element) {
@@ -1006,8 +1195,8 @@
                 responses[domain][field] = ta.value;
             });
 
-            // Save final responses
-            localStorage.setItem('audhd_career_discovery_' + currentUser.id, JSON.stringify(responses));
+            // Save final responses to PostgreSQL
+            saveDiscoveryData();
 
             // Generate results
             const resultsHtml = generateResultsHTML();
