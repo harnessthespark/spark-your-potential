@@ -832,6 +832,7 @@
         }
 
         // Load saved data - PostgreSQL FIRST, localStorage fallback
+        // If PostgreSQL empty but localStorage has data, SYNC UP to PostgreSQL
         async function loadFoundations() {
             const email = getUserEmail();
             const status = document.getElementById('saveStatus');
@@ -852,6 +853,45 @@
                             // Update localStorage cache
                             localStorage.setItem('foundations_' + getUserId(), JSON.stringify(result.data.data));
                             return;
+                        } else {
+                            // PostgreSQL has NO data - check if localStorage has data to sync UP
+                            const localData = localStorage.getItem('foundations_' + getUserId());
+                            if (localData) {
+                                const data = JSON.parse(localData);
+                                populateForm(data);
+                                console.log('📤 PostgreSQL empty but localStorage has data - syncing UP...');
+                                status.textContent = '⬆️ Syncing...';
+                                status.style.color = '#3B82F6';
+
+                                // Push localStorage data UP to PostgreSQL
+                                try {
+                                    const syncResponse = await fetch(`${API_URL}/api/foundations`, {
+                                        method: 'POST',
+                                        headers: { 'Content-Type': 'application/json' },
+                                        body: JSON.stringify({
+                                            client_email: email,
+                                            data: data
+                                        })
+                                    });
+
+                                    if (syncResponse.ok) {
+                                        isLiveData = true;
+                                        status.textContent = '☁️ Synced';
+                                        status.style.color = '#10B981';
+                                        console.log('✅ localStorage data synced UP to PostgreSQL');
+                                    } else {
+                                        isLiveData = false;
+                                        status.textContent = '💾 Cached';
+                                        status.style.color = '#F59E0B';
+                                    }
+                                } catch (syncError) {
+                                    console.log('⚠️ Could not sync up:', syncError.message);
+                                    isLiveData = false;
+                                    status.textContent = '💾 Cached';
+                                    status.style.color = '#F59E0B';
+                                }
+                                return;
+                            }
                         }
                     }
                 } catch (error) {
@@ -859,7 +899,7 @@
                 }
             }
 
-            // Fallback to localStorage
+            // Fallback to localStorage (no email or API failed)
             const saved = localStorage.getItem('foundations_' + getUserId());
             if (saved) {
                 const data = JSON.parse(saved);
