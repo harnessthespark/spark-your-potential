@@ -2172,6 +2172,9 @@
 
             let docs = {};
 
+            // Check if this is a demo client (use static files instead of API-driven editors)
+            const isDemo = selectedClient.is_demo === true;
+
             if (programmeType === 'audhd' || programmeType === 'nd') {
                 // Spark/ND documents - use correct filename pattern
                 docs = {
@@ -2180,9 +2183,14 @@
                 };
             } else {
                 // Career documents - all standard naming conventions
+                // Demo clients use static files; real clients use API editors
                 docs = {
-                    'questionnaire': `questionnaire-editor.html?client_id=${clientId}`,
-                    'insights': `insights-editor.html?client_id=${clientId}`,
+                    'questionnaire': isDemo
+                        ? `${folder}/${folder}_Questionnaire_Responses.html`
+                        : `questionnaire-editor.html?client_id=${clientId}`,
+                    'insights': isDemo
+                        ? `${folder}/${folder}_Career_Insights_Report.html`
+                        : `insights-editor.html?client_id=${clientId}`,
                     'homework': `${folder}/${folder}_Week2_Homework.html`,
                     'blueprint': `${folder}/${folder}_Career_Blueprint.html`,
                     'cv-builder': `${folder}/${folder}_Interactive_CV_Builder.html`,
