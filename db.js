@@ -471,6 +471,42 @@ async function createClientAccount(email, name, password, programmeAccess = 'car
 }
 
 /**
+ * Create a coach/admin account
+ * @param {string} email - Coach email
+ * @param {string} name - Coach name
+ * @param {string} password - Coach password
+ */
+async function createCoachAccount(email, name, password) {
+    // Check if user already exists
+    const existing = await pool.query(
+        'SELECT id FROM users WHERE email = $1',
+        [email]
+    );
+
+    const hashedPassword = hashPassword(password);
+
+    if (existing.rows.length > 0) {
+        // Update existing user to be admin with password
+        const result = await pool.query(
+            `UPDATE users SET name = COALESCE($2, name), password_hash = $3, is_admin = true, must_change_password = false, updated_at = NOW()
+             WHERE email = $1
+             RETURNING *`,
+            [email, name, hashedPassword]
+        );
+        return result.rows[0];
+    }
+
+    // Create new admin user
+    const result = await pool.query(
+        `INSERT INTO users (email, name, password_hash, is_admin, must_change_password, last_login)
+         VALUES ($1, $2, $3, true, false, NOW())
+         RETURNING *`,
+        [email, name, hashedPassword]
+    );
+    return result.rows[0];
+}
+
+/**
  * Get all users (admin function)
  */
 async function getAllUsers() {
@@ -1321,6 +1357,7 @@ module.exports = {
     getOrCreateUser,
     loginUser,
     createClientAccount,
+    createCoachAccount,
     getAllUsers,
     isAdmin,
     updateClient,

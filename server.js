@@ -194,6 +194,30 @@ app.post('/api/login', async (req, res) => {
     }
 });
 
+// Setup coach account (one-time setup)
+app.post('/api/setup-coach', async (req, res) => {
+    try {
+        const { email, name, password, setupKey } = req.body;
+
+        // Simple setup key for security - only works once
+        if (setupKey !== 'spark2025setup') {
+            return res.status(403).json({ success: false, error: 'Invalid setup key' });
+        }
+
+        if (!email || !password) {
+            return res.status(400).json({ success: false, error: 'Email and password are required' });
+        }
+
+        const user = await db.createCoachAccount(email, name || email.split('@')[0], password);
+        console.log(`🔥 Coach account created/updated: ${email}`);
+
+        res.json({ success: true, user: { email: user.email, name: user.name, is_admin: user.is_admin } });
+    } catch (error) {
+        console.error('Coach setup error:', error);
+        res.status(500).json({ success: false, error: error.message });
+    }
+});
+
 // Password validation helper
 function validatePasswordStrength(password) {
     const errors = [];
