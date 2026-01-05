@@ -1204,6 +1204,269 @@ app.get('/api/spark-collector/:clientEmail', async (req, res) => {
 });
 
 // ============================================
+// FOUNDATIONS ENDPOINTS (PostgreSQL)
+// ============================================
+
+// Save Foundations data (POST)
+app.post('/api/foundations', async (req, res) => {
+    try {
+        const { client_email, data } = req.body;
+
+        if (!client_email || !data) {
+            return res.status(400).json({
+                success: false,
+                error: 'client_email and data are required'
+            });
+        }
+
+        const result = await db.saveFoundations(client_email, data);
+        console.log(`🏗️ Foundations saved: ${client_email}`);
+
+        res.json({ success: true, data: result });
+    } catch (error) {
+        console.error('Foundations save error:', error);
+        res.status(500).json({ success: false, error: error.message });
+    }
+});
+
+// Get Foundations data (GET)
+app.get('/api/foundations/:clientEmail', async (req, res) => {
+    try {
+        const { clientEmail } = req.params;
+
+        const data = await db.getFoundations(clientEmail);
+
+        res.json({
+            success: true,
+            data: data || null
+        });
+    } catch (error) {
+        console.error('Foundations fetch error:', error);
+        res.status(500).json({ success: false, error: error.message });
+    }
+});
+
+// ============================================
+// WEEKLY CHECKIN ENDPOINTS (PostgreSQL)
+// ============================================
+
+// Save Weekly Check-in (POST)
+app.post('/api/weekly-checkin', async (req, res) => {
+    try {
+        const { client_email, checkin_date, data } = req.body;
+
+        if (!client_email || !data) {
+            return res.status(400).json({
+                success: false,
+                error: 'client_email and data are required'
+            });
+        }
+
+        // Use today's date if not provided
+        const date = checkin_date || new Date().toISOString().split('T')[0];
+        const result = await db.saveWeeklyCheckin(client_email, date, data);
+        console.log(`📋 Weekly check-in saved: ${client_email} (${date})`);
+
+        res.json({ success: true, data: result });
+    } catch (error) {
+        console.error('Weekly check-in save error:', error);
+        res.status(500).json({ success: false, error: error.message });
+    }
+});
+
+// Get Weekly Check-ins (GET)
+app.get('/api/weekly-checkin/:clientEmail', async (req, res) => {
+    try {
+        const { clientEmail } = req.params;
+        const { date } = req.query;
+
+        const data = await db.getWeeklyCheckin(clientEmail, date);
+
+        res.json({
+            success: true,
+            data: data || (date ? null : [])
+        });
+    } catch (error) {
+        console.error('Weekly check-in fetch error:', error);
+        res.status(500).json({ success: false, error: error.message });
+    }
+});
+
+// ============================================
+// DECISIONS ENDPOINTS (PostgreSQL)
+// ============================================
+
+// Save Decisions (POST)
+app.post('/api/decisions', async (req, res) => {
+    try {
+        const { client_email, decision_data } = req.body;
+
+        if (!client_email || !decision_data) {
+            return res.status(400).json({
+                success: false,
+                error: 'client_email and decision_data are required'
+            });
+        }
+
+        const result = await db.saveDecisions(client_email, decision_data);
+        console.log(`⚖️ Decisions saved: ${client_email}`);
+
+        res.json({ success: true, data: result });
+    } catch (error) {
+        console.error('Decisions save error:', error);
+        res.status(500).json({ success: false, error: error.message });
+    }
+});
+
+// Get Decisions (GET)
+app.get('/api/decisions/:clientEmail', async (req, res) => {
+    try {
+        const { clientEmail } = req.params;
+
+        const data = await db.getDecisions(clientEmail);
+
+        res.json({
+            success: true,
+            data: data || null
+        });
+    } catch (error) {
+        console.error('Decisions fetch error:', error);
+        res.status(500).json({ success: false, error: error.message });
+    }
+});
+
+// ============================================
+// SESSION NOTES ENDPOINTS (PostgreSQL)
+// ============================================
+
+// Save Session Notes (POST)
+app.post('/api/session-notes', async (req, res) => {
+    try {
+        const { client_email, session_date, notes } = req.body;
+
+        if (!client_email || !notes) {
+            return res.status(400).json({
+                success: false,
+                error: 'client_email and notes are required'
+            });
+        }
+
+        const date = session_date || new Date().toISOString().split('T')[0];
+        const result = await db.saveSessionNotes(client_email, date, notes);
+        console.log(`📝 Session notes saved: ${client_email} (${date})`);
+
+        res.json({ success: true, data: result });
+    } catch (error) {
+        console.error('Session notes save error:', error);
+        res.status(500).json({ success: false, error: error.message });
+    }
+});
+
+// Get Session Notes (GET)
+app.get('/api/session-notes/:clientEmail', async (req, res) => {
+    try {
+        const { clientEmail } = req.params;
+        const { date } = req.query;
+
+        const data = await db.getSessionNotes(clientEmail, date);
+
+        res.json({
+            success: true,
+            data: data || (date ? null : [])
+        });
+    } catch (error) {
+        console.error('Session notes fetch error:', error);
+        res.status(500).json({ success: false, error: error.message });
+    }
+});
+
+// ============================================
+// CAREER DISCOVERY ENDPOINTS (PostgreSQL)
+// ============================================
+
+// Save Career Discovery (POST)
+app.post('/api/career-discovery', async (req, res) => {
+    try {
+        const { client_email, responses } = req.body;
+
+        if (!client_email || !responses) {
+            return res.status(400).json({
+                success: false,
+                error: 'client_email and responses are required'
+            });
+        }
+
+        const result = await db.saveCareerDiscovery(client_email, responses);
+        console.log(`🎯 Career discovery saved: ${client_email}`);
+
+        res.json({ success: true, data: result });
+    } catch (error) {
+        console.error('Career discovery save error:', error);
+        res.status(500).json({ success: false, error: error.message });
+    }
+});
+
+// Get Career Discovery (GET)
+app.get('/api/career-discovery/:clientEmail', async (req, res) => {
+    try {
+        const { clientEmail } = req.params;
+
+        const data = await db.getCareerDiscovery(clientEmail);
+
+        res.json({
+            success: true,
+            data: data || null
+        });
+    } catch (error) {
+        console.error('Career discovery fetch error:', error);
+        res.status(500).json({ success: false, error: error.message });
+    }
+});
+
+// ============================================
+// SPARK IGNITION ENDPOINTS (PostgreSQL)
+// ============================================
+
+// Save Spark Ignition (POST)
+app.post('/api/spark-ignition', async (req, res) => {
+    try {
+        const { client_email, data } = req.body;
+
+        if (!client_email || !data) {
+            return res.status(400).json({
+                success: false,
+                error: 'client_email and data are required'
+            });
+        }
+
+        const result = await db.saveSparkIgnition(client_email, data);
+        console.log(`🔥 Spark Ignition saved: ${client_email}`);
+
+        res.json({ success: true, data: result });
+    } catch (error) {
+        console.error('Spark Ignition save error:', error);
+        res.status(500).json({ success: false, error: error.message });
+    }
+});
+
+// Get Spark Ignition (GET)
+app.get('/api/spark-ignition/:clientEmail', async (req, res) => {
+    try {
+        const { clientEmail } = req.params;
+
+        const data = await db.getSparkIgnition(clientEmail);
+
+        res.json({
+            success: true,
+            data: data || null
+        });
+    } catch (error) {
+        console.error('Spark Ignition fetch error:', error);
+        res.status(500).json({ success: false, error: error.message });
+    }
+});
+
+// ============================================
 // AGREEMENT ENDPOINTS (PostgreSQL)
 // ============================================
 

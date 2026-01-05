@@ -804,6 +804,333 @@ async function getFoundations(userEmail) {
 }
 
 // =============================================
+// WEEKLY CHECKIN FUNCTIONS
+// =============================================
+
+/**
+ * Save Weekly Check-in data (upsert)
+ * @param {string} userEmail - Client email address
+ * @param {string} checkinDate - Date in YYYY-MM-DD format
+ * @param {object} data - Check-in data
+ */
+async function saveWeeklyCheckin(userEmail, checkinDate, data) {
+    const userResult = await pool.query(
+        'SELECT id FROM users WHERE email = $1',
+        [userEmail]
+    );
+
+    if (userResult.rows.length === 0) {
+        throw new Error('User not found: ' + userEmail);
+    }
+
+    const userId = userResult.rows[0].id;
+
+    const query = `
+        INSERT INTO weekly_checkins (user_id, checkin_date, data, updated_at)
+        VALUES ($1, $2, $3, NOW())
+        ON CONFLICT (user_id, checkin_date)
+        DO UPDATE SET
+            data = $3,
+            updated_at = NOW()
+        RETURNING *
+    `;
+
+    const result = await pool.query(query, [userId, checkinDate, JSON.stringify(data)]);
+    return result.rows[0];
+}
+
+/**
+ * Get Weekly Check-in data for a client
+ * @param {string} userEmail - Client email address
+ * @param {string} checkinDate - Optional specific date
+ */
+async function getWeeklyCheckin(userEmail, checkinDate = null) {
+    let query, params;
+
+    if (checkinDate) {
+        query = `
+            SELECT wc.* FROM weekly_checkins wc
+            JOIN users u ON wc.user_id = u.id
+            WHERE u.email = $1 AND wc.checkin_date = $2
+        `;
+        params = [userEmail, checkinDate];
+    } else {
+        query = `
+            SELECT wc.* FROM weekly_checkins wc
+            JOIN users u ON wc.user_id = u.id
+            WHERE u.email = $1
+            ORDER BY wc.checkin_date DESC
+        `;
+        params = [userEmail];
+    }
+
+    const result = await pool.query(query, params);
+
+    if (checkinDate) {
+        return result.rows[0] ? { id: result.rows[0].id, data: result.rows[0].data, checkinDate: result.rows[0].checkin_date, updatedAt: result.rows[0].updated_at } : null;
+    }
+
+    return result.rows.map(row => ({
+        id: row.id,
+        data: row.data,
+        checkinDate: row.checkin_date,
+        updatedAt: row.updated_at
+    }));
+}
+
+// =============================================
+// DECISIONS FUNCTIONS
+// =============================================
+
+/**
+ * Save Decision Framework data (upsert)
+ * @param {string} userEmail - Client email address
+ * @param {array} decisionData - Array of decision objects
+ */
+async function saveDecisions(userEmail, decisionData) {
+    const userResult = await pool.query(
+        'SELECT id FROM users WHERE email = $1',
+        [userEmail]
+    );
+
+    if (userResult.rows.length === 0) {
+        throw new Error('User not found: ' + userEmail);
+    }
+
+    const userId = userResult.rows[0].id;
+
+    const query = `
+        INSERT INTO decisions (user_id, decision_data, updated_at)
+        VALUES ($1, $2, NOW())
+        ON CONFLICT (user_id)
+        DO UPDATE SET
+            decision_data = $2,
+            updated_at = NOW()
+        RETURNING *
+    `;
+
+    const result = await pool.query(query, [userId, JSON.stringify(decisionData)]);
+    return result.rows[0];
+}
+
+/**
+ * Get Decision Framework data for a client
+ * @param {string} userEmail - Client email address
+ */
+async function getDecisions(userEmail) {
+    const query = `
+        SELECT d.* FROM decisions d
+        JOIN users u ON d.user_id = u.id
+        WHERE u.email = $1
+    `;
+    const result = await pool.query(query, [userEmail]);
+
+    if (result.rows.length === 0) {
+        return null;
+    }
+
+    const row = result.rows[0];
+    return {
+        id: row.id,
+        decisionData: row.decision_data || [],
+        updatedAt: row.updated_at
+    };
+}
+
+// =============================================
+// SESSION NOTES FUNCTIONS
+// =============================================
+
+/**
+ * Save Session Notes (upsert)
+ * @param {string} userEmail - Client email address
+ * @param {string} sessionDate - Date in YYYY-MM-DD format
+ * @param {object} notes - Session notes data
+ */
+async function saveSessionNotes(userEmail, sessionDate, notes) {
+    const userResult = await pool.query(
+        'SELECT id FROM users WHERE email = $1',
+        [userEmail]
+    );
+
+    if (userResult.rows.length === 0) {
+        throw new Error('User not found: ' + userEmail);
+    }
+
+    const userId = userResult.rows[0].id;
+
+    const query = `
+        INSERT INTO session_notes (user_id, session_date, notes, updated_at)
+        VALUES ($1, $2, $3, NOW())
+        ON CONFLICT (user_id, session_date)
+        DO UPDATE SET
+            notes = $3,
+            updated_at = NOW()
+        RETURNING *
+    `;
+
+    const result = await pool.query(query, [userId, sessionDate, JSON.stringify(notes)]);
+    return result.rows[0];
+}
+
+/**
+ * Get Session Notes for a client
+ * @param {string} userEmail - Client email address
+ * @param {string} sessionDate - Optional specific date
+ */
+async function getSessionNotes(userEmail, sessionDate = null) {
+    let query, params;
+
+    if (sessionDate) {
+        query = `
+            SELECT sn.* FROM session_notes sn
+            JOIN users u ON sn.user_id = u.id
+            WHERE u.email = $1 AND sn.session_date = $2
+        `;
+        params = [userEmail, sessionDate];
+    } else {
+        query = `
+            SELECT sn.* FROM session_notes sn
+            JOIN users u ON sn.user_id = u.id
+            WHERE u.email = $1
+            ORDER BY sn.session_date DESC
+        `;
+        params = [userEmail];
+    }
+
+    const result = await pool.query(query, params);
+
+    if (sessionDate) {
+        return result.rows[0] ? { id: result.rows[0].id, notes: result.rows[0].notes, sessionDate: result.rows[0].session_date, updatedAt: result.rows[0].updated_at } : null;
+    }
+
+    return result.rows.map(row => ({
+        id: row.id,
+        notes: row.notes,
+        sessionDate: row.session_date,
+        updatedAt: row.updated_at
+    }));
+}
+
+// =============================================
+// CAREER DISCOVERY FUNCTIONS
+// =============================================
+
+/**
+ * Save Career Discovery responses (upsert)
+ * @param {string} userEmail - Client email address
+ * @param {object} responses - Questionnaire responses
+ */
+async function saveCareerDiscovery(userEmail, responses) {
+    const userResult = await pool.query(
+        'SELECT id FROM users WHERE email = $1',
+        [userEmail]
+    );
+
+    if (userResult.rows.length === 0) {
+        throw new Error('User not found: ' + userEmail);
+    }
+
+    const userId = userResult.rows[0].id;
+
+    const query = `
+        INSERT INTO career_discovery (user_id, responses, updated_at)
+        VALUES ($1, $2, NOW())
+        ON CONFLICT (user_id)
+        DO UPDATE SET
+            responses = $2,
+            updated_at = NOW()
+        RETURNING *
+    `;
+
+    const result = await pool.query(query, [userId, JSON.stringify(responses)]);
+    return result.rows[0];
+}
+
+/**
+ * Get Career Discovery responses for a client
+ * @param {string} userEmail - Client email address
+ */
+async function getCareerDiscovery(userEmail) {
+    const query = `
+        SELECT cd.* FROM career_discovery cd
+        JOIN users u ON cd.user_id = u.id
+        WHERE u.email = $1
+    `;
+    const result = await pool.query(query, [userEmail]);
+
+    if (result.rows.length === 0) {
+        return null;
+    }
+
+    const row = result.rows[0];
+    return {
+        id: row.id,
+        responses: row.responses || {},
+        updatedAt: row.updated_at
+    };
+}
+
+// =============================================
+// SPARK IGNITION FUNCTIONS
+// =============================================
+
+/**
+ * Save Spark Ignition data (upsert)
+ * @param {string} userEmail - Client email address
+ * @param {object} data - Spark ignition data
+ */
+async function saveSparkIgnition(userEmail, data) {
+    const userResult = await pool.query(
+        'SELECT id FROM users WHERE email = $1',
+        [userEmail]
+    );
+
+    if (userResult.rows.length === 0) {
+        throw new Error('User not found: ' + userEmail);
+    }
+
+    const userId = userResult.rows[0].id;
+
+    const query = `
+        INSERT INTO spark_ignition (user_id, data, updated_at)
+        VALUES ($1, $2, NOW())
+        ON CONFLICT (user_id)
+        DO UPDATE SET
+            data = $2,
+            updated_at = NOW()
+        RETURNING *
+    `;
+
+    const result = await pool.query(query, [userId, JSON.stringify(data)]);
+    return result.rows[0];
+}
+
+/**
+ * Get Spark Ignition data for a client
+ * @param {string} userEmail - Client email address
+ */
+async function getSparkIgnition(userEmail) {
+    const query = `
+        SELECT si.* FROM spark_ignition si
+        JOIN users u ON si.user_id = u.id
+        WHERE u.email = $1
+    `;
+    const result = await pool.query(query, [userEmail]);
+
+    if (result.rows.length === 0) {
+        return null;
+    }
+
+    const row = result.rows[0];
+    return {
+        id: row.id,
+        data: row.data || {},
+        updatedAt: row.updated_at
+    };
+}
+
+// =============================================
 // AGREEMENT FUNCTIONS
 // =============================================
 
@@ -1005,6 +1332,18 @@ module.exports = {
     getAllHomework,
     saveSparkCollector,
     getSparkCollector,
+    saveFoundations,
+    getFoundations,
+    saveWeeklyCheckin,
+    getWeeklyCheckin,
+    saveDecisions,
+    getDecisions,
+    saveSessionNotes,
+    getSessionNotes,
+    saveCareerDiscovery,
+    getCareerDiscovery,
+    saveSparkIgnition,
+    getSparkIgnition,
     saveAgreement,
     getAgreement,
     changePassword,
