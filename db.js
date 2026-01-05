@@ -196,6 +196,18 @@ async function initDatabase() {
             )
         `);
 
+        // Create foundations table for "Laying the Foundations" worksheet
+        await client.query(`
+            CREATE TABLE IF NOT EXISTS foundations (
+                id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+                user_id UUID REFERENCES users(id) ON DELETE CASCADE,
+                data JSONB DEFAULT '{}',
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                UNIQUE(user_id)
+            )
+        `);
+
         // Create password_reset_tokens table
         await client.query(`
             CREATE TABLE IF NOT EXISTS password_reset_tokens (
@@ -216,6 +228,7 @@ async function initDatabase() {
             CREATE INDEX IF NOT EXISTS idx_decision_frameworks_user_id ON decision_frameworks(user_id);
             CREATE INDEX IF NOT EXISTS idx_homework_user_id ON homework(user_id);
             CREATE INDEX IF NOT EXISTS idx_spark_collector_user_id ON spark_collector(user_id);
+            CREATE INDEX IF NOT EXISTS idx_foundations_user_id ON foundations(user_id);
         `);
 
         console.log('✅ Database tables initialised');
@@ -662,6 +675,63 @@ async function getSparkCollector(userEmail) {
         wins: row.wins || {},
         firstSteps: row.first_steps || {},
         stats: row.stats || { totalWins: 0, bestStreak: 0, currentStreak: 0 },
+        updatedAt: row.updated_at
+    };
+}
+
+/**
+ * Save Foundations data (upsert - creates or updates)
+ * @param {string} userEmail - Client email address
+ * @param {object} data - Foundations data (8 categories with colour, rules, exceptions, protected)
+ */
+async function saveFoundations(userEmail, data) {
+    // First, get the user by email
+    const userResult = await pool.query(
+        'SELECT id FROM users WHERE email = $1',
+        [userEmail]
+    );
+
+    if (userResult.rows.length === 0) {
+        throw new Error('User not found: ' + userEmail);
+    }
+
+    const userId = userResult.rows[0].id;
+
+    // Upsert foundations record
+    const query = `
+        INSERT INTO foundations (user_id, data, updated_at)
+        VALUES ($1, $2, NOW())
+        ON CONFLICT (user_id)
+        DO UPDATE SET
+            data = $2,
+            updated_at = NOW()
+        RETURNING *
+    `;
+
+    const result = await pool.query(query, [userId, JSON.stringify(data)]);
+    return result.rows[0];
+}
+
+/**
+ * Get Foundations data for a client
+ * @param {string} userEmail - Client email address
+ */
+async function getFoundations(userEmail) {
+    const query = `
+        SELECT f.* FROM foundations f
+        JOIN users u ON f.user_id = u.id
+        WHERE u.email = $1
+    `;
+    const result = await pool.query(query, [userEmail]);
+
+    if (result.rows.length === 0) {
+        return null;
+    }
+
+    const row = result.rows[0];
+    return {
+        id: row.id,
+        data: row.data || {},
         updatedAt: row.updated_at
     };
 }

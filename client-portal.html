@@ -2050,9 +2050,10 @@
             // Use client-specific file paths if available, otherwise fall back to generated names
             const files = client.files || {};
 
-            // Check if Spark client or Blended client
+            // Check if Spark client, Blended client, or All-access (testing)
+            const isAllAccess = client.programmeType === 'all';
             const isSparkClient = client.programmeType === 'audhd';
-            const isBlendedClient = client.programmeType === 'blended';
+            const isBlendedClient = client.programmeType === 'blended' || isAllAccess;
 
             // Spark tools (for Spark-only and Blended clients)
             const sparkTools = [

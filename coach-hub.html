@@ -1377,6 +1377,7 @@
                     <option value="career">💼 Career Booster</option>
                     <option value="audhd">🧠 Spark Coaching</option>
                     <option value="blended">✨ Blended (Career + Mind)</option>
+                    <option value="all">🔑 All Access (Testing)</option>
                 </select>
             </div>
             <div class="modal-actions">
@@ -1480,6 +1481,8 @@
                 <select id="editClientProgramme">
                     <option value="career">💼 Career Booster</option>
                     <option value="audhd">🧠 Spark Coaching</option>
+                    <option value="blended">✨ Blended (Career + Mind)</option>
+                    <option value="all">🔑 All Access (Testing)</option>
                 </select>
             </div>
             <div class="form-group">
@@ -1592,7 +1595,7 @@
                 full_name: 'Lisa Gills',
                 name: 'Lisa Gills',
                 email: 'lisa.gills@icloud.com',
-                programme_type: 'career',
+                programme_type: 'all',
                 programme_status: 'week-1',
                 status: 'week-1',
                 enrolled_date: '2025-12-01',
@@ -1964,7 +1967,7 @@
                             <h3>
                                 ${name}
                                 <span class="programme-badge ${programmeType}">
-                                    ${programmeType === 'audhd' ? '🧠 Spark' : '💼 Career'}
+                                    ${programmeType === 'audhd' ? '🧠 Spark' : programmeType === 'blended' ? '✨ Blended' : programmeType === 'all' ? '🔑 All' : '💼 Career'}
                                 </span>
                                 ${homeworkBadge}
                             </h3>
