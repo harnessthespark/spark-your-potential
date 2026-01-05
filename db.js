@@ -208,6 +208,68 @@ async function initDatabase() {
             )
         `);
 
+        // Create weekly_checkins table for weekly check-in data
+        await client.query(`
+            CREATE TABLE IF NOT EXISTS weekly_checkins (
+                id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+                user_id UUID REFERENCES users(id) ON DELETE CASCADE,
+                checkin_date DATE NOT NULL,
+                data JSONB DEFAULT '{}',
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                UNIQUE(user_id, checkin_date)
+            )
+        `);
+
+        // Create decisions table for decision framework
+        await client.query(`
+            CREATE TABLE IF NOT EXISTS decisions (
+                id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+                user_id UUID REFERENCES users(id) ON DELETE CASCADE,
+                decision_data JSONB DEFAULT '[]',
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                UNIQUE(user_id)
+            )
+        `);
+
+        // Create session_notes table for coaching session notes
+        await client.query(`
+            CREATE TABLE IF NOT EXISTS session_notes (
+                id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+                user_id UUID REFERENCES users(id) ON DELETE CASCADE,
+                session_date DATE NOT NULL,
+                notes JSONB DEFAULT '{}',
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                UNIQUE(user_id, session_date)
+            )
+        `);
+
+        // Create career_discovery table for career discovery questionnaire
+        await client.query(`
+            CREATE TABLE IF NOT EXISTS career_discovery (
+                id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+                user_id UUID REFERENCES users(id) ON DELETE CASCADE,
+                responses JSONB DEFAULT '{}',
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                UNIQUE(user_id)
+            )
+        `);
+
+        // Create spark_ignition table for spark ignition tool data
+        await client.query(`
+            CREATE TABLE IF NOT EXISTS spark_ignition (
+                id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+                user_id UUID REFERENCES users(id) ON DELETE CASCADE,
+                data JSONB DEFAULT '{}',
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                UNIQUE(user_id)
+            )
+        `);
+
         // Create password_reset_tokens table
         await client.query(`
             CREATE TABLE IF NOT EXISTS password_reset_tokens (
@@ -229,6 +291,11 @@ async function initDatabase() {
             CREATE INDEX IF NOT EXISTS idx_homework_user_id ON homework(user_id);
             CREATE INDEX IF NOT EXISTS idx_spark_collector_user_id ON spark_collector(user_id);
             CREATE INDEX IF NOT EXISTS idx_foundations_user_id ON foundations(user_id);
+            CREATE INDEX IF NOT EXISTS idx_weekly_checkins_user_id ON weekly_checkins(user_id);
+            CREATE INDEX IF NOT EXISTS idx_decisions_user_id ON decisions(user_id);
+            CREATE INDEX IF NOT EXISTS idx_session_notes_user_id ON session_notes(user_id);
+            CREATE INDEX IF NOT EXISTS idx_career_discovery_user_id ON career_discovery(user_id);
+            CREATE INDEX IF NOT EXISTS idx_spark_ignition_user_id ON spark_ignition(user_id);
         `);
 
         console.log('✅ Database tables initialised');
