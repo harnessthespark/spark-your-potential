@@ -1777,16 +1777,30 @@
                 try {
                     const user = JSON.parse(savedUser);
                     const email = user.email?.toLowerCase();
-                    if (email && CLIENTS[email]) {
-                        // Sync the client email for consistency
+                    if (email) {
+                        // User is authenticated - show portal
                         localStorage.setItem('syp_client_email', email);
-                        showPortal(CLIENTS[email]);
+                        if (CLIENTS[email]) {
+                            showPortal(CLIENTS[email]);
+                        } else {
+                            // Create dynamic client from user data
+                            showPortal({
+                                name: user.name || email.split('@')[0],
+                                email: email,
+                                programmeType: user.programme_access || 'career',
+                                status: user.programme_status || 'enrolled'
+                            });
+                        }
                         return;
                     }
                 } catch (e) {
                     console.error('Error parsing saved user:', e);
                 }
             }
+
+            // NO SESSION - Redirect to central login
+            console.log('🔐 No session found - redirecting to login.html');
+            window.location.href = 'login.html';
         };
 
         // SYP Express API - single backend for auth and client data
