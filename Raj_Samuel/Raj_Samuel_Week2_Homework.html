@@ -35,6 +35,26 @@
             color: white;
             padding: 40px;
             text-align: center;
+            position: relative;
+        }
+
+        .back-btn {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: rgba(255,255,255,0.2);
+            color: white;
+            border: 1px solid rgba(255,255,255,0.3);
+            padding: 8px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.9em;
+            font-family: inherit;
+            transition: all 0.3s ease;
+        }
+
+        .back-btn:hover {
+            background: rgba(255,255,255,0.3);
         }
 
         .header h1 {
@@ -300,6 +320,7 @@
 <body>
     <div class="container">
         <div class="header">
+            <button class="back-btn" onclick="goBackToPortal()">← Back to Portal</button>
             <h1>📝 Week 2 Homework</h1>
             <div class="subtitle">Raj Samuel | Career Booster Programme</div>
         </div>
@@ -432,6 +453,24 @@ What 'recognised for cultural transformation' looks like for me (in-house, consu
     <div class="save-indicator" id="saveIndicator">✓ Progress Saved</div>
 
     <script>
+        // Smart back navigation
+        function goBackToPortal() {
+            const savedUser = localStorage.getItem('syp_user');
+            if (savedUser) {
+                try {
+                    const user = JSON.parse(savedUser);
+                    const access = user.programme_access || user.programme_type || 'career';
+                    if (access === 'audhd') {
+                        window.location.href = '../audhd-dashboard.html';
+                    } else {
+                        window.location.href = '../client-portal.html';
+                    }
+                    return;
+                } catch(e) {}
+            }
+            window.location.href = '../client-portal.html';
+        }
+
         // PostgreSQL API Configuration
         const API_BASE = 'https://stingray-app-7kg9p.ondigitalocean.app';
         const CLIENT_EMAIL = 'rs@rajsamuel.net';
