@@ -1083,19 +1083,6 @@
 </head>
 <body>
     <div class="container">
-        <!-- Login Section -->
-        <div class="login-section" id="loginSection">
-            <h2>⚡ Your Career Toolkit</h2>
-            <p>Log in to access your coaching portal and tools</p>
-            <div class="login-error" id="loginError"></div>
-            <label class="input-label" for="emailInput">Email Address</label>
-            <input type="email" class="email-input" id="emailInput" placeholder="your@email.com" onkeypress="if(event.key==='Enter') document.getElementById('passwordInput').focus()">
-            <label class="input-label" for="passwordInput">Password</label>
-            <input type="password" class="email-input" id="passwordInput" placeholder="Enter your password" onkeypress="if(event.key==='Enter') clientLogin()">
-            <button class="login-btn" onclick="clientLogin()">Log In</button>
-            <p class="login-help">First time? Use your temporary password, then <a href="mailto:lisa@harnessthespark.com">contact Lisa</a> to set your own.</p>
-            <p class="login-help">Forgot password? <a href="mailto:lisa@harnessthespark.com">Contact Lisa</a></p>
-        </div>
 
         <!-- Testimonial Agreement Section (shown for testimonial-access clients) -->
         <div class="agreement-section" id="testimonialAgreementSection">
@@ -1806,128 +1793,7 @@
         // SYP Express API - single backend for auth and client data
         const SPARKHUB_API = 'https://sparkhub-be-qtmmb.ondigitalocean.app';  // CRM fallback only
 
-        // Client login - authenticates against SYP Express PostgreSQL
-        async function clientLogin() {
-            const email = document.getElementById('emailInput').value.trim().toLowerCase();
-            const password = document.getElementById('passwordInput').value;
-            const errorEl = document.getElementById('loginError');
-            const loginBtn = document.querySelector('.login-btn');
-
-            if (!email) {
-                errorEl.textContent = 'Please enter your email address';
-                errorEl.style.display = 'block';
-                return;
-            }
-
-            if (!password) {
-                errorEl.textContent = 'Please enter your password';
-                errorEl.style.display = 'block';
-                return;
-            }
-
-            // Show loading state
-            loginBtn.disabled = true;
-            loginBtn.textContent = 'Logging in...';
-            errorEl.style.display = 'none';
-
-            try {
-                // Authenticate against SYP Express (single backend)
-                const response = await fetch('/api/login', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ email, password })
-                });
-
-                const data = await response.json();
-
-                if (data.success && data.user) {
-                    console.log('🔐 LOGIN SUCCESS - Full user object:', JSON.stringify(data.user, null, 2));
-                    console.log('🔐 must_change_password value:', data.user.must_change_password);
-                    console.log('🔐 must_change_password type:', typeof data.user.must_change_password);
-
-                    // CRITICAL: Check password change IMMEDIATELY before anything else
-                    if (data.user.must_change_password === true) {
-                        console.log('🔐 PASSWORD CHANGE REQUIRED - Redirecting NOW!');
-                        localStorage.setItem('syp_pending_password_change', email);
-                        localStorage.setItem('syp_user', JSON.stringify(data.user));
-                        window.location.href = 'change-password.html';
-                        return;
-                    }
-
-                    // Success - store auth data
-                    localStorage.setItem('syp_client_email', email);
-                    localStorage.setItem('syp_user', JSON.stringify(data.user));
-
-                    // Get client data from SYP Express or CLIENTS fallback
-                    let client = null;
-
-                    // Step 1: Try SYP Express API first
-                    try {
-                        console.log('🔄 Fetching client data from SYP Express...');
-                        const clientResponse = await fetch(`/api/clients/${encodeURIComponent(email)}`);
-
-                        if (clientResponse.ok) {
-                            const clientData = await clientResponse.json();
-                            console.log('✅ Got client data from SYP Express:', clientData);
-
-                            // Merge with CLIENTS config for file mappings if available
-                            const localConfig = CLIENTS[email] || {};
-
-                            client = {
-                                name: clientData.user?.name || data.user.name || email.split('@')[0],
-                                email: email,
-                                folder: localConfig.folder || email.split('@')[0].replace(/[^a-zA-Z0-9]/g, '_'),
-                                status: data.user.programme_status || localConfig.status || 'pre-programme',
-                                programmeType: data.user.programme_access || localConfig.programmeType || 'career',
-                                agreementSigned: localConfig.agreementSigned || false,
-                                files: localConfig.files || {},  // File mappings from local config
-                                prompts: localConfig.prompts || {},
-                                blueprintProgress: clientData.blueprint_progress || localConfig.blueprintProgress || 0
-                            };
-                        } else {
-                            console.warn('⚠️ PostgreSQL API returned:', clientResponse.status);
-                        }
-                    } catch (apiError) {
-                        console.warn('⚠️ PostgreSQL API error:', apiError.message);
-                    }
-
-                    // Step 2: Fall back to CLIENTS constant only if PostgreSQL failed
-                    if (!client && CLIENTS[email]) {
-                        console.log('📋 Using CLIENTS fallback for:', email);
-                        client = CLIENTS[email];
-                    }
-
-                    // Step 3: Create minimal profile if nothing else worked
-                    if (!client) {
-                        console.log('📋 Creating minimal profile for:', email);
-                        client = {
-                            name: data.user.name || data.user.full_name || email.split('@')[0],
-                            email: email,
-                            folder: email.split('@')[0].replace(/[^a-zA-Z0-9]/g, '_'),
-                            status: data.user.programme_status || 'pre-programme',
-                            programmeType: data.user.programme_access || 'career',
-                            agreementSigned: false,
-                            files: {},
-                            prompts: {},
-                            blueprintProgress: 0
-                        };
-                    }
-
-                    showPortal(client);
-                } else {
-                    throw new Error(data.error || data.detail || data.message || 'Invalid credentials');
-                }
-
-            } catch (error) {
-                console.error('Login error:', error);
-                errorEl.textContent = error.message.includes('credentials')
-                    ? 'Invalid email or password. Please try again.'
-                    : 'Login failed. Please try again or contact Lisa.';
-                errorEl.style.display = 'block';
-                loginBtn.disabled = false;
-                loginBtn.textContent = 'Log In';
-            }
-        }
+        // NOTE: clientLogin() removed - all login now via central login.html
 
         // Show portal (async to check agreement status from PostgreSQL)
         async function showPortal(client) {
@@ -1947,7 +1813,6 @@
             }
 
             currentClient = client;
-            document.getElementById('loginSection').style.display = 'none';
 
             // Check if agreement is signed (async - checks PostgreSQL first for cross-device persistence)
             const agreementSigned = await hasSignedAgreement(client);
@@ -2838,14 +2703,11 @@
         // Logout
         function logout() {
             localStorage.removeItem('syp_client_email');
+            localStorage.removeItem('syp_user');
             currentClient = null;
             selectedWeek = null;
-            document.getElementById('portalContent').classList.remove('visible');
-            document.getElementById('agreementSection').classList.remove('visible');
-            document.getElementById('loginSection').style.display = 'block';
-            document.getElementById('emailInput').value = '';
-            document.getElementById('passwordInput').value = '';
-            document.getElementById('loginError').style.display = 'none';
+            // Redirect to central login page
+            window.location.href = 'login.html';
         }
 
         // =============================================
