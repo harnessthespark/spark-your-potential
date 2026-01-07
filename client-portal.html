@@ -1797,6 +1797,8 @@
 
         // Show portal (async to check agreement status from PostgreSQL)
         async function showPortal(client) {
+            console.log('🚀 showPortal called with client:', client?.name, client?.email);
+
             // FIRST: Check if user needs to change password (catches ALL code paths)
             const savedUser = localStorage.getItem('syp_user');
             if (savedUser) {
@@ -1815,7 +1817,17 @@
             currentClient = client;
 
             // Check if agreement is signed (async - checks PostgreSQL first for cross-device persistence)
-            const agreementSigned = await hasSignedAgreement(client);
+            console.log('🔍 Checking agreement status...');
+            let agreementSigned = false;
+            try {
+                agreementSigned = await hasSignedAgreement(client);
+            } catch (e) {
+                console.error('Agreement check failed:', e);
+                // Default to checking client.agreementSigned as fallback
+                agreementSigned = client?.agreementSigned || false;
+            }
+            console.log('📋 Agreement signed:', agreementSigned);
+
             if (!agreementSigned) {
                 // Check if this is a testimonial-access client
                 if (client.programmeType === 'testimonial-access') {
@@ -1853,34 +1865,48 @@
             }
 
             // Agreement signed - show toolkit
-            document.getElementById('agreementSection').classList.remove('visible');
-            document.getElementById('testimonialAgreementSection').classList.remove('visible');
-            document.getElementById('portalContent').classList.add('visible');
+            console.log('✅ Agreement check passed - showing portal for:', client.name);
 
-            // Update header
-            document.getElementById('clientName').textContent = client.name.split(' ')[0];
+            try {
+                document.getElementById('agreementSection').classList.remove('visible');
+                document.getElementById('testimonialAgreementSection').classList.remove('visible');
+                document.getElementById('portalContent').classList.add('visible');
 
-            // Update portal title based on programme type
-            const isSparkClient = client.programmeType === 'audhd';
-            const isBlendedClient = client.programmeType === 'blended';
-            let portalTitle = 'Your Career Toolkit';
-            if (isSparkClient) portalTitle = 'Your Spark Toolkit';
-            if (isBlendedClient) portalTitle = 'Your Complete Toolkit';
-            document.getElementById('portalTitle').textContent = portalTitle;
+                // Update header
+                document.getElementById('clientName').textContent = client.name ? client.name.split(' ')[0] : 'Client';
 
-            // Calculate stats
-            const stageIndex = STAGES.findIndex(s => s.id === client.status);
-            const toolsUnlocked = getToolsUnlocked(stageIndex);
+                // Update portal title based on programme type
+                const isSparkClient = client.programmeType === 'audhd';
+                const isBlendedClient = client.programmeType === 'blended';
+                let portalTitle = 'Your Career Toolkit';
+                if (isSparkClient) portalTitle = 'Your Spark Toolkit';
+                if (isBlendedClient) portalTitle = 'Your Complete Toolkit';
+                document.getElementById('portalTitle').textContent = portalTitle;
 
-            document.getElementById('statBlueprints').textContent = stageIndex >= 2 ? '1' : '0';
-            document.getElementById('statTools').textContent = `${toolsUnlocked}/6`;
-            document.getElementById('statDate').textContent = new Date().toLocaleDateString('en-GB');
+                // Calculate stats
+                const stageIndex = STAGES.findIndex(s => s.id === client.status);
+                const toolsUnlocked = getToolsUnlocked(stageIndex);
 
-            // Render journey
-            renderJourney(client);
+                document.getElementById('statBlueprints').textContent = stageIndex >= 2 ? '1' : '0';
+                document.getElementById('statTools').textContent = `${toolsUnlocked}/6`;
+                document.getElementById('statDate').textContent = new Date().toLocaleDateString('en-GB');
+            } catch (e) {
+                console.error('Error setting up portal header:', e);
+            }
+
+            // Render journey (wrapped in try-catch)
+            try {
+                renderJourney(client);
+            } catch (e) {
+                console.error('Error rendering journey:', e);
+            }
 
             // Render transformation flow (3-step journey)
-            renderTransformationJourney(client);
+            try {
+                renderTransformationJourney(client);
+            } catch (e) {
+                console.error('Error rendering transformation journey:', e);
+            }
 
             // Render homework section
             renderHomeworkSection(client);
