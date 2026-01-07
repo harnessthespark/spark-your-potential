@@ -174,7 +174,9 @@ app.get('/health', async (req, res) => {
     });
 });
 
-// Login with email and password
+// Login with email and password - authenticates via Django backend
+const DJANGO_BACKEND = 'https://sparkhub-be-qtmmb.ondigitalocean.app';
+
 app.post('/api/login', async (req, res) => {
     try {
         const { email, password } = req.body;
@@ -182,12 +184,73 @@ app.post('/api/login', async (req, res) => {
             return res.status(400).json({ success: false, error: 'Email and password are required' });
         }
 
-        const result = await db.loginUser(email, password);
-        if (!result.success) {
-            return res.status(401).json(result);
+        console.log(`🔐 Login attempt for: ${email}`);
+
+        // Step 1: Authenticate via Django backend
+        // Django login accepts 'username' field which can be email or username
+        const authResponse = await fetch(`${DJANGO_BACKEND}/api/accounts/login/`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ username: email, password })
+        });
+
+        const authData = await authResponse.json();
+
+        // Django returns { tokens: { access, refresh }, user: { ... } }
+        const jwtToken = authData.tokens?.access || authData.token;
+
+        if (!authResponse.ok || !jwtToken) {
+            console.log(`❌ Django auth failed for ${email}: ${authData.error || 'Invalid credentials'}`);
+            return res.status(401).json({
+                success: false,
+                error: authData.error || 'Invalid credentials'
+            });
         }
 
-        res.json({ success: true, user: result.user });
+        console.log(`✅ Django auth successful for ${email}`);
+
+        // Step 2: Fetch SYPClient data using the JWT token
+        const clientResponse = await fetch(`${DJANGO_BACKEND}/api/crm/syp/clients/me/`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${jwtToken}`
+            }
+        });
+
+        let clientData = null;
+        if (clientResponse.ok) {
+            clientData = await clientResponse.json();
+            console.log(`📋 SYPClient data retrieved for ${email}: ${clientData.programme_type || 'career'}`);
+        } else {
+            console.log(`⚠️ No SYPClient record for ${email}, using defaults`);
+        }
+
+        // Step 3: Build user response combining Django auth + SYPClient data
+        const user = {
+            id: authData.user?.id || authData.id,
+            email: email,
+            name: clientData?.full_name || authData.user?.first_name || email.split('@')[0],
+            is_admin: authData.user?.is_staff || false,
+            programme_access: clientData?.programme_type || 'career',
+            programme_status: clientData?.programme_status || 'enrolled',
+            must_change_password: clientData?.must_change_password || false,
+            jwt_token: jwtToken
+        };
+
+        // Update last login in local users table if exists (for backwards compatibility)
+        try {
+            await db.pool.query(
+                'UPDATE users SET last_login = NOW() WHERE email = $1',
+                [email]
+            );
+        } catch (dbErr) {
+            // Ignore - local users table may not have this user
+        }
+
+        console.log(`🎉 Login successful for ${email} - programme: ${user.programme_access}`);
+        res.json({ success: true, user });
+
     } catch (error) {
         console.error('Login error:', error);
         res.status(500).json({ success: false, error: error.message });
