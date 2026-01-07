@@ -276,10 +276,13 @@ async function getBlueprintById(blueprintId) {
  * Create or get user by email (legacy - no password)
  */
 async function getOrCreateUser(email, name = null) {
-    // Try to find existing user
+    // Normalise email to lowercase
+    const normalisedEmail = email.toLowerCase().trim();
+
+    // Try to find existing user (case-insensitive)
     let result = await pool.query(
-        'SELECT * FROM users WHERE email = $1',
-        [email]
+        'SELECT * FROM users WHERE LOWER(email) = $1',
+        [normalisedEmail]
     );
 
     if (result.rows.length > 0) {
@@ -291,12 +294,12 @@ async function getOrCreateUser(email, name = null) {
         return result.rows[0];
     }
 
-    // Create new user
+    // Create new user (email stored in lowercase)
     result = await pool.query(
         `INSERT INTO users (email, name, last_login)
          VALUES ($1, $2, NOW())
          RETURNING *`,
-        [email, name]
+        [normalisedEmail, name]
     );
     return result.rows[0];
 }
@@ -305,8 +308,9 @@ async function getOrCreateUser(email, name = null) {
  * Login user with email and password
  */
 async function loginUser(email, password) {
+    // Use case-insensitive email matching
     const result = await pool.query(
-        'SELECT * FROM users WHERE email = $1',
+        'SELECT * FROM users WHERE LOWER(email) = LOWER($1)',
         [email]
     );
 
@@ -343,10 +347,13 @@ async function loginUser(email, password) {
  * @param {string} programmeAccess - 'career', 'audhd', or 'both'
  */
 async function createClientAccount(email, name, password, programmeAccess = 'career') {
-    // Check if user already exists
+    // Normalise email to lowercase
+    const normalisedEmail = email.toLowerCase().trim();
+
+    // Check if user already exists (case-insensitive)
     const existing = await pool.query(
-        'SELECT id FROM users WHERE email = $1',
-        [email]
+        'SELECT id FROM users WHERE LOWER(email) = $1',
+        [normalisedEmail]
     );
 
     if (existing.rows.length > 0) {
@@ -354,20 +361,20 @@ async function createClientAccount(email, name, password, programmeAccess = 'car
         const hashedPassword = hashPassword(password);
         const result = await pool.query(
             `UPDATE users SET name = COALESCE($2, name), password_hash = $3, programme_access = $4, updated_at = NOW()
-             WHERE email = $1
+             WHERE LOWER(email) = $1
              RETURNING *`,
-            [email, name, hashedPassword, programmeAccess]
+            [normalisedEmail, name, hashedPassword, programmeAccess]
         );
         return result.rows[0];
     }
 
-    // Create new user with password and programme access
+    // Create new user with password and programme access (email stored in lowercase)
     const hashedPassword = hashPassword(password);
     const result = await pool.query(
         `INSERT INTO users (email, name, password_hash, programme_access, last_login)
          VALUES ($1, $2, $3, $4, NOW())
          RETURNING *`,
-        [email, name, hashedPassword, programmeAccess]
+        [normalisedEmail, name, hashedPassword, programmeAccess]
     );
     return result.rows[0];
 }
