@@ -115,9 +115,9 @@ app.use((req, res, next) => {
 // PAGES
 // ============================================
 
-// Home - Redirect to Dashboard (login required)
+// Home - Redirect to Login
 app.get('/', (req, res) => {
-    res.redirect('/dashboard');
+    res.redirect('/login.html');
 });
 
 // Questionnaire (accessed from dashboard after login)
