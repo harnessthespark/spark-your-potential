@@ -1247,6 +1247,71 @@ app.get('/api/homework/:clientEmail', async (req, res) => {
     }
 });
 
+// Send homework email to Lisa (POST)
+app.post('/api/send-homework-email', async (req, res) => {
+    try {
+        const { client_name, client_email, homework_type, content } = req.body;
+
+        if (!client_name || !content) {
+            return res.status(400).json({
+                success: false,
+                error: 'client_name and content are required'
+            });
+        }
+
+        const mailOptions = {
+            from: `"Spark Your Potential" <${process.env.SMTP_USER || 'lisa@harnessthespark.com'}>`,
+            to: 'lisa@harnessthespark.com',
+            subject: `${homework_type || 'Homework'} - ${client_name}`,
+            html: `
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <style>
+        body { font-family: 'Inter', Arial, sans-serif; line-height: 1.6; color: #333; }
+        .container { max-width: 700px; margin: 0 auto; padding: 40px 20px; }
+        .header { background: linear-gradient(135deg, #7c3aed 0%, #a855f7 100%); color: white; padding: 30px; border-radius: 12px 12px 0 0; text-align: center; }
+        .header h1 { margin: 0; font-size: 24px; }
+        .content { background: #f8f9fa; border-radius: 0 0 12px 12px; padding: 30px; white-space: pre-wrap; font-family: monospace; font-size: 14px; line-height: 1.8; }
+        .footer { text-align: center; color: #666; font-size: 14px; margin-top: 30px; }
+        .client-info { background: #e9ecef; padding: 15px; border-radius: 8px; margin-bottom: 20px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📝 ${homework_type || 'Homework Submission'}</h1>
+        </div>
+        <div class="content">
+            <div class="client-info">
+                <strong>Client:</strong> ${client_name}<br>
+                <strong>Email:</strong> ${client_email || 'Not provided'}<br>
+                <strong>Submitted:</strong> ${new Date().toLocaleString('en-GB', { dateStyle: 'full', timeStyle: 'short' })}
+            </div>
+            <hr style="border: 1px solid #ddd; margin: 20px 0;">
+${content}
+        </div>
+        <div class="footer">
+            <p>Sent via Spark Your Potential Client Portal</p>
+        </div>
+    </div>
+</body>
+</html>
+            `,
+            text: `${homework_type || 'Homework'} - ${client_name}\n\nClient: ${client_name}\nEmail: ${client_email || 'Not provided'}\nSubmitted: ${new Date().toLocaleString('en-GB')}\n\n${'='.repeat(50)}\n\n${content}`
+        };
+
+        await emailTransporter.sendMail(mailOptions);
+        console.log(`📧 Homework email sent: ${client_name} - ${homework_type}`);
+
+        res.json({ success: true, message: 'Homework sent to Lisa' });
+    } catch (error) {
+        console.error('Homework email error:', error);
+        res.status(500).json({ success: false, error: error.message });
+    }
+});
+
 // ============================================
 // SPARK COLLECTOR ENDPOINTS
 // ============================================

@@ -605,9 +605,10 @@ What 'recognised for cultural transformation' looks like for me (in-house, consu
             document.getElementById('progressFill').style.width = percent + '%';
         }
 
-        function emailToLisa() {
+        async function emailToLisa() {
+            // Build the homework content
             let body = "WEEK 2 HOMEWORK - Raj Samuel\n";
-            body += "=" .repeat(40) + "\n\n";
+            body += "=".repeat(40) + "\n\n";
 
             body += "KEY QUESTIONS\n";
             body += "-".repeat(20) + "\n\n";
@@ -643,9 +644,65 @@ What 'recognised for cultural transformation' looks like for me (in-house, consu
                 body += "\n\n";
             });
 
+            // Try to send via API first
+            try {
+                const response = await fetch(`${API_BASE}/api/send-homework-email`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        client_name: 'Raj Samuel',
+                        client_email: CLIENT_EMAIL,
+                        homework_type: 'Week 2 Homework',
+                        content: body
+                    })
+                });
+
+                if (response.ok) {
+                    showSaveIndicator('✅ Sent to Lisa!');
+                    alert('✅ Your homework has been sent to Lisa!\n\nShe will review it before your next session.');
+                    return;
+                }
+            } catch (error) {
+                console.warn('API email failed, trying mailto fallback:', error);
+            }
+
+            // Fallback 1: Try mailto (may fail on some devices)
             const subject = encodeURIComponent("Week 2 Homework - Raj Samuel");
-            const mailto = `mailto:lisa@harnessthespark.com?subject=${subject}&body=${encodeURIComponent(body)}`;
-            window.location.href = mailto;
+            // Truncate body for mailto URL length limit (2000 chars safe)
+            const truncatedBody = body.length > 1800 ? body.substring(0, 1800) + "\n\n[Content truncated - see full version in portal]" : body;
+            const mailto = `mailto:lisa@harnessthespark.com?subject=${subject}&body=${encodeURIComponent(truncatedBody)}`;
+
+            // Create a hidden link and click it
+            const link = document.createElement('a');
+            link.href = mailto;
+            link.style.display = 'none';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+
+            // Give user a fallback option after brief delay
+            setTimeout(() => {
+                const didWork = confirm('Did your email app open?\n\nClick "OK" if it worked.\nClick "Cancel" to copy your homework to clipboard instead.');
+
+                if (!didWork) {
+                    // Fallback 2: Copy to clipboard
+                    navigator.clipboard.writeText(body).then(() => {
+                        alert('✅ Copied to clipboard!\n\nNow paste it into an email to:\nlisa@harnessthespark.com\n\nSubject: Week 2 Homework - Raj Samuel');
+                        showSaveIndicator('📋 Copied to clipboard');
+                    }).catch(() => {
+                        // Fallback 3: Show in a textarea for manual copy
+                        const copyArea = document.createElement('textarea');
+                        copyArea.value = body;
+                        copyArea.style.cssText = 'position:fixed;top:10%;left:10%;width:80%;height:80%;z-index:10000;padding:20px;font-family:monospace;font-size:12px;';
+                        document.body.appendChild(copyArea);
+                        copyArea.select();
+                        alert('Please manually copy the text shown, then paste into an email to:\nlisa@harnessthespark.com\n\nClick anywhere outside the text box to close it.');
+                        copyArea.addEventListener('blur', () => copyArea.remove());
+                    });
+                } else {
+                    showSaveIndicator('✅ Email opened');
+                }
+            }, 1500);
         }
     </script>
 </body>
