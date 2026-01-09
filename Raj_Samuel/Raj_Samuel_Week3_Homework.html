@@ -1,0 +1,865 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Raj Samuel - Week 3 Homework | Spark Your Potential</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            line-height: 1.6;
+            color: #2c3e50;
+            background: linear-gradient(135deg, #7c3aed 0%, #a855f7 100%);
+            padding: 40px 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #7c3aed 0%, #a855f7 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+            position: relative;
+        }
+
+        .back-btn {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: rgba(255,255,255,0.2);
+            color: white;
+            border: 1px solid rgba(255,255,255,0.3);
+            padding: 8px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.9em;
+            font-family: inherit;
+            transition: all 0.3s ease;
+        }
+
+        .back-btn:hover {
+            background: rgba(255,255,255,0.3);
+        }
+
+        .header h1 {
+            font-size: 2em;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .header .subtitle {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+
+        .content {
+            padding: 40px;
+        }
+
+        .intro {
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+            padding: 25px;
+            border-radius: 15px;
+            border-left: 5px solid #f59e0b;
+            margin-bottom: 40px;
+        }
+
+        .intro h3 {
+            color: #92400e;
+            margin-bottom: 10px;
+        }
+
+        .intro p {
+            color: #78350f;
+        }
+
+        .section {
+            margin-bottom: 40px;
+        }
+
+        .section-title {
+            font-size: 1.5em;
+            font-weight: 700;
+            color: #7c3aed;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #7c3aed;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .context-box {
+            background: #f0f9ff;
+            border-left: 4px solid #0ea5e9;
+            padding: 20px;
+            border-radius: 0 10px 10px 0;
+            margin-bottom: 25px;
+        }
+
+        .context-box h4 {
+            color: #0369a1;
+            margin-bottom: 8px;
+        }
+
+        .context-box p, .context-box li {
+            color: #0c4a6e;
+            font-size: 0.95em;
+        }
+
+        .context-box ul {
+            margin-left: 20px;
+            margin-top: 10px;
+        }
+
+        .context-box li {
+            margin-bottom: 5px;
+        }
+
+        .pitch-card {
+            background: #f8fafc;
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 25px;
+            border: 2px solid #e2e8f0;
+            transition: border-color 0.3s ease;
+        }
+
+        .pitch-card:focus-within {
+            border-color: #7c3aed;
+        }
+
+        .pitch-card h4 {
+            color: #1e293b;
+            font-size: 1.1em;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .pitch-card .duration {
+            background: #7c3aed;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8em;
+            font-weight: 600;
+        }
+
+        .pitch-card .hint {
+            font-size: 0.9em;
+            color: #64748b;
+            font-style: italic;
+            margin-bottom: 15px;
+        }
+
+        .pitch-card .word-count {
+            font-size: 0.85em;
+            color: #94a3b8;
+            margin-bottom: 10px;
+        }
+
+        textarea {
+            width: 100%;
+            min-height: 120px;
+            padding: 15px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-family: inherit;
+            font-size: 1em;
+            line-height: 1.6;
+            resize: vertical;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        textarea:focus {
+            outline: none;
+            border-color: #7c3aed;
+            box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.1);
+        }
+
+        textarea::placeholder {
+            color: #94a3b8;
+        }
+
+        textarea.large {
+            min-height: 180px;
+        }
+
+        textarea.xlarge {
+            min-height: 250px;
+        }
+
+        .building-blocks {
+            background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%);
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 25px;
+            border-left: 5px solid #10b981;
+        }
+
+        .building-blocks h4 {
+            color: #065f46;
+            margin-bottom: 15px;
+        }
+
+        .building-blocks .block {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            border-left: 3px solid #10b981;
+        }
+
+        .building-blocks .block:last-child {
+            margin-bottom: 0;
+        }
+
+        .building-blocks .block-label {
+            font-weight: 600;
+            color: #047857;
+            font-size: 0.9em;
+            margin-bottom: 5px;
+        }
+
+        .building-blocks .block-content {
+            color: #064e3b;
+            font-size: 0.95em;
+        }
+
+        .save-indicator {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: #22c55e;
+            color: white;
+            padding: 12px 20px;
+            border-radius: 10px;
+            font-weight: 600;
+            box-shadow: 0 4px 15px rgba(34, 197, 94, 0.4);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: 1000;
+        }
+
+        .save-indicator.visible {
+            opacity: 1;
+        }
+
+        .progress-bar {
+            background: #e2e8f0;
+            height: 8px;
+            border-radius: 4px;
+            margin-bottom: 30px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            background: linear-gradient(90deg, #7c3aed, #a855f7);
+            height: 100%;
+            border-radius: 4px;
+            transition: width 0.5s ease;
+        }
+
+        .progress-text {
+            text-align: center;
+            color: #64748b;
+            font-size: 0.9em;
+            margin-bottom: 10px;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 40px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 15px 30px;
+            border-radius: 10px;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            transition: all 0.3s ease;
+            font-family: inherit;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #7c3aed 0%, #a855f7 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(124, 58, 237, 0.4);
+        }
+
+        .btn-secondary {
+            background: white;
+            color: #7c3aed;
+            border: 2px solid #7c3aed;
+        }
+
+        .btn-secondary:hover {
+            background: #f5f3ff;
+        }
+
+        .reflection-prompt {
+            background: linear-gradient(135deg, #fdf4ff 0%, #fae8ff 100%);
+            border-left: 4px solid #c026d3;
+            padding: 20px;
+            border-radius: 0 10px 10px 0;
+            margin: 20px 0;
+        }
+
+        .reflection-prompt h5 {
+            color: #86198f;
+            margin-bottom: 8px;
+        }
+
+        .reflection-prompt p {
+            color: #701a75;
+            font-size: 0.95em;
+        }
+
+        @media print {
+            body {
+                background: white;
+                padding: 0;
+            }
+            .container {
+                box-shadow: none;
+            }
+            .save-indicator, .action-buttons {
+                display: none;
+            }
+            textarea {
+                border: 1px solid #ccc;
+                min-height: 80px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .content {
+                padding: 25px;
+            }
+            .action-buttons {
+                flex-direction: column;
+            }
+            .btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <button class="back-btn" onclick="goBackToPortal()">← Back to Portal</button>
+            <h1>📝 Week 3 Homework</h1>
+            <div class="subtitle">Raj Samuel | Career Booster Programme</div>
+        </div>
+
+        <div class="content">
+            <div class="intro">
+                <h3>🔮 The Crystal Ball Pitch</h3>
+                <p>This week is about articulating your unique "benefit of hindsight" — the perspective you've gained from moving across different sides of the desk. You're not just a strategist — you're someone who can see where things are heading because you've been everywhere they've been.</p>
+            </div>
+
+            <div class="progress-text">Progress: <span id="progressPercent">0</span>% complete</div>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+            </div>
+
+            <!-- BUILDING BLOCKS FROM OUR WORK -->
+            <div class="building-blocks">
+                <h4>🧱 Your Building Blocks (from our sessions)</h4>
+                <p style="margin-bottom: 15px; color: #065f46;">Use these to craft your pitches below:</p>
+
+                <div class="block">
+                    <div class="block-label">Your Core Thread</div>
+                    <div class="block-content">"I spot the cultural-emotional truth hiding beneath the business problem, then make it tangible so people can act on it. The unlock is always about giving permission."</div>
+                </div>
+
+                <div class="block">
+                    <div class="block-label">The Transformation You Enable</div>
+                    <div class="block-content">Helping brands stop treating people like "audiences" and start treating them like humans again. Moving organisations from messaging to experiences that actually land.</div>
+                </div>
+
+                <div class="block">
+                    <div class="block-label">Your Crystal Ball Advantage</div>
+                    <div class="block-content">You've moved across different sides of the desk — agency, client-side, startup, founder. This gives you a "benefit of hindsight" that others don't have. You can see where things are heading because you've been everywhere they've been.</div>
+                </div>
+
+                <div class="block">
+                    <div class="block-label">What Makes You Different</div>
+                    <div class="block-content">You take people on a journey. You seek collaborators who are excited, open-minded, and ready to be challenged. You're driven by stepping outside comfort zones and finding completely different ways to approach problems.</div>
+                </div>
+
+                <div class="block">
+                    <div class="block-label">Your Legacy Statement</div>
+                    <div class="block-content">"He made brands more human, more entertaining, more alive — and showed organisations that culture and entertainment move people far more than advertising ever could."</div>
+                </div>
+            </div>
+
+            <!-- SECTION 1: THE CRYSTAL BALL PITCH -->
+            <div class="section">
+                <h2 class="section-title">🔮 Section 1: The Crystal Ball Pitch</h2>
+                <p style="color: #64748b; margin-bottom: 25px;">Craft your "benefit of hindsight" story at three different lengths. Each should feel natural, not rehearsed.</p>
+
+                <div class="context-box">
+                    <h4>💡 The Goal</h4>
+                    <p>When someone asks "So what do you do?" or "Tell me about yourself" — you want them to immediately understand why your perspective is different and valuable. The crystal ball pitch positions your cross-industry experience as a superpower, not a scattered career.</p>
+                </div>
+
+                <div class="pitch-card">
+                    <h4>
+                        <span class="duration">30 seconds</span>
+                        The Elevator Pitch
+                    </h4>
+                    <p class="hint">For: Networking events, first introductions, LinkedIn connection messages</p>
+                    <p class="word-count">Aim for ~50-75 words</p>
+                    <textarea id="pitch30" class="large" placeholder="Start with who you are, then immediately differentiate...
+
+Example structure:
+'I'm a [role] who [what you do differently]. Having worked [your journey], I've developed [your crystal ball advantage]. I help [who] to [transformation].'"></textarea>
+                </div>
+
+                <div class="pitch-card">
+                    <h4>
+                        <span class="duration">2 minutes</span>
+                        The Coffee Chat Pitch
+                    </h4>
+                    <p class="hint">For: Informational interviews, intro calls, "tell me about yourself" in interviews</p>
+                    <p class="word-count">Aim for ~200-250 words</p>
+                    <textarea id="pitch2min" class="xlarge" placeholder="Expand your 30-second pitch with proof points...
+
+Include:
+• Your core positioning
+• 1-2 specific examples that prove your crystal ball (e.g., AMV transformation, Arley's reframe)
+• What you're looking for / excited about now
+• End with what you want them to remember"></textarea>
+                </div>
+
+                <div class="pitch-card">
+                    <h4>
+                        <span class="duration">5 minutes</span>
+                        The Deep Dive Pitch
+                    </h4>
+                    <p class="hint">For: Final-round interviews, board presentations, speaking opportunities</p>
+                    <p class="word-count">Aim for ~400-500 words</p>
+                    <textarea id="pitch5min" class="xlarge" placeholder="The full story with narrative arc...
+
+Structure:
+1. THE HOOK - Start with a provocative insight or question
+2. THE JOURNEY - How you came to see what others miss (agency → client → startup → founder)
+3. THE PROOF - 2-3 case studies showing your crystal ball in action
+4. THE PATTERN - What you've learned that others haven't
+5. THE FUTURE - Where you see things heading and why you're excited
+6. THE ASK - What you're looking for in your next chapter"></textarea>
+                </div>
+
+                <div class="reflection-prompt">
+                    <h5>🤔 Test It</h5>
+                    <p>Read each pitch aloud. Does it sound like you talking, or like a LinkedIn profile? If it sounds written, make it more conversational.</p>
+                </div>
+            </div>
+
+            <!-- SECTION 2: POSITIONING SANDBOX -->
+            <div class="section">
+                <h2 class="section-title">🎨 Section 2: Positioning Sandbox</h2>
+                <p style="color: #64748b; margin-bottom: 25px;">A space to experiment with different angles and framings. Nothing here is final — play with the words.</p>
+
+                <div class="pitch-card">
+                    <h4>The "I Am / I Am Not" Sharpener</h4>
+                    <p class="hint">Binary thinking to clarify your positioning. What do you want to be known for? What do you NOT want to be mistaken for?</p>
+                    <textarea id="iAmIAmNot" class="large" placeholder="I AM:
+• A cultural translator who...
+• Someone who takes people on journeys...
+•
+
+I AM NOT:
+• A digital strategist who just...
+• A consultant who delivers decks...
+• "></textarea>
+                </div>
+
+                <div class="pitch-card">
+                    <h4>The "When They Say X, I Say Y" Reframes</h4>
+                    <p class="hint">Common questions or objections you might face, and how you'd reframe them</p>
+                    <textarea id="reframes" class="large" placeholder="When they say: 'Your experience is quite varied...'
+I say: 'That's exactly what gives me the crystal ball perspective. I've seen...'
+
+When they say: 'You've done a lot of agency work...'
+I say:
+
+When they say: 'What makes you different from other strategists?'
+I say: "></textarea>
+                </div>
+
+                <div class="pitch-card">
+                    <h4>The Headline Generator</h4>
+                    <p class="hint">If you had to describe yourself in a single headline for each dream company, what would it be?</p>
+                    <textarea id="headlines" class="large" placeholder="For Jack Morton:
+
+
+For Amplify:
+
+
+For 160over90:
+
+
+For Avantgarde:
+
+
+For LEGO Group:
+"></textarea>
+                </div>
+
+                <div class="pitch-card">
+                    <h4>The "What Do You Actually Want?" Clarity Check</h4>
+                    <p class="hint">Sometimes we need to get really honest with ourselves. Write freely — this is just for you.</p>
+                    <textarea id="wantClarity" class="xlarge" placeholder="What do I actually want from my next role?
+
+
+What am I afraid people will think about my career?
+
+
+What would I do if I knew I couldn't fail?
+
+
+What's the brave thing I've been avoiding saying?
+"></textarea>
+                </div>
+            </div>
+
+            <!-- SECTION 3: NEXT STEPS -->
+            <div class="section">
+                <h2 class="section-title">🚀 Section 3: Actions Before Week 4</h2>
+                <p style="color: #64748b; margin-bottom: 25px;">Practical steps to take before our final session.</p>
+
+                <div class="pitch-card">
+                    <h4>Practice Log</h4>
+                    <p class="hint">Who can you practice your 30-second pitch with this week? Note how it lands.</p>
+                    <textarea id="practiceLog" placeholder="Person 1:
+What I said:
+How it landed:
+What I'd change:
+
+Person 2:
+What I said:
+How it landed:
+What I'd change:"></textarea>
+                </div>
+
+                <div class="pitch-card">
+                    <h4>Questions for Week 4</h4>
+                    <p class="hint">What do you want to make sure we cover in our final session?</p>
+                    <textarea id="week4Questions" placeholder="1.
+
+2.
+
+3. "></textarea>
+                </div>
+            </div>
+
+            <!-- PATTERN REMINDER -->
+            <div class="context-box" style="background: linear-gradient(135deg, #7c3aed15 0%, #a855f715 100%); border-left-color: #7c3aed;">
+                <h4 style="color: #7c3aed;">💡 Your Pattern Reminder</h4>
+                <p style="color: #5b21b6;">"I spot the cultural-emotional truth hiding beneath the business problem, then make it tangible so people can act on it. The unlock is always about giving permission - to be brave, to reframe, to see bigger opportunities."</p>
+            </div>
+
+            <div class="action-buttons">
+                <button class="btn btn-primary" onclick="saveProgress()">💾 Save Progress</button>
+                <button class="btn btn-secondary" onclick="emailToLisa()">📧 Email to Lisa</button>
+                <button class="btn btn-secondary" onclick="window.print()">🖨️ Print</button>
+            </div>
+        </div>
+
+        <div style="text-align: center; padding: 30px; background: #f8f9fa; color: #7f8c8d; font-size: 0.9em;">
+            <p>Career Booster Programme with Lisa Gills | Harness the Spark</p>
+            <p style="margin-top: 5px;">Due before Session 4</p>
+        </div>
+    </div>
+
+    <div class="save-indicator" id="saveIndicator">✓ Progress Saved</div>
+
+    <script>
+        // Smart back navigation
+        function goBackToPortal() {
+            const savedUser = localStorage.getItem('syp_user');
+            if (savedUser) {
+                try {
+                    const user = JSON.parse(savedUser);
+                    const access = user.programme_access || user.programme_type || 'career';
+                    if (access === 'audhd') {
+                        window.location.href = '../audhd-dashboard.html';
+                    } else {
+                        window.location.href = '../client-portal.html';
+                    }
+                    return;
+                } catch(e) {}
+            }
+            window.location.href = '../client-portal.html';
+        }
+
+        // PostgreSQL API Configuration
+        const API_BASE = 'https://stingray-app-7kg9p.ondigitalocean.app';
+        const CLIENT_EMAIL = 'rs@rajsamuel.net';
+        const HOMEWORK_TYPE = 'week3';
+
+        const textareas = document.querySelectorAll('textarea');
+        let saveTimeout = null;
+
+        // Load saved data on page load
+        window.onload = function() {
+            loadProgress();
+            updateProgressBar();
+        };
+
+        // Auto-save on input with debounce
+        textareas.forEach(textarea => {
+            textarea.addEventListener('input', function() {
+                updateProgressBar();
+                // Debounce: save after 2 seconds of no typing
+                clearTimeout(saveTimeout);
+                saveTimeout = setTimeout(() => {
+                    saveProgress(true); // silent save
+                }, 2000);
+            });
+        });
+
+        async function saveProgress(silent = false) {
+            const data = {};
+            textareas.forEach(textarea => {
+                data[textarea.id] = textarea.value;
+            });
+            data.lastSaved = new Date().toISOString();
+            data.progress = calculateProgress();
+
+            // Save to PostgreSQL via API
+            try {
+                const response = await fetch(`${API_BASE}/api/homework`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        client_email: CLIENT_EMAIL,
+                        homework_type: HOMEWORK_TYPE,
+                        responses: data
+                    })
+                });
+
+                if (response.ok) {
+                    console.log('✅ Saved to PostgreSQL');
+                    if (!silent) {
+                        showSaveIndicator('✓ Saved to Database');
+                    }
+                } else {
+                    throw new Error('API error');
+                }
+            } catch (error) {
+                console.warn('PostgreSQL save failed, using localStorage fallback:', error);
+                // Fallback to localStorage
+                localStorage.setItem('raj_week3_homework', JSON.stringify(data));
+                if (!silent) {
+                    showSaveIndicator('✓ Saved Locally');
+                }
+            }
+        }
+
+        async function loadProgress() {
+            // Try to load from PostgreSQL first
+            try {
+                const response = await fetch(`${API_BASE}/api/homework/${CLIENT_EMAIL}/${HOMEWORK_TYPE}`);
+                if (response.ok) {
+                    const result = await response.json();
+                    if (result.success && result.homework && result.homework.responses) {
+                        const data = typeof result.homework.responses === 'string'
+                            ? JSON.parse(result.homework.responses)
+                            : result.homework.responses;
+                        textareas.forEach(textarea => {
+                            if (data[textarea.id]) {
+                                textarea.value = data[textarea.id];
+                            }
+                        });
+                        console.log('✅ Loaded from PostgreSQL');
+                        updateProgressBar();
+                        return;
+                    }
+                }
+            } catch (error) {
+                console.warn('PostgreSQL load failed:', error);
+            }
+
+            // Fallback to localStorage
+            const saved = localStorage.getItem('raj_week3_homework');
+            if (saved) {
+                const data = JSON.parse(saved);
+                textareas.forEach(textarea => {
+                    if (data[textarea.id]) {
+                        textarea.value = data[textarea.id];
+                    }
+                });
+                console.log('📋 Loaded from localStorage');
+            }
+        }
+
+        function calculateProgress() {
+            let filled = 0;
+            textareas.forEach(textarea => {
+                if (textarea.value.trim().length > 20) {
+                    filled++;
+                }
+            });
+            return Math.round((filled / textareas.length) * 100);
+        }
+
+        function showSaveIndicator(message = '✓ Progress Saved') {
+            const indicator = document.getElementById('saveIndicator');
+            indicator.textContent = message;
+            indicator.classList.add('visible');
+            setTimeout(() => {
+                indicator.classList.remove('visible');
+            }, 2000);
+        }
+
+        function updateProgressBar() {
+            let filled = 0;
+            textareas.forEach(textarea => {
+                if (textarea.value.trim().length > 20) {
+                    filled++;
+                }
+            });
+
+            const percent = Math.round((filled / textareas.length) * 100);
+            document.getElementById('progressPercent').textContent = percent;
+            document.getElementById('progressFill').style.width = percent + '%';
+        }
+
+        async function emailToLisa() {
+            // Build the homework content
+            let body = "WEEK 3 HOMEWORK - Raj Samuel\n";
+            body += "=".repeat(40) + "\n\n";
+
+            body += "THE CRYSTAL BALL PITCH\n";
+            body += "-".repeat(20) + "\n\n";
+
+            body += "30-Second Elevator Pitch:\n";
+            body += document.getElementById('pitch30').value || "(Not yet completed)";
+            body += "\n\n";
+
+            body += "2-Minute Coffee Chat Pitch:\n";
+            body += document.getElementById('pitch2min').value || "(Not yet completed)";
+            body += "\n\n";
+
+            body += "5-Minute Deep Dive Pitch:\n";
+            body += document.getElementById('pitch5min').value || "(Not yet completed)";
+            body += "\n\n";
+
+            body += "POSITIONING SANDBOX\n";
+            body += "-".repeat(20) + "\n\n";
+
+            body += "I Am / I Am Not:\n";
+            body += document.getElementById('iAmIAmNot').value || "(Not yet completed)";
+            body += "\n\n";
+
+            body += "Reframes:\n";
+            body += document.getElementById('reframes').value || "(Not yet completed)";
+            body += "\n\n";
+
+            body += "Headlines for Dream Companies:\n";
+            body += document.getElementById('headlines').value || "(Not yet completed)";
+            body += "\n\n";
+
+            body += "What Do You Actually Want:\n";
+            body += document.getElementById('wantClarity').value || "(Not yet completed)";
+            body += "\n\n";
+
+            body += "ACTIONS & QUESTIONS\n";
+            body += "-".repeat(20) + "\n\n";
+
+            body += "Practice Log:\n";
+            body += document.getElementById('practiceLog').value || "(Not yet completed)";
+            body += "\n\n";
+
+            body += "Questions for Week 4:\n";
+            body += document.getElementById('week4Questions').value || "(Not yet completed)";
+
+            // Try to send via API first
+            try {
+                const response = await fetch(`${API_BASE}/api/send-homework-email`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        client_name: 'Raj Samuel',
+                        client_email: CLIENT_EMAIL,
+                        homework_type: 'Week 3 Homework',
+                        content: body
+                    })
+                });
+
+                if (response.ok) {
+                    showSaveIndicator('✅ Sent to Lisa!');
+                    alert('✅ Your homework has been sent to Lisa!\n\nShe will review it before your next session.');
+                    return;
+                }
+            } catch (error) {
+                console.warn('API email failed, trying mailto fallback:', error);
+            }
+
+            // Fallback to mailto
+            const subject = encodeURIComponent("Week 3 Homework - Raj Samuel");
+            const truncatedBody = body.length > 1800 ? body.substring(0, 1800) + "\n\n[Content truncated - see full version in portal]" : body;
+            const mailto = `mailto:lisa@harnessthespark.com?subject=${subject}&body=${encodeURIComponent(truncatedBody)}`;
+
+            const link = document.createElement('a');
+            link.href = mailto;
+            link.style.display = 'none';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+
+            setTimeout(() => {
+                const didWork = confirm('Did your email app open?\n\nClick "OK" if it worked.\nClick "Cancel" to copy your homework to clipboard instead.');
+
+                if (!didWork) {
+                    navigator.clipboard.writeText(body).then(() => {
+                        alert('✅ Copied to clipboard!\n\nNow paste it into an email to:\nlisa@harnessthespark.com\n\nSubject: Week 3 Homework - Raj Samuel');
+                        showSaveIndicator('📋 Copied to clipboard');
+                    }).catch(() => {
+                        const copyArea = document.createElement('textarea');
+                        copyArea.value = body;
+                        copyArea.style.cssText = 'position:fixed;top:10%;left:10%;width:80%;height:80%;z-index:10000;padding:20px;font-family:monospace;font-size:12px;';
+                        document.body.appendChild(copyArea);
+                        copyArea.select();
+                        alert('Please manually copy the text shown, then paste into an email to:\nlisa@harnessthespark.com\n\nClick anywhere outside the text box to close it.');
+                        copyArea.addEventListener('blur', () => copyArea.remove());
+                    });
+                } else {
+                    showSaveIndicator('✅ Email opened');
+                }
+            }, 1500);
+        }
+    </script>
+</body>
+</html>
