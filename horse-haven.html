@@ -1,0 +1,1441 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Horse Haven - Your Safe Space</title>
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🐴</text></svg>">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            min-height: 100vh;
+            min-height: 100dvh;
+            background: linear-gradient(180deg, #87CEEB 0%, #98D8AA 50%, #7B9E6B 100%);
+            overflow-x: hidden;
+        }
+
+        /* Clouds animation */
+        .sky {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 200px;
+            pointer-events: none;
+            overflow: hidden;
+            z-index: 0;
+        }
+
+        .cloud {
+            position: absolute;
+            font-size: 40px;
+            opacity: 0.8;
+            animation: drift 30s linear infinite;
+        }
+
+        .cloud:nth-child(1) { top: 20px; animation-delay: 0s; }
+        .cloud:nth-child(2) { top: 60px; animation-delay: -10s; font-size: 30px; }
+        .cloud:nth-child(3) { top: 100px; animation-delay: -20s; font-size: 50px; }
+
+        @keyframes drift {
+            from { transform: translateX(-100px); }
+            to { transform: translateX(calc(100vw + 100px)); }
+        }
+
+        /* Main container */
+        .container {
+            position: relative;
+            z-index: 1;
+            max-width: 500px;
+            margin: 0 auto;
+            padding: 20px;
+            padding-bottom: 100px;
+        }
+
+        /* Header with horse */
+        .header {
+            text-align: center;
+            padding: 20px 0;
+        }
+
+        .horse-container {
+            position: relative;
+            display: inline-block;
+        }
+
+        .horse {
+            font-size: 80px;
+            animation: horseIdle 2s ease-in-out infinite;
+            cursor: pointer;
+            transition: transform 0.2s;
+            display: inline-block;
+        }
+
+        .horse:active {
+            transform: scale(1.2);
+        }
+
+        .horse.happy {
+            animation: horseHappy 0.5s ease-in-out;
+        }
+
+        .horse.nuzzle {
+            animation: horseNuzzle 0.6s ease-in-out;
+        }
+
+        @keyframes horseIdle {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
+
+        @keyframes horseHappy {
+            0%, 100% { transform: rotate(0deg) scale(1); }
+            25% { transform: rotate(-10deg) scale(1.1); }
+            75% { transform: rotate(10deg) scale(1.1); }
+        }
+
+        @keyframes horseNuzzle {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px) rotate(-5deg); }
+            75% { transform: translateX(10px) rotate(5deg); }
+        }
+
+        .horse-name {
+            font-size: 1.5em;
+            color: #5D4E37;
+            font-weight: bold;
+            margin-top: 10px;
+            text-shadow: 2px 2px 0 white;
+        }
+
+        .horse-speech {
+            background: white;
+            border-radius: 20px;
+            padding: 12px 20px;
+            margin: 15px auto;
+            max-width: 280px;
+            position: relative;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            font-size: 1.1em;
+            color: #5D4E37;
+            animation: popIn 0.3s ease-out;
+        }
+
+        .horse-speech::after {
+            content: '';
+            position: absolute;
+            top: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            border: 10px solid transparent;
+            border-bottom-color: white;
+            border-top: 0;
+        }
+
+        @keyframes popIn {
+            from { transform: scale(0.8); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        /* Horseshoe counter */
+        .horseshoe-counter {
+            position: fixed;
+            top: 15px;
+            right: 15px;
+            background: linear-gradient(135deg, #FFD700, #FFA500);
+            border-radius: 25px;
+            padding: 8px 16px;
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #5D4E37;
+            box-shadow: 0 4px 15px rgba(255,165,0,0.4);
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .horseshoe-counter .icon {
+            font-size: 1.3em;
+        }
+
+        .horseshoe-pop {
+            animation: horseshoePop 0.5s ease-out;
+        }
+
+        @keyframes horseshoePop {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.3); }
+            100% { transform: scale(1); }
+        }
+
+        /* Activity cards */
+        .activities {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .activity-card {
+            background: white;
+            border-radius: 20px;
+            padding: 20px 15px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            border: 3px solid transparent;
+        }
+
+        .activity-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+
+        .activity-card:active {
+            transform: scale(0.95);
+        }
+
+        .activity-card.active {
+            border-color: #98D8AA;
+        }
+
+        .activity-card .icon {
+            font-size: 40px;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        .activity-card .label {
+            font-size: 1em;
+            color: #5D4E37;
+            font-weight: 600;
+        }
+
+        /* Mood meadow */
+        .mood-section {
+            background: white;
+            border-radius: 25px;
+            padding: 25px;
+            margin-top: 20px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            display: none;
+        }
+
+        .mood-section.visible {
+            display: block;
+            animation: slideUp 0.3s ease-out;
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .section-title {
+            font-size: 1.3em;
+            color: #5D4E37;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .mood-options {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .mood-btn {
+            background: #f8f8f8;
+            border: 3px solid #eee;
+            border-radius: 15px;
+            padding: 15px;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-align: center;
+            min-width: 80px;
+        }
+
+        .mood-btn:hover, .mood-btn:active {
+            transform: scale(1.1);
+            border-color: #98D8AA;
+            background: #f0fff4;
+        }
+
+        .mood-btn .emoji {
+            font-size: 35px;
+            display: block;
+        }
+
+        .mood-btn .text {
+            font-size: 0.8em;
+            color: #666;
+            margin-top: 5px;
+        }
+
+        /* Worry stable */
+        .worry-section {
+            background: linear-gradient(135deg, #FFF8E7, #FFE4C4);
+            border-radius: 25px;
+            padding: 25px;
+            margin-top: 20px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            display: none;
+        }
+
+        .worry-section.visible {
+            display: block;
+            animation: slideUp 0.3s ease-out;
+        }
+
+        .worry-input {
+            width: 100%;
+            padding: 15px;
+            border: 2px dashed #DEB887;
+            border-radius: 15px;
+            font-size: 1.1em;
+            background: white;
+            resize: none;
+            min-height: 100px;
+            font-family: inherit;
+        }
+
+        .worry-input:focus {
+            outline: none;
+            border-color: #CD853F;
+        }
+
+        .worry-input::placeholder {
+            color: #BDB76B;
+        }
+
+        .send-worry-btn {
+            width: 100%;
+            margin-top: 15px;
+            padding: 15px 25px;
+            background: linear-gradient(135deg, #98D8AA, #7BC88C);
+            border: none;
+            border-radius: 15px;
+            color: white;
+            font-size: 1.1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .send-worry-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(123,200,140,0.4);
+        }
+
+        .send-worry-btn:active {
+            transform: scale(0.98);
+        }
+
+        .worry-sent {
+            text-align: center;
+            padding: 30px;
+            display: none;
+        }
+
+        .worry-sent.visible {
+            display: block;
+            animation: popIn 0.4s ease-out;
+        }
+
+        .worry-sent .emoji {
+            font-size: 60px;
+            animation: trotAway 1.5s ease-out forwards;
+        }
+
+        @keyframes trotAway {
+            0% { transform: translateX(0) scale(1); opacity: 1; }
+            100% { transform: translateX(100px) scale(0.5); opacity: 0; }
+        }
+
+        .worry-sent .message {
+            font-size: 1.2em;
+            color: #5D4E37;
+            margin-top: 15px;
+        }
+
+        /* Golden horseshoes (gratitude) */
+        .horseshoe-section {
+            background: linear-gradient(135deg, #FFF9E6, #FFF3CD);
+            border-radius: 25px;
+            padding: 25px;
+            margin-top: 20px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            display: none;
+        }
+
+        .horseshoe-section.visible {
+            display: block;
+            animation: slideUp 0.3s ease-out;
+        }
+
+        .horseshoe-input-row {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .horseshoe-input {
+            flex: 1;
+            padding: 12px 15px;
+            border: 2px solid #FFD700;
+            border-radius: 12px;
+            font-size: 1em;
+            background: white;
+        }
+
+        .horseshoe-input:focus {
+            outline: none;
+            border-color: #FFA500;
+        }
+
+        .horseshoe-add-btn {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #FFD700, #FFA500);
+            border: none;
+            border-radius: 12px;
+            font-size: 1.5em;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .horseshoe-add-btn:hover {
+            transform: scale(1.1);
+        }
+
+        .horseshoe-list {
+            list-style: none;
+            max-height: 250px;
+            overflow-y: auto;
+        }
+
+        .horseshoe-item {
+            background: white;
+            border-radius: 12px;
+            padding: 12px 15px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            animation: popIn 0.3s ease-out;
+            border: 2px solid #FFE4B5;
+        }
+
+        .horseshoe-item .shoe {
+            font-size: 1.5em;
+        }
+
+        .horseshoe-item .text {
+            flex: 1;
+            color: #5D4E37;
+        }
+
+        .quick-adds {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 2px dashed #FFE4B5;
+        }
+
+        .quick-add {
+            background: white;
+            border: 2px solid #FFD700;
+            border-radius: 20px;
+            padding: 8px 14px;
+            font-size: 0.9em;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .quick-add:hover, .quick-add:active {
+            background: #FFF9E6;
+            transform: scale(1.05);
+        }
+
+        /* Breathing exercise */
+        .breathing-section {
+            background: linear-gradient(135deg, #E8F4FD, #D4E9F7);
+            border-radius: 25px;
+            padding: 25px;
+            margin-top: 20px;
+            text-align: center;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            display: none;
+        }
+
+        .breathing-section.visible {
+            display: block;
+            animation: slideUp 0.3s ease-out;
+        }
+
+        .breathing-horse {
+            font-size: 80px;
+            margin: 20px 0;
+            display: inline-block;
+        }
+
+        .breathing-horse.breathe-in {
+            animation: breatheIn 4s ease-in-out;
+        }
+
+        .breathing-horse.breathe-out {
+            animation: breatheOut 4s ease-in-out;
+        }
+
+        @keyframes breatheIn {
+            0% { transform: scale(1); }
+            100% { transform: scale(1.3); }
+        }
+
+        @keyframes breatheOut {
+            0% { transform: scale(1.3); }
+            100% { transform: scale(1); }
+        }
+
+        .breathing-text {
+            font-size: 1.5em;
+            color: #4A90A4;
+            font-weight: bold;
+            min-height: 40px;
+        }
+
+        .breathing-start-btn {
+            margin-top: 20px;
+            padding: 15px 40px;
+            background: linear-gradient(135deg, #87CEEB, #4A90A4);
+            border: none;
+            border-radius: 25px;
+            color: white;
+            font-size: 1.1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .breathing-start-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(74,144,164,0.4);
+        }
+
+        .breathing-progress {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .breath-dot {
+            width: 15px;
+            height: 15px;
+            border-radius: 50%;
+            background: #ccc;
+            transition: all 0.3s;
+        }
+
+        .breath-dot.complete {
+            background: #4A90A4;
+            transform: scale(1.2);
+        }
+
+        /* Kind words */
+        .kindwords-section {
+            background: linear-gradient(135deg, #FCE4EC, #F8BBD9);
+            border-radius: 25px;
+            padding: 25px;
+            margin-top: 20px;
+            text-align: center;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            display: none;
+        }
+
+        .kindwords-section.visible {
+            display: block;
+            animation: slideUp 0.3s ease-out;
+        }
+
+        .kindword-card {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            margin: 20px 0;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .kindword-text {
+            font-size: 1.3em;
+            color: #8B4A6B;
+            line-height: 1.5;
+            font-style: italic;
+        }
+
+        .kindword-btn {
+            margin-top: 15px;
+            padding: 12px 30px;
+            background: linear-gradient(135deg, #E91E63, #AD1457);
+            border: none;
+            border-radius: 20px;
+            color: white;
+            font-size: 1em;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .kindword-btn:hover {
+            transform: scale(1.05);
+        }
+
+        /* Setup screen */
+        .setup-screen {
+            position: fixed;
+            inset: 0;
+            background: linear-gradient(180deg, #87CEEB 0%, #98D8AA 50%, #7BC88C 100%);
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .setup-screen.hidden {
+            display: none;
+        }
+
+        .setup-horse {
+            font-size: 100px;
+            animation: horseIdle 2s ease-in-out infinite;
+        }
+
+        .setup-title {
+            font-size: 1.8em;
+            color: #5D4E37;
+            margin: 20px 0 10px;
+            text-shadow: 2px 2px 0 white;
+        }
+
+        .setup-subtitle {
+            font-size: 1.1em;
+            color: #5D4E37;
+            margin-bottom: 30px;
+        }
+
+        .setup-input {
+            width: 100%;
+            max-width: 280px;
+            padding: 15px 20px;
+            border: 3px solid white;
+            border-radius: 15px;
+            font-size: 1.2em;
+            text-align: center;
+            background: white;
+            color: #5D4E37;
+        }
+
+        .setup-input:focus {
+            outline: none;
+            border-color: #FFD700;
+        }
+
+        .setup-btn {
+            margin-top: 20px;
+            padding: 15px 50px;
+            background: linear-gradient(135deg, #FFD700, #FFA500);
+            border: none;
+            border-radius: 25px;
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #5D4E37;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .setup-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(255,165,0,0.4);
+        }
+
+        .setup-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* Close button for sections */
+        .close-section {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            width: 35px;
+            height: 35px;
+            background: #f0f0f0;
+            border: none;
+            border-radius: 50%;
+            font-size: 1.2em;
+            cursor: pointer;
+            color: #888;
+            transition: all 0.2s;
+        }
+
+        .close-section:hover {
+            background: #e0e0e0;
+            color: #555;
+        }
+
+        /* Make sections relative for close button */
+        .mood-section, .worry-section, .horseshoe-section, .breathing-section, .kindwords-section {
+            position: relative;
+        }
+
+        /* Floating horseshoe animation */
+        .floating-horseshoe {
+            position: fixed;
+            font-size: 30px;
+            pointer-events: none;
+            z-index: 1000;
+            animation: floatUp 1s ease-out forwards;
+        }
+
+        @keyframes floatUp {
+            0% { transform: translateY(0) scale(1); opacity: 1; }
+            100% { transform: translateY(-100px) scale(1.5); opacity: 0; }
+        }
+
+        /* Streak display */
+        .streak-badge {
+            position: fixed;
+            top: 15px;
+            left: 15px;
+            background: linear-gradient(135deg, #FF6B6B, #EE5A5A);
+            border-radius: 20px;
+            padding: 8px 14px;
+            font-size: 1em;
+            font-weight: bold;
+            color: white;
+            box-shadow: 0 4px 15px rgba(255,107,107,0.4);
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        /* Tap hint */
+        .tap-hint {
+            font-size: 0.85em;
+            color: #888;
+            text-align: center;
+            margin-top: 10px;
+        }
+
+        /* Empty state */
+        .empty-state {
+            text-align: center;
+            color: #999;
+            padding: 20px;
+            font-style: italic;
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 30px 20px;
+            color: #5D4E37;
+            opacity: 0.7;
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+<body>
+    <!-- Clouds in sky -->
+    <div class="sky">
+        <div class="cloud">☁️</div>
+        <div class="cloud">☁️</div>
+        <div class="cloud">☁️</div>
+    </div>
+
+    <!-- Setup screen (name your horse) -->
+    <div class="setup-screen" id="setupScreen">
+        <div class="setup-horse">🐴</div>
+        <h1 class="setup-title">Welcome to Horse Haven!</h1>
+        <p class="setup-subtitle">Your horse is waiting to meet you.<br>What would you like to call them?</p>
+        <input type="text" class="setup-input" id="horseNameInput" placeholder="Enter a name..." maxlength="15" autofocus>
+        <button class="setup-btn" id="setupBtn" onclick="completeSetup()" disabled>Let's Go! 🐴</button>
+    </div>
+
+    <!-- Main content -->
+    <div class="container">
+        <!-- Horseshoe counter -->
+        <div class="horseshoe-counter" id="horseshoeCounter">
+            <span class="icon">🧲</span>
+            <span id="horseshoeCount">0</span>
+        </div>
+
+        <!-- Streak badge -->
+        <div class="streak-badge" id="streakBadge" style="display: none;">
+            <span>🔥</span>
+            <span id="streakCount">0</span> day streak!
+        </div>
+
+        <!-- Header with horse -->
+        <div class="header">
+            <div class="horse-container">
+                <span class="horse" id="horse" onclick="petHorse()">🐴</span>
+            </div>
+            <div class="horse-name" id="horseName">Your Horse</div>
+            <div class="horse-speech" id="horseSpeech">Tap me to say hello! 💕</div>
+            <p class="tap-hint">Tap your horse anytime for comfort</p>
+        </div>
+
+        <!-- Activity cards -->
+        <div class="activities">
+            <div class="activity-card" onclick="showSection('mood')">
+                <span class="icon">🌤️</span>
+                <span class="label">How are you?</span>
+            </div>
+            <div class="activity-card" onclick="showSection('worry')">
+                <span class="icon">🏠</span>
+                <span class="label">Worry Stable</span>
+            </div>
+            <div class="activity-card" onclick="showSection('horseshoe')">
+                <span class="icon">🧲</span>
+                <span class="label">Good Things</span>
+            </div>
+            <div class="activity-card" onclick="showSection('breathing')">
+                <span class="icon">🌬️</span>
+                <span class="label">Calm Breathing</span>
+            </div>
+            <div class="activity-card" onclick="showSection('kindwords')" style="grid-column: span 2;">
+                <span class="icon">💜</span>
+                <span class="label">Kind Words from <span class="horse-name-inline">Your Horse</span></span>
+            </div>
+        </div>
+
+        <!-- Mood section -->
+        <div class="mood-section" id="moodSection">
+            <button class="close-section" onclick="hideSection('mood')">×</button>
+            <h3 class="section-title">How are you feeling right now?</h3>
+            <div class="mood-options">
+                <button class="mood-btn" onclick="selectMood('happy', 'That\\'s wonderful! Let\\'s celebrate! 🎉')">
+                    <span class="emoji">😊</span>
+                    <span class="text">Happy</span>
+                </button>
+                <button class="mood-btn" onclick="selectMood('calm', 'Peaceful moments are precious 🌸')">
+                    <span class="emoji">😌</span>
+                    <span class="text">Calm</span>
+                </button>
+                <button class="mood-btn" onclick="selectMood('worried', 'I\\'m here with you. Want to tell me about it?')">
+                    <span class="emoji">😟</span>
+                    <span class="text">Worried</span>
+                </button>
+                <button class="mood-btn" onclick="selectMood('sad', 'It\\'s okay to feel sad. I\\'ll stay right here with you 💕')">
+                    <span class="emoji">😢</span>
+                    <span class="text">Sad</span>
+                </button>
+                <button class="mood-btn" onclick="selectMood('angry', 'Those feelings are valid. Take a deep breath with me? 🌬️')">
+                    <span class="emoji">😠</span>
+                    <span class="text">Angry</span>
+                </button>
+                <button class="mood-btn" onclick="selectMood('tired', 'Rest is important. Be gentle with yourself today 🌙')">
+                    <span class="emoji">😴</span>
+                    <span class="text">Tired</span>
+                </button>
+                <button class="mood-btn" onclick="selectMood('confused', 'That\\'s okay - we don\\'t always have to understand everything 🌈')">
+                    <span class="emoji">😕</span>
+                    <span class="text">Confused</span>
+                </button>
+                <button class="mood-btn" onclick="selectMood('excited', 'Your energy is amazing! What\\'s got you buzzing? ⚡')">
+                    <span class="emoji">🤩</span>
+                    <span class="text">Excited</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Worry section -->
+        <div class="worry-section" id="worrySection">
+            <button class="close-section" onclick="hideSection('worry')">×</button>
+            <h3 class="section-title">🏠 Worry Stable</h3>
+            <p style="text-align: center; color: #8B7355; margin-bottom: 15px;">
+                Write down what's bothering you.<br>
+                <span id="horseNameWorry">Your horse</span> will carry it away safely.
+            </p>
+            <div id="worryForm">
+                <textarea class="worry-input" id="worryInput" placeholder="What's on your mind? You can write anything here..."></textarea>
+                <button class="send-worry-btn" onclick="sendWorry()">
+                    <span>🐴</span>
+                    Give worry to <span id="horseNameBtn">horse</span>
+                </button>
+            </div>
+            <div class="worry-sent" id="worrySent">
+                <div class="emoji">🐴💨</div>
+                <p class="message"><span id="horseNameSent">Your horse</span> has carried your worry far away.<br>It's safe now. 💕</p>
+                <button class="send-worry-btn" onclick="resetWorry()" style="margin-top: 20px;">
+                    Write another worry
+                </button>
+            </div>
+        </div>
+
+        <!-- Horseshoe (gratitude) section -->
+        <div class="horseshoe-section" id="horseshoeSection">
+            <button class="close-section" onclick="hideSection('horseshoe')">×</button>
+            <h3 class="section-title">🧲 Golden Horseshoes</h3>
+            <p style="text-align: center; color: #B8860B; margin-bottom: 15px;">
+                Collect good moments - even tiny ones count!
+            </p>
+            <div class="horseshoe-input-row">
+                <input type="text" class="horseshoe-input" id="horseshoeInput" placeholder="Something good..." onkeypress="if(event.key==='Enter')addHorseshoe()">
+                <button class="horseshoe-add-btn" onclick="addHorseshoe()">+</button>
+            </div>
+            <ul class="horseshoe-list" id="horseshoeList">
+                <li class="empty-state">Add your first golden horseshoe! ✨</li>
+            </ul>
+            <div class="quick-adds">
+                <span style="font-size: 0.85em; color: #B8860B;">Quick add:</span>
+                <button class="quick-add" onclick="quickAddHorseshoe('Saw something pretty 🌸')">🌸 Pretty thing</button>
+                <button class="quick-add" onclick="quickAddHorseshoe('Had a yummy snack 🍪')">🍪 Nice snack</button>
+                <button class="quick-add" onclick="quickAddHorseshoe('Made someone smile 😊')">😊 Made smile</button>
+                <button class="quick-add" onclick="quickAddHorseshoe('Felt cosy and warm 🧣')">🧣 Felt cosy</button>
+                <button class="quick-add" onclick="quickAddHorseshoe('Did something brave 💪')">💪 Was brave</button>
+                <button class="quick-add" onclick="quickAddHorseshoe('Spent time with animals 🐾')">🐾 Animal time</button>
+            </div>
+        </div>
+
+        <!-- Breathing section -->
+        <div class="breathing-section" id="breathingSection">
+            <button class="close-section" onclick="hideSection('breathing')">×</button>
+            <h3 class="section-title">🌬️ Breathe with <span id="horseNameBreathing">Your Horse</span></h3>
+            <p style="color: #4A90A4; margin-bottom: 10px;">
+                Follow along - breathe when your horse breathes
+            </p>
+            <div class="breathing-horse" id="breathingHorse">🐴</div>
+            <div class="breathing-text" id="breathingText">Ready when you are!</div>
+            <div class="breathing-progress" id="breathingProgress">
+                <div class="breath-dot"></div>
+                <div class="breath-dot"></div>
+                <div class="breath-dot"></div>
+                <div class="breath-dot"></div>
+                <div class="breath-dot"></div>
+            </div>
+            <button class="breathing-start-btn" id="breathingBtn" onclick="startBreathing()">
+                Start Breathing 🌬️
+            </button>
+        </div>
+
+        <!-- Kind words section -->
+        <div class="kindwords-section" id="kindwordsSection">
+            <button class="close-section" onclick="hideSection('kindwords')">×</button>
+            <h3 class="section-title">💜 A Message from <span id="horseNameKind">Your Horse</span></h3>
+            <div class="kindword-card">
+                <p class="kindword-text" id="kindwordText">"You are braver than you believe, and stronger than you seem."</p>
+            </div>
+            <button class="kindword-btn" onclick="newKindWord()">Another message 💕</button>
+        </div>
+
+        <div class="footer">
+            <p>Made with 💜 for you</p>
+            <p style="font-size: 0.8em; margin-top: 5px;">Your data stays on your device</p>
+        </div>
+    </div>
+
+    <script>
+        // ============================================
+        // DATA & STATE
+        // ============================================
+        let userData = {
+            horseName: '',
+            horseshoes: 0,
+            horseshoeItems: [],
+            streak: 0,
+            lastVisit: null,
+            moodHistory: [],
+            setupComplete: false
+        };
+
+        const kindWords = [
+            "You are braver than you believe, and stronger than you seem.",
+            "It's okay to take things one moment at a time.",
+            "You matter so much, even on the hard days.",
+            "Your feelings are valid, all of them.",
+            "Tomorrow is a fresh start, with new possibilities.",
+            "You don't have to be perfect to be wonderful.",
+            "Small steps still move you forward.",
+            "It's okay to rest when you need to.",
+            "You're doing better than you think you are.",
+            "Being different is your superpower.",
+            "You are loved, exactly as you are.",
+            "It's okay to ask for help - that takes courage.",
+            "Your best is always enough.",
+            "Tough times don't last, but tough people do.",
+            "You bring something special to this world.",
+            "It's okay if today was hard. Tomorrow is new.",
+            "You deserve kindness, especially from yourself.",
+            "Every storm runs out of rain eventually.",
+            "You are not alone, even when it feels that way.",
+            "Your story isn't over - there's so much more to come."
+        ];
+
+        const horseSayings = [
+            "I'm so glad you're here! 💕",
+            "You're wonderful, you know that?",
+            "*happy nuzzle* 🐴💕",
+            "I'm always here for you!",
+            "You make me so happy!",
+            "Want to go on an adventure?",
+            "You're my favourite human!",
+            "*gentle whinny* 💕",
+            "I believe in you!",
+            "We make a great team!",
+            "Today is going to be okay.",
+            "*soft nose boop* 🐴",
+            "You're doing great!",
+            "I'm proud of you!",
+            "Let's face today together!"
+        ];
+
+        // ============================================
+        // INITIALIZATION
+        // ============================================
+        function init() {
+            loadData();
+
+            if (!userData.setupComplete) {
+                document.getElementById('setupScreen').classList.remove('hidden');
+            } else {
+                document.getElementById('setupScreen').classList.add('hidden');
+                updateUI();
+                checkStreak();
+            }
+
+            // Setup input handler for setup screen
+            const input = document.getElementById('horseNameInput');
+            input.addEventListener('input', function() {
+                document.getElementById('setupBtn').disabled = this.value.trim().length < 1;
+            });
+        }
+
+        function loadData() {
+            const saved = localStorage.getItem('horse_haven_data');
+            if (saved) {
+                try {
+                    userData = { ...userData, ...JSON.parse(saved) };
+                } catch(e) {
+                    console.log('Could not load saved data');
+                }
+            }
+        }
+
+        function saveData() {
+            localStorage.setItem('horse_haven_data', JSON.stringify(userData));
+        }
+
+        function completeSetup() {
+            const name = document.getElementById('horseNameInput').value.trim();
+            if (!name) return;
+
+            userData.horseName = name;
+            userData.setupComplete = true;
+            userData.lastVisit = new Date().toDateString();
+            saveData();
+
+            document.getElementById('setupScreen').classList.add('hidden');
+            updateUI();
+
+            // Welcome message
+            setTimeout(() => {
+                showHorseSpeech(`Hi! I'm ${name}! I'm so happy to meet you! 🎉`);
+                triggerHorseAnimation('happy');
+                addHorseshoes(5); // Starting bonus!
+            }, 500);
+        }
+
+        function updateUI() {
+            // Update all horse name references
+            const name = userData.horseName || 'Your Horse';
+            document.getElementById('horseName').textContent = name;
+            document.querySelectorAll('.horse-name-inline').forEach(el => el.textContent = name);
+            document.getElementById('horseNameWorry').textContent = name;
+            document.getElementById('horseNameBtn').textContent = name;
+            document.getElementById('horseNameSent').textContent = name;
+            document.getElementById('horseNameBreathing').textContent = name;
+            document.getElementById('horseNameKind').textContent = name;
+
+            // Update horseshoe count
+            document.getElementById('horseshoeCount').textContent = userData.horseshoes;
+
+            // Update streak
+            if (userData.streak > 1) {
+                document.getElementById('streakBadge').style.display = 'flex';
+                document.getElementById('streakCount').textContent = userData.streak;
+            }
+
+            // Render horseshoe items
+            renderHorseshoes();
+        }
+
+        function checkStreak() {
+            const today = new Date().toDateString();
+            const lastVisit = userData.lastVisit;
+
+            if (!lastVisit) {
+                userData.streak = 1;
+            } else if (lastVisit === today) {
+                // Same day, do nothing
+            } else {
+                const last = new Date(lastVisit);
+                const now = new Date(today);
+                const diffDays = Math.floor((now - last) / (1000 * 60 * 60 * 24));
+
+                if (diffDays === 1) {
+                    userData.streak++;
+                    if (userData.streak > 1) {
+                        setTimeout(() => {
+                            showHorseSpeech(`Wow! ${userData.streak} days in a row! You're amazing! 🔥`);
+                            addHorseshoes(userData.streak);
+                        }, 2000);
+                    }
+                } else if (diffDays > 1) {
+                    userData.streak = 1;
+                }
+            }
+
+            userData.lastVisit = today;
+            saveData();
+            updateUI();
+        }
+
+        // ============================================
+        // HORSE INTERACTIONS
+        // ============================================
+        function petHorse() {
+            const saying = horseSayings[Math.floor(Math.random() * horseSayings.length)];
+            showHorseSpeech(saying);
+            triggerHorseAnimation('nuzzle');
+
+            // 20% chance of bonus horseshoe
+            if (Math.random() < 0.2) {
+                setTimeout(() => {
+                    addHorseshoes(1);
+                    showHorseSpeech("Here's a lucky horseshoe for you! 🧲");
+                }, 1000);
+            }
+        }
+
+        function showHorseSpeech(text) {
+            const speech = document.getElementById('horseSpeech');
+            speech.style.animation = 'none';
+            speech.offsetHeight; // Trigger reflow
+            speech.style.animation = 'popIn 0.3s ease-out';
+            speech.textContent = text;
+        }
+
+        function triggerHorseAnimation(type) {
+            const horse = document.getElementById('horse');
+            horse.classList.remove('happy', 'nuzzle');
+            horse.offsetHeight; // Trigger reflow
+            horse.classList.add(type);
+            setTimeout(() => horse.classList.remove(type), 600);
+        }
+
+        // ============================================
+        // SECTIONS
+        // ============================================
+        function showSection(name) {
+            // Hide all sections first
+            document.querySelectorAll('.mood-section, .worry-section, .horseshoe-section, .breathing-section, .kindwords-section')
+                .forEach(el => el.classList.remove('visible'));
+
+            // Show selected section
+            const section = document.getElementById(name + 'Section');
+            if (section) {
+                section.classList.add('visible');
+                section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        }
+
+        function hideSection(name) {
+            const section = document.getElementById(name + 'Section');
+            if (section) {
+                section.classList.remove('visible');
+            }
+        }
+
+        // ============================================
+        // MOOD
+        // ============================================
+        function selectMood(mood, response) {
+            // Save mood
+            userData.moodHistory.push({
+                mood: mood,
+                timestamp: new Date().toISOString()
+            });
+            // Keep only last 30
+            userData.moodHistory = userData.moodHistory.slice(-30);
+            saveData();
+
+            // Horse responds
+            showHorseSpeech(response);
+            triggerHorseAnimation('nuzzle');
+
+            // Award horseshoe for checking in
+            addHorseshoes(1);
+
+            // Close mood section after a moment
+            setTimeout(() => hideSection('mood'), 2000);
+
+            // If worried/sad/angry, suggest activities
+            if (['worried', 'sad', 'angry'].includes(mood)) {
+                setTimeout(() => {
+                    showHorseSpeech("Would you like to try breathing together, or tell me what's on your mind? 💕");
+                }, 3000);
+            }
+        }
+
+        // ============================================
+        // WORRY STABLE
+        // ============================================
+        function sendWorry() {
+            const input = document.getElementById('worryInput');
+            const worry = input.value.trim();
+
+            if (!worry) {
+                showHorseSpeech("Write down what's bothering you - I'll carry it away safely 💕");
+                return;
+            }
+
+            // Hide form, show sent message
+            document.getElementById('worryForm').style.display = 'none';
+            document.getElementById('worrySent').classList.add('visible');
+
+            // Horse animation
+            triggerHorseAnimation('happy');
+
+            // Clear input
+            input.value = '';
+
+            // Award horseshoe for being brave
+            addHorseshoes(2);
+
+            // Horse message
+            setTimeout(() => {
+                showHorseSpeech("You're so brave for sharing that. I've got it now. 💕");
+            }, 1500);
+        }
+
+        function resetWorry() {
+            document.getElementById('worryForm').style.display = 'block';
+            document.getElementById('worrySent').classList.remove('visible');
+        }
+
+        // ============================================
+        // GOLDEN HORSESHOES (GRATITUDE)
+        // ============================================
+        function addHorseshoe() {
+            const input = document.getElementById('horseshoeInput');
+            const text = input.value.trim();
+
+            if (!text) return;
+
+            userData.horseshoeItems.unshift({
+                id: Date.now(),
+                text: text,
+                timestamp: new Date().toISOString()
+            });
+
+            // Keep only last 50
+            userData.horseshoeItems = userData.horseshoeItems.slice(0, 50);
+
+            input.value = '';
+            addHorseshoes(1);
+            saveData();
+            renderHorseshoes();
+
+            showHorseSpeech("That's a lovely golden moment! ✨");
+            triggerHorseAnimation('happy');
+        }
+
+        function quickAddHorseshoe(text) {
+            userData.horseshoeItems.unshift({
+                id: Date.now(),
+                text: text,
+                timestamp: new Date().toISOString()
+            });
+
+            userData.horseshoeItems = userData.horseshoeItems.slice(0, 50);
+
+            addHorseshoes(1);
+            saveData();
+            renderHorseshoes();
+
+            showHorseSpeech("Another golden horseshoe! 🧲✨");
+            triggerHorseAnimation('happy');
+        }
+
+        function renderHorseshoes() {
+            const list = document.getElementById('horseshoeList');
+
+            if (userData.horseshoeItems.length === 0) {
+                list.innerHTML = '<li class="empty-state">Add your first golden horseshoe! ✨</li>';
+                return;
+            }
+
+            // Show today's items first, then recent
+            const today = new Date().toDateString();
+            const items = userData.horseshoeItems.slice(0, 10);
+
+            list.innerHTML = items.map(item => `
+                <li class="horseshoe-item">
+                    <span class="shoe">🧲</span>
+                    <span class="text">${escapeHtml(item.text)}</span>
+                </li>
+            `).join('');
+        }
+
+        function addHorseshoes(count) {
+            userData.horseshoes += count;
+            saveData();
+
+            const counter = document.getElementById('horseshoeCounter');
+            counter.classList.add('horseshoe-pop');
+            setTimeout(() => counter.classList.remove('horseshoe-pop'), 500);
+
+            document.getElementById('horseshoeCount').textContent = userData.horseshoes;
+
+            // Floating horseshoe animation
+            createFloatingHorseshoe();
+        }
+
+        function createFloatingHorseshoe() {
+            const horseshoe = document.createElement('div');
+            horseshoe.className = 'floating-horseshoe';
+            horseshoe.textContent = '🧲';
+            horseshoe.style.left = (Math.random() * window.innerWidth * 0.8 + window.innerWidth * 0.1) + 'px';
+            horseshoe.style.top = (window.innerHeight * 0.5) + 'px';
+            document.body.appendChild(horseshoe);
+            setTimeout(() => horseshoe.remove(), 1000);
+        }
+
+        // ============================================
+        // BREATHING
+        // ============================================
+        let breathingActive = false;
+
+        function startBreathing() {
+            if (breathingActive) return;
+            breathingActive = true;
+
+            const btn = document.getElementById('breathingBtn');
+            btn.textContent = 'Breathing...';
+            btn.disabled = true;
+
+            const horse = document.getElementById('breathingHorse');
+            const text = document.getElementById('breathingText');
+            const dots = document.querySelectorAll('.breath-dot');
+
+            let breathCount = 0;
+            const totalBreaths = 5;
+
+            function doBreath() {
+                if (breathCount >= totalBreaths) {
+                    // Done!
+                    text.textContent = 'Well done! You did it! 🌟';
+                    btn.textContent = 'Start Again 🌬️';
+                    btn.disabled = false;
+                    breathingActive = false;
+
+                    addHorseshoes(3);
+                    showHorseSpeech("That was lovely! I feel so calm now. 💕");
+                    triggerHorseAnimation('happy');
+                    return;
+                }
+
+                // Breathe in
+                text.textContent = 'Breathe in... 🌬️';
+                horse.classList.remove('breathe-out');
+                horse.classList.add('breathe-in');
+
+                setTimeout(() => {
+                    // Hold
+                    text.textContent = 'Hold... ✨';
+                }, 4000);
+
+                setTimeout(() => {
+                    // Breathe out
+                    text.textContent = 'Breathe out... 💨';
+                    horse.classList.remove('breathe-in');
+                    horse.classList.add('breathe-out');
+                }, 6000);
+
+                setTimeout(() => {
+                    // Mark dot complete
+                    dots[breathCount].classList.add('complete');
+                    breathCount++;
+
+                    if (breathCount < totalBreaths) {
+                        text.textContent = 'Ready...';
+                        setTimeout(doBreath, 1000);
+                    } else {
+                        doBreath(); // Will trigger completion
+                    }
+                }, 10000);
+            }
+
+            // Reset dots
+            dots.forEach(d => d.classList.remove('complete'));
+
+            text.textContent = 'Get comfortable...';
+            setTimeout(doBreath, 2000);
+        }
+
+        // ============================================
+        // KIND WORDS
+        // ============================================
+        function newKindWord() {
+            const text = document.getElementById('kindwordText');
+            const randomWord = kindWords[Math.floor(Math.random() * kindWords.length)];
+
+            text.style.opacity = 0;
+            setTimeout(() => {
+                text.textContent = `"${randomWord}"`;
+                text.style.opacity = 1;
+            }, 200);
+
+            showHorseSpeech("This one's for you 💕");
+            triggerHorseAnimation('nuzzle');
+        }
+
+        // ============================================
+        // UTILITIES
+        // ============================================
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        // ============================================
+        // START
+        // ============================================
+        init();
+    </script>
+</body>
+</html>
