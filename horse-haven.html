@@ -610,6 +610,320 @@
             transform: scale(1.05);
         }
 
+        /* Game sections shared styles */
+        .game-section {
+            border-radius: 25px;
+            padding: 25px;
+            margin-top: 20px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            display: none;
+            position: relative;
+        }
+
+        .game-section.visible {
+            display: block;
+            animation: slideUp 0.3s ease-out;
+        }
+
+        .game-btn {
+            display: block;
+            width: 100%;
+            margin-top: 15px;
+            padding: 15px 25px;
+            background: linear-gradient(135deg, #98D8AA, #7BC88C);
+            border: none;
+            border-radius: 15px;
+            color: white;
+            font-size: 1.1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .game-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(123,200,140,0.4);
+        }
+
+        .game-btn.secondary {
+            background: linear-gradient(135deg, #ccc, #aaa);
+            margin-top: 10px;
+        }
+
+        .game-card {
+            background: white;
+            border-radius: 20px;
+            padding: 25px;
+            margin-bottom: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .game-question {
+            font-size: 1.2em;
+            color: #5D4E37;
+            text-align: center;
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+
+        .game-options {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+        }
+
+        .game-option {
+            padding: 15px;
+            background: #f8f8f8;
+            border: 3px solid #eee;
+            border-radius: 12px;
+            font-size: 1.1em;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-align: center;
+        }
+
+        .game-option:hover, .game-option:active {
+            border-color: #98D8AA;
+            background: #f0fff4;
+            transform: scale(1.02);
+        }
+
+        .game-option.correct {
+            background: #d4edda;
+            border-color: #28a745;
+        }
+
+        .game-option.wrong {
+            background: #fff3cd;
+            border-color: #ffc107;
+        }
+
+        .game-result {
+            text-align: center;
+            padding: 15px;
+            font-size: 1.1em;
+            font-weight: bold;
+            min-height: 50px;
+        }
+
+        /* Stable Helper (orange/brown theme) */
+        .stablehelper-section {
+            background: linear-gradient(135deg, #FFF3E0, #FFE0B2);
+        }
+
+        /* Horse Secrets (golden theme) */
+        .secrets-section {
+            background: linear-gradient(135deg, #FFF8E1, #FFECB3);
+        }
+
+        .secret-card {
+            background: white;
+            border-radius: 20px;
+            padding: 25px;
+            margin-bottom: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+
+        .secret-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #FFD700, #FFA500);
+            color: #5D4E37;
+            padding: 5px 15px;
+            border-radius: 15px;
+            font-size: 0.9em;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        .secret-text {
+            font-size: 1.15em;
+            color: #5D4E37;
+            line-height: 1.6;
+        }
+
+        .secret-collection {
+            text-align: center;
+            color: #B8860B;
+            margin-bottom: 10px;
+        }
+
+        /* Adventure Tales (purple/blue theme) */
+        .adventure-section {
+            background: linear-gradient(135deg, #EDE7F6, #D1C4E9);
+        }
+
+        .story-card {
+            background: white;
+            border-radius: 20px;
+            padding: 25px;
+            margin-bottom: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .story-starter {
+            font-size: 1.15em;
+            color: #5D4E37;
+            line-height: 1.6;
+            font-style: italic;
+        }
+
+        .story-input {
+            width: 100%;
+            min-height: 120px;
+            padding: 15px;
+            border: 2px solid #D1C4E9;
+            border-radius: 15px;
+            font-size: 1em;
+            font-family: inherit;
+            resize: none;
+            margin-bottom: 10px;
+        }
+
+        .story-input:focus {
+            outline: none;
+            border-color: #9575CD;
+        }
+
+        /* Puzzle Paddock (green theme) */
+        .puzzle-section {
+            background: linear-gradient(135deg, #E8F5E9, #C8E6C9);
+        }
+
+        .puzzle-card {
+            background: white;
+            border-radius: 20px;
+            padding: 25px;
+            margin-bottom: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+
+        .scrambled-word {
+            font-size: 1.8em;
+            font-weight: bold;
+            color: #2E7D32;
+            letter-spacing: 5px;
+            margin-bottom: 10px;
+        }
+
+        .puzzle-hint {
+            color: #666;
+            font-style: italic;
+        }
+
+        .letter-tiles {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 8px;
+            margin-bottom: 15px;
+        }
+
+        .letter-tile {
+            width: 45px;
+            height: 45px;
+            background: white;
+            border: 2px solid #4CAF50;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .letter-tile:hover {
+            background: #E8F5E9;
+            transform: scale(1.1);
+        }
+
+        .letter-tile.used {
+            opacity: 0.3;
+            cursor: not-allowed;
+        }
+
+        .answer-tiles {
+            display: flex;
+            justify-content: center;
+            gap: 5px;
+            margin-bottom: 15px;
+            min-height: 50px;
+        }
+
+        .answer-slot {
+            width: 40px;
+            height: 45px;
+            background: #f0f0f0;
+            border: 2px dashed #ccc;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2em;
+            font-weight: bold;
+        }
+
+        .answer-slot.filled {
+            background: #C8E6C9;
+            border: 2px solid #4CAF50;
+            cursor: pointer;
+        }
+
+        .puzzle-result {
+            text-align: center;
+            padding: 10px;
+            font-size: 1.1em;
+            font-weight: bold;
+            min-height: 40px;
+        }
+
+        /* Daily Quest (gold/star theme) */
+        .quest-section {
+            background: linear-gradient(135deg, #FFF9C4, #FFF176);
+        }
+
+        .quest-card {
+            background: white;
+            border-radius: 20px;
+            padding: 25px;
+            margin-bottom: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+
+        .quest-type {
+            display: inline-block;
+            background: linear-gradient(135deg, #FFD700, #FFA000);
+            color: #5D4E37;
+            padding: 5px 15px;
+            border-radius: 15px;
+            font-size: 0.9em;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        .quest-text {
+            font-size: 1.15em;
+            color: #5D4E37;
+            line-height: 1.6;
+        }
+
+        .quest-status {
+            text-align: center;
+            padding: 10px;
+            font-size: 1em;
+            color: #666;
+        }
+
+        .quest-status.completed {
+            color: #2E7D32;
+            font-weight: bold;
+        }
+
         /* Setup screen */
         .setup-screen {
             position: fixed;
@@ -832,9 +1146,29 @@
                 <span class="icon">🌬️</span>
                 <span class="label">Calm Breathing</span>
             </div>
-            <div class="activity-card" onclick="showSection('kindwords')" style="grid-column: span 2;">
+            <div class="activity-card" onclick="showSection('kindwords')">
                 <span class="icon">💜</span>
-                <span class="label">Kind Words from <span class="horse-name-inline">Your Horse</span></span>
+                <span class="label">Kind Words</span>
+            </div>
+            <div class="activity-card" onclick="showSection('stablehelper')">
+                <span class="icon">🥕</span>
+                <span class="label">Stable Helper</span>
+            </div>
+            <div class="activity-card" onclick="showSection('secrets')">
+                <span class="icon">🌟</span>
+                <span class="label">Horse Secrets</span>
+            </div>
+            <div class="activity-card" onclick="showSection('adventure')">
+                <span class="icon">📖</span>
+                <span class="label">Adventure Tales</span>
+            </div>
+            <div class="activity-card" onclick="showSection('puzzle')">
+                <span class="icon">🧩</span>
+                <span class="label">Puzzle Paddock</span>
+            </div>
+            <div class="activity-card" onclick="showSection('quest')" style="grid-column: span 2;">
+                <span class="icon">⭐</span>
+                <span class="label">Daily Quest</span>
             </div>
         </div>
 
@@ -958,6 +1292,86 @@
             <button class="kindword-btn" onclick="newKindWord()">Another message 💕</button>
         </div>
 
+        <!-- Stable Helper (maths disguised as horse care) -->
+        <div class="game-section stablehelper-section" id="stablehelperSection">
+            <button class="close-section" onclick="hideSection('stablehelper')">×</button>
+            <h3 class="section-title">🥕 Stable Helper</h3>
+            <p style="text-align: center; color: #8B4513; margin-bottom: 15px;">
+                Help <span class="horse-name-inline">your horse</span> with stable jobs!
+            </p>
+            <div class="game-card" id="stableHelperCard">
+                <div class="game-question" id="stableQuestion">Loading...</div>
+                <div class="game-options" id="stableOptions"></div>
+            </div>
+            <div class="game-result" id="stableResult"></div>
+            <button class="game-btn" onclick="nextStableHelper()">Next job! 🥕</button>
+        </div>
+
+        <!-- Horse Secrets (fun facts) -->
+        <div class="game-section secrets-section" id="secretsSection">
+            <button class="close-section" onclick="hideSection('secrets')">×</button>
+            <h3 class="section-title">🌟 Horse Secrets</h3>
+            <p style="text-align: center; color: #6B4423; margin-bottom: 15px;">
+                Discover amazing things about horses!
+            </p>
+            <div class="secret-card" id="secretCard">
+                <div class="secret-badge">Did you know?</div>
+                <p class="secret-text" id="secretText">Loading...</p>
+            </div>
+            <div class="secret-collection">
+                <span>🌟 Secrets collected: <strong id="secretsCollected">0</strong></span>
+            </div>
+            <button class="game-btn" onclick="nextSecret()">Discover another! 🌟</button>
+        </div>
+
+        <!-- Adventure Tales (creative writing) -->
+        <div class="game-section adventure-section" id="adventureSection">
+            <button class="close-section" onclick="hideSection('adventure')">×</button>
+            <h3 class="section-title">📖 Adventure Tales</h3>
+            <p style="text-align: center; color: #4A4A8A; margin-bottom: 15px;">
+                What happens next in <span class="horse-name-inline">your horse</span>'s adventure?
+            </p>
+            <div class="story-card">
+                <p class="story-starter" id="storyStarter">Loading...</p>
+            </div>
+            <textarea class="story-input" id="storyInput" placeholder="Continue the story... what happens next?"></textarea>
+            <button class="game-btn" onclick="saveStory()">Save my story! 📖</button>
+            <button class="game-btn secondary" onclick="newStoryStarter()">Different adventure</button>
+        </div>
+
+        <!-- Puzzle Paddock (word games) -->
+        <div class="game-section puzzle-section" id="puzzleSection">
+            <button class="close-section" onclick="hideSection('puzzle')">×</button>
+            <h3 class="section-title">🧩 Puzzle Paddock</h3>
+            <p style="text-align: center; color: #2E7D32; margin-bottom: 15px;">
+                Unscramble the horse words!
+            </p>
+            <div class="puzzle-card">
+                <div class="scrambled-word" id="scrambledWord">????</div>
+                <div class="puzzle-hint" id="puzzleHint">Hint loading...</div>
+            </div>
+            <div class="letter-tiles" id="letterTiles"></div>
+            <div class="answer-tiles" id="answerTiles"></div>
+            <div class="puzzle-result" id="puzzleResult"></div>
+            <button class="game-btn" onclick="checkPuzzle()">Check answer! ✓</button>
+            <button class="game-btn secondary" onclick="nextPuzzle()">Skip this one</button>
+        </div>
+
+        <!-- Daily Quest -->
+        <div class="game-section quest-section" id="questSection">
+            <button class="close-section" onclick="hideSection('quest')">×</button>
+            <h3 class="section-title">⭐ Daily Quest</h3>
+            <p style="text-align: center; color: #B8860B; margin-bottom: 15px;">
+                Today's special mission!
+            </p>
+            <div class="quest-card" id="questCard">
+                <div class="quest-type" id="questType">🎯 Today's Quest</div>
+                <p class="quest-text" id="questText">Loading your quest...</p>
+            </div>
+            <div class="quest-status" id="questStatus"></div>
+            <button class="game-btn" id="questBtn" onclick="completeQuest()">I did it! ⭐</button>
+        </div>
+
         <div class="footer">
             <p>Made with 💜 for you</p>
             <p style="font-size: 0.8em; margin-top: 5px;">Your data stays on your device</p>
@@ -1031,6 +1445,7 @@
                 document.getElementById('setupScreen').classList.add('hidden');
                 updateUI();
                 checkStreak();
+                initGames();
             }
 
             // Setup input handler for setup screen
@@ -1066,6 +1481,7 @@
 
             document.getElementById('setupScreen').classList.add('hidden');
             updateUI();
+            initGames();
 
             // Welcome message
             setTimeout(() => {
@@ -1168,7 +1584,7 @@
         // ============================================
         function showSection(name) {
             // Hide all sections first
-            document.querySelectorAll('.mood-section, .worry-section, .horseshoe-section, .breathing-section, .kindwords-section')
+            document.querySelectorAll('.mood-section, .worry-section, .horseshoe-section, .breathing-section, .kindwords-section, .game-section')
                 .forEach(el => el.classList.remove('visible'));
 
             // Show selected section
@@ -1428,6 +1844,359 @@
 
             showHorseSpeech("This one's for you 💕");
             triggerHorseAnimation('nuzzle');
+        }
+
+        // ============================================
+        // STABLE HELPER (Maths disguised as horse care)
+        // ============================================
+        const stableHelperQuestions = [
+            { q: "Your horse needs 3 carrots in the morning and 4 in the evening. How many carrots for the whole day?", a: 7, options: [6, 7, 8, 5] },
+            { q: "The stable has 12 hay bales. You use 5 today. How many are left?", a: 7, options: [7, 6, 8, 5] },
+            { q: "Each horse needs 2 buckets of water. You have 4 horses. How many buckets in total?", a: 8, options: [6, 8, 10, 4] },
+            { q: "You brush your horse for 15 minutes in the morning and 10 minutes at night. How long in total?", a: 25, options: [20, 25, 30, 15] },
+            { q: "A bag of horse treats has 20 treats. You give 3 treats each day. How many left after 5 days?", a: 5, options: [5, 10, 15, 3] },
+            { q: "The paddock fence needs 8 posts on each side. It has 4 sides. How many posts in total?", a: 32, options: [24, 32, 28, 36] },
+            { q: "Your horse walks 3 laps around the field. Each lap is 100 metres. How far did they walk?", a: 300, options: [200, 300, 400, 150] },
+            { q: "You have 24 apples to share equally between 6 horses. How many does each horse get?", a: 4, options: [3, 4, 5, 6] },
+            { q: "The riding lesson is 45 minutes. You've been riding for 20 minutes. How many minutes left?", a: 25, options: [20, 25, 30, 15] },
+            { q: "A horse eats 10kg of hay per day. How much hay for 1 week (7 days)?", a: 70, options: [60, 70, 80, 50] },
+            { q: "You saved £5 each week for 8 weeks to buy horse supplies. How much did you save?", a: 40, options: [35, 40, 45, 50] },
+            { q: "The stable opens at 7am and closes at 5pm. How many hours is it open?", a: 10, options: [8, 10, 12, 9] },
+            { q: "You need 3 brushes for each horse. You have 5 horses. How many brushes do you need?", a: 15, options: [12, 15, 18, 10] },
+            { q: "A horse's hoof needs trimming every 6 weeks. How many times per year?", a: 8, options: [6, 8, 10, 12] },
+            { q: "You ride for half an hour. How many minutes is that?", a: 30, options: [20, 30, 40, 45] },
+        ];
+
+        let currentStableQuestion = null;
+
+        function loadStableHelper() {
+            const randomQ = stableHelperQuestions[Math.floor(Math.random() * stableHelperQuestions.length)];
+            currentStableQuestion = randomQ;
+
+            document.getElementById('stableQuestion').textContent = randomQ.q;
+            document.getElementById('stableResult').textContent = '';
+
+            // Shuffle options
+            const shuffled = [...randomQ.options].sort(() => Math.random() - 0.5);
+
+            document.getElementById('stableOptions').innerHTML = shuffled.map(opt => `
+                <div class="game-option" onclick="checkStableAnswer(${opt})">${opt}</div>
+            `).join('');
+        }
+
+        function checkStableAnswer(answer) {
+            const options = document.querySelectorAll('#stableOptions .game-option');
+            options.forEach(opt => {
+                opt.style.pointerEvents = 'none';
+                if (parseInt(opt.textContent) === currentStableQuestion.a) {
+                    opt.classList.add('correct');
+                } else if (parseInt(opt.textContent) === answer && answer !== currentStableQuestion.a) {
+                    opt.classList.add('wrong');
+                }
+            });
+
+            if (answer === currentStableQuestion.a) {
+                document.getElementById('stableResult').innerHTML = '🎉 Amazing! You helped your horse!';
+                addHorseshoes(2);
+                showHorseSpeech("You're such a great helper! 🥕");
+                triggerHorseAnimation('happy');
+            } else {
+                document.getElementById('stableResult').innerHTML = `Good try! The answer was ${currentStableQuestion.a}. You'll get the next one! 💪`;
+                showHorseSpeech("Nice try! Let's do another one! 💕");
+            }
+        }
+
+        function nextStableHelper() {
+            loadStableHelper();
+        }
+
+        // ============================================
+        // HORSE SECRETS (Fun facts - reading)
+        // ============================================
+        const horseSecrets = [
+            "Horses can sleep standing up! They have special legs that lock in place so they don't fall over. 🐴💤",
+            "A horse's heart weighs about 4.5kg - that's as heavy as a big watermelon! 🍉❤️",
+            "Horses can see almost 360 degrees around them. They have eyes on the sides of their head! 👀",
+            "The oldest horse ever lived to be 62 years old. His name was Old Billy! 🎂",
+            "Horses can't breathe through their mouths - only through their noses! 👃",
+            "A baby horse can stand up and walk within an hour of being born! 🐎",
+            "Horses have the largest eyes of any land mammal! 👁️",
+            "A horse's teeth never stop growing throughout their life! 🦷",
+            "Horses can run within hours of being born. They need to keep up with the herd! 🏃",
+            "There are about 400 different breeds of horses in the world! 🌍",
+            "Horses can drink up to 38 litres of water per day! 💧",
+            "A horse's ear can rotate 180 degrees to listen in different directions! 👂",
+            "Horses have excellent memories and can remember people and places for years! 🧠",
+            "The fastest recorded speed of a horse was 70.76 km/h - that's really fast! ⚡",
+            "Horses are social animals and can feel lonely if kept alone! 💕",
+            "A group of horses is called a 'herd' or sometimes a 'string'! 🐴🐴🐴",
+            "Horses communicate through sounds, body language, and facial expressions! 💬",
+            "The hoof of a horse is like a giant fingernail! It grows about 6mm per month! 💅",
+            "Horses have been domesticated for over 5,000 years! 📜",
+            "Arabian horses have one fewer vertebra than other horse breeds! 🦴",
+        ];
+
+        function loadSecret() {
+            const secret = horseSecrets[Math.floor(Math.random() * horseSecrets.length)];
+            document.getElementById('secretText').textContent = secret;
+
+            // Update secrets collected
+            userData.secretsCollected = (userData.secretsCollected || 0) + 1;
+            document.getElementById('secretsCollected').textContent = userData.secretsCollected;
+            saveData();
+        }
+
+        function nextSecret() {
+            loadSecret();
+            addHorseshoes(1);
+            showHorseSpeech("Ooh, another secret discovered! 🌟");
+            triggerHorseAnimation('happy');
+        }
+
+        // ============================================
+        // ADVENTURE TALES (Creative writing)
+        // ============================================
+        const storyStarters = [
+            "One sunny morning, HORSE_NAME discovered a sparkling golden key hidden in the hay. It seemed to glow with magic...",
+            "HORSE_NAME heard a tiny voice calling from behind the old oak tree. When they looked closer, they saw...",
+            "The storm had passed, and HORSE_NAME noticed something amazing in the field - footprints that glowed in the moonlight...",
+            "HORSE_NAME woke up to find that overnight, beautiful flowers had grown all around the stable in every colour imaginable...",
+            "A mysterious letter arrived at the stable, addressed to HORSE_NAME. It said: 'You are invited to...'",
+            "While exploring the forest, HORSE_NAME found a hidden path that no one had ever seen before. It led to...",
+            "HORSE_NAME made a new friend today - a little robin who could do something very unusual...",
+            "The old well in the paddock started to glow blue at midnight. HORSE_NAME decided to investigate...",
+            "A hot air balloon landed in the field, and out stepped the most interesting character HORSE_NAME had ever seen...",
+            "HORSE_NAME discovered they could understand what the other animals were saying! The first thing they heard was...",
+            "There was a door in the oldest tree in the forest. HORSE_NAME had never noticed it before, but today it was wide open...",
+            "HORSE_NAME found a map tucked under their favourite apple tree. It showed the way to something called 'The Meadow of Dreams'...",
+            "A friendly owl delivered a special package to HORSE_NAME in the middle of the night. Inside was...",
+            "The stream started flowing backwards! HORSE_NAME followed it upstream to find out why...",
+            "HORSE_NAME woke up to discover they had grown beautiful, shimmering wings overnight...",
+        ];
+
+        function loadStoryStarter() {
+            const starter = storyStarters[Math.floor(Math.random() * storyStarters.length)];
+            const personalised = starter.replace(/HORSE_NAME/g, userData.horseName || 'your horse');
+            document.getElementById('storyStarter').textContent = personalised;
+            document.getElementById('storyInput').value = '';
+        }
+
+        function newStoryStarter() {
+            loadStoryStarter();
+            showHorseSpeech("Ooh, a new adventure awaits! 📖");
+        }
+
+        function saveStory() {
+            const story = document.getElementById('storyInput').value.trim();
+            if (!story) {
+                showHorseSpeech("Write something in the box first! I want to hear your story! 📖");
+                return;
+            }
+
+            // Save to stories array
+            userData.stories = userData.stories || [];
+            userData.stories.unshift({
+                starter: document.getElementById('storyStarter').textContent,
+                continuation: story,
+                timestamp: new Date().toISOString()
+            });
+            userData.stories = userData.stories.slice(0, 20); // Keep last 20
+            saveData();
+
+            addHorseshoes(3);
+            showHorseSpeech("What an amazing story! You're so creative! ✨");
+            triggerHorseAnimation('happy');
+
+            // Clear and get new starter
+            setTimeout(() => {
+                loadStoryStarter();
+            }, 2000);
+        }
+
+        // ============================================
+        // PUZZLE PADDOCK (Word unscramble - spelling)
+        // ============================================
+        const puzzleWords = [
+            { word: "SADDLE", hint: "You sit on this when riding" },
+            { word: "BRIDLE", hint: "Goes on the horse's head with reins" },
+            { word: "STABLE", hint: "Where horses live" },
+            { word: "GALLOP", hint: "The fastest way a horse runs" },
+            { word: "MANE", hint: "The hair on a horse's neck" },
+            { word: "HOOF", hint: "A horse's foot" },
+            { word: "TROT", hint: "A bouncy way of moving, faster than walking" },
+            { word: "CANTER", hint: "Faster than trot, slower than gallop" },
+            { word: "FOAL", hint: "A baby horse" },
+            { word: "MARE", hint: "A female horse" },
+            { word: "PONY", hint: "A small type of horse" },
+            { word: "REINS", hint: "You hold these to steer the horse" },
+            { word: "PADDOCK", hint: "A fenced field for horses" },
+            { word: "CARROT", hint: "Orange treat that horses love" },
+            { word: "BRUSH", hint: "Used to groom the horse's coat" },
+            { word: "STIRRUP", hint: "Where you put your feet when riding" },
+            { word: "HAY", hint: "Dried grass that horses eat" },
+            { word: "NEIGH", hint: "The sound a horse makes" },
+            { word: "WILD", hint: "Horses that live free in nature" },
+            { word: "TAIL", hint: "At the back end of a horse" },
+        ];
+
+        let currentPuzzle = null;
+        let puzzleAnswer = [];
+
+        function loadPuzzle() {
+            currentPuzzle = puzzleWords[Math.floor(Math.random() * puzzleWords.length)];
+            puzzleAnswer = [];
+
+            // Scramble the word
+            const letters = currentPuzzle.word.split('');
+            const scrambled = [...letters].sort(() => Math.random() - 0.5);
+
+            document.getElementById('scrambledWord').textContent = scrambled.join(' ');
+            document.getElementById('puzzleHint').textContent = `Hint: ${currentPuzzle.hint}`;
+            document.getElementById('puzzleResult').textContent = '';
+
+            // Create letter tiles
+            document.getElementById('letterTiles').innerHTML = scrambled.map((letter, i) => `
+                <div class="letter-tile" data-index="${i}" onclick="selectLetter(this, '${letter}')">${letter}</div>
+            `).join('');
+
+            // Create answer slots
+            document.getElementById('answerTiles').innerHTML = currentPuzzle.word.split('').map(() => `
+                <div class="answer-slot"></div>
+            `).join('');
+        }
+
+        function selectLetter(tile, letter) {
+            if (tile.classList.contains('used')) return;
+
+            const slots = document.querySelectorAll('.answer-slot');
+            const nextEmpty = Array.from(slots).find(slot => !slot.classList.contains('filled'));
+
+            if (nextEmpty) {
+                tile.classList.add('used');
+                nextEmpty.classList.add('filled');
+                nextEmpty.textContent = letter;
+                nextEmpty.dataset.tileIndex = tile.dataset.index;
+                nextEmpty.onclick = () => removeLetter(nextEmpty, tile);
+                puzzleAnswer.push(letter);
+            }
+        }
+
+        function removeLetter(slot, tile) {
+            if (!slot.classList.contains('filled')) return;
+
+            const tileIndex = slot.dataset.tileIndex;
+            const originalTile = document.querySelector(`.letter-tile[data-index="${tileIndex}"]`);
+
+            if (originalTile) {
+                originalTile.classList.remove('used');
+            }
+
+            slot.classList.remove('filled');
+            slot.textContent = '';
+            slot.onclick = null;
+
+            // Remove from answer
+            const letter = slot.textContent;
+            const idx = puzzleAnswer.lastIndexOf(letter);
+            if (idx > -1) puzzleAnswer.splice(idx, 1);
+        }
+
+        function checkPuzzle() {
+            const slots = document.querySelectorAll('.answer-slot');
+            const answer = Array.from(slots).map(s => s.textContent).join('');
+
+            if (answer.length < currentPuzzle.word.length) {
+                showHorseSpeech("Tap all the letters first! 🧩");
+                return;
+            }
+
+            if (answer === currentPuzzle.word) {
+                document.getElementById('puzzleResult').innerHTML = '🎉 Brilliant! You got it!';
+                addHorseshoes(2);
+                showHorseSpeech("You're so clever! 🧩✨");
+                triggerHorseAnimation('happy');
+            } else {
+                document.getElementById('puzzleResult').innerHTML = `The word was ${currentPuzzle.word}. Great try! 💪`;
+                showHorseSpeech("Good effort! Try another one! 💕");
+            }
+        }
+
+        function nextPuzzle() {
+            loadPuzzle();
+        }
+
+        // ============================================
+        // DAILY QUEST
+        // ============================================
+        const dailyQuests = [
+            { type: "🥕 Stable Helper", text: "Complete 3 stable helper puzzles today!", action: "stablehelper" },
+            { type: "🌟 Explorer", text: "Discover 5 horse secrets!", action: "secrets" },
+            { type: "📖 Storyteller", text: "Write a short adventure story!", action: "adventure" },
+            { type: "🧩 Word Wizard", text: "Solve 3 word puzzles!", action: "puzzle" },
+            { type: "💜 Kindness", text: "Read 3 kind messages from your horse!", action: "kindwords" },
+            { type: "🌬️ Calm", text: "Do the breathing exercise!", action: "breathing" },
+            { type: "🧲 Collector", text: "Add 3 things to your Golden Horseshoes!", action: "horseshoe" },
+            { type: "😊 Check-in", text: "Tell your horse how you're feeling today!", action: "mood" },
+            { type: "🏠 Brave", text: "Give a worry to the Worry Stable!", action: "worry" },
+            { type: "🐴 Best Friend", text: "Tap your horse 5 times for comfort!", action: null },
+        ];
+
+        function loadDailyQuest() {
+            const today = new Date().toDateString();
+
+            // Check if quest already completed today
+            if (userData.lastQuestDate === today && userData.questCompleted) {
+                document.getElementById('questText').textContent = userData.currentQuest?.text || "Quest completed!";
+                document.getElementById('questType').textContent = userData.currentQuest?.type || "⭐ Daily Quest";
+                document.getElementById('questStatus').textContent = "✅ Quest completed today! Come back tomorrow!";
+                document.getElementById('questStatus').classList.add('completed');
+                document.getElementById('questBtn').style.display = 'none';
+                return;
+            }
+
+            // New day = new quest
+            if (userData.lastQuestDate !== today) {
+                userData.questCompleted = false;
+                // Use date as seed for consistent daily quest
+                const dayIndex = new Date().getDate() % dailyQuests.length;
+                userData.currentQuest = dailyQuests[dayIndex];
+                userData.lastQuestDate = today;
+                saveData();
+            }
+
+            const quest = userData.currentQuest;
+            document.getElementById('questText').textContent = quest.text;
+            document.getElementById('questType').textContent = quest.type;
+            document.getElementById('questStatus').textContent = '';
+            document.getElementById('questStatus').classList.remove('completed');
+            document.getElementById('questBtn').style.display = 'block';
+        }
+
+        function completeQuest() {
+            userData.questCompleted = true;
+            saveData();
+
+            addHorseshoes(5);
+            showHorseSpeech("Amazing! You completed today's quest! ⭐🎉");
+            triggerHorseAnimation('happy');
+
+            document.getElementById('questStatus').textContent = "✅ Quest completed! You're a star!";
+            document.getElementById('questStatus').classList.add('completed');
+            document.getElementById('questBtn').style.display = 'none';
+        }
+
+        // ============================================
+        // INITIALIZE GAMES
+        // ============================================
+        function initGames() {
+            loadStableHelper();
+            loadSecret();
+            loadStoryStarter();
+            loadPuzzle();
+            loadDailyQuest();
+
+            // Update secrets collected display
+            document.getElementById('secretsCollected').textContent = userData.secretsCollected || 0;
         }
 
         // ============================================
