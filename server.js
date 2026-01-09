@@ -1268,32 +1268,33 @@ app.post('/api/send-homework-email', async (req, res) => {
 <html>
 <head>
     <meta charset="UTF-8">
-    <style>
-        body { font-family: 'Inter', Arial, sans-serif; line-height: 1.6; color: #333; }
-        .container { max-width: 700px; margin: 0 auto; padding: 40px 20px; }
-        .header { background: linear-gradient(135deg, #7c3aed 0%, #a855f7 100%); color: white; padding: 30px; border-radius: 12px 12px 0 0; text-align: center; }
-        .header h1 { margin: 0; font-size: 24px; }
-        .content { background: #f8f9fa; border-radius: 0 0 12px 12px; padding: 30px; white-space: pre-wrap; font-family: monospace; font-size: 14px; line-height: 1.8; }
-        .footer { text-align: center; color: #666; font-size: 14px; margin-top: 30px; }
-        .client-info { background: #e9ecef; padding: 15px; border-radius: 8px; margin-bottom: 20px; }
-    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
-<body>
-    <div class="container">
-        <div class="header">
-            <h1>📝 ${homework_type || 'Homework Submission'}</h1>
+<body style="margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f5f5f5;">
+    <div style="max-width: 650px; margin: 0 auto; background: white;">
+        <!-- Header -->
+        <div style="background: linear-gradient(135deg, #7c3aed 0%, #a855f7 100%); color: white; padding: 30px; text-align: center;">
+            <h1 style="margin: 0; font-size: 22px; font-weight: 600;">📝 ${homework_type || 'Homework Submission'}</h1>
         </div>
-        <div class="content">
-            <div class="client-info">
-                <strong>Client:</strong> ${client_name}<br>
-                <strong>Email:</strong> ${client_email || 'Not provided'}<br>
-                <strong>Submitted:</strong> ${new Date().toLocaleString('en-GB', { dateStyle: 'full', timeStyle: 'short' })}
-            </div>
-            <hr style="border: 1px solid #ddd; margin: 20px 0;">
+
+        <!-- Client Info Box -->
+        <div style="background: #f8f9fa; padding: 20px 30px; border-bottom: 1px solid #e9ecef;">
+            <p style="margin: 0 0 8px 0; font-size: 15px;"><strong>Client:</strong> ${client_name}</p>
+            <p style="margin: 0 0 8px 0; font-size: 15px;"><strong>Email:</strong> <a href="mailto:${client_email}" style="color: #7c3aed;">${client_email || 'Not provided'}</a></p>
+            <p style="margin: 0; font-size: 15px;"><strong>Submitted:</strong> ${new Date().toLocaleString('en-GB', { dateStyle: 'full', timeStyle: 'short' })}</p>
+        </div>
+
+        <!-- Content -->
+        <div style="padding: 30px; font-size: 15px; line-height: 1.7; color: #333; white-space: pre-wrap;">
 ${content}
         </div>
-        <div class="footer">
-            <p>Sent via Spark Your Potential Client Portal</p>
+
+        <!-- Footer -->
+        <div style="background: #f8f9fa; padding: 20px 30px; text-align: center; border-top: 1px solid #e9ecef;">
+            <p style="margin: 0; color: #888; font-size: 13px;">
+                Sent via Spark Your Potential Client Portal<br>
+                <a href="https://www.harnessthespark.com" style="color: #7c3aed;">www.harnessthespark.com</a>
+            </p>
         </div>
     </div>
 </body>
