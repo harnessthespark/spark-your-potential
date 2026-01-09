@@ -1260,7 +1260,7 @@ app.post('/api/send-homework-email', async (req, res) => {
         }
 
         const mailOptions = {
-            from: `"Spark Your Potential" <${process.env.SMTP_USER || 'lisa@harnessthespark.com'}>`,
+            from: `"Lisa Gills - Harness the Spark" <${process.env.SMTP_USER || 'lisa@harnessthespark.com'}>`,
             to: 'lisa@harnessthespark.com',
             subject: `${homework_type || 'Homework'} - ${client_name}`,
             html: `
@@ -1292,7 +1292,7 @@ ${content}
         <!-- Footer -->
         <div style="background: #f8f9fa; padding: 20px 30px; text-align: center; border-top: 1px solid #e9ecef;">
             <p style="margin: 0; color: #888; font-size: 13px;">
-                Sent via Spark Your Potential Client Portal<br>
+                Sent via Harness the Spark<br>
                 <a href="https://www.harnessthespark.com" style="color: #7c3aed;">www.harnessthespark.com</a>
             </p>
         </div>
@@ -1379,7 +1379,7 @@ app.post('/api/send-client-notification', async (req, res) => {
         }
 
         const mailOptions = {
-            from: '"Lisa Gills - Spark Your Potential" <lisa@harnessthespark.com>',
+            from: '"Lisa Gills - Harness the Spark" <lisa@harnessthespark.com>',
             to: client_email,
             subject: emailSubject,
             html: `
