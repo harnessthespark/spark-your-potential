@@ -758,7 +758,7 @@
             saveData();
         }
 
-        // Drag and drop
+        // Drag and drop (Desktop)
         let draggedItem = null;
         let draggedSource = null;
 
@@ -797,6 +797,152 @@
             draggedItem = null;
             draggedSource = null;
         }
+
+        // ========== TOUCH DRAG AND DROP (Mobile) ==========
+        let touchDragElement = null;
+        let touchDragClone = null;
+        let touchDragSource = null;
+        let touchDragId = null;
+        let touchStartX = 0;
+        let touchStartY = 0;
+        let isDragging = false;
+
+        // Attach touch handlers to all draggable items
+        function attachTouchHandlers() {
+            document.querySelectorAll('[draggable="true"]').forEach(el => {
+                el.addEventListener('touchstart', handleTouchStart, { passive: false });
+                el.addEventListener('touchmove', handleTouchMove, { passive: false });
+                el.addEventListener('touchend', handleTouchEnd, { passive: false });
+            });
+        }
+
+        function handleTouchStart(e) {
+            // Only start drag after a brief hold (150ms) to distinguish from scroll
+            const touch = e.touches[0];
+            touchStartX = touch.clientX;
+            touchStartY = touch.clientY;
+            touchDragElement = e.currentTarget;
+            touchDragId = touchDragElement.dataset.id;
+            touchDragSource = touchDragElement.dataset.source;
+            isDragging = false;
+        }
+
+        function handleTouchMove(e) {
+            if (!touchDragElement) return;
+
+            const touch = e.touches[0];
+            const deltaX = Math.abs(touch.clientX - touchStartX);
+            const deltaY = Math.abs(touch.clientY - touchStartY);
+
+            // Start drag after moving 10px (prevents accidental drags)
+            if (!isDragging && (deltaX > 10 || deltaY > 10)) {
+                isDragging = true;
+                createTouchClone(touch);
+                touchDragElement.style.opacity = '0.3';
+            }
+
+            if (isDragging) {
+                e.preventDefault(); // Prevent scrolling while dragging
+                moveTouchClone(touch);
+                highlightDropZone(touch);
+            }
+        }
+
+        function handleTouchEnd(e) {
+            if (isDragging && touchDragClone) {
+                const touch = e.changedTouches[0];
+                const dropTarget = getDropTarget(touch);
+
+                if (dropTarget && dropTarget !== touchDragSource) {
+                    // Move item to new box
+                    const itemIndex = data[touchDragSource].findIndex(i => i.id == touchDragId);
+                    if (itemIndex !== -1) {
+                        const item = data[touchDragSource].splice(itemIndex, 1)[0];
+                        data[dropTarget].push(item);
+                        renderAll();
+                        saveData();
+                    }
+                }
+
+                // Cleanup
+                removeTouchClone();
+                clearAllHighlights();
+            }
+
+            if (touchDragElement) {
+                touchDragElement.style.opacity = '1';
+            }
+
+            touchDragElement = null;
+            touchDragId = null;
+            touchDragSource = null;
+            isDragging = false;
+        }
+
+        function createTouchClone(touch) {
+            touchDragClone = touchDragElement.cloneNode(true);
+            touchDragClone.style.cssText = `
+                position: fixed;
+                z-index: 10000;
+                pointer-events: none;
+                opacity: 0.9;
+                transform: rotate(3deg) scale(1.05);
+                box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+                max-width: 280px;
+                background: white;
+                border-radius: 10px;
+                padding: 12px 15px;
+            `;
+            document.body.appendChild(touchDragClone);
+            moveTouchClone(touch);
+        }
+
+        function moveTouchClone(touch) {
+            if (!touchDragClone) return;
+            touchDragClone.style.left = (touch.clientX - 100) + 'px';
+            touchDragClone.style.top = (touch.clientY - 30) + 'px';
+        }
+
+        function removeTouchClone() {
+            if (touchDragClone && touchDragClone.parentNode) {
+                touchDragClone.parentNode.removeChild(touchDragClone);
+            }
+            touchDragClone = null;
+        }
+
+        function highlightDropZone(touch) {
+            clearAllHighlights();
+            const target = getDropTarget(touch);
+            if (target) {
+                const box = document.querySelector(`[data-box="${target}"]`);
+                if (box) box.classList.add('drag-over');
+            }
+        }
+
+        function clearAllHighlights() {
+            document.querySelectorAll('.box').forEach(box => {
+                box.classList.remove('drag-over');
+            });
+        }
+
+        function getDropTarget(touch) {
+            const boxes = document.querySelectorAll('.box[data-box]');
+            for (const box of boxes) {
+                const rect = box.getBoundingClientRect();
+                if (touch.clientX >= rect.left && touch.clientX <= rect.right &&
+                    touch.clientY >= rect.top && touch.clientY <= rect.bottom) {
+                    return box.dataset.box;
+                }
+            }
+            return null;
+        }
+
+        // Re-attach touch handlers after render
+        const originalRenderAll = renderAll;
+        renderAll = function() {
+            originalRenderAll();
+            setTimeout(attachTouchHandlers, 50);
+        };
 
         // Export Do Now list
         function exportList() {
