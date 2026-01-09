@@ -209,6 +209,32 @@
             padding: 15px 20px;
             border-bottom: 1px solid #D1D5DB;
             position: relative;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .time-slot.dragging {
+            opacity: 0.5;
+            transform: scale(0.98);
+        }
+
+        .time-slot.drag-over {
+            border-top: 3px solid #E91E78;
+            margin-top: -3px;
+        }
+
+        .reorder-handle {
+            cursor: grab;
+            color: #ccc;
+            font-size: 18px;
+            padding: 8px;
+            margin-right: 8px;
+            touch-action: none;
+        }
+        .reorder-handle:hover {
+            color: #E91E78;
+        }
+        .reorder-handle:active {
+            cursor: grabbing;
         }
 
         .time-slot:last-of-type {
@@ -704,6 +730,47 @@
                 height: 44px;
             }
         }
+
+        /* Touch swipe hint */
+        .swipe-hint {
+            display: none;
+            text-align: center;
+            font-size: 12px;
+            color: #888;
+            padding: 8px;
+            background: #FEF3C7;
+            border-radius: 8px;
+            margin-bottom: 10px;
+        }
+
+        @media (max-width: 768px) {
+            .swipe-hint {
+                display: block;
+            }
+        }
+
+        /* Swipe feedback */
+        .time-slot.swiping-left {
+            background: linear-gradient(90deg, #FEE2E2 0%, transparent 50%) !important;
+        }
+        .time-slot.swiping-right {
+            background: linear-gradient(90deg, transparent 50%, #D1FAE5 100%) !important;
+        }
+        .spark-change-indicator {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 48px;
+            z-index: 1000;
+            pointer-events: none;
+            animation: popIn 0.4s ease-out forwards;
+        }
+        @keyframes popIn {
+            0% { opacity: 0; transform: translate(-50%, -50%) scale(0.5); }
+            50% { opacity: 1; transform: translate(-50%, -50%) scale(1.2); }
+            100% { opacity: 0; transform: translate(-50%, -50%) scale(1); }
+        }
     </style>
 </head>
 <body>
@@ -785,6 +852,7 @@
         <!-- Timeline -->
         <div class="timeline">
             <h2>Plan Your Day</h2>
+            <div class="swipe-hint">👆 Swipe left on a time slot to drain sparks, swipe right to fuel</div>
             <div class="timeline-table">
                 <div class="timeline-header">
                     <span>Time block</span>
@@ -1036,8 +1104,11 @@
                 div.id = 'slot-' + index;
                 div.innerHTML = `
                     <div class="time-block">
-                        <input type="text" class="slot-name" value="${slot.name}"
-                               onchange="updateSlotName(${index}, this.value)">
+                        <div style="display: flex; align-items: center;">
+                            <span class="reorder-handle" title="Drag to reorder" data-index="${index}">⋮⋮</span>
+                            <input type="text" class="slot-name" value="${slot.name}"
+                                   onchange="updateSlotName(${index}, this.value)">
+                        </div>
                         <div class="time-range">
                             <input type="time" class="time-input" value="${slot.start}"
                                    onchange="updateSlotTime(${index}, 'start', this.value)">
@@ -1259,6 +1330,268 @@
         if (checkAuth()) {
             init();
         }
+
+        // ========== TOUCH SWIPE FOR MOBILE ==========
+        let touchStartX = 0;
+        let touchStartY = 0;
+        let touchSlotIndex = null;
+        let isSwiping = false;
+
+        function attachSwipeHandlers() {
+            document.querySelectorAll('.time-slot').forEach((slot, index) => {
+                slot.addEventListener('touchstart', handleSwipeStart, { passive: true });
+                slot.addEventListener('touchmove', handleSwipeMove, { passive: false });
+                slot.addEventListener('touchend', handleSwipeEnd, { passive: true });
+            });
+        }
+
+        function handleSwipeStart(e) {
+            const touch = e.touches[0];
+            touchStartX = touch.clientX;
+            touchStartY = touch.clientY;
+            touchSlotIndex = parseInt(e.currentTarget.id.replace('slot-', ''));
+            isSwiping = false;
+        }
+
+        function handleSwipeMove(e) {
+            if (touchSlotIndex === null) return;
+
+            const touch = e.touches[0];
+            const deltaX = touch.clientX - touchStartX;
+            const deltaY = Math.abs(touch.clientY - touchStartY);
+
+            // Only swipe if horizontal movement > vertical (not scrolling)
+            if (Math.abs(deltaX) > 30 && Math.abs(deltaX) > deltaY) {
+                isSwiping = true;
+                e.preventDefault();
+
+                const slot = document.getElementById('slot-' + touchSlotIndex);
+                slot.classList.remove('swiping-left', 'swiping-right');
+
+                if (deltaX < -50) {
+                    slot.classList.add('swiping-left');
+                } else if (deltaX > 50) {
+                    slot.classList.add('swiping-right');
+                }
+            }
+        }
+
+        function handleSwipeEnd(e) {
+            if (touchSlotIndex === null) return;
+
+            const slot = document.getElementById('slot-' + touchSlotIndex);
+            const touch = e.changedTouches[0];
+            const deltaX = touch.clientX - touchStartX;
+
+            slot.classList.remove('swiping-left', 'swiping-right');
+
+            if (isSwiping && Math.abs(deltaX) > 80) {
+                const slotName = slots[touchSlotIndex].name;
+
+                if (deltaX < -80) {
+                    // Swipe left = drain/cost
+                    addCost(slotName);
+                    showSparkIndicator('−⚡');
+                } else if (deltaX > 80) {
+                    // Swipe right = fuel
+                    addFuel(slotName);
+                    showSparkIndicator('+⚡');
+                }
+            }
+
+            touchSlotIndex = null;
+            isSwiping = false;
+        }
+
+        function showSparkIndicator(text) {
+            const indicator = document.createElement('div');
+            indicator.className = 'spark-change-indicator';
+            indicator.textContent = text;
+            document.body.appendChild(indicator);
+            setTimeout(() => indicator.remove(), 400);
+        }
+
+        // ========== REORDER TIME SLOTS (Drag & Drop) ==========
+        let reorderDragIndex = null;
+        let reorderClone = null;
+
+        function attachReorderHandlers() {
+            const handles = document.querySelectorAll('.reorder-handle');
+
+            handles.forEach(handle => {
+                // Desktop drag
+                handle.setAttribute('draggable', 'true');
+                handle.addEventListener('dragstart', handleReorderDragStart);
+                handle.addEventListener('dragend', handleReorderDragEnd);
+
+                // Mobile touch
+                handle.addEventListener('touchstart', handleReorderTouchStart, { passive: false });
+                handle.addEventListener('touchmove', handleReorderTouchMove, { passive: false });
+                handle.addEventListener('touchend', handleReorderTouchEnd, { passive: false });
+            });
+
+            // Drop zones on slots
+            document.querySelectorAll('.time-slot').forEach((slot, index) => {
+                slot.addEventListener('dragover', handleReorderDragOver);
+                slot.addEventListener('dragleave', handleReorderDragLeave);
+                slot.addEventListener('drop', handleReorderDrop);
+            });
+        }
+
+        // Desktop drag handlers
+        function handleReorderDragStart(e) {
+            reorderDragIndex = parseInt(e.target.dataset.index);
+            const slot = document.getElementById('slot-' + reorderDragIndex);
+            slot.classList.add('dragging');
+            e.dataTransfer.effectAllowed = 'move';
+        }
+
+        function handleReorderDragEnd(e) {
+            document.querySelectorAll('.time-slot').forEach(slot => {
+                slot.classList.remove('dragging', 'drag-over');
+            });
+            reorderDragIndex = null;
+        }
+
+        function handleReorderDragOver(e) {
+            e.preventDefault();
+            const targetIndex = parseInt(e.currentTarget.id.replace('slot-', ''));
+            if (targetIndex !== reorderDragIndex) {
+                e.currentTarget.classList.add('drag-over');
+            }
+        }
+
+        function handleReorderDragLeave(e) {
+            e.currentTarget.classList.remove('drag-over');
+        }
+
+        function handleReorderDrop(e) {
+            e.preventDefault();
+            const targetIndex = parseInt(e.currentTarget.id.replace('slot-', ''));
+            e.currentTarget.classList.remove('drag-over');
+
+            if (reorderDragIndex !== null && reorderDragIndex !== targetIndex) {
+                reorderSlots(reorderDragIndex, targetIndex);
+            }
+        }
+
+        // Mobile touch handlers for reorder
+        let reorderTouchStartY = 0;
+        let isReordering = false;
+
+        function handleReorderTouchStart(e) {
+            e.preventDefault();
+            reorderDragIndex = parseInt(e.target.dataset.index);
+            reorderTouchStartY = e.touches[0].clientY;
+            isReordering = false;
+
+            const slot = document.getElementById('slot-' + reorderDragIndex);
+            slot.classList.add('dragging');
+        }
+
+        function handleReorderTouchMove(e) {
+            if (reorderDragIndex === null) return;
+            e.preventDefault();
+
+            const touch = e.touches[0];
+            isReordering = true;
+
+            // Create clone if not exists
+            if (!reorderClone) {
+                const slot = document.getElementById('slot-' + reorderDragIndex);
+                reorderClone = slot.cloneNode(true);
+                reorderClone.style.cssText = `
+                    position: fixed;
+                    z-index: 10000;
+                    pointer-events: none;
+                    opacity: 0.9;
+                    transform: scale(0.95);
+                    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+                    width: ${slot.offsetWidth}px;
+                    background: white;
+                    border-radius: 8px;
+                `;
+                document.body.appendChild(reorderClone);
+            }
+
+            reorderClone.style.left = '10px';
+            reorderClone.style.top = (touch.clientY - 40) + 'px';
+
+            // Highlight drop target
+            highlightReorderTarget(touch);
+        }
+
+        function handleReorderTouchEnd(e) {
+            if (reorderDragIndex === null) return;
+
+            if (isReordering && reorderClone) {
+                const touch = e.changedTouches[0];
+                const targetSlot = getSlotAtPosition(touch);
+
+                if (targetSlot) {
+                    const targetIndex = parseInt(targetSlot.id.replace('slot-', ''));
+                    if (targetIndex !== reorderDragIndex) {
+                        reorderSlots(reorderDragIndex, targetIndex);
+                    }
+                }
+            }
+
+            // Cleanup
+            if (reorderClone && reorderClone.parentNode) {
+                reorderClone.parentNode.removeChild(reorderClone);
+            }
+            reorderClone = null;
+
+            document.querySelectorAll('.time-slot').forEach(slot => {
+                slot.classList.remove('dragging', 'drag-over');
+            });
+
+            reorderDragIndex = null;
+            isReordering = false;
+        }
+
+        function highlightReorderTarget(touch) {
+            document.querySelectorAll('.time-slot').forEach(slot => {
+                slot.classList.remove('drag-over');
+            });
+
+            const targetSlot = getSlotAtPosition(touch);
+            if (targetSlot && targetSlot.id !== 'slot-' + reorderDragIndex) {
+                targetSlot.classList.add('drag-over');
+            }
+        }
+
+        function getSlotAtPosition(touch) {
+            const slots = document.querySelectorAll('.time-slot');
+            for (const slot of slots) {
+                const rect = slot.getBoundingClientRect();
+                if (touch.clientY >= rect.top && touch.clientY <= rect.bottom) {
+                    return slot;
+                }
+            }
+            return null;
+        }
+
+        function reorderSlots(fromIndex, toIndex) {
+            // Move slot in array
+            const [movedSlot] = slots.splice(fromIndex, 1);
+            slots.splice(toIndex, 0, movedSlot);
+
+            // Re-render and save
+            renderSlots();
+            updateBalances();
+            autoSave();
+        }
+
+        // Attach all handlers after slots render
+        const originalRenderSlots = renderSlots;
+        renderSlots = function() {
+            originalRenderSlots();
+            setTimeout(() => {
+                attachSwipeHandlers();
+                attachReorderHandlers();
+            }, 50);
+        };
     </script>
 </body>
 </html>
