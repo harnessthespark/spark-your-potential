@@ -40,6 +40,73 @@
             font-weight: 600;
         }
 
+        /* Notification Banner */
+        .notification-banner {
+            background: linear-gradient(135deg, #4ECDC4 0%, #44A08D 100%);
+            border-radius: 12px;
+            padding: 16px 20px;
+            margin-bottom: 20px;
+            animation: slideDown 0.3s ease-out;
+        }
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .notification-content {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        .notification-icon {
+            font-size: 1.8em;
+        }
+        .notification-text {
+            flex: 1;
+            min-width: 200px;
+        }
+        .notification-text strong {
+            display: block;
+            color: #fff;
+            font-size: 1.1em;
+            margin-bottom: 2px;
+        }
+        .notification-text p {
+            color: rgba(255,255,255,0.9);
+            margin: 0;
+            font-size: 0.95em;
+        }
+        .notification-btn {
+            background: #fff;
+            color: #44A08D;
+            padding: 10px 20px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .notification-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+        .notification-dismiss {
+            background: rgba(255,255,255,0.2);
+            border: none;
+            color: #fff;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.2s;
+        }
+        .notification-dismiss:hover {
+            background: rgba(255,255,255,0.3);
+        }
+
         /* Stats Bar */
         .stats-bar {
             background: rgba(255,255,255,0.1);
@@ -1289,6 +1356,19 @@
                 <p class="welcome">Welcome, <span id="clientName"></span></p>
             </div>
 
+            <!-- Notification Banner (shown when new content available) -->
+            <div class="notification-banner" id="notificationBanner" style="display: none;">
+                <div class="notification-content">
+                    <span class="notification-icon">✨</span>
+                    <div class="notification-text">
+                        <strong id="notificationTitle">New Content Ready!</strong>
+                        <p id="notificationMessage">You have new homework waiting.</p>
+                    </div>
+                    <a href="#" id="notificationLink" class="notification-btn">View Now</a>
+                    <button class="notification-dismiss" onclick="dismissNotification()" title="Dismiss">✕</button>
+                </div>
+            </div>
+
             <!-- Stats Bar -->
             <div class="stats-bar">
                 <div class="stat-item">
@@ -1596,6 +1676,75 @@
             { id: 'complete', label: 'Complete', icon: '🏆' }
         ];
 
+        // SYP API base URL
+        const SYP_API = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+            ? 'http://localhost:3001'
+            : 'https://stingray-app-7kg9p.ondigitalocean.app';
+
+        // Current notification ID for dismissal
+        let currentNotificationId = null;
+
+        // Track login for nudge system
+        async function trackClientLogin(email) {
+            try {
+                await fetch(`${SYP_API}/api/track-login`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ client_email: email })
+                });
+                console.log('📊 Login tracked for:', email);
+            } catch (e) {
+                console.log('Could not track login:', e.message);
+            }
+        }
+
+        // Load and display notifications
+        async function loadNotifications(email) {
+            try {
+                const response = await fetch(`${SYP_API}/api/notifications/${encodeURIComponent(email)}`);
+                const data = await response.json();
+
+                if (data.success && data.notifications && data.notifications.length > 0) {
+                    // Show the most recent unread notification
+                    const notification = data.notifications[0];
+                    currentNotificationId = notification.id;
+
+                    document.getElementById('notificationTitle').textContent = notification.subject || 'New Content Ready!';
+                    document.getElementById('notificationMessage').textContent = notification.message || 'You have new content waiting.';
+
+                    const linkBtn = document.getElementById('notificationLink');
+                    if (notification.link) {
+                        linkBtn.href = notification.link;
+                        linkBtn.textContent = notification.link_text || 'View Now';
+                        linkBtn.style.display = 'inline-block';
+                    } else {
+                        linkBtn.style.display = 'none';
+                    }
+
+                    document.getElementById('notificationBanner').style.display = 'block';
+                    console.log('🔔 Showing notification:', notification.subject);
+                }
+            } catch (e) {
+                console.log('Could not load notifications:', e.message);
+            }
+        }
+
+        // Dismiss notification
+        async function dismissNotification() {
+            document.getElementById('notificationBanner').style.display = 'none';
+
+            if (currentNotificationId && currentClient) {
+                try {
+                    await fetch(`${SYP_API}/api/notifications/${encodeURIComponent(currentClient.email)}/${currentNotificationId}`, {
+                        method: 'PATCH'
+                    });
+                    console.log('✓ Notification dismissed');
+                } catch (e) {
+                    console.log('Could not mark notification read:', e.message);
+                }
+            }
+        }
+
         // Weekly homework tasks - builds progressively towards complete toolkit
         const WEEKLY_HOMEWORK = {
             'week-1': {
@@ -1664,6 +1813,13 @@
                 title: 'Positioning & Voice',
                 subtitle: 'Crafting Your Narrative',
                 tasks: [
+                    {
+                        id: 'w3-homework',
+                        title: '📝 Complete Week 3 Homework',
+                        description: 'The Crystal Ball Pitch - craft your positioning and narrative with building blocks from our sessions',
+                        linkText: 'Open Homework Sheet',
+                        linkKey: 'week3Homework'
+                    },
                     {
                         id: 'w3-one-sentence',
                         title: 'Write Your One-Sentence Intro',
@@ -1867,6 +2023,12 @@
 
             // Agreement signed - show toolkit
             console.log('✅ Agreement check passed - showing portal for:', client.name);
+
+            // Track login for nudge system (fire and forget)
+            trackClientLogin(client.email);
+
+            // Load notifications (fire and forget - will show banner if any)
+            loadNotifications(client.email);
 
             try {
                 document.getElementById('agreementSection').classList.remove('visible');

@@ -1313,6 +1313,181 @@ ${content}
 });
 
 // ============================================
+// CLIENT NOTIFICATION SYSTEM
+// ============================================
+
+// Send notification email to client (homework ready, reminders, etc.)
+app.post('/api/send-client-notification', async (req, res) => {
+    try {
+        const { client_email, client_name, notification_type, subject, message, link, link_text } = req.body;
+
+        if (!client_email || !client_name || !notification_type) {
+            return res.status(400).json({
+                success: false,
+                error: 'client_email, client_name, and notification_type are required'
+            });
+        }
+
+        // Build email based on notification type
+        let emailSubject, emailContent;
+
+        switch (notification_type) {
+            case 'homework_ready':
+                emailSubject = subject || `New Homework Ready - Spark Your Potential`;
+                emailContent = `
+                    <h2 style="color: #4ECDC4; margin-bottom: 20px;">New Content Ready! ✨</h2>
+                    <p>Hi ${client_name},</p>
+                    <p>${message || 'You have new homework waiting for you in your Career Toolkit.'}</p>
+                    ${link ? `
+                    <div style="text-align: center; margin: 30px 0;">
+                        <a href="${link}" style="background: linear-gradient(135deg, #4ECDC4 0%, #44A08D 100%); color: white; padding: 15px 30px; border-radius: 8px; text-decoration: none; font-weight: 600; display: inline-block;">${link_text || 'View Homework'}</a>
+                    </div>
+                    ` : ''}
+                    <p style="color: #666; font-size: 14px;">Looking forward to seeing your insights!</p>
+                `;
+                break;
+
+            case 'login_reminder':
+                emailSubject = subject || `Your Career Toolkit is Waiting - Spark Your Potential`;
+                emailContent = `
+                    <h2 style="color: #4ECDC4; margin-bottom: 20px;">Still Here For You! 💪</h2>
+                    <p>Hi ${client_name},</p>
+                    <p>${message || "Just a gentle reminder that your Career Toolkit is ready and waiting. All your tools, homework, and resources are there whenever you need them."}</p>
+                    <div style="text-align: center; margin: 30px 0;">
+                        <a href="${link || 'https://career.harnessthespark.com/client-portal.html'}" style="background: linear-gradient(135deg, #4ECDC4 0%, #44A08D 100%); color: white; padding: 15px 30px; border-radius: 8px; text-decoration: none; font-weight: 600; display: inline-block;">${link_text || 'Access Your Toolkit'}</a>
+                    </div>
+                    <p style="color: #666; font-size: 14px;">No rush - I'm here when you're ready.</p>
+                `;
+                break;
+
+            case 'custom':
+                emailSubject = subject || `Update from Spark Your Potential`;
+                emailContent = `
+                    <p>Hi ${client_name},</p>
+                    <p>${message}</p>
+                    ${link ? `
+                    <div style="text-align: center; margin: 30px 0;">
+                        <a href="${link}" style="background: linear-gradient(135deg, #4ECDC4 0%, #44A08D 100%); color: white; padding: 15px 30px; border-radius: 8px; text-decoration: none; font-weight: 600; display: inline-block;">${link_text || 'View'}</a>
+                    </div>
+                    ` : ''}
+                `;
+                break;
+
+            default:
+                return res.status(400).json({ success: false, error: 'Invalid notification_type' });
+        }
+
+        const mailOptions = {
+            from: '"Lisa Gills - Spark Your Potential" <lisa@harnessthespark.com>',
+            to: client_email,
+            subject: emailSubject,
+            html: `
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body style="margin: 0; padding: 0; font-family: 'Segoe UI', Arial, sans-serif; background-color: #f5f5f5;">
+    <div style="max-width: 600px; margin: 0 auto; background: white;">
+        <!-- Header -->
+        <div style="background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%); padding: 30px; text-align: center;">
+            <h1 style="color: white; margin: 0; font-size: 24px;">
+                ⚡ <span style="color: #FFB627;">Spark</span> Your Potential
+            </h1>
+        </div>
+
+        <!-- Content -->
+        <div style="padding: 40px 30px;">
+            ${emailContent}
+        </div>
+
+        <!-- Footer -->
+        <div style="background: #f8f9fa; padding: 20px 30px; text-align: center; border-top: 1px solid #eee;">
+            <p style="margin: 0; color: #888; font-size: 12px;">
+                Lisa Gills | Career Coach<br>
+                <a href="https://www.harnessthespark.com" style="color: #4ECDC4;">www.harnessthespark.com</a>
+            </p>
+        </div>
+    </div>
+</body>
+</html>
+            `
+        };
+
+        await emailTransporter.sendMail(mailOptions);
+        console.log(`📧 Client notification sent: ${client_email} (${notification_type})`);
+
+        // Also save notification to database for portal display
+        await db.saveNotification(client_email, {
+            type: notification_type,
+            subject: emailSubject,
+            message: message,
+            link: link,
+            link_text: link_text,
+            sent_at: new Date().toISOString(),
+            read: false
+        });
+
+        res.json({ success: true, message: `Notification sent to ${client_name}` });
+    } catch (error) {
+        console.error('Client notification error:', error);
+        res.status(500).json({ success: false, error: error.message });
+    }
+});
+
+// Get pending notifications for a client
+app.get('/api/notifications/:clientEmail', async (req, res) => {
+    try {
+        const { clientEmail } = req.params;
+        const notifications = await db.getNotifications(clientEmail);
+        res.json({ success: true, notifications: notifications || [] });
+    } catch (error) {
+        console.error('Get notifications error:', error);
+        res.status(500).json({ success: false, error: error.message });
+    }
+});
+
+// Mark notification as read
+app.patch('/api/notifications/:clientEmail/:notificationId', async (req, res) => {
+    try {
+        const { clientEmail, notificationId } = req.params;
+        await db.markNotificationRead(clientEmail, notificationId);
+        res.json({ success: true });
+    } catch (error) {
+        console.error('Mark notification read error:', error);
+        res.status(500).json({ success: false, error: error.message });
+    }
+});
+
+// Track last login for nudge system
+app.post('/api/track-login', async (req, res) => {
+    try {
+        const { client_email } = req.body;
+        if (!client_email) {
+            return res.status(400).json({ success: false, error: 'client_email required' });
+        }
+        await db.trackLogin(client_email);
+        res.json({ success: true });
+    } catch (error) {
+        console.error('Track login error:', error);
+        res.status(500).json({ success: false, error: error.message });
+    }
+});
+
+// Get clients who haven't logged in recently (for coach nudge list)
+app.get('/api/inactive-clients', async (req, res) => {
+    try {
+        const { days = 7 } = req.query;
+        const clients = await db.getInactiveClients(parseInt(days));
+        res.json({ success: true, clients: clients || [] });
+    } catch (error) {
+        console.error('Get inactive clients error:', error);
+        res.status(500).json({ success: false, error: error.message });
+    }
+});
+
+// ============================================
 // SPARK COLLECTOR ENDPOINTS
 // ============================================
 

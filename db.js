@@ -282,6 +282,33 @@ async function initDatabase() {
             )
         `);
 
+        // Create notifications table for client portal alerts
+        await client.query(`
+            CREATE TABLE IF NOT EXISTS notifications (
+                id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+                user_email VARCHAR(255) NOT NULL,
+                notification_type VARCHAR(50) NOT NULL,
+                subject VARCHAR(500),
+                message TEXT,
+                link VARCHAR(500),
+                link_text VARCHAR(100),
+                read BOOLEAN DEFAULT false,
+                sent_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            )
+        `);
+
+        // Create login_tracking table for nudge system
+        await client.query(`
+            CREATE TABLE IF NOT EXISTS login_tracking (
+                id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+                user_email VARCHAR(255) NOT NULL UNIQUE,
+                last_login TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                login_count INTEGER DEFAULT 1,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            )
+        `);
+
         // Create indexes
         await client.query(`
             CREATE INDEX IF NOT EXISTS idx_blueprints_user_id ON blueprints(user_id);
@@ -296,6 +323,9 @@ async function initDatabase() {
             CREATE INDEX IF NOT EXISTS idx_session_notes_user_id ON session_notes(user_id);
             CREATE INDEX IF NOT EXISTS idx_career_discovery_user_id ON career_discovery(user_id);
             CREATE INDEX IF NOT EXISTS idx_spark_ignition_user_id ON spark_ignition(user_id);
+            CREATE INDEX IF NOT EXISTS idx_notifications_user_email ON notifications(user_email);
+            CREATE INDEX IF NOT EXISTS idx_login_tracking_user_email ON login_tracking(user_email);
+            CREATE INDEX IF NOT EXISTS idx_login_tracking_last_login ON login_tracking(last_login);
         `);
 
         console.log('✅ Database tables initialised');
@@ -1348,6 +1378,104 @@ async function setMustChangePassword(email, mustChange = true) {
     return { success: true, user: result.rows[0] };
 }
 
+// ============================================
+// NOTIFICATION FUNCTIONS
+// ============================================
+
+/**
+ * Save a notification for a client
+ * @param {string} userEmail - Client email address
+ * @param {object} notification - Notification data
+ */
+async function saveNotification(userEmail, notification) {
+    const query = `
+        INSERT INTO notifications (user_email, notification_type, subject, message, link, link_text, read, sent_at)
+        VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
+        RETURNING *
+    `;
+    const result = await pool.query(query, [
+        userEmail,
+        notification.type,
+        notification.subject || null,
+        notification.message || null,
+        notification.link || null,
+        notification.link_text || null,
+        notification.read || false,
+        notification.sent_at || new Date().toISOString()
+    ]);
+    return result.rows[0];
+}
+
+/**
+ * Get unread notifications for a client
+ * @param {string} userEmail - Client email address
+ */
+async function getNotifications(userEmail) {
+    const query = `
+        SELECT * FROM notifications
+        WHERE user_email = $1 AND read = false
+        ORDER BY sent_at DESC
+        LIMIT 20
+    `;
+    const result = await pool.query(query, [userEmail]);
+    return result.rows;
+}
+
+/**
+ * Mark a notification as read
+ * @param {string} userEmail - Client email address
+ * @param {string} notificationId - Notification UUID
+ */
+async function markNotificationRead(userEmail, notificationId) {
+    const query = `
+        UPDATE notifications
+        SET read = true
+        WHERE id = $1 AND user_email = $2
+        RETURNING *
+    `;
+    const result = await pool.query(query, [notificationId, userEmail]);
+    return result.rows[0];
+}
+
+/**
+ * Track client login for nudge system
+ * @param {string} userEmail - Client email address
+ */
+async function trackLogin(userEmail) {
+    const query = `
+        INSERT INTO login_tracking (user_email, last_login, login_count)
+        VALUES ($1, NOW(), 1)
+        ON CONFLICT (user_email)
+        DO UPDATE SET
+            last_login = NOW(),
+            login_count = login_tracking.login_count + 1
+        RETURNING *
+    `;
+    const result = await pool.query(query, [userEmail]);
+    return result.rows[0];
+}
+
+/**
+ * Get clients who haven't logged in for X days
+ * @param {number} days - Number of days of inactivity
+ */
+async function getInactiveClients(days = 7) {
+    const query = `
+        SELECT u.email, u.full_name, u.name, u.programme_access, u.programme_status,
+               lt.last_login, lt.login_count
+        FROM users u
+        LEFT JOIN login_tracking lt ON u.email = lt.user_email
+        WHERE u.is_admin = false
+        AND (
+            lt.last_login IS NULL
+            OR lt.last_login < NOW() - INTERVAL '1 day' * $1
+        )
+        ORDER BY lt.last_login ASC NULLS FIRST
+    `;
+    const result = await pool.query(query, [days]);
+    return result.rows;
+}
+
 module.exports = {
     pool,
     initDatabase,
@@ -1387,5 +1515,10 @@ module.exports = {
     setMustChangePassword,
     createPasswordResetToken,
     verifyPasswordResetToken,
-    markTokenUsed
+    markTokenUsed,
+    saveNotification,
+    getNotifications,
+    markNotificationRead,
+    trackLogin,
+    getInactiveClients
 };
