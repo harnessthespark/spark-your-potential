@@ -71,11 +71,13 @@
         }
 
         .horse {
-            font-size: 80px;
+            width: 120px;
+            height: 120px;
             animation: horseIdle 2s ease-in-out infinite;
             cursor: pointer;
             transition: transform 0.2s;
             display: inline-block;
+            object-fit: contain;
         }
 
         .horse:active {
@@ -359,6 +361,7 @@
         .worry-sent .emoji {
             font-size: 60px;
             animation: trotAway 1.5s ease-out forwards;
+            display: inline-block;
         }
 
         @keyframes trotAway {
@@ -490,9 +493,11 @@
         }
 
         .breathing-horse {
-            font-size: 80px;
+            width: 100px;
+            height: 100px;
             margin: 20px 0;
             display: inline-block;
+            object-fit: contain;
         }
 
         .breathing-horse.breathe-in {
@@ -624,8 +629,10 @@
         }
 
         .setup-horse {
-            font-size: 100px;
+            width: 150px;
+            height: 150px;
             animation: horseIdle 2s ease-in-out infinite;
+            object-fit: contain;
         }
 
         .setup-title {
@@ -776,7 +783,7 @@
 
     <!-- Setup screen (name your horse) -->
     <div class="setup-screen" id="setupScreen">
-        <div class="setup-horse">🐴</div>
+        <img src="horse-mascot.png" alt="Your horse friend" class="setup-horse">
         <h1 class="setup-title">Welcome to Horse Haven!</h1>
         <p class="setup-subtitle">Your horse is waiting to meet you.<br>What would you like to call them?</p>
         <input type="text" class="setup-input" id="horseNameInput" placeholder="Enter a name..." maxlength="15" autofocus>
@@ -800,7 +807,7 @@
         <!-- Header with horse -->
         <div class="header">
             <div class="horse-container">
-                <span class="horse" id="horse" onclick="petHorse()">🐴</span>
+                <img src="horse-mascot.png" alt="Your horse friend" class="horse" id="horse" onclick="petHorse()">
             </div>
             <div class="horse-name" id="horseName">Your Horse</div>
             <div class="horse-speech" id="horseSpeech">Tap me to say hello! 💕</div>
@@ -887,7 +894,7 @@
                 </button>
             </div>
             <div class="worry-sent" id="worrySent">
-                <div class="emoji">🐴💨</div>
+                <img src="horse-mascot.png" alt="Horse carrying worry away" class="emoji" style="width: 80px; height: 80px;">
                 <p class="message"><span id="horseNameSent">Your horse</span> has carried your worry far away.<br>It's safe now. 💕</p>
                 <button class="send-worry-btn" onclick="resetWorry()" style="margin-top: 20px;">
                     Write another worry
@@ -927,7 +934,7 @@
             <p style="color: #4A90A4; margin-bottom: 10px;">
                 Follow along - breathe when your horse breathes
             </p>
-            <div class="breathing-horse" id="breathingHorse">🐴</div>
+            <img src="horse-mascot.png" alt="Breathing horse" class="breathing-horse" id="breathingHorse">
             <div class="breathing-text" id="breathingText">Ready when you are!</div>
             <div class="breathing-progress" id="breathingProgress">
                 <div class="breath-dot"></div>
