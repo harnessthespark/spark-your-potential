@@ -67,6 +67,102 @@
         .dump-textarea::placeholder {
             color: #999;
         }
+
+        /* Expand button */
+        .textarea-wrapper {
+            position: relative;
+        }
+        .expand-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: rgba(239, 68, 68, 0.1);
+            border: none;
+            padding: 8px 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.85em;
+            color: #ef4444;
+            font-weight: 600;
+            transition: all 0.2s;
+            z-index: 10;
+        }
+        .expand-btn:hover {
+            background: rgba(239, 68, 68, 0.2);
+        }
+
+        /* Fullscreen textarea overlay */
+        .fullscreen-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: #1a1a2e;
+            z-index: 9999;
+            padding: 20px;
+            padding-top: env(safe-area-inset-top, 20px);
+            padding-bottom: env(safe-area-inset-bottom, 20px);
+        }
+        .fullscreen-overlay.active {
+            display: flex;
+            flex-direction: column;
+        }
+        .fullscreen-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            color: white;
+        }
+        .fullscreen-header h3 {
+            font-size: 1.2em;
+        }
+        .fullscreen-close {
+            background: #ef4444;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 1em;
+        }
+        .fullscreen-textarea {
+            flex: 1;
+            width: 100%;
+            border: none;
+            border-radius: 15px;
+            padding: 20px;
+            font-family: inherit;
+            font-size: 18px;
+            line-height: 1.6;
+            resize: none;
+            background: white;
+        }
+        .fullscreen-textarea:focus {
+            outline: none;
+        }
+        .fullscreen-hint {
+            color: rgba(255,255,255,0.7);
+            font-size: 0.9em;
+            margin-top: 15px;
+            text-align: center;
+        }
+        .fullscreen-add-btn {
+            background: linear-gradient(135deg, #ef4444 0%, #f97316 100%);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 12px;
+            font-size: 1.1em;
+            font-weight: 700;
+            cursor: pointer;
+            margin-top: 15px;
+            width: 100%;
+        }
+
         .dump-hint {
             color: #666;
             font-size: 0.9em;
@@ -449,9 +545,23 @@
         <!-- Quick Dump Input -->
         <div class="dump-input-section">
             <h2>🧠 Step 1: Empty Your Head</h2>
-            <textarea class="dump-textarea" id="dumpInput" placeholder="Type or paste everything swirling in your head...&#10;&#10;- That email I need to send&#10;- Buy milk&#10;- Call mum back&#10;- The thing from last week&#10;- Why did I say that thing?&#10;- Project deadline&#10;&#10;Press Enter after each thought, or paste a whole list!"></textarea>
+            <div class="textarea-wrapper">
+                <button class="expand-btn" onclick="openFullscreen()">⛶ Expand</button>
+                <textarea class="dump-textarea" id="dumpInput" placeholder="Type or paste everything swirling in your head...&#10;&#10;- That email I need to send&#10;- Buy milk&#10;- Call mum back&#10;- The thing from last week&#10;- Why did I say that thing?&#10;- Project deadline&#10;&#10;Press Enter after each thought, or paste a whole list!"></textarea>
+            </div>
             <p class="dump-hint">Tip: Don't think, just write. You can sort it all afterwards. Each line becomes one item.</p>
             <button class="add-btn" onclick="addDumpItems()">📥 Add to Unsorted Pile</button>
+        </div>
+
+        <!-- Fullscreen Textarea Overlay -->
+        <div class="fullscreen-overlay" id="fullscreenOverlay">
+            <div class="fullscreen-header">
+                <h3>🧠 Empty Your Head</h3>
+                <button class="fullscreen-close" onclick="closeFullscreen()">✓ Done</button>
+            </div>
+            <textarea class="fullscreen-textarea" id="fullscreenInput" placeholder="Just let it all out...&#10;&#10;One thought per line.&#10;Don't filter, don't judge.&#10;Your brain will thank you."></textarea>
+            <p class="fullscreen-hint">Each line becomes one item. Press Done when you're ready to sort.</p>
+            <button class="fullscreen-add-btn" onclick="addFromFullscreen()">📥 Add to Unsorted Pile</button>
         </div>
 
         <!-- Breathing Reminder -->
@@ -658,6 +768,73 @@
             });
 
             textarea.value = '';
+            renderAll();
+            saveData();
+        }
+
+        // ========== FULLSCREEN TEXTAREA MODE ==========
+        function openFullscreen() {
+            const mainTextarea = document.getElementById('dumpInput');
+            const fullscreenTextarea = document.getElementById('fullscreenInput');
+            const overlay = document.getElementById('fullscreenOverlay');
+
+            // Copy content from main to fullscreen
+            fullscreenTextarea.value = mainTextarea.value;
+
+            // Show overlay
+            overlay.classList.add('active');
+
+            // Prevent body scroll
+            document.body.style.overflow = 'hidden';
+
+            // Focus the textarea
+            setTimeout(() => fullscreenTextarea.focus(), 100);
+        }
+
+        function closeFullscreen() {
+            const mainTextarea = document.getElementById('dumpInput');
+            const fullscreenTextarea = document.getElementById('fullscreenInput');
+            const overlay = document.getElementById('fullscreenOverlay');
+
+            // Copy content back to main
+            mainTextarea.value = fullscreenTextarea.value;
+
+            // Hide overlay
+            overlay.classList.remove('active');
+
+            // Restore body scroll
+            document.body.style.overflow = '';
+        }
+
+        function addFromFullscreen() {
+            const fullscreenTextarea = document.getElementById('fullscreenInput');
+            const text = fullscreenTextarea.value.trim();
+
+            if (!text) {
+                closeFullscreen();
+                return;
+            }
+
+            // Split by newlines, filter empty
+            const items = text.split('\n')
+                .map(line => line.replace(/^[-*•]\s*/, '').trim())
+                .filter(line => line.length > 0);
+
+            items.forEach(item => {
+                data.unsorted.push({
+                    id: Date.now() + Math.random(),
+                    text: item
+                });
+            });
+
+            // Clear both textareas
+            fullscreenTextarea.value = '';
+            document.getElementById('dumpInput').value = '';
+
+            // Close fullscreen
+            closeFullscreen();
+
+            // Update UI
             renderAll();
             saveData();
         }
