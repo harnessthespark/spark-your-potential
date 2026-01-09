@@ -142,6 +142,29 @@
             border-radius: 12px;
             margin-bottom: 10px;
             animation: slideIn 0.3s ease;
+            cursor: grab;
+            touch-action: none;
+            transition: transform 0.2s, box-shadow 0.2s, opacity 0.2s;
+        }
+        .win-item:active {
+            cursor: grabbing;
+        }
+        .win-item.dragging {
+            opacity: 0.4;
+            transform: scale(0.98);
+        }
+        .win-item.drag-over {
+            border: 2px dashed #FFD700;
+            background: #fffbeb;
+        }
+        .drag-handle {
+            color: #ccc;
+            cursor: grab;
+            padding: 5px;
+            font-size: 1.2em;
+        }
+        .drag-handle:hover {
+            color: #888;
         }
 
         @keyframes slideIn {
@@ -680,13 +703,17 @@
 
             emptyState.style.display = 'none';
             list.innerHTML = wins.map((win, index) => `
-                <li class="win-item">
+                <li class="win-item" draggable="true" data-index="${index}">
+                    <span class="drag-handle" title="Drag to reorder">⋮⋮</span>
                     <span class="win-icon">✨</span>
                     <span class="win-text">${escapeHtml(win.text)}</span>
                     <span class="win-time">${win.time}</span>
                     <button class="delete-btn" onclick="deleteWin(${index})" title="Remove">×</button>
                 </li>
             `).join('');
+
+            // Attach drag handlers after render
+            attachDragHandlers();
         }
 
         function addWin(event) {
@@ -853,6 +880,197 @@
             const div = document.createElement('div');
             div.textContent = text;
             return div.innerHTML;
+        }
+
+        // ========== DRAG AND DROP (Desktop + Mobile) ==========
+        let draggedIndex = null;
+
+        function attachDragHandlers() {
+            const items = document.querySelectorAll('.win-item');
+
+            items.forEach(item => {
+                // Desktop drag events
+                item.addEventListener('dragstart', handleDragStart);
+                item.addEventListener('dragend', handleDragEnd);
+                item.addEventListener('dragover', handleDragOver);
+                item.addEventListener('dragleave', handleDragLeave);
+                item.addEventListener('drop', handleDrop);
+
+                // Mobile touch events
+                item.addEventListener('touchstart', handleTouchStart, { passive: false });
+                item.addEventListener('touchmove', handleTouchMove, { passive: false });
+                item.addEventListener('touchend', handleTouchEnd, { passive: false });
+            });
+        }
+
+        // Desktop drag handlers
+        function handleDragStart(e) {
+            draggedIndex = parseInt(e.currentTarget.dataset.index);
+            e.currentTarget.classList.add('dragging');
+            e.dataTransfer.effectAllowed = 'move';
+        }
+
+        function handleDragEnd(e) {
+            e.currentTarget.classList.remove('dragging');
+            document.querySelectorAll('.win-item').forEach(item => {
+                item.classList.remove('drag-over');
+            });
+            draggedIndex = null;
+        }
+
+        function handleDragOver(e) {
+            e.preventDefault();
+            const targetIndex = parseInt(e.currentTarget.dataset.index);
+            if (targetIndex !== draggedIndex) {
+                e.currentTarget.classList.add('drag-over');
+            }
+        }
+
+        function handleDragLeave(e) {
+            e.currentTarget.classList.remove('drag-over');
+        }
+
+        function handleDrop(e) {
+            e.preventDefault();
+            const targetIndex = parseInt(e.currentTarget.dataset.index);
+            e.currentTarget.classList.remove('drag-over');
+
+            if (draggedIndex !== null && draggedIndex !== targetIndex) {
+                reorderWins(draggedIndex, targetIndex);
+            }
+        }
+
+        // Mobile touch handlers
+        let touchDragElement = null;
+        let touchDragClone = null;
+        let touchStartY = 0;
+        let touchDragIndex = null;
+        let isDragging = false;
+
+        function handleTouchStart(e) {
+            // Check if touch started on drag handle or the item itself
+            const touch = e.touches[0];
+            touchStartY = touch.clientY;
+            touchDragElement = e.currentTarget;
+            touchDragIndex = parseInt(touchDragElement.dataset.index);
+            isDragging = false;
+        }
+
+        function handleTouchMove(e) {
+            if (!touchDragElement) return;
+
+            const touch = e.touches[0];
+            const deltaY = Math.abs(touch.clientY - touchStartY);
+
+            // Start drag after moving 15px vertically
+            if (!isDragging && deltaY > 15) {
+                isDragging = true;
+                createTouchClone(touch);
+                touchDragElement.classList.add('dragging');
+            }
+
+            if (isDragging) {
+                e.preventDefault();
+                moveTouchClone(touch);
+                highlightDropTarget(touch);
+            }
+        }
+
+        function handleTouchEnd(e) {
+            if (isDragging && touchDragClone) {
+                const touch = e.changedTouches[0];
+                const targetItem = getItemAtPosition(touch);
+
+                if (targetItem && targetItem !== touchDragElement) {
+                    const targetIndex = parseInt(targetItem.dataset.index);
+                    reorderWins(touchDragIndex, targetIndex);
+                }
+
+                removeTouchClone();
+                clearAllHighlights();
+            }
+
+            if (touchDragElement) {
+                touchDragElement.classList.remove('dragging');
+            }
+
+            touchDragElement = null;
+            touchDragIndex = null;
+            isDragging = false;
+        }
+
+        function createTouchClone(touch) {
+            touchDragClone = touchDragElement.cloneNode(true);
+            touchDragClone.style.cssText = `
+                position: fixed;
+                z-index: 10000;
+                pointer-events: none;
+                opacity: 0.9;
+                transform: rotate(2deg) scale(1.02);
+                box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+                width: ${touchDragElement.offsetWidth}px;
+                background: #f8f5ff;
+                border-radius: 12px;
+                padding: 15px;
+                display: flex;
+                align-items: center;
+                gap: 12px;
+            `;
+            document.body.appendChild(touchDragClone);
+            moveTouchClone(touch);
+        }
+
+        function moveTouchClone(touch) {
+            if (!touchDragClone) return;
+            touchDragClone.style.left = '20px';
+            touchDragClone.style.top = (touch.clientY - 30) + 'px';
+        }
+
+        function removeTouchClone() {
+            if (touchDragClone && touchDragClone.parentNode) {
+                touchDragClone.parentNode.removeChild(touchDragClone);
+            }
+            touchDragClone = null;
+        }
+
+        function highlightDropTarget(touch) {
+            clearAllHighlights();
+            const target = getItemAtPosition(touch);
+            if (target && target !== touchDragElement) {
+                target.classList.add('drag-over');
+            }
+        }
+
+        function clearAllHighlights() {
+            document.querySelectorAll('.win-item').forEach(item => {
+                item.classList.remove('drag-over');
+            });
+        }
+
+        function getItemAtPosition(touch) {
+            const items = document.querySelectorAll('.win-item');
+            for (const item of items) {
+                const rect = item.getBoundingClientRect();
+                if (touch.clientY >= rect.top && touch.clientY <= rect.bottom) {
+                    return item;
+                }
+            }
+            return null;
+        }
+
+        // Reorder wins array
+        function reorderWins(fromIndex, toIndex) {
+            const dateKey = formatDate(viewingDate);
+            const wins = sparkData.wins[dateKey];
+
+            if (!wins || fromIndex < 0 || toIndex < 0) return;
+
+            // Remove from old position and insert at new position
+            const [moved] = wins.splice(fromIndex, 1);
+            wins.splice(toIndex, 0, moved);
+
+            saveData();
+            renderWins();
         }
     </script>
 </body>
