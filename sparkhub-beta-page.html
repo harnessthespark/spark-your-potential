@@ -110,6 +110,171 @@
             border-radius: 8px;
         }
 
+        /* Promo Banner */
+        .promo-banner {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: linear-gradient(90deg, #f86904, #FF6B35);
+            padding: 0.625rem 1.25rem;
+            border-radius: 100px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            animation: fadeInUp 0.6s ease-out both;
+            box-shadow: 0 4px 15px rgba(248, 105, 4, 0.4);
+        }
+
+        .promo-icon {
+            font-size: 1.1rem;
+        }
+
+        /* Features Grid */
+        .features {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+            margin-bottom: 2.5rem;
+            animation: fadeInUp 0.6s ease-out 0.45s both;
+        }
+
+        .feature-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 16px;
+            padding: 1.25rem;
+            transition: all 0.3s ease;
+        }
+
+        .feature-card:hover {
+            background: rgba(255, 255, 255, 0.15);
+            transform: translateY(-2px);
+        }
+
+        .feature-card:last-child:nth-child(odd) {
+            grid-column: 1 / -1;
+        }
+
+        .feature-emoji {
+            font-size: 1.75rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .feature-title {
+            font-size: 0.9375rem;
+            font-weight: 700;
+            margin-bottom: 0.375rem;
+        }
+
+        .feature-desc {
+            font-size: 0.8125rem;
+            opacity: 0.85;
+            line-height: 1.4;
+        }
+
+        @media (max-width: 480px) {
+            .features {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Pricing Section */
+        .pricing-section {
+            margin-bottom: 2.5rem;
+            animation: fadeInUp 0.6s ease-out 0.5s both;
+        }
+
+        .pricing-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 1.25rem;
+        }
+
+        .pricing-cards {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+        }
+
+        .pricing-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 16px;
+            padding: 1.5rem;
+            text-align: center;
+            position: relative;
+        }
+
+        .pricing-card.pricing-featured {
+            background: rgba(255, 255, 255, 0.2);
+            border: 2px solid var(--yellow-accent);
+            box-shadow: 0 4px 20px rgba(248, 105, 4, 0.3);
+        }
+
+        .pricing-badge {
+            position: absolute;
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(90deg, #f86904, #FF6B35);
+            padding: 0.25rem 0.75rem;
+            border-radius: 100px;
+            font-size: 0.6875rem;
+            font-weight: 700;
+            letter-spacing: 0.05em;
+        }
+
+        .pricing-label {
+            font-size: 0.8125rem;
+            opacity: 0.8;
+            margin-bottom: 0.5rem;
+        }
+
+        .pricing-amount {
+            font-size: 2rem;
+            font-weight: 800;
+            line-height: 1;
+        }
+
+        .pricing-period {
+            font-size: 1rem;
+            font-weight: 500;
+            opacity: 0.8;
+        }
+
+        .pricing-yearly {
+            font-size: 0.8125rem;
+            opacity: 0.7;
+            margin-top: 0.25rem;
+        }
+
+        .pricing-bonus {
+            background: rgba(74, 222, 128, 0.2);
+            color: #4ADE80;
+            padding: 0.375rem 0.75rem;
+            border-radius: 100px;
+            font-size: 0.8125rem;
+            font-weight: 600;
+            display: inline-block;
+            margin-top: 0.75rem;
+        }
+
+        .pricing-savings {
+            font-size: 0.75rem;
+            opacity: 0.9;
+            margin-top: 0.5rem;
+            line-height: 1.4;
+        }
+
+        @media (max-width: 480px) {
+            .pricing-cards {
+                grid-template-columns: 1fr;
+            }
+        }
+
         /* Hero */
         .hero-badge {
             display: inline-flex;
@@ -139,12 +304,14 @@
         }
 
         h1 {
-            font-size: clamp(2.25rem, 6vw, 3.5rem);
+            font-size: clamp(1.75rem, 5vw, 3rem);
             font-weight: 900;
             line-height: 1.1;
             letter-spacing: -0.03em;
-            margin-bottom: 1.25rem;
+            margin-top: 1rem;
+            margin-bottom: 1.75rem;
             animation: fadeInUp 0.6s ease-out 0.2s both;
+            white-space: nowrap;
         }
 
         .highlight {
@@ -247,7 +414,7 @@
         .submit-btn {
             width: 100%;
             padding: 1rem 2rem;
-            background: var(-orange-accent);
+            background: var(--yellow-accent);
             color: var(--dark);
             font-family: inherit;
             font-size: 1.5rem;
@@ -448,6 +615,11 @@
                 <img src="assets/HTS_white.png" alt="Harness The Spark" class="logo-img">
             </div>
 
+            <div class="promo-banner">
+                <span class="promo-icon">🎁</span>
+                <span>LIMITED: <strong>1 MONTH FREE</strong> FOR FIRST 100</span>
+            </div>
+
             <div class="hero-badge">
                 <span class="badge-dot"></span>
                 Beta now open
@@ -465,6 +637,52 @@
                 <span class="mode-tag">🔍 Detail-Focused</span>
                 <span class="mode-tag">🔄 Hybrid</span>
                 <span class="mode-tag">⚖️ Standard</span>
+            </div>
+
+            <div class="features">
+                <div class="feature-card">
+                    <div class="feature-emoji">🧠</div>
+                    <div class="feature-title">AuDHD Task Management</div>
+                    <div class="feature-desc">World's first system honouring contradiction — structure AND flexibility</div>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-emoji">💜</div>
+                    <div class="feature-title">Mood-Aware Productivity</div>
+                    <div class="feature-desc">19 mood states. Tasks that work WITH your energy</div>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-emoji">📧</div>
+                    <div class="feature-title">Email Matrix</div>
+                    <div class="feature-desc">Hyperfocus protection and automatic batching</div>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-emoji">⚡</div>
+                    <div class="feature-title">Beautiful Brain Blueprint</div>
+                    <div class="feature-desc">STOP → DISCOVER → HARNESS → AMPLIFY</div>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-emoji">🏆</div>
+                    <div class="feature-title">Gamification</div>
+                    <div class="feature-desc">Dopamine-friendly streaks without shame spirals</div>
+                </div>
+            </div>
+
+            <div class="pricing-section">
+                <h3 class="pricing-title">SparkHub Pricing</h3>
+                <div class="pricing-cards">
+                    <div class="pricing-card">
+                        <div class="pricing-label">Regular Price</div>
+                        <div class="pricing-amount">£18<span class="pricing-period">/month</span></div>
+                        <div class="pricing-yearly">(£180/year)</div>
+                    </div>
+                    <div class="pricing-card pricing-featured">
+                        <div class="pricing-badge">FIRST 100</div>
+                        <div class="pricing-label">Early Bird Offer</div>
+                        <div class="pricing-amount">£14.99<span class="pricing-period">/month</span></div>
+                        <div class="pricing-bonus">+ 1 month FREE</div>
+                        <div class="pricing-savings">Save £51 Year 1, £36/year forever</div>
+                    </div>
+                </div>
             </div>
 
             <div class="signup-form">
