@@ -2010,6 +2010,301 @@ app.post('/api/admin/set-admin', async (req, res) => {
 });
 
 // ============================================
+// AUTOMATION SETTINGS & SCHEDULER
+// ============================================
+
+// Save automation settings
+app.post('/api/automation-settings', async (req, res) => {
+    try {
+        const { setting_key, enabled, frequency_days, config } = req.body;
+
+        if (!setting_key) {
+            return res.status(400).json({ success: false, error: 'setting_key is required' });
+        }
+
+        const settings = await db.saveAutomationSettings(setting_key, {
+            enabled,
+            frequency_days,
+            config
+        });
+
+        console.log(`⚙️ Automation settings saved: ${setting_key} (enabled: ${enabled})`);
+        res.json({ success: true, settings });
+    } catch (error) {
+        console.error('Save automation settings error:', error);
+        res.status(500).json({ success: false, error: error.message });
+    }
+});
+
+// Get all automation settings
+app.get('/api/automation-settings', async (req, res) => {
+    try {
+        const settings = await db.getAllAutomationSettings();
+        res.json({ success: true, settings });
+    } catch (error) {
+        console.error('Get automation settings error:', error);
+        res.status(500).json({ success: false, error: error.message });
+    }
+});
+
+// Get specific automation setting
+app.get('/api/automation-settings/:key', async (req, res) => {
+    try {
+        const { key } = req.params;
+        const setting = await db.getAutomationSettings(key);
+        res.json({ success: true, setting });
+    } catch (error) {
+        console.error('Get automation setting error:', error);
+        res.status(500).json({ success: false, error: error.message });
+    }
+});
+
+// Get automation log
+app.get('/api/automation-log', async (req, res) => {
+    try {
+        const { type, email, limit } = req.query;
+        const log = await db.getAutomationLog({
+            automation_type: type,
+            client_email: email,
+            limit: limit ? parseInt(limit) : 50
+        });
+        res.json({ success: true, log });
+    } catch (error) {
+        console.error('Get automation log error:', error);
+        res.status(500).json({ success: false, error: error.message });
+    }
+});
+
+// Manually trigger automation check (for testing)
+app.post('/api/run-automations', async (req, res) => {
+    try {
+        const results = await runAutomations();
+        res.json({ success: true, results });
+    } catch (error) {
+        console.error('Run automations error:', error);
+        res.status(500).json({ success: false, error: error.message });
+    }
+});
+
+/**
+ * Run all enabled automations
+ * Called by scheduler or manually via API
+ */
+async function runAutomations() {
+    console.log('\n🤖 Running automated checks...');
+    const results = {
+        login_reminders: { sent: 0, skipped: 0, failed: 0 },
+        homework_alerts: { sent: 0, skipped: 0, failed: 0 },
+        timestamp: new Date().toISOString()
+    };
+
+    try {
+        // Get all automation settings
+        const settings = await db.getAllAutomationSettings();
+        const settingsMap = {};
+        settings.forEach(s => {
+            settingsMap[s.setting_key] = s;
+        });
+
+        // 1. Login Reminders
+        const loginReminderSetting = settingsMap['login_reminders'];
+        if (loginReminderSetting && loginReminderSetting.enabled) {
+            const frequencyDays = loginReminderSetting.frequency_days || 7;
+            console.log(`📧 Checking login reminders (inactive ${frequencyDays}+ days)...`);
+
+            const inactiveClients = await db.getInactiveClients(frequencyDays);
+            console.log(`   Found ${inactiveClients.length} inactive clients`);
+
+            for (const client of inactiveClients) {
+                try {
+                    // Check if we already sent a reminder recently
+                    const alreadySent = await db.wasAutomationSentRecently(
+                        'login_reminder',
+                        client.email,
+                        frequencyDays
+                    );
+
+                    if (alreadySent) {
+                        console.log(`   ⏭️ Skipped ${client.email} (already reminded recently)`);
+                        results.login_reminders.skipped++;
+                        continue;
+                    }
+
+                    // Send the reminder
+                    const clientName = client.full_name || client.name || client.email.split('@')[0];
+
+                    await sendAutomatedNotification(client.email, clientName, 'login_reminder', {
+                        message: "Just a gentle reminder that your Career Toolkit is ready and waiting. All your tools, homework, and resources are there whenever you need them.",
+                        link: 'https://career.harnessthespark.com/client-portal.html',
+                        link_text: 'Access Your Toolkit'
+                    });
+
+                    // Log the automation
+                    await db.logAutomation('login_reminder', client.email, 'sent', {
+                        client_name: clientName,
+                        days_inactive: frequencyDays
+                    });
+
+                    console.log(`   ✅ Sent reminder to ${client.email}`);
+                    results.login_reminders.sent++;
+                } catch (err) {
+                    console.error(`   ❌ Failed to send to ${client.email}:`, err.message);
+                    await db.logAutomation('login_reminder', client.email, 'failed', {
+                        error: err.message
+                    });
+                    results.login_reminders.failed++;
+                }
+            }
+
+            // Update last run timestamp
+            await db.updateAutomationLastRun('login_reminders');
+        }
+
+        // 2. Weekly Progress Summaries (placeholder for future)
+        const weeklySummarySetting = settingsMap['weekly_summaries'];
+        if (weeklySummarySetting && weeklySummarySetting.enabled) {
+            console.log(`📊 Weekly summaries automation enabled (not yet implemented)`);
+        }
+
+        console.log(`🤖 Automation check complete:`, results);
+        return results;
+    } catch (error) {
+        console.error('❌ Automation runner error:', error);
+        throw error;
+    }
+}
+
+/**
+ * Send automated notification email
+ */
+async function sendAutomatedNotification(clientEmail, clientName, notificationType, options = {}) {
+    let emailSubject, emailContent;
+
+    switch (notificationType) {
+        case 'login_reminder':
+            emailSubject = options.subject || `Your Career Toolkit is Waiting - Spark Your Potential`;
+            emailContent = `
+                <h2 style="color: #4ECDC4; margin-bottom: 20px;">Still Here For You! 💪</h2>
+                <p>Hi ${clientName},</p>
+                <p>${options.message || "Just a gentle reminder that your Career Toolkit is ready and waiting."}</p>
+                <div style="text-align: center; margin: 30px 0;">
+                    <a href="${options.link || 'https://career.harnessthespark.com/client-portal.html'}" style="background: linear-gradient(135deg, #4ECDC4 0%, #44A08D 100%); color: white; padding: 15px 30px; border-radius: 8px; text-decoration: none; font-weight: 600; display: inline-block;">${options.link_text || 'Access Your Toolkit'}</a>
+                </div>
+                <p style="color: #666; font-size: 14px;">No rush - I'm here when you're ready.</p>
+                <p style="color: #888; font-size: 12px; margin-top: 30px;">This is an automated reminder. You can manage notification preferences in your settings.</p>
+            `;
+            break;
+
+        case 'homework_ready':
+            emailSubject = options.subject || `New Homework Ready - Spark Your Potential`;
+            emailContent = `
+                <h2 style="color: #4ECDC4; margin-bottom: 20px;">New Content Ready! ✨</h2>
+                <p>Hi ${clientName},</p>
+                <p>${options.message || 'You have new homework waiting for you in your Career Toolkit.'}</p>
+                ${options.link ? `
+                <div style="text-align: center; margin: 30px 0;">
+                    <a href="${options.link}" style="background: linear-gradient(135deg, #4ECDC4 0%, #44A08D 100%); color: white; padding: 15px 30px; border-radius: 8px; text-decoration: none; font-weight: 600; display: inline-block;">${options.link_text || 'View Homework'}</a>
+                </div>
+                ` : ''}
+                <p style="color: #666; font-size: 14px;">Looking forward to seeing your insights!</p>
+            `;
+            break;
+
+        default:
+            emailSubject = options.subject || `Update from Spark Your Potential`;
+            emailContent = `
+                <p>Hi ${clientName},</p>
+                <p>${options.message}</p>
+                ${options.link ? `
+                <div style="text-align: center; margin: 30px 0;">
+                    <a href="${options.link}" style="background: linear-gradient(135deg, #4ECDC4 0%, #44A08D 100%); color: white; padding: 15px 30px; border-radius: 8px; text-decoration: none; font-weight: 600; display: inline-block;">${options.link_text || 'View'}</a>
+                </div>
+                ` : ''}
+            `;
+    }
+
+    const mailOptions = {
+        from: '"Lisa Gills - Harness the Spark" <lisa@harnessthespark.com>',
+        to: clientEmail,
+        subject: emailSubject,
+        html: `
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body style="margin: 0; padding: 0; font-family: 'Segoe UI', Arial, sans-serif; background-color: #f5f5f5;">
+    <div style="max-width: 600px; margin: 0 auto; background: white;">
+        <!-- Header -->
+        <div style="background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%); padding: 30px; text-align: center;">
+            <h1 style="color: white; margin: 0; font-size: 24px;">
+                ⚡ <span style="color: #FFB627;">Spark</span> Your Potential
+            </h1>
+        </div>
+
+        <!-- Content -->
+        <div style="padding: 40px 30px;">
+            ${emailContent}
+        </div>
+
+        <!-- Footer -->
+        <div style="background: #f8f9fa; padding: 20px 30px; text-align: center; border-top: 1px solid #eee;">
+            <p style="margin: 0; color: #888; font-size: 12px;">
+                Lisa Gills | Career Coach<br>
+                <a href="https://www.harnessthespark.com" style="color: #4ECDC4;">www.harnessthespark.com</a>
+            </p>
+        </div>
+    </div>
+</body>
+</html>
+        `
+    };
+
+    await emailTransporter.sendMail(mailOptions);
+
+    // Also save to notifications table for portal display
+    await db.saveNotification(clientEmail, {
+        type: notificationType,
+        subject: emailSubject,
+        message: options.message,
+        link: options.link,
+        link_text: options.link_text,
+        sent_at: new Date().toISOString(),
+        read: false
+    });
+}
+
+/**
+ * Start the automation scheduler
+ * Runs every hour to check for automations to run
+ */
+function startAutomationScheduler() {
+    // Run every hour (3600000 ms)
+    const SCHEDULER_INTERVAL = 60 * 60 * 1000;
+
+    console.log('🕐 Automation scheduler started (runs every hour)');
+
+    // Run immediately on startup (after a short delay to let DB init)
+    setTimeout(async () => {
+        try {
+            await runAutomations();
+        } catch (error) {
+            console.error('Initial automation run failed:', error.message);
+        }
+    }, 5000);
+
+    // Then run every hour
+    setInterval(async () => {
+        try {
+            await runAutomations();
+        } catch (error) {
+            console.error('Scheduled automation run failed:', error.message);
+        }
+    }, SCHEDULER_INTERVAL);
+}
+
+// ============================================
 // START SERVER
 // ============================================
 const PORT = process.env.PORT || 8080;
@@ -2020,6 +2315,9 @@ async function startServer() {
         try {
             await db.initDatabase();
             console.log('📦 Database: Connected and initialised');
+
+            // Start automation scheduler after database is ready
+            startAutomationScheduler();
         } catch (error) {
             console.error('❌ Database initialisation failed:', error.message);
             console.log('⚠️  Server will run without database persistence');
@@ -2045,7 +2343,12 @@ async function startServer() {
         console.log(`   POST /api/homework → Save homework responses`);
         console.log(`   GET  /api/homework/:email/:type → Get homework`);
         console.log(`   POST /api/analyze → AI analysis`);
-        console.log(`   GET  /health     → Health check\n`);
+        console.log(`   GET  /health     → Health check`);
+        console.log(`\n🤖 Automation Endpoints:`);
+        console.log(`   GET  /api/automation-settings → Get all settings`);
+        console.log(`   POST /api/automation-settings → Save settings`);
+        console.log(`   GET  /api/automation-log → View automation history`);
+        console.log(`   POST /api/run-automations → Manually trigger automations\n`);
     });
 }
 

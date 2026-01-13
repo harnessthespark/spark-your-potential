@@ -309,6 +309,32 @@ async function initDatabase() {
             )
         `);
 
+        // Create automation_settings table for coach automations
+        await client.query(`
+            CREATE TABLE IF NOT EXISTS automation_settings (
+                id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+                setting_key VARCHAR(100) UNIQUE NOT NULL,
+                enabled BOOLEAN DEFAULT false,
+                frequency_days INTEGER DEFAULT 7,
+                last_run TIMESTAMP,
+                config JSONB DEFAULT '{}',
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            )
+        `);
+
+        // Create automation_log table to track sent automations
+        await client.query(`
+            CREATE TABLE IF NOT EXISTS automation_log (
+                id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+                automation_type VARCHAR(50) NOT NULL,
+                client_email VARCHAR(255) NOT NULL,
+                status VARCHAR(20) DEFAULT 'sent',
+                details JSONB DEFAULT '{}',
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            )
+        `);
+
         // Create indexes
         await client.query(`
             CREATE INDEX IF NOT EXISTS idx_blueprints_user_id ON blueprints(user_id);
@@ -326,6 +352,9 @@ async function initDatabase() {
             CREATE INDEX IF NOT EXISTS idx_notifications_user_email ON notifications(user_email);
             CREATE INDEX IF NOT EXISTS idx_login_tracking_user_email ON login_tracking(user_email);
             CREATE INDEX IF NOT EXISTS idx_login_tracking_last_login ON login_tracking(last_login);
+            CREATE INDEX IF NOT EXISTS idx_automation_log_type ON automation_log(automation_type);
+            CREATE INDEX IF NOT EXISTS idx_automation_log_client ON automation_log(client_email);
+            CREATE INDEX IF NOT EXISTS idx_automation_log_created ON automation_log(created_at);
         `);
 
         console.log('✅ Database tables initialised');
@@ -1476,6 +1505,142 @@ async function getInactiveClients(days = 7) {
     return result.rows;
 }
 
+// ============================================
+// AUTOMATION SETTINGS FUNCTIONS
+// ============================================
+
+/**
+ * Save or update automation settings
+ * @param {string} settingKey - e.g., 'login_reminders', 'homework_alerts'
+ * @param {object} settings - { enabled, frequency_days, config }
+ */
+async function saveAutomationSettings(settingKey, settings) {
+    const query = `
+        INSERT INTO automation_settings (setting_key, enabled, frequency_days, config, updated_at)
+        VALUES ($1, $2, $3, $4, NOW())
+        ON CONFLICT (setting_key)
+        DO UPDATE SET
+            enabled = $2,
+            frequency_days = $3,
+            config = $4,
+            updated_at = NOW()
+        RETURNING *
+    `;
+    const result = await pool.query(query, [
+        settingKey,
+        settings.enabled || false,
+        settings.frequency_days || 7,
+        JSON.stringify(settings.config || {})
+    ]);
+    return result.rows[0];
+}
+
+/**
+ * Get automation settings by key
+ * @param {string} settingKey - e.g., 'login_reminders'
+ */
+async function getAutomationSettings(settingKey) {
+    const query = `SELECT * FROM automation_settings WHERE setting_key = $1`;
+    const result = await pool.query(query, [settingKey]);
+    return result.rows[0] || null;
+}
+
+/**
+ * Get all automation settings
+ */
+async function getAllAutomationSettings() {
+    const query = `SELECT * FROM automation_settings ORDER BY setting_key`;
+    const result = await pool.query(query);
+    return result.rows;
+}
+
+/**
+ * Update last_run timestamp for an automation
+ * @param {string} settingKey - Automation key
+ */
+async function updateAutomationLastRun(settingKey) {
+    const query = `
+        UPDATE automation_settings
+        SET last_run = NOW(), updated_at = NOW()
+        WHERE setting_key = $1
+        RETURNING *
+    `;
+    const result = await pool.query(query, [settingKey]);
+    return result.rows[0];
+}
+
+/**
+ * Log an automation action
+ * @param {string} automationType - Type of automation (e.g., 'login_reminder')
+ * @param {string} clientEmail - Client email
+ * @param {string} status - 'sent', 'failed', 'skipped'
+ * @param {object} details - Additional details
+ */
+async function logAutomation(automationType, clientEmail, status, details = {}) {
+    const query = `
+        INSERT INTO automation_log (automation_type, client_email, status, details)
+        VALUES ($1, $2, $3, $4)
+        RETURNING *
+    `;
+    const result = await pool.query(query, [
+        automationType,
+        clientEmail,
+        status,
+        JSON.stringify(details)
+    ]);
+    return result.rows[0];
+}
+
+/**
+ * Get automation log entries
+ * @param {object} options - { automation_type, client_email, limit }
+ */
+async function getAutomationLog(options = {}) {
+    let query = `SELECT * FROM automation_log WHERE 1=1`;
+    const params = [];
+    let paramCount = 1;
+
+    if (options.automation_type) {
+        query += ` AND automation_type = $${paramCount}`;
+        params.push(options.automation_type);
+        paramCount++;
+    }
+
+    if (options.client_email) {
+        query += ` AND client_email = $${paramCount}`;
+        params.push(options.client_email);
+        paramCount++;
+    }
+
+    query += ` ORDER BY created_at DESC`;
+
+    if (options.limit) {
+        query += ` LIMIT $${paramCount}`;
+        params.push(options.limit);
+    }
+
+    const result = await pool.query(query, params);
+    return result.rows;
+}
+
+/**
+ * Check if an automation was sent to a client recently
+ * @param {string} automationType - Type of automation
+ * @param {string} clientEmail - Client email
+ * @param {number} days - Days to check back
+ */
+async function wasAutomationSentRecently(automationType, clientEmail, days = 7) {
+    const query = `
+        SELECT COUNT(*) as count FROM automation_log
+        WHERE automation_type = $1
+        AND client_email = $2
+        AND status = 'sent'
+        AND created_at > NOW() - INTERVAL '1 day' * $3
+    `;
+    const result = await pool.query(query, [automationType, clientEmail, days]);
+    return parseInt(result.rows[0].count) > 0;
+}
+
 module.exports = {
     pool,
     initDatabase,
@@ -1520,5 +1685,12 @@ module.exports = {
     getNotifications,
     markNotificationRead,
     trackLogin,
-    getInactiveClients
+    getInactiveClients,
+    saveAutomationSettings,
+    getAutomationSettings,
+    getAllAutomationSettings,
+    updateAutomationLastRun,
+    logAutomation,
+    getAutomationLog,
+    wasAutomationSentRecently
 };

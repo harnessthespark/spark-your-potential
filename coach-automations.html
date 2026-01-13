@@ -376,6 +376,26 @@
                 <div class="number" id="remindersSent">0</div>
                 <div class="label">Reminders Sent Today</div>
             </div>
+            <div class="stat-card" id="automationStatusCard">
+                <div class="number" id="automationStatus" style="font-size: 1.5em;">⏸️ Paused</div>
+                <div class="label" id="lastRunLabel">Click Save to enable</div>
+            </div>
+        </div>
+
+        <!-- Automation Status Banner -->
+        <div class="section" id="automationBanner" style="background: linear-gradient(135deg, rgba(78,205,196,0.2), rgba(68,160,141,0.2)); border: 1px solid rgba(78,205,196,0.3);">
+            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px;">
+                <div>
+                    <h3 style="margin-bottom: 5px;">🤖 Automated Reminders</h3>
+                    <p style="color: #aaa; font-size: 0.9em;" id="automationDescription">
+                        Enable toggles below and save to start automatic reminders
+                    </p>
+                </div>
+                <div style="display: flex; gap: 10px;">
+                    <button class="btn btn-secondary" onclick="runAutomationsNow()">▶️ Run Now</button>
+                    <button class="btn btn-secondary" onclick="viewAutomationLog()">📋 View Log</button>
+                </div>
+            </div>
         </div>
 
         <!-- Inactive Clients -->
@@ -507,6 +527,7 @@
             loadSettings();
             loadInactiveClients();
             loadStats();
+            loadAutomationStatus();
         };
 
         // Load stats
@@ -622,12 +643,12 @@
             }
         }
 
-        // Save settings to localStorage
-        function saveSettings() {
+        // Save settings to PostgreSQL (with localStorage backup)
+        async function saveSettings() {
             const settings = {
-                firstReminderDays: document.getElementById('firstReminderDays').value,
-                followUpDays: document.getElementById('followUpDays').value,
-                maxReminders: document.getElementById('maxReminders').value,
+                firstReminderDays: parseInt(document.getElementById('firstReminderDays').value),
+                followUpDays: parseInt(document.getElementById('followUpDays').value),
+                maxReminders: parseInt(document.getElementById('maxReminders').value),
                 enableLoginReminders: document.getElementById('enableLoginReminders').checked,
                 enableHomeworkAlerts: document.getElementById('enableHomeworkAlerts').checked,
                 enableAchievements: document.getElementById('enableAchievements').checked,
@@ -638,12 +659,130 @@
                 templateAchievement: document.getElementById('templateAchievement').value
             };
 
+            // Save to localStorage as backup
             localStorage.setItem('syp_automation_settings', JSON.stringify(settings));
-            showToast('✅ Settings saved!');
+
+            try {
+                // Save login_reminders automation to PostgreSQL
+                await fetch(`${API_BASE}/api/automation-settings`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        setting_key: 'login_reminders',
+                        enabled: settings.enableLoginReminders,
+                        frequency_days: settings.firstReminderDays,
+                        config: {
+                            followUpDays: settings.followUpDays,
+                            maxReminders: settings.maxReminders,
+                            templateFirst: settings.templateLoginFirst,
+                            templateFollowup: settings.templateLoginFollowup
+                        }
+                    })
+                });
+
+                // Save homework_alerts automation
+                await fetch(`${API_BASE}/api/automation-settings`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        setting_key: 'homework_alerts',
+                        enabled: settings.enableHomeworkAlerts,
+                        frequency_days: 1,
+                        config: {
+                            template: settings.templateHomework
+                        }
+                    })
+                });
+
+                // Save weekly_summaries automation
+                await fetch(`${API_BASE}/api/automation-settings`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        setting_key: 'weekly_summaries',
+                        enabled: settings.enableWeeklySummary,
+                        frequency_days: 7,
+                        config: {}
+                    })
+                });
+
+                // Save achievements automation
+                await fetch(`${API_BASE}/api/automation-settings`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        setting_key: 'achievements',
+                        enabled: settings.enableAchievements,
+                        frequency_days: 1,
+                        config: {
+                            template: settings.templateAchievement
+                        }
+                    })
+                });
+
+                showToast('✅ Settings saved to database! Automations enabled.');
+                loadAutomationStatus();
+            } catch (e) {
+                console.error('Failed to save to PostgreSQL:', e);
+                showToast('⚠️ Settings saved locally (database unavailable)');
+            }
         }
 
-        // Load settings from localStorage
-        function loadSettings() {
+        // Load settings from PostgreSQL (with localStorage fallback)
+        async function loadSettings() {
+            try {
+                // Try to load from PostgreSQL first
+                const response = await fetch(`${API_BASE}/api/automation-settings`);
+                const data = await response.json();
+
+                if (data.success && data.settings && data.settings.length > 0) {
+                    console.log('📦 Loaded settings from PostgreSQL');
+                    const settingsMap = {};
+                    data.settings.forEach(s => {
+                        settingsMap[s.setting_key] = s;
+                    });
+
+                    // Apply login_reminders settings
+                    if (settingsMap['login_reminders']) {
+                        const lr = settingsMap['login_reminders'];
+                        document.getElementById('firstReminderDays').value = lr.frequency_days || 7;
+                        document.getElementById('enableLoginReminders').checked = lr.enabled;
+                        if (lr.config) {
+                            if (lr.config.followUpDays !== undefined) document.getElementById('followUpDays').value = lr.config.followUpDays;
+                            if (lr.config.maxReminders !== undefined) document.getElementById('maxReminders').value = lr.config.maxReminders;
+                            if (lr.config.templateFirst) document.getElementById('templateLoginFirst').value = lr.config.templateFirst;
+                            if (lr.config.templateFollowup) document.getElementById('templateLoginFollowup').value = lr.config.templateFollowup;
+                        }
+                    }
+
+                    // Apply homework_alerts settings
+                    if (settingsMap['homework_alerts']) {
+                        document.getElementById('enableHomeworkAlerts').checked = settingsMap['homework_alerts'].enabled;
+                        if (settingsMap['homework_alerts'].config?.template) {
+                            document.getElementById('templateHomework').value = settingsMap['homework_alerts'].config.template;
+                        }
+                    }
+
+                    // Apply weekly_summaries settings
+                    if (settingsMap['weekly_summaries']) {
+                        document.getElementById('enableWeeklySummary').checked = settingsMap['weekly_summaries'].enabled;
+                    }
+
+                    // Apply achievements settings
+                    if (settingsMap['achievements']) {
+                        document.getElementById('enableAchievements').checked = settingsMap['achievements'].enabled;
+                        if (settingsMap['achievements'].config?.template) {
+                            document.getElementById('templateAchievement').value = settingsMap['achievements'].config.template;
+                        }
+                    }
+
+                    return;
+                }
+            } catch (e) {
+                console.log('⚠️ PostgreSQL unavailable, using localStorage');
+            }
+
+            // Fallback to localStorage
             const saved = localStorage.getItem('syp_automation_settings');
             if (!saved) return;
 
@@ -665,9 +804,138 @@
             }
         }
 
+        // Load automation status
+        async function loadAutomationStatus() {
+            try {
+                const response = await fetch(`${API_BASE}/api/automation-settings/login_reminders`);
+                const data = await response.json();
+
+                const statusEl = document.getElementById('automationStatus');
+                const labelEl = document.getElementById('lastRunLabel');
+                const descEl = document.getElementById('automationDescription');
+                const bannerEl = document.getElementById('automationBanner');
+
+                if (data.success && data.setting) {
+                    if (data.setting.enabled) {
+                        statusEl.textContent = '✅ Active';
+                        statusEl.style.color = '#4ECDC4';
+                        bannerEl.style.background = 'linear-gradient(135deg, rgba(78,205,196,0.2), rgba(68,160,141,0.2))';
+                        bannerEl.style.borderColor = 'rgba(78,205,196,0.3)';
+                        descEl.textContent = `Checking every hour for clients inactive ${data.setting.frequency_days}+ days`;
+
+                        if (data.setting.last_run) {
+                            const lastRun = new Date(data.setting.last_run);
+                            labelEl.textContent = `Last run: ${lastRun.toLocaleString('en-GB')}`;
+                        } else {
+                            labelEl.textContent = 'Waiting for first run...';
+                        }
+                    } else {
+                        statusEl.textContent = '⏸️ Paused';
+                        statusEl.style.color = '#FFB627';
+                        labelEl.textContent = 'Enable toggles and save to start';
+                        descEl.textContent = 'Enable toggles below and save to start automatic reminders';
+                        bannerEl.style.background = 'rgba(255,182,39,0.1)';
+                        bannerEl.style.borderColor = 'rgba(255,182,39,0.3)';
+                    }
+                } else {
+                    statusEl.textContent = '⚠️ Not configured';
+                    statusEl.style.color = '#aaa';
+                    labelEl.textContent = 'Save settings to enable';
+                }
+
+                // Load today's reminders count from log
+                const logResponse = await fetch(`${API_BASE}/api/automation-log?type=login_reminder&limit=50`);
+                const logData = await logResponse.json();
+                if (logData.success && logData.log) {
+                    const today = new Date().toDateString();
+                    const todayCount = logData.log.filter(l =>
+                        l.status === 'sent' && new Date(l.created_at).toDateString() === today
+                    ).length;
+                    document.getElementById('remindersSent').textContent = todayCount;
+                }
+            } catch (e) {
+                console.log('Could not load automation status:', e);
+            }
+        }
+
+        // Run automations manually
+        async function runAutomationsNow() {
+            if (!confirm('Run automation check now? This will send reminders to inactive clients if enabled.')) return;
+
+            showToast('🔄 Running automations...');
+
+            try {
+                const response = await fetch(`${API_BASE}/api/run-automations`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' }
+                });
+                const data = await response.json();
+
+                if (data.success) {
+                    const results = data.results;
+                    showToast(`✅ Done! Login reminders: ${results.login_reminders.sent} sent, ${results.login_reminders.skipped} skipped`);
+                    loadAutomationStatus();
+                    loadInactiveClients();
+                } else {
+                    showToast(`❌ Failed: ${data.error}`);
+                }
+            } catch (e) {
+                showToast(`❌ Error: ${e.message}`);
+            }
+        }
+
+        // View automation log
+        async function viewAutomationLog() {
+            try {
+                const response = await fetch(`${API_BASE}/api/automation-log?limit=20`);
+                const data = await response.json();
+
+                if (data.success && data.log && data.log.length > 0) {
+                    const logText = data.log.map(entry => {
+                        const date = new Date(entry.created_at).toLocaleString('en-GB');
+                        const status = entry.status === 'sent' ? '✅' : (entry.status === 'skipped' ? '⏭️' : '❌');
+                        return `${status} ${date} - ${entry.automation_type} to ${entry.client_email}`;
+                    }).join('\n');
+
+                    alert('📋 Recent Automation Log:\n\n' + logText);
+                } else {
+                    alert('📋 No automation log entries yet.\n\nRun automations or wait for the hourly scheduler.');
+                }
+            } catch (e) {
+                alert('❌ Could not load log: ' + e.message);
+            }
+        }
+
         // Reset settings
-        function resetSettings() {
-            if (!confirm('Reset all settings to defaults?')) return;
+        async function resetSettings() {
+            if (!confirm('Reset all settings to defaults? This will disable all automations.')) return;
+
+            try {
+                // Disable all automations in PostgreSQL
+                await fetch(`${API_BASE}/api/automation-settings`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ setting_key: 'login_reminders', enabled: false, frequency_days: 7, config: {} })
+                });
+                await fetch(`${API_BASE}/api/automation-settings`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ setting_key: 'homework_alerts', enabled: false, frequency_days: 1, config: {} })
+                });
+                await fetch(`${API_BASE}/api/automation-settings`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ setting_key: 'weekly_summaries', enabled: false, frequency_days: 7, config: {} })
+                });
+                await fetch(`${API_BASE}/api/automation-settings`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ setting_key: 'achievements', enabled: false, frequency_days: 1, config: {} })
+                });
+            } catch (e) {
+                console.error('Failed to reset PostgreSQL settings:', e);
+            }
+
             localStorage.removeItem('syp_automation_settings');
             location.reload();
         }
