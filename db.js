@@ -348,12 +348,24 @@ async function initDatabase() {
                 sparkhub_token_expires TIMESTAMP,
                 sparkhub_refresh_token TEXT,
                 gmail_connected BOOLEAN DEFAULT false,
+                gmail_access_token TEXT,
+                gmail_refresh_token TEXT,
+                gmail_token_expires TIMESTAMP,
+                gmail_email VARCHAR(255),
                 email_preferences JSONB DEFAULT '{}',
                 calendar_preferences JSONB DEFAULT '{}',
                 default_daily_spoons INTEGER DEFAULT 10,
                 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                 updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             )
+        `);
+
+        // Add Gmail columns if they don't exist (migration for existing tables)
+        await client.query(`
+            ALTER TABLE coach_settings ADD COLUMN IF NOT EXISTS gmail_access_token TEXT;
+            ALTER TABLE coach_settings ADD COLUMN IF NOT EXISTS gmail_refresh_token TEXT;
+            ALTER TABLE coach_settings ADD COLUMN IF NOT EXISTS gmail_token_expires TIMESTAMP;
+            ALTER TABLE coach_settings ADD COLUMN IF NOT EXISTS gmail_email VARCHAR(255);
         `);
 
         // Email keyword preferences (local cache for MailMatrix)
@@ -1833,7 +1845,8 @@ async function updateCoachSettings(coachEmail, settings) {
 
     const allowedFields = [
         'sparkhub_token', 'sparkhub_token_expires', 'sparkhub_refresh_token',
-        'gmail_connected', 'email_preferences', 'calendar_preferences', 'default_daily_spoons'
+        'gmail_connected', 'gmail_access_token', 'gmail_refresh_token', 'gmail_token_expires', 'gmail_email',
+        'email_preferences', 'calendar_preferences', 'default_daily_spoons'
     ];
 
     for (const field of allowedFields) {

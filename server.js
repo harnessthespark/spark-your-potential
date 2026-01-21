@@ -7,7 +7,60 @@ require('dotenv').config();
 const express = require('express');
 const path = require('path');
 const nodemailer = require('nodemailer');
+const { google } = require('googleapis');
 const db = require('./db');
+
+// ============================================
+// GOOGLE OAUTH CONFIGURATION
+// ============================================
+
+const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
+const GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET;
+const GOOGLE_REDIRECT_URI = process.env.GOOGLE_REDIRECT_URI || 'https://potential.harnessthespark.com/api/gmail/callback';
+
+// Gmail API scopes
+const GMAIL_SCOPES = [
+    'https://www.googleapis.com/auth/gmail.readonly',
+    'https://www.googleapis.com/auth/gmail.modify',
+    'https://www.googleapis.com/auth/userinfo.email',
+    'https://www.googleapis.com/auth/userinfo.profile'
+];
+
+// Create OAuth2 client
+function createOAuth2Client() {
+    return new google.auth.OAuth2(
+        GOOGLE_CLIENT_ID,
+        GOOGLE_CLIENT_SECRET,
+        GOOGLE_REDIRECT_URI
+    );
+}
+
+// Get authenticated Gmail client for a coach
+async function getGmailClient(coachEmail) {
+    const settings = await db.getOrCreateCoachSettings(coachEmail);
+
+    if (!settings.gmail_access_token) {
+        throw new Error('Gmail not connected');
+    }
+
+    const oauth2Client = createOAuth2Client();
+    oauth2Client.setCredentials({
+        access_token: settings.gmail_access_token,
+        refresh_token: settings.gmail_refresh_token,
+        expiry_date: settings.gmail_token_expires ? new Date(settings.gmail_token_expires).getTime() : null
+    });
+
+    // Handle token refresh
+    oauth2Client.on('tokens', async (tokens) => {
+        console.log('Gmail tokens refreshed for:', coachEmail);
+        await db.updateCoachSettings(coachEmail, {
+            gmail_access_token: tokens.access_token,
+            gmail_token_expires: tokens.expiry_date ? new Date(tokens.expiry_date) : null
+        });
+    });
+
+    return google.gmail({ version: 'v1', auth: oauth2Client });
+}
 
 const app = express();
 
@@ -2005,6 +2058,312 @@ app.post('/api/admin/set-admin', async (req, res) => {
         res.json({ success: true, user: result.rows[0] });
     } catch (error) {
         console.error('Set admin error:', error);
+        res.status(500).json({ success: false, error: error.message });
+    }
+});
+
+// ============================================
+// GMAIL OAUTH & EMAIL API (Coach Hub)
+// ============================================
+
+// Start Gmail OAuth flow
+app.get('/api/gmail/auth', (req, res) => {
+    try {
+        const coachEmail = req.query.email;
+        if (!coachEmail) {
+            return res.status(400).json({ success: false, error: 'email parameter required' });
+        }
+
+        if (!GOOGLE_CLIENT_ID || !GOOGLE_CLIENT_SECRET) {
+            return res.status(500).json({
+                success: false,
+                error: 'Google OAuth not configured. Set GOOGLE_CLIENT_ID and GOOGLE_CLIENT_SECRET.'
+            });
+        }
+
+        const oauth2Client = createOAuth2Client();
+        const authUrl = oauth2Client.generateAuthUrl({
+            access_type: 'offline',
+            scope: GMAIL_SCOPES,
+            prompt: 'consent',
+            state: Buffer.from(JSON.stringify({ email: coachEmail })).toString('base64')
+        });
+
+        console.log('Gmail OAuth started for:', coachEmail);
+        res.redirect(authUrl);
+    } catch (error) {
+        console.error('Gmail auth error:', error);
+        res.status(500).json({ success: false, error: error.message });
+    }
+});
+
+// Gmail OAuth callback
+app.get('/api/gmail/callback', async (req, res) => {
+    try {
+        const { code, state } = req.query;
+
+        if (!code) {
+            return res.redirect('/coach-hub.html?gmail=error&reason=no_code');
+        }
+
+        // Decode state to get coach email
+        let coachEmail;
+        try {
+            const stateData = JSON.parse(Buffer.from(state, 'base64').toString());
+            coachEmail = stateData.email;
+        } catch (e) {
+            return res.redirect('/coach-hub.html?gmail=error&reason=invalid_state');
+        }
+
+        const oauth2Client = createOAuth2Client();
+        const { tokens } = await oauth2Client.getToken(code);
+
+        // Get user info to verify email
+        oauth2Client.setCredentials(tokens);
+        const oauth2 = google.oauth2({ version: 'v2', auth: oauth2Client });
+        const userInfo = await oauth2.userinfo.get();
+
+        // Store tokens in database
+        await db.updateCoachSettings(coachEmail, {
+            gmail_connected: true,
+            gmail_access_token: tokens.access_token,
+            gmail_refresh_token: tokens.refresh_token,
+            gmail_token_expires: tokens.expiry_date ? new Date(tokens.expiry_date) : null,
+            gmail_email: userInfo.data.email
+        });
+
+        console.log('✅ Gmail connected for:', coachEmail, '- Gmail account:', userInfo.data.email);
+        res.redirect('/coach-hub.html?gmail=success');
+    } catch (error) {
+        console.error('Gmail callback error:', error);
+        res.redirect('/coach-hub.html?gmail=error&reason=' + encodeURIComponent(error.message));
+    }
+});
+
+// Check Gmail connection status
+app.get('/api/gmail/status', async (req, res) => {
+    try {
+        const coachEmail = req.query.email;
+        if (!coachEmail) {
+            return res.status(400).json({ success: false, error: 'email parameter required' });
+        }
+
+        const settings = await db.getOrCreateCoachSettings(coachEmail);
+        res.json({
+            success: true,
+            connected: settings.gmail_connected || false,
+            gmail_email: settings.gmail_email || null,
+            oauth_configured: !!(GOOGLE_CLIENT_ID && GOOGLE_CLIENT_SECRET)
+        });
+    } catch (error) {
+        console.error('Gmail status error:', error);
+        res.status(500).json({ success: false, error: error.message });
+    }
+});
+
+// Disconnect Gmail
+app.post('/api/gmail/disconnect', async (req, res) => {
+    try {
+        const { email } = req.body;
+        if (!email) {
+            return res.status(400).json({ success: false, error: 'email required' });
+        }
+
+        await db.updateCoachSettings(email, {
+            gmail_connected: false,
+            gmail_access_token: null,
+            gmail_refresh_token: null,
+            gmail_token_expires: null,
+            gmail_email: null
+        });
+
+        console.log('Gmail disconnected for:', email);
+        res.json({ success: true });
+    } catch (error) {
+        console.error('Gmail disconnect error:', error);
+        res.status(500).json({ success: false, error: error.message });
+    }
+});
+
+// Fetch emails for MailMatrix (Eisenhower Matrix)
+app.get('/api/gmail/emails', async (req, res) => {
+    try {
+        const coachEmail = req.query.email;
+        const maxResults = parseInt(req.query.max) || 50;
+
+        if (!coachEmail) {
+            return res.status(400).json({ success: false, error: 'email parameter required' });
+        }
+
+        const gmail = await getGmailClient(coachEmail);
+
+        // Fetch unread emails from inbox
+        const response = await gmail.users.messages.list({
+            userId: 'me',
+            maxResults: maxResults,
+            q: 'in:inbox -category:promotions -category:social'
+        });
+
+        if (!response.data.messages || response.data.messages.length === 0) {
+            return res.json({ success: true, emails: [], total: 0 });
+        }
+
+        // Fetch details for each email
+        const emails = await Promise.all(
+            response.data.messages.map(async (msg) => {
+                const detail = await gmail.users.messages.get({
+                    userId: 'me',
+                    id: msg.id,
+                    format: 'metadata',
+                    metadataHeaders: ['From', 'Subject', 'Date']
+                });
+
+                const headers = detail.data.payload.headers;
+                const getHeader = (name) => headers.find(h => h.name === name)?.value || '';
+
+                // Parse sender
+                const fromHeader = getHeader('From');
+                const senderMatch = fromHeader.match(/^(.+?)\s*<(.+?)>$/) || [null, fromHeader, fromHeader];
+
+                return {
+                    id: msg.id,
+                    threadId: msg.threadId,
+                    subject: getHeader('Subject'),
+                    sender_name: senderMatch[1]?.trim().replace(/"/g, '') || '',
+                    sender_email: senderMatch[2]?.trim() || fromHeader,
+                    snippet: detail.data.snippet,
+                    date: getHeader('Date'),
+                    timestamp: detail.data.internalDate,
+                    is_unread: detail.data.labelIds?.includes('UNREAD') || false,
+                    labels: detail.data.labelIds || []
+                };
+            })
+        );
+
+        // Get email preferences for classification
+        const prefs = await db.getEmailKeywordPreferences(coachEmail);
+
+        // Classify emails into quadrants
+        const classifiedEmails = emails.map(email => {
+            const quadrant = classifyEmail(email, prefs);
+            return { ...email, quadrant };
+        });
+
+        res.json({
+            success: true,
+            emails: classifiedEmails,
+            total: classifiedEmails.length
+        });
+    } catch (error) {
+        console.error('Gmail fetch error:', error);
+        if (error.message === 'Gmail not connected') {
+            return res.status(401).json({ success: false, error: 'Gmail not connected', code: 'NOT_CONNECTED' });
+        }
+        res.status(500).json({ success: false, error: error.message });
+    }
+});
+
+// Email classification function (Eisenhower Matrix)
+function classifyEmail(email, prefs) {
+    const subject = (email.subject || '').toLowerCase();
+    const senderEmail = (email.sender_email || '').toLowerCase();
+    const senderName = (email.sender_name || '').toLowerCase();
+
+    const urgentKeywords = prefs?.urgent_keywords || ['urgent', 'asap', 'immediately', 'critical', 'emergency', 'deadline'];
+    const importantKeywords = prefs?.important_keywords || ['invoice', 'payment', 'contract', 'meeting', 'proposal', 'client'];
+    const importantDomains = prefs?.important_domains || ['gov.uk', 'nhs.uk', 'hmrc.gov.uk'];
+    const lowPrioritySenders = prefs?.low_priority_senders || ['noreply', 'newsletter', 'marketing', 'notifications'];
+    const lowPriorityKeywords = prefs?.low_priority_keywords || ['unsubscribe', 'promotional', 'sale', 'offer'];
+
+    // Check for urgent signals
+    const isUrgent = urgentKeywords.some(kw => subject.includes(kw)) ||
+                     email.labels?.includes('IMPORTANT');
+
+    // Check for important signals
+    const isImportant = importantKeywords.some(kw => subject.includes(kw)) ||
+                        importantDomains.some(domain => senderEmail.includes(domain)) ||
+                        email.labels?.includes('STARRED');
+
+    // Check for low priority signals
+    const isLowPriority = lowPrioritySenders.some(sender => senderEmail.includes(sender) || senderName.includes(sender)) ||
+                          lowPriorityKeywords.some(kw => subject.includes(kw));
+
+    // Eisenhower Matrix classification
+    if (isUrgent && isImportant) return 'Q1'; // Urgent & Important - Do First
+    if (!isUrgent && isImportant) return 'Q2'; // Important Not Urgent - Schedule
+    if (isUrgent && !isImportant) return 'Q3'; // Urgent Not Important - Delegate
+    if (isLowPriority) return 'Q4'; // Neither - Consider deleting
+    return 'Q2'; // Default to Important Not Urgent
+}
+
+// Mark email as done (archive/read)
+app.post('/api/gmail/mark-done', async (req, res) => {
+    try {
+        const { email, message_id, action } = req.body;
+
+        if (!email || !message_id) {
+            return res.status(400).json({ success: false, error: 'email and message_id required' });
+        }
+
+        const gmail = await getGmailClient(email);
+
+        if (action === 'archive') {
+            // Remove from inbox (archive)
+            await gmail.users.messages.modify({
+                userId: 'me',
+                id: message_id,
+                requestBody: {
+                    removeLabelIds: ['INBOX', 'UNREAD']
+                }
+            });
+        } else {
+            // Just mark as read
+            await gmail.users.messages.modify({
+                userId: 'me',
+                id: message_id,
+                requestBody: {
+                    removeLabelIds: ['UNREAD']
+                }
+            });
+        }
+
+        // Update cache
+        await db.markEmailCompleted(email, message_id);
+
+        res.json({ success: true });
+    } catch (error) {
+        console.error('Mark email done error:', error);
+        res.status(500).json({ success: false, error: error.message });
+    }
+});
+
+// Get/update email preferences
+app.get('/api/gmail/preferences', async (req, res) => {
+    try {
+        const coachEmail = req.query.email;
+        if (!coachEmail) {
+            return res.status(400).json({ success: false, error: 'email parameter required' });
+        }
+
+        const prefs = await db.getEmailKeywordPreferences(coachEmail);
+        res.json({ success: true, preferences: prefs });
+    } catch (error) {
+        console.error('Get email preferences error:', error);
+        res.status(500).json({ success: false, error: error.message });
+    }
+});
+
+app.post('/api/gmail/preferences', async (req, res) => {
+    try {
+        const { email, ...preferences } = req.body;
+        if (!email) {
+            return res.status(400).json({ success: false, error: 'email required' });
+        }
+
+        const prefs = await db.updateEmailKeywordPreferences(email, preferences);
+        res.json({ success: true, preferences: prefs });
+    } catch (error) {
+        console.error('Update email preferences error:', error);
         res.status(500).json({ success: false, error: error.message });
     }
 });
