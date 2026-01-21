@@ -592,6 +592,7 @@ What I'd change:"></textarea>
             <div class="action-buttons">
                 <button class="btn btn-primary" onclick="saveProgress()">💾 Save Progress</button>
                 <button class="btn btn-secondary" onclick="emailToLisa()">📧 Email to Lisa</button>
+                <button class="btn btn-secondary" onclick="downloadHomework()">📥 Download</button>
                 <button class="btn btn-secondary" onclick="window.print()">🖨️ Print</button>
             </div>
         </div>
@@ -603,6 +604,9 @@ What I'd change:"></textarea>
     </div>
 
     <div class="save-indicator" id="saveIndicator">✓ Progress Saved</div>
+
+    <!-- PDF Generation Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
     <script>
         // Smart back navigation
@@ -859,6 +863,185 @@ What I'd change:"></textarea>
                     showSaveIndicator('✅ Email opened');
                 }
             }, 1500);
+        }
+
+        function downloadHomework() {
+            // Create a formatted document for download
+            const content = document.createElement('div');
+            content.innerHTML = `
+                <div style="font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; max-width: 800px; margin: 0 auto; padding: 40px; color: #2c3e50;">
+                    <div style="text-align: center; margin-bottom: 40px; padding-bottom: 20px; border-bottom: 3px solid #7c3aed;">
+                        <h1 style="color: #7c3aed; font-size: 2em; margin-bottom: 10px;">Week 3 Homework</h1>
+                        <p style="font-size: 1.2em; color: #64748b;">Raj Samuel | Career Booster Programme</p>
+                        <p style="font-size: 0.9em; color: #94a3b8;">Generated: ${new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })}</p>
+                    </div>
+
+                    <div style="background: #f0fdf4; border-left: 4px solid #10b981; padding: 20px; margin-bottom: 30px; border-radius: 0 10px 10px 0;">
+                        <h3 style="color: #065f46; margin-bottom: 10px;">Your Core Thread</h3>
+                        <p style="color: #064e3b; font-style: italic;">"I spot the cultural-emotional truth hiding beneath the business problem, then make it tangible so people can act on it. The unlock is always about giving permission."</p>
+                    </div>
+
+                    <h2 style="color: #7c3aed; border-bottom: 2px solid #7c3aed; padding-bottom: 10px; margin-top: 40px;">Section 1: The Crystal Ball Pitch</h2>
+
+                    <div style="margin: 25px 0; padding: 20px; background: #f8fafc; border-radius: 10px;">
+                        <h3 style="color: #1e293b; margin-bottom: 5px;">30-Second Elevator Pitch</h3>
+                        <p style="color: #64748b; font-size: 0.9em; margin-bottom: 15px;">~50-75 words</p>
+                        <div style="white-space: pre-wrap; line-height: 1.7;">${document.getElementById('pitch30').value || '(Not yet completed)'}</div>
+                    </div>
+
+                    <div style="margin: 25px 0; padding: 20px; background: #f8fafc; border-radius: 10px;">
+                        <h3 style="color: #1e293b; margin-bottom: 5px;">2-Minute Coffee Chat Pitch</h3>
+                        <p style="color: #64748b; font-size: 0.9em; margin-bottom: 15px;">~200-250 words</p>
+                        <div style="white-space: pre-wrap; line-height: 1.7;">${document.getElementById('pitch2min').value || '(Not yet completed)'}</div>
+                    </div>
+
+                    <div style="margin: 25px 0; padding: 20px; background: #f8fafc; border-radius: 10px;">
+                        <h3 style="color: #1e293b; margin-bottom: 5px;">5-Minute Deep Dive Pitch</h3>
+                        <p style="color: #64748b; font-size: 0.9em; margin-bottom: 15px;">~400-500 words</p>
+                        <div style="white-space: pre-wrap; line-height: 1.7;">${document.getElementById('pitch5min').value || '(Not yet completed)'}</div>
+                    </div>
+
+                    <h2 style="color: #7c3aed; border-bottom: 2px solid #7c3aed; padding-bottom: 10px; margin-top: 40px;">Section 2: Positioning Sandbox</h2>
+
+                    <div style="margin: 25px 0; padding: 20px; background: #f8fafc; border-radius: 10px;">
+                        <h3 style="color: #1e293b; margin-bottom: 15px;">I Am / I Am Not</h3>
+                        <div style="white-space: pre-wrap; line-height: 1.7;">${document.getElementById('iAmIAmNot').value || '(Not yet completed)'}</div>
+                    </div>
+
+                    <div style="margin: 25px 0; padding: 20px; background: #f8fafc; border-radius: 10px;">
+                        <h3 style="color: #1e293b; margin-bottom: 15px;">Reframes</h3>
+                        <div style="white-space: pre-wrap; line-height: 1.7;">${document.getElementById('reframes').value || '(Not yet completed)'}</div>
+                    </div>
+
+                    <div style="margin: 25px 0; padding: 20px; background: #f8fafc; border-radius: 10px;">
+                        <h3 style="color: #1e293b; margin-bottom: 15px;">Headlines for Dream Companies</h3>
+                        <div style="white-space: pre-wrap; line-height: 1.7;">${document.getElementById('headlines').value || '(Not yet completed)'}</div>
+                    </div>
+
+                    <div style="margin: 25px 0; padding: 20px; background: #f8fafc; border-radius: 10px;">
+                        <h3 style="color: #1e293b; margin-bottom: 15px;">What Do You Actually Want?</h3>
+                        <div style="white-space: pre-wrap; line-height: 1.7;">${document.getElementById('wantClarity').value || '(Not yet completed)'}</div>
+                    </div>
+
+                    <h2 style="color: #7c3aed; border-bottom: 2px solid #7c3aed; padding-bottom: 10px; margin-top: 40px;">Section 3: Actions & Questions</h2>
+
+                    <div style="margin: 25px 0; padding: 20px; background: #f8fafc; border-radius: 10px;">
+                        <h3 style="color: #1e293b; margin-bottom: 15px;">Practice Log</h3>
+                        <div style="white-space: pre-wrap; line-height: 1.7;">${document.getElementById('practiceLog').value || '(Not yet completed)'}</div>
+                    </div>
+
+                    <div style="margin: 25px 0; padding: 20px; background: #f8fafc; border-radius: 10px;">
+                        <h3 style="color: #1e293b; margin-bottom: 15px;">Questions for Week 4</h3>
+                        <div style="white-space: pre-wrap; line-height: 1.7;">${document.getElementById('week4Questions').value || '(Not yet completed)'}</div>
+                    </div>
+
+                    <div style="text-align: center; margin-top: 50px; padding-top: 20px; border-top: 2px solid #e2e8f0; color: #94a3b8; font-size: 0.9em;">
+                        <p>Career Booster Programme with Lisa Gills | Harness the Spark</p>
+                    </div>
+                </div>
+            `;
+
+            const opt = {
+                margin: [15, 15, 15, 15],
+                filename: 'Raj_Samuel_Week3_Homework.pdf',
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { scale: 2, useCORS: true },
+                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
+                pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
+            };
+
+            showSaveIndicator('📥 Generating PDF...');
+
+            html2pdf().set(opt).from(content).save().then(() => {
+                showSaveIndicator('✅ Downloaded!');
+            }).catch(err => {
+                console.error('PDF generation failed:', err);
+                // Fallback: download as HTML
+                downloadAsHTML();
+            });
+        }
+
+        function downloadAsHTML() {
+            let content = `<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Raj Samuel - Week 3 Homework</title>
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; max-width: 800px; margin: 40px auto; padding: 20px; color: #2c3e50; }
+        h1 { color: #7c3aed; }
+        h2 { color: #7c3aed; border-bottom: 2px solid #7c3aed; padding-bottom: 10px; margin-top: 40px; }
+        .section { margin: 25px 0; padding: 20px; background: #f8fafc; border-radius: 10px; }
+        .section h3 { margin-bottom: 15px; }
+        pre { white-space: pre-wrap; font-family: inherit; }
+    </style>
+</head>
+<body>
+    <h1>Week 3 Homework</h1>
+    <p>Raj Samuel | Career Booster Programme</p>
+    <p>Generated: ${new Date().toLocaleDateString('en-GB')}</p>
+
+    <h2>Section 1: The Crystal Ball Pitch</h2>
+
+    <div class="section">
+        <h3>30-Second Elevator Pitch</h3>
+        <pre>${document.getElementById('pitch30').value || '(Not yet completed)'}</pre>
+    </div>
+
+    <div class="section">
+        <h3>2-Minute Coffee Chat Pitch</h3>
+        <pre>${document.getElementById('pitch2min').value || '(Not yet completed)'}</pre>
+    </div>
+
+    <div class="section">
+        <h3>5-Minute Deep Dive Pitch</h3>
+        <pre>${document.getElementById('pitch5min').value || '(Not yet completed)'}</pre>
+    </div>
+
+    <h2>Section 2: Positioning Sandbox</h2>
+
+    <div class="section">
+        <h3>I Am / I Am Not</h3>
+        <pre>${document.getElementById('iAmIAmNot').value || '(Not yet completed)'}</pre>
+    </div>
+
+    <div class="section">
+        <h3>Reframes</h3>
+        <pre>${document.getElementById('reframes').value || '(Not yet completed)'}</pre>
+    </div>
+
+    <div class="section">
+        <h3>Headlines for Dream Companies</h3>
+        <pre>${document.getElementById('headlines').value || '(Not yet completed)'}</pre>
+    </div>
+
+    <div class="section">
+        <h3>What Do You Actually Want?</h3>
+        <pre>${document.getElementById('wantClarity').value || '(Not yet completed)'}</pre>
+    </div>
+
+    <h2>Section 3: Actions & Questions</h2>
+
+    <div class="section">
+        <h3>Practice Log</h3>
+        <pre>${document.getElementById('practiceLog').value || '(Not yet completed)'}</pre>
+    </div>
+
+    <div class="section">
+        <h3>Questions for Week 4</h3>
+        <pre>${document.getElementById('week4Questions').value || '(Not yet completed)'}</pre>
+    </div>
+</body>
+</html>`;
+
+            const blob = new Blob([content], { type: 'text/html' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'Raj_Samuel_Week3_Homework.html';
+            a.click();
+            URL.revokeObjectURL(url);
+            showSaveIndicator('✅ Downloaded as HTML');
         }
     </script>
 </body>

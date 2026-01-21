@@ -440,6 +440,7 @@ What 'recognised for cultural transformation' looks like for me (in-house, consu
             <div class="action-buttons">
                 <button class="btn btn-primary" onclick="saveProgress()">💾 Save Progress</button>
                 <button class="btn btn-secondary" onclick="emailToLisa()">📧 Email to Lisa</button>
+                <button class="btn btn-secondary" onclick="downloadHomework()">📥 Download</button>
                 <button class="btn btn-secondary" onclick="window.print()">🖨️ Print</button>
             </div>
         </div>
@@ -451,6 +452,9 @@ What 'recognised for cultural transformation' looks like for me (in-house, consu
     </div>
 
     <div class="save-indicator" id="saveIndicator">✓ Progress Saved</div>
+
+    <!-- PDF Generation Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
     <script>
         // Smart back navigation
@@ -703,6 +707,95 @@ What 'recognised for cultural transformation' looks like for me (in-house, consu
                     showSaveIndicator('✅ Email opened');
                 }
             }, 1500);
+        }
+
+        function downloadHomework() {
+            // Create formatted content for download
+            const content = document.createElement('div');
+            content.innerHTML = `
+                <div style="font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; max-width: 800px; margin: 0 auto; padding: 40px; color: #2c3e50;">
+                    <div style="text-align: center; margin-bottom: 40px; padding-bottom: 20px; border-bottom: 3px solid #7c3aed;">
+                        <h1 style="color: #7c3aed; font-size: 2em; margin-bottom: 10px;">Week 2 Homework</h1>
+                        <p style="font-size: 1.2em; color: #64748b;">Raj Samuel | Career Booster Programme</p>
+                        <p style="font-size: 0.9em; color: #94a3b8;">Generated: ${new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })}</p>
+                    </div>
+
+                    <h2 style="color: #7c3aed; border-bottom: 2px solid #7c3aed; padding-bottom: 10px; margin-top: 40px;">Key Questions</h2>
+
+                    <div style="margin: 25px 0; padding: 20px; background: #f8fafc; border-radius: 10px;">
+                        <h3 style="color: #1e293b; margin-bottom: 15px;">1. What does 'recognised for cultural transformation' look like?</h3>
+                        <div style="white-space: pre-wrap; line-height: 1.7;">${document.getElementById('q1')?.value || '(Not yet completed)'}</div>
+                    </div>
+
+                    <div style="margin: 25px 0; padding: 20px; background: #f8fafc; border-radius: 10px;">
+                        <h3 style="color: #1e293b; margin-bottom: 15px;">2. Environments that let you thrive vs. frustrated you?</h3>
+                        <div style="white-space: pre-wrap; line-height: 1.7;">${document.getElementById('q2')?.value || '(Not yet completed)'}</div>
+                    </div>
+
+                    <div style="margin: 25px 0; padding: 20px; background: #f8fafc; border-radius: 10px;">
+                        <h3 style="color: #1e293b; margin-bottom: 15px;">3. Ideal role - what would you be doing day-to-day?</h3>
+                        <div style="white-space: pre-wrap; line-height: 1.7;">${document.getElementById('q3')?.value || '(Not yet completed)'}</div>
+                    </div>
+
+                    <div style="margin: 25px 0; padding: 20px; background: #f8fafc; border-radius: 10px;">
+                        <h3 style="color: #1e293b; margin-bottom: 15px;">4. The transformation you want to be known for?</h3>
+                        <div style="white-space: pre-wrap; line-height: 1.7;">${document.getElementById('q4')?.value || '(Not yet completed)'}</div>
+                    </div>
+
+                    <h2 style="color: #7c3aed; border-bottom: 2px solid #7c3aed; padding-bottom: 10px; margin-top: 40px;">Homework Tasks</h2>
+
+                    <div style="margin: 25px 0; padding: 20px; background: #f8fafc; border-radius: 10px;">
+                        <h3 style="color: #1e293b; margin-bottom: 15px;">1. Drains & Charges Validation</h3>
+                        <div style="white-space: pre-wrap; line-height: 1.7;">${document.getElementById('hw1')?.value || '(Not yet completed)'}</div>
+                    </div>
+
+                    <div style="margin: 25px 0; padding: 20px; background: #f8fafc; border-radius: 10px;">
+                        <h3 style="color: #1e293b; margin-bottom: 15px;">2. Dream Companies</h3>
+                        <div style="white-space: pre-wrap; line-height: 1.7;">${document.getElementById('hw2')?.value || '(Not yet completed)'}</div>
+                    </div>
+
+                    <div style="margin: 25px 0; padding: 20px; background: #f8fafc; border-radius: 10px;">
+                        <h3 style="color: #1e293b; margin-bottom: 15px;">3. Hell Yes Criteria</h3>
+                        <div style="white-space: pre-wrap; line-height: 1.7;">${document.getElementById('hw3')?.value || '(Not yet completed)'}</div>
+                    </div>
+
+                    <div style="margin: 25px 0; padding: 20px; background: #f8fafc; border-radius: 10px;">
+                        <h3 style="color: #1e293b; margin-bottom: 15px;">4. Environments & Direction</h3>
+                        <div style="white-space: pre-wrap; line-height: 1.7;">${document.getElementById('hw4')?.value || '(Not yet completed)'}</div>
+                    </div>
+
+                    <div style="text-align: center; margin-top: 50px; padding-top: 20px; border-top: 2px solid #e2e8f0; color: #94a3b8; font-size: 0.9em;">
+                        <p>Career Booster Programme with Lisa Gills | Harness the Spark</p>
+                    </div>
+                </div>
+            `;
+
+            // Try PDF first, fallback to HTML
+            if (typeof html2pdf !== 'undefined') {
+                const opt = {
+                    margin: [15, 15, 15, 15],
+                    filename: 'Raj_Samuel_Week2_Homework.pdf',
+                    image: { type: 'jpeg', quality: 0.98 },
+                    html2canvas: { scale: 2, useCORS: true },
+                    jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+                };
+
+                showSaveIndicator('📥 Generating PDF...');
+                html2pdf().set(opt).from(content).save().then(() => {
+                    showSaveIndicator('✅ Downloaded!');
+                });
+            } else {
+                // Fallback: download as HTML
+                let htmlContent = `<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Raj Samuel - Week 2 Homework</title></head><body>${content.innerHTML}</body></html>`;
+                const blob = new Blob([htmlContent], { type: 'text/html' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'Raj_Samuel_Week2_Homework.html';
+                a.click();
+                URL.revokeObjectURL(url);
+                showSaveIndicator('✅ Downloaded!');
+            }
         }
     </script>
 </body>
