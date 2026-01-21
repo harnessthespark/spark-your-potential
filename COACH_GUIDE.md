@@ -286,8 +286,8 @@ agreementSigned: true,
 
 | Page | URL |
 |------|-----|
-| **Coach Dashboard** | https://stingray-app-7kg9p.ondigitalocean.app/dashboard.html |
-| **Client Portal** | https://stingray-app-7kg9p.ondigitalocean.app/client-portal.html |
+| **Coach Dashboard** | https://potential.harnessthespark.com/dashboard.html |
+| **Client Portal** | https://potential.harnessthespark.com/client-portal.html |
 | **Local Dev** | Open files directly in browser |
 
 ---

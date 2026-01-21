@@ -335,6 +335,145 @@ async function initDatabase() {
             )
         `);
 
+        // ============================================
+        // COACH HUB TABLES (MailMatrix, CRM, Calendar)
+        // ============================================
+
+        // Coach settings table (SparkHub tokens, preferences)
+        await client.query(`
+            CREATE TABLE IF NOT EXISTS coach_settings (
+                id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+                coach_email VARCHAR(255) UNIQUE NOT NULL,
+                sparkhub_token TEXT,
+                sparkhub_token_expires TIMESTAMP,
+                sparkhub_refresh_token TEXT,
+                gmail_connected BOOLEAN DEFAULT false,
+                email_preferences JSONB DEFAULT '{}',
+                calendar_preferences JSONB DEFAULT '{}',
+                default_daily_spoons INTEGER DEFAULT 10,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            )
+        `);
+
+        // Email keyword preferences (local cache for MailMatrix)
+        await client.query(`
+            CREATE TABLE IF NOT EXISTS email_keyword_preferences (
+                id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+                coach_email VARCHAR(255) UNIQUE NOT NULL,
+                urgent_keywords JSONB DEFAULT '["urgent", "asap", "immediately", "critical", "emergency"]',
+                important_keywords JSONB DEFAULT '["invoice", "payment", "contract", "meeting", "deadline"]',
+                important_domains JSONB DEFAULT '["gov.uk", "nhs.uk", "hmrc.gov.uk"]',
+                low_priority_senders JSONB DEFAULT '["noreply", "newsletter", "marketing"]',
+                low_priority_keywords JSONB DEFAULT '["unsubscribe", "promotional", "sale"]',
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            )
+        `);
+
+        // Enhanced CRM data (migrated from SparkHub SYPClient)
+        await client.query(`
+            CREATE TABLE IF NOT EXISTS client_crm (
+                id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+                user_id UUID REFERENCES users(id) ON DELETE CASCADE,
+                phone VARCHAR(50),
+                total_sessions INTEGER DEFAULT 4,
+                current_session INTEGER DEFAULT 1,
+                gamification_data JSONB DEFAULT '{"points": 0, "streak": 0, "achievements": []}',
+                coach_notes TEXT,
+                enrolled_date DATE DEFAULT CURRENT_DATE,
+                session_1_date DATE,
+                session_2_date DATE,
+                session_3_date DATE,
+                session_4_date DATE,
+                completed_date DATE,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                UNIQUE(user_id)
+            )
+        `);
+
+        // Coaching sessions (detailed tracking)
+        await client.query(`
+            CREATE TABLE IF NOT EXISTS coaching_sessions (
+                id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+                client_email VARCHAR(255) NOT NULL,
+                session_number INTEGER,
+                session_type VARCHAR(50) DEFAULT 'coaching',
+                scheduled_date TIMESTAMP NOT NULL,
+                duration_minutes INTEGER DEFAULT 60,
+                completed BOOLEAN DEFAULT false,
+                preparation_notes TEXT,
+                session_notes TEXT,
+                key_insights TEXT,
+                action_items TEXT,
+                homework TEXT,
+                homework_completed BOOLEAN DEFAULT false,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            )
+        `);
+
+        // Calendar events with energy tracking
+        await client.query(`
+            CREATE TABLE IF NOT EXISTS calendar_events (
+                id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+                coach_email VARCHAR(255) NOT NULL,
+                title VARCHAR(255) NOT NULL,
+                description TEXT,
+                start_time TIMESTAMP NOT NULL,
+                end_time TIMESTAMP NOT NULL,
+                location VARCHAR(255),
+                external_id VARCHAR(255),
+                external_source VARCHAR(50),
+                event_type VARCHAR(50) DEFAULT 'meeting',
+                energy_cost INTEGER DEFAULT 2,
+                masking_level INTEGER DEFAULT 1,
+                is_protected BOOLEAN DEFAULT false,
+                is_flexible BOOLEAN DEFAULT false,
+                attendees JSONB DEFAULT '[]',
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            )
+        `);
+
+        // Daily energy budget (spoon theory)
+        await client.query(`
+            CREATE TABLE IF NOT EXISTS daily_energy_budget (
+                id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+                coach_email VARCHAR(255) NOT NULL,
+                date DATE NOT NULL,
+                starting_spoons INTEGER DEFAULT 10,
+                adjustment_reason VARCHAR(255),
+                total_scheduled INTEGER DEFAULT 0,
+                actual_ending_spoons INTEGER,
+                notes TEXT,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                UNIQUE(coach_email, date)
+            )
+        `);
+
+        // Email cache (for MailMatrix)
+        await client.query(`
+            CREATE TABLE IF NOT EXISTS email_cache (
+                id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+                coach_email VARCHAR(255) NOT NULL,
+                email_id VARCHAR(255) NOT NULL,
+                subject VARCHAR(500),
+                sender_email VARCHAR(255),
+                sender_name VARCHAR(255),
+                snippet TEXT,
+                received_at TIMESTAMP,
+                quadrant VARCHAR(50),
+                is_completed BOOLEAN DEFAULT false,
+                is_starred BOOLEAN DEFAULT false,
+                labels JSONB DEFAULT '[]',
+                cached_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                UNIQUE(coach_email, email_id)
+            )
+        `);
+
         // Create indexes
         await client.query(`
             CREATE INDEX IF NOT EXISTS idx_blueprints_user_id ON blueprints(user_id);
@@ -355,6 +494,18 @@ async function initDatabase() {
             CREATE INDEX IF NOT EXISTS idx_automation_log_type ON automation_log(automation_type);
             CREATE INDEX IF NOT EXISTS idx_automation_log_client ON automation_log(client_email);
             CREATE INDEX IF NOT EXISTS idx_automation_log_created ON automation_log(created_at);
+
+            -- Coach Hub indexes
+            CREATE INDEX IF NOT EXISTS idx_coach_settings_email ON coach_settings(coach_email);
+            CREATE INDEX IF NOT EXISTS idx_email_prefs_email ON email_keyword_preferences(coach_email);
+            CREATE INDEX IF NOT EXISTS idx_client_crm_user_id ON client_crm(user_id);
+            CREATE INDEX IF NOT EXISTS idx_coaching_sessions_email ON coaching_sessions(client_email);
+            CREATE INDEX IF NOT EXISTS idx_coaching_sessions_date ON coaching_sessions(scheduled_date);
+            CREATE INDEX IF NOT EXISTS idx_calendar_events_email ON calendar_events(coach_email);
+            CREATE INDEX IF NOT EXISTS idx_calendar_events_dates ON calendar_events(start_time, end_time);
+            CREATE INDEX IF NOT EXISTS idx_daily_energy_date ON daily_energy_budget(coach_email, date);
+            CREATE INDEX IF NOT EXISTS idx_email_cache_email ON email_cache(coach_email);
+            CREATE INDEX IF NOT EXISTS idx_email_cache_quadrant ON email_cache(quadrant);
         `);
 
         console.log('✅ Database tables initialised');
@@ -1641,6 +1792,632 @@ async function wasAutomationSentRecently(automationType, clientEmail, days = 7) 
     return parseInt(result.rows[0].count) > 0;
 }
 
+// ============================================
+// COACH HUB FUNCTIONS
+// ============================================
+
+/**
+ * Get or create coach settings
+ * @param {string} coachEmail - Coach email
+ */
+async function getOrCreateCoachSettings(coachEmail) {
+    // Try to get existing settings
+    let result = await pool.query(
+        'SELECT * FROM coach_settings WHERE coach_email = $1',
+        [coachEmail]
+    );
+
+    if (result.rows.length > 0) {
+        return result.rows[0];
+    }
+
+    // Create default settings
+    result = await pool.query(
+        `INSERT INTO coach_settings (coach_email)
+         VALUES ($1)
+         RETURNING *`,
+        [coachEmail]
+    );
+    return result.rows[0];
+}
+
+/**
+ * Update coach settings
+ * @param {string} coachEmail - Coach email
+ * @param {object} settings - Settings to update
+ */
+async function updateCoachSettings(coachEmail, settings) {
+    const updates = [];
+    const values = [];
+    let paramCount = 1;
+
+    const allowedFields = [
+        'sparkhub_token', 'sparkhub_token_expires', 'sparkhub_refresh_token',
+        'gmail_connected', 'email_preferences', 'calendar_preferences', 'default_daily_spoons'
+    ];
+
+    for (const field of allowedFields) {
+        if (settings[field] !== undefined) {
+            updates.push(`${field} = $${paramCount}`);
+            if (field === 'email_preferences' || field === 'calendar_preferences') {
+                values.push(JSON.stringify(settings[field]));
+            } else {
+                values.push(settings[field]);
+            }
+            paramCount++;
+        }
+    }
+
+    if (updates.length === 0) {
+        return getOrCreateCoachSettings(coachEmail);
+    }
+
+    updates.push('updated_at = NOW()');
+    values.push(coachEmail);
+
+    const query = `
+        UPDATE coach_settings
+        SET ${updates.join(', ')}
+        WHERE coach_email = $${paramCount}
+        RETURNING *
+    `;
+
+    const result = await pool.query(query, values);
+    if (result.rows.length === 0) {
+        // Create if doesn't exist
+        return getOrCreateCoachSettings(coachEmail);
+    }
+    return result.rows[0];
+}
+
+/**
+ * Get or create email keyword preferences
+ * @param {string} coachEmail - Coach email
+ */
+async function getEmailKeywordPreferences(coachEmail) {
+    let result = await pool.query(
+        'SELECT * FROM email_keyword_preferences WHERE coach_email = $1',
+        [coachEmail]
+    );
+
+    if (result.rows.length > 0) {
+        return result.rows[0];
+    }
+
+    // Create with defaults
+    result = await pool.query(
+        `INSERT INTO email_keyword_preferences (coach_email)
+         VALUES ($1)
+         RETURNING *`,
+        [coachEmail]
+    );
+    return result.rows[0];
+}
+
+/**
+ * Update email keyword preferences
+ * @param {string} coachEmail - Coach email
+ * @param {object} prefs - Preferences to update
+ */
+async function updateEmailKeywordPreferences(coachEmail, prefs) {
+    const query = `
+        INSERT INTO email_keyword_preferences (
+            coach_email, urgent_keywords, important_keywords,
+            important_domains, low_priority_senders, low_priority_keywords
+        ) VALUES ($1, $2, $3, $4, $5, $6)
+        ON CONFLICT (coach_email) DO UPDATE SET
+            urgent_keywords = COALESCE($2, email_keyword_preferences.urgent_keywords),
+            important_keywords = COALESCE($3, email_keyword_preferences.important_keywords),
+            important_domains = COALESCE($4, email_keyword_preferences.important_domains),
+            low_priority_senders = COALESCE($5, email_keyword_preferences.low_priority_senders),
+            low_priority_keywords = COALESCE($6, email_keyword_preferences.low_priority_keywords),
+            updated_at = NOW()
+        RETURNING *
+    `;
+
+    const result = await pool.query(query, [
+        coachEmail,
+        JSON.stringify(prefs.urgent_keywords || null),
+        JSON.stringify(prefs.important_keywords || null),
+        JSON.stringify(prefs.important_domains || null),
+        JSON.stringify(prefs.low_priority_senders || null),
+        JSON.stringify(prefs.low_priority_keywords || null)
+    ]);
+    return result.rows[0];
+}
+
+// ============================================
+// CLIENT CRM FUNCTIONS
+// ============================================
+
+/**
+ * Get or create CRM record for a client
+ * @param {string} userId - User UUID
+ */
+async function getOrCreateClientCRM(userId) {
+    let result = await pool.query(
+        'SELECT * FROM client_crm WHERE user_id = $1',
+        [userId]
+    );
+
+    if (result.rows.length > 0) {
+        return result.rows[0];
+    }
+
+    result = await pool.query(
+        `INSERT INTO client_crm (user_id)
+         VALUES ($1)
+         RETURNING *`,
+        [userId]
+    );
+    return result.rows[0];
+}
+
+/**
+ * Get all clients with CRM data (for coach dashboard)
+ */
+async function getAllClientsWithCRM() {
+    const query = `
+        SELECT u.id, u.email, u.name, u.full_name, u.programme_access, u.programme_status,
+               u.created_at as user_created_at, u.last_login,
+               c.phone, c.total_sessions, c.current_session, c.gamification_data,
+               c.coach_notes, c.enrolled_date, c.completed_date,
+               c.session_1_date, c.session_2_date, c.session_3_date, c.session_4_date
+        FROM users u
+        LEFT JOIN client_crm c ON u.id = c.user_id
+        WHERE u.is_admin = false
+        ORDER BY u.created_at DESC
+    `;
+    const result = await pool.query(query);
+    return result.rows;
+}
+
+/**
+ * Get single client with CRM data
+ * @param {string} email - Client email
+ */
+async function getClientWithCRM(email) {
+    const query = `
+        SELECT u.id, u.email, u.name, u.full_name, u.programme_access, u.programme_status,
+               u.created_at as user_created_at, u.last_login,
+               c.phone, c.total_sessions, c.current_session, c.gamification_data,
+               c.coach_notes, c.enrolled_date, c.completed_date,
+               c.session_1_date, c.session_2_date, c.session_3_date, c.session_4_date
+        FROM users u
+        LEFT JOIN client_crm c ON u.id = c.user_id
+        WHERE u.email = $1
+    `;
+    const result = await pool.query(query, [email]);
+    return result.rows[0] || null;
+}
+
+/**
+ * Update client CRM data
+ * @param {string} userId - User UUID
+ * @param {object} data - CRM data to update
+ */
+async function updateClientCRM(userId, data) {
+    // Ensure CRM record exists
+    await getOrCreateClientCRM(userId);
+
+    const updates = [];
+    const values = [];
+    let paramCount = 1;
+
+    const allowedFields = [
+        'phone', 'total_sessions', 'current_session', 'gamification_data',
+        'coach_notes', 'enrolled_date', 'completed_date',
+        'session_1_date', 'session_2_date', 'session_3_date', 'session_4_date'
+    ];
+
+    for (const field of allowedFields) {
+        if (data[field] !== undefined) {
+            updates.push(`${field} = $${paramCount}`);
+            if (field === 'gamification_data') {
+                values.push(JSON.stringify(data[field]));
+            } else {
+                values.push(data[field]);
+            }
+            paramCount++;
+        }
+    }
+
+    if (updates.length === 0) {
+        return getOrCreateClientCRM(userId);
+    }
+
+    updates.push('updated_at = NOW()');
+    values.push(userId);
+
+    const query = `
+        UPDATE client_crm
+        SET ${updates.join(', ')}
+        WHERE user_id = $${paramCount}
+        RETURNING *
+    `;
+
+    const result = await pool.query(query, values);
+    return result.rows[0];
+}
+
+// ============================================
+// COACHING SESSIONS FUNCTIONS
+// ============================================
+
+/**
+ * Create a coaching session (linked to SparkHub appointment via external_id)
+ * @param {object} session - Session data
+ */
+async function createCoachingSession(session) {
+    const query = `
+        INSERT INTO coaching_sessions (
+            client_email, session_number, session_type, scheduled_date,
+            duration_minutes, preparation_notes
+        ) VALUES ($1, $2, $3, $4, $5, $6)
+        RETURNING *
+    `;
+    const result = await pool.query(query, [
+        session.client_email,
+        session.session_number || null,
+        session.session_type || 'coaching',
+        session.scheduled_date,
+        session.duration_minutes || 60,
+        session.preparation_notes || null
+    ]);
+    return result.rows[0];
+}
+
+/**
+ * Get coaching sessions for a client
+ * @param {string} clientEmail - Client email
+ */
+async function getClientSessions(clientEmail) {
+    const query = `
+        SELECT * FROM coaching_sessions
+        WHERE client_email = $1
+        ORDER BY scheduled_date DESC
+    `;
+    const result = await pool.query(query, [clientEmail]);
+    return result.rows;
+}
+
+/**
+ * Update coaching session (notes, insights, action items)
+ * @param {string} sessionId - Session UUID
+ * @param {object} updates - Data to update
+ */
+async function updateCoachingSession(sessionId, updates) {
+    const allowedFields = [
+        'completed', 'preparation_notes', 'session_notes', 'key_insights',
+        'action_items', 'homework', 'homework_completed'
+    ];
+
+    const updateClauses = [];
+    const values = [];
+    let paramCount = 1;
+
+    for (const field of allowedFields) {
+        if (updates[field] !== undefined) {
+            updateClauses.push(`${field} = $${paramCount}`);
+            values.push(updates[field]);
+            paramCount++;
+        }
+    }
+
+    if (updateClauses.length === 0) {
+        const result = await pool.query('SELECT * FROM coaching_sessions WHERE id = $1', [sessionId]);
+        return result.rows[0];
+    }
+
+    updateClauses.push('updated_at = NOW()');
+    values.push(sessionId);
+
+    const query = `
+        UPDATE coaching_sessions
+        SET ${updateClauses.join(', ')}
+        WHERE id = $${paramCount}
+        RETURNING *
+    `;
+
+    const result = await pool.query(query, values);
+    return result.rows[0];
+}
+
+// ============================================
+// CALENDAR EVENTS FUNCTIONS (Local + Energy)
+// ============================================
+
+/**
+ * Create a calendar event with energy tracking
+ * @param {object} event - Event data
+ */
+async function createCalendarEvent(event) {
+    const query = `
+        INSERT INTO calendar_events (
+            coach_email, title, description, start_time, end_time,
+            location, external_id, external_source, event_type,
+            energy_cost, masking_level, is_protected, is_flexible, attendees
+        ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14)
+        RETURNING *
+    `;
+    const result = await pool.query(query, [
+        event.coach_email,
+        event.title,
+        event.description || null,
+        event.start_time,
+        event.end_time,
+        event.location || null,
+        event.external_id || null,
+        event.external_source || null,
+        event.event_type || 'meeting',
+        event.energy_cost || 2,
+        event.masking_level || 1,
+        event.is_protected || false,
+        event.is_flexible || false,
+        JSON.stringify(event.attendees || [])
+    ]);
+    return result.rows[0];
+}
+
+/**
+ * Get calendar events for a date range
+ * @param {string} coachEmail - Coach email
+ * @param {string} startDate - ISO date string
+ * @param {string} endDate - ISO date string
+ */
+async function getCalendarEvents(coachEmail, startDate, endDate) {
+    const query = `
+        SELECT * FROM calendar_events
+        WHERE coach_email = $1
+        AND start_time >= $2
+        AND end_time <= $3
+        ORDER BY start_time ASC
+    `;
+    const result = await pool.query(query, [coachEmail, startDate, endDate]);
+    return result.rows;
+}
+
+/**
+ * Update calendar event
+ * @param {string} eventId - Event UUID
+ * @param {object} updates - Data to update
+ */
+async function updateCalendarEvent(eventId, updates) {
+    const allowedFields = [
+        'title', 'description', 'start_time', 'end_time', 'location',
+        'event_type', 'energy_cost', 'masking_level', 'is_protected', 'is_flexible', 'attendees'
+    ];
+
+    const updateClauses = [];
+    const values = [];
+    let paramCount = 1;
+
+    for (const field of allowedFields) {
+        if (updates[field] !== undefined) {
+            updateClauses.push(`${field} = $${paramCount}`);
+            if (field === 'attendees') {
+                values.push(JSON.stringify(updates[field]));
+            } else {
+                values.push(updates[field]);
+            }
+            paramCount++;
+        }
+    }
+
+    if (updateClauses.length === 0) {
+        const result = await pool.query('SELECT * FROM calendar_events WHERE id = $1', [eventId]);
+        return result.rows[0];
+    }
+
+    updateClauses.push('updated_at = NOW()');
+    values.push(eventId);
+
+    const query = `
+        UPDATE calendar_events
+        SET ${updateClauses.join(', ')}
+        WHERE id = $${paramCount}
+        RETURNING *
+    `;
+
+    const result = await pool.query(query, values);
+    return result.rows[0];
+}
+
+/**
+ * Delete calendar event
+ * @param {string} eventId - Event UUID
+ */
+async function deleteCalendarEvent(eventId) {
+    const result = await pool.query(
+        'DELETE FROM calendar_events WHERE id = $1 RETURNING id',
+        [eventId]
+    );
+    return result.rows[0];
+}
+
+// ============================================
+// DAILY ENERGY BUDGET FUNCTIONS
+// ============================================
+
+/**
+ * Get or create daily energy budget
+ * @param {string} coachEmail - Coach email
+ * @param {string} date - Date in YYYY-MM-DD format
+ */
+async function getOrCreateDailyEnergy(coachEmail, date) {
+    let result = await pool.query(
+        'SELECT * FROM daily_energy_budget WHERE coach_email = $1 AND date = $2',
+        [coachEmail, date]
+    );
+
+    if (result.rows.length > 0) {
+        return result.rows[0];
+    }
+
+    // Get default spoons from coach settings
+    const settings = await getOrCreateCoachSettings(coachEmail);
+    const defaultSpoons = settings.default_daily_spoons || 10;
+
+    result = await pool.query(
+        `INSERT INTO daily_energy_budget (coach_email, date, starting_spoons)
+         VALUES ($1, $2, $3)
+         RETURNING *`,
+        [coachEmail, date, defaultSpoons]
+    );
+    return result.rows[0];
+}
+
+/**
+ * Update daily energy budget
+ * @param {string} coachEmail - Coach email
+ * @param {string} date - Date in YYYY-MM-DD format
+ * @param {object} data - Energy data to update
+ */
+async function updateDailyEnergy(coachEmail, date, data) {
+    // Ensure record exists
+    await getOrCreateDailyEnergy(coachEmail, date);
+
+    const query = `
+        UPDATE daily_energy_budget
+        SET starting_spoons = COALESCE($3, starting_spoons),
+            adjustment_reason = COALESCE($4, adjustment_reason),
+            total_scheduled = COALESCE($5, total_scheduled),
+            actual_ending_spoons = COALESCE($6, actual_ending_spoons),
+            notes = COALESCE($7, notes),
+            updated_at = NOW()
+        WHERE coach_email = $1 AND date = $2
+        RETURNING *
+    `;
+
+    const result = await pool.query(query, [
+        coachEmail, date,
+        data.starting_spoons,
+        data.adjustment_reason,
+        data.total_scheduled,
+        data.actual_ending_spoons,
+        data.notes
+    ]);
+    return result.rows[0];
+}
+
+/**
+ * Calculate total energy cost for a day
+ * @param {string} coachEmail - Coach email
+ * @param {string} date - Date in YYYY-MM-DD format
+ */
+async function calculateDailyEnergyCost(coachEmail, date) {
+    const startOfDay = `${date}T00:00:00`;
+    const endOfDay = `${date}T23:59:59`;
+
+    const result = await pool.query(`
+        SELECT COALESCE(SUM(energy_cost), 0) as total_energy
+        FROM calendar_events
+        WHERE coach_email = $1
+        AND start_time >= $2
+        AND start_time <= $3
+    `, [coachEmail, startOfDay, endOfDay]);
+
+    return parseInt(result.rows[0].total_energy);
+}
+
+// ============================================
+// EMAIL CACHE FUNCTIONS
+// ============================================
+
+/**
+ * Cache email data
+ * @param {string} coachEmail - Coach email
+ * @param {object} email - Email data
+ */
+async function cacheEmail(coachEmail, email) {
+    const query = `
+        INSERT INTO email_cache (
+            coach_email, email_id, subject, sender_email, sender_name,
+            snippet, received_at, quadrant, is_completed, is_starred, labels
+        ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)
+        ON CONFLICT (coach_email, email_id) DO UPDATE SET
+            subject = EXCLUDED.subject,
+            quadrant = COALESCE(EXCLUDED.quadrant, email_cache.quadrant),
+            is_completed = COALESCE(EXCLUDED.is_completed, email_cache.is_completed),
+            is_starred = COALESCE(EXCLUDED.is_starred, email_cache.is_starred),
+            cached_at = NOW()
+        RETURNING *
+    `;
+    const result = await pool.query(query, [
+        coachEmail,
+        email.email_id,
+        email.subject || null,
+        email.sender_email || null,
+        email.sender_name || null,
+        email.snippet || null,
+        email.received_at || null,
+        email.quadrant || null,
+        email.is_completed || false,
+        email.is_starred || false,
+        JSON.stringify(email.labels || [])
+    ]);
+    return result.rows[0];
+}
+
+/**
+ * Get cached emails by quadrant
+ * @param {string} coachEmail - Coach email
+ * @param {string} quadrant - Q1, Q2, Q3, Q4
+ */
+async function getCachedEmailsByQuadrant(coachEmail, quadrant = null) {
+    let query, params;
+
+    if (quadrant) {
+        query = `
+            SELECT * FROM email_cache
+            WHERE coach_email = $1 AND quadrant = $2 AND is_completed = false
+            ORDER BY received_at DESC
+        `;
+        params = [coachEmail, quadrant];
+    } else {
+        query = `
+            SELECT * FROM email_cache
+            WHERE coach_email = $1 AND is_completed = false
+            ORDER BY received_at DESC
+        `;
+        params = [coachEmail];
+    }
+
+    const result = await pool.query(query, params);
+    return result.rows;
+}
+
+/**
+ * Mark email as completed
+ * @param {string} coachEmail - Coach email
+ * @param {string} emailId - Gmail message ID
+ */
+async function markEmailCompleted(coachEmail, emailId) {
+    const result = await pool.query(`
+        UPDATE email_cache
+        SET is_completed = true, cached_at = NOW()
+        WHERE coach_email = $1 AND email_id = $2
+        RETURNING *
+    `, [coachEmail, emailId]);
+    return result.rows[0];
+}
+
+/**
+ * Update email quadrant (manual override)
+ * @param {string} coachEmail - Coach email
+ * @param {string} emailId - Gmail message ID
+ * @param {string} newQuadrant - Q1, Q2, Q3, Q4
+ */
+async function updateEmailQuadrant(coachEmail, emailId, newQuadrant) {
+    const result = await pool.query(`
+        UPDATE email_cache
+        SET quadrant = $3, cached_at = NOW()
+        WHERE coach_email = $1 AND email_id = $2
+        RETURNING *
+    `, [coachEmail, emailId, newQuadrant]);
+    return result.rows[0];
+}
+
 module.exports = {
     pool,
     initDatabase,
@@ -1692,5 +2469,33 @@ module.exports = {
     updateAutomationLastRun,
     logAutomation,
     getAutomationLog,
-    wasAutomationSentRecently
+    wasAutomationSentRecently,
+    // Coach Hub functions
+    getOrCreateCoachSettings,
+    updateCoachSettings,
+    getEmailKeywordPreferences,
+    updateEmailKeywordPreferences,
+    // Client CRM
+    getOrCreateClientCRM,
+    getAllClientsWithCRM,
+    getClientWithCRM,
+    updateClientCRM,
+    // Coaching Sessions
+    createCoachingSession,
+    getClientSessions,
+    updateCoachingSession,
+    // Calendar Events
+    createCalendarEvent,
+    getCalendarEvents,
+    updateCalendarEvent,
+    deleteCalendarEvent,
+    // Daily Energy
+    getOrCreateDailyEnergy,
+    updateDailyEnergy,
+    calculateDailyEnergyCost,
+    // Email Cache
+    cacheEmail,
+    getCachedEmailsByQuadrant,
+    markEmailCompleted,
+    updateEmailQuadrant
 };

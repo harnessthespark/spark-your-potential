@@ -135,7 +135,7 @@ To stop underestimating how rare this ability is. To own that "seeing the obviou
 ## 🧪 How to Test:
 
 ### Step 1: Fill in the Form
-1. Go to: https://stingray-app-7kg9p.ondigitalocean.app/
+1. Go to: https://potential.harnessthespark.com/
 2. Copy and paste the sample data above into each section
 3. Fill all sections completely
 

@@ -29,7 +29,7 @@ const emailTransporter = nodemailer.createTransport({
 
 // Send password reset email
 async function sendPasswordResetEmail(toEmail, resetToken, clientName) {
-    const resetUrl = `${process.env.APP_URL || 'https://career.harnessthespark.com'}/reset-password.html?token=${resetToken}`;
+    const resetUrl = `${process.env.APP_URL || 'https://potential.harnessthespark.com'}/reset-password.html?token=${resetToken}`;
 
     const mailOptions = {
         from: `"Harness the Spark" <${process.env.SMTP_USER || 'lisa@harnessthespark.com'}>`,
@@ -1355,7 +1355,7 @@ app.post('/api/send-client-notification', async (req, res) => {
                     <p>Hi ${client_name},</p>
                     <p>${message || "Just a gentle reminder that your Career Toolkit is ready and waiting. All your tools, homework, and resources are there whenever you need them."}</p>
                     <div style="text-align: center; margin: 30px 0;">
-                        <a href="${link || 'https://career.harnessthespark.com/client-portal.html'}" style="background: linear-gradient(135deg, #4ECDC4 0%, #44A08D 100%); color: white; padding: 15px 30px; border-radius: 8px; text-decoration: none; font-weight: 600; display: inline-block;">${link_text || 'Access Your Toolkit'}</a>
+                        <a href="${link || 'https://potential.harnessthespark.com/client-portal.html'}" style="background: linear-gradient(135deg, #4ECDC4 0%, #44A08D 100%); color: white; padding: 15px 30px; border-radius: 8px; text-decoration: none; font-weight: 600; display: inline-block;">${link_text || 'Access Your Toolkit'}</a>
                     </div>
                     <p style="color: #666; font-size: 14px;">No rush - I'm here when you're ready.</p>
                 `;
@@ -2135,7 +2135,7 @@ async function runAutomations() {
 
                     await sendAutomatedNotification(client.email, clientName, 'login_reminder', {
                         message: "Just a gentle reminder that your Career Toolkit is ready and waiting. All your tools, homework, and resources are there whenever you need them.",
-                        link: 'https://career.harnessthespark.com/client-portal.html',
+                        link: 'https://potential.harnessthespark.com/client-portal.html',
                         link_text: 'Access Your Toolkit'
                     });
 
@@ -2188,7 +2188,7 @@ async function sendAutomatedNotification(clientEmail, clientName, notificationTy
                 <p>Hi ${clientName},</p>
                 <p>${options.message || "Just a gentle reminder that your Career Toolkit is ready and waiting."}</p>
                 <div style="text-align: center; margin: 30px 0;">
-                    <a href="${options.link || 'https://career.harnessthespark.com/client-portal.html'}" style="background: linear-gradient(135deg, #4ECDC4 0%, #44A08D 100%); color: white; padding: 15px 30px; border-radius: 8px; text-decoration: none; font-weight: 600; display: inline-block;">${options.link_text || 'Access Your Toolkit'}</a>
+                    <a href="${options.link || 'https://potential.harnessthespark.com/client-portal.html'}" style="background: linear-gradient(135deg, #4ECDC4 0%, #44A08D 100%); color: white; padding: 15px 30px; border-radius: 8px; text-decoration: none; font-weight: 600; display: inline-block;">${options.link_text || 'Access Your Toolkit'}</a>
                 </div>
                 <p style="color: #666; font-size: 14px;">No rush - I'm here when you're ready.</p>
                 <p style="color: #888; font-size: 12px; margin-top: 30px;">This is an automated reminder. You can manage notification preferences in your settings.</p>

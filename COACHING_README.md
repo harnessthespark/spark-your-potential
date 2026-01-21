@@ -10,7 +10,7 @@ A comprehensive 4-week coaching programme using the "Spark Your Potential" AI to
 ## Session 1: Foundation Discovery
 
 ### What Happens in Session 1:
-- Client completes "Spark Your Potential" tool (https://stingray-app-7kg9p.ondigitalocean.app/)
+- Client completes "Spark Your Potential" tool (https://potential.harnessthespark.com/)
 - Data saved to Google Sheet automatically
 - AI generates pattern analysis and unlock insights
 - Coach reviews responses and prepares Session 2 materials
@@ -194,7 +194,7 @@ A comprehensive 4-week coaching programme using the "Spark Your Potential" AI to
 
 ### Spark Your Potential Tool Setup
 
-**App URL:** https://stingray-app-7kg9p.ondigitalocean.app/
+**App URL:** https://potential.harnessthespark.com/
 
 **Google Sheet Columns (23 total):**
 1. Timestamp
@@ -379,7 +379,7 @@ A comprehensive 4-week coaching programme using the "Spark Your Potential" AI to
 ## Quick Start for New Client
 
 ### Step 1: Client Completes Tool
-- Send client to https://stingray-app-7kg9p.ondigitalocean.app/
+- Send client to https://potential.harnessthespark.com/
 - Responses automatically saved to Google Sheet
 
 ### Step 2: Generate AI Analysis

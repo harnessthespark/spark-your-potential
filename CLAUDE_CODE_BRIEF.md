@@ -13,7 +13,7 @@ Connect the existing "Spark Your Potential" career positioning app into a full p
 ## Existing Infrastructure
 
 - **Hosting:** Digital Ocean App Platform
-- **URL:** https://stingray-app-7kg9p.ondigitalocean.app/
+- **URL:** https://potential.harnessthespark.com/
 - **Database:** PostgreSQL (existing, used for SparkHub - separate product)
 - **AI:** Claude API (already integrated for Blueprint generation)
 

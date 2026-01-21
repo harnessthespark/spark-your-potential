@@ -8,7 +8,7 @@ This tool helps you discover the extraordinary abilities you think are ordinary.
 
 ## 🚀 Getting Started
 
-**Access the tool here:** https://stingray-app-7kg9p.ondigitalocean.app/
+**Access the tool here:** https://potential.harnessthespark.com/
 
 **Time needed:** 30-45 minutes (but you can pause and come back anytime)
 
@@ -145,7 +145,7 @@ Lisa will help you:
 
 ## ✨ Ready to Begin?
 
-**Go to:** https://stingray-app-7kg9p.ondigitalocean.app/
+**Go to:** https://potential.harnessthespark.com/
 
 Take your time. Be honest. Trust what feels easy.
 

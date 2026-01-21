@@ -6,9 +6,9 @@
 
 ## 🔗 Essential Links
 
-**Client Access:** https://stingray-app-7kg9p.ondigitalocean.app/
-**Health Check:** https://stingray-app-7kg9p.ondigitalocean.app/health
-**DigitalOcean App:** https://cloud.digitalocean.com/apps (search for `stingray-app-7kg9p`)
+**Client Access:** https://potential.harnessthespark.com/
+**Health Check:** https://potential.harnessthespark.com/health
+**DigitalOcean App:** https://cloud.digitalocean.com/apps
 
 ---
 
@@ -56,7 +56,7 @@
 ## 💡 How to Use with Clients
 
 ### **Pre-Session (Send Ahead)**
-1. Send client the tool URL: https://stingray-app-7kg9p.ondigitalocean.app/
+1. Send client the tool URL: https://potential.harnessthespark.com/
 2. Send CLIENT-INSTRUCTIONS.md as PDF or in email
 3. Ask them to complete before your session
 4. Request they click "Save to Google Sheets" when done
@@ -127,7 +127,7 @@ When clients write these, PAUSE and dig deeper:
 ## 🛠️ Technical Troubleshooting
 
 ### **Client Says: "AI buttons aren't working"**
-1. Check health endpoint: https://stingray-app-7kg9p.ondigitalocean.app/health
+1. Check health endpoint: https://potential.harnessthespark.com/health
 2. Verify `"aiConfigured": true`
 3. If false, check DigitalOcean environment variables
 4. Redeploy if needed (Settings → Force Redeploy)

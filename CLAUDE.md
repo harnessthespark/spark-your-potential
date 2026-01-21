@@ -11,7 +11,7 @@ This document contains important context for Claude to remember across sessions 
 **Spark Your Potential (SYP)** - Lisa Gills' career coaching platform featuring the Career Booster Programme. Provides career transformation services for clients seeking clarity, positioning, and practical career tools.
 
 ## Production URLs
-- **Dashboard:** https://stingray-app-7kg9p.ondigitalocean.app/dashboard
+- **Dashboard:** https://potential.harnessthespark.com/dashboard
 - **Backend API:** https://sparkhub-be-qtmmb.ondigitalocean.app (SparkHub Django backend)
 
 ## Coach Details
@@ -171,13 +171,13 @@ This document contains important context for Claude to remember across sessions 
 
 ## Development Notes
 - CORS configured in SparkHub backend settings.py
-- SYP domain added: "https://stingray-app-7kg9p.ondigitalocean.app"
+- SYP domain added: "https://potential.harnessthespark.com"
 - Uses same PostgreSQL database as SparkHub
 - JWT authentication shared with SparkHub platform
 
 ## Production URLs
-- **Dashboard (Coach):** https://stingray-app-7kg9p.ondigitalocean.app/dashboard.html
-- **Client Portal:** https://stingray-app-7kg9p.ondigitalocean.app/client-portal.html
+- **Dashboard (Coach):** https://potential.harnessthespark.com/dashboard.html
+- **Client Portal:** https://potential.harnessthespark.com/client-portal.html
 - **Backend API:** https://sparkhub-be-qtmmb.ondigitalocean.app
 
 ## Session History
@@ -304,8 +304,8 @@ This document contains important context for Claude to remember across sessions 
 - feat: unified client portal and coach hub for all programme types
 
 **Production URLs:**
-- Client Portal: https://stingray-app-7kg9p.ondigitalocean.app/client-portal.html
-- Coach Dashboard: https://stingray-app-7kg9p.ondigitalocean.app/dashboard.html
+- Client Portal: https://potential.harnessthespark.com/client-portal.html
+- Coach Dashboard: https://potential.harnessthespark.com/dashboard.html
 
 ### 19 December 2025 - PostgreSQL-First Architecture & Raj Week 2 Homework
 
@@ -383,7 +383,7 @@ Client/Coach → SYP Express API → PostgreSQL Database
 - Commits: `fa5833ae`, `fdd0c5d2`
 
 **Login Flow:**
-- **Login URL:** https://career.harnessthespark.com/login.html
+- **Login URL:** https://potential.harnessthespark.com/login.html
 - AuDHD clients (`programme_type='audhd'`) → Redirect to `audhd-dashboard.html`
 - Career clients (`programme_type='career'`) → Redirect to `client-portal.html`
 - Staff users → Redirect to `dashboard.html` (Coach Hub)
@@ -402,15 +402,15 @@ python manage.py setup_audhd_clients         # Run setup
 ```
 
 **Production URLs:**
-- **Login:** https://career.harnessthespark.com/login.html
-- **AuDHD Dashboard:** https://career.harnessthespark.com/audhd-dashboard.html
-- **Client Portal:** https://career.harnessthespark.com/client-portal.html
-- **Coach Hub:** https://career.harnessthespark.com/coach-hub.html
+- **Login:** https://potential.harnessthespark.com/login.html
+- **AuDHD Dashboard:** https://potential.harnessthespark.com/audhd-dashboard.html
+- **Client Portal:** https://potential.harnessthespark.com/client-portal.html
+- **Coach Hub:** https://potential.harnessthespark.com/coach-hub.html
 
 ### 24 December 2025 - Unified Login System & PostgreSQL-First Architecture
 
 **Single Login for All Programmes:**
-- **One login URL:** https://career.harnessthespark.com/login.html
+- **One login URL:** https://potential.harnessthespark.com/login.html
 - Smart routing based on `programme_type` from PostgreSQL SYPClient record
 - No separate login pages per programme - cleaner user experience
 
@@ -513,7 +513,7 @@ python manage.py shell -c "[command above]"
 | `SMTP_PORT` | `587` |
 | `SMTP_USER` | `lisa@harnessthespark.com` |
 | `SMTP_PASS` | Gmail App Password |
-| `APP_URL` | `https://career.harnessthespark.com` |
+| `APP_URL` | `https://potential.harnessthespark.com` |
 
 **Password Reset Flow:**
 1. User clicks "Forgot password?" on login.html
