@@ -525,7 +525,13 @@
     </style>
 </head>
 <body>
-    <button class="back-btn" onclick="goBackToPortal()">← Back to Portal</button>
+    <!-- Back Button -->
+    <div class="fixed top-4 left-4 z-50 max-sm:relative max-sm:top-0 max-sm:left-0 max-sm:flex max-sm:justify-center max-sm:mb-4">
+        <button class="btn btn-ghost btn-sm gap-2" onclick="goBackToPortal()">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" /></svg>
+            Back to Portal
+        </button>
+    </div>
     <script>
         function goBackToPortal() {
             const savedUser = localStorage.getItem('syp_user');
@@ -545,129 +551,182 @@
         }
     </script>
 
-    <div class="container">
-        <div class="header">
-            <h1>✨ Spark Collector</h1>
-            <div class="subtitle">Capture your wins. Plan your first step.</div>
+    <div class="container mx-auto max-w-3xl px-4 py-8">
+        <!-- Header -->
+        <div class="text-center mb-8">
+            <h1 class="text-4xl font-extrabold mb-2 bg-gradient-to-r from-yellow-400 to-orange-500 bg-clip-text text-transparent">✨ Spark Collector</h1>
+            <p class="text-base-content/70">Capture your wins. Plan your first step.</p>
         </div>
 
         <!-- Date Navigation -->
-        <div class="date-nav">
-            <button onclick="changeDate(-1)" id="prevBtn">←</button>
-            <span class="current-date" id="currentDate">Today</span>
-            <button onclick="changeDate(1)" id="nextBtn" disabled>→</button>
+        <div class="flex items-center justify-center gap-4 mb-6">
+            <button class="btn btn-circle btn-ghost" onclick="changeDate(-1)" id="prevBtn">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" /></svg>
+            </button>
+            <span class="text-xl font-semibold min-w-[150px] text-center" id="currentDate">Today</span>
+            <button class="btn btn-circle btn-ghost" onclick="changeDate(1)" id="nextBtn" disabled>
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
+            </button>
         </div>
 
         <!-- Streak Badge -->
-        <div style="text-align: center;">
-            <div class="streak-badge" id="streakBadge" style="display: none;">
+        <div class="flex justify-center mb-6">
+            <div class="badge badge-warning badge-lg gap-2 py-4 px-6 text-lg font-bold" id="streakBadge" style="display: none;">
                 🔥 <span id="streakCount">0</span> Day Streak!
             </div>
         </div>
 
-        <!-- Today's Wins -->
-        <div class="card">
-            <h2 style="display: flex; justify-content: space-between; align-items: center;">
-                <span><span class="emoji">🏆</span> Today's Wins</span>
-                <div class="share-dropdown">
-                    <button onclick="toggleShareMenu()" class="share-btn" title="Share your wins">📤 Share</button>
-                    <div class="share-menu" id="shareMenu">
-                        <button onclick="shareWins('day')"><span class="period-icon">📅</span> Today</button>
-                        <button onclick="shareWins('week')"><span class="period-icon">📆</span> This Week</button>
-                        <button onclick="shareWins('month')"><span class="period-icon">🗓️</span> This Month</button>
-                        <button onclick="shareWins('all')"><span class="period-icon">🌟</span> All Time</button>
-                        <div style="border-top: 1px solid #eee; margin: 8px 0;"></div>
-                        <button onclick="shareToWhatsApp()"><span class="period-icon">💬</span> WhatsApp</button>
+        <!-- Today's Wins Card -->
+        <div class="card bg-base-100 shadow-xl mb-6">
+            <div class="card-body">
+                <div class="flex justify-between items-center mb-4">
+                    <h2 class="card-title text-2xl">
+                        <span class="text-3xl">🏆</span> Today's Wins
+                    </h2>
+
+                    <!-- Share Dropdown -->
+                    <div class="dropdown dropdown-end">
+                        <label tabindex="0" class="btn btn-warning btn-sm gap-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" /></svg>
+                            Share
+                        </label>
+                        <ul tabindex="0" class="dropdown-content z-[1] menu p-2 shadow-lg bg-base-100 rounded-box w-52 mt-2">
+                            <li><a onclick="shareWins('day')">📅 Today</a></li>
+                            <li><a onclick="shareWins('week')">📆 This Week</a></li>
+                            <li><a onclick="shareWins('month')">🗓️ This Month</a></li>
+                            <li><a onclick="shareWins('all')">🌟 All Time</a></li>
+                            <li class="divider"></li>
+                            <li><a onclick="shareToWhatsApp()">💬 WhatsApp</a></li>
+                        </ul>
                     </div>
                 </div>
-            </h2>
 
-            <ul class="wins-list" id="winsList">
-                <!-- Wins populated by JS -->
-            </ul>
+                <!-- Wins List -->
+                <ul class="wins-list space-y-2" id="winsList">
+                    <!-- Wins populated by JS -->
+                </ul>
 
-            <div class="empty-state" id="emptyState">
-                <div class="emoji">✨</div>
-                <p>No wins logged yet today.<br>Even tiny wins count!</p>
-            </div>
+                <!-- Empty State -->
+                <div class="empty-state text-center py-8 text-base-content/60" id="emptyState">
+                    <div class="text-5xl mb-4">✨</div>
+                    <p>No wins logged yet today.<br>Even tiny wins count!</p>
+                </div>
 
-            <form class="add-win-form" onsubmit="addWin(event)">
-                <input type="text" id="winInput" placeholder="What went well today?" autocomplete="off">
-                <button type="submit">Add Win ✨</button>
-            </form>
+                <!-- Add Win Form -->
+                <form class="join w-full mt-4" onsubmit="addWin(event)">
+                    <input type="text" id="winInput" placeholder="What went well today?" autocomplete="off" class="input input-bordered join-item flex-1 bg-base-200">
+                    <button type="submit" class="btn btn-warning join-item">Add Win ✨</button>
+                </form>
 
-            <div class="quick-wins">
-                <span style="color: #888; font-size: 0.85em; margin-right: 10px;">Quick add:</span>
-                <button type="button" class="quick-win-btn" onclick="addQuickWin('Got out of bed')">Got out of bed</button>
-                <button type="button" class="quick-win-btn" onclick="addQuickWin('Ate a meal')">Ate a meal</button>
-                <button type="button" class="quick-win-btn" onclick="addQuickWin('Replied to a message')">Replied to a message</button>
-                <button type="button" class="quick-win-btn" onclick="addQuickWin('Asked for help')">Asked for help</button>
-                <button type="button" class="quick-win-btn" onclick="addQuickWin('Took a break')">Took a break</button>
-                <button type="button" class="quick-win-btn" onclick="addQuickWin('Said no to something')">Said no</button>
-                <button type="button" class="quick-win-btn" onclick="addQuickWin('Completed a task')">Completed a task</button>
-                <button type="button" class="quick-win-btn" onclick="addQuickWin('Showed up')">Showed up</button>
+                <!-- Quick Add Buttons -->
+                <div class="mt-4">
+                    <span class="text-sm text-base-content/60 mr-2">Quick add:</span>
+                    <div class="flex flex-wrap gap-2 mt-2">
+                        <button type="button" class="btn btn-xs btn-outline btn-ghost" onclick="addQuickWin('Got out of bed')">Got out of bed</button>
+                        <button type="button" class="btn btn-xs btn-outline btn-ghost" onclick="addQuickWin('Ate a meal')">Ate a meal</button>
+                        <button type="button" class="btn btn-xs btn-outline btn-ghost" onclick="addQuickWin('Replied to a message')">Replied to a message</button>
+                        <button type="button" class="btn btn-xs btn-outline btn-ghost" onclick="addQuickWin('Asked for help')">Asked for help</button>
+                        <button type="button" class="btn btn-xs btn-outline btn-ghost" onclick="addQuickWin('Took a break')">Took a break</button>
+                        <button type="button" class="btn btn-xs btn-outline btn-ghost" onclick="addQuickWin('Said no')">Said no</button>
+                        <button type="button" class="btn btn-xs btn-outline btn-ghost" onclick="addQuickWin('Completed a task')">Completed a task</button>
+                        <button type="button" class="btn btn-xs btn-outline btn-ghost" onclick="addQuickWin('Showed up')">Showed up</button>
+                    </div>
+                </div>
             </div>
         </div>
 
-        <!-- Tomorrow's First Step -->
-        <div class="card first-step-card">
-            <h2><span class="emoji">🚀</span> Tomorrow's First Step</h2>
-            <p style="margin-bottom: 15px; opacity: 0.9;">What's the tiniest possible action to start your day?</p>
+        <!-- Tomorrow's First Step Card -->
+        <div class="card bg-gradient-to-br from-emerald-600 to-teal-700 text-white shadow-xl mb-6">
+            <div class="card-body">
+                <h2 class="card-title text-2xl mb-2">
+                    <span class="text-3xl">🚀</span> Tomorrow's First Step
+                </h2>
+                <p class="opacity-90 mb-4">What's the tiniest possible action to start your day?</p>
 
-            <input type="text"
-                   class="first-step-input"
-                   id="firstStepInput"
-                   placeholder="e.g. Open laptop and look at inbox"
-                   onkeypress="if(event.key==='Enter') saveFirstStep()">
+                <input type="text"
+                       class="input input-bordered w-full bg-white/20 border-white/30 placeholder-white/60 text-white"
+                       id="firstStepInput"
+                       placeholder="e.g. Open laptop and look at inbox"
+                       onkeypress="if(event.key==='Enter') saveFirstStep()">
 
-            <div style="display: flex; gap: 10px; align-items: center; margin-top: 12px;">
-                <button type="button" onclick="saveFirstStep()" style="
-                    background: white;
-                    color: #059669;
-                    border: none;
-                    padding: 12px 24px;
-                    border-radius: 8px;
-                    font-weight: 600;
-                    font-size: 1em;
-                    cursor: pointer;
-                    transition: all 0.2s;
-                ">🚀 Set First Step</button>
-                <span id="firstStepStatus" style="font-size: 0.9em; opacity: 0.9;"></span>
-            </div>
+                <div class="flex items-center gap-3 mt-4">
+                    <button type="button" onclick="saveFirstStep()" class="btn btn-white text-emerald-700">
+                        🚀 Set First Step
+                    </button>
+                    <span id="firstStepStatus" class="text-sm opacity-90"></span>
+                </div>
 
-            <div class="first-step-tip">
-                <strong>💡 First Step Magic</strong>
-                Make it so small it feels almost silly. "Start the report" → "Open the document".
-                The hardest part is starting. Make starting effortless.
+                <div class="alert bg-white/10 border-0 mt-4">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="stroke-current shrink-0 w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                    <div>
+                        <div class="font-bold">💡 First Step Magic</div>
+                        <div class="text-sm opacity-90">Make it so small it feels almost silly. "Start the report" → "Open the document". The hardest part is starting.</div>
+                    </div>
+                </div>
             </div>
         </div>
 
-        <!-- Stats -->
-        <div class="card stats-card">
-            <h2><span class="emoji">📊</span> Your Spark Stats</h2>
-            <div class="stats-grid">
-                <div class="stat-item">
-                    <span class="stat-number" id="totalWins">0</span>
-                    <span class="stat-label">Total Wins</span>
-                </div>
-                <div class="stat-item">
-                    <span class="stat-number" id="thisWeek">0</span>
-                    <span class="stat-label">This Week</span>
-                </div>
-                <div class="stat-item">
-                    <span class="stat-number" id="bestStreak">0</span>
-                    <span class="stat-label">Best Streak</span>
+        <!-- Stats Card -->
+        <div class="card bg-base-100 shadow-xl">
+            <div class="card-body">
+                <h2 class="card-title text-2xl mb-4">
+                    <span class="text-3xl">📊</span> Your Spark Stats
+                </h2>
+                <div class="stats stats-vertical lg:stats-horizontal shadow bg-base-200 w-full">
+                    <div class="stat">
+                        <div class="stat-figure text-warning">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="inline-block w-8 h-8 stroke-current"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                        </div>
+                        <div class="stat-title">Total Wins</div>
+                        <div class="stat-value text-warning" id="totalWins">0</div>
+                        <div class="stat-desc">All time</div>
+                    </div>
+
+                    <div class="stat">
+                        <div class="stat-figure text-success">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="inline-block w-8 h-8 stroke-current"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"></path></svg>
+                        </div>
+                        <div class="stat-title">This Week</div>
+                        <div class="stat-value text-success" id="thisWeek">0</div>
+                        <div class="stat-desc">Keep going!</div>
+                    </div>
+
+                    <div class="stat">
+                        <div class="stat-figure text-error">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="inline-block w-8 h-8 stroke-current"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 18.657A8 8 0 016.343 7.343S7 9 9 10c0-2 .5-5 2.986-7C14 5 16.09 5.777 17.656 7.343A7.975 7.975 0 0120 13a7.975 7.975 0 01-2.343 5.657z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.879 16.121A3 3 0 1012.015 11L11 14H9c0 .768.293 1.536.879 2.121z"></path></svg>
+                        </div>
+                        <div class="stat-title">Best Streak</div>
+                        <div class="stat-value text-error" id="bestStreak">0</div>
+                        <div class="stat-desc">🔥 days</div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Celebration Overlay -->
-    <div class="celebration" id="celebration" style="display: none;" onclick="closeCelebration()">
+    <!-- Celebration Modal -->
+    <dialog id="celebrationModal" class="modal">
+        <div class="modal-box text-center bg-gradient-to-br from-purple-600 to-pink-600 text-white">
+            <div class="text-6xl mb-4" id="celebrationEmoji">🎉</div>
+            <h3 class="font-bold text-2xl" id="celebrationText">Amazing!</h3>
+            <p class="py-4" id="celebrationSubtext">You're building momentum!</p>
+            <div class="modal-action justify-center">
+                <form method="dialog">
+                    <button class="btn btn-white">Keep Going! ✨</button>
+                </form>
+            </div>
+        </div>
+        <form method="dialog" class="modal-backdrop">
+            <button>close</button>
+        </form>
+    </dialog>
+
+    <!-- Legacy celebration div for JS compatibility -->
+    <div class="celebration hidden" id="celebration" style="display: none;" onclick="closeCelebration()">
         <div class="celebration-content">
-            <div class="celebration-emoji" id="celebrationEmoji">🎉</div>
-            <div class="celebration-text" id="celebrationText">Amazing!</div>
-            <div class="celebration-subtext" id="celebrationSubtext">You're building momentum!</div>
+            <div class="celebration-emoji" id="celebrationEmojiLegacy">🎉</div>
+            <div class="celebration-text" id="celebrationTextLegacy">Amazing!</div>
+            <div class="celebration-subtext" id="celebrationSubtextLegacy">You're building momentum!</div>
         </div>
     </div>
 
@@ -852,12 +911,12 @@
 
             emptyState.style.display = 'none';
             list.innerHTML = wins.map((win, index) => `
-                <li class="win-item" draggable="true" data-index="${index}">
-                    <span class="drag-handle" title="Drag to reorder">⋮⋮</span>
-                    <span class="win-icon">✨</span>
-                    <span class="win-text">${escapeHtml(win.text)}</span>
-                    <span class="win-time">${win.time}</span>
-                    <button class="delete-btn" onclick="deleteWin(${index})" title="Remove">×</button>
+                <li class="flex items-center gap-3 p-3 bg-base-200 rounded-lg mb-2 group hover:bg-base-300 transition-all cursor-grab" draggable="true" data-index="${index}">
+                    <span class="text-base-content/30 cursor-grab" title="Drag to reorder">⋮⋮</span>
+                    <span class="text-xl">✨</span>
+                    <span class="flex-1">${escapeHtml(win.text)}</span>
+                    <span class="badge badge-ghost badge-sm">${win.time}</span>
+                    <button class="btn btn-ghost btn-xs opacity-0 group-hover:opacity-100 transition-opacity" onclick="deleteWin(${index})" title="Remove">✕</button>
                 </li>
             `).join('');
 
@@ -1009,42 +1068,22 @@
             saveData();
         }
 
-        // Celebration
+        // Celebration with DaisyUI Modal
         function celebrate(text, subtext) {
             const emojis = ['🎉', '🌟', '✨', '🔥', '💫', '🏆', '⭐', '🎊'];
             document.getElementById('celebrationEmoji').textContent = emojis[Math.floor(Math.random() * emojis.length)];
             document.getElementById('celebrationText').textContent = text;
             document.getElementById('celebrationSubtext').textContent = subtext;
-            document.getElementById('celebration').style.display = 'flex';
+            document.getElementById('celebrationModal').showModal();
 
-            setTimeout(closeCelebration, 2500);
+            setTimeout(closeCelebration, 3000);
         }
 
         function closeCelebration() {
-            document.getElementById('celebration').style.display = 'none';
+            document.getElementById('celebrationModal').close();
         }
 
-        // Toggle share menu
-        function toggleShareMenu() {
-            const menu = document.getElementById('shareMenu');
-            menu.classList.toggle('show');
-
-            // Close menu when clicking outside
-            if (menu.classList.contains('show')) {
-                setTimeout(() => {
-                    document.addEventListener('click', closeShareMenuOnClickOutside);
-                }, 0);
-            }
-        }
-
-        function closeShareMenuOnClickOutside(e) {
-            const menu = document.getElementById('shareMenu');
-            const dropdown = document.querySelector('.share-dropdown');
-            if (!dropdown.contains(e.target)) {
-                menu.classList.remove('show');
-                document.removeEventListener('click', closeShareMenuOnClickOutside);
-            }
-        }
+        // DaisyUI handles dropdown automatically - no toggle needed
 
         // Get wins for a period
         function getWinsForPeriod(period) {
@@ -1091,8 +1130,8 @@
 
         // Share wins
         async function shareWins(period = 'day') {
-            // Close the menu
-            document.getElementById('shareMenu').classList.remove('show');
+            // Close DaisyUI dropdown by removing focus
+            document.activeElement.blur();
 
             const wins = getWinsForPeriod(period);
 
@@ -1155,7 +1194,8 @@
 
         // Share directly to WhatsApp
         function shareToWhatsApp() {
-            document.getElementById('shareMenu').classList.remove('show');
+            // Close DaisyUI dropdown
+            document.activeElement.blur();
 
             const wins = getWinsForPeriod('day');
             if (wins.length === 0) {
@@ -1190,12 +1230,16 @@
 
         function showToast(message) {
             // Remove existing toast
-            const existing = document.querySelector('.toast');
+            const existing = document.querySelector('.toast-container');
             if (existing) existing.remove();
 
             const toast = document.createElement('div');
-            toast.className = 'toast';
-            toast.textContent = message;
+            toast.className = 'toast-container toast toast-end toast-bottom z-50';
+            toast.innerHTML = `
+                <div class="alert alert-success shadow-lg">
+                    <span>${message}</span>
+                </div>
+            `;
             document.body.appendChild(toast);
 
             setTimeout(() => toast.remove(), 3000);
