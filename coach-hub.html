@@ -1440,6 +1440,40 @@
                 grid-template-columns: 1fr;
             }
         }
+
+        /* Calendar Section */
+        .calendar-header-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .calendar-actions-bar {
+            display: flex;
+            gap: 10px;
+        }
+
+        .calendar-btn {
+            background: var(--purple-main);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+        }
+
+        .calendar-btn:hover {
+            background: var(--purple-dark);
+        }
+
+        .calendar-embed-container {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+        }
     </style>
 </head>
 <body>
@@ -1589,6 +1623,36 @@
                         <input type="text" id="lowPrioritySenders" placeholder="noreply, newsletter, marketing">
                     </div>
                     <button onclick="saveEmailPreferences()" class="settings-btn" style="margin-top: 15px;">Save Preferences</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Calendar Section -->
+        <div id="calendarSection" class="tab-content" style="display: none;">
+            <div class="main-container">
+                <div class="calendar-header-bar">
+                    <h2>📆 My Schedule</h2>
+                    <div class="calendar-actions-bar">
+                        <button onclick="openGoogleCalendar()" class="calendar-btn">↗️ Open Google Calendar</button>
+                    </div>
+                </div>
+
+                <div class="calendar-embed-container">
+                    <p style="text-align: center; padding: 20px; color: var(--text-muted);">
+                        Loading calendar...
+                    </p>
+                    <iframe
+                        id="googleCalendarIframe"
+                        src="https://calendar.google.com/calendar/embed?src=lisa%40harnessthespark.com&ctz=Europe%2FLondon&mode=WEEK&showTitle=0&showNav=1&showPrint=0&showTabs=1&showCalendars=0"
+                        style="border: 0; width: 100%; height: 600px; border-radius: 12px;"
+                        frameborder="0"
+                        scrolling="no">
+                    </iframe>
+                </div>
+
+                <div class="calendar-note" style="margin-top: 20px; padding: 15px; background: #F3F4F6; border-radius: 8px; font-size: 0.9em; color: var(--text-muted);">
+                    💡 <strong>Tip:</strong> Use SparkHub's appointment booking system for client sessions.
+                    <a href="https://sparkhub-be-qtmmb.ondigitalocean.app/secure-admin/crm/appointmentbooking/" target="_blank" style="color: var(--purple-main);">Manage Appointments →</a>
                 </div>
             </div>
         </div>
