@@ -2243,9 +2243,16 @@ app.get('/api/gmail/emails', async (req, res) => {
         // Get email preferences for classification
         const prefs = await db.getEmailKeywordPreferences(coachEmail);
 
-        // Classify emails into quadrants
+        // Get any cached quadrant overrides
+        const cachedEmails = await db.getCachedEmails(coachEmail);
+        const cachedQuadrants = {};
+        cachedEmails.forEach(e => {
+            if (e.quadrant) cachedQuadrants[e.email_id] = e.quadrant;
+        });
+
+        // Classify emails into quadrants (cached override takes precedence)
         const classifiedEmails = emails.map(email => {
-            const quadrant = classifyEmail(email, prefs);
+            const quadrant = cachedQuadrants[email.id] || classifyEmail(email, prefs);
             return { ...email, quadrant };
         });
 
@@ -2333,6 +2340,31 @@ app.post('/api/gmail/mark-done', async (req, res) => {
         res.json({ success: true });
     } catch (error) {
         console.error('Mark email done error:', error);
+        res.status(500).json({ success: false, error: error.message });
+    }
+});
+
+// Move email to different quadrant (drag-and-drop)
+app.post('/api/gmail/move-quadrant', async (req, res) => {
+    try {
+        const { email, message_id, quadrant } = req.body;
+
+        if (!email || !message_id || !quadrant) {
+            return res.status(400).json({ success: false, error: 'email, message_id, and quadrant required' });
+        }
+
+        // Validate quadrant
+        if (!['Q1', 'Q2', 'Q3', 'Q4'].includes(quadrant)) {
+            return res.status(400).json({ success: false, error: 'Invalid quadrant (must be Q1, Q2, Q3, or Q4)' });
+        }
+
+        // Store the override in the email_cache table
+        await db.updateEmailQuadrant(email, message_id, quadrant);
+
+        console.log(`📧 Email ${message_id} moved to ${quadrant} for ${email}`);
+        res.json({ success: true, quadrant });
+    } catch (error) {
+        console.error('Move quadrant error:', error);
         res.status(500).json({ success: false, error: error.message });
     }
 });

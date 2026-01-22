@@ -1384,6 +1384,42 @@
             font-size: 0.9em;
         }
 
+        /* Drag and Drop Styles */
+        .email-card[draggable="true"] {
+            cursor: grab;
+        }
+
+        .email-card.dragging {
+            opacity: 0.5;
+            cursor: grabbing;
+        }
+
+        .email-list.drag-over {
+            background: rgba(124, 58, 237, 0.1);
+            border: 2px dashed var(--purple-main);
+            border-radius: 8px;
+        }
+
+        .matrix-quadrant.q1 .email-list.drag-over {
+            background: rgba(239, 68, 68, 0.1);
+            border-color: #EF4444;
+        }
+
+        .matrix-quadrant.q2 .email-list.drag-over {
+            background: rgba(34, 197, 94, 0.1);
+            border-color: #22C55E;
+        }
+
+        .matrix-quadrant.q3 .email-list.drag-over {
+            background: rgba(249, 115, 22, 0.1);
+            border-color: #F97316;
+        }
+
+        .matrix-quadrant.q4 .email-list.drag-over {
+            background: rgba(107, 114, 128, 0.1);
+            border-color: #6B7280;
+        }
+
         /* Settings Styles */
         .settings-card {
             background: white;
@@ -1604,7 +1640,7 @@
             <div class="main-container">
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
                     <h2>✅ To-Do / Brain Dump</h2>
-                    <a href="https://potential.harnessthespark.com/brain-dump.html" target="_blank"
+                    <a href="https://potential.harnessthespark.com/audhd-braindump.html" target="_blank"
                        style="background: var(--purple-main); color: white; padding: 10px 20px; border-radius: 8px; text-decoration: none; font-weight: 500;">
                         ↗️ Open Full Brain Dump
                     </a>
@@ -1653,7 +1689,7 @@
             <div class="main-container">
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
                     <h2>⚡ Energy Tracking</h2>
-                    <a href="https://potential.harnessthespark.com/energy-tracking.html" target="_blank"
+                    <a href="https://potential.harnessthespark.com/audhd-energy.html" target="_blank"
                        style="background: var(--purple-main); color: white; padding: 10px 20px; border-radius: 8px; text-decoration: none; font-weight: 500;">
                         ↗️ Open Energy Tracker
                     </a>
@@ -2334,6 +2370,9 @@
                     }
                 });
 
+                // Initialize drag-and-drop after rendering
+                initDragDrop();
+
             } catch (error) {
                 console.error('Load emails failed:', error);
             }
@@ -2341,7 +2380,13 @@
 
         function renderEmailCard(email) {
             return `
-                <div class="email-card" onclick="openEmail('${email.id}')">
+                <div class="email-card"
+                     draggable="true"
+                     data-email-id="${email.id}"
+                     data-quadrant="${email.quadrant || 'Q2'}"
+                     ondragstart="handleDragStart(event, '${email.id}')"
+                     ondragend="handleDragEnd(event)"
+                     onclick="openEmail('${email.id}')">
                     <div class="email-sender">${escapeHtml(email.sender_name || email.sender_email)}</div>
                     <div class="email-subject">${escapeHtml(email.subject || '(No subject)')}</div>
                     <div class="email-snippet">${escapeHtml(email.snippet || '')}</div>
@@ -2383,6 +2428,102 @@
 
         function refreshEmails() {
             loadEmails();
+        }
+
+        // ============================================
+        // DRAG AND DROP FUNCTIONS
+        // ============================================
+
+        let draggedEmailId = null;
+
+        function handleDragStart(event, emailId) {
+            draggedEmailId = emailId;
+            event.target.classList.add('dragging');
+            event.dataTransfer.effectAllowed = 'move';
+            event.dataTransfer.setData('text/plain', emailId);
+        }
+
+        function handleDragEnd(event) {
+            event.target.classList.remove('dragging');
+            draggedEmailId = null;
+            // Remove drag-over from all lists
+            document.querySelectorAll('.email-list').forEach(el => {
+                el.classList.remove('drag-over');
+            });
+        }
+
+        function handleDragOver(event) {
+            event.preventDefault();
+            event.dataTransfer.dropEffect = 'move';
+            event.currentTarget.classList.add('drag-over');
+        }
+
+        function handleDragLeave(event) {
+            event.currentTarget.classList.remove('drag-over');
+        }
+
+        async function handleDrop(event, targetQuadrant) {
+            event.preventDefault();
+            event.currentTarget.classList.remove('drag-over');
+
+            const emailId = event.dataTransfer.getData('text/plain') || draggedEmailId;
+            if (!emailId) return;
+
+            // Find the card and its current quadrant
+            const card = document.querySelector(`[data-email-id="${emailId}"]`);
+            const currentQuadrant = card ? card.dataset.quadrant : null;
+
+            if (currentQuadrant === targetQuadrant) return; // No change needed
+
+            console.log(`Moving email ${emailId} from ${currentQuadrant} to ${targetQuadrant}`);
+
+            // Optimistic UI update - move the card immediately
+            const targetContainer = document.getElementById(targetQuadrant.toLowerCase() + 'Emails');
+            if (card && targetContainer) {
+                card.dataset.quadrant = targetQuadrant;
+                targetContainer.appendChild(card);
+
+                // Update empty state in source
+                const sourceContainer = document.getElementById(currentQuadrant.toLowerCase() + 'Emails');
+                if (sourceContainer && sourceContainer.children.length === 0) {
+                    sourceContainer.innerHTML = '<div class="empty-quadrant">No emails</div>';
+                }
+
+                // Remove empty state from target if present
+                const emptyState = targetContainer.querySelector('.empty-quadrant');
+                if (emptyState) {
+                    emptyState.remove();
+                }
+            }
+
+            // Save to server
+            try {
+                await fetch('/api/gmail/move-quadrant', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        email: COACH_EMAIL,
+                        message_id: emailId,
+                        quadrant: targetQuadrant
+                    })
+                });
+            } catch (error) {
+                console.error('Failed to save quadrant move:', error);
+                // Reload to restore correct state
+                loadEmails();
+            }
+        }
+
+        // Initialize drag-drop on quadrant containers
+        function initDragDrop() {
+            ['Q1', 'Q2', 'Q3', 'Q4'].forEach(q => {
+                const container = document.getElementById(q.toLowerCase() + 'Emails');
+                if (container) {
+                    container.addEventListener('dragover', handleDragOver);
+                    container.addEventListener('dragleave', handleDragLeave);
+                    container.addEventListener('drop', (e) => handleDrop(e, q));
+                }
+            });
         }
 
         // ============================================

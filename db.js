@@ -2422,10 +2422,13 @@ async function markEmailCompleted(coachEmail, emailId) {
  * @param {string} newQuadrant - Q1, Q2, Q3, Q4
  */
 async function updateEmailQuadrant(coachEmail, emailId, newQuadrant) {
+    // Use upsert to handle emails not yet in cache
     const result = await pool.query(`
-        UPDATE email_cache
-        SET quadrant = $3, cached_at = NOW()
-        WHERE coach_email = $1 AND email_id = $2
+        INSERT INTO email_cache (coach_email, email_id, quadrant, cached_at)
+        VALUES ($1, $2, $3, NOW())
+        ON CONFLICT (coach_email, email_id) DO UPDATE SET
+            quadrant = $3,
+            cached_at = NOW()
         RETURNING *
     `, [coachEmail, emailId, newQuadrant]);
     return result.rows[0];
