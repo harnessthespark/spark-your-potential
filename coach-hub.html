@@ -2371,18 +2371,20 @@
 
             // Check for saved session
             const savedUser = localStorage.getItem('syp_user');
+            const savedToken = localStorage.getItem('syp_token');
 
             if (savedUser) {
                 try {
                     currentUser = JSON.parse(savedUser);
                     // Only auto-login if user is admin
                     if (currentUser.is_admin) {
-                        authToken = 'syp-session';
+                        authToken = savedToken || currentUser.jwt_token || 'syp-session';
                         showDashboard();
                     }
                 } catch (e) {
                     console.error('Invalid saved session');
                     localStorage.removeItem('syp_user');
+                    localStorage.removeItem('syp_token');
                 }
             }
         };
@@ -2420,10 +2422,13 @@
                     }
 
                     currentUser = data.user;
-                    authToken = 'syp-session';  // No token needed for SYP Express
+                    authToken = data.user.jwt_token || 'syp-session';
 
                     localStorage.setItem('syp_user', JSON.stringify(currentUser));
                     localStorage.setItem('syp_client_email', email);
+                    if (data.user.jwt_token) {
+                        localStorage.setItem('syp_token', data.user.jwt_token);
+                    }
 
                     showDashboard();
                 } else {
