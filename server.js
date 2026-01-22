@@ -291,14 +291,19 @@ app.post('/api/login', async (req, res) => {
             jwt_token: jwtToken
         };
 
-        // Update last login in local users table if exists (for backwards compatibility)
+        // Ensure user exists in local PostgreSQL (for Spark Collector, Foundations, etc.)
         try {
             await db.pool.query(
-                'UPDATE users SET last_login = NOW() WHERE email = $1',
-                [email]
+                `INSERT INTO users (email, name, last_login, created_at)
+                 VALUES ($1, $2, NOW(), NOW())
+                 ON CONFLICT (email) DO UPDATE SET
+                     name = COALESCE(EXCLUDED.name, users.name),
+                     last_login = NOW()`,
+                [email, user.name]
             );
+            console.log(`📦 User synced to local PostgreSQL: ${email}`);
         } catch (dbErr) {
-            // Ignore - local users table may not have this user
+            console.warn(`⚠️ Failed to sync user to local DB: ${dbErr.message}`);
         }
 
         console.log(`🎉 Login successful for ${email} - programme: ${user.programme_access}`);
