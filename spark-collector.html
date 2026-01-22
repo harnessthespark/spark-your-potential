@@ -199,6 +199,46 @@
             color: #ef4444;
         }
 
+        /* Share Button */
+        .share-btn {
+            background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+            color: #333;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .share-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 15px rgba(255, 215, 0, 0.4);
+        }
+        .share-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* Toast notification */
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #333;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 30px;
+            font-size: 0.95em;
+            z-index: 1000;
+            animation: toastIn 0.3s ease;
+        }
+        @keyframes toastIn {
+            from { opacity: 0; transform: translateX(-50%) translateY(20px); }
+            to { opacity: 1; transform: translateX(-50%) translateY(0); }
+        }
+
         .add-win-form {
             display: flex;
             gap: 10px;
@@ -464,7 +504,10 @@
 
         <!-- Today's Wins -->
         <div class="card">
-            <h2><span class="emoji">🏆</span> Today's Wins</h2>
+            <h2 style="display: flex; justify-content: space-between; align-items: center;">
+                <span><span class="emoji">🏆</span> Today's Wins</span>
+                <button onclick="shareWins()" class="share-btn" title="Share your wins">📤 Share</button>
+            </h2>
 
             <ul class="wins-list" id="winsList">
                 <!-- Wins populated by JS -->
@@ -873,6 +916,67 @@
 
         function closeCelebration() {
             document.getElementById('celebration').style.display = 'none';
+        }
+
+        // Share wins
+        async function shareWins() {
+            const dateKey = formatDate(viewingDate);
+            const wins = sparkData.wins[dateKey] || [];
+
+            if (wins.length === 0) {
+                showToast('No wins to share yet! Add some wins first ✨');
+                return;
+            }
+
+            // Format the wins nicely
+            const dateStr = formatDisplayDate(viewingDate);
+            const winsList = wins.map((w, i) => `✨ ${w.text}`).join('\n');
+            const shareText = `🏆 My Wins for ${dateStr}\n\n${winsList}\n\n#SparkYourPotential #DailyWins`;
+
+            // Try native share first (mobile)
+            if (navigator.share) {
+                try {
+                    await navigator.share({
+                        title: `My Wins - ${dateStr}`,
+                        text: shareText
+                    });
+                    showToast('Shared successfully! 🎉');
+                } catch (err) {
+                    if (err.name !== 'AbortError') {
+                        copyToClipboard(shareText);
+                    }
+                }
+            } else {
+                copyToClipboard(shareText);
+            }
+        }
+
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(text).then(() => {
+                showToast('Copied to clipboard! 📋');
+            }).catch(() => {
+                // Fallback for older browsers
+                const textarea = document.createElement('textarea');
+                textarea.value = text;
+                document.body.appendChild(textarea);
+                textarea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textarea);
+                showToast('Copied to clipboard! 📋');
+            });
+        }
+
+        function showToast(message) {
+            // Remove existing toast
+            const existing = document.querySelector('.toast');
+            if (existing) existing.remove();
+
+            const toast = document.createElement('div');
+            toast.className = 'toast';
+            toast.textContent = message;
+            document.body.appendChild(toast);
+
+            setTimeout(() => toast.remove(), 3000);
         }
 
         // Utility

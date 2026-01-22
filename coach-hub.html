@@ -1585,8 +1585,8 @@
             <button class="hub-tab" onclick="switchTab('foundations')" data-tab="foundations">
                 🏗️ Foundations
             </button>
-            <button class="hub-tab" onclick="switchTab('fuelling')" data-tab="fuelling">
-                ⛽ Fuelling
+            <button class="hub-tab" onclick="switchTab('todaysplan')" data-tab="todaysplan">
+                📅 Today's Plan
             </button>
             <button class="hub-tab" onclick="switchTab('beautifulbrain')" data-tab="beautifulbrain">
                 🧬 Beautiful Brain
@@ -1606,6 +1606,10 @@
                 <div class="mailmatrix-header">
                     <h2>📧 MailMatrix - Email Triage</h2>
                     <div class="mailmatrix-actions">
+                        <label style="display: flex; align-items: center; gap: 6px; font-size: 0.85em; color: #666; cursor: pointer;">
+                            <input type="checkbox" id="includeAllEmails" onchange="loadEmails()">
+                            Include promo/social
+                        </label>
                         <button onclick="refreshEmails()" class="refresh-btn">🔄 Refresh</button>
                         <span id="gmailStatus" class="gmail-status">Checking...</span>
                     </div>
@@ -1679,9 +1683,9 @@
             <iframe src="/audhd-foundations.html" class="tool-frame"></iframe>
         </div>
 
-        <!-- Fuelling Your Spark Section -->
-        <div id="fuellingSection" class="tab-content" style="display: none;">
-            <iframe src="/weekly-checkin.html" class="tool-frame"></iframe>
+        <!-- Today's Plan Section -->
+        <div id="todaysplanSection" class="tab-content" style="display: none;">
+            <iframe src="/todays-plan.html" class="tool-frame"></iframe>
         </div>
 
         <!-- Beautiful Brain Section -->
@@ -2299,13 +2303,20 @@
 
         async function loadEmails() {
             try {
-                const response = await fetch(`/api/gmail/emails?email=${COACH_EMAIL}&max=50`);
+                const includeAll = document.getElementById('includeAllEmails')?.checked || false;
+                const response = await fetch(`/api/gmail/emails?email=${COACH_EMAIL}&max=50&all=${includeAll}`);
                 const data = await response.json();
+
+                console.log('📧 Email fetch response:', data);
 
                 if (!data.success) {
                     console.error('Failed to load emails:', data.error);
+                    // Show error in Q1 quadrant
+                    document.getElementById('q1Emails').innerHTML = `<div class="empty-quadrant" style="color: #EF4444;">Error: ${data.error}</div>`;
                     return;
                 }
+
+                console.log(`📧 Got ${data.emails?.length || 0} emails`);
 
                 // Clear existing emails
                 ['q1', 'q2', 'q3', 'q4'].forEach(q => {

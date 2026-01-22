@@ -2190,19 +2190,28 @@ app.get('/api/gmail/emails', async (req, res) => {
     try {
         const coachEmail = req.query.email;
         const maxResults = parseInt(req.query.max) || 50;
+        const includeAll = req.query.all === 'true'; // Option to include promotional/social
 
         if (!coachEmail) {
             return res.status(400).json({ success: false, error: 'email parameter required' });
         }
 
+        console.log(`📧 Fetching emails for: ${coachEmail}`);
+
         const gmail = await getGmailClient(coachEmail);
 
-        // Fetch unread emails from inbox
+        // Build query - optionally include promotional/social emails
+        const query = includeAll ? 'in:inbox' : 'in:inbox -category:promotions -category:social';
+        console.log(`📧 Gmail query: ${query}`);
+
+        // Fetch emails from inbox
         const response = await gmail.users.messages.list({
             userId: 'me',
             maxResults: maxResults,
-            q: 'in:inbox -category:promotions -category:social'
+            q: query
         });
+
+        console.log(`📧 Gmail API returned ${response.data.messages?.length || 0} messages`);
 
         if (!response.data.messages || response.data.messages.length === 0) {
             return res.json({ success: true, emails: [], total: 0 });
