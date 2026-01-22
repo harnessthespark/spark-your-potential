@@ -1631,28 +1631,67 @@
         <div id="calendarSection" class="tab-content" style="display: none;">
             <div class="main-container">
                 <div class="calendar-header-bar">
-                    <h2>📆 My Schedule</h2>
+                    <h2>📆 Calendar & Bookings</h2>
                     <div class="calendar-actions-bar">
                         <button onclick="openGoogleCalendar()" class="calendar-btn">↗️ Open Google Calendar</button>
                     </div>
                 </div>
 
+                <!-- Booking System Card -->
+                <div class="booking-card" style="background: linear-gradient(135deg, var(--purple-main) 0%, var(--purple-dark) 100%); border-radius: 12px; padding: 25px; margin-bottom: 20px; color: white;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px;">
+                        <div>
+                            <h3 style="font-size: 1.3em; margin-bottom: 8px;">📅 Appointment Booking System</h3>
+                            <p style="opacity: 0.9; font-size: 0.95em;">Manage client sessions, availability, and bookings</p>
+                        </div>
+                        <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                            <a href="https://sparkhub-be-qtmmb.ondigitalocean.app/secure-admin/crm/appointmentbooking/"
+                               target="_blank"
+                               style="background: var(--gold); color: var(--text-dark); padding: 12px 24px; border-radius: 8px; text-decoration: none; font-weight: 600; display: inline-flex; align-items: center; gap: 8px;">
+                                🗓️ Open Booking System
+                            </a>
+                            <a href="https://sparkhub-be-qtmmb.ondigitalocean.app/secure-admin/crm/appointmentslot/"
+                               target="_blank"
+                               style="background: rgba(255,255,255,0.2); color: white; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-weight: 500;">
+                                ⚙️ Manage Slots
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Google Calendar Embed -->
                 <div class="calendar-embed-container">
-                    <p style="text-align: center; padding: 20px; color: var(--text-muted);">
-                        Loading calendar...
-                    </p>
                     <iframe
                         id="googleCalendarIframe"
                         src="https://calendar.google.com/calendar/embed?src=lisa%40harnessthespark.com&ctz=Europe%2FLondon&mode=WEEK&showTitle=0&showNav=1&showPrint=0&showTabs=1&showCalendars=0"
-                        style="border: 0; width: 100%; height: 600px; border-radius: 12px;"
+                        style="border: 0; width: 100%; height: 550px; border-radius: 12px;"
                         frameborder="0"
                         scrolling="no">
                     </iframe>
                 </div>
 
-                <div class="calendar-note" style="margin-top: 20px; padding: 15px; background: #F3F4F6; border-radius: 8px; font-size: 0.9em; color: var(--text-muted);">
-                    💡 <strong>Tip:</strong> Use SparkHub's appointment booking system for client sessions.
-                    <a href="https://sparkhub-be-qtmmb.ondigitalocean.app/secure-admin/crm/appointmentbooking/" target="_blank" style="color: var(--purple-main);">Manage Appointments →</a>
+                <!-- Quick Links -->
+                <div style="margin-top: 20px; display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px;">
+                    <a href="https://sparkhub-be-qtmmb.ondigitalocean.app/secure-admin/crm/coachingsession/"
+                       target="_blank"
+                       class="quick-link-card"
+                       style="background: white; padding: 15px 20px; border-radius: 8px; text-decoration: none; color: var(--text-dark); display: flex; align-items: center; gap: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.06);">
+                        <span style="font-size: 1.5em;">📝</span>
+                        <div>
+                            <strong>Session Notes</strong>
+                            <p style="font-size: 0.85em; color: var(--text-muted); margin-top: 2px;">View coaching sessions</p>
+                        </div>
+                    </a>
+                    <a href="https://sparkhub-be-qtmmb.ondigitalocean.app/secure-admin/crm/sypclient/"
+                       target="_blank"
+                       class="quick-link-card"
+                       style="background: white; padding: 15px 20px; border-radius: 8px; text-decoration: none; color: var(--text-dark); display: flex; align-items: center; gap: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.06);">
+                        <span style="font-size: 1.5em;">👥</span>
+                        <div>
+                            <strong>SparkHub Clients</strong>
+                            <p style="font-size: 0.85em; color: var(--text-muted); margin-top: 2px;">CRM in Django admin</p>
+                        </div>
+                    </a>
                 </div>
             </div>
         </div>
@@ -1691,52 +1730,16 @@
                 </div>
             </section>
 
-            <!-- Calendar Section -->
-            <section class="calendar-section">
-                <div class="calendar-header">
-                    <h2 class="section-title">📆 My Schedule</h2>
-                    <div class="calendar-nav">
-                        <button onclick="toggleCalendarView()" id="calendarViewToggle" title="Toggle view">📋</button>
-                        <span id="calendarViewLabel" style="font-size: 0.85em; color: var(--text-muted);">Google Calendar</span>
+            <!-- Quick Calendar Link -->
+            <section class="calendar-quick-link" style="background: linear-gradient(135deg, var(--purple-light) 0%, var(--purple-main) 100%); border-radius: 12px; padding: 20px; margin-bottom: 25px; color: white;">
+                <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px;">
+                    <div>
+                        <h3 style="margin-bottom: 5px;">📆 Calendar & Bookings</h3>
+                        <p style="opacity: 0.9; font-size: 0.9em;">View schedule and manage appointments</p>
                     </div>
-                </div>
-
-                <!-- Google Calendar Embed View -->
-                <div id="googleCalendarView">
-                    <div id="googleCalendarEmbed" style="border-radius: 12px; overflow: hidden; min-height: 500px;">
-                        <p style="text-align: center; padding: 40px; color: var(--text-muted);">
-                            Click "Connect Google Calendar" to embed your calendar here.
-                        </p>
-                    </div>
-                    <div class="calendar-actions">
-                        <button class="calendar-action-btn primary" onclick="connectGoogleCalendar()">
-                            🔗 Connect Google Calendar
-                        </button>
-                        <button class="calendar-action-btn" onclick="openGoogleCalendar()">
-                            ↗️ Open in Google Calendar
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Manual Schedule View (hidden by default) -->
-                <div id="manualCalendarView" style="display: none;">
-                    <div class="calendar-nav" style="margin-bottom: 15px;">
-                        <button onclick="prevWeek()">←</button>
-                        <span id="weekLabel">Loading...</span>
-                        <button onclick="nextWeek()">→</button>
-                        <button onclick="goToToday()" style="width: auto; padding: 8px 16px; margin-left: 10px;">Today</button>
-                    </div>
-                    <div class="week-grid" id="weekGrid">
-                        <!-- Generated by JavaScript -->
-                    </div>
-                    <div class="calendar-actions">
-                        <button class="calendar-action-btn primary" onclick="openScheduleModal()">
-                            ➕ Schedule Session
-                        </button>
-                        <button class="calendar-action-btn" onclick="exportCalendar()">
-                            📤 Export to Calendar
-                        </button>
-                    </div>
+                    <button onclick="switchTab('calendar')" style="background: white; color: var(--purple-main); border: none; padding: 10px 20px; border-radius: 8px; font-weight: 600; cursor: pointer;">
+                        Open Calendar →
+                    </button>
                 </div>
             </section>
 
