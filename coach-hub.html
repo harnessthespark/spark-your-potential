@@ -1549,8 +1549,8 @@
 </head>
 <body>
     <!-- Login Section (shown when not logged in) -->
-    <div id="loginSection" class="min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-900 via-purple-800 to-indigo-900 p-4">
-        <div class="card w-full max-w-md bg-base-100 shadow-2xl">
+    <div id="loginSection" style="min-height: 100vh; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, #5B21B6 0%, #6D28D9 50%, #4338CA 100%); padding: 20px;">
+        <div class="card w-full max-w-md bg-base-100 shadow-2xl" style="margin: 0 auto;">
             <div class="card-body">
                 <div class="text-center mb-6">
                     <h2 class="text-3xl font-bold">🔥 Coach Hub</h2>
@@ -1578,7 +1578,7 @@
                     <span></span>
                 </div>
 
-                <button onclick="login()" class="btn btn-primary w-full mt-6">Sign In</button>
+                <button onclick="login()" class="btn btn-primary w-full mt-6 text-white">Sign In</button>
 
                 <div class="text-center mt-4">
                     <a href="forgot-password.html" class="link link-primary text-sm">Forgot password?</a>
