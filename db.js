@@ -2512,6 +2512,7 @@ module.exports = {
     // Email Cache
     cacheEmail,
     getCachedEmailsByQuadrant,
+    getCachedEmails: getCachedEmailsByQuadrant, // alias for backwards compatibility
     markEmailCompleted,
     updateEmailQuadrant
 };

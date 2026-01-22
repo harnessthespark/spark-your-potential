@@ -199,7 +199,11 @@
             color: #ef4444;
         }
 
-        /* Share Button */
+        /* Share Button & Dropdown */
+        .share-dropdown {
+            position: relative;
+            display: inline-block;
+        }
         .share-btn {
             background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
             color: #333;
@@ -218,6 +222,45 @@
         .share-btn:disabled {
             opacity: 0.5;
             cursor: not-allowed;
+        }
+        .share-menu {
+            display: none;
+            position: absolute;
+            right: 0;
+            top: 100%;
+            margin-top: 8px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+            min-width: 160px;
+            z-index: 100;
+            overflow: hidden;
+        }
+        .share-menu.show {
+            display: block;
+            animation: fadeIn 0.2s ease;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .share-menu button {
+            display: block;
+            width: 100%;
+            padding: 12px 16px;
+            border: none;
+            background: none;
+            text-align: left;
+            cursor: pointer;
+            font-size: 0.9em;
+            color: #333;
+            transition: background 0.2s;
+        }
+        .share-menu button:hover {
+            background: #f8f5ff;
+        }
+        .share-menu button .period-icon {
+            margin-right: 8px;
         }
 
         /* Toast notification */
@@ -506,7 +549,15 @@
         <div class="card">
             <h2 style="display: flex; justify-content: space-between; align-items: center;">
                 <span><span class="emoji">🏆</span> Today's Wins</span>
-                <button onclick="shareWins()" class="share-btn" title="Share your wins">📤 Share</button>
+                <div class="share-dropdown">
+                    <button onclick="toggleShareMenu()" class="share-btn" title="Share your wins">📤 Share</button>
+                    <div class="share-menu" id="shareMenu">
+                        <button onclick="shareWins('day')"><span class="period-icon">📅</span> Today</button>
+                        <button onclick="shareWins('week')"><span class="period-icon">📆</span> This Week</button>
+                        <button onclick="shareWins('month')"><span class="period-icon">🗓️</span> This Month</button>
+                        <button onclick="shareWins('all')"><span class="period-icon">🌟</span> All Time</button>
+                    </div>
+                </div>
             </h2>
 
             <ul class="wins-list" id="winsList">
@@ -918,26 +969,122 @@
             document.getElementById('celebration').style.display = 'none';
         }
 
+        // Toggle share menu
+        function toggleShareMenu() {
+            const menu = document.getElementById('shareMenu');
+            menu.classList.toggle('show');
+
+            // Close menu when clicking outside
+            if (menu.classList.contains('show')) {
+                setTimeout(() => {
+                    document.addEventListener('click', closeShareMenuOnClickOutside);
+                }, 0);
+            }
+        }
+
+        function closeShareMenuOnClickOutside(e) {
+            const menu = document.getElementById('shareMenu');
+            const dropdown = document.querySelector('.share-dropdown');
+            if (!dropdown.contains(e.target)) {
+                menu.classList.remove('show');
+                document.removeEventListener('click', closeShareMenuOnClickOutside);
+            }
+        }
+
+        // Get wins for a period
+        function getWinsForPeriod(period) {
+            const allWins = [];
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+
+            // Get start date based on period
+            let startDate = new Date(today);
+            if (period === 'day') {
+                startDate = new Date(viewingDate);
+            } else if (period === 'week') {
+                // Start of current week (Monday)
+                const dayOfWeek = today.getDay();
+                const daysToMonday = dayOfWeek === 0 ? 6 : dayOfWeek - 1;
+                startDate.setDate(today.getDate() - daysToMonday);
+            } else if (period === 'month') {
+                // Start of current month
+                startDate = new Date(today.getFullYear(), today.getMonth(), 1);
+            } else {
+                // All time - set to a very old date
+                startDate = new Date(2020, 0, 1);
+            }
+
+            // Collect wins from all days in range
+            for (const dateKey in sparkData.wins) {
+                const dateParts = dateKey.split('-');
+                const winDate = new Date(dateParts[0], dateParts[1] - 1, dateParts[2]);
+
+                if (winDate >= startDate && winDate <= today) {
+                    const dayWins = sparkData.wins[dateKey] || [];
+                    dayWins.forEach(win => {
+                        allWins.push({
+                            ...win,
+                            date: dateKey,
+                            displayDate: formatDisplayDate(winDate)
+                        });
+                    });
+                }
+            }
+
+            return allWins;
+        }
+
         // Share wins
-        async function shareWins() {
-            const dateKey = formatDate(viewingDate);
-            const wins = sparkData.wins[dateKey] || [];
+        async function shareWins(period = 'day') {
+            // Close the menu
+            document.getElementById('shareMenu').classList.remove('show');
+
+            const wins = getWinsForPeriod(period);
 
             if (wins.length === 0) {
-                showToast('No wins to share yet! Add some wins first ✨');
+                showToast('No wins to share for this period! Add some wins first ✨');
                 return;
             }
 
-            // Format the wins nicely
-            const dateStr = formatDisplayDate(viewingDate);
-            const winsList = wins.map((w, i) => `✨ ${w.text}`).join('\n');
-            const shareText = `🏆 My Wins for ${dateStr}\n\n${winsList}\n\n#SparkYourPotential #DailyWins`;
+            // Format the wins nicely based on period
+            let title, shareText;
+            const periodLabels = {
+                day: 'Today',
+                week: 'This Week',
+                month: 'This Month',
+                all: 'All Time'
+            };
+
+            if (period === 'day') {
+                const dateStr = formatDisplayDate(viewingDate);
+                const winsList = wins.map(w => `✨ ${w.text}`).join('\n');
+                title = `My Wins - ${dateStr}`;
+                shareText = `🏆 My Wins for ${dateStr}\n\n${winsList}\n\n#SparkYourPotential #DailyWins`;
+            } else {
+                // Group wins by date for week/month/all
+                const winsByDate = {};
+                wins.forEach(w => {
+                    if (!winsByDate[w.displayDate]) winsByDate[w.displayDate] = [];
+                    winsByDate[w.displayDate].push(w.text);
+                });
+
+                let winsList = '';
+                for (const date in winsByDate) {
+                    winsList += `\n📅 ${date}\n`;
+                    winsByDate[date].forEach(text => {
+                        winsList += `  ✨ ${text}\n`;
+                    });
+                }
+
+                title = `My Wins - ${periodLabels[period]}`;
+                shareText = `🏆 My Wins (${periodLabels[period]})\n${winsList}\n${wins.length} total wins! 🎉\n\n#SparkYourPotential #Wins`;
+            }
 
             // Try native share first (mobile)
             if (navigator.share) {
                 try {
                     await navigator.share({
-                        title: `My Wins - ${dateStr}`,
+                        title: title,
                         text: shareText
                     });
                     showToast('Shared successfully! 🎉');
