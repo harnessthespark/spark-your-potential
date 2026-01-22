@@ -731,6 +731,7 @@
         async function loadData() {
             try {
                 // Try PostgreSQL first
+                console.log('📡 Loading from PostgreSQL for:', currentUser.email);
                 const response = await fetch(`/api/spark-collector/${encodeURIComponent(currentUser.email)}`);
                 const result = await response.json();
 
@@ -764,6 +765,7 @@
 
             // Save to PostgreSQL
             try {
+                showSyncStatus('saving');
                 const response = await fetch('/api/spark-collector', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
@@ -776,9 +778,40 @@
                 const result = await response.json();
                 if (result.success) {
                     console.log('✅ Saved to PostgreSQL');
+                    showSyncStatus('synced');
+                } else {
+                    console.warn('⚠️ PostgreSQL save failed:', result.error);
+                    showSyncStatus('offline');
                 }
             } catch (error) {
                 console.warn('⚠️ PostgreSQL save failed:', error.message);
+                showSyncStatus('offline');
+            }
+        }
+
+        function showSyncStatus(status) {
+            let indicator = document.getElementById('syncIndicator');
+            if (!indicator) {
+                indicator = document.createElement('div');
+                indicator.id = 'syncIndicator';
+                indicator.style.cssText = 'position: fixed; bottom: 20px; left: 20px; padding: 8px 16px; border-radius: 20px; font-size: 0.85em; font-weight: 500; z-index: 1000; transition: all 0.3s ease;';
+                document.body.appendChild(indicator);
+            }
+
+            if (status === 'saving') {
+                indicator.innerHTML = '☁️ Saving...';
+                indicator.style.background = 'rgba(255, 215, 0, 0.9)';
+                indicator.style.color = '#333';
+            } else if (status === 'synced') {
+                indicator.innerHTML = '☁️ Synced to cloud';
+                indicator.style.background = 'rgba(34, 197, 94, 0.9)';
+                indicator.style.color = '#fff';
+                setTimeout(() => { indicator.style.opacity = '0'; }, 2000);
+                setTimeout(() => { indicator.style.opacity = '1'; indicator.innerHTML = '☁️ Cloud sync active'; indicator.style.background = 'rgba(255,255,255,0.1)'; indicator.style.color = '#aaa'; }, 2500);
+            } else if (status === 'offline') {
+                indicator.innerHTML = '📱 Saved locally';
+                indicator.style.background = 'rgba(239, 68, 68, 0.9)';
+                indicator.style.color = '#fff';
             }
         }
 
