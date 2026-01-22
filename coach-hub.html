@@ -1521,6 +1521,12 @@
             <button class="hub-tab" onclick="switchTab('mailmatrix')" data-tab="mailmatrix">
                 📧 MailMatrix
             </button>
+            <button class="hub-tab" onclick="switchTab('todo')" data-tab="todo">
+                ✅ To-Do
+            </button>
+            <button class="hub-tab" onclick="switchTab('energy')" data-tab="energy">
+                ⚡ Energy
+            </button>
             <button class="hub-tab" onclick="switchTab('calendar')" data-tab="calendar">
                 📆 Calendar
             </button>
@@ -1588,6 +1594,104 @@
                         <div id="q4Emails" class="email-list">
                             <div class="empty-quadrant">No emails</div>
                         </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- To-Do Section (Brain Dump) -->
+        <div id="todoSection" class="tab-content" style="display: none;">
+            <div class="main-container">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                    <h2>✅ To-Do / Brain Dump</h2>
+                    <a href="https://potential.harnessthespark.com/brain-dump.html" target="_blank"
+                       style="background: var(--purple-main); color: white; padding: 10px 20px; border-radius: 8px; text-decoration: none; font-weight: 500;">
+                        ↗️ Open Full Brain Dump
+                    </a>
+                </div>
+
+                <div class="tool-preview-card" style="background: white; border-radius: 12px; padding: 30px; box-shadow: 0 2px 12px rgba(0,0,0,0.06);">
+                    <p style="color: var(--text-muted); margin-bottom: 20px;">
+                        The Brain Dump tool helps you capture and sort thoughts into action categories.
+                        Use it to clear mental clutter and prioritise tasks.
+                    </p>
+
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-top: 20px;">
+                        <div style="background: #FEF3C7; padding: 15px; border-radius: 8px; text-align: center;">
+                            <span style="font-size: 1.5em;">📥</span>
+                            <p style="font-weight: 600; margin-top: 8px;">Unsorted</p>
+                            <p style="font-size: 0.85em; color: var(--text-muted);">Capture everything</p>
+                        </div>
+                        <div style="background: #DCFCE7; padding: 15px; border-radius: 8px; text-align: center;">
+                            <span style="font-size: 1.5em;">🔥</span>
+                            <p style="font-weight: 600; margin-top: 8px;">Do Now</p>
+                            <p style="font-size: 0.85em; color: var(--text-muted);">Urgent & important</p>
+                        </div>
+                        <div style="background: #DBEAFE; padding: 15px; border-radius: 8px; text-align: center;">
+                            <span style="font-size: 1.5em;">📅</span>
+                            <p style="font-weight: 600; margin-top: 8px;">Do Later</p>
+                            <p style="font-size: 0.85em; color: var(--text-muted);">Schedule it</p>
+                        </div>
+                        <div style="background: #F3E8FF; padding: 15px; border-radius: 8px; text-align: center;">
+                            <span style="font-size: 1.5em;">🤝</span>
+                            <p style="font-weight: 600; margin-top: 8px;">Delegate</p>
+                            <p style="font-size: 0.85em; color: var(--text-muted);">Ask for help</p>
+                        </div>
+                    </div>
+
+                    <div style="margin-top: 25px; padding: 15px; background: #F3F4F6; border-radius: 8px;">
+                        <p style="font-size: 0.9em; color: var(--text-muted);">
+                            💡 <strong>Future:</strong> Your To-Do items can sync with MailMatrix to create a unified task view.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Energy Section -->
+        <div id="energySection" class="tab-content" style="display: none;">
+            <div class="main-container">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                    <h2>⚡ Energy Tracking</h2>
+                    <a href="https://potential.harnessthespark.com/energy-tracking.html" target="_blank"
+                       style="background: var(--purple-main); color: white; padding: 10px 20px; border-radius: 8px; text-decoration: none; font-weight: 500;">
+                        ↗️ Open Energy Tracker
+                    </a>
+                </div>
+
+                <div class="tool-preview-card" style="background: white; border-radius: 12px; padding: 30px; box-shadow: 0 2px 12px rgba(0,0,0,0.06);">
+                    <p style="color: var(--text-muted); margin-bottom: 20px;">
+                        Track your energy levels throughout the day using spoon theory.
+                        Understand patterns and plan activities around your natural rhythms.
+                    </p>
+
+                    <div style="display: flex; justify-content: center; gap: 10px; margin: 25px 0;">
+                        <span style="font-size: 2em; filter: brightness(1.2);">🥄</span>
+                        <span style="font-size: 2em; filter: brightness(1.1);">🥄</span>
+                        <span style="font-size: 2em;">🥄</span>
+                        <span style="font-size: 2em; filter: brightness(0.8);">🥄</span>
+                        <span style="font-size: 2em; filter: brightness(0.6);">🥄</span>
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px; margin-top: 20px;">
+                        <div style="text-align: center; padding: 15px; background: #DCFCE7; border-radius: 8px;">
+                            <p style="font-size: 1.8em; font-weight: 700; color: #16A34A;">5</p>
+                            <p style="font-size: 0.85em; color: var(--text-muted);">Fully Charged</p>
+                        </div>
+                        <div style="text-align: center; padding: 15px; background: #FEF9C3; border-radius: 8px;">
+                            <p style="font-size: 1.8em; font-weight: 700; color: #CA8A04;">3</p>
+                            <p style="font-size: 0.85em; color: var(--text-muted);">Managing</p>
+                        </div>
+                        <div style="text-align: center; padding: 15px; background: #FEE2E2; border-radius: 8px;">
+                            <p style="font-size: 1.8em; font-weight: 700; color: #DC2626;">1</p>
+                            <p style="font-size: 0.85em; color: var(--text-muted);">Running Low</p>
+                        </div>
+                    </div>
+
+                    <div style="margin-top: 25px; padding: 15px; background: #F3F4F6; border-radius: 8px;">
+                        <p style="font-size: 0.9em; color: var(--text-muted);">
+                            💡 <strong>Tip:</strong> Track energy for a week to identify your peak performance times.
+                        </p>
                     </div>
                 </div>
             </div>
