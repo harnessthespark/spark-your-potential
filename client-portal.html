@@ -2371,6 +2371,17 @@
             if (isSparkClient) {
                 const audhdTools = [
                     {
+                        icon: '📅',
+                        title: 'Book a Session',
+                        description: 'Schedule your next coaching session with Lisa. Choose a time that works for you.',
+                        file: 'https://calendar.app.google/N1dg9FiqxASyDXQV8',
+                        btnText: 'Book Session →',
+                        alwaysUnlocked: true,
+                        statusWhenComplete: 'ready',
+                        isExternal: true,
+                        badge: '📆 Calendar'
+                    },
+                    {
                         icon: '📋',
                         title: 'Coaching Agreement',
                         description: 'Your signed coaching agreement with programme details and terms.',
@@ -2464,7 +2475,7 @@
                             <h3>${tool.title}</h3>
                             <span class="status-badge status-ready">${tool.badge || 'Ready'}</span>
                             <p>${tool.description}</p>
-                            <a href="${tool.file}" class="tool-btn">${tool.btnText}</a>
+                            <a href="${tool.file}" class="tool-btn" ${tool.isExternal ? 'target="_blank" rel="noopener"' : ''}>${tool.btnText}</a>
                         </div>
                     `;
                 }).join('');
@@ -2482,6 +2493,17 @@
                 : `${folder}/${nameUnderscored}_Coaching_Agreement.html`);
 
             const tools = [
+                {
+                    icon: '📅',
+                    title: 'Book a Session',
+                    description: 'Schedule your next coaching session with Lisa. Choose a time that works for you.',
+                    file: 'https://calendar.app.google/N1dg9FiqxASyDXQV8',
+                    btnText: 'Book Session →',
+                    alwaysUnlocked: true,
+                    statusWhenComplete: 'ready',
+                    isExternal: true,
+                    badge: '📆 Calendar'
+                },
                 {
                     icon: '📋',
                     title: agreementTitle,
@@ -2547,13 +2569,14 @@
                         statusText = '🔒 Locked';
                     }
 
+                    const externalAttr = tool.isExternal ? 'target="_blank" rel="noopener"' : '';
                     return `
                         <div class="${cardClass}">
                             <div class="tool-icon">${tool.icon}</div>
                             <h3>${tool.title}</h3>
                             <span class="status-badge ${statusClass}">${statusText}</span>
                             <p>${tool.description}</p>
-                            <a href="${isUnlocked ? tool.file : '#'}" class="tool-btn" ${!isUnlocked ? 'onclick="return false;"' : ''}>${tool.btnText}</a>
+                            <a href="${isUnlocked ? tool.file : '#'}" class="tool-btn" ${!isUnlocked ? 'onclick="return false;"' : ''} ${externalAttr}>${tool.btnText}</a>
                         </div>
                     `;
                 }).join('');
@@ -2573,7 +2596,7 @@
                             <h3>${tool.title}</h3>
                             <span class="status-badge status-ready">${tool.badge || 'Ready'}</span>
                             <p>${tool.description}</p>
-                            <a href="${tool.file}" class="tool-btn">${tool.btnText}</a>
+                            <a href="${tool.file}" class="tool-btn" ${tool.isExternal ? 'target="_blank" rel="noopener"' : ''}>${tool.btnText}</a>
                         </div>
                     `;
                 }).join('');
@@ -2614,13 +2637,14 @@
                     statusText = 'Ready';
                 }
 
+                const externalAttr = tool.isExternal ? 'target="_blank" rel="noopener"' : '';
                 return `
                     <div class="${cardClass}">
                         <div class="tool-icon">${tool.icon}</div>
                         <h3>${tool.title}</h3>
                         <span class="status-badge ${statusClass}">${statusText}</span>
                         <p>${tool.description}</p>
-                        <a href="${isUnlocked ? tool.file : '#'}" class="tool-btn" ${!isUnlocked ? 'onclick="return false;"' : ''}>${tool.btnText}</a>
+                        <a href="${isUnlocked ? tool.file : '#'}" class="tool-btn" ${!isUnlocked ? 'onclick="return false;"' : ''} ${externalAttr}>${tool.btnText}</a>
                         ${tool.secondaryBtn && isUnlocked ? `<button class="tool-btn secondary">${tool.secondaryBtn}</button>` : ''}
                     </div>
                 `;
