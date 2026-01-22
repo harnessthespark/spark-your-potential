@@ -2456,6 +2456,32 @@
     </div>
 
     <script>
+        // ============================================
+        // THEME TOGGLE
+        // ============================================
+        function toggleTheme() {
+            const html = document.documentElement;
+            const toggle = document.getElementById('themeToggle');
+            const currentTheme = html.getAttribute('data-theme');
+            const newTheme = currentTheme === 'corporate' ? 'night' : 'corporate';
+
+            html.setAttribute('data-theme', newTheme);
+            localStorage.setItem('coach_hub_theme', newTheme);
+            toggle.checked = newTheme === 'night';
+        }
+
+        function loadSavedTheme() {
+            const savedTheme = localStorage.getItem('coach_hub_theme') || 'corporate';
+            const html = document.documentElement;
+            const toggle = document.getElementById('themeToggle');
+
+            html.setAttribute('data-theme', savedTheme);
+            if (toggle) toggle.checked = savedTheme === 'night';
+        }
+
+        // Load theme on page load
+        document.addEventListener('DOMContentLoaded', loadSavedTheme);
+
         // Config - Single backend for auth (SYP Express), SparkHub for CRM
         const SPARKHUB_API = 'https://sparkhub-be-qtmmb.ondigitalocean.app';  // CRM only
         const SYP_API = '';  // Same origin for SYP Express
