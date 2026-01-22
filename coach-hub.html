@@ -1142,6 +1142,279 @@
                 grid-template-columns: 1fr;
             }
         }
+
+        /* Hub Navigation Tabs */
+        .hub-tabs {
+            display: flex;
+            background: white;
+            border-bottom: 2px solid var(--warm-border);
+            padding: 0 30px;
+            gap: 5px;
+        }
+
+        .hub-tab {
+            padding: 15px 25px;
+            background: none;
+            border: none;
+            font-size: 0.95em;
+            font-weight: 500;
+            color: var(--text-muted);
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+            margin-bottom: -2px;
+            transition: all 0.2s;
+        }
+
+        .hub-tab:hover {
+            color: var(--purple-main);
+        }
+
+        .hub-tab.active {
+            color: var(--purple-main);
+            border-bottom-color: var(--purple-main);
+            font-weight: 600;
+        }
+
+        /* MailMatrix Styles */
+        .mailmatrix-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid var(--warm-border);
+        }
+
+        .mailmatrix-actions {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .refresh-btn {
+            background: var(--purple-main);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+        }
+
+        .refresh-btn:hover {
+            background: var(--purple-dark);
+        }
+
+        .gmail-status {
+            font-size: 0.85em;
+            color: var(--text-muted);
+        }
+
+        .gmail-status.connected {
+            color: var(--success);
+        }
+
+        .gmail-connect-prompt {
+            text-align: center;
+            padding: 60px 20px;
+            background: white;
+            border-radius: 16px;
+            border: 2px dashed var(--warm-border);
+        }
+
+        .connect-gmail-btn {
+            background: #EA4335;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 10px;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 15px;
+        }
+
+        .connect-gmail-btn:hover {
+            background: #d33426;
+        }
+
+        .email-matrix {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            grid-template-rows: 1fr 1fr;
+            gap: 20px;
+            min-height: 600px;
+        }
+
+        .matrix-quadrant {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .matrix-quadrant.q1 {
+            border-top: 4px solid #EF4444;
+        }
+
+        .matrix-quadrant.q2 {
+            border-top: 4px solid #3B82F6;
+        }
+
+        .matrix-quadrant.q3 {
+            border-top: 4px solid #F59E0B;
+        }
+
+        .matrix-quadrant.q4 {
+            border-top: 4px solid #9CA3AF;
+        }
+
+        .quadrant-header {
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #E5E7EB;
+        }
+
+        .quadrant-header h3 {
+            font-size: 1em;
+            margin-bottom: 4px;
+        }
+
+        .quadrant-subtitle {
+            font-size: 0.8em;
+            color: var(--text-muted);
+        }
+
+        .email-list {
+            flex: 1;
+            overflow-y: auto;
+            max-height: 250px;
+        }
+
+        .email-card {
+            background: #F9FAFB;
+            border-radius: 8px;
+            padding: 12px;
+            margin-bottom: 10px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .email-card:hover {
+            background: #F3F4F6;
+            transform: translateX(3px);
+        }
+
+        .email-sender {
+            font-weight: 600;
+            font-size: 0.9em;
+            margin-bottom: 4px;
+        }
+
+        .email-subject {
+            font-size: 0.85em;
+            color: var(--text-dark);
+            margin-bottom: 6px;
+        }
+
+        .email-snippet {
+            font-size: 0.8em;
+            color: var(--text-muted);
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .email-actions {
+            display: flex;
+            gap: 8px;
+            margin-top: 10px;
+        }
+
+        .email-action-btn {
+            padding: 5px 10px;
+            font-size: 0.75em;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .email-action-btn.done {
+            background: var(--success);
+            color: white;
+        }
+
+        .email-action-btn.move {
+            background: #E5E7EB;
+            color: var(--text-dark);
+        }
+
+        .empty-quadrant {
+            text-align: center;
+            padding: 30px;
+            color: var(--text-muted);
+            font-size: 0.9em;
+        }
+
+        /* Settings Styles */
+        .settings-card {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+        }
+
+        .settings-card h3 {
+            margin-bottom: 15px;
+            font-size: 1.1em;
+        }
+
+        .settings-btn {
+            background: var(--purple-main);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+        }
+
+        .settings-btn.danger {
+            background: #EF4444;
+        }
+
+        .keyword-group {
+            margin-bottom: 15px;
+        }
+
+        .keyword-group label {
+            display: block;
+            font-size: 0.9em;
+            margin-bottom: 5px;
+            font-weight: 500;
+        }
+
+        .keyword-group input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #E5E7EB;
+            border-radius: 8px;
+            font-size: 0.9em;
+        }
+
+        @media (max-width: 768px) {
+            .hub-tabs {
+                overflow-x: auto;
+                padding: 0 15px;
+            }
+
+            .email-matrix {
+                grid-template-columns: 1fr;
+            }
+        }
     </style>
 </head>
 <body>
@@ -1178,6 +1451,122 @@
             </div>
         </header>
 
+        <!-- Navigation Tabs -->
+        <nav class="hub-tabs">
+            <button class="hub-tab active" onclick="switchTab('clients')" data-tab="clients">
+                👥 Clients
+            </button>
+            <button class="hub-tab" onclick="switchTab('mailmatrix')" data-tab="mailmatrix">
+                📧 MailMatrix
+            </button>
+            <button class="hub-tab" onclick="switchTab('calendar')" data-tab="calendar">
+                📆 Calendar
+            </button>
+            <button class="hub-tab" onclick="switchTab('settings')" data-tab="settings">
+                ⚙️ Settings
+            </button>
+        </nav>
+
+        <!-- MailMatrix Section -->
+        <div id="mailmatrixSection" class="tab-content" style="display: none;">
+            <div class="main-container">
+                <div class="mailmatrix-header">
+                    <h2>📧 MailMatrix - Email Triage</h2>
+                    <div class="mailmatrix-actions">
+                        <button onclick="refreshEmails()" class="refresh-btn">🔄 Refresh</button>
+                        <span id="gmailStatus" class="gmail-status">Checking...</span>
+                    </div>
+                </div>
+
+                <div id="gmailNotConnected" class="gmail-connect-prompt" style="display: none;">
+                    <p>Connect your Gmail to use MailMatrix</p>
+                    <button onclick="connectGmail()" class="connect-gmail-btn">🔗 Connect Gmail</button>
+                </div>
+
+                <div id="emailMatrix" class="email-matrix" style="display: none;">
+                    <!-- Q1: Urgent & Important -->
+                    <div class="matrix-quadrant q1">
+                        <div class="quadrant-header">
+                            <h3>🔥 Q1: Do First</h3>
+                            <span class="quadrant-subtitle">Urgent & Important</span>
+                        </div>
+                        <div id="q1Emails" class="email-list">
+                            <div class="empty-quadrant">No emails</div>
+                        </div>
+                    </div>
+
+                    <!-- Q2: Important Not Urgent -->
+                    <div class="matrix-quadrant q2">
+                        <div class="quadrant-header">
+                            <h3>📋 Q2: Schedule</h3>
+                            <span class="quadrant-subtitle">Important, Not Urgent</span>
+                        </div>
+                        <div id="q2Emails" class="email-list">
+                            <div class="empty-quadrant">No emails</div>
+                        </div>
+                    </div>
+
+                    <!-- Q3: Urgent Not Important -->
+                    <div class="matrix-quadrant q3">
+                        <div class="quadrant-header">
+                            <h3>👋 Q3: Delegate</h3>
+                            <span class="quadrant-subtitle">Urgent, Not Important</span>
+                        </div>
+                        <div id="q3Emails" class="email-list">
+                            <div class="empty-quadrant">No emails</div>
+                        </div>
+                    </div>
+
+                    <!-- Q4: Neither -->
+                    <div class="matrix-quadrant q4">
+                        <div class="quadrant-header">
+                            <h3>🗑️ Q4: Delete/Defer</h3>
+                            <span class="quadrant-subtitle">Neither Urgent nor Important</span>
+                        </div>
+                        <div id="q4Emails" class="email-list">
+                            <div class="empty-quadrant">No emails</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Settings Section -->
+        <div id="settingsSection" class="tab-content" style="display: none;">
+            <div class="main-container">
+                <h2 style="margin-bottom: 20px;">⚙️ Settings</h2>
+
+                <div class="settings-card">
+                    <h3>📧 Gmail Connection</h3>
+                    <div id="gmailSettingsStatus"></div>
+                    <button onclick="connectGmail()" class="settings-btn">Connect Gmail</button>
+                    <button onclick="disconnectGmail()" class="settings-btn danger" style="margin-left: 10px;">Disconnect</button>
+                </div>
+
+                <div class="settings-card" style="margin-top: 20px;">
+                    <h3>🏷️ Email Keywords</h3>
+                    <p style="color: var(--text-muted); font-size: 0.9em; margin-bottom: 15px;">
+                        Customise how emails are classified in MailMatrix
+                    </p>
+                    <div class="keyword-group">
+                        <label>Urgent Keywords (comma separated):</label>
+                        <input type="text" id="urgentKeywords" placeholder="urgent, asap, deadline, emergency">
+                    </div>
+                    <div class="keyword-group">
+                        <label>Important Keywords:</label>
+                        <input type="text" id="importantKeywords" placeholder="invoice, contract, client, meeting">
+                    </div>
+                    <div class="keyword-group">
+                        <label>Low Priority Senders:</label>
+                        <input type="text" id="lowPrioritySenders" placeholder="noreply, newsletter, marketing">
+                    </div>
+                    <button onclick="saveEmailPreferences()" class="settings-btn" style="margin-top: 15px;">Save Preferences</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Clients Section (original content) -->
+        <div id="clientsSection" class="tab-content">
         <main class="main-container">
             <!-- Today Section -->
             <section class="today-section">
@@ -1289,6 +1678,7 @@
                 </div>
             </section>
         </main>
+        </div><!-- End clientsSection -->
     </div>
 
     <!-- Slide-out Panel -->
@@ -1612,6 +2002,238 @@
             }
         ];
 
+        // Coach email for API calls
+        const COACH_EMAIL = 'lisa@harnessthespark.com';
+
+        // ============================================
+        // TAB NAVIGATION
+        // ============================================
+
+        function switchTab(tabName) {
+            // Hide all tab content
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.style.display = 'none';
+            });
+
+            // Remove active from all tabs
+            document.querySelectorAll('.hub-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+
+            // Show selected tab content
+            const sectionId = tabName + 'Section';
+            const section = document.getElementById(sectionId);
+            if (section) {
+                section.style.display = 'block';
+            }
+
+            // Mark tab as active
+            document.querySelector(`[data-tab="${tabName}"]`).classList.add('active');
+
+            // Load content for specific tabs
+            if (tabName === 'mailmatrix') {
+                checkGmailStatus();
+            } else if (tabName === 'settings') {
+                loadSettings();
+            }
+        }
+
+        // ============================================
+        // GMAIL / MAILMATRIX FUNCTIONS
+        // ============================================
+
+        async function checkGmailStatus() {
+            try {
+                const response = await fetch(`/api/gmail/status?email=${COACH_EMAIL}`);
+                const data = await response.json();
+
+                const statusEl = document.getElementById('gmailStatus');
+                const notConnectedEl = document.getElementById('gmailNotConnected');
+                const matrixEl = document.getElementById('emailMatrix');
+
+                if (data.connected) {
+                    statusEl.textContent = '✅ Connected: ' + (data.gmail_email || 'Gmail');
+                    statusEl.classList.add('connected');
+                    notConnectedEl.style.display = 'none';
+                    matrixEl.style.display = 'grid';
+                    loadEmails();
+                } else {
+                    statusEl.textContent = '❌ Not connected';
+                    statusEl.classList.remove('connected');
+                    notConnectedEl.style.display = 'block';
+                    matrixEl.style.display = 'none';
+                }
+            } catch (error) {
+                console.error('Gmail status check failed:', error);
+                document.getElementById('gmailStatus').textContent = '⚠️ Error checking status';
+            }
+        }
+
+        function connectGmail() {
+            window.location.href = `/api/gmail/auth?email=${COACH_EMAIL}`;
+        }
+
+        async function disconnectGmail() {
+            if (!confirm('Disconnect Gmail? You will need to reconnect to use MailMatrix.')) return;
+
+            try {
+                await fetch('/api/gmail/disconnect', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email: COACH_EMAIL })
+                });
+                checkGmailStatus();
+            } catch (error) {
+                console.error('Disconnect failed:', error);
+            }
+        }
+
+        async function loadEmails() {
+            try {
+                const response = await fetch(`/api/gmail/emails?email=${COACH_EMAIL}&max=50`);
+                const data = await response.json();
+
+                if (!data.success) {
+                    console.error('Failed to load emails:', data.error);
+                    return;
+                }
+
+                // Clear existing emails
+                ['q1', 'q2', 'q3', 'q4'].forEach(q => {
+                    document.getElementById(q + 'Emails').innerHTML = '<div class="empty-quadrant">No emails</div>';
+                });
+
+                // Group emails by quadrant
+                const quadrants = { Q1: [], Q2: [], Q3: [], Q4: [] };
+                data.emails.forEach(email => {
+                    const q = email.quadrant || 'Q2';
+                    if (quadrants[q]) {
+                        quadrants[q].push(email);
+                    }
+                });
+
+                // Render each quadrant
+                Object.entries(quadrants).forEach(([q, emails]) => {
+                    const container = document.getElementById(q.toLowerCase() + 'Emails');
+                    if (emails.length === 0) {
+                        container.innerHTML = '<div class="empty-quadrant">No emails</div>';
+                    } else {
+                        container.innerHTML = emails.map(email => renderEmailCard(email)).join('');
+                    }
+                });
+
+            } catch (error) {
+                console.error('Load emails failed:', error);
+            }
+        }
+
+        function renderEmailCard(email) {
+            return `
+                <div class="email-card" onclick="openEmail('${email.id}')">
+                    <div class="email-sender">${escapeHtml(email.sender_name || email.sender_email)}</div>
+                    <div class="email-subject">${escapeHtml(email.subject || '(No subject)')}</div>
+                    <div class="email-snippet">${escapeHtml(email.snippet || '')}</div>
+                    <div class="email-actions">
+                        <button class="email-action-btn done" onclick="event.stopPropagation(); markEmailDone('${email.id}', 'archive')">✓ Done</button>
+                        <button class="email-action-btn move" onclick="event.stopPropagation(); markEmailDone('${email.id}', 'read')">👁 Read</button>
+                    </div>
+                </div>
+            `;
+        }
+
+        function escapeHtml(text) {
+            if (!text) return '';
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        function openEmail(messageId) {
+            window.open(`https://mail.google.com/mail/u/0/#inbox/${messageId}`, '_blank');
+        }
+
+        async function markEmailDone(messageId, action) {
+            try {
+                await fetch('/api/gmail/mark-done', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        email: COACH_EMAIL,
+                        message_id: messageId,
+                        action: action
+                    })
+                });
+                loadEmails(); // Refresh
+            } catch (error) {
+                console.error('Mark done failed:', error);
+            }
+        }
+
+        function refreshEmails() {
+            loadEmails();
+        }
+
+        // ============================================
+        // SETTINGS FUNCTIONS
+        // ============================================
+
+        async function loadSettings() {
+            // Load Gmail status
+            try {
+                const response = await fetch(`/api/gmail/status?email=${COACH_EMAIL}`);
+                const data = await response.json();
+
+                const statusEl = document.getElementById('gmailSettingsStatus');
+                if (data.connected) {
+                    statusEl.innerHTML = `<p style="color: var(--success);">✅ Connected to: ${data.gmail_email}</p>`;
+                } else {
+                    statusEl.innerHTML = `<p style="color: #EF4444;">❌ Gmail not connected</p>`;
+                }
+            } catch (error) {
+                console.error('Load settings failed:', error);
+            }
+
+            // Load email preferences
+            try {
+                const response = await fetch(`/api/gmail/preferences?email=${COACH_EMAIL}`);
+                const data = await response.json();
+
+                if (data.preferences) {
+                    const p = data.preferences;
+                    document.getElementById('urgentKeywords').value = (p.urgent_keywords || []).join(', ');
+                    document.getElementById('importantKeywords').value = (p.important_keywords || []).join(', ');
+                    document.getElementById('lowPrioritySenders').value = (p.low_priority_senders || []).join(', ');
+                }
+            } catch (error) {
+                console.error('Load preferences failed:', error);
+            }
+        }
+
+        async function saveEmailPreferences() {
+            const parseKeywords = (str) => str.split(',').map(s => s.trim().toLowerCase()).filter(s => s);
+
+            try {
+                await fetch('/api/gmail/preferences', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        email: COACH_EMAIL,
+                        urgent_keywords: parseKeywords(document.getElementById('urgentKeywords').value),
+                        important_keywords: parseKeywords(document.getElementById('importantKeywords').value),
+                        low_priority_senders: parseKeywords(document.getElementById('lowPrioritySenders').value)
+                    })
+                });
+                alert('Preferences saved!');
+            } catch (error) {
+                console.error('Save preferences failed:', error);
+                alert('Failed to save preferences');
+            }
+        }
+
+        // ============================================
+        // ORIGINAL COACH HUB CODE
+        // ============================================
+
         // State
         let authToken = null;
         let currentUser = null;
@@ -1620,6 +2242,16 @@
 
         // Initialise
         window.onload = function() {
+            // Check for Gmail OAuth callback
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('gmail') === 'success') {
+                alert('✅ Gmail connected successfully!');
+                window.history.replaceState({}, '', '/coach-hub.html');
+                switchTab('mailmatrix');
+            } else if (urlParams.get('gmail') === 'error') {
+                alert('❌ Gmail connection failed: ' + (urlParams.get('reason') || 'Unknown error'));
+                window.history.replaceState({}, '', '/coach-hub.html');
+            }
             // Set today's date
             const today = new Date();
             document.getElementById('todayDate').textContent = today.toLocaleDateString('en-GB', {
