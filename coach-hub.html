@@ -1599,6 +1599,14 @@
                 </div>
             </div>
             <div class="navbar-end gap-2">
+                <!-- Theme Toggle -->
+                <label class="swap swap-rotate btn btn-ghost btn-circle">
+                    <input type="checkbox" id="themeToggle" onchange="toggleTheme()" />
+                    <!-- Sun icon (light mode) -->
+                    <svg class="swap-on fill-current w-5 h-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M5.64,17l-.71.71a1,1,0,0,0,0,1.41,1,1,0,0,0,1.41,0l.71-.71A1,1,0,0,0,5.64,17ZM5,12a1,1,0,0,0-1-1H3a1,1,0,0,0,0,2H4A1,1,0,0,0,5,12Zm7-7a1,1,0,0,0,1-1V3a1,1,0,0,0-2,0V4A1,1,0,0,0,12,5ZM5.64,7.05a1,1,0,0,0,.7.29,1,1,0,0,0,.71-.29,1,1,0,0,0,0-1.41l-.71-.71A1,1,0,0,0,4.93,6.34Zm12,.29a1,1,0,0,0,.7-.29l.71-.71a1,1,0,1,0-1.41-1.41L17,5.64a1,1,0,0,0,0,1.41A1,1,0,0,0,17.66,7.34ZM21,11H20a1,1,0,0,0,0,2h1a1,1,0,0,0,0-2Zm-9,8a1,1,0,0,0-1,1v1a1,1,0,0,0,2,0V20A1,1,0,0,0,12,19ZM18.36,17A1,1,0,0,0,17,18.36l.71.71a1,1,0,0,0,1.41,0,1,1,0,0,0,0-1.41ZM12,6.5A5.5,5.5,0,1,0,17.5,12,5.51,5.51,0,0,0,12,6.5Zm0,9A3.5,3.5,0,1,1,15.5,12,3.5,3.5,0,0,1,12,15.5Z"/></svg>
+                    <!-- Moon icon (dark mode) -->
+                    <svg class="swap-off fill-current w-5 h-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21.64,13a1,1,0,0,0-1.05-.14,8.05,8.05,0,0,1-3.37.73A8.15,8.15,0,0,1,9.08,5.49a8.59,8.59,0,0,1,.25-2A1,1,0,0,0,8,2.36,10.14,10.14,0,1,0,22,14.05,1,1,0,0,0,21.64,13Zm-9.5,6.69A8.14,8.14,0,0,1,7.08,5.22v.27A10.15,10.15,0,0,0,17.22,15.63a9.79,9.79,0,0,0,2.1-.22A8.11,8.11,0,0,1,12.14,19.73Z"/></svg>
+                </label>
                 <a href="coach-automations.html" class="btn btn-sm btn-accent gap-2">
                     ⚡ Automations
                 </a>
@@ -1649,6 +1657,13 @@
                 </button>
                 <button class="tab" onclick="switchTab('sparkcollector')" data-tab="sparkcollector">
                     ✨ Spark Collector
+                </button>
+                <div class="divider divider-horizontal mx-1"></div>
+                <button class="tab" onclick="switchTab('toollib')" data-tab="toollib">
+                    🧰 Tool Library
+                </button>
+                <button class="tab" onclick="switchTab('programmes')" data-tab="programmes">
+                    📦 Programmes
                 </button>
                 <div class="divider divider-horizontal mx-1"></div>
                 <button class="tab" onclick="switchTab('settings')" data-tab="settings">
@@ -1753,6 +1768,290 @@
         <!-- Spark Collector Section -->
         <div id="sparkcollectorSection" class="tab-content" style="display: none;">
             <iframe src="/spark-collector.html" class="tool-frame"></iframe>
+        </div>
+
+        <!-- Tool Library Section -->
+        <div id="toollibSection" class="tab-content" style="display: none;">
+            <div class="main-container p-6">
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="text-2xl font-bold">🧰 Tool Library</h2>
+                    <div class="badge badge-info">Preview tools before assigning to clients</div>
+                </div>
+
+                <!-- Career Tools -->
+                <div class="mb-8">
+                    <h3 class="text-lg font-semibold mb-4 text-warning flex items-center gap-2">
+                        <span>💼</span> Career Tools
+                    </h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" id="careerToolsGrid">
+                        <div class="card bg-base-100 shadow-md hover:shadow-lg transition-shadow">
+                            <div class="card-body p-4">
+                                <h4 class="card-title text-sm">📝 Discovery Questionnaire</h4>
+                                <p class="text-xs text-base-content/70">Values, skills, experience deep-dive</p>
+                                <div class="card-actions justify-end mt-2">
+                                    <a href="ability-recognition-visual.html" target="_blank" class="btn btn-xs btn-outline">Preview</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card bg-base-100 shadow-md hover:shadow-lg transition-shadow">
+                            <div class="card-body p-4">
+                                <h4 class="card-title text-sm">🎯 Career Blueprint</h4>
+                                <p class="text-xs text-base-content/70">AI-generated career positioning</p>
+                                <div class="card-actions justify-end mt-2">
+                                    <a href="templates/Career_Blueprint_Template.html" target="_blank" class="btn btn-xs btn-outline">Preview</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card bg-base-100 shadow-md hover:shadow-lg transition-shadow">
+                            <div class="card-body p-4">
+                                <h4 class="card-title text-sm">📄 CV Builder</h4>
+                                <p class="text-xs text-base-content/70">Interactive CV creation tool</p>
+                                <div class="card-actions justify-end mt-2">
+                                    <a href="templates/CV_Builder_Template.html" target="_blank" class="btn btn-xs btn-outline">Preview</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card bg-base-100 shadow-md hover:shadow-lg transition-shadow">
+                            <div class="card-body p-4">
+                                <h4 class="card-title text-sm">⚖️ Decision Framework</h4>
+                                <p class="text-xs text-base-content/70">Structured job offer evaluation</p>
+                                <div class="card-actions justify-end mt-2">
+                                    <a href="Donald_Pirie/Donald_Decision_Framework_Updated.html" target="_blank" class="btn btn-xs btn-outline">Preview</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card bg-base-100 shadow-md hover:shadow-lg transition-shadow">
+                            <div class="card-body p-4">
+                                <h4 class="card-title text-sm">📅 Session Booking</h4>
+                                <p class="text-xs text-base-content/70">Google Calendar integration</p>
+                                <div class="card-actions justify-end mt-2">
+                                    <a href="https://calendar.app.google/N1dg9FiqxASyDXQV8" target="_blank" class="btn btn-xs btn-outline">Preview</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card bg-base-100 shadow-md hover:shadow-lg transition-shadow">
+                            <div class="card-body p-4">
+                                <h4 class="card-title text-sm">📊 Insights Report</h4>
+                                <p class="text-xs text-base-content/70">Career insights visualization</p>
+                                <div class="card-actions justify-end mt-2">
+                                    <a href="insights-viewer.html" target="_blank" class="btn btn-xs btn-outline">Preview</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- AuDHD/Mind Management Tools -->
+                <div class="mb-8">
+                    <h3 class="text-lg font-semibold mb-4 text-secondary flex items-center gap-2">
+                        <span>🧠</span> AuDHD & Mind Management Tools
+                    </h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" id="audhdToolsGrid">
+                        <div class="card bg-base-100 shadow-md hover:shadow-lg transition-shadow">
+                            <div class="card-body p-4">
+                                <h4 class="card-title text-sm">✨ Spark Collector</h4>
+                                <p class="text-xs text-base-content/70">Daily wins & first steps tracker</p>
+                                <div class="card-actions justify-end mt-2">
+                                    <a href="spark-collector.html" target="_blank" class="btn btn-xs btn-outline">Preview</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card bg-base-100 shadow-md hover:shadow-lg transition-shadow">
+                            <div class="card-body p-4">
+                                <h4 class="card-title text-sm">🏗️ Foundations</h4>
+                                <p class="text-xs text-base-content/70">Personal boundaries & rules</p>
+                                <div class="card-actions justify-end mt-2">
+                                    <a href="foundations.html" target="_blank" class="btn btn-xs btn-outline">Preview</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card bg-base-100 shadow-md hover:shadow-lg transition-shadow">
+                            <div class="card-body p-4">
+                                <h4 class="card-title text-sm">⚡ Energy Tracker</h4>
+                                <p class="text-xs text-base-content/70">Spoon theory & energy budget</p>
+                                <div class="card-actions justify-end mt-2">
+                                    <a href="energy-tracker.html" target="_blank" class="btn btn-xs btn-outline">Preview</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card bg-base-100 shadow-md hover:shadow-lg transition-shadow">
+                            <div class="card-body p-4">
+                                <h4 class="card-title text-sm">🧠 Brain Dump</h4>
+                                <p class="text-xs text-base-content/70">Clear mental clutter</p>
+                                <div class="card-actions justify-end mt-2">
+                                    <a href="brain-dump.html" target="_blank" class="btn btn-xs btn-outline">Preview</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card bg-base-100 shadow-md hover:shadow-lg transition-shadow">
+                            <div class="card-body p-4">
+                                <h4 class="card-title text-sm">📅 Today's Plan</h4>
+                                <p class="text-xs text-base-content/70">Daily planning with energy</p>
+                                <div class="card-actions justify-end mt-2">
+                                    <a href="todays-plan.html" target="_blank" class="btn btn-xs btn-outline">Preview</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card bg-base-100 shadow-md hover:shadow-lg transition-shadow">
+                            <div class="card-body p-4">
+                                <h4 class="card-title text-sm">🧬 Beautiful Brain</h4>
+                                <p class="text-xs text-base-content/70">Neurodivergent strengths</p>
+                                <div class="card-actions justify-end mt-2">
+                                    <a href="beautiful-brain.html" target="_blank" class="btn btn-xs btn-outline">Preview</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Documents & Templates -->
+                <div class="mb-8">
+                    <h3 class="text-lg font-semibold mb-4 text-accent flex items-center gap-2">
+                        <span>📋</span> Documents & Templates
+                    </h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                        <div class="card bg-base-100 shadow-md hover:shadow-lg transition-shadow">
+                            <div class="card-body p-4">
+                                <h4 class="card-title text-sm">📝 Programme Outline</h4>
+                                <p class="text-xs text-base-content/70">4-week coaching structure</p>
+                                <div class="card-actions justify-end mt-2">
+                                    <a href="templates/programme_outline.html" target="_blank" class="btn btn-xs btn-outline">Preview</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card bg-base-100 shadow-md hover:shadow-lg transition-shadow">
+                            <div class="card-body p-4">
+                                <h4 class="card-title text-sm">✍️ Coaching Agreement</h4>
+                                <p class="text-xs text-base-content/70">Terms & commitment</p>
+                                <div class="card-actions justify-end mt-2">
+                                    <a href="templates/coaching_agreement.html" target="_blank" class="btn btn-xs btn-outline">Preview</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card bg-base-100 shadow-md hover:shadow-lg transition-shadow">
+                            <div class="card-body p-4">
+                                <h4 class="card-title text-sm">🔀 Blended Programme</h4>
+                                <p class="text-xs text-base-content/70">Career + AuDHD combined</p>
+                                <div class="card-actions justify-end mt-2">
+                                    <a href="templates/Blended_Programme_Outline.html" target="_blank" class="btn btn-xs btn-outline">Preview</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Programmes Section -->
+        <div id="programmesSection" class="tab-content" style="display: none;">
+            <div class="main-container p-6">
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="text-2xl font-bold">📦 Programme Builder</h2>
+                    <button onclick="openCreateProgrammeModal()" class="btn btn-warning btn-sm gap-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" /></svg>
+                        New Programme
+                    </button>
+                </div>
+
+                <!-- Existing Programmes -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="programmesGrid">
+                    <!-- Career Booster -->
+                    <div class="card bg-gradient-to-br from-amber-500 to-orange-600 text-white shadow-xl">
+                        <div class="card-body">
+                            <h3 class="card-title">💼 Career Booster</h3>
+                            <p class="text-sm opacity-90">4-week career positioning programme</p>
+                            <div class="divider my-2 before:bg-white/20 after:bg-white/20"></div>
+                            <div class="text-xs space-y-1">
+                                <div class="flex items-center gap-2">✓ Discovery Questionnaire</div>
+                                <div class="flex items-center gap-2">✓ Career Blueprint</div>
+                                <div class="flex items-center gap-2">✓ CV Builder</div>
+                                <div class="flex items-center gap-2">✓ Decision Framework</div>
+                                <div class="flex items-center gap-2">✓ Session Booking</div>
+                            </div>
+                            <div class="card-actions justify-end mt-4">
+                                <button onclick="assignProgramme('career')" class="btn btn-sm bg-white/20 border-0 hover:bg-white/30">Assign to Client</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- AuDHD Coaching -->
+                    <div class="card bg-gradient-to-br from-purple-600 to-pink-600 text-white shadow-xl">
+                        <div class="card-body">
+                            <h3 class="card-title">🧠 AuDHD Coaching</h3>
+                            <p class="text-sm opacity-90">Mind management & energy toolkit</p>
+                            <div class="divider my-2 before:bg-white/20 after:bg-white/20"></div>
+                            <div class="text-xs space-y-1">
+                                <div class="flex items-center gap-2">✓ Spark Collector</div>
+                                <div class="flex items-center gap-2">✓ Foundations</div>
+                                <div class="flex items-center gap-2">✓ Energy Tracker</div>
+                                <div class="flex items-center gap-2">✓ Brain Dump</div>
+                                <div class="flex items-center gap-2">✓ Beautiful Brain</div>
+                            </div>
+                            <div class="card-actions justify-end mt-4">
+                                <button onclick="assignProgramme('audhd')" class="btn btn-sm bg-white/20 border-0 hover:bg-white/30">Assign to Client</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Blended -->
+                    <div class="card bg-gradient-to-br from-emerald-500 to-teal-600 text-white shadow-xl">
+                        <div class="card-body">
+                            <h3 class="card-title">🔀 Blended Programme</h3>
+                            <p class="text-sm opacity-90">Career + AuDHD combined</p>
+                            <div class="divider my-2 before:bg-white/20 after:bg-white/20"></div>
+                            <div class="text-xs space-y-1">
+                                <div class="flex items-center gap-2">✓ All Career Tools</div>
+                                <div class="flex items-center gap-2">✓ All Mind Management Tools</div>
+                                <div class="flex items-center gap-2">✓ Extended Support</div>
+                            </div>
+                            <div class="card-actions justify-end mt-4">
+                                <button onclick="assignProgramme('blended')" class="btn btn-sm bg-white/20 border-0 hover:bg-white/30">Assign to Client</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Exec Career -->
+                    <div class="card bg-gradient-to-br from-slate-700 to-slate-900 text-white shadow-xl">
+                        <div class="card-body">
+                            <h3 class="card-title">👔 Executive Career</h3>
+                            <p class="text-sm opacity-90">Senior-level career transition</p>
+                            <div class="divider my-2 before:bg-white/20 after:bg-white/20"></div>
+                            <div class="text-xs space-y-1">
+                                <div class="flex items-center gap-2">✓ Executive Discovery</div>
+                                <div class="flex items-center gap-2">✓ Leadership Blueprint</div>
+                                <div class="flex items-center gap-2">✓ Executive CV</div>
+                                <div class="flex items-center gap-2">✓ Board-level Positioning</div>
+                            </div>
+                            <div class="card-actions justify-end mt-4">
+                                <button onclick="assignProgramme('exec')" class="btn btn-sm bg-white/20 border-0 hover:bg-white/30">Assign to Client</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick Assign Section -->
+                <div class="mt-8 p-6 bg-base-200 rounded-xl">
+                    <h3 class="text-lg font-semibold mb-4">⚡ Quick Assign Programme</h3>
+                    <div class="flex flex-wrap gap-4 items-end">
+                        <div class="form-control w-full max-w-xs">
+                            <label class="label"><span class="label-text">Select Client</span></label>
+                            <select id="assignClientSelect" class="select select-bordered">
+                                <option value="">Choose a client...</option>
+                            </select>
+                        </div>
+                        <div class="form-control w-full max-w-xs">
+                            <label class="label"><span class="label-text">Programme</span></label>
+                            <select id="assignProgrammeSelect" class="select select-bordered">
+                                <option value="career">💼 Career Booster</option>
+                                <option value="audhd">🧠 AuDHD Coaching</option>
+                                <option value="blended">🔀 Blended Programme</option>
+                                <option value="exec">👔 Executive Career</option>
+                            </select>
+                        </div>
+                        <button onclick="quickAssignProgramme()" class="btn btn-primary">Assign Programme</button>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <!-- Settings Section -->
@@ -2308,6 +2607,8 @@
                 checkGmailStatus();
             } else if (tabName === 'settings') {
                 loadSettings();
+            } else if (tabName === 'programmes') {
+                populateClientDropdown();
             }
         }
 
@@ -2718,6 +3019,83 @@
                 console.error('Login error:', error);
                 showError('Connection error. Please try again.');
             }
+        }
+
+        // ============================================
+        // PROGRAMME BUILDER FUNCTIONS
+        // ============================================
+
+        // Populate client dropdown when switching to programmes tab
+        function populateClientDropdown() {
+            const select = document.getElementById('assignClientSelect');
+            if (!select) return;
+
+            select.innerHTML = '<option value="">Choose a client...</option>';
+            clients.forEach(client => {
+                const option = document.createElement('option');
+                option.value = client.email;
+                option.textContent = `${client.full_name || client.name} (${client.programme_type || 'career'})`;
+                select.appendChild(option);
+            });
+        }
+
+        // Assign programme to a specific client
+        async function assignProgramme(programmeType) {
+            const clientEmail = prompt('Enter client email to assign this programme:');
+            if (!clientEmail) return;
+
+            try {
+                const response = await fetch(`${SYP_API}/api/clients/${encodeURIComponent(clientEmail)}/programme`, {
+                    method: 'PATCH',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ programme_type: programmeType })
+                });
+
+                if (response.ok) {
+                    showSuccess(`Programme "${programmeType}" assigned to ${clientEmail}`);
+                    loadClients(); // Refresh client list
+                } else {
+                    showError('Failed to assign programme');
+                }
+            } catch (error) {
+                console.error('Assign programme error:', error);
+                // Fallback: update locally
+                const client = clients.find(c => c.email === clientEmail);
+                if (client) {
+                    client.programme_type = programmeType;
+                    showSuccess(`Programme "${programmeType}" assigned to ${clientEmail} (local only)`);
+                } else {
+                    showError('Client not found');
+                }
+            }
+        }
+
+        // Quick assign from the dropdown
+        async function quickAssignProgramme() {
+            const clientEmail = document.getElementById('assignClientSelect').value;
+            const programmeType = document.getElementById('assignProgrammeSelect').value;
+
+            if (!clientEmail) {
+                showError('Please select a client');
+                return;
+            }
+
+            await assignProgramme(programmeType);
+            document.getElementById('assignClientSelect').value = '';
+        }
+
+        // Open create programme modal (placeholder for future custom programmes)
+        function openCreateProgrammeModal() {
+            alert('Custom programme builder coming soon! For now, use the pre-defined programmes.');
+        }
+
+        // Helper: Show success message
+        function showSuccess(message) {
+            const toast = document.createElement('div');
+            toast.className = 'toast toast-end toast-top z-50';
+            toast.innerHTML = `<div class="alert alert-success"><span>${message}</span></div>`;
+            document.body.appendChild(toast);
+            setTimeout(() => toast.remove(), 3000);
         }
 
         // Logout
