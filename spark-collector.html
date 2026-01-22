@@ -556,6 +556,8 @@
                         <button onclick="shareWins('week')"><span class="period-icon">📆</span> This Week</button>
                         <button onclick="shareWins('month')"><span class="period-icon">🗓️</span> This Month</button>
                         <button onclick="shareWins('all')"><span class="period-icon">🌟</span> All Time</button>
+                        <div style="border-top: 1px solid #eee; margin: 8px 0;"></div>
+                        <button onclick="shareToWhatsApp()"><span class="period-icon">💬</span> WhatsApp</button>
                     </div>
                 </div>
             </h2>
@@ -1129,6 +1131,26 @@
             } else {
                 copyToClipboard(shareText);
             }
+        }
+
+        // Share directly to WhatsApp
+        function shareToWhatsApp() {
+            document.getElementById('shareMenu').classList.remove('show');
+
+            const wins = getWinsForPeriod('day');
+            if (wins.length === 0) {
+                showToast('No wins to share yet! Add some wins first ✨');
+                return;
+            }
+
+            const dateStr = formatDisplayDate(viewingDate);
+            const winsList = wins.map(w => `✨ ${w.text}`).join('\n');
+            const shareText = `🏆 My Wins for ${dateStr}\n\n${winsList}\n\n#SparkYourPotential`;
+
+            // WhatsApp URL scheme
+            const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(shareText)}`;
+            window.open(whatsappUrl, '_blank');
+            showToast('Opening WhatsApp... 💬');
         }
 
         function copyToClipboard(text) {
