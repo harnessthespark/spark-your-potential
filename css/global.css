@@ -1,0 +1,495 @@
+/**
+ * Spark Your Potential - Global Styles
+ * Shared CSS for consistent look across all pages
+ */
+
+/* ============================================
+   CSS VARIABLES / DESIGN TOKENS
+   ============================================ */
+:root {
+    /* Brand Colors */
+    --spark-purple-dark: #5B21B6;
+    --spark-purple-main: #7C3AED;
+    --spark-purple-light: #A78BFA;
+    --spark-gold: #F59E0B;
+    --spark-gold-light: #FCD34D;
+    --spark-orange: #F97316;
+    --spark-pink: #EC4899;
+    --spark-teal: #14B8A6;
+
+    /* Semantic Colors */
+    --success: #10B981;
+    --warning: #F59E0B;
+    --error: #EF4444;
+    --info: #3B82F6;
+
+    /* Backgrounds */
+    --bg-dark: #1a1a2e;
+    --bg-dark-alt: #2d1b4e;
+    --bg-light: #FFFBEB;
+    --bg-light-alt: #FEF3C7;
+    --bg-card: #FFFFFF;
+
+    /* Text */
+    --text-dark: #1F2937;
+    --text-muted: #6B7280;
+    --text-light: #F9FAFB;
+
+    /* Borders */
+    --border-light: #E5E7EB;
+    --border-gold: #FDE68A;
+
+    /* Shadows */
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+    --shadow-purple: 0 4px 20px rgba(124, 58, 237, 0.3);
+    --shadow-gold: 0 4px 15px rgba(245, 158, 11, 0.4);
+
+    /* Spacing */
+    --space-xs: 4px;
+    --space-sm: 8px;
+    --space-md: 16px;
+    --space-lg: 24px;
+    --space-xl: 32px;
+    --space-2xl: 48px;
+
+    /* Border Radius */
+    --radius-sm: 6px;
+    --radius-md: 10px;
+    --radius-lg: 16px;
+    --radius-xl: 24px;
+    --radius-full: 9999px;
+
+    /* Typography */
+    --font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    --font-size-xs: 0.75rem;
+    --font-size-sm: 0.875rem;
+    --font-size-base: 1rem;
+    --font-size-lg: 1.125rem;
+    --font-size-xl: 1.25rem;
+    --font-size-2xl: 1.5rem;
+    --font-size-3xl: 2rem;
+
+    /* Transitions */
+    --transition-fast: 150ms ease;
+    --transition-normal: 200ms ease;
+    --transition-slow: 300ms ease;
+}
+
+/* ============================================
+   BASE RESETS
+   ============================================ */
+*, *::before, *::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: var(--font-family);
+    font-size: var(--font-size-base);
+    line-height: 1.6;
+    color: var(--text-dark);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* ============================================
+   TYPOGRAPHY
+   ============================================ */
+h1, h2, h3, h4, h5, h6 {
+    font-weight: 700;
+    line-height: 1.2;
+}
+
+h1 { font-size: var(--font-size-3xl); }
+h2 { font-size: var(--font-size-2xl); }
+h3 { font-size: var(--font-size-xl); }
+h4 { font-size: var(--font-size-lg); }
+
+a {
+    color: var(--spark-purple-main);
+    text-decoration: none;
+    transition: color var(--transition-fast);
+}
+
+a:hover {
+    color: var(--spark-purple-dark);
+}
+
+/* ============================================
+   GRADIENTS
+   ============================================ */
+.gradient-purple {
+    background: linear-gradient(135deg, var(--spark-purple-dark) 0%, var(--spark-purple-main) 100%);
+}
+
+.gradient-gold {
+    background: linear-gradient(135deg, var(--spark-gold) 0%, var(--spark-orange) 100%);
+}
+
+.gradient-dark {
+    background: linear-gradient(135deg, var(--bg-dark) 0%, var(--bg-dark-alt) 100%);
+}
+
+.gradient-career {
+    background: linear-gradient(135deg, #F59E0B 0%, #F97316 100%);
+}
+
+.gradient-audhd {
+    background: linear-gradient(135deg, #7C3AED 0%, #EC4899 100%);
+}
+
+.gradient-blended {
+    background: linear-gradient(135deg, #10B981 0%, #14B8A6 100%);
+}
+
+.gradient-exec {
+    background: linear-gradient(135deg, #475569 0%, #1E293B 100%);
+}
+
+/* Text gradient */
+.text-gradient {
+    background: linear-gradient(135deg, var(--spark-gold) 0%, var(--spark-orange) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+/* ============================================
+   BUTTONS
+   ============================================ */
+.btn-spark {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-sm);
+    padding: var(--space-sm) var(--space-lg);
+    font-size: var(--font-size-sm);
+    font-weight: 600;
+    border: none;
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    transition: all var(--transition-normal);
+}
+
+.btn-spark:hover {
+    transform: translateY(-2px);
+}
+
+.btn-spark:active {
+    transform: translateY(0);
+}
+
+.btn-spark-primary {
+    background: var(--spark-purple-main);
+    color: white;
+}
+
+.btn-spark-primary:hover {
+    background: var(--spark-purple-dark);
+    box-shadow: var(--shadow-purple);
+}
+
+.btn-spark-gold {
+    background: linear-gradient(135deg, var(--spark-gold) 0%, var(--spark-orange) 100%);
+    color: var(--text-dark);
+}
+
+.btn-spark-gold:hover {
+    box-shadow: var(--shadow-gold);
+}
+
+.btn-spark-outline {
+    background: transparent;
+    border: 2px solid var(--spark-purple-main);
+    color: var(--spark-purple-main);
+}
+
+.btn-spark-outline:hover {
+    background: var(--spark-purple-main);
+    color: white;
+}
+
+/* ============================================
+   CARDS
+   ============================================ */
+.card-spark {
+    background: var(--bg-card);
+    border-radius: var(--radius-lg);
+    padding: var(--space-lg);
+    box-shadow: var(--shadow-md);
+    transition: all var(--transition-normal);
+}
+
+.card-spark:hover {
+    box-shadow: var(--shadow-lg);
+}
+
+.card-spark-bordered {
+    border: 2px solid var(--border-light);
+}
+
+.card-spark-gold {
+    border: 2px solid var(--border-gold);
+    background: linear-gradient(135deg, #FFFBEB 0%, #FEF3C7 100%);
+}
+
+/* ============================================
+   FORMS
+   ============================================ */
+.input-spark {
+    width: 100%;
+    padding: var(--space-md);
+    font-size: var(--font-size-base);
+    font-family: inherit;
+    border: 2px solid var(--border-light);
+    border-radius: var(--radius-md);
+    background: white;
+    transition: all var(--transition-fast);
+}
+
+.input-spark:focus {
+    outline: none;
+    border-color: var(--spark-purple-main);
+    box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.1);
+}
+
+.input-spark::placeholder {
+    color: var(--text-muted);
+}
+
+.label-spark {
+    display: block;
+    font-size: var(--font-size-sm);
+    font-weight: 600;
+    color: var(--text-dark);
+    margin-bottom: var(--space-xs);
+}
+
+/* ============================================
+   BADGES
+   ============================================ */
+.badge-spark {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-xs);
+    padding: var(--space-xs) var(--space-sm);
+    font-size: var(--font-size-xs);
+    font-weight: 600;
+    border-radius: var(--radius-full);
+}
+
+.badge-spark-success {
+    background: rgba(16, 185, 129, 0.1);
+    color: var(--success);
+}
+
+.badge-spark-warning {
+    background: rgba(245, 158, 11, 0.1);
+    color: var(--warning);
+}
+
+.badge-spark-error {
+    background: rgba(239, 68, 68, 0.1);
+    color: var(--error);
+}
+
+.badge-spark-info {
+    background: rgba(59, 130, 246, 0.1);
+    color: var(--info);
+}
+
+/* ============================================
+   LAYOUT UTILITIES
+   ============================================ */
+.container-spark {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 var(--space-md);
+}
+
+.flex-center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.flex-between {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.grid-2 {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-lg);
+}
+
+.grid-3 {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-lg);
+}
+
+.grid-4 {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--space-lg);
+}
+
+/* Responsive grids */
+@media (max-width: 1024px) {
+    .grid-4 { grid-template-columns: repeat(2, 1fr); }
+    .grid-3 { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 640px) {
+    .grid-4, .grid-3, .grid-2 { grid-template-columns: 1fr; }
+}
+
+/* ============================================
+   ANIMATIONS
+   ============================================ */
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes slideUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideIn {
+    from { opacity: 0; transform: translateX(-20px); }
+    to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+}
+
+@keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+}
+
+@keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+.animate-fadeIn { animation: fadeIn var(--transition-slow) ease; }
+.animate-slideUp { animation: slideUp var(--transition-slow) ease; }
+.animate-slideIn { animation: slideIn var(--transition-slow) ease; }
+.animate-pulse { animation: pulse 2s infinite; }
+.animate-bounce { animation: bounce 1s infinite; }
+.animate-spin { animation: spin 1s linear infinite; }
+
+/* ============================================
+   TOAST / NOTIFICATIONS
+   ============================================ */
+.toast-spark {
+    position: fixed;
+    bottom: var(--space-lg);
+    right: var(--space-lg);
+    padding: var(--space-md) var(--space-lg);
+    border-radius: var(--radius-md);
+    font-weight: 500;
+    z-index: 9999;
+    animation: slideUp var(--transition-normal) ease;
+}
+
+.toast-spark-success {
+    background: var(--success);
+    color: white;
+}
+
+.toast-spark-error {
+    background: var(--error);
+    color: white;
+}
+
+/* ============================================
+   LOADING STATES
+   ============================================ */
+.skeleton {
+    background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+    border-radius: var(--radius-sm);
+}
+
+@keyframes shimmer {
+    0% { background-position: -200% 0; }
+    100% { background-position: 200% 0; }
+}
+
+.loading-spinner {
+    width: 24px;
+    height: 24px;
+    border: 3px solid var(--border-light);
+    border-top-color: var(--spark-purple-main);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+}
+
+/* ============================================
+   PROGRAMME-SPECIFIC COLORS
+   ============================================ */
+.programme-career {
+    --programme-color: var(--spark-gold);
+    --programme-bg: linear-gradient(135deg, #F59E0B 0%, #F97316 100%);
+}
+
+.programme-audhd {
+    --programme-color: var(--spark-purple-main);
+    --programme-bg: linear-gradient(135deg, #7C3AED 0%, #EC4899 100%);
+}
+
+.programme-blended {
+    --programme-color: var(--spark-teal);
+    --programme-bg: linear-gradient(135deg, #10B981 0%, #14B8A6 100%);
+}
+
+.programme-exec {
+    --programme-color: #475569;
+    --programme-bg: linear-gradient(135deg, #475569 0%, #1E293B 100%);
+}
+
+/* ============================================
+   DARK MODE SUPPORT
+   ============================================ */
+[data-theme="night"] {
+    --bg-card: #1f2937;
+    --text-dark: #f9fafb;
+    --text-muted: #9ca3af;
+    --border-light: #374151;
+}
+
+/* ============================================
+   PRINT STYLES
+   ============================================ */
+@media print {
+    .no-print { display: none !important; }
+
+    body {
+        background: white;
+        color: black;
+    }
+
+    .card-spark {
+        box-shadow: none;
+        border: 1px solid #ccc;
+    }
+}
