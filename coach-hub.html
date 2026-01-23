@@ -1159,6 +1159,19 @@
         }
 
         /* Mobile Responsive */
+
+        /* Tablets and small desktops */
+        @media (max-width: 1024px) {
+            .main-container {
+                padding: 20px;
+            }
+
+            .clients-grid {
+                grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            }
+        }
+
+        /* Tablets */
         @media (max-width: 768px) {
             .header {
                 flex-direction: column;
@@ -1186,6 +1199,278 @@
 
             .today-grid {
                 grid-template-columns: 1fr;
+            }
+
+            /* DaisyUI Navbar mobile adjustments */
+            .navbar {
+                padding: 8px 12px !important;
+                flex-wrap: wrap;
+                min-height: auto;
+            }
+
+            .navbar-start {
+                flex: 0 0 auto;
+                width: auto;
+            }
+
+            .navbar-start h1 {
+                font-size: 1rem !important;
+            }
+
+            .navbar-start .badge {
+                display: none;
+            }
+
+            .navbar-end {
+                flex: 1;
+                justify-content: flex-end;
+                gap: 4px !important;
+            }
+
+            .navbar-end .btn {
+                padding: 6px 10px !important;
+                font-size: 0.75rem !important;
+                min-height: 32px !important;
+                height: 32px !important;
+            }
+
+            .navbar-end .btn-circle {
+                width: 32px !important;
+                height: 32px !important;
+                min-height: 32px !important;
+            }
+
+            /* Hide button text, show icons only on mobile */
+            .navbar-end .btn:not(.btn-circle):not(.btn-ghost) span,
+            .navbar-end .btn:not(.btn-circle):not(.btn-ghost) {
+                font-size: 0;
+            }
+
+            .navbar-end .btn:not(.btn-circle):not(.btn-ghost) svg {
+                width: 18px !important;
+                height: 18px !important;
+            }
+
+            /* Navigation tabs mobile */
+            nav.bg-base-200 {
+                position: relative;
+            }
+
+            /* Scroll indicator gradient */
+            nav.bg-base-200::after {
+                content: '';
+                position: absolute;
+                right: 0;
+                top: 0;
+                bottom: 0;
+                width: 40px;
+                background: linear-gradient(to right, transparent, var(--b2, #f2f2f2));
+                pointer-events: none;
+                z-index: 10;
+            }
+
+            .tabs {
+                padding: 8px !important;
+                gap: 4px !important;
+                -webkit-overflow-scrolling: touch;
+                scrollbar-width: none;
+                -ms-overflow-style: none;
+            }
+
+            .tabs::-webkit-scrollbar {
+                display: none;
+            }
+
+            .tab {
+                padding: 8px 12px !important;
+                font-size: 0.8rem !important;
+                white-space: nowrap;
+                flex-shrink: 0;
+            }
+
+            .divider-horizontal {
+                width: 1px !important;
+                margin: 0 4px !important;
+            }
+
+            /* Section headers */
+            .section-header,
+            .section-bar {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+
+            .today-section {
+                padding: 15px;
+            }
+
+            /* Client cards */
+            .client-card {
+                padding: 15px;
+            }
+
+            .card-actions {
+                flex-direction: column;
+            }
+
+            .card-actions .action-btn {
+                width: 100%;
+                justify-content: center;
+            }
+
+            /* Panel adjustments */
+            .panel-header {
+                padding: 20px 15px;
+            }
+
+            .panel-content {
+                padding: 15px;
+            }
+
+            .panel-client-name {
+                font-size: 1.2em;
+            }
+
+            /* Modal adjustments */
+            .modal {
+                padding: 20px;
+                margin: 15px;
+                width: calc(100% - 30px);
+            }
+
+            .modal-actions {
+                flex-direction: column;
+            }
+
+            .modal-actions button {
+                width: 100%;
+            }
+        }
+
+        /* Small phones */
+        @media (max-width: 480px) {
+            .navbar {
+                padding: 6px 8px !important;
+            }
+
+            .navbar-start h1 {
+                font-size: 0.9rem !important;
+            }
+
+            .navbar-end .btn:not(.btn-circle) {
+                padding: 4px 8px !important;
+            }
+
+            /* Hide Automations text completely on small phones */
+            .navbar-end a[href="coach-automations.html"] {
+                padding: 6px !important;
+            }
+
+            .navbar-end a[href="coach-automations.html"]::before {
+                content: '⚡';
+                font-size: 1rem;
+            }
+
+            /* User dropdown smaller */
+            .navbar-end .avatar .w-10 {
+                width: 28px !important;
+                height: 28px !important;
+            }
+
+            /* Tabs even more compact */
+            .tab {
+                padding: 6px 10px !important;
+                font-size: 0.75rem !important;
+            }
+
+            /* Main container full width */
+            .main-container {
+                padding: 10px;
+            }
+
+            .today-section,
+            .clients-section {
+                border-radius: 12px;
+            }
+
+            .section-title {
+                font-size: 1rem;
+            }
+
+            .section-bar h2 {
+                font-size: 0.95rem;
+            }
+
+            /* Client card compact */
+            .client-info h3 {
+                font-size: 1rem;
+            }
+
+            .client-email {
+                font-size: 0.8rem;
+            }
+
+            .stage-badge {
+                font-size: 0.7rem;
+                padding: 3px 8px;
+            }
+
+            .progress-label {
+                font-size: 0.75rem;
+            }
+
+            /* Login section */
+            .login-section {
+                margin: 20px 10px;
+                padding: 25px 20px;
+            }
+        }
+
+        /* Extra small phones */
+        @media (max-width: 360px) {
+            .navbar-start h1 span {
+                display: none;
+            }
+
+            .navbar-start h1::after {
+                content: 'Hub';
+                color: #fde047;
+            }
+
+            .tab {
+                padding: 5px 8px !important;
+                font-size: 0.7rem !important;
+            }
+        }
+
+        /* Touch device optimisations */
+        @media (hover: none) and (pointer: coarse) {
+            .client-card:hover {
+                transform: none;
+            }
+
+            .action-btn,
+            .tab,
+            .btn {
+                min-height: 44px;
+            }
+
+            .tab {
+                min-height: 40px;
+                display: flex;
+                align-items: center;
+            }
+        }
+
+        /* Safe area for notched phones */
+        @supports (padding-bottom: env(safe-area-inset-bottom)) {
+            .slide-panel {
+                padding-bottom: env(safe-area-inset-bottom);
+            }
+
+            .modal-overlay {
+                padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
             }
         }
 
@@ -1502,6 +1787,7 @@
             font-size: 0.9em;
         }
 
+        /* MailMatrix & Calendar Mobile */
         @media (max-width: 768px) {
             .hub-tabs {
                 overflow-x: auto;
@@ -1510,6 +1796,76 @@
 
             .email-matrix {
                 grid-template-columns: 1fr;
+                gap: 15px;
+                min-height: auto;
+            }
+
+            .matrix-quadrant {
+                padding: 15px;
+            }
+
+            .mailmatrix-header {
+                flex-direction: column;
+                gap: 15px;
+                align-items: flex-start;
+            }
+
+            .mailmatrix-actions {
+                width: 100%;
+                flex-wrap: wrap;
+            }
+
+            .gmail-connect-prompt {
+                padding: 30px 15px;
+            }
+
+            .tool-frame {
+                height: calc(100vh - 200px);
+                min-height: 400px;
+            }
+
+            .calendar-header-bar {
+                flex-direction: column;
+                gap: 10px;
+                align-items: flex-start;
+            }
+
+            .calendar-actions-bar {
+                width: 100%;
+                flex-wrap: wrap;
+            }
+
+            .calendar-btn {
+                flex: 1;
+                min-width: 120px;
+                text-align: center;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .email-card {
+                padding: 10px;
+            }
+
+            .email-sender {
+                font-size: 0.85em;
+            }
+
+            .email-subject {
+                font-size: 0.8em;
+            }
+
+            .matrix-quadrant {
+                padding: 12px;
+            }
+
+            .quadrant-header h3 {
+                font-size: 0.9em;
+            }
+
+            .tool-frame {
+                height: calc(100vh - 160px);
+                border-radius: 8px;
             }
         }
 
