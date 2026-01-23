@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Leadership Blueprint - Spark Your Potential</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>👔</text></svg>">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/global.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            line-height: 1.6;
+            color: #1e293b;
+            background: linear-gradient(135deg, #334155 0%, #1e293b 100%);
+            padding: 40px 20px;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+        .header {
+            background: linear-gradient(135deg, #475569 0%, #334155 100%);
+            color: white;
+            padding: 60px 40px;
+            text-align: center;
+        }
+        .header h1 { font-size: 2.8em; font-weight: 700; margin-bottom: 10px; }
+        .header .subtitle { font-size: 1.3em; opacity: 0.9; font-weight: 300; }
+        .header .coach { font-size: 0.9em; margin-top: 15px; opacity: 0.8; }
+
+        .content { padding: 50px 40px; }
+
+        .section { margin-bottom: 50px; page-break-inside: avoid; }
+        .section-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+        .section-title {
+            font-size: 1.6em;
+            font-weight: 700;
+            color: #475569;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .section-divider {
+            border-bottom: 3px solid #475569;
+            padding-bottom: 10px;
+            margin-bottom: 25px;
+        }
+
+        .intro-box {
+            background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%);
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 40px;
+            border-left: 5px solid #475569;
+        }
+        .intro-box h3 { color: #475569; margin-bottom: 15px; }
+        .intro-box p { color: #64748b; }
+
+        .insight-box {
+            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+            padding: 30px;
+            border-radius: 15px;
+            border-left: 5px solid #64748b;
+            margin: 20px 0;
+        }
+        .insight-label {
+            font-size: 0.85em;
+            font-weight: 600;
+            color: #64748b;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 10px;
+        }
+
+        .outcome {
+            background: #f8fafc;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            border-left: 4px solid #475569;
+        }
+        .outcome-title { font-weight: 600; color: #475569; margin-bottom: 8px; }
+
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 25px; }
+        .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-bottom: 25px; }
+
+        .metric-box {
+            background: linear-gradient(135deg, #475569 0%, #334155 100%);
+            color: white;
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+        }
+        .metric-value { font-size: 1.8em; font-weight: 700; margin-bottom: 5px; }
+        .metric-label { font-size: 0.85em; opacity: 0.9; }
+
+        .editable {
+            border: 2px dashed #cbd5e1;
+            padding: 15px;
+            border-radius: 8px;
+            min-height: 80px;
+            background: #fafafa;
+            transition: all 0.3s;
+        }
+        .editable:hover { background: #f1f5f9; border-color: #94a3b8; }
+        .editable:focus { outline: none; background: white; border-style: solid; border-color: #475569; }
+        .placeholder { color: #94a3b8; font-style: italic; }
+
+        .strength-pill {
+            display: inline-block;
+            background: #475569;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            margin: 5px 5px 5px 0;
+        }
+
+        .achievement-card {
+            background: white;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 15px;
+        }
+        .achievement-card:hover { border-color: #475569; }
+        .achievement-impact {
+            background: #f1f5f9;
+            padding: 10px 15px;
+            border-radius: 8px;
+            margin-top: 10px;
+            font-size: 0.95em;
+        }
+        .achievement-impact strong { color: #475569; }
+
+        /* Print Styles */
+        @media print {
+            body { background: white; padding: 0; }
+            .container { box-shadow: none; }
+            .editable { border: 1px solid #ddd; }
+            .no-print { display: none; }
+        }
+
+        @media (max-width: 768px) {
+            .grid-2, .grid-3 { grid-template-columns: 1fr; }
+            .content { padding: 30px 20px; }
+            .header { padding: 40px 20px; }
+            .header h1 { font-size: 2em; }
+        }
+
+        /* Save indicator */
+        .save-indicator {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #475569;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-size: 0.85em;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        .save-indicator.visible { opacity: 1; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Leadership Blueprint</h1>
+            <div class="subtitle">Your Executive Positioning Document</div>
+            <div class="coach">Executive Career Programme with Lisa Gills</div>
+        </div>
+
+        <div class="content">
+            <!-- Intro -->
+            <div class="intro-box">
+                <h3>👔 Your Leadership Blueprint</h3>
+                <p>This document captures your leadership identity, strategic achievements, and executive positioning.
+                   Use it to prepare for board interviews, craft executive summaries, and articulate your value at senior level.</p>
+                <p style="margin-top: 15px;"><strong>Click any field to edit.</strong> Changes save automatically.</p>
+            </div>
+
+            <!-- Leadership Identity -->
+            <div class="section">
+                <div class="section-title">🏛️ Leadership Identity</div>
+                <div class="section-divider"></div>
+
+                <div class="insight-label">Your Leadership Philosophy</div>
+                <div class="insight-box">
+                    <div class="editable" contenteditable="true" id="leadership-philosophy">
+                        <span class="placeholder">What's your core leadership philosophy? The belief that drives how you lead...</span>
+                    </div>
+                </div>
+
+                <div class="insight-label">Your Signature Impact</div>
+                <div class="insight-box">
+                    <div class="editable" contenteditable="true" id="signature-impact">
+                        <span class="placeholder">What do organisations look like after you've led them? Your trademark transformation...</span>
+                    </div>
+                </div>
+
+                <div class="insight-label">Leadership Style</div>
+                <div class="grid-2">
+                    <div class="outcome">
+                        <div class="outcome-title">What I'm Known For</div>
+                        <div class="editable" contenteditable="true" id="known-for">
+                            <span class="placeholder">How others describe your leadership...</span>
+                        </div>
+                    </div>
+                    <div class="outcome">
+                        <div class="outcome-title">How I Build Teams</div>
+                        <div class="editable" contenteditable="true" id="team-building">
+                            <span class="placeholder">Your approach to talent and team development...</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Strategic Achievements -->
+            <div class="section">
+                <div class="section-title">📊 Strategic Achievements</div>
+                <div class="section-divider"></div>
+
+                <div class="insight-label">Key Metrics</div>
+                <div class="grid-3">
+                    <div class="metric-box">
+                        <div class="metric-value editable" contenteditable="true" id="metric-pnl">£__M</div>
+                        <div class="metric-label">P&L Responsibility</div>
+                    </div>
+                    <div class="metric-box">
+                        <div class="metric-value editable" contenteditable="true" id="metric-team">___</div>
+                        <div class="metric-label">Team Size Led</div>
+                    </div>
+                    <div class="metric-box">
+                        <div class="metric-value editable" contenteditable="true" id="metric-growth">__%</div>
+                        <div class="metric-label">Growth Delivered</div>
+                    </div>
+                </div>
+
+                <div class="insight-label">Signature Achievements</div>
+
+                <div class="achievement-card">
+                    <div class="editable" contenteditable="true" id="achievement-1-title" style="font-weight: 600; margin-bottom: 10px;">
+                        <span class="placeholder">Achievement #1 Title</span>
+                    </div>
+                    <div class="editable" contenteditable="true" id="achievement-1-desc">
+                        <span class="placeholder">Describe the challenge, your actions, and the outcome...</span>
+                    </div>
+                    <div class="achievement-impact">
+                        <strong>Impact:</strong> <span class="editable" contenteditable="true" id="achievement-1-impact" style="display: inline;"><span class="placeholder">Quantified result</span></span>
+                    </div>
+                </div>
+
+                <div class="achievement-card">
+                    <div class="editable" contenteditable="true" id="achievement-2-title" style="font-weight: 600; margin-bottom: 10px;">
+                        <span class="placeholder">Achievement #2 Title</span>
+                    </div>
+                    <div class="editable" contenteditable="true" id="achievement-2-desc">
+                        <span class="placeholder">Describe the challenge, your actions, and the outcome...</span>
+                    </div>
+                    <div class="achievement-impact">
+                        <strong>Impact:</strong> <span class="editable" contenteditable="true" id="achievement-2-impact" style="display: inline;"><span class="placeholder">Quantified result</span></span>
+                    </div>
+                </div>
+
+                <div class="achievement-card">
+                    <div class="editable" contenteditable="true" id="achievement-3-title" style="font-weight: 600; margin-bottom: 10px;">
+                        <span class="placeholder">Achievement #3 Title</span>
+                    </div>
+                    <div class="editable" contenteditable="true" id="achievement-3-desc">
+                        <span class="placeholder">Describe the challenge, your actions, and the outcome...</span>
+                    </div>
+                    <div class="achievement-impact">
+                        <strong>Impact:</strong> <span class="editable" contenteditable="true" id="achievement-3-impact" style="display: inline;"><span class="placeholder">Quantified result</span></span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Board Readiness -->
+            <div class="section">
+                <div class="section-title">🎯 Board Readiness</div>
+                <div class="section-divider"></div>
+
+                <div class="grid-2">
+                    <div class="insight-box">
+                        <div class="insight-label">Board Experience</div>
+                        <div class="editable" contenteditable="true" id="board-experience">
+                            <span class="placeholder">Board presentations, committee membership, NED/advisory roles...</span>
+                        </div>
+                    </div>
+                    <div class="insight-box">
+                        <div class="insight-label">Governance Expertise</div>
+                        <div class="editable" contenteditable="true" id="governance">
+                            <span class="placeholder">Risk, audit, remuneration, ESG, regulatory...</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="insight-label">Unique Board Perspective</div>
+                <div class="insight-box">
+                    <div class="editable" contenteditable="true" id="board-perspective">
+                        <span class="placeholder">The differentiated viewpoint you bring to board discussions...</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Executive Strengths -->
+            <div class="section">
+                <div class="section-title">💪 Executive Strengths</div>
+                <div class="section-divider"></div>
+
+                <div class="insight-label">Core Leadership Competencies</div>
+                <div style="margin-bottom: 20px;">
+                    <span class="strength-pill">Strategic Vision</span>
+                    <span class="strength-pill">Commercial Acumen</span>
+                    <span class="strength-pill">Change Leadership</span>
+                    <span class="strength-pill">Stakeholder Management</span>
+                    <span class="strength-pill">Talent Development</span>
+                </div>
+
+                <div class="grid-2">
+                    <div class="outcome">
+                        <div class="outcome-title">Strategic Strengths</div>
+                        <div class="editable" contenteditable="true" id="strategic-strengths">
+                            <span class="placeholder">Where you excel at strategic level...</span>
+                        </div>
+                    </div>
+                    <div class="outcome">
+                        <div class="outcome-title">Operational Strengths</div>
+                        <div class="editable" contenteditable="true" id="operational-strengths">
+                            <span class="placeholder">Your execution and delivery capabilities...</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Career Trajectory -->
+            <div class="section">
+                <div class="section-title">🚀 Career Trajectory</div>
+                <div class="section-divider"></div>
+
+                <div class="grid-2">
+                    <div class="insight-box">
+                        <div class="insight-label">Target Role</div>
+                        <div class="editable" contenteditable="true" id="target-role">
+                            <span class="placeholder">CEO, MD, NED portfolio, Chair, CxO...</span>
+                        </div>
+                    </div>
+                    <div class="insight-box">
+                        <div class="insight-label">Target Sectors</div>
+                        <div class="editable" contenteditable="true" id="target-sectors">
+                            <span class="placeholder">Industries where your experience translates...</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="insight-label">Career Legacy</div>
+                <div class="insight-box">
+                    <div class="editable" contenteditable="true" id="career-legacy">
+                        <span class="placeholder">The lasting impact you want to have...</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Executive Summary -->
+            <div class="section">
+                <div class="section-title">📝 Executive Summary</div>
+                <div class="section-divider"></div>
+
+                <div class="insight-label">Your 30-Second Pitch</div>
+                <div class="insight-box" style="background: linear-gradient(135deg, #475569 0%, #334155 100%); color: white;">
+                    <div class="editable" contenteditable="true" id="executive-pitch" style="color: white; min-height: 100px;">
+                        <span class="placeholder" style="color: rgba(255,255,255,0.7);">A concise summary of who you are, what you've achieved, and what you're looking for...</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Print Button -->
+            <div class="no-print" style="text-align: center; margin-top: 40px;">
+                <button onclick="window.print()" style="background: #475569; color: white; border: none; padding: 15px 40px; border-radius: 10px; font-size: 1em; font-weight: 600; cursor: pointer;">
+                    📄 Print / Save as PDF
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="save-indicator" id="saveIndicator">✓ Saved</div>
+
+    <script>
+        // Auto-save functionality
+        function saveBlueprint() {
+            const data = {};
+            document.querySelectorAll('.editable').forEach(el => {
+                data[el.id] = el.innerHTML;
+            });
+            localStorage.setItem('exec_leadership_blueprint', JSON.stringify(data));
+
+            const indicator = document.getElementById('saveIndicator');
+            indicator.classList.add('visible');
+            setTimeout(() => indicator.classList.remove('visible'), 2000);
+        }
+
+        function loadBlueprint() {
+            const saved = localStorage.getItem('exec_leadership_blueprint');
+            if (saved) {
+                const data = JSON.parse(saved);
+                Object.keys(data).forEach(id => {
+                    const el = document.getElementById(id);
+                    if (el) el.innerHTML = data[id];
+                });
+            }
+        }
+
+        // Clear placeholder on focus
+        document.querySelectorAll('.editable').forEach(el => {
+            el.addEventListener('focus', function() {
+                if (this.querySelector('.placeholder')) {
+                    this.innerHTML = '';
+                }
+            });
+
+            el.addEventListener('blur', function() {
+                if (this.textContent.trim() === '') {
+                    // Restore placeholder based on field
+                    const placeholders = {
+                        'leadership-philosophy': 'What\'s your core leadership philosophy? The belief that drives how you lead...',
+                        'signature-impact': 'What do organisations look like after you\'ve led them? Your trademark transformation...',
+                        // Add more as needed
+                    };
+                    if (placeholders[this.id]) {
+                        this.innerHTML = `<span class="placeholder">${placeholders[this.id]}</span>`;
+                    }
+                }
+            });
+
+            el.addEventListener('input', () => {
+                clearTimeout(window.saveTimeout);
+                window.saveTimeout = setTimeout(saveBlueprint, 1000);
+            });
+        });
+
+        // Initialize
+        loadBlueprint();
+    </script>
+</body>
+</html>

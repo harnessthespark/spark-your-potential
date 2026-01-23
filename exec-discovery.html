@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Executive Discovery - Spark Your Potential</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>👔</text></svg>">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/global.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+            min-height: 100vh;
+            padding: 40px 20px;
+            color: #333;
+        }
+
+        .container { max-width: 900px; margin: 0 auto; }
+
+        /* Navigation */
+        .nav-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+        .back-link {
+            color: #94a3b8;
+            text-decoration: none;
+            font-size: 0.95em;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .back-link:hover { text-decoration: underline; color: #cbd5e1; }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            color: white;
+        }
+        .header h1 {
+            font-size: 2.2em;
+            font-weight: 800;
+            margin-bottom: 10px;
+        }
+        .header h1 span {
+            background: linear-gradient(135deg, #475569 0%, #64748b 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .header .subtitle {
+            font-size: 1.1em;
+            opacity: 0.8;
+        }
+
+        /* Progress Bar */
+        .progress-container {
+            background: rgba(255,255,255,0.1);
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 30px;
+        }
+        .progress-bar {
+            background: rgba(255,255,255,0.2);
+            border-radius: 8px;
+            height: 12px;
+            overflow: hidden;
+        }
+        .progress-fill {
+            background: linear-gradient(135deg, #475569 0%, #64748b 100%);
+            height: 100%;
+            width: 0%;
+            transition: width 0.5s ease;
+            border-radius: 8px;
+        }
+        .progress-text {
+            color: white;
+            font-size: 0.9em;
+            margin-top: 10px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        /* Section Card */
+        .section-card {
+            background: white;
+            border-radius: 20px;
+            padding: 35px;
+            margin-bottom: 25px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            border-top: 5px solid #475569;
+        }
+        .section-card.hidden { display: none; }
+
+        .section-icon { font-size: 2.5em; margin-bottom: 15px; }
+        .section-title {
+            font-size: 1.4em;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 10px;
+        }
+        .section-intro {
+            color: #64748b;
+            line-height: 1.7;
+            margin-bottom: 25px;
+            background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%);
+            padding: 15px 20px;
+            border-radius: 12px;
+        }
+
+        /* Question Blocks */
+        .question-block {
+            background: #f8fafc;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-left: 4px solid #475569;
+        }
+        .question-label {
+            font-weight: 600;
+            color: #1e293b;
+            margin-bottom: 10px;
+            font-size: 1em;
+        }
+        .question-help {
+            font-size: 0.85em;
+            color: #64748b;
+            margin-bottom: 12px;
+        }
+        textarea {
+            width: 100%;
+            min-height: 120px;
+            padding: 15px;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            font-family: inherit;
+            font-size: 0.95em;
+            resize: vertical;
+            transition: border-color 0.3s;
+        }
+        textarea:focus {
+            outline: none;
+            border-color: #475569;
+        }
+        textarea::placeholder {
+            color: #94a3b8;
+        }
+
+        /* Navigation Buttons */
+        .nav-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+            gap: 15px;
+        }
+        .nav-btn {
+            padding: 14px 28px;
+            border: none;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 1em;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .nav-btn.prev {
+            background: #e2e8f0;
+            color: #475569;
+        }
+        .nav-btn.prev:hover {
+            background: #cbd5e1;
+        }
+        .nav-btn.next {
+            background: linear-gradient(135deg, #475569 0%, #334155 100%);
+            color: white;
+        }
+        .nav-btn.next:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(71, 85, 105, 0.4);
+        }
+        .nav-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* Save Status */
+        .save-status {
+            text-align: center;
+            padding: 10px;
+            color: #94a3b8;
+            font-size: 0.85em;
+        }
+        .save-status.saved {
+            color: #10b981;
+        }
+
+        @media (max-width: 600px) {
+            .header h1 { font-size: 1.6em; }
+            .section-card { padding: 25px 20px; }
+            .nav-buttons { flex-direction: column; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <nav class="nav-bar">
+            <a href="javascript:history.back()" class="back-link">← Back to Toolkit</a>
+        </nav>
+
+        <div class="header">
+            <h1>👔 Executive <span>Discovery</span></h1>
+            <p class="subtitle">Uncover your leadership legacy and strategic impact</p>
+        </div>
+
+        <div class="progress-container">
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+            <div class="progress-text">
+                <span id="progressLabel">Section 1 of 5</span>
+                <span id="progressPercent">0% Complete</span>
+            </div>
+        </div>
+
+        <!-- Section 1: Leadership Legacy -->
+        <div class="section-card" id="section1">
+            <div class="section-icon">🏛️</div>
+            <h2 class="section-title">Your Leadership Legacy</h2>
+            <div class="section-intro">
+                At executive level, you're not just managing teams — you're shaping organisations.
+                Let's capture the transformational impact you've made.
+            </div>
+
+            <div class="question-block">
+                <div class="question-label">What is the single biggest transformation you've led?</div>
+                <div class="question-help">Think scale: revenue growth, organisational change, market entry, turnaround</div>
+                <textarea id="q1_1" placeholder="Describe the transformation, your role, and the measurable outcome..."></textarea>
+            </div>
+
+            <div class="question-block">
+                <div class="question-label">What do organisations look like after you've led them?</div>
+                <div class="question-help">Your signature impact — what's different because of your leadership?</div>
+                <textarea id="q1_2" placeholder="The patterns of change you create..."></textarea>
+            </div>
+
+            <div class="question-block">
+                <div class="question-label">What do your direct reports say about working for you?</div>
+                <div class="question-help">Your leadership style from their perspective</div>
+                <textarea id="q1_3" placeholder="Quotes, feedback, or patterns you've noticed..."></textarea>
+            </div>
+
+            <div class="nav-buttons">
+                <button class="nav-btn prev" disabled>← Previous</button>
+                <button class="nav-btn next" onclick="nextSection()">Next: Strategic Impact →</button>
+            </div>
+        </div>
+
+        <!-- Section 2: Strategic Impact -->
+        <div class="section-card hidden" id="section2">
+            <div class="section-icon">📊</div>
+            <h2 class="section-title">Strategic Impact</h2>
+            <div class="section-intro">
+                Executive roles require evidence of commercial acumen and strategic thinking.
+                Let's quantify your impact.
+            </div>
+
+            <div class="question-block">
+                <div class="question-label">What's the largest P&L you've owned or influenced?</div>
+                <div class="question-help">Include revenue, budget responsibility, or cost management</div>
+                <textarea id="q2_1" placeholder="£/$ figures, team sizes, scope of responsibility..."></textarea>
+            </div>
+
+            <div class="question-block">
+                <div class="question-label">Describe a strategic decision that changed the business trajectory</div>
+                <div class="question-help">Market entry, acquisition, pivot, divestment, or major initiative</div>
+                <textarea id="q2_2" placeholder="The situation, your decision, and the outcome..."></textarea>
+            </div>
+
+            <div class="question-block">
+                <div class="question-label">How have you navigated stakeholder complexity?</div>
+                <div class="question-help">Board dynamics, investor relations, cross-functional leadership</div>
+                <textarea id="q2_3" placeholder="Examples of managing multiple stakeholder agendas..."></textarea>
+            </div>
+
+            <div class="nav-buttons">
+                <button class="nav-btn prev" onclick="prevSection()">← Previous</button>
+                <button class="nav-btn next" onclick="nextSection()">Next: Board Readiness →</button>
+            </div>
+        </div>
+
+        <!-- Section 3: Board Readiness -->
+        <div class="section-card hidden" id="section3">
+            <div class="section-icon">🎯</div>
+            <h2 class="section-title">Board Readiness</h2>
+            <div class="section-intro">
+                Whether executive or non-executive, board roles require specific experience and gravitas.
+                Let's assess your readiness.
+            </div>
+
+            <div class="question-block">
+                <div class="question-label">What board-level exposure have you had?</div>
+                <div class="question-help">Board presentations, committee membership, NED experience, advisory roles</div>
+                <textarea id="q3_1" placeholder="Your experience at or with boards..."></textarea>
+            </div>
+
+            <div class="question-block">
+                <div class="question-label">What governance expertise do you bring?</div>
+                <div class="question-help">Risk, audit, remuneration, nomination, ESG, or sector-specific</div>
+                <textarea id="q3_2" placeholder="Your governance knowledge and experience..."></textarea>
+            </div>
+
+            <div class="question-block">
+                <div class="question-label">What unique perspective would you bring to a board?</div>
+                <div class="question-help">Industry insight, functional expertise, diverse viewpoint</div>
+                <textarea id="q3_3" placeholder="Your differentiated value at board level..."></textarea>
+            </div>
+
+            <div class="nav-buttons">
+                <button class="nav-btn prev" onclick="prevSection()">← Previous</button>
+                <button class="nav-btn next" onclick="nextSection()">Next: Leadership Philosophy →</button>
+            </div>
+        </div>
+
+        <!-- Section 4: Leadership Philosophy -->
+        <div class="section-card hidden" id="section4">
+            <div class="section-icon">💡</div>
+            <h2 class="section-title">Leadership Philosophy</h2>
+            <div class="section-intro">
+                Senior leaders need clarity on their values and approach.
+                This shapes how you'll position yourself.
+            </div>
+
+            <div class="question-block">
+                <div class="question-label">What's your leadership philosophy in one sentence?</div>
+                <div class="question-help">The core belief that drives how you lead</div>
+                <textarea id="q4_1" placeholder="I believe that..."></textarea>
+            </div>
+
+            <div class="question-block">
+                <div class="question-label">How do you balance short-term performance with long-term value?</div>
+                <div class="question-help">Your approach to the classic executive tension</div>
+                <textarea id="q4_2" placeholder="Your philosophy on sustainable leadership..."></textarea>
+            </div>
+
+            <div class="question-block">
+                <div class="question-label">What's the toughest leadership decision you've made?</div>
+                <div class="question-help">Demonstrates judgement, resilience, and values in action</div>
+                <textarea id="q4_3" placeholder="The decision, context, and what it revealed about you..."></textarea>
+            </div>
+
+            <div class="nav-buttons">
+                <button class="nav-btn prev" onclick="prevSection()">← Previous</button>
+                <button class="nav-btn next" onclick="nextSection()">Next: Career Aspirations →</button>
+            </div>
+        </div>
+
+        <!-- Section 5: Career Aspirations -->
+        <div class="section-card hidden" id="section5">
+            <div class="section-icon">🚀</div>
+            <h2 class="section-title">Career Aspirations</h2>
+            <div class="section-intro">
+                Where do you want to take your career next?
+                Let's get specific about your executive ambitions.
+            </div>
+
+            <div class="question-block">
+                <div class="question-label">What's your ideal next role?</div>
+                <div class="question-help">Be specific: CEO, MD, NED portfolio, Chair, CxO in a different function?</div>
+                <textarea id="q5_1" placeholder="The role, organisation type, and context..."></textarea>
+            </div>
+
+            <div class="question-block">
+                <div class="question-label">What sectors or industries interest you?</div>
+                <div class="question-help">Where your experience translates or where you want to pivot</div>
+                <textarea id="q5_2" placeholder="Target sectors and why..."></textarea>
+            </div>
+
+            <div class="question-block">
+                <div class="question-label">What legacy do you want to leave in your career?</div>
+                <div class="question-help">The bigger picture of what you want to achieve</div>
+                <textarea id="q5_3" placeholder="Your career legacy..."></textarea>
+            </div>
+
+            <div class="nav-buttons">
+                <button class="nav-btn prev" onclick="prevSection()">← Previous</button>
+                <button class="nav-btn next" onclick="completeDiscovery()">Complete Discovery ✓</button>
+            </div>
+        </div>
+
+        <div class="save-status" id="saveStatus">Auto-saving your responses...</div>
+    </div>
+
+    <script>
+        let currentSection = 1;
+        const totalSections = 5;
+
+        function updateProgress() {
+            const percent = Math.round(((currentSection - 1) / totalSections) * 100);
+            document.getElementById('progressFill').style.width = percent + '%';
+            document.getElementById('progressLabel').textContent = `Section ${currentSection} of ${totalSections}`;
+            document.getElementById('progressPercent').textContent = percent + '% Complete';
+        }
+
+        function showSection(num) {
+            for (let i = 1; i <= totalSections; i++) {
+                const section = document.getElementById('section' + i);
+                if (i === num) {
+                    section.classList.remove('hidden');
+                } else {
+                    section.classList.add('hidden');
+                }
+            }
+            currentSection = num;
+            updateProgress();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function nextSection() {
+            if (currentSection < totalSections) {
+                showSection(currentSection + 1);
+            }
+        }
+
+        function prevSection() {
+            if (currentSection > 1) {
+                showSection(currentSection - 1);
+            }
+        }
+
+        function completeDiscovery() {
+            saveResponses();
+            alert('Executive Discovery complete! Your responses have been saved.');
+            // Could redirect to Leadership Blueprint
+        }
+
+        // Auto-save functionality
+        function saveResponses() {
+            const responses = {};
+            document.querySelectorAll('textarea').forEach(ta => {
+                responses[ta.id] = ta.value;
+            });
+            localStorage.setItem('exec_discovery_responses', JSON.stringify(responses));
+
+            const status = document.getElementById('saveStatus');
+            status.textContent = '✓ Saved';
+            status.classList.add('saved');
+            setTimeout(() => {
+                status.textContent = 'Auto-saving your responses...';
+                status.classList.remove('saved');
+            }, 2000);
+        }
+
+        function loadResponses() {
+            const saved = localStorage.getItem('exec_discovery_responses');
+            if (saved) {
+                const responses = JSON.parse(saved);
+                Object.keys(responses).forEach(id => {
+                    const el = document.getElementById(id);
+                    if (el) el.value = responses[id];
+                });
+            }
+        }
+
+        // Auto-save on input
+        document.querySelectorAll('textarea').forEach(ta => {
+            ta.addEventListener('input', () => {
+                clearTimeout(window.saveTimeout);
+                window.saveTimeout = setTimeout(saveResponses, 1000);
+            });
+        });
+
+        // Initialize
+        loadResponses();
+        updateProgress();
+    </script>
+</body>
+</html>

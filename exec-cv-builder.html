@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Executive CV Builder - Spark Your Potential</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>👔</text></svg>">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/global.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #333;
+        }
+        .container { max-width: 1400px; margin: 0 auto; }
+        .header { text-align: center; color: white; margin-bottom: 30px; }
+        .header h1 { font-size: 2em; margin-bottom: 5px; }
+        .header p { opacity: 0.8; }
+
+        .builder-layout { display: grid; grid-template-columns: 280px 1fr; gap: 20px; }
+        @media (max-width: 1000px) { .builder-layout { grid-template-columns: 1fr; } }
+
+        /* Sidebar */
+        .sidebar {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            height: fit-content;
+            position: sticky;
+            top: 20px;
+        }
+        .sidebar h2 {
+            font-size: 1em;
+            color: #475569;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .option-group { margin-bottom: 20px; }
+        .option-group label {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.2s;
+            font-size: 0.9em;
+        }
+        .option-group label:hover { background: #f1f5f9; }
+        .option-group input[type="radio"] { accent-color: #475569; }
+
+        .section-toggle {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            border-radius: 8px;
+            background: #f8fafc;
+            margin-bottom: 8px;
+        }
+        .section-toggle span { font-size: 0.85em; }
+        .toggle-switch { position: relative; width: 40px; height: 20px; }
+        .toggle-switch input { opacity: 0; width: 0; height: 0; }
+        .toggle-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: #cbd5e1;
+            border-radius: 20px;
+            transition: 0.3s;
+        }
+        .toggle-slider:before {
+            position: absolute;
+            content: "";
+            height: 16px;
+            width: 16px;
+            left: 2px;
+            bottom: 2px;
+            background: white;
+            border-radius: 50%;
+            transition: 0.3s;
+        }
+        .toggle-switch input:checked + .toggle-slider { background: #475569; }
+        .toggle-switch input:checked + .toggle-slider:before { transform: translateX(20px); }
+
+        .sidebar-actions { margin-top: 20px; padding-top: 20px; border-top: 1px solid #e2e8f0; }
+        .sidebar-btn {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 10px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 0.9em;
+        }
+        .sidebar-btn.primary { background: #475569; color: white; }
+        .sidebar-btn.secondary { background: #f1f5f9; color: #475569; }
+
+        /* CV Preview */
+        .cv-preview {
+            background: white;
+            border-radius: 15px;
+            padding: 50px;
+            min-height: 1000px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+        }
+
+        /* Executive Template Styles */
+        .cv-header {
+            border-bottom: 3px solid #475569;
+            padding-bottom: 25px;
+            margin-bottom: 35px;
+        }
+        .cv-name {
+            font-size: 2.5em;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 5px;
+            letter-spacing: -0.02em;
+        }
+        .cv-headline {
+            font-size: 1.2em;
+            color: #475569;
+            font-weight: 500;
+            margin-bottom: 15px;
+        }
+        .cv-contact {
+            display: flex;
+            gap: 25px;
+            flex-wrap: wrap;
+            font-size: 0.9em;
+            color: #64748b;
+        }
+        .cv-contact a { color: #475569; text-decoration: none; }
+
+        .cv-section { margin-bottom: 35px; }
+        .cv-section-title {
+            font-size: 1.1em;
+            font-weight: 700;
+            color: #475569;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 15px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #e2e8f0;
+        }
+
+        /* Executive Summary */
+        .cv-summary {
+            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+            padding: 25px;
+            border-radius: 10px;
+            border-left: 4px solid #475569;
+            font-size: 1em;
+            line-height: 1.8;
+            margin-bottom: 30px;
+        }
+
+        /* Key Metrics */
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+        .metric-box {
+            background: #475569;
+            color: white;
+            padding: 20px 15px;
+            border-radius: 10px;
+            text-align: center;
+        }
+        .metric-value { font-size: 1.5em; font-weight: 700; }
+        .metric-label { font-size: 0.75em; opacity: 0.9; margin-top: 5px; }
+
+        /* Career History */
+        .cv-experience { margin-bottom: 30px; }
+        .cv-experience-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 10px;
+        }
+        .cv-role { font-weight: 700; font-size: 1.1em; color: #1e293b; }
+        .cv-company { color: #475569; font-weight: 600; margin-top: 2px; }
+        .cv-scope { font-size: 0.9em; color: #64748b; margin-top: 5px; }
+        .cv-dates { color: #64748b; font-size: 0.9em; text-align: right; }
+        .cv-bullets { margin-top: 12px; padding-left: 20px; }
+        .cv-bullets li { margin-bottom: 8px; line-height: 1.6; color: #475569; }
+
+        /* Board Experience */
+        .board-role {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        .board-role:last-child { border-bottom: none; }
+        .board-title { font-weight: 600; color: #1e293b; }
+        .board-org { color: #64748b; font-size: 0.9em; }
+        .board-dates { color: #64748b; font-size: 0.9em; }
+
+        /* Skills */
+        .cv-skills { display: flex; flex-wrap: wrap; gap: 10px; }
+        .cv-skill {
+            background: #f1f5f9;
+            color: #475569;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: 500;
+        }
+
+        /* Education & Qualifications */
+        .qualification {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        .qualification:last-child { border-bottom: none; }
+
+        /* Editable styling */
+        .editable {
+            cursor: text;
+            padding: 3px 5px;
+            border-radius: 4px;
+            transition: background 0.2s;
+        }
+        .editable:hover { background: #f8fafc; }
+        .editable:focus { outline: 2px solid #475569; background: white; }
+
+        /* Template variations */
+        .template-classic .cv-header { border-bottom: 2px solid #1e293b; }
+        .template-classic .cv-section-title { color: #1e293b; }
+        .template-classic .cv-skill { background: #1e293b; color: white; }
+
+        .template-modern .cv-header {
+            background: linear-gradient(135deg, #475569 0%, #334155 100%);
+            color: white;
+            padding: 40px;
+            margin: -50px -50px 35px -50px;
+            border-radius: 15px 15px 0 0;
+            border-bottom: none;
+        }
+        .template-modern .cv-name { color: white; }
+        .template-modern .cv-headline { color: rgba(255,255,255,0.9); }
+        .template-modern .cv-contact { color: rgba(255,255,255,0.8); }
+        .template-modern .cv-contact a { color: white; }
+
+        /* Print Styles */
+        @media print {
+            body { background: white; padding: 0; }
+            .sidebar { display: none; }
+            .builder-layout { display: block; }
+            .cv-preview { box-shadow: none; padding: 30px; }
+            .header { display: none; }
+            .metrics-grid { grid-template-columns: repeat(4, 1fr); }
+        }
+
+        @media (max-width: 768px) {
+            .metrics-grid { grid-template-columns: repeat(2, 1fr); }
+            .cv-preview { padding: 30px 20px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>👔 Executive CV Builder</h1>
+            <p>Craft a board-ready CV that showcases your leadership impact | Click any text to edit</p>
+        </div>
+
+        <div class="builder-layout">
+            <!-- Sidebar Controls -->
+            <div class="sidebar">
+                <h2>🎨 Template Style</h2>
+                <div class="option-group">
+                    <label><input type="radio" name="template" value="executive" checked onchange="changeTemplate(this.value)"><span>Executive (Default)</span></label>
+                    <label><input type="radio" name="template" value="modern" onchange="changeTemplate(this.value)"><span>Modern (Bold Header)</span></label>
+                    <label><input type="radio" name="template" value="classic" onchange="changeTemplate(this.value)"><span>Classic (Traditional)</span></label>
+                </div>
+
+                <h2>📋 Sections</h2>
+                <div class="section-toggle">
+                    <span>Key Metrics</span>
+                    <label class="toggle-switch">
+                        <input type="checkbox" checked onchange="toggleSection('metricsSection', this.checked)">
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+                <div class="section-toggle">
+                    <span>Board Experience</span>
+                    <label class="toggle-switch">
+                        <input type="checkbox" checked onchange="toggleSection('boardSection', this.checked)">
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+                <div class="section-toggle">
+                    <span>Executive Summary</span>
+                    <label class="toggle-switch">
+                        <input type="checkbox" checked onchange="toggleSection('summarySection', this.checked)">
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+                <div class="section-toggle">
+                    <span>Qualifications</span>
+                    <label class="toggle-switch">
+                        <input type="checkbox" checked onchange="toggleSection('qualSection', this.checked)">
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+
+                <div class="sidebar-actions">
+                    <button class="sidebar-btn primary" onclick="window.print()">📄 Print / PDF</button>
+                    <button class="sidebar-btn secondary" onclick="saveCV()">💾 Save Progress</button>
+                </div>
+            </div>
+
+            <!-- CV Preview -->
+            <div class="cv-preview" id="cvPreview">
+                <!-- Header -->
+                <div class="cv-header">
+                    <div class="cv-name editable" contenteditable="true" id="cvName">Your Name</div>
+                    <div class="cv-headline editable" contenteditable="true" id="cvHeadline">Chief Executive Officer | Board Director | Transformation Leader</div>
+                    <div class="cv-contact">
+                        <span class="editable" contenteditable="true" id="cvEmail">email@example.com</span>
+                        <span class="editable" contenteditable="true" id="cvPhone">+44 7xxx xxx xxx</span>
+                        <span class="editable" contenteditable="true" id="cvLocation">London, UK</span>
+                        <a href="#" class="editable" contenteditable="true" id="cvLinkedin">LinkedIn Profile</a>
+                    </div>
+                </div>
+
+                <!-- Executive Summary -->
+                <div class="cv-section" id="summarySection">
+                    <div class="cv-section-title">Executive Summary</div>
+                    <div class="cv-summary editable" contenteditable="true" id="cvSummary">
+                        Accomplished senior executive with [X] years of leadership experience across [sectors].
+                        Track record of delivering transformational growth, leading organisations through change,
+                        and building high-performing executive teams. Known for [signature strengths].
+                        Seeking [target role] to [value proposition].
+                    </div>
+                </div>
+
+                <!-- Key Metrics -->
+                <div class="cv-section" id="metricsSection">
+                    <div class="cv-section-title">Leadership Impact</div>
+                    <div class="metrics-grid">
+                        <div class="metric-box">
+                            <div class="metric-value editable" contenteditable="true" id="metric1Value">£XXM</div>
+                            <div class="metric-label">P&L Responsibility</div>
+                        </div>
+                        <div class="metric-box">
+                            <div class="metric-value editable" contenteditable="true" id="metric2Value">X,XXX</div>
+                            <div class="metric-label">Team Size</div>
+                        </div>
+                        <div class="metric-box">
+                            <div class="metric-value editable" contenteditable="true" id="metric3Value">XX%</div>
+                            <div class="metric-label">Revenue Growth</div>
+                        </div>
+                        <div class="metric-box">
+                            <div class="metric-value editable" contenteditable="true" id="metric4Value">X</div>
+                            <div class="metric-label">Countries Led</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Career History -->
+                <div class="cv-section">
+                    <div class="cv-section-title">Career History</div>
+
+                    <div class="cv-experience">
+                        <div class="cv-experience-header">
+                            <div>
+                                <div class="cv-role editable" contenteditable="true">Chief Executive Officer</div>
+                                <div class="cv-company editable" contenteditable="true">Company Name</div>
+                                <div class="cv-scope editable" contenteditable="true">£XXM revenue | XXX employees | X countries</div>
+                            </div>
+                            <div class="cv-dates editable" contenteditable="true">20XX – Present</div>
+                        </div>
+                        <ul class="cv-bullets">
+                            <li class="editable" contenteditable="true">Led business transformation delivering XX% revenue growth and £XM EBITDA improvement</li>
+                            <li class="editable" contenteditable="true">Built and developed high-performing executive team, reducing attrition by XX%</li>
+                            <li class="editable" contenteditable="true">Drove digital transformation programme, resulting in XX% operational efficiency gains</li>
+                        </ul>
+                    </div>
+
+                    <div class="cv-experience">
+                        <div class="cv-experience-header">
+                            <div>
+                                <div class="cv-role editable" contenteditable="true">Managing Director</div>
+                                <div class="cv-company editable" contenteditable="true">Previous Company</div>
+                                <div class="cv-scope editable" contenteditable="true">£XXM revenue | XXX employees</div>
+                            </div>
+                            <div class="cv-dates editable" contenteditable="true">20XX – 20XX</div>
+                        </div>
+                        <ul class="cv-bullets">
+                            <li class="editable" contenteditable="true">Delivered XX% year-on-year growth through market expansion strategy</li>
+                            <li class="editable" contenteditable="true">Led M&A activity including successful acquisition and integration of [company]</li>
+                            <li class="editable" contenteditable="true">Established governance framework and reporting structure for board</li>
+                        </ul>
+                    </div>
+
+                    <div class="cv-experience">
+                        <div class="cv-experience-header">
+                            <div>
+                                <div class="cv-role editable" contenteditable="true">Director / VP</div>
+                                <div class="cv-company editable" contenteditable="true">Earlier Company</div>
+                                <div class="cv-scope editable" contenteditable="true">Scope description</div>
+                            </div>
+                            <div class="cv-dates editable" contenteditable="true">20XX – 20XX</div>
+                        </div>
+                        <ul class="cv-bullets">
+                            <li class="editable" contenteditable="true">Key achievement with quantified impact</li>
+                            <li class="editable" contenteditable="true">Another significant accomplishment</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Board Experience -->
+                <div class="cv-section" id="boardSection">
+                    <div class="cv-section-title">Board & Advisory Experience</div>
+                    <div class="board-role">
+                        <div>
+                            <div class="board-title editable" contenteditable="true">Non-Executive Director</div>
+                            <div class="board-org editable" contenteditable="true">Organisation Name | Audit Committee</div>
+                        </div>
+                        <div class="board-dates editable" contenteditable="true">20XX – Present</div>
+                    </div>
+                    <div class="board-role">
+                        <div>
+                            <div class="board-title editable" contenteditable="true">Advisory Board Member</div>
+                            <div class="board-org editable" contenteditable="true">Organisation Name</div>
+                        </div>
+                        <div class="board-dates editable" contenteditable="true">20XX – 20XX</div>
+                    </div>
+                </div>
+
+                <!-- Core Competencies -->
+                <div class="cv-section">
+                    <div class="cv-section-title">Core Competencies</div>
+                    <div class="cv-skills" id="skillsContainer">
+                        <span class="cv-skill">Strategic Leadership</span>
+                        <span class="cv-skill">P&L Management</span>
+                        <span class="cv-skill">Business Transformation</span>
+                        <span class="cv-skill">M&A Integration</span>
+                        <span class="cv-skill">Board Governance</span>
+                        <span class="cv-skill">Stakeholder Management</span>
+                        <span class="cv-skill">Change Management</span>
+                        <span class="cv-skill">Talent Development</span>
+                    </div>
+                </div>
+
+                <!-- Education & Qualifications -->
+                <div class="cv-section" id="qualSection">
+                    <div class="cv-section-title">Education & Qualifications</div>
+                    <div class="qualification">
+                        <div>
+                            <div class="editable" contenteditable="true" style="font-weight: 600;">MBA</div>
+                            <div class="editable" contenteditable="true" style="color: #64748b;">Business School Name</div>
+                        </div>
+                        <div class="editable" contenteditable="true" style="color: #64748b;">Year</div>
+                    </div>
+                    <div class="qualification">
+                        <div>
+                            <div class="editable" contenteditable="true" style="font-weight: 600;">Degree Title</div>
+                            <div class="editable" contenteditable="true" style="color: #64748b;">University Name</div>
+                        </div>
+                        <div class="editable" contenteditable="true" style="color: #64748b;">Year</div>
+                    </div>
+                    <div class="qualification">
+                        <div>
+                            <div class="editable" contenteditable="true" style="font-weight: 600;">Professional Qualification</div>
+                            <div class="editable" contenteditable="true" style="color: #64748b;">Awarding Body</div>
+                        </div>
+                        <div class="editable" contenteditable="true" style="color: #64748b;">Year</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function changeTemplate(template) {
+            const cv = document.getElementById('cvPreview');
+            cv.classList.remove('template-executive', 'template-modern', 'template-classic');
+            if (template !== 'executive') {
+                cv.classList.add('template-' + template);
+            }
+            saveCV();
+        }
+
+        function toggleSection(sectionId, show) {
+            const section = document.getElementById(sectionId);
+            if (section) {
+                section.style.display = show ? 'block' : 'none';
+            }
+            saveCV();
+        }
+
+        function saveCV() {
+            const data = {
+                template: document.querySelector('input[name="template"]:checked')?.value || 'executive',
+                sections: {},
+                content: {}
+            };
+
+            // Save section visibility
+            ['metricsSection', 'boardSection', 'summarySection', 'qualSection'].forEach(id => {
+                const section = document.getElementById(id);
+                data.sections[id] = section ? section.style.display !== 'none' : true;
+            });
+
+            // Save all editable content
+            document.querySelectorAll('.editable').forEach(el => {
+                if (el.id) {
+                    data.content[el.id] = el.innerHTML;
+                }
+            });
+
+            localStorage.setItem('exec_cv_builder', JSON.stringify(data));
+        }
+
+        function loadCV() {
+            const saved = localStorage.getItem('exec_cv_builder');
+            if (saved) {
+                const data = JSON.parse(saved);
+
+                // Restore template
+                if (data.template) {
+                    const radio = document.querySelector(`input[value="${data.template}"]`);
+                    if (radio) {
+                        radio.checked = true;
+                        changeTemplate(data.template);
+                    }
+                }
+
+                // Restore section visibility
+                if (data.sections) {
+                    Object.keys(data.sections).forEach(id => {
+                        const section = document.getElementById(id);
+                        const toggle = document.querySelector(`input[onchange*="${id}"]`);
+                        if (section) {
+                            section.style.display = data.sections[id] ? 'block' : 'none';
+                        }
+                        if (toggle) {
+                            toggle.checked = data.sections[id];
+                        }
+                    });
+                }
+
+                // Restore content
+                if (data.content) {
+                    Object.keys(data.content).forEach(id => {
+                        const el = document.getElementById(id);
+                        if (el) el.innerHTML = data.content[id];
+                    });
+                }
+            }
+        }
+
+        // Auto-save on edit
+        document.querySelectorAll('.editable').forEach(el => {
+            el.addEventListener('input', () => {
+                clearTimeout(window.saveTimeout);
+                window.saveTimeout = setTimeout(saveCV, 1000);
+            });
+        });
+
+        // Initialize
+        loadCV();
+    </script>
+</body>
+</html>
