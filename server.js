@@ -279,7 +279,21 @@ app.post('/api/login', async (req, res) => {
             console.log(`⚠️ No SYPClient record for ${email}, using defaults`);
         }
 
-        // Step 3: Build user response combining Django auth + SYPClient data
+        // Step 3: Fetch client_tools from local PostgreSQL (if exists)
+        let localUserData = null;
+        try {
+            const localResult = await db.pool.query(
+                'SELECT client_tools FROM users WHERE email = $1',
+                [email]
+            );
+            if (localResult.rows.length > 0) {
+                localUserData = localResult.rows[0];
+            }
+        } catch (dbErr) {
+            // Ignore - local users table may not have this user
+        }
+
+        // Step 4: Build user response combining Django auth + SYPClient data + local data
         const user = {
             id: authData.user?.id || authData.id,
             email: email,
@@ -288,7 +302,8 @@ app.post('/api/login', async (req, res) => {
             programme_access: clientData?.programme_type || 'career',
             programme_status: clientData?.programme_status || 'enrolled',
             must_change_password: clientData?.must_change_password || false,
-            jwt_token: jwtToken
+            jwt_token: jwtToken,
+            client_tools: localUserData?.client_tools || null
         };
 
         // Ensure user exists in local PostgreSQL (for Spark Collector, Foundations, etc.)
@@ -1067,7 +1082,7 @@ app.get('/api/clients', async (req, res) => {
     try {
         // Get all users from database with full details
         const result = await db.pool.query(
-            'SELECT id, email, name, full_name, programme_access, programme_status, created_at, last_login FROM users ORDER BY created_at DESC'
+            'SELECT id, email, name, full_name, programme_access, programme_status, created_at, last_login, client_tools FROM users ORDER BY created_at DESC'
         );
         const users = result.rows;
 
@@ -1118,7 +1133,8 @@ app.get('/api/clients', async (req, res) => {
                 folder: (user.full_name || user.name || user.email.split('@')[0]).replace(/\s+/g, '_'),
                 homework: clientHomework,
                 homework_progress: homeworkProgress,
-                homework_updated: latestHomeworkUpdate
+                homework_updated: latestHomeworkUpdate,
+                client_tools: user.client_tools || null
             };
         });
 
@@ -1162,7 +1178,8 @@ app.get('/api/clients/:email', async (req, res) => {
             last_login: user.last_login,
             folder: (user.full_name || user.name || user.email.split('@')[0]).replace(/\s+/g, '_'),
             blueprint: blueprint,
-            homework: homework
+            homework: homework,
+            client_tools: user.client_tools || null
         };
 
         res.json({ success: true, client });
@@ -1176,9 +1193,9 @@ app.get('/api/clients/:email', async (req, res) => {
 app.patch('/api/clients/:email', async (req, res) => {
     try {
         const { email } = req.params;
-        const { programme_status, programme_type, name, full_name } = req.body;
+        const { programme_status, programme_type, name, full_name, client_tools } = req.body;
 
-        console.log(`📝 Updating client ${email}:`, { programme_status, programme_type, name, full_name });
+        console.log(`📝 Updating client ${email}:`, { programme_status, programme_type, name, full_name, client_tools: client_tools ? 'provided' : 'not provided' });
 
         // Find user
         const userResult = await db.pool.query(
@@ -1222,6 +1239,13 @@ app.patch('/api/clients/:email', async (req, res) => {
         if (programme_status) {
             updates.push(`programme_status = $${paramCount}`);
             values.push(programme_status);
+            paramCount++;
+        }
+
+        // Update client_tools (JSONB for per-client tool customisation)
+        if (client_tools !== undefined) {
+            updates.push(`client_tools = $${paramCount}`);
+            values.push(JSON.stringify(client_tools));
             paramCount++;
         }
 

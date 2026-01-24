@@ -1006,6 +1006,188 @@
             margin-bottom: 15px;
         }
 
+        /* Manage Tools Modal */
+        .tools-modal {
+            max-width: 600px;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .tools-section-label {
+            font-size: 0.85em;
+            font-weight: 600;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin: 20px 0 10px 0;
+            padding-bottom: 5px;
+            border-bottom: 1px solid #E5E7EB;
+        }
+
+        .tools-list {
+            max-height: 250px;
+            overflow-y: auto;
+            border: 1px solid #E5E7EB;
+            border-radius: 10px;
+            padding: 10px;
+            background: #FAFAFA;
+        }
+
+        .tool-toggle {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            border-radius: 8px;
+            transition: background 0.2s;
+        }
+
+        .tool-toggle:hover {
+            background: #F3F4F6;
+        }
+
+        .tool-toggle input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            margin-right: 12px;
+            accent-color: var(--purple-main);
+        }
+
+        .tool-toggle-label {
+            flex: 1;
+        }
+
+        .tool-toggle-name {
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .tool-toggle-desc {
+            font-size: 0.8em;
+            color: var(--text-muted);
+            margin-top: 2px;
+        }
+
+        .custom-tools-list {
+            margin-top: 10px;
+        }
+
+        .custom-tool-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px;
+            background: white;
+            border: 1px solid #E5E7EB;
+            border-radius: 8px;
+            margin-bottom: 8px;
+        }
+
+        .custom-tool-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .custom-tool-icon {
+            font-size: 1.5em;
+        }
+
+        .custom-tool-title {
+            font-weight: 500;
+        }
+
+        .custom-tool-file {
+            font-size: 0.75em;
+            color: var(--text-muted);
+        }
+
+        .delete-custom-tool {
+            background: #FEE2E2;
+            color: #DC2626;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 0.8em;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .delete-custom-tool:hover {
+            background: #FECACA;
+        }
+
+        .add-custom-tool-form {
+            background: #F9FAFB;
+            border: 1px solid #E5E7EB;
+            border-radius: 10px;
+            padding: 15px;
+            margin-top: 15px;
+        }
+
+        .add-custom-tool-form .form-row {
+            display: grid;
+            grid-template-columns: 80px 1fr;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .add-custom-tool-form input,
+        .add-custom-tool-form textarea {
+            width: 100%;
+            padding: 8px 12px;
+            border: 1px solid #D1D5DB;
+            border-radius: 6px;
+            font-size: 0.9em;
+        }
+
+        .add-custom-tool-form textarea {
+            resize: vertical;
+            min-height: 60px;
+        }
+
+        .add-custom-tool-form .checkbox-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 10px;
+        }
+
+        .add-custom-tool-btn {
+            background: var(--purple-light);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-weight: 500;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: all 0.2s;
+        }
+
+        .add-custom-tool-btn:hover {
+            background: var(--purple-main);
+        }
+
+        .toggle-add-form-btn {
+            background: #E5E7EB;
+            color: var(--text-dark);
+            border: none;
+            padding: 10px 16px;
+            border-radius: 8px;
+            font-weight: 500;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            margin-top: 10px;
+        }
+
+        .toggle-add-form-btn:hover {
+            background: #D1D5DB;
+        }
+
         /* Upload Section */
         .upload-section {
             margin-top: 20px;
@@ -2261,6 +2443,72 @@
                 <p style="text-align: center; margin-top: 8px; font-size: 0.8em; color: var(--text-muted);">
                     Upload agreements, notes, or other files
                 </p>
+            </div>
+
+            <div class="upload-section">
+                <button class="upload-btn" onclick="openManageToolsModal()" style="background: linear-gradient(135deg, var(--purple-main) 0%, var(--purple-light) 100%); color: white;">
+                    <span>🛠️</span> Manage Tools
+                </button>
+                <p style="text-align: center; margin-top: 8px; font-size: 0.8em; color: var(--text-muted);">
+                    Enable/disable tools or add custom tools
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Manage Tools Modal -->
+    <div class="modal-overlay" id="manageToolsModal">
+        <div class="modal tools-modal">
+            <h2>🛠️ Manage Tools for <span id="toolsClientName">Client</span></h2>
+
+            <div class="tools-section-label">Standard Tools</div>
+            <p style="font-size: 0.85em; color: var(--text-muted); margin-bottom: 10px;">
+                Toggle which tools this client can see in their portal.
+            </p>
+            <div class="tools-list" id="standardToolsList">
+                <!-- Populated dynamically -->
+            </div>
+
+            <div class="tools-section-label">Custom Tools</div>
+            <p style="font-size: 0.85em; color: var(--text-muted); margin-bottom: 10px;">
+                Add personalised tools with custom titles and files.
+            </p>
+            <div class="custom-tools-list" id="customToolsList">
+                <!-- Populated dynamically -->
+            </div>
+
+            <button class="toggle-add-form-btn" id="toggleAddFormBtn" onclick="toggleAddCustomToolForm()">
+                <span>➕</span> Add Custom Tool
+            </button>
+
+            <div class="add-custom-tool-form" id="addCustomToolForm" style="display: none;">
+                <div class="form-row">
+                    <label>Icon</label>
+                    <input type="text" id="customToolIcon" placeholder="📊 (emoji)" maxlength="4">
+                </div>
+                <div class="form-row">
+                    <label>Title</label>
+                    <input type="text" id="customToolTitle" placeholder="e.g. Peter's Action Plan">
+                </div>
+                <div class="form-row">
+                    <label>Description</label>
+                    <textarea id="customToolDescription" placeholder="Brief description of what this tool is for"></textarea>
+                </div>
+                <div class="form-row">
+                    <label>File Path</label>
+                    <input type="text" id="customToolFile" placeholder="e.g. Peter_Morgan/Action_Plan.html">
+                </div>
+                <div class="checkbox-row">
+                    <input type="checkbox" id="customToolAlwaysUnlocked" checked>
+                    <label for="customToolAlwaysUnlocked">Always unlocked (visible regardless of programme stage)</label>
+                </div>
+                <button class="add-custom-tool-btn" onclick="addCustomTool()">Add Tool</button>
+            </div>
+
+            <input type="hidden" id="toolsClientEmail">
+            <div class="modal-actions">
+                <button class="btn-cancel" onclick="closeManageToolsModal()">Cancel</button>
+                <button class="btn-save" onclick="saveClientTools()">💾 Save Changes</button>
             </div>
         </div>
     </div>
@@ -3856,6 +4104,250 @@
                 alert('✅ Client updated and saved to database!');
             } else {
                 alert('⚠️ Client updated locally (database unavailable)');
+            }
+        }
+
+        // ============================================
+        // MANAGE TOOLS MODAL
+        // ============================================
+
+        // Master list of all standard tools (matches client-portal.html)
+        const STANDARD_TOOLS = {
+            career: [
+                { id: 'agreement', icon: '📋', title: 'Coaching Agreement', description: 'Programme details and terms' },
+                { id: 'cvBuilder', icon: '📄', title: 'CV Builder', description: 'Build your CV from your Blueprint' },
+                { id: 'mappingGuide', icon: '🗺️', title: 'Mapping Guide', description: 'Where Blueprint content goes' },
+                { id: 'decisionFramework', icon: '⚖️', title: 'Decision Framework', description: 'Evaluate opportunities objectively' }
+            ],
+            spark: [
+                { id: 'agreement', icon: '📋', title: 'Coaching Agreement', description: 'Programme details and terms' },
+                { id: 'brainDump', icon: '📦', title: 'Brain Dump Box', description: 'Get everything out of your head fast' },
+                { id: 'energyTracker', icon: '⚡', title: 'Fuelling Your Spark', description: 'Plan around energy costs' },
+                { id: 'sparkCollector', icon: '✨', title: 'Spark Collector', description: 'Capture daily wins' },
+                { id: 'foundations', icon: '🏗️', title: 'Laying the Foundations', description: 'Define your rules across 8 categories' },
+                { id: 'sessionNotes', icon: '📝', title: 'Session Notes', description: 'Notes from coaching sessions' },
+                { id: 'decisionFramework', icon: '⚖️', title: 'Decision Framework', description: 'Make decisions that honour your brain' },
+                { id: 'sparkIgnition', icon: '🔥', title: 'Spark Ignition', description: 'Your Spark first aid kit' },
+                { id: 'relationships', icon: '🤝', title: 'Boundaries & Communication', description: 'Scripts for tricky conversations' }
+            ],
+            blended: [
+                // Career tools
+                { id: 'agreement', icon: '📋', title: 'Coaching Agreement', description: 'Programme details and terms', section: 'career' },
+                { id: 'cvBuilder', icon: '📄', title: 'CV Builder', description: 'Build your CV from your Blueprint', section: 'career' },
+                { id: 'mappingGuide', icon: '🗺️', title: 'Mapping Guide', description: 'Where Blueprint content goes', section: 'career' },
+                { id: 'decisionFramework', icon: '⚖️', title: 'Decision Framework', description: 'Evaluate opportunities', section: 'career' },
+                // Mind Management tools
+                { id: 'brainDump', icon: '📦', title: 'Brain Dump Box', description: 'Get everything out of your head', section: 'mind' },
+                { id: 'energyTracker', icon: '⚡', title: 'Fuelling Your Spark', description: 'Plan around energy costs', section: 'mind' },
+                { id: 'sparkCollector', icon: '✨', title: 'Spark Collector', description: 'Capture daily wins', section: 'mind' },
+                { id: 'foundations', icon: '🏗️', title: 'Laying the Foundations', description: 'Define your rules', section: 'mind' },
+                { id: 'sessionNotes', icon: '📝', title: 'Session Notes', description: 'Notes from sessions', section: 'mind' },
+                { id: 'sparkIgnition', icon: '🔥', title: 'Spark Ignition', description: 'Your first aid kit', section: 'mind' },
+                { id: 'relationships', icon: '🤝', title: 'Boundaries & Communication', description: 'Scripts for conversations', section: 'mind' }
+            ]
+        };
+
+        let currentToolsConfig = null; // Holds the current client_tools configuration
+
+        function openManageToolsModal() {
+            if (!selectedClient) {
+                alert('Please select a client first');
+                return;
+            }
+
+            document.getElementById('toolsClientName').textContent = selectedClient.full_name || selectedClient.name;
+            document.getElementById('toolsClientEmail').value = selectedClient.email;
+
+            // Determine which tool set to show based on programme type
+            const programmeType = selectedClient.programme_type || 'career';
+            let toolSet = 'career';
+            if (programmeType === 'audhd') toolSet = 'spark';
+            else if (programmeType === 'blended' || programmeType === 'all') toolSet = 'blended';
+
+            const standardTools = STANDARD_TOOLS[toolSet] || STANDARD_TOOLS.career;
+
+            // Load existing client_tools config or create default (all enabled)
+            currentToolsConfig = selectedClient.client_tools ? JSON.parse(JSON.stringify(selectedClient.client_tools)) : null;
+
+            // If no config exists, all tools are enabled by default
+            const enabledTools = currentToolsConfig?.enabled || null; // null means all enabled
+            const customTools = currentToolsConfig?.custom || [];
+
+            // Render standard tools checkboxes
+            const standardToolsList = document.getElementById('standardToolsList');
+            standardToolsList.innerHTML = standardTools.map(tool => {
+                const isEnabled = enabledTools === null || enabledTools.includes(tool.id);
+                const sectionLabel = tool.section ? (tool.section === 'career' ? '💼' : '✨') : '';
+                return `
+                    <div class="tool-toggle">
+                        <input type="checkbox" id="tool_${tool.id}" value="${tool.id}" ${isEnabled ? 'checked' : ''}>
+                        <div class="tool-toggle-label">
+                            <div class="tool-toggle-name">${sectionLabel} ${tool.icon} ${tool.title}</div>
+                            <div class="tool-toggle-desc">${tool.description}</div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            // Render custom tools
+            renderCustomToolsList(customTools);
+
+            // Hide add form by default
+            document.getElementById('addCustomToolForm').style.display = 'none';
+            document.getElementById('toggleAddFormBtn').innerHTML = '<span>➕</span> Add Custom Tool';
+
+            document.getElementById('manageToolsModal').classList.add('active');
+        }
+
+        function closeManageToolsModal() {
+            document.getElementById('manageToolsModal').classList.remove('active');
+            currentToolsConfig = null;
+        }
+
+        function renderCustomToolsList(customTools) {
+            const container = document.getElementById('customToolsList');
+            if (!customTools || customTools.length === 0) {
+                container.innerHTML = '<p style="color: var(--text-muted); font-size: 0.9em; padding: 10px;">No custom tools yet.</p>';
+                return;
+            }
+
+            container.innerHTML = customTools.map((tool, index) => `
+                <div class="custom-tool-item">
+                    <div class="custom-tool-info">
+                        <span class="custom-tool-icon">${tool.icon}</span>
+                        <div>
+                            <div class="custom-tool-title">${tool.title}</div>
+                            <div class="custom-tool-file">${tool.file}</div>
+                        </div>
+                    </div>
+                    <button class="delete-custom-tool" onclick="deleteCustomTool(${index})">Delete</button>
+                </div>
+            `).join('');
+        }
+
+        function toggleAddCustomToolForm() {
+            const form = document.getElementById('addCustomToolForm');
+            const btn = document.getElementById('toggleAddFormBtn');
+            if (form.style.display === 'none') {
+                form.style.display = 'block';
+                btn.innerHTML = '<span>➖</span> Cancel';
+            } else {
+                form.style.display = 'none';
+                btn.innerHTML = '<span>➕</span> Add Custom Tool';
+                // Clear form
+                document.getElementById('customToolIcon').value = '';
+                document.getElementById('customToolTitle').value = '';
+                document.getElementById('customToolDescription').value = '';
+                document.getElementById('customToolFile').value = '';
+                document.getElementById('customToolAlwaysUnlocked').checked = true;
+            }
+        }
+
+        function addCustomTool() {
+            const icon = document.getElementById('customToolIcon').value.trim() || '📄';
+            const title = document.getElementById('customToolTitle').value.trim();
+            const description = document.getElementById('customToolDescription').value.trim();
+            const file = document.getElementById('customToolFile').value.trim();
+            const alwaysUnlocked = document.getElementById('customToolAlwaysUnlocked').checked;
+
+            if (!title || !file) {
+                alert('Please enter at least a title and file path');
+                return;
+            }
+
+            // Initialise config if needed
+            if (!currentToolsConfig) {
+                // Get all currently checked tools as the enabled list
+                const checkedTools = Array.from(document.querySelectorAll('#standardToolsList input[type="checkbox"]:checked'))
+                    .map(cb => cb.value);
+                currentToolsConfig = {
+                    enabled: checkedTools,
+                    custom: []
+                };
+            }
+
+            if (!currentToolsConfig.custom) {
+                currentToolsConfig.custom = [];
+            }
+
+            // Add the new custom tool
+            const newTool = {
+                id: 'custom-' + Date.now(),
+                icon: icon,
+                title: title,
+                description: description,
+                file: file,
+                alwaysUnlocked: alwaysUnlocked
+            };
+
+            currentToolsConfig.custom.push(newTool);
+
+            // Re-render custom tools list
+            renderCustomToolsList(currentToolsConfig.custom);
+
+            // Hide and clear form
+            toggleAddCustomToolForm();
+        }
+
+        function deleteCustomTool(index) {
+            if (!currentToolsConfig || !currentToolsConfig.custom) return;
+
+            if (confirm('Delete this custom tool?')) {
+                currentToolsConfig.custom.splice(index, 1);
+                renderCustomToolsList(currentToolsConfig.custom);
+            }
+        }
+
+        async function saveClientTools() {
+            const email = document.getElementById('toolsClientEmail').value;
+            if (!email) return;
+
+            // Gather enabled standard tools
+            const checkedTools = Array.from(document.querySelectorAll('#standardToolsList input[type="checkbox"]:checked'))
+                .map(cb => cb.value);
+            const allTools = Array.from(document.querySelectorAll('#standardToolsList input[type="checkbox"]'))
+                .map(cb => cb.value);
+
+            // Build client_tools config
+            let clientTools = null;
+
+            // If all tools are checked and no custom tools, set to null (default behaviour)
+            const hasCustomTools = currentToolsConfig?.custom && currentToolsConfig.custom.length > 0;
+            const allToolsEnabled = checkedTools.length === allTools.length;
+
+            if (!allToolsEnabled || hasCustomTools) {
+                clientTools = {
+                    enabled: checkedTools,
+                    custom: currentToolsConfig?.custom || []
+                };
+            }
+
+            try {
+                const response = await fetch(`/api/clients/${encodeURIComponent(email)}`, {
+                    method: 'PATCH',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ client_tools: clientTools })
+                });
+
+                if (response.ok) {
+                    // Update local client data
+                    if (selectedClient) {
+                        selectedClient.client_tools = clientTools;
+                    }
+                    const clientIndex = clients.findIndex(c => c.email === email);
+                    if (clientIndex >= 0) {
+                        clients[clientIndex].client_tools = clientTools;
+                    }
+
+                    closeManageToolsModal();
+                    alert('✅ Tools configuration saved!');
+                } else {
+                    const data = await response.json();
+                    alert('Error: ' + (data.error || 'Failed to save'));
+                }
+            } catch (error) {
+                console.error('Error saving tools:', error);
+                alert('Error saving tools configuration');
             }
         }
 

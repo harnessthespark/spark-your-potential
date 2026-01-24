@@ -1946,14 +1946,21 @@
                         // User is authenticated - show portal
                         localStorage.setItem('syp_client_email', email);
                         if (CLIENTS[email]) {
-                            showPortal(CLIENTS[email]);
+                            // Merge CLIENTS data with user data (for client_tools)
+                            const mergedClient = {
+                                ...CLIENTS[email],
+                                client_tools: user.client_tools || CLIENTS[email].client_tools || null
+                            };
+                            showPortal(mergedClient);
                         } else {
                             // Create dynamic client from user data
                             showPortal({
                                 name: user.name || email.split('@')[0],
                                 email: email,
                                 programmeType: user.programme_access || 'career',
-                                status: user.programme_status || 'enrolled'
+                                status: user.programme_status || 'enrolled',
+                                client_tools: user.client_tools || null,
+                                folder: (user.name || email.split('@')[0]).replace(/\s+/g, '_')
                             });
                         }
                         return;
@@ -2312,6 +2319,17 @@
             // Use client-specific file paths if available, otherwise fall back to generated names
             const files = client.files || {};
 
+            // Get client_tools configuration (for filtering)
+            const clientTools = client.client_tools || client.clientTools || null;
+            const enabledToolIds = clientTools?.enabled || null; // null = all enabled
+            const customTools = clientTools?.custom || [];
+
+            // Helper function to check if a tool is enabled
+            function isToolEnabled(toolId) {
+                if (enabledToolIds === null) return true; // All enabled by default
+                return enabledToolIds.includes(toolId);
+            }
+
             // Check if Spark client, Blended client, or All-access (testing)
             const isAllAccess = client.programmeType === 'all';
             const isSparkClient = client.programmeType === 'audhd';
@@ -2320,6 +2338,7 @@
             // Spark tools (for Spark-only and Blended clients)
             const sparkTools = [
                 {
+                    id: 'brainDump',
                     icon: '📦',
                     title: 'Brain Dump Box',
                     description: 'Overwhelmed? Get everything out of your head fast. Sort into: Do Now, Do Later, Delegate, Delete.',
@@ -2330,6 +2349,7 @@
                     badge: '☁️ Syncs'
                 },
                 {
+                    id: 'energyTracker',
                     icon: '⚡',
                     title: 'Fuelling Your Spark',
                     description: 'Plan your day around energy costs. Track what drains vs fuels you. Don\'t stack drains!',
@@ -2340,6 +2360,7 @@
                     badge: '☁️ Syncs'
                 },
                 {
+                    id: 'sparkCollector',
                     icon: '✨',
                     title: 'Spark Collector',
                     description: 'Capture daily wins (even tiny ones!) and plan tomorrow\'s first step. Build evidence of your capability.',
@@ -2350,6 +2371,7 @@
                     badge: '☁️ Syncs'
                 },
                 {
+                    id: 'foundations',
                     icon: '🏗️',
                     title: 'Laying the Foundations',
                     description: 'Define your rules, plan for flexibility, and protect time for what matters across 8 life categories.',
@@ -2360,6 +2382,7 @@
                     badge: '☁️ Syncs'
                 },
                 {
+                    id: 'sessionNotes',
                     icon: '📝',
                     title: 'Session Notes',
                     description: 'Notes and reflections from your coaching sessions.',
@@ -2369,6 +2392,7 @@
                     statusWhenComplete: 'reference'
                 },
                 {
+                    id: 'sparkIgnition',
                     icon: '🔥',
                     title: 'Spark Ignition',
                     description: 'Your Spark first aid kit. Identify your nervous system state and access tailored interventions.',
@@ -2378,6 +2402,7 @@
                     statusWhenComplete: 'ready'
                 },
                 {
+                    id: 'relationships',
                     icon: '🤝',
                     title: 'Boundaries & Communication',
                     description: 'Define your values, set boundaries, and get scripts for tricky conversations. Navigate relationships as your authentic self.',
@@ -2392,6 +2417,7 @@
             if (isSparkClient) {
                 const audhdTools = [
                     {
+                        id: 'bookSession',
                         icon: '📅',
                         title: 'Book a Session',
                         description: 'Schedule your next coaching session with Lisa. Choose a time that works for you.',
@@ -2403,6 +2429,7 @@
                         badge: '📆 Calendar'
                     },
                     {
+                        id: 'agreement',
                         icon: '📋',
                         title: 'Coaching Agreement',
                         description: 'Your signed coaching agreement with programme details and terms.',
@@ -2412,6 +2439,7 @@
                         statusWhenComplete: 'signed'
                     },
                     {
+                        id: 'brainDump',
                         icon: '📦',
                         title: 'Brain Dump Box',
                         description: 'Overwhelmed? Get everything out of your head fast. Sort into: Do Now, Do Later, Delegate, Delete.',
@@ -2422,6 +2450,7 @@
                         badge: '☁️ Syncs'
                     },
                     {
+                        id: 'energyTracker',
                         icon: '⚡',
                         title: 'Fuelling Your Spark',
                         description: 'Plan your day around energy costs. Track what drains vs fuels you. Don\'t stack drains!',
@@ -2432,6 +2461,7 @@
                         badge: '☁️ Syncs'
                     },
                     {
+                        id: 'sparkCollector',
                         icon: '✨',
                         title: 'Spark Collector',
                         description: 'Capture daily wins (even tiny ones!) and plan tomorrow\'s first step. Build evidence of your capability.',
@@ -2442,6 +2472,7 @@
                         badge: '☁️ Syncs'
                     },
                     {
+                        id: 'foundations',
                         icon: '🏗️',
                         title: 'Laying the Foundations',
                         description: 'Define your rules, plan for flexibility, and protect time for what matters across 8 life categories.',
@@ -2452,6 +2483,7 @@
                         badge: '☁️ Syncs'
                     },
                     {
+                        id: 'sessionNotes',
                         icon: '📝',
                         title: 'Session Notes',
                         description: 'Notes and reflections from your coaching sessions.',
@@ -2461,6 +2493,7 @@
                         statusWhenComplete: 'reference'
                     },
                     {
+                        id: 'decisionFramework',
                         icon: '⚖️',
                         title: 'Decision Framework',
                         description: 'Make decisions that honour how your brain works best.',
@@ -2470,6 +2503,7 @@
                         statusWhenComplete: 'ready'
                     },
                     {
+                        id: 'sparkIgnition',
                         icon: '🔥',
                         title: 'Spark Ignition',
                         description: 'Your Spark first aid kit. Identify your nervous system state and access tailored interventions.',
@@ -2479,6 +2513,7 @@
                         statusWhenComplete: 'ready'
                     },
                     {
+                        id: 'relationships',
                         icon: '🤝',
                         title: 'Boundaries & Communication',
                         description: 'Define your values, set boundaries, and get scripts for tricky conversations. Navigate relationships as your authentic self.',
@@ -2489,7 +2524,23 @@
                     }
                 ];
 
-                container.innerHTML = audhdTools.map(tool => {
+                // Filter audhd tools based on client_tools config
+                const filteredAudhdTools = audhdTools.filter(tool => isToolEnabled(tool.id));
+
+                // Add custom tools
+                const allAudhdTools = [...filteredAudhdTools, ...customTools.map(ct => ({
+                    id: ct.id,
+                    icon: ct.icon || '📄',
+                    title: ct.title,
+                    description: ct.description,
+                    file: ct.file,
+                    btnText: 'Open',
+                    alwaysUnlocked: ct.alwaysUnlocked !== false,
+                    statusWhenComplete: 'ready',
+                    badge: ct.badge || ''
+                }))];
+
+                container.innerHTML = allAudhdTools.map(tool => {
                     return `
                         <div class="tool-card">
                             <div class="tool-icon">${tool.icon}</div>
@@ -2515,6 +2566,7 @@
 
             const tools = [
                 {
+                    id: 'bookSession',
                     icon: '📅',
                     title: 'Book a Session',
                     description: 'Schedule your next coaching session with Lisa. Choose a time that works for you.',
@@ -2526,6 +2578,7 @@
                     badge: '📆 Calendar'
                 },
                 {
+                    id: 'agreement',
                     icon: '📋',
                     title: agreementTitle,
                     description: agreementDesc,
@@ -2536,6 +2589,7 @@
                     alwaysUnlocked: true
                 },
                 {
+                    id: 'cvBuilder',
                     icon: '📄',
                     title: 'CV Builder',
                     description: 'Build your CV with fields pre-filled from your Blueprint. Create multiple versions and export to Word.',
@@ -2546,6 +2600,7 @@
                     statusWhenComplete: 'ready'
                 },
                 {
+                    id: 'mappingGuide',
                     icon: '🗺️',
                     title: 'Mapping Guide',
                     description: 'A visual guide showing where your Blueprint content goes across LinkedIn, CV, and interviews.',
@@ -2555,6 +2610,7 @@
                     statusWhenComplete: 'reference'
                 },
                 {
+                    id: 'decisionFramework',
                     icon: '⚖️',
                     title: 'Decision Framework',
                     description: 'Evaluate opportunities against your red flags and green flags. Score roles objectively.',
@@ -2567,66 +2623,99 @@
 
             // BLENDED CLIENTS: Show Career tools + Spark tools together
             if (isBlendedClient) {
+                // Filter tools based on client_tools config
+                const filteredCareerTools = tools.filter(tool => isToolEnabled(tool.id));
+                const filteredSparkTools = sparkTools.filter(tool => isToolEnabled(tool.id));
+
                 // Build combined tools array with section headers
                 let blendedHTML = '';
 
-                // Career Section Header
-                blendedHTML += `
-                    <div class="tools-section-header" style="grid-column: 1 / -1; margin: 20px 0 10px 0; padding-bottom: 10px; border-bottom: 2px solid var(--primary-gold);">
-                        <h3 style="color: var(--primary-gold); margin: 0; font-size: 1.1rem;">💼 Career Tools</h3>
-                    </div>
-                `;
-
-                // Career tools
-                blendedHTML += tools.map(tool => {
-                    const isUnlocked = tool.alwaysUnlocked || stageIndex >= tool.unlockStage || client.status === 'complete';
-                    let cardClass = 'tool-card';
-                    let statusClass = 'status-ready';
-                    let statusText = tool.badge || 'Ready';
-
-                    if (!isUnlocked) {
-                        cardClass += ' locked';
-                        statusClass = 'status-locked';
-                        statusText = '🔒 Locked';
-                    }
-
-                    const externalAttr = tool.isExternal ? 'target="_blank" rel="noopener"' : '';
-                    return `
-                        <div class="${cardClass}">
-                            <div class="tool-icon">${tool.icon}</div>
-                            <h3>${tool.title}</h3>
-                            <span class="status-badge ${statusClass}">${statusText}</span>
-                            <p>${tool.description}</p>
-                            <a href="${isUnlocked ? tool.file : '#'}" class="tool-btn" ${!isUnlocked ? 'onclick="return false;"' : ''} ${externalAttr}>${tool.btnText}</a>
+                // Career Section Header (only show if there are career tools)
+                if (filteredCareerTools.length > 0) {
+                    blendedHTML += `
+                        <div class="tools-section-header" style="grid-column: 1 / -1; margin: 20px 0 10px 0; padding-bottom: 10px; border-bottom: 2px solid var(--primary-gold);">
+                            <h3 style="color: var(--primary-gold); margin: 0; font-size: 1.1rem;">💼 Career Tools</h3>
                         </div>
                     `;
-                }).join('');
 
-                // Mind Management Section Header
-                blendedHTML += `
-                    <div class="tools-section-header" style="grid-column: 1 / -1; margin: 30px 0 10px 0; padding-bottom: 10px; border-bottom: 2px solid var(--accent-purple, #8B5CF6);">
-                        <h3 style="color: var(--accent-purple, #8B5CF6); margin: 0; font-size: 1.1rem;">✨ Mind Management Tools</h3>
-                    </div>
-                `;
+                    // Career tools
+                    blendedHTML += filteredCareerTools.map(tool => {
+                        const isUnlocked = tool.alwaysUnlocked || stageIndex >= tool.unlockStage || client.status === 'complete';
+                        let cardClass = 'tool-card';
+                        let statusClass = 'status-ready';
+                        let statusText = tool.badge || 'Ready';
 
-                // Spark tools (all unlocked for blended clients)
-                blendedHTML += sparkTools.map(tool => {
-                    return `
-                        <div class="tool-card">
-                            <div class="tool-icon">${tool.icon}</div>
-                            <h3>${tool.title}</h3>
-                            <span class="status-badge status-ready">${tool.badge || 'Ready'}</span>
-                            <p>${tool.description}</p>
-                            <a href="${tool.file}" class="tool-btn" ${tool.isExternal ? 'target="_blank" rel="noopener"' : ''}>${tool.btnText}</a>
+                        if (!isUnlocked) {
+                            cardClass += ' locked';
+                            statusClass = 'status-locked';
+                            statusText = '🔒 Locked';
+                        }
+
+                        const externalAttr = tool.isExternal ? 'target="_blank" rel="noopener"' : '';
+                        return `
+                            <div class="${cardClass}">
+                                <div class="tool-icon">${tool.icon}</div>
+                                <h3>${tool.title}</h3>
+                                <span class="status-badge ${statusClass}">${statusText}</span>
+                                <p>${tool.description}</p>
+                                <a href="${isUnlocked ? tool.file : '#'}" class="tool-btn" ${!isUnlocked ? 'onclick="return false;"' : ''} ${externalAttr}>${tool.btnText}</a>
+                            </div>
+                        `;
+                    }).join('');
+                }
+
+                // Mind Management Section Header (only show if there are spark tools)
+                if (filteredSparkTools.length > 0) {
+                    blendedHTML += `
+                        <div class="tools-section-header" style="grid-column: 1 / -1; margin: 30px 0 10px 0; padding-bottom: 10px; border-bottom: 2px solid var(--accent-purple, #8B5CF6);">
+                            <h3 style="color: var(--accent-purple, #8B5CF6); margin: 0; font-size: 1.1rem;">✨ Mind Management Tools</h3>
                         </div>
                     `;
-                }).join('');
+
+                    // Spark tools (all unlocked for blended clients)
+                    blendedHTML += filteredSparkTools.map(tool => {
+                        const externalAttr = tool.isExternal ? 'target="_blank" rel="noopener"' : '';
+                        return `
+                            <div class="tool-card">
+                                <div class="tool-icon">${tool.icon}</div>
+                                <h3>${tool.title}</h3>
+                                <span class="status-badge status-ready">${tool.badge || 'Ready'}</span>
+                                <p>${tool.description}</p>
+                                <a href="${tool.file}" class="tool-btn" ${externalAttr}>${tool.btnText}</a>
+                            </div>
+                        `;
+                    }).join('');
+                }
+
+                // Custom tools section
+                if (customTools.length > 0) {
+                    blendedHTML += `
+                        <div class="tools-section-header" style="grid-column: 1 / -1; margin: 30px 0 10px 0; padding-bottom: 10px; border-bottom: 2px solid #10B981;">
+                            <h3 style="color: #10B981; margin: 0; font-size: 1.1rem;">🎯 Your Custom Tools</h3>
+                        </div>
+                    `;
+
+                    blendedHTML += customTools.map(tool => {
+                        return `
+                            <div class="tool-card">
+                                <div class="tool-icon">${tool.icon || '📄'}</div>
+                                <h3>${tool.title}</h3>
+                                <span class="status-badge status-ready">${tool.badge || 'Ready'}</span>
+                                <p>${tool.description}</p>
+                                <a href="${tool.file}" class="tool-btn">Open</a>
+                            </div>
+                        `;
+                    }).join('');
+                }
 
                 container.innerHTML = blendedHTML;
                 return;
             }
 
-            container.innerHTML = tools.map(tool => {
+            // CAREER CLIENTS: Filter tools based on client_tools config
+            const filteredTools = tools.filter(tool => isToolEnabled(tool.id));
+
+            let careerHTML = filteredTools.map(tool => {
                 const isUnlocked = tool.alwaysUnlocked || stageIndex >= tool.unlockStage || client.status === 'complete';
                 const isComplete = stageIndex > tool.unlockStage || client.status === 'complete';
 
@@ -2670,6 +2759,29 @@
                     </div>
                 `;
             }).join('');
+
+            // Add custom tools for career clients
+            if (customTools.length > 0) {
+                careerHTML += `
+                    <div class="tools-section-header" style="grid-column: 1 / -1; margin: 30px 0 10px 0; padding-bottom: 10px; border-bottom: 2px solid #10B981;">
+                        <h3 style="color: #10B981; margin: 0; font-size: 1.1rem;">🎯 Your Custom Tools</h3>
+                    </div>
+                `;
+
+                careerHTML += customTools.map(tool => {
+                    return `
+                        <div class="tool-card">
+                            <div class="tool-icon">${tool.icon || '📄'}</div>
+                            <h3>${tool.title}</h3>
+                            <span class="status-badge status-ready">${tool.badge || 'Ready'}</span>
+                            <p>${tool.description}</p>
+                            <a href="${tool.file}" class="tool-btn">Open</a>
+                        </div>
+                    `;
+                }).join('');
+            }
+
+            container.innerHTML = careerHTML;
         }
 
         // =============================================

@@ -94,6 +94,12 @@ async function initDatabase() {
             ALTER TABLE users ADD COLUMN IF NOT EXISTS full_name VARCHAR(255);
         `);
 
+        // Add client_tools column for per-client tool customisation
+        // Structure: { enabled: ['toolId1', 'toolId2'], custom: [{id, icon, title, description, file, alwaysUnlocked}] }
+        await client.query(`
+            ALTER TABLE users ADD COLUMN IF NOT EXISTS client_tools JSONB DEFAULT NULL;
+        `);
+
         // Create blueprints table
         await client.query(`
             CREATE TABLE IF NOT EXISTS blueprints (
