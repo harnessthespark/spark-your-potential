@@ -1245,7 +1245,8 @@ app.patch('/api/clients/:email', async (req, res) => {
         // Update client_tools (JSONB for per-client tool customisation)
         if (client_tools !== undefined) {
             updates.push(`client_tools = $${paramCount}`);
-            values.push(JSON.stringify(client_tools));
+            // Pass the object directly - pg driver handles JSONB conversion
+            values.push(client_tools);
             paramCount++;
         }
 

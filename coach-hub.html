@@ -4150,11 +4150,13 @@
         let currentToolsConfig = null; // Holds the current client_tools configuration
 
         function openManageToolsModal() {
+            console.log('🛠️ openManageToolsModal called, selectedClient:', selectedClient);
             if (!selectedClient) {
                 alert('Please select a client first');
                 return;
             }
 
+            console.log('🛠️ Opening tools modal for:', selectedClient.full_name, 'client_tools:', selectedClient.client_tools);
             document.getElementById('toolsClientName').textContent = selectedClient.full_name || selectedClient.name;
             document.getElementById('toolsClientEmail').value = selectedClient.email;
 
@@ -4709,6 +4711,11 @@
         function renderCalendar() {
             const weekGrid = document.getElementById('weekGrid');
             const weekLabel = document.getElementById('weekLabel');
+
+            // Guard: If calendar elements don't exist, skip rendering
+            if (!weekGrid || !weekLabel) {
+                return;
+            }
 
             // Calculate week range
             const weekEnd = new Date(currentWeekStart);
