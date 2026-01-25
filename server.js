@@ -228,7 +228,7 @@ app.get('/health', async (req, res) => {
 });
 
 // Login with email and password - authenticates via Django backend
-const DJANGO_BACKEND = 'https://sparkhub-be-qtmmb.ondigitalocean.app';
+const DJANGO_BACKEND = 'https://api.harnessthespark.ai';
 
 app.post('/api/login', async (req, res) => {
     try {
@@ -1945,7 +1945,7 @@ app.post('/api/emergency-alert', async (req, res) => {
         // Try to send via SparkHub backend if available
         try {
             const fetch = (await import('node-fetch')).default;
-            const sparkHubResponse = await fetch('https://sparkhub-be-qtmmb.ondigitalocean.app/api/email/send/', {
+            const sparkHubResponse = await fetch('https://api.harnessthespark.ai/api/email/send/', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'

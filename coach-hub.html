@@ -2292,12 +2292,12 @@
                             <p style="opacity: 0.9; font-size: 0.95em;">Manage client sessions, availability, and bookings</p>
                         </div>
                         <div style="display: flex; gap: 10px; flex-wrap: wrap;">
-                            <a href="https://sparkhub-be-qtmmb.ondigitalocean.app/secure-admin/crm/appointmentbooking/"
+                            <a href="https://api.harnessthespark.ai/secure-admin/crm/appointmentbooking/"
                                target="_blank"
                                style="background: var(--gold); color: var(--text-dark); padding: 12px 24px; border-radius: 8px; text-decoration: none; font-weight: 600; display: inline-flex; align-items: center; gap: 8px;">
                                 🗓️ Open Booking System
                             </a>
-                            <a href="https://sparkhub-be-qtmmb.ondigitalocean.app/secure-admin/crm/appointmentslot/"
+                            <a href="https://api.harnessthespark.ai/secure-admin/crm/appointmentslot/"
                                target="_blank"
                                style="background: rgba(255,255,255,0.2); color: white; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-weight: 500;">
                                 ⚙️ Manage Slots
@@ -2319,7 +2319,7 @@
 
                 <!-- Quick Links -->
                 <div style="margin-top: 20px; display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px;">
-                    <a href="https://sparkhub-be-qtmmb.ondigitalocean.app/secure-admin/crm/coachingsession/"
+                    <a href="https://api.harnessthespark.ai/secure-admin/crm/coachingsession/"
                        target="_blank"
                        class="quick-link-card"
                        style="background: white; padding: 15px 20px; border-radius: 8px; text-decoration: none; color: var(--text-dark); display: flex; align-items: center; gap: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.06);">
@@ -2329,7 +2329,7 @@
                             <p style="font-size: 0.85em; color: var(--text-muted); margin-top: 2px;">View coaching sessions</p>
                         </div>
                     </a>
-                    <a href="https://sparkhub-be-qtmmb.ondigitalocean.app/secure-admin/crm/sypclient/"
+                    <a href="https://api.harnessthespark.ai/secure-admin/crm/sypclient/"
                        target="_blank"
                        class="quick-link-card"
                        style="background: white; padding: 15px 20px; border-radius: 8px; text-decoration: none; color: var(--text-dark); display: flex; align-items: center; gap: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.06);">
@@ -2734,7 +2734,7 @@
         document.addEventListener('DOMContentLoaded', loadSavedTheme);
 
         // Config - Single backend for auth (SYP Express), SparkHub for CRM
-        const SPARKHUB_API = 'https://sparkhub-be-qtmmb.ondigitalocean.app';  // CRM only
+        const SPARKHUB_API = 'https://api.harnessthespark.ai';  // CRM only
         const SYP_API = '';  // Same origin for SYP Express
         const API_BASE = SPARKHUB_API;  // For CRM compatibility
 

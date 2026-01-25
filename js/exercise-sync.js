@@ -8,7 +8,7 @@
  *   sync.save(data);    // Auto-save to PostgreSQL
  */
 
-const API_BASE = 'https://sparkhub-be-qtmmb.ondigitalocean.app';
+const API_BASE = 'https://api.harnessthespark.ai';
 
 class ExerciseSync {
     constructor(exerciseType) {

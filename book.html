@@ -640,7 +640,7 @@
                 localStorage.setItem('syp_bookings', JSON.stringify(bookings));
 
                 // Send to backend API
-                const response = await fetch('https://sparkhub-be-qtmmb.ondigitalocean.app/api/crm/syp/public/booking/', {
+                const response = await fetch('https://api.harnessthespark.ai/api/crm/syp/public/booking/', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(formData)

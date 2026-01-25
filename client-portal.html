@@ -1976,7 +1976,7 @@
         };
 
         // SYP Express API - single backend for auth and client data
-        const SPARKHUB_API = 'https://sparkhub-be-qtmmb.ondigitalocean.app';  // CRM fallback only
+        const SPARKHUB_API = 'https://api.harnessthespark.ai';  // CRM fallback only
 
         // NOTE: clientLogin() removed - all login now via central login.html
 
@@ -2124,7 +2124,7 @@
             try {
                 const authToken = localStorage.getItem('syp_token') || localStorage.getItem('token');
                 if (authToken) {
-                    const API_BASE = 'https://sparkhub-be-qtmmb.ondigitalocean.app';
+                    const API_BASE = 'https://api.harnessthespark.ai';
                     const response = await fetch(`${API_BASE}/api/crm/syp/coach/client-documents/?client_email=${encodeURIComponent(client.email)}`, {
                         headers: {
                             'Authorization': `Token ${authToken}`,
@@ -3237,7 +3237,7 @@
 
             try {
                 // Submit to PostgreSQL API
-                const response = await fetch('https://sparkhub-be-qtmmb.ondigitalocean.app/api/crm/syp/public/sign-agreement/', {
+                const response = await fetch('https://api.harnessthespark.ai/api/crm/syp/public/sign-agreement/', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
@@ -3553,7 +3553,7 @@
 
             try {
                 // Submit to PostgreSQL API
-                const response = await fetch('https://sparkhub-be-qtmmb.ondigitalocean.app/api/crm/syp/public/sign-agreement/', {
+                const response = await fetch('https://api.harnessthespark.ai/api/crm/syp/public/sign-agreement/', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
