@@ -657,16 +657,19 @@
             display: flex;
         }
 
-        .modal {
-            background: white;
-            border-radius: 16px;
-            padding: 30px;
-            width: 90%;
+        .syp-modal {
+            background: white !important;
+            border-radius: 16px !important;
+            padding: 30px !important;
+            width: 90% !important;
             max-width: 500px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3) !important;
+            position: relative !important;
+            opacity: 1 !important;
+            visibility: visible !important;
         }
 
-        .modal h2 {
+        .syp-modal h2 {
             margin-bottom: 20px;
             display: flex;
             align-items: center;
@@ -1008,15 +1011,9 @@
 
         /* Manage Tools Modal */
         .tools-modal {
-            max-width: 600px;
+            max-width: 600px !important;
             max-height: 90vh;
             overflow-y: auto;
-            position: relative;
-            z-index: 500;
-            background: white;
-            border-radius: 16px;
-            padding: 30px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
         }
 
         .tools-section-label {
@@ -2464,7 +2461,7 @@
 
     <!-- Manage Tools Modal -->
     <div class="modal-overlay" id="manageToolsModal">
-        <div class="modal tools-modal">
+        <div class="syp-modal tools-modal">
             <h2>🛠️ Manage Tools for <span id="toolsClientName">Client</span></h2>
 
             <div class="tools-section-label">Standard Tools</div>
@@ -2521,7 +2518,7 @@
 
     <!-- Schedule Session Modal -->
     <div class="modal-overlay" id="scheduleModal">
-        <div class="modal">
+        <div class="syp-modal">
             <h2>📅 Schedule Session</h2>
             <div class="form-group">
                 <label>Client</label>
@@ -2566,7 +2563,7 @@
 
     <!-- Add Client Modal -->
     <div class="modal-overlay" id="addClientModal">
-        <div class="modal">
+        <div class="syp-modal">
             <h2>➕ Add New Client</h2>
             <div class="form-group">
                 <label>Full Name</label>
@@ -2594,7 +2591,7 @@
 
     <!-- Upload Document Modal -->
     <div class="modal-overlay" id="uploadModal">
-        <div class="modal">
+        <div class="syp-modal">
             <h2>📤 Upload Document</h2>
             <p style="color: var(--text-muted); margin-bottom: 20px;">
                 Upload documents for <strong id="uploadClientName">Client</strong>
@@ -2645,7 +2642,7 @@
 
     <!-- Client Notes Modal -->
     <div class="modal-overlay" id="notesModal">
-        <div class="modal" style="max-width: 600px;">
+        <div class="syp-modal" style="max-width: 600px;">
             <h2>📝 Session Notes</h2>
             <p style="color: var(--text-muted); margin-bottom: 15px;">
                 Notes for <strong id="notesClientName">Client</strong>
@@ -2671,7 +2668,7 @@
 
     <!-- Edit Client Modal -->
     <div class="modal-overlay" id="editClientModal">
-        <div class="modal">
+        <div class="syp-modal">
             <h2>✏️ Edit Client</h2>
             <div class="form-group">
                 <label>Full Name</label>
