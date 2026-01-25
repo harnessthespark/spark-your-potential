@@ -4150,55 +4150,75 @@
         let currentToolsConfig = null; // Holds the current client_tools configuration
 
         function openManageToolsModal() {
-            console.log('🛠️ openManageToolsModal called, selectedClient:', selectedClient);
-            if (!selectedClient) {
-                alert('Please select a client first');
-                return;
-            }
+            try {
+                console.log('🛠️ openManageToolsModal called, selectedClient:', selectedClient);
+                if (!selectedClient) {
+                    alert('Please select a client first');
+                    return;
+                }
 
-            console.log('🛠️ Opening tools modal for:', selectedClient.full_name, 'client_tools:', selectedClient.client_tools);
-            document.getElementById('toolsClientName').textContent = selectedClient.full_name || selectedClient.name;
-            document.getElementById('toolsClientEmail').value = selectedClient.email;
+                console.log('🛠️ Opening tools modal for:', selectedClient.full_name, 'client_tools:', selectedClient.client_tools);
+                document.getElementById('toolsClientName').textContent = selectedClient.full_name || selectedClient.name;
+                document.getElementById('toolsClientEmail').value = selectedClient.email;
 
-            // Determine which tool set to show based on programme type
-            const programmeType = selectedClient.programme_type || 'career';
-            let toolSet = 'career';
-            if (programmeType === 'audhd') toolSet = 'spark';
-            else if (programmeType === 'blended' || programmeType === 'all') toolSet = 'blended';
+                // Determine which tool set to show based on programme type
+                const programmeType = selectedClient.programme_type || selectedClient.programme_access || 'career';
+                console.log('🛠️ Programme type:', programmeType);
+                let toolSet = 'career';
+                if (programmeType === 'audhd') toolSet = 'spark';
+                else if (programmeType === 'blended' || programmeType === 'all') toolSet = 'blended';
+                console.log('🛠️ Tool set:', toolSet);
 
-            const standardTools = STANDARD_TOOLS[toolSet] || STANDARD_TOOLS.career;
+                const standardTools = STANDARD_TOOLS[toolSet] || STANDARD_TOOLS.career;
+                console.log('🛠️ Standard tools count:', standardTools.length);
 
-            // Load existing client_tools config or create default (all enabled)
-            currentToolsConfig = selectedClient.client_tools ? JSON.parse(JSON.stringify(selectedClient.client_tools)) : null;
+                // Load existing client_tools config or create default (all enabled)
+                let clientToolsData = selectedClient.client_tools;
+                // Handle if client_tools is a string (double-encoded JSON)
+                if (typeof clientToolsData === 'string') {
+                    try {
+                        clientToolsData = JSON.parse(clientToolsData);
+                    } catch (e) {
+                        console.warn('🛠️ Could not parse client_tools string:', e);
+                        clientToolsData = null;
+                    }
+                }
+                currentToolsConfig = clientToolsData ? JSON.parse(JSON.stringify(clientToolsData)) : null;
+                console.log('🛠️ Current tools config:', currentToolsConfig);
 
-            // If no config exists, all tools are enabled by default
-            const enabledTools = currentToolsConfig?.enabled || null; // null means all enabled
-            const customTools = currentToolsConfig?.custom || [];
+                // If no config exists, all tools are enabled by default
+                const enabledTools = currentToolsConfig?.enabled || null; // null means all enabled
+                const customTools = currentToolsConfig?.custom || [];
 
-            // Render standard tools checkboxes
-            const standardToolsList = document.getElementById('standardToolsList');
-            standardToolsList.innerHTML = standardTools.map(tool => {
-                const isEnabled = enabledTools === null || enabledTools.includes(tool.id);
-                const sectionLabel = tool.section ? (tool.section === 'career' ? '💼' : '✨') : '';
-                return `
-                    <div class="tool-toggle">
-                        <input type="checkbox" id="tool_${tool.id}" value="${tool.id}" ${isEnabled ? 'checked' : ''}>
-                        <div class="tool-toggle-label">
-                            <div class="tool-toggle-name">${sectionLabel} ${tool.icon} ${tool.title}</div>
-                            <div class="tool-toggle-desc">${tool.description}</div>
+                // Render standard tools checkboxes
+                const standardToolsList = document.getElementById('standardToolsList');
+                standardToolsList.innerHTML = standardTools.map(tool => {
+                    const isEnabled = enabledTools === null || enabledTools.includes(tool.id);
+                    const sectionLabel = tool.section ? (tool.section === 'career' ? '💼' : '✨') : '';
+                    return `
+                        <div class="tool-toggle">
+                            <input type="checkbox" id="tool_${tool.id}" value="${tool.id}" ${isEnabled ? 'checked' : ''}>
+                            <div class="tool-toggle-label">
+                                <div class="tool-toggle-name">${sectionLabel} ${tool.icon} ${tool.title}</div>
+                                <div class="tool-toggle-desc">${tool.description}</div>
+                            </div>
                         </div>
-                    </div>
-                `;
-            }).join('');
+                    `;
+                }).join('');
 
-            // Render custom tools
-            renderCustomToolsList(customTools);
+                // Render custom tools
+                renderCustomToolsList(customTools);
 
-            // Hide add form by default
-            document.getElementById('addCustomToolForm').style.display = 'none';
-            document.getElementById('toggleAddFormBtn').innerHTML = '<span>➕</span> Add Custom Tool';
+                // Hide add form by default
+                document.getElementById('addCustomToolForm').style.display = 'none';
+                document.getElementById('toggleAddFormBtn').innerHTML = '<span>➕</span> Add Custom Tool';
 
-            document.getElementById('manageToolsModal').classList.add('active');
+                document.getElementById('manageToolsModal').classList.add('active');
+                console.log('🛠️ Modal opened successfully');
+            } catch (error) {
+                console.error('🛠️ Error opening Manage Tools modal:', error);
+                alert('Error opening Manage Tools: ' + error.message);
+            }
         }
 
         function closeManageToolsModal() {
