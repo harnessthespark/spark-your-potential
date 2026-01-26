@@ -228,7 +228,7 @@ app.get('/health', async (req, res) => {
 });
 
 // Login with email and password - authenticates via Django backend
-const DJANGO_BACKEND = 'https://api.harnessthespark.ai';
+const DJANGO_BACKEND = process.env.DJANGO_BACKEND || 'https://api.harnessthespark.ai';
 
 app.post('/api/login', async (req, res) => {
     try {
