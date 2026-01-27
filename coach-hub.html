@@ -3751,11 +3751,26 @@
                 `;
             } else {
                 // Career Coaching documents
-                // Get homework progress for this client
-                const hwProgress = selectedClient.homework_progress || 0;
-                const hwUpdated = selectedClient.homework_updated
-                    ? new Date(selectedClient.homework_updated).toLocaleDateString('en-GB')
+                // Get homework data from the homework array
+                const homeworkArray = selectedClient.homework || [];
+
+                // Find week2 homework
+                const week2Hw = homeworkArray.find(h => h.homework_type === 'week2') || {};
+                const hwProgress = week2Hw.progress || 0;
+                const hwUpdated = week2Hw.updated_at
+                    ? new Date(week2Hw.updated_at).toLocaleDateString('en-GB')
                     : 'Not started';
+
+                // Find week3 homework
+                const week3Hw = homeworkArray.find(h => h.homework_type === 'week3') || {};
+                const hw3Progress = week3Hw.progress || 0;
+                const hw3Updated = week3Hw.updated_at
+                    ? new Date(week3Hw.updated_at).toLocaleDateString('en-GB')
+                    : 'Not started';
+
+                // Show week 3 homework for clients at week-3 or week-4 status
+                const clientStatus = selectedClient.programme_status || selectedClient.status || '';
+                const showWeek3 = ['week-3', 'week-4', 'complete', 'completed'].includes(clientStatus);
 
                 panelDocs.innerHTML = `
                     <div class="panel-item" onclick="openDoc('questionnaire')">
@@ -3772,7 +3787,16 @@
                         </div>
                         <span>→</span>
                     </div>
-                    <div class="panel-item" onclick="openDoc('insights')">
+                    ${showWeek3 ? `
+                    <div class="panel-item" onclick="openDoc('homework3')" style="background: ${hw3Progress > 0 ? '#FFFBEB' : ''}; border-left: 3px solid ${hw3Progress > 0 ? '#F59E0B' : 'transparent'};">
+                        <div>
+                            <div class="panel-item-title">📋 Week 3 Homework ${hw3Progress > 0 ? '<span style="font-size: 0.8em; background: #DBEAFE; color: #1D4ED8; padding: 2px 6px; border-radius: 4px; margin-left: 8px;">' + hw3Progress + '%</span>' : ''}</div>
+                            <div class="panel-item-meta">${hw3Progress > 0 ? 'Last updated: ' + hw3Updated : 'Not started yet'}</div>
+                        </div>
+                        <span>→</span>
+                    </div>
+                    ` : ''}
+                    <div class="panel-item" onclick="openDoc('insights')">`
                         <div>
                             <div class="panel-item-title">💡 Insights Report</div>
                             <div class="panel-item-meta">Career insights editor</div>
@@ -3879,6 +3903,7 @@
                         ? `${folder}/${folder}_Career_Insights_Report.html`
                         : `insights-editor.html?client_id=${clientId}`,
                     'homework': `${folder}/${folder}_Week2_Homework.html`,
+                    'homework3': `${folder}/${folder}_Week3_Homework.html`,
                     'blueprint': `${folder}/${folder}_Career_Blueprint.html`,
                     'cv-builder': `${folder}/${folder}_Interactive_CV_Builder.html`,
                     'decision': `${folder}/${folder}_Decision_Framework.html`,
