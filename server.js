@@ -462,16 +462,35 @@ app.post('/api/reset-password', async (req, res) => {
             return res.status(400).json({ success: false, error: tokenResult.error });
         }
 
-        // Change the password
-        const changeResult = await db.changePassword(tokenResult.email, newPassword);
-        if (!changeResult.success) {
-            return res.status(400).json({ success: false, error: changeResult.error });
+        // Change the password in Django (source of truth for authentication)
+        const djangoResponse = await fetch(`${DJANGO_BACKEND}/api/accounts/admin-set-password/`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                email: tokenResult.email,
+                new_password: newPassword,
+                secret: process.env.PASSWORD_RESET_SECRET
+            })
+        });
+
+        const djangoResult = await djangoResponse.json();
+        if (!djangoResponse.ok || !djangoResult.success) {
+            console.error(`❌ Django password reset failed for ${tokenResult.email}:`, djangoResult.message);
+            return res.status(400).json({ success: false, error: djangoResult.message || 'Failed to reset password' });
+        }
+
+        // Also update local DB for consistency (optional, keeps local cache in sync)
+        try {
+            await db.changePassword(tokenResult.email, newPassword);
+        } catch (localErr) {
+            // Non-fatal - Django is source of truth
+            console.warn(`⚠️ Local password sync failed for ${tokenResult.email}:`, localErr.message);
         }
 
         // Mark the token as used
         await db.markTokenUsed(token);
 
-        console.log(`✅ Password reset successful for: ${tokenResult.email}`);
+        console.log(`✅ Password reset successful for: ${tokenResult.email} (Django + local)`);
         res.json({ success: true, message: 'Password reset successful' });
     } catch (error) {
         console.error('Password reset error:', error);
