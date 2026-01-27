@@ -1,0 +1,20 @@
+name: spark-your-potential
+region: lon
+services:
+  - name: web
+    github:
+      branch: main
+      deploy_on_push: true
+      repo: harnessthespark/spark-your-potential
+    build_command: npm install
+    run_command: npm start
+    environment_slug: node-js
+    instance_count: 1
+    instance_size_slug: basic-xxs
+    http_port: 8080
+    envs:
+      - key: ANTHROPIC_API_KEY
+        scope: RUN_TIME
+        type: SECRET
+    routes:
+      - path: /

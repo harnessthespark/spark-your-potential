@@ -1,0 +1,953 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Neurodivergent Coaching Session Notes</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧠</text></svg>">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --primary: #E91E78;
+            --primary-light: #fce7f3;
+            --purple: #8B5CF6;
+            --purple-light: #f5f3ff;
+            --green: #22c55e;
+            --green-light: #f0fdf4;
+            --amber: #f59e0b;
+            --amber-light: #fffbeb;
+            --blue: #3b82f6;
+            --blue-light: #eff6ff;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #2d1b4e 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        /* Header */
+        .header {
+            text-align: center;
+            padding: 20px 0 30px;
+            color: white;
+        }
+        .header h1 {
+            font-size: 1.8em;
+            font-weight: 800;
+            margin-bottom: 8px;
+        }
+        .back-link {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            color: white;
+            text-decoration: none;
+            opacity: 0.8;
+            font-size: 0.9em;
+        }
+        .back-link:hover { opacity: 1; }
+
+        /* Session Info Bar */
+        .session-info {
+            background: white;
+            border-radius: 16px;
+            padding: 20px 25px;
+            margin-bottom: 20px;
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr auto;
+            gap: 20px;
+            align-items: end;
+        }
+        .info-field label {
+            display: block;
+            font-size: 0.8em;
+            font-weight: 600;
+            color: #666;
+            margin-bottom: 6px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .info-field input, .info-field select {
+            width: 100%;
+            padding: 10px 14px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-family: inherit;
+            font-size: 0.95em;
+        }
+        .info-field input:focus, .info-field select:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+        .new-session-btn {
+            padding: 12px 24px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--purple) 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            white-space: nowrap;
+        }
+        .new-session-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(233, 30, 120, 0.3);
+        }
+
+        /* Main Card */
+        .main-card {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+
+        /* Section Styling */
+        .session-section {
+            border-bottom: 2px solid #f0f0f0;
+        }
+        .session-section:last-child {
+            border-bottom: none;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 18px 25px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .section-header:hover {
+            background: #fafafa;
+        }
+        .section-header h3 {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 1.1em;
+            color: #2d1b4e;
+        }
+        .section-number {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.9em;
+            color: white;
+        }
+        .section-toggle {
+            font-size: 1.2em;
+            transition: transform 0.3s;
+            color: #888;
+        }
+        .session-section.open .section-toggle {
+            transform: rotate(180deg);
+        }
+
+        .section-content {
+            display: none;
+            padding: 0 25px 25px;
+        }
+        .session-section.open .section-content {
+            display: block;
+        }
+
+        /* Section Colours */
+        .section-checkin .section-number { background: var(--green); }
+        .section-checkin .section-header { border-left: 4px solid var(--green); }
+
+        .section-recap .section-number { background: var(--blue); }
+        .section-recap .section-header { border-left: 4px solid var(--blue); }
+
+        .section-agenda .section-number { background: var(--purple); }
+        .section-agenda .section-header { border-left: 4px solid var(--purple); }
+
+        .section-goals .section-number { background: var(--amber); }
+        .section-goals .section-header { border-left: 4px solid var(--amber); }
+
+        .section-wrapup .section-number { background: var(--primary); }
+        .section-wrapup .section-header { border-left: 4px solid var(--primary); }
+
+        /* Form Elements */
+        .notes-area {
+            width: 100%;
+            min-height: 100px;
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            font-family: inherit;
+            font-size: 0.95em;
+            line-height: 1.6;
+            resize: vertical;
+            margin-bottom: 15px;
+        }
+        .notes-area:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+        .notes-area::placeholder {
+            color: #aaa;
+        }
+
+        /* Subsection */
+        .subsection {
+            margin-bottom: 20px;
+        }
+        .subsection:last-child {
+            margin-bottom: 0;
+        }
+        .subsection-label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 600;
+            color: #444;
+            margin-bottom: 10px;
+            font-size: 0.95em;
+        }
+
+        /* Win Highlight */
+        .win-highlight {
+            background: var(--green-light);
+            border: 2px solid var(--green);
+            border-radius: 12px;
+            padding: 15px;
+        }
+        .win-highlight textarea {
+            background: transparent;
+            border: none;
+            width: 100%;
+            min-height: 60px;
+            font-family: inherit;
+            font-size: 1em;
+            line-height: 1.5;
+            resize: none;
+        }
+        .win-highlight textarea:focus {
+            outline: none;
+        }
+
+        /* Two Column Layout */
+        .two-columns {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        .column-went-well {
+            background: var(--green-light);
+            border-radius: 12px;
+            padding: 15px;
+        }
+        .column-went-well .subsection-label {
+            color: var(--green);
+        }
+        .column-better {
+            background: var(--amber-light);
+            border-radius: 12px;
+            padding: 15px;
+        }
+        .column-better .subsection-label {
+            color: #b45309;
+        }
+        .column-went-well textarea,
+        .column-better textarea {
+            background: transparent;
+            border: none;
+            width: 100%;
+            min-height: 80px;
+            font-family: inherit;
+            font-size: 0.95em;
+            line-height: 1.5;
+            resize: none;
+        }
+        .column-went-well textarea:focus,
+        .column-better textarea:focus {
+            outline: none;
+        }
+
+        /* Action Items */
+        .action-list {
+            list-style: none;
+        }
+        .action-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 12px 0;
+            border-bottom: 1px solid #eee;
+        }
+        .action-item:last-child {
+            border-bottom: none;
+        }
+        .action-checkbox {
+            width: 24px;
+            height: 24px;
+            border: 2px solid #ccc;
+            border-radius: 6px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+        .action-checkbox.checked {
+            background: var(--green);
+            border-color: var(--green);
+            color: white;
+        }
+        .action-text {
+            flex: 1;
+            padding: 8px 12px;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            font-family: inherit;
+            font-size: 0.95em;
+        }
+        .action-text:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+        .action-delete {
+            padding: 8px;
+            background: none;
+            border: none;
+            color: #ccc;
+            cursor: pointer;
+            font-size: 1.1em;
+        }
+        .action-delete:hover {
+            color: #ef4444;
+        }
+
+        .add-action-btn {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 16px;
+            background: #f5f5f5;
+            border: 2px dashed #ccc;
+            border-radius: 8px;
+            color: #666;
+            cursor: pointer;
+            font-family: inherit;
+            font-size: 0.9em;
+            margin-top: 10px;
+            width: 100%;
+            justify-content: center;
+        }
+        .add-action-btn:hover {
+            background: #eee;
+            border-color: #999;
+        }
+
+        /* Goals Section */
+        .goals-grid {
+            display: grid;
+            gap: 15px;
+        }
+        .goal-item {
+            display: flex;
+            gap: 12px;
+            align-items: flex-start;
+        }
+        .goal-item input[type="text"] {
+            flex: 1;
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-family: inherit;
+            font-size: 0.95em;
+        }
+        .goal-item input:focus {
+            outline: none;
+            border-color: var(--amber);
+        }
+        .goal-priority {
+            padding: 8px 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-family: inherit;
+            background: white;
+        }
+        .goal-due {
+            padding: 8px 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-family: inherit;
+        }
+
+        /* Wrap Up */
+        .energy-check {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+            padding: 15px;
+            background: var(--purple-light);
+            border-radius: 12px;
+        }
+        .energy-check label {
+            font-weight: 600;
+            color: var(--purple);
+        }
+        .energy-slider {
+            flex: 1;
+            height: 8px;
+            -webkit-appearance: none;
+            background: #ddd;
+            border-radius: 4px;
+        }
+        .energy-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 24px;
+            height: 24px;
+            background: var(--purple);
+            border-radius: 50%;
+            cursor: pointer;
+        }
+        .energy-value {
+            font-weight: 700;
+            color: var(--purple);
+            min-width: 40px;
+            text-align: center;
+        }
+
+        /* Save Bar */
+        .save-bar {
+            background: white;
+            border-radius: 16px;
+            padding: 20px 25px;
+            margin-top: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .save-status {
+            color: #888;
+            font-size: 0.9em;
+        }
+        .save-actions {
+            display: flex;
+            gap: 12px;
+        }
+        .btn {
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            font-family: inherit;
+            font-size: 0.95em;
+            border: none;
+        }
+        .btn-secondary {
+            background: #f0f0f0;
+            color: #555;
+        }
+        .btn-secondary:hover {
+            background: #e0e0e0;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--purple) 100%);
+            color: white;
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(233, 30, 120, 0.3);
+        }
+
+        /* Print Styles */
+        @media print {
+            body {
+                background: white;
+                padding: 0;
+            }
+            .back-link, .new-session-btn, .save-bar, .action-delete, .add-action-btn {
+                display: none !important;
+            }
+            .main-card {
+                box-shadow: none;
+            }
+            .session-section {
+                break-inside: avoid;
+            }
+            .section-content {
+                display: block !important;
+            }
+        }
+
+        /* Mobile */
+        @media (max-width: 700px) {
+            .session-info {
+                grid-template-columns: 1fr;
+            }
+            .two-columns {
+                grid-template-columns: 1fr;
+            }
+            .goal-item {
+                flex-wrap: wrap;
+            }
+            .goal-item input[type="text"] {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <script>
+        function goBackToPortal() {
+            const savedUser = localStorage.getItem('syp_user');
+            if (savedUser) {
+                try {
+                    const user = JSON.parse(savedUser);
+                    const access = user.programme_access || user.programme_type || 'career';
+                    if (access === 'blended' || access === 'career') {
+                        window.location.href = 'client-portal.html';
+                    } else {
+                        window.location.href = 'audhd-dashboard.html';
+                    }
+                    return;
+                } catch(e) {}
+            }
+            window.location.href = 'client-portal.html';
+        }
+    </script>
+    <button class="back-link" onclick="goBackToPortal()" style="background: none; border: none; cursor: pointer; font: inherit; color: inherit; padding: 0;">← Back to Portal</button>
+
+    <div class="container">
+        <div class="header">
+            <h1>🧠 Spark Coaching Session Notes</h1>
+        </div>
+
+        <!-- Session Info -->
+        <div class="session-info">
+            <div class="info-field">
+                <label>Client Name</label>
+                <input type="text" id="clientName" placeholder="Enter client name">
+            </div>
+            <div class="info-field">
+                <label>Session Date</label>
+                <input type="date" id="sessionDate">
+            </div>
+            <div class="info-field">
+                <label>Session Number</label>
+                <select id="sessionNumber">
+                    <option value="1">Session 1 of 4</option>
+                    <option value="2">Session 2 of 4</option>
+                    <option value="3">Session 3 of 4</option>
+                    <option value="4">Session 4 of 4</option>
+                    <option value="5">Session 1 of 8</option>
+                    <option value="6">Session 2 of 8</option>
+                    <option value="7">Session 3 of 8</option>
+                    <option value="8">Session 4 of 8</option>
+                    <option value="9">Session 5 of 8</option>
+                    <option value="10">Session 6 of 8</option>
+                    <option value="11">Session 7 of 8</option>
+                    <option value="12">Session 8 of 8</option>
+                </select>
+            </div>
+            <button class="new-session-btn" onclick="newSession()">+ New Session</button>
+        </div>
+
+        <!-- Main Session Card -->
+        <div class="main-card">
+            <!-- 1. Check-In -->
+            <div class="session-section section-checkin open">
+                <div class="section-header" onclick="toggleSection(this)">
+                    <h3>
+                        <span class="section-number">1</span>
+                        Check-In: Weekly Win
+                    </h3>
+                    <span class="section-toggle">▼</span>
+                </div>
+                <div class="section-content">
+                    <div class="subsection">
+                        <div class="subsection-label">🏆 What was a win from your week?</div>
+                        <div class="win-highlight">
+                            <textarea id="weeklyWin" placeholder="Capture their win - big or small, it counts..."></textarea>
+                        </div>
+                    </div>
+                    <div class="subsection" style="margin-top: 20px;">
+                        <div class="subsection-label">💭 How are you arriving today?</div>
+                        <textarea class="notes-area" id="arrivalState" placeholder="Energy level, mood, anything on their mind..."></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 2. Recap Previous Actions -->
+            <div class="session-section section-recap">
+                <div class="section-header" onclick="toggleSection(this)">
+                    <h3>
+                        <span class="section-number">2</span>
+                        Recap: Previous Actions
+                    </h3>
+                    <span class="section-toggle">▼</span>
+                </div>
+                <div class="section-content">
+                    <div class="subsection">
+                        <div class="subsection-label">📋 Actions from last session</div>
+                        <ul class="action-list" id="previousActions">
+                            <li class="action-item">
+                                <div class="action-checkbox" onclick="toggleCheck(this)"></div>
+                                <input type="text" class="action-text" placeholder="Action item from last session...">
+                                <button class="action-delete" onclick="deleteAction(this)">×</button>
+                            </li>
+                        </ul>
+                        <button class="add-action-btn" onclick="addPreviousAction()">+ Add action from last session</button>
+                    </div>
+
+                    <div class="two-columns" style="margin-top: 20px;">
+                        <div class="column-went-well">
+                            <div class="subsection-label">✅ What went well?</div>
+                            <textarea id="wentWell" placeholder="Celebrate the progress..."></textarea>
+                        </div>
+                        <div class="column-better">
+                            <div class="subsection-label">🔄 What could have gone better?</div>
+                            <textarea id="couldBeBetter" placeholder="No judgement - learning opportunities..."></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 3. Session Agenda -->
+            <div class="session-section section-agenda">
+                <div class="section-header" onclick="toggleSection(this)">
+                    <h3>
+                        <span class="section-number">3</span>
+                        Today's Agenda
+                    </h3>
+                    <span class="section-toggle">▼</span>
+                </div>
+                <div class="section-content">
+                    <div class="subsection">
+                        <div class="subsection-label">🎯 What do we want to cover today?</div>
+                        <textarea class="notes-area" id="agendaItems" placeholder="Topics, challenges, questions to explore..."></textarea>
+                    </div>
+                    <div class="subsection">
+                        <div class="subsection-label">📝 Session Notes</div>
+                        <textarea class="notes-area" id="sessionNotes" style="min-height: 200px;" placeholder="Key points, insights, breakthroughs, tools discussed..."></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 4. Goals & Actions -->
+            <div class="session-section section-goals">
+                <div class="section-header" onclick="toggleSection(this)">
+                    <h3>
+                        <span class="section-number">4</span>
+                        Goals & Next Actions
+                    </h3>
+                    <span class="section-toggle">▼</span>
+                </div>
+                <div class="section-content">
+                    <div class="subsection">
+                        <div class="subsection-label">🎯 Actions for next session</div>
+                        <ul class="action-list" id="nextActions">
+                            <li class="action-item">
+                                <div class="action-checkbox"></div>
+                                <input type="text" class="action-text" placeholder="What will they do before next session?">
+                                <button class="action-delete" onclick="deleteAction(this)">×</button>
+                            </li>
+                        </ul>
+                        <button class="add-action-btn" onclick="addNextAction()">+ Add action</button>
+                    </div>
+
+                    <div class="subsection" style="margin-top: 20px;">
+                        <div class="subsection-label">💡 Key insight or commitment</div>
+                        <textarea class="notes-area" id="keyInsight" placeholder="What's the one thing they're taking away?"></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 5. Wrap-Up -->
+            <div class="session-section section-wrapup">
+                <div class="section-header" onclick="toggleSection(this)">
+                    <h3>
+                        <span class="section-number">5</span>
+                        Wrap-Up
+                    </h3>
+                    <span class="section-toggle">▼</span>
+                </div>
+                <div class="section-content">
+                    <div class="energy-check">
+                        <label>Energy leaving session:</label>
+                        <input type="range" class="energy-slider" id="energySlider" min="1" max="10" value="7" oninput="updateEnergy()">
+                        <span class="energy-value" id="energyValue">7/10</span>
+                    </div>
+
+                    <div class="subsection">
+                        <div class="subsection-label">📅 Next session</div>
+                        <input type="datetime-local" id="nextSession" style="padding: 10px 14px; border: 2px solid #e0e0e0; border-radius: 8px; font-family: inherit;">
+                    </div>
+
+                    <div class="subsection" style="margin-top: 20px;">
+                        <div class="subsection-label">📝 Coach notes (private)</div>
+                        <textarea class="notes-area" id="coachNotes" placeholder="Observations, things to follow up, patterns noticed..."></textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Save Bar -->
+        <div class="save-bar">
+            <span class="save-status" id="saveStatus">Auto-saved locally</span>
+            <div class="save-actions">
+                <button class="btn btn-secondary" onclick="exportSession()">📄 Export PDF</button>
+                <button class="btn btn-primary" onclick="saveSession()">💾 Save Session</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Set today's date
+        document.getElementById('sessionDate').valueAsDate = new Date();
+
+        // Toggle section
+        function toggleSection(header) {
+            const section = header.parentElement;
+            section.classList.toggle('open');
+        }
+
+        // Toggle checkbox
+        function toggleCheck(checkbox) {
+            checkbox.classList.toggle('checked');
+            if (checkbox.classList.contains('checked')) {
+                checkbox.innerHTML = '✓';
+            } else {
+                checkbox.innerHTML = '';
+            }
+            autoSave();
+        }
+
+        // Add previous action
+        function addPreviousAction() {
+            const list = document.getElementById('previousActions');
+            const item = document.createElement('li');
+            item.className = 'action-item';
+            item.innerHTML = `
+                <div class="action-checkbox" onclick="toggleCheck(this)"></div>
+                <input type="text" class="action-text" placeholder="Action item from last session...">
+                <button class="action-delete" onclick="deleteAction(this)">×</button>
+            `;
+            list.appendChild(item);
+        }
+
+        // Add next action
+        function addNextAction() {
+            const list = document.getElementById('nextActions');
+            const item = document.createElement('li');
+            item.className = 'action-item';
+            item.innerHTML = `
+                <div class="action-checkbox"></div>
+                <input type="text" class="action-text" placeholder="What will they do before next session?">
+                <button class="action-delete" onclick="deleteAction(this)">×</button>
+            `;
+            list.appendChild(item);
+        }
+
+        // Delete action
+        function deleteAction(btn) {
+            btn.parentElement.remove();
+            autoSave();
+        }
+
+        // Update energy display
+        function updateEnergy() {
+            const value = document.getElementById('energySlider').value;
+            document.getElementById('energyValue').textContent = value + '/10';
+        }
+
+        // Auto-save to localStorage
+        function autoSave() {
+            const sessionData = collectSessionData();
+            const key = `audhd_session_${sessionData.clientName}_${sessionData.sessionDate}`;
+            localStorage.setItem(key, JSON.stringify(sessionData));
+            localStorage.setItem('audhd_session_current', JSON.stringify(sessionData));
+            document.getElementById('saveStatus').textContent = 'Auto-saved at ' + new Date().toLocaleTimeString('en-GB');
+        }
+
+        // Collect all session data
+        function collectSessionData() {
+            // Collect previous actions
+            const previousActions = [];
+            document.querySelectorAll('#previousActions .action-item').forEach(item => {
+                previousActions.push({
+                    text: item.querySelector('.action-text').value,
+                    completed: item.querySelector('.action-checkbox').classList.contains('checked')
+                });
+            });
+
+            // Collect next actions
+            const nextActions = [];
+            document.querySelectorAll('#nextActions .action-item').forEach(item => {
+                nextActions.push({
+                    text: item.querySelector('.action-text').value,
+                    completed: false
+                });
+            });
+
+            return {
+                clientName: document.getElementById('clientName').value,
+                sessionDate: document.getElementById('sessionDate').value,
+                sessionNumber: document.getElementById('sessionNumber').value,
+                weeklyWin: document.getElementById('weeklyWin').value,
+                arrivalState: document.getElementById('arrivalState').value,
+                previousActions: previousActions,
+                wentWell: document.getElementById('wentWell').value,
+                couldBeBetter: document.getElementById('couldBeBetter').value,
+                agendaItems: document.getElementById('agendaItems').value,
+                sessionNotes: document.getElementById('sessionNotes').value,
+                nextActions: nextActions,
+                keyInsight: document.getElementById('keyInsight').value,
+                energyLevel: document.getElementById('energySlider').value,
+                nextSession: document.getElementById('nextSession').value,
+                coachNotes: document.getElementById('coachNotes').value,
+                savedAt: new Date().toISOString()
+            };
+        }
+
+        // Load session data
+        function loadSessionData(data) {
+            document.getElementById('clientName').value = data.clientName || '';
+            document.getElementById('sessionDate').value = data.sessionDate || '';
+            document.getElementById('sessionNumber').value = data.sessionNumber || '1';
+            document.getElementById('weeklyWin').value = data.weeklyWin || '';
+            document.getElementById('arrivalState').value = data.arrivalState || '';
+            document.getElementById('wentWell').value = data.wentWell || '';
+            document.getElementById('couldBeBetter').value = data.couldBeBetter || '';
+            document.getElementById('agendaItems').value = data.agendaItems || '';
+            document.getElementById('sessionNotes').value = data.sessionNotes || '';
+            document.getElementById('keyInsight').value = data.keyInsight || '';
+            document.getElementById('energySlider').value = data.energyLevel || 7;
+            document.getElementById('nextSession').value = data.nextSession || '';
+            document.getElementById('coachNotes').value = data.coachNotes || '';
+            updateEnergy();
+
+            // Load previous actions
+            if (data.previousActions && data.previousActions.length > 0) {
+                const list = document.getElementById('previousActions');
+                list.innerHTML = '';
+                data.previousActions.forEach(action => {
+                    const item = document.createElement('li');
+                    item.className = 'action-item';
+                    item.innerHTML = `
+                        <div class="action-checkbox ${action.completed ? 'checked' : ''}" onclick="toggleCheck(this)">${action.completed ? '✓' : ''}</div>
+                        <input type="text" class="action-text" value="${action.text || ''}" placeholder="Action item from last session...">
+                        <button class="action-delete" onclick="deleteAction(this)">×</button>
+                    `;
+                    list.appendChild(item);
+                });
+            }
+
+            // Load next actions
+            if (data.nextActions && data.nextActions.length > 0) {
+                const list = document.getElementById('nextActions');
+                list.innerHTML = '';
+                data.nextActions.forEach(action => {
+                    const item = document.createElement('li');
+                    item.className = 'action-item';
+                    item.innerHTML = `
+                        <div class="action-checkbox"></div>
+                        <input type="text" class="action-text" value="${action.text || ''}" placeholder="What will they do before next session?">
+                        <button class="action-delete" onclick="deleteAction(this)">×</button>
+                    `;
+                    list.appendChild(item);
+                });
+            }
+        }
+
+        // New session
+        function newSession() {
+            if (confirm('Start a new session? Current session will be saved.')) {
+                saveSession();
+
+                // Clear form
+                document.getElementById('clientName').value = '';
+                document.getElementById('sessionDate').valueAsDate = new Date();
+                document.getElementById('weeklyWin').value = '';
+                document.getElementById('arrivalState').value = '';
+                document.getElementById('wentWell').value = '';
+                document.getElementById('couldBeBetter').value = '';
+                document.getElementById('agendaItems').value = '';
+                document.getElementById('sessionNotes').value = '';
+                document.getElementById('keyInsight').value = '';
+                document.getElementById('energySlider').value = 7;
+                document.getElementById('nextSession').value = '';
+                document.getElementById('coachNotes').value = '';
+                updateEnergy();
+
+                // Reset action lists
+                document.getElementById('previousActions').innerHTML = `
+                    <li class="action-item">
+                        <div class="action-checkbox" onclick="toggleCheck(this)"></div>
+                        <input type="text" class="action-text" placeholder="Action item from last session...">
+                        <button class="action-delete" onclick="deleteAction(this)">×</button>
+                    </li>
+                `;
+                document.getElementById('nextActions').innerHTML = `
+                    <li class="action-item">
+                        <div class="action-checkbox"></div>
+                        <input type="text" class="action-text" placeholder="What will they do before next session?">
+                        <button class="action-delete" onclick="deleteAction(this)">×</button>
+                    </li>
+                `;
+            }
+        }
+
+        // Save session
+        function saveSession() {
+            autoSave();
+            document.getElementById('saveStatus').textContent = '✓ Saved at ' + new Date().toLocaleTimeString('en-GB');
+        }
+
+        // Export to PDF (print)
+        function exportSession() {
+            window.print();
+        }
+
+        // Auto-save on input
+        document.querySelectorAll('input, textarea, select').forEach(el => {
+            el.addEventListener('input', () => {
+                clearTimeout(window.saveTimeout);
+                window.saveTimeout = setTimeout(autoSave, 1000);
+            });
+        });
+
+        // Load current session on page load
+        const savedCurrent = localStorage.getItem('audhd_session_current');
+        if (savedCurrent) {
+            const data = JSON.parse(savedCurrent);
+            // Only load if it's from today
+            const today = new Date().toISOString().split('T')[0];
+            if (data.sessionDate === today) {
+                loadSessionData(data);
+            }
+        }
+
+        // Check auth
+        function checkAuth() {
+            const savedUser = localStorage.getItem('syp_user');
+            // Token check removed - using session only
+            if (!savedUser) {
+                window.location.href = 'login.html';
+                return false;
+            }
+            return true;
+        }
+        checkAuth();
+    </script>
+</body>
+</html>

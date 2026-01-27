@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Raj Samuel - Career Blueprint</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; line-height: 1.6; color: #2c3e50; background: linear-gradient(135deg, #7c3aed 0%, #a855f7 100%); padding: 40px 20px; }
+        .container { max-width: 1000px; margin: 0 auto; background: white; border-radius: 20px; box-shadow: 0 20px 60px rgba(0,0,0,0.3); overflow: hidden; }
+        .header { background: linear-gradient(135deg, #7c3aed 0%, #a855f7 100%); color: white; padding: 60px 40px; text-align: center; }
+        .header h1 { font-size: 2.8em; font-weight: 700; margin-bottom: 10px; }
+        .header .subtitle { font-size: 1.3em; opacity: 0.9; font-weight: 300; }
+        .progress-tracker { background: white; padding: 30px 40px; border-bottom: 2px solid #f0f0f0; }
+        .progress-tracker h3 { color: #7c3aed; margin-bottom: 20px; text-align: center; }
+        .progress-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; }
+        .progress-item { text-align: center; padding: 15px; border-radius: 10px; border: 2px solid #e0e0e0; }
+        .progress-item.complete { background: linear-gradient(135deg, #4caf5015 0%, #8bc34a15 100%); border-color: #4caf50; }
+        .progress-item.in-progress { background: linear-gradient(135deg, #7c3aed15 0%, #a855f715 100%); border-color: #7c3aed; }
+        .progress-item.locked { background: #f5f5f5; border-color: #e0e0e0; opacity: 0.6; }
+        .progress-icon { font-size: 2em; margin-bottom: 8px; }
+        .progress-label { font-size: 0.9em; font-weight: 600; color: #2c3e50; }
+        .progress-status { font-size: 0.8em; margin-top: 5px; opacity: 0.7; }
+        .content { padding: 50px 40px; }
+        .section { margin-bottom: 50px; page-break-inside: avoid; }
+        .section.locked { opacity: 0.5; }
+        .section-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
+        .section-title { font-size: 1.8em; font-weight: 700; color: #7c3aed; display: flex; align-items: center; gap: 10px; }
+        .week-badge { background: #7c3aed; color: white; padding: 5px 15px; border-radius: 20px; font-size: 0.6em; font-weight: 600; }
+        .week-badge.complete { background: #4caf50; }
+        .week-badge.in-progress { background: #7c3aed; }
+        .week-badge.locked { background: #9e9e9e; }
+        .section-divider { border-bottom: 3px solid #7c3aed; padding-bottom: 10px; margin-bottom: 25px; }
+        .insight-box { background: linear-gradient(135deg, #7c3aed15 0%, #a855f715 100%); padding: 30px; border-radius: 15px; border-left: 5px solid #7c3aed; margin: 20px 0; }
+        .insight-box.blank { background: #f8f9fa; border-left-color: #e0e0e0; }
+        .outcome { background: #f8f9fa; padding: 20px; border-radius: 10px; margin-bottom: 15px; border-left: 4px solid #7c3aed; }
+        .outcome.blank { border-left-color: #e0e0e0; }
+        .outcome-title { font-weight: 600; color: #7c3aed; margin-bottom: 8px; }
+        .outcome.blank .outcome-title { color: #9e9e9e; }
+        .proposition-box { background: linear-gradient(135deg, #FFD70015 0%, #FFA50015 100%); padding: 25px; border-radius: 15px; border: 2px solid #FFD700; margin: 20px 0; }
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 25px; }
+        .green-box { background: linear-gradient(135deg, #4caf5015 0%, #8bc34a15 100%); border: 2px solid #4caf50; border-radius: 10px; padding: 20px; }
+        .green-box.blank { background: #f8f9fa; border-color: #e0e0e0; }
+        .red-box { background: linear-gradient(135deg, #ff980015 0%, #ff572215 100%); border: 2px solid #ff5722; border-radius: 10px; padding: 20px; }
+        .red-box.blank { background: #f8f9fa; border-color: #e0e0e0; }
+        .tool-card { background: #f8f9fa; border-radius: 12px; padding: 20px; margin-bottom: 15px; border-left: 4px solid #7c3aed; }
+        .tool-card h4 { color: #7c3aed; margin-bottom: 8px; }
+        .placeholder { color: #9e9e9e; font-style: italic; }
+        .locked-overlay { position: relative; }
+        .locked-overlay::after { content: '🔒 Unlocks after previous week'; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgba(255,255,255,0.95); padding: 15px 25px; border-radius: 10px; font-weight: 600; color: #7c3aed; }
+        @media (max-width: 768px) { .progress-grid { grid-template-columns: repeat(2, 1fr); } .grid-2 { grid-template-columns: 1fr; } .content { padding: 30px 20px; } }
+        @media print { body { background: white; padding: 0; } .container { box-shadow: none; } .section.locked { display: none; } }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Career Blueprint</h1>
+            <div class="subtitle">Raj Samuel | 4-Week Programme</div>
+            <div style="font-size: 0.9em; margin-top: 15px; opacity: 0.8;">Career Booster Programme with Lisa Gills</div>
+        </div>
+
+        <!-- PROGRESS TRACKER -->
+        <div class="progress-tracker">
+            <h3>Your Progress</h3>
+            <div class="progress-grid">
+                <div class="progress-item complete">
+                    <div class="progress-icon">✅</div>
+                    <div class="progress-label">Week 1</div>
+                    <div class="progress-status">Foundation - Complete</div>
+                </div>
+                <div class="progress-item complete">
+                    <div class="progress-icon">✅</div>
+                    <div class="progress-label">Week 2</div>
+                    <div class="progress-status">Direction - Complete</div>
+                </div>
+                <div class="progress-item complete">
+                    <div class="progress-icon">✅</div>
+                    <div class="progress-label">Week 3</div>
+                    <div class="progress-status">Positioning - Complete</div>
+                </div>
+                <div class="progress-item in-progress">
+                    <div class="progress-icon">🔄</div>
+                    <div class="progress-label">Week 4</div>
+                    <div class="progress-status">Implementation - In Progress</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="content">
+            <!-- INTRO BOX -->
+            <div style="background: linear-gradient(135deg, #7c3aed15 0%, #a855f715 100%); padding: 30px; border-radius: 15px; margin-bottom: 50px;">
+                <h3 style="color: #7c3aed; margin-bottom: 15px;">Your Career Blueprint</h3>
+                <p>This document will capture everything we discover together over 4 weeks. By the end, you'll have your complete reference guide for career decisions, CV updates, interview preparation, and ongoing career development.</p>
+                <p style="margin-top: 15px;"><strong>Use it to:</strong> Evaluate opportunities against your patterns, craft positioning for specific roles, and remind yourself what you actually bring to the table.</p>
+            </div>
+
+            <!-- WEEK 1: FOUNDATION (COMPLETE) -->
+            <div class="section">
+                <div class="section-header">
+                    <div class="section-title">
+                        <span>Week 1: Foundation</span>
+                        <span class="week-badge complete">Complete</span>
+                    </div>
+                </div>
+                <div class="section-divider"></div>
+
+                <h3 style="color: #a855f7; margin-bottom: 15px;">Your Core Pattern</h3>
+                <div class="insight-box">
+                    <p style="font-size: 1.1em; font-weight: 600; margin-bottom: 15px;">Raj shifts thinking away from the obvious and has a unique knack for turning the ordinary into extraordinary by bringing cultural reference to the forefront of strategy and beyond.</p>
+                    <p>Being able to take digital strategy and articulate that it's a vehicle to carry messaging. He reframes context in cultural familiarity.</p>
+                    <p style="margin-top: 15px;"><strong>The Reframe:</strong> Beyond the Strategist, Raj encapsulates 'hindsight' before it's even happened.</p>
+                </div>
+
+                <h3 style="color: #a855f7; margin: 25px 0 15px 0;">Your Evidence Collection</h3>
+                <p style="margin-bottom: 15px; color: #7f8c8d;">Five career outcomes that reveal your unique pattern of impact:</p>
+
+                <div class="outcome">
+                    <div class="outcome-title">Outcome #1: AMV/BBDO & Brands Transformation</div>
+                    <p>AMV was systematically locked out of digital pitches. Brought in as freelance planning director for BT Digital pitch - we won. Then became Board Account Planner, Co-Innovation Director. Spent five years repositioning how the entire agency operated - from 90% TV to 60% integrated/digital. BT evolved from telco to tech brand (2M+ engaged). Aviva went from "insurance company" to "life enabler" (2M visits across 87 countries). Proved: when you understand culture deeply, technology stops being a separate problem.</p>
+                </div>
+
+                <div class="outcome">
+                    <div class="outcome-title">Outcome #2: Cadbury Gorilla Digital</div>
+                    <p>Fallon brought me in for digital strategy. The drumming gorilla ad was insane - no chocolate, no bite. Client was terrified. Ran workshops to create belief, showed how content lives in the world now. Built digital destination, found remixers to make it look organic. The workshop gave them permission to be brave. Campaign became one of the most famous of the 2000s. Creative was brilliant - but it was the digital strategy and workshop that gave them courage to greenlight it.</p>
+                </div>
+
+                <div class="outcome">
+                    <div class="outcome-title">Outcome #3: Arley's Brand Creation</div>
+                    <p>First time client-side. Brand Director for plant-based startup. Transformed generic "plant-based startup" into "heritage comfort brand" - secured 3 major retailer listings in 12 months, £1.2M pre-launch revenue. Cultural research revealed the "comfort paradox": 73% of flexitarian consumers wanted familiarity over innovation. Everyone chased "the future" when the opportunity was "the familiar, but better." Brand still going strong with their own factory, selling across Europe.</p>
+                </div>
+
+                <div class="outcome">
+                    <div class="outcome-title">Outcome #4: Malice Arts - Immersive Events</div>
+                    <p>2014-2019. Created immersive horror experiences - Malice in Wonderland, 1984 vs 1984, Inferno/Paradiso. Twisted pop culture: Tron crash-landing in a club, Narnia glitching inside the Matrix. Ten events, 5,000+ guests, 85% return rates, brand sponsorships, press coverage. Proved: when you create worlds people want to enter - not just events they attend - they come back. Audiences want to be transported, not just entertained.</p>
+                </div>
+
+                <div class="outcome">
+                    <div class="outcome-title">Outcome #5: Lemons.life → Quilter Partnership</div>
+                    <p>Co-founded with Alex after her husband's death exposed broken financial planning for women. Created brand strategy - went with "Lemons" instead of narrow "wills" name. "Life will always throw Lemons." Spotted early that the real story wasn't about death - it was about women's financial vulnerability across career breaks, caring, divorce, widowhood. Quilter now investing. Women selling to women. Turning finance upside down for women.</p>
+                </div>
+
+                <h3 style="color: #a855f7; margin: 25px 0 15px 0;">Your Thread</h3>
+                <div class="insight-box">
+                    <p style="font-style: italic; margin-bottom: 15px;">"I spot the cultural-emotional truth hiding beneath the business problem - the thing people sense but can't articulate yet. Then I make that truth tangible. Sometimes through strategic reframing, sometimes through research that reveals invisible patterns, sometimes through creating proof that builds belief."</p>
+                    <p><strong>The thread is:</strong> Ahead of the curve, he makes the invisible visible - spotting where culture has already moved before brands catch up.</p>
+                    <p style="margin-top: 15px;">Everyone else sees the surface. Raj sees what's actually underneath:</p>
+                    <ul style="margin-left: 20px; margin-top: 10px;">
+                        <li>AMV: "We need digital departments" → No, you've stopped living in culture</li>
+                        <li>Cadbury: "We're becoming a content company" → No, this ad is an invitation for more</li>
+                        <li>Arley's: "Plant-based = the future" → No, flexitarians want the familiar, done better</li>
+                    </ul>
+                </div>
+
+                <h3 style="color: #a855f7; margin: 25px 0 15px 0;">Your Recognition</h3>
+                <div class="insight-box">
+                    <p><strong>The ability I've been underestimating:</strong> My ability to bridge external and internal culture - spotting where culture's already moved outside, then transforming how organisations operate inside to match it. I've been underselling cultural transformation as strategy delivery.</p>
+                    <p style="margin-top: 15px;"><strong>The pattern I now see:</strong> I spot the cultural-emotional truth hiding beneath the business problem, then make it tangible so people can act on it. The unlock is always about giving permission - to be brave, to reframe, to see bigger opportunities. The result feels obvious in hindsight, but only because I made the invisible visible first.</p>
+                    <p style="margin-top: 15px;"><strong>The transformation I enable:</strong> I help people and organisations see the cultural truth they couldn't articulate, then give them permission to act on it with confidence. It's not just delivering insights - it's creating belief and making the scary thing feel doable.</p>
+                    <p style="margin-top: 15px;"><strong>The permission I'm giving myself:</strong> I don't just do strategy - I create transformation. I'm a cultural translator who spots where culture's already gone and makes the path visible so brands can get there.</p>
+                </div>
+
+                <h3 style="color: #a855f7; margin: 25px 0 15px 0;">Your Superpower Stack</h3>
+                <div class="insight-box">
+                    <p style="text-align: center; font-size: 1.1em; font-weight: 600;"><strong>Rich Awareness</strong> → <strong>Unique Perspective</strong> → <strong>Detail Detection</strong> → <strong>Pattern Spotting</strong></p>
+                    <p style="margin-top: 15px; text-align: center;">Awareness feeds perspective, which sharpens detection, which enables pattern spotting. This is how you process - and why you see what others miss.</p>
+                </div>
+
+                <h3 style="color: #a855f7; margin: 25px 0 15px 0;">How Others See You</h3>
+                <div class="insight-box">
+                    <p style="font-style: italic;">"Call Raj when you're culturally stuck and don't know why. He makes complex stuff simple. He gives you permission to try the scary thing. He spots the pattern we were all missing. Operates between big brand credibility and underground experiential instincts; strategic but not stuffy."</p>
+                </div>
+            </div>
+
+            <!-- WEEK 2: CAREER DIRECTION (COMPLETE) -->
+            <div class="section">
+                <div class="section-header">
+                    <div class="section-title">
+                        <span>Week 2: Career Direction</span>
+                        <span class="week-badge complete">Complete</span>
+                    </div>
+                </div>
+                <div class="section-divider"></div>
+
+                <h3 style="color: #a855f7; margin-bottom: 15px;">The Engine of Raj</h3>
+                <div class="insight-box">
+                    <p style="font-size: 1.1em; font-weight: 600; margin-bottom: 15px;">Cultural transformation through experience design</p>
+                    <p>Being recognised for cultural transformation means being valued for shaping brand and strategic direction through the lens of culture and entertainment — not as a layer added at the end, but as a core driver of how people connect, behave, and care.</p>
+                    <p style="margin-top: 15px;">I do my best work when I'm involved early enough to influence direction, rather than being brought in once decisions are already locked. My contribution is usually about grounding strategy in what actually resonates with people in the real world — drawing on culture, entertainment, play, and human instinct to make ideas feel relevant, confident, and alive.</p>
+                    <p style="margin-top: 15px;"><strong>The transformation I want to be known for:</strong> Helping brands stop treating people like "audiences" and start treating them like humans again. Moving organisations from messaging and media plans to experiences that actually land — where culture isn't decoration, it's the engine.</p>
+                    <p style="margin-top: 15px;"><strong>Target titles:</strong> Strategy Director, Brand Director / Brand Strategy Director, Experience Director, Experience Design Director</p>
+                </div>
+
+                <h3 style="color: #a855f7; margin: 25px 0 15px 0;">What Charges vs Drains You</h3>
+                <div class="grid-2">
+                    <div class="green-box">
+                        <h4 style="color: #27ae60; margin-bottom: 10px;">⚡ Charges You Up</h4>
+                        <ul style="margin-left: 15px; margin-top: 10px;">
+                            <li>Turning a flat brief into a lived experience — "what do we want people to feel, and how do we build that?"</li>
+                            <li>Building worlds: using culture + entertainment, then adding music, sound, light, pacing, participation</li>
+                            <li>The "of course" moment — when a team or client finally sees the real truth underneath the problem</li>
+                            <li>Permission-making: helping people stop playing it safe and make the braver move</li>
+                            <li>Working with ambitious makers (creative, design, production, tech) where ideas get built, not just debated</li>
+                            <li>Variety and momentum: a mix of thinking + making in the same week</li>
+                            <li>Being in culture, not commenting on it from a distance</li>
+                            <li>High trust / high autonomy: being given the reins to shape direction</li>
+                            <li>Creating something people actually choose to engage with — because it's genuinely good</li>
+                        </ul>
+                        <p style="margin-top: 15px; font-style: italic; color: #166534;"><strong>Learning:</strong> I'm fuelled by cultural energy, entertainment, and building experiences that feel alive.</p>
+                    </div>
+                    <div class="red-box">
+                        <h4 style="color: #c0392b; margin-bottom: 10px;">🔋 Drains Your Energy</h4>
+                        <ul style="margin-left: 15px; margin-top: 10px;">
+                            <li>When "culture" is treated as decoration — a surface layer added at the end</li>
+                            <li>Strategy that becomes admin: endless decks, stakeholder management, no actual leap or build</li>
+                            <li>Being boxed into a narrow label (especially "digital strategist")</li>
+                            <li>Passive work built around messaging, channels, comms mechanics — no experience or participation</li>
+                            <li>Decision paralysis: too many stakeholders, no taste, no bravery — everything beige</li>
+                            <li>Clients/teams who want transformation results without changing anything internally</li>
+                            <li>Environments where play is seen as childish, and curiosity is treated like a distraction</li>
+                            <li>Projects where the brief is obviously the wrong problem, but no one will admit it</li>
+                            <li>Politics and defensiveness: when people protect their status more than quality of work</li>
+                        </ul>
+                        <p style="margin-top: 15px; font-style: italic; color: #991b1b;"><strong>Learning:</strong> I burn out when the job is mainly "convincing" rather than "creating," and when bravery is permanently out of stock.</p>
+                    </div>
+                </div>
+
+                <h3 style="color: #a855f7; margin: 25px 0 15px 0;">Environments: Thrived vs Frustrated</h3>
+                <div class="insight-box">
+                    <h4 style="color: #22c55e; margin-bottom: 10px;">✅ Where I've Thrived</h4>
+                    <ul style="margin-left: 15px; margin-bottom: 20px;">
+                        <li>Places where culture and entertainment are taken seriously as part of the strategy, not something added at the end</li>
+                        <li>Environments where I'm trusted with real responsibility and given room to shape direction, not just execute</li>
+                        <li>Organisations comfortable with ambiguity and figuring things out as they go</li>
+                        <li>Teams with taste and curiosity, where play is encouraged and ideas actually get built</li>
+                        <li>Situations where strategy naturally turns into something real — an experience, a moment, a space people can step into</li>
+                    </ul>
+                    <p style="margin-bottom: 20px;"><strong>AMV</strong> was the highest point — the right agency at the right time. Co-Innovation Director role is where I really came alive — helping change how the agency operated, not just what it produced.</p>
+                    <p style="margin-bottom: 20px;"><strong>Arley's</strong> — given the reins to define the brand, make decisions, figure things out. That freedom to create direction from scratch really suits me.</p>
+                    <p><strong>Lemons</strong> — building everything from scratch, making everything up as we go. Reinforced how comfortable I am working in ambiguity and taking responsibility for what gets created.</p>
+
+                    <h4 style="color: #ef4444; margin: 25px 0 10px 0;">❌ Where I Get Frustrated</h4>
+                    <ul style="margin-left: 15px;">
+                        <li>Places that talk about transformation but consistently play it safe</li>
+                        <li>Cultures where strategy stays in decks and language, with no real intention to make anything felt</li>
+                        <li>Too much internal politics or fear of strong points of view</li>
+                        <li>Roles where culture is treated as an add-on and experience only shows up at the end</li>
+                        <li>Environments where play and curiosity are quietly discouraged</li>
+                    </ul>
+
+                    <div style="background: #f0fdf4; padding: 15px; border-radius: 8px; margin-top: 20px; border-left: 4px solid #22c55e;">
+                        <strong>The Pattern:</strong> I do my best work when I'm able to spot the cultural or emotional truth beneath the brief and help turn that into something people can actually experience. I thrive where there's permission to be brave, to reframe the problem, and to make work that feels human rather than polished.
+                    </div>
+                </div>
+
+                <h3 style="color: #a855f7; margin: 25px 0 15px 0;">Your 10/10 Authentic Role</h3>
+                <div class="insight-box">
+                    <p style="font-weight: 600; margin-bottom: 15px;">A great Monday for Raj:</p>
+                    <p>Starts with a real brief and a real space. At my best when I'm thinking about how something will actually be experienced, not just how it will be described. That might mean walking a retail environment, standing in a venue, or sketching out how someone moves through a space — where they enter, what they see first, what they hear, how it builds, and what moment they leave with.</p>
+
+                    <p style="margin-top: 15px;"><strong>Day-to-day:</strong> Translating business or brand problems into experiences. Instead of asking "what's the message?", asking "what do we want people to feel, and how do we design that feeling?" That's where music, sound design, lighting, pacing, and participation come in — borrowing from theatre, live entertainment, and culture to create moments that feel intentional and memorable.</p>
+
+                    <p style="margin-top: 15px;"><strong>The work:</strong> Helping teams move away from flat communication and towards something more immersive. Turning a product launch into a piece of theatre. Turning a retail environment into a world you step into. Turning an idea into something people can physically experience, not just be told about.</p>
+
+                    <p style="margin-top: 15px;"><strong>Collaborating with:</strong> Creatives, designers, producers, and technologists — shaping the concept, stress-testing whether it actually creates magic, and pushing it beyond the obvious. Hands-on: shaping the narrative, mapping the journey, refining the moments.</p>
+
+                    <p style="margin-top: 15px;"><strong>By end of day:</strong> Something tangible exists — a clear experience idea, a spatial journey, a sensory concept, a prototype, or a moment you can imagine stepping into.</p>
+
+                    <div style="background: #fef3c7; padding: 15px; border-radius: 8px; margin-top: 20px; border-left: 4px solid #f59e0b;">
+                        <strong>The problems I like solving:</strong> How to make brands feel alive, how to turn strategy into something people can feel in their bodies, and how to create experiences that stay with people long after they've left the room.
+                    </div>
+                </div>
+
+                <h3 style="color: #a855f7; margin: 25px 0 15px 0;">Your Non-Negotiables (Manifesto)</h3>
+                <div class="grid-2">
+                    <div class="green-box">
+                        <h4 style="color: #27ae60; margin-bottom: 10px;">✅ Green Lights (Hell Yes Criteria)</h4>
+                        <ul style="margin-left: 15px; margin-top: 10px;">
+                            <li>Being involved early enough to help shape the direction, not just react to it</li>
+                            <li>A shared belief that culture, entertainment, and experience are how brands really connect with people</li>
+                            <li>Permission to think in terms of feeling, participation, and lived experience — not just messaging</li>
+                            <li>Leaders with taste, conviction, and the confidence to back a clear point of view</li>
+                            <li>Space to turn ideas into things people can actually step into: moments, environments, worlds</li>
+                            <li>A rhythm of thinking and making, not one without the other</li>
+                            <li>Clear decisions and forward motion — even when things are messy</li>
+                            <li>An environment where play and humanity are seen as strengths</li>
+                            <li>Work that people choose to engage with because it's genuinely good</li>
+                        </ul>
+                    </div>
+                    <div class="red-box">
+                        <h4 style="color: #c0392b; margin-bottom: 10px;">🚫 Red Flags (Deal-Breakers)</h4>
+                        <ul style="margin-left: 15px; margin-top: 10px;">
+                            <li>Roles where culture or experience are talked about, but only show up at the edges</li>
+                            <li>Being brought in once everything's already decided and asked to make it sound better</li>
+                            <li>Strategy that lives mostly in decks and language, with no intention of turning into something real</li>
+                            <li>Organisations that say they want brave work but quietly reward safe behaviour</li>
+                            <li>Too much internal politics, defensiveness, or fear of having taste</li>
+                            <li>Being reduced to a single label that flattens how I actually think and work</li>
+                            <li>Endless alignment, stakeholder management, and process with no momentum</li>
+                            <li>Environments where play, curiosity, or experimentation are treated as indulgent</li>
+                            <li>Leaders who want change in the output, but not in how they operate</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <h3 style="color: #a855f7; margin: 25px 0 15px 0;">Dream Companies</h3>
+                <div class="insight-box">
+                    <p style="margin-bottom: 15px;">Organisations where Raj's cultural transformation abilities would be valued:</p>
+                    <ol style="margin-left: 20px;">
+                        <li style="margin-bottom: 10px;"><strong>Jack Morton</strong> — Deep experience design with real scale. Strong at turning brand ideas into theatre, moments, and worlds people actually step into.</li>
+                        <li style="margin-bottom: 10px;"><strong>Amplify</strong> — Culture- and entertainment-led, with permission to push brands beyond polite messaging into lived experiences.</li>
+                        <li style="margin-bottom: 10px;"><strong>160over90</strong> — Strong crossover of sport, culture, entertainment, and experience. Thinks in terms of moments, fandom, and feeling — not just campaigns.</li>
+                        <li style="margin-bottom: 10px;"><strong>Avantgarde</strong> — Serious craft across space, sound, light, and narrative. Focused on making brands felt through experience, not explained.</li>
+                        <li><strong>LEGO Group</strong> — A progressive brand that genuinely believes in play, imagination, and experience as strategy — not as marketing garnish.</li>
+                    </ol>
+                </div>
+
+                <h3 style="color: #a855f7; margin: 25px 0 15px 0;">Your Legacy</h3>
+                <div class="proposition-box">
+                    <p style="font-style: italic; font-size: 1.1em; margin-bottom: 15px;">"When people talk about Raj Samuel's work in 10 years, what do they say?"</p>
+                    <p>He made brands more human, more entertaining, more alive — and he showed organisations that culture and entertainment move people far more than advertising ever could.</p>
+                    <p style="margin-top: 15px;">I want to be known for bringing play back into serious places — not as gimmicks, but as one of the deepest human drivers we've got. The kind of play that creates permission. The kind that unlocks bravery. The kind that turns a product launch into theatre, a retail space into a moment, and a brand into something you can feel in your body.</p>
+                </div>
+
+                <h3 style="color: #a855f7; margin: 25px 0 15px 0;">Session 3 Insights</h3>
+                <div class="insight-box" style="background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%); border-left-color: #f59e0b;">
+                    <p style="font-size: 0.9em; color: #92400e; margin-bottom: 15px;"><strong>📅 Session 3 - 9 January 2026</strong></p>
+
+                    <h4 style="color: #b45309; margin-bottom: 10px;">🚀 Raj Takes People on a Journey</h4>
+                    <p style="margin-bottom: 15px;">Raj seeks collaborators who are <strong>excited, open-minded, and ready to be challenged</strong> to make a difference. He's driven by stepping outside comfort zones and looking for completely different ways to approach problems.</p>
+
+                    <h4 style="color: #b45309; margin-bottom: 10px;">🔮 The "Crystal Ball" Perspective</h4>
+                    <p style="margin-bottom: 15px;">Raj has a unique <strong>"benefit of hindsight"</strong> that comes from moving across <strong>different sides of the desk</strong> in the industry — agency, client-side, startup, founder. This gives him a perspective others don't have: he can showcase past successful track records and anticipate where things are heading.</p>
+
+                    <h4 style="color: #b45309; margin-bottom: 10px;">💡 Key Positioning Insight</h4>
+                    <p>This cross-industry experience is a differentiator. It's not just strategy — it's <strong>proven pattern recognition</strong> backed by results from multiple vantage points.</p>
+                </div>
+            </div>
+
+            <!-- WEEK 3: POSITIONING & NARRATIVE (COMPLETE) -->
+            <div class="section">
+                <div class="section-header">
+                    <div class="section-title">
+                        <span>Week 3: Positioning & Narrative</span>
+                        <span class="week-badge complete">Complete</span>
+                    </div>
+                </div>
+                <div class="section-divider"></div>
+
+                <h3 style="color: #7c3aed; margin-bottom: 15px;">Your Positioning: "Strategic Mischief"</h3>
+                <div class="proposition-box" style="background: linear-gradient(135deg, #7c3aed15 0%, #a855f715 100%); border: 2px solid #7c3aed;">
+                    <p style="font-size: 1.1em; font-weight: 600; color: #7c3aed; margin-bottom: 15px;">The identity that captures Raj's unique approach:</p>
+                    <p style="font-size: 1.2em; line-height: 1.8;">
+                        Strategy that feels like <strong>permission to be braver</strong>. Cultural transformation through experience, entertainment, and play — not as decoration, but as the main event.
+                    </p>
+                </div>
+
+                <h3 style="color: #7c3aed; margin: 25px 0 15px 0;">30-Second Pitch</h3>
+                <div class="insight-box">
+                    <p style="font-size: 1.05em; line-height: 1.8;">I'm a Creative Strategy Director who works through culture and entertainment, because that's how people actually feel things.</p>
+                    <p style="margin-top: 15px;">I've lived across countries and languages, worked agency-side, brand-side and founder-side, and spent years experimenting in underground, music-led immersive worlds where you quickly learn if something works. People either feel it, or they leave.</p>
+                    <p style="margin-top: 15px;">The pattern's always the same. People want to do things, not be told things. My job is spotting the human truth under what a brand is trying to say or do, and turning it into experiences people choose to step into and carry with them.</p>
+                </div>
+
+                <h3 style="color: #7c3aed; margin: 25px 0 15px 0;">5-Minute Pitch</h3>
+                <div class="insight-box">
+                    <p style="margin-bottom: 15px;">I'm a Creative Strategy Director who works through culture and entertainment, because that's how people actually feel things. It's also how brands stay alive without constantly shouting for attention.</p>
+                    <p style="margin-bottom: 15px;">I've lived across countries and languages, worked agency-side, brand-side, and founder-side, and spent years experimenting in underground, music-led immersive worlds. Those spaces are a great reality check. You don't get polite feedback. You don't get the benefit of the doubt. You know very quickly if something works. People either feel it or they leave.</p>
+                    <p style="margin-bottom: 15px;">Across all those environments, I started noticing the same pattern. Organisations often think their problem is execution. The campaign. The platform. The format. But more often than not, the real issue is cultural. There's a mismatch between what the organisation is trying to say and where people already are emotionally or behaviourally.</p>
+                    <p style="margin-bottom: 15px;">A lot of my work is about spotting that mismatch early. The human truth sitting underneath the brief, usually felt but not yet named. Once that becomes clear, the work gets simpler. Not easier. Simpler. It stops being about convincing and starts being about permission.</p>
+                    <p style="margin-bottom: 15px;">People don't want to be told what to think or feel. They want to do things. They want to step into something, test it, play with it, and decide for themselves. When brands understand that, the work shifts. It moves from persuasion to participation. From messaging to experience.</p>
+                    <p>I'm most interested in work where culture, entertainment, and experience aren't treated as add-ons, but as the main way organisations connect with people. Creating things that don't just get noticed, but get remembered, returned to, and carried forward.</p>
+                </div>
+
+                <h3 style="color: #7c3aed; margin: 25px 0 15px 0;">The "I Am / I Am Not" Framework</h3>
+                <div class="grid-2">
+                    <div class="green-box">
+                        <h4 style="color: #4caf50; margin-bottom: 10px;">I AM</h4>
+                        <ul style="margin-left: 15px; line-height: 1.8;">
+                            <li>A Creative Strategy Director grounded in culture, entertainment, and lived experience</li>
+                            <li>Someone who spots the human truth under the brief before it's been articulated</li>
+                            <li>Multicultural by life, not by slide — shaped by countries, languages, and different ways of seeing</li>
+                            <li>Experienced in underground, music-led immersive worlds where ideas succeed or fail fast</li>
+                            <li>Good at translation: turning messy cultural signals into something people can act on</li>
+                            <li>Often the person helping teams realise they're allowed to be braver than they think</li>
+                            <li>Focused on what people do and feel, not just what's said about them</li>
+                            <li>Creating the mystery, the suspense, anticipation</li>
+                        </ul>
+                    </div>
+                    <div class="red-box">
+                        <h4 style="color: #ff5722; margin-bottom: 10px;">I AM NOT</h4>
+                        <ul style="margin-left: 15px; line-height: 1.8;">
+                            <li>A "marketing thinker" or comms-first strategist</li>
+                            <li>Someone who starts with frameworks, decks, or buzzwords</li>
+                            <li>Interested in persuasion for its own sake</li>
+                            <li>A specialist in one channel, platform, or format</li>
+                            <li>Someone who believes attention equals impact</li>
+                            <li>A hype merchant or trend-chaser</li>
+                            <li>Comfortable designing work that people politely sit through</li>
+                            <li>Interested in culture as decoration or flavour</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <h3 style="color: #7c3aed; margin: 25px 0 15px 0;">Reframes: Turning Objections into Opportunities</h3>
+                <div class="insight-box">
+                    <ul style="margin-left: 15px; line-height: 2;">
+                        <li><strong>"We need a campaign."</strong> → What people actually need is something they can step into, not be spoken at.</li>
+                        <li><strong>"We need to explain this better."</strong> → If it needs that much explaining, something's off in what people are actually encountering.</li>
+                        <li><strong>"Can we make it clearer?"</strong> → Clarity helps, but how it feels usually matters more.</li>
+                        <li><strong>"Is this too risky?"</strong> → Risky compared to what people already ignore every day?</li>
+                        <li><strong>"We need more messaging."</strong> → People don't lack messages. They lack moments that mean something.</li>
+                        <li><strong>"Will people get it?"</strong> → They don't need to get it. They need to feel it.</li>
+                        <li><strong>"What's the content strategy?"</strong> → This isn't content. It's an invitation.</li>
+                        <li><strong>"Can we control how people respond?"</strong> → No — but we can design how it feels to step into it.</li>
+                        <li><strong>"We need proof before we commit."</strong> → Sometimes you don't get proof until people actually experience it.</li>
+                        <li><strong>"This feels a bit unconventional."</strong> → So does culture, most of the time.</li>
+                    </ul>
+                </div>
+
+                <h3 style="color: #7c3aed; margin: 25px 0 15px 0;">Headlines for Dream Companies</h3>
+                <div class="insight-box">
+                    <p style="margin-bottom: 15px;"><strong>Jack Morton:</strong> Creative Strategy Director who turns human insight into experiences people choose to step into, not just campaigns that people see.</p>
+                    <p style="margin-bottom: 15px;"><strong>Amplify:</strong> Strategic voice for culture-driven experiences that feel alive, not crafted to be watched, but lived.</p>
+                    <p style="margin-bottom: 15px;"><strong>160Over90:</strong> Brings cultural truth to immersive and experiential design, helping work land because people feel it, not just see or hear it.</p>
+                    <p style="margin-bottom: 15px;"><strong>Avantgarde:</strong> Strategy that connects culture and entertainment to unforgettable experiences, the invisible force behind what people remember.</p>
+                    <p><strong>LEGO:</strong> Strategy that sees the blueprint in people's play — turning cultural insight into experiences kids AND adults choose to build & be inspired with.</p>
+                </div>
+
+                <h3 style="color: #7c3aed; margin: 25px 0 15px 0;">What I Actually Want</h3>
+                <div class="proposition-box">
+                    <p style="margin-bottom: 15px;">I want to work somewhere that genuinely believes culture and experience are not outputs, but levers.</p>
+                    <p style="margin-bottom: 15px;">A role where I'm trusted to shape direction early, not decorate decisions late.</p>
+                    <p style="margin-bottom: 15px;">I want to build things people feel, not just explain things people understand.</p>
+                    <p style="margin-bottom: 15px;">I want proximity to real creative work, real makers, real audiences, and enough influence to turn instinct into action.</p>
+                    <p>And I want to be somewhere that values curiosity, play, and experimentation as strengths, not risks.</p>
+                </div>
+
+                <h3 style="color: #7c3aed; margin: 25px 0 15px 0;">The Brave Thing</h3>
+                <div class="insight-box" style="background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%); border-left-color: #f59e0b;">
+                    <p style="font-style: italic; margin-bottom: 15px;">"What's the brave thing I've been avoiding saying?"</p>
+                    <p style="margin-bottom: 15px;"><strong>I don't want to just advise transformation anymore. I want to create it.</strong></p>
+                    <p style="margin-bottom: 15px;">I'm not interested in roles that optimise messaging when the real problem is how people feel, behave, and participate.</p>
+                    <p>And I'm done pretending that culture, entertainment, and play are optional extras — they're the main event.</p>
+                </div>
+
+                <h3 style="color: #7c3aed; margin: 25px 0 15px 0;">Questions for Week 4</h3>
+                <div class="outcome">
+                    <ol style="margin-left: 20px; line-height: 1.8;">
+                        <li>How do I make sure I'm recognised for cultural and experiential transformation, not repeatedly translated back into 'strategy delivery' roles?</li>
+                        <li>What environments will actually let me do this work at the scale it deserves, and which ones should I stop trying to bend?</li>
+                        <li>Is 'Strategic Mischief' a positioning I should fully commit to, and if so, how do I deploy it without it being misunderstood or softened?</li>
+                        <li>Where am I still holding back out of fear of being seen as 'too much' — and what would it look like to step fully into the identity I'm already operating from?</li>
+                        <li>If we looked at the next year as a narrative arc rather than a job move, what should I be optimising for?</li>
+                    </ol>
+                </div>
+            </div>
+
+            <!-- WEEK 4: IMPLEMENTATION TOOLS (IN PROGRESS) -->
+            <div class="section">
+                <div class="section-header">
+                    <div class="section-title">
+                        <span>Week 4: Implementation Tools</span>
+                        <span class="week-badge in-progress">In Progress</span>
+                    </div>
+                </div>
+                <div class="section-divider"></div>
+
+                <h3 style="color: #7c3aed; margin-bottom: 15px;">Your Career Toolkit</h3>
+                <p style="margin-bottom: 20px;">You will have three documents that work together:</p>
+
+                <div class="tool-card">
+                    <h4>1. Career Blueprint (this document)</h4>
+                    <p>Your master reference - everything we've discovered about your patterns, positioning, and what you need to thrive.</p>
+                </div>
+
+                <div class="tool-card">
+                    <h4>2. Interactive CV Builder</h4>
+                    <p>An editable CV template with your content pre-loaded. Toggle sections on/off for different opportunities.</p>
+                </div>
+
+                <div class="tool-card">
+                    <h4>3. Blueprint to CV/LinkedIn Mapping Guide</h4>
+                    <p>Shows exactly where each piece of your Blueprint lands in your CV and LinkedIn profile.</p>
+                </div>
+
+                <h3 style="color: #7c3aed; margin: 25px 0 15px 0;">Session 4 Focus</h3>
+                <div class="insight-box" style="background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%); border-left-color: #f59e0b;">
+                    <p style="font-weight: 600; margin-bottom: 15px;">Key questions to address:</p>
+                    <ol style="margin-left: 20px; line-height: 1.8;">
+                        <li>How to deploy "Strategic Mischief" positioning without it being misunderstood</li>
+                        <li>Which environments to pursue vs. stop trying to bend</li>
+                        <li>Building the narrative arc for the next year</li>
+                        <li>CV and LinkedIn strategy aligned with experiential/cultural positioning</li>
+                    </ol>
+                </div>
+
+                <h3 style="color: #7c3aed; margin: 25px 0 15px 0;">Interview Questions to Ask</h3>
+                <div class="outcome">
+                    <div class="outcome-title">Questions tailored to Raj's non-negotiables</div>
+                    <ul style="margin-left: 20px; margin-top: 10px; line-height: 1.8;">
+                        <li>"How early in the process does strategy get involved in shaping the direction?"</li>
+                        <li>"Can you give me an example of when the team chose the braver option over the safer one?"</li>
+                        <li>"How do you think about culture and experience as strategic tools, not just executional ones?"</li>
+                        <li>"What happens here when someone proposes something unconventional?"</li>
+                        <li>"How much of the work is about creating things vs. advising on things?"</li>
+                    </ul>
+                </div>
+
+                <h3 style="color: #7c3aed; margin: 25px 0 15px 0;">CV Strategy</h3>
+                <div class="insight-box">
+                    <p><strong>Master CV:</strong> Lead with cultural transformation and experiential strategy, not "marketing strategy"</p>
+                    <p style="margin-top: 15px;"><strong>Positioning approach:</strong> Frame career narrative as deliberate cross-industry experience building "crystal ball" perspective</p>
+                    <p style="margin-top: 15px;"><strong>Key differentiator:</strong> Underground/immersive experience as proof of what works when people can simply leave</p>
+                </div>
+            </div>
+
+            <!-- FINAL NOTE -->
+            <div style="background: linear-gradient(135deg, #7c3aed 0%, #a855f7 100%); color: white; padding: 40px; border-radius: 15px; margin-top: 50px; text-align: center;">
+                <h3 style="margin-bottom: 15px;">Your Blueprint Journey</h3>
+                <p style="opacity: 0.9; line-height: 1.8;">
+                    Week 1: Foundation - Patterns & Evidence<br>
+                    Week 2: Direction - What Charges vs Drains You<br>
+                    Week 3: Positioning - Your Narrative & Statement<br>
+                    Week 4: Implementation - CV, LinkedIn & Tools
+                </p>
+                <p style="margin-top: 20px; font-weight: 600; font-size: 1.1em;">Each week builds on the last. By the end, you'll have complete clarity.</p>
+            </div>
+        </div>
+
+        <div style="text-align: center; padding: 30px; background: #f8f9fa; color: #7f8c8d; font-size: 0.9em;">
+            <p>Career Booster Programme with Lisa Gills | Harness the Spark</p>
+            <p style="margin-top: 5px;">Blueprint Document - Started December 2025</p>
+        </div>
+    </div>
+<script src="../shared/back-button.js"></script>
+</body>
+</html>

@@ -1,0 +1,3623 @@
+<!DOCTYPE html>
+<html lang="en-GB" data-theme="night">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Career Toolkit - Spark Your Potential</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/global.css">
+    <!-- Tailwind CSS + DaisyUI for polished components -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@4.4.24/dist/full.min.css" rel="stylesheet" type="text/css" />
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        spark: {
+                            red: '#EF4444',
+                            orange: '#F97316',
+                            yellow: '#EAB308',
+                            gold: '#F59E0B',
+                            purple: '#7C3AED',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            min-height: 100vh;
+            padding: 40px 20px;
+            color: #fff;
+        }
+        .container { max-width: 1000px; margin: 0 auto; }
+
+        /* Header */
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .header h1 {
+            font-size: 2.2em;
+            font-weight: 800;
+            margin-bottom: 8px;
+            color: #fff;
+        }
+        .header h1 span { color: #FFB627; }
+        .header .subtitle {
+            font-size: 1em;
+            color: #aaa;
+            margin-bottom: 8px;
+        }
+        .header .welcome {
+            font-size: 1.1em;
+            color: #4ECDC4;
+            font-weight: 600;
+        }
+
+        /* Notification Banner */
+        .notification-banner {
+            background: linear-gradient(135deg, #4ECDC4 0%, #44A08D 100%);
+            border-radius: 12px;
+            padding: 16px 20px;
+            margin-bottom: 20px;
+            animation: slideDown 0.3s ease-out;
+        }
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .notification-content {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        .notification-icon {
+            font-size: 1.8em;
+        }
+        .notification-text {
+            flex: 1;
+            min-width: 200px;
+        }
+        .notification-text strong {
+            display: block;
+            color: #fff;
+            font-size: 1.1em;
+            margin-bottom: 2px;
+        }
+        .notification-text p {
+            color: rgba(255,255,255,0.9);
+            margin: 0;
+            font-size: 0.95em;
+        }
+        .notification-btn {
+            background: #fff;
+            color: #44A08D;
+            padding: 10px 20px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .notification-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+        .notification-dismiss {
+            background: rgba(255,255,255,0.2);
+            border: none;
+            color: #fff;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.2s;
+        }
+        .notification-dismiss:hover {
+            background: rgba(255,255,255,0.3);
+        }
+
+        /* Stats Bar */
+        .stats-bar {
+            background: rgba(255,255,255,0.1);
+            border-radius: 12px;
+            padding: 20px 30px;
+            margin-bottom: 30px;
+            display: flex;
+            justify-content: space-around;
+            text-align: center;
+        }
+        .stat-item .stat-value {
+            font-size: 1.8em;
+            font-weight: 800;
+            color: #FFB627;
+        }
+        .stat-item .stat-label {
+            font-size: 0.85em;
+            color: #aaa;
+            margin-top: 4px;
+        }
+
+        /* Login Section */
+        .login-section {
+            background: rgba(255,255,255,0.95);
+            border-radius: 20px;
+            padding: 40px;
+            text-align: center;
+            max-width: 450px;
+            margin: 60px auto;
+        }
+        .login-section h2 {
+            color: #1a1a2e;
+            margin-bottom: 10px;
+            font-size: 1.5em;
+        }
+        .login-section p {
+            color: #666;
+            margin-bottom: 25px;
+        }
+        .input-label {
+            display: block;
+            text-align: left;
+            font-size: 0.9em;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 8px;
+        }
+        .login-help {
+            font-size: 0.85em;
+            color: #888;
+            margin-top: 15px;
+        }
+        .login-help a {
+            color: #4ECDC4;
+            text-decoration: none;
+        }
+        .login-help a:hover {
+            text-decoration: underline;
+        }
+        .email-input {
+            width: 100%;
+            padding: 15px 20px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 1em;
+            margin-bottom: 15px;
+            font-family: inherit;
+        }
+        .email-input:focus {
+            outline: none;
+            border-color: #4ECDC4;
+        }
+        .login-btn {
+            width: 100%;
+            background: linear-gradient(135deg, #4ECDC4 0%, #44A08D 100%);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            border-radius: 10px;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .login-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(78, 205, 196, 0.4);
+        }
+        .login-error {
+            background: #ffe0e0;
+            color: #c00;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            display: none;
+            font-size: 0.9em;
+        }
+
+        /* Portal Content */
+        .portal-content {
+            display: none;
+        }
+        .portal-content.visible {
+            display: block;
+        }
+
+        /* ============================================
+           TRANSFORMATION JOURNEY - 3-Step Flow
+           ============================================ */
+        .transformation-section {
+            background: rgba(255,255,255,0.05);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+        }
+        .transformation-header {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+        .transformation-header h2 {
+            color: #fff;
+            font-size: 1.4em;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+        .transformation-header p {
+            color: #aaa;
+            font-size: 0.95em;
+        }
+
+        /* 3-Step Flow Container */
+        .transformation-flow {
+            display: flex;
+            align-items: stretch;
+            gap: 0;
+            position: relative;
+        }
+
+        /* Step Card */
+        .step-card {
+            flex: 1;
+            background: rgba(255,255,255,0.95);
+            border-radius: 16px;
+            padding: 25px 20px;
+            text-align: center;
+            position: relative;
+            transition: transform 0.2s, box-shadow 0.2s;
+            border: 3px solid transparent;
+        }
+        .step-card:hover:not(.locked) {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+        }
+
+        /* Step Number Badge */
+        .step-number {
+            position: absolute;
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 0.85em;
+            color: white;
+        }
+        .step-1 .step-number { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+        .step-2 .step-number { background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); }
+        .step-3 .step-number { background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); }
+
+        /* Step States */
+        .step-card.completed {
+            border-color: #4ECDC4;
+        }
+        .step-card.completed .step-number {
+            background: linear-gradient(135deg, #4ECDC4 0%, #44A08D 100%);
+        }
+        .step-card.current {
+            border-color: #FFB627;
+            box-shadow: 0 0 20px rgba(255, 182, 39, 0.3);
+        }
+        .step-card.current .step-number {
+            background: linear-gradient(135deg, #FFB627 0%, #FF6B35 100%);
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(255, 182, 39, 0.4); }
+            50% { box-shadow: 0 0 0 10px rgba(255, 182, 39, 0); }
+        }
+        .step-card.locked {
+            opacity: 0.4;
+            filter: grayscale(60%);
+        }
+
+        /* Arrow Connectors */
+        .step-arrow {
+            display: flex;
+            align-items: center;
+            padding: 0 8px;
+            color: rgba(255,255,255,0.4);
+            font-size: 1.8em;
+        }
+        .step-arrow.active {
+            color: #4ECDC4;
+        }
+
+        /* Step Content */
+        .step-icon {
+            font-size: 2.5em;
+            margin: 15px 0 12px 0;
+        }
+        .step-label {
+            font-size: 0.7em;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #888;
+            margin-bottom: 6px;
+        }
+        .step-title {
+            font-size: 1.05em;
+            font-weight: 700;
+            color: #1a1a2e;
+            margin-bottom: 10px;
+        }
+        .step-description {
+            font-size: 0.8em;
+            color: #666;
+            line-height: 1.5;
+            margin-bottom: 15px;
+        }
+        .step-btn {
+            display: inline-block;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-size: 0.85em;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.2s;
+            border: none;
+            cursor: pointer;
+        }
+        .step-1 .step-btn { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; }
+        .step-2 .step-btn { background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); color: white; }
+        .step-3 .step-btn { background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); color: white; }
+        .step-card.completed .step-btn { background: linear-gradient(135deg, #4ECDC4 0%, #44A08D 100%); }
+        .step-card.locked .step-btn { background: #ccc; cursor: not-allowed; }
+
+        /* Responsive */
+        @media (max-width: 700px) {
+            .transformation-flow {
+                flex-direction: column;
+                gap: 20px;
+            }
+            .step-arrow {
+                transform: rotate(90deg);
+                padding: 5px 0;
+                justify-content: center;
+            }
+        }
+
+        /* ============================================
+           RESOURCES FROM COACH
+           ============================================ */
+        .resources-section {
+            margin-top: 30px;
+            background: linear-gradient(135deg, #1e1e3f 0%, #2d2d5a 100%);
+            border-radius: 16px;
+            padding: 25px;
+            border: 1px solid rgba(124, 58, 237, 0.3);
+        }
+        .resources-header {
+            color: #a78bfa;
+            font-size: 1.2em;
+            margin-bottom: 8px;
+        }
+        .resources-intro {
+            color: #94a3b8;
+            font-size: 0.9em;
+            margin-bottom: 20px;
+        }
+        .resources-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 15px;
+        }
+        .resource-card {
+            background: linear-gradient(135deg, #2a2a4a 0%, #1e1e3f 100%);
+            border-radius: 12px;
+            padding: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.2s ease;
+            cursor: pointer;
+            text-decoration: none;
+            display: block;
+        }
+        .resource-card:hover {
+            transform: translateY(-2px);
+            border-color: #a78bfa;
+            box-shadow: 0 4px 20px rgba(124, 58, 237, 0.2);
+        }
+        .resource-card .icon {
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+        .resource-card .title {
+            color: #fff;
+            font-weight: 600;
+            font-size: 1em;
+            margin-bottom: 6px;
+        }
+        .resource-card .description {
+            color: #94a3b8;
+            font-size: 0.85em;
+            line-height: 1.5;
+        }
+        .resource-card .meta {
+            color: #64748b;
+            font-size: 0.75em;
+            margin-top: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* ============================================
+           SUPPORTING TOOLS GRID
+           ============================================ */
+        .tools-section {
+            margin-top: 20px;
+        }
+        .tools-section-header {
+            color: #fff;
+            font-size: 1.1em;
+            margin-bottom: 15px;
+            padding-left: 5px;
+        }
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        @media (max-width: 800px) {
+            .tools-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+        @media (max-width: 550px) {
+            .tools-grid { grid-template-columns: 1fr; }
+        }
+
+        /* Tool Card */
+        .tool-card {
+            background: rgba(255,255,255,0.95);
+            border-radius: 16px;
+            padding: 25px;
+            transition: transform 0.2s, box-shadow 0.2s;
+            border: 3px solid transparent;
+        }
+        .tool-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+        .tool-card.completed {
+            border-color: #4ECDC4;
+        }
+        .tool-card.locked {
+            opacity: 0.5;
+            pointer-events: none;
+            filter: grayscale(50%);
+        }
+        .tool-card .tool-icon {
+            font-size: 2.2em;
+            margin-bottom: 12px;
+        }
+        .tool-card h3 {
+            color: #1a1a2e;
+            font-size: 1.1em;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+        .tool-card .status-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.75em;
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+        .status-completed {
+            background: #e8f5e9;
+            color: #2e7d32;
+        }
+        .status-ready {
+            background: #fff3e0;
+            color: #e65100;
+        }
+        .status-locked {
+            background: #f5f5f5;
+            color: #999;
+        }
+        .status-reference {
+            background: #e3f2fd;
+            color: #1565c0;
+        }
+        .tool-card p {
+            color: #666;
+            font-size: 0.9em;
+            line-height: 1.5;
+            margin-bottom: 15px;
+        }
+        .tool-card .tool-btn {
+            display: inline-block;
+            background: linear-gradient(135deg, #4ECDC4 0%, #44A08D 100%);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-size: 0.9em;
+            font-weight: 600;
+            transition: transform 0.2s;
+            border: none;
+            cursor: pointer;
+        }
+        .tool-card .tool-btn:hover {
+            transform: translateY(-1px);
+        }
+        .tool-card .tool-btn.secondary {
+            background: #e0e0e0;
+            color: #555;
+            margin-left: 8px;
+        }
+        .tool-card.locked .tool-btn {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+
+        /* ============================================
+           WEEKLY HOMEWORK SECTION
+           ============================================ */
+        .homework-section {
+            background: rgba(255,255,255,0.05);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+        }
+        .homework-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .homework-header h2 {
+            color: #fff;
+            font-size: 1.3em;
+            font-weight: 700;
+        }
+        .homework-header .week-badge {
+            background: linear-gradient(135deg, #FFB627 0%, #FF6B35 100%);
+            color: white;
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: 600;
+        }
+
+        /* Blueprint Progress */
+        .blueprint-progress {
+            background: rgba(255,255,255,0.1);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 25px;
+        }
+        .blueprint-progress-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+        .blueprint-progress-header h4 {
+            color: #fff;
+            font-size: 0.95em;
+            font-weight: 600;
+        }
+        .blueprint-progress-header .progress-text {
+            color: #4ECDC4;
+            font-size: 0.9em;
+            font-weight: 600;
+        }
+        .blueprint-progress-bar {
+            height: 8px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        .blueprint-progress-bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #4ECDC4 0%, #44A08D 100%);
+            border-radius: 4px;
+            transition: width 0.5s ease;
+        }
+
+        /* Personalised Prompt */
+        .personalised-prompt {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.2) 0%, rgba(118, 75, 162, 0.2) 100%);
+            border: 1px solid rgba(102, 126, 234, 0.3);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 25px;
+        }
+        .personalised-prompt-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 12px;
+        }
+        .personalised-prompt-header .icon {
+            font-size: 1.3em;
+        }
+        .personalised-prompt-header h4 {
+            color: #fff;
+            font-size: 0.95em;
+            font-weight: 600;
+        }
+        .personalised-prompt p {
+            color: #ddd;
+            font-size: 0.95em;
+            line-height: 1.6;
+            font-style: italic;
+        }
+        .personalised-prompt.empty {
+            opacity: 0.5;
+        }
+        .personalised-prompt.empty p {
+            color: #999;
+            font-style: normal;
+        }
+
+        /* Week Tabs */
+        .week-tabs {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        .week-tab {
+            padding: 10px 20px;
+            border-radius: 10px;
+            font-size: 0.9em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: 2px solid transparent;
+            background: rgba(255,255,255,0.1);
+            color: #aaa;
+        }
+        .week-tab:hover:not(.locked) {
+            background: rgba(255,255,255,0.15);
+        }
+        .week-tab.active {
+            background: rgba(255,255,255,0.95);
+            color: #1a1a2e;
+        }
+        .week-tab.completed {
+            background: rgba(78, 205, 196, 0.2);
+            border-color: #4ECDC4;
+            color: #4ECDC4;
+        }
+        .week-tab.completed.active {
+            background: rgba(78, 205, 196, 0.95);
+            border-color: #4ECDC4;
+            color: #1a1a2e;
+        }
+        .week-tab.locked {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+
+        /* Homework List */
+        .homework-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .homework-item {
+            background: rgba(255,255,255,0.95);
+            border-radius: 12px;
+            padding: 18px 20px;
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+            transition: all 0.2s;
+        }
+        .homework-item:hover {
+            transform: translateX(5px);
+        }
+        .homework-item.locked {
+            opacity: 0.4;
+            pointer-events: none;
+        }
+        .homework-checkbox {
+            width: 24px;
+            height: 24px;
+            border: 2px solid #ddd;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+        .homework-checkbox:hover {
+            border-color: #4ECDC4;
+        }
+        .homework-checkbox.checked {
+            background: linear-gradient(135deg, #4ECDC4 0%, #44A08D 100%);
+            border-color: #4ECDC4;
+            color: white;
+        }
+        .homework-content {
+            flex: 1;
+        }
+        .homework-title {
+            font-weight: 600;
+            color: #1a1a2e;
+            font-size: 0.95em;
+            margin-bottom: 4px;
+        }
+        .homework-description {
+            color: #666;
+            font-size: 0.85em;
+            line-height: 1.5;
+        }
+        .homework-link {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.85em;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            margin-top: 8px;
+        }
+        .homework-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Week Summary */
+        .week-summary {
+            background: rgba(255,255,255,0.1);
+            border-radius: 12px;
+            padding: 15px 20px;
+            margin-top: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .week-summary-text {
+            color: #aaa;
+            font-size: 0.9em;
+        }
+        .week-summary-text strong {
+            color: #4ECDC4;
+        }
+
+        /* Journey Section */
+        .journey-section {
+            background: rgba(255,255,255,0.1);
+            border-radius: 16px;
+            padding: 25px;
+            margin-bottom: 30px;
+        }
+        .journey-section h3 {
+            color: #fff;
+            margin-bottom: 20px;
+            font-size: 1.1em;
+        }
+        .journey-steps {
+            display: flex;
+            gap: 10px;
+        }
+        .journey-step {
+            flex: 1;
+            text-align: center;
+            padding: 15px 8px;
+            border-radius: 10px;
+            background: rgba(255,255,255,0.1);
+            border: 2px solid rgba(255,255,255,0.2);
+        }
+        .journey-step.completed {
+            background: rgba(78, 205, 196, 0.2);
+            border-color: #4ECDC4;
+        }
+        .journey-step.current {
+            background: rgba(255, 182, 39, 0.2);
+            border-color: #FFB627;
+        }
+        .journey-step.locked {
+            opacity: 0.4;
+        }
+        .journey-step .icon {
+            font-size: 1.5em;
+            margin-bottom: 6px;
+        }
+        .journey-step .label {
+            font-size: 0.75em;
+            color: #fff;
+            font-weight: 500;
+        }
+
+        /* Top Bar */
+        .top-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 20px;
+            background: rgba(0,0,0,0.3);
+            border-radius: 10px;
+            margin-bottom: 20px;
+            color: #aaa;
+            font-size: 0.9em;
+        }
+        .top-bar a {
+            color: #4ECDC4;
+            text-decoration: none;
+        }
+        .top-bar p {
+            margin: 0;
+        }
+        .logout-link {
+            color: #888;
+            cursor: pointer;
+            font-size: 0.9em;
+        }
+        .logout-link:hover {
+            color: #fff;
+        }
+
+        /* Agreement Section */
+        .agreement-section {
+            display: none;
+            background: rgba(255,255,255,0.98);
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 800px;
+            margin: 0 auto 30px auto;
+            color: #333;
+        }
+        .agreement-section.visible {
+            display: block;
+        }
+        .agreement-section h2 {
+            color: #1a1a2e;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .agreement-section .intro {
+            color: #666;
+            margin-bottom: 25px;
+            line-height: 1.6;
+        }
+        .agreement-content {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 25px;
+            max-height: 400px;
+            overflow-y: auto;
+            font-size: 0.9em;
+            line-height: 1.7;
+        }
+        .agreement-content h3 {
+            color: #4ECDC4;
+            font-size: 1.1em;
+            margin: 20px 0 10px 0;
+            padding-bottom: 5px;
+            border-bottom: 2px solid #4ECDC4;
+        }
+        .agreement-content h3:first-child {
+            margin-top: 0;
+        }
+        .agreement-content ul {
+            margin: 10px 0 10px 20px;
+        }
+        .agreement-content li {
+            margin-bottom: 8px;
+        }
+        .programme-box {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 15px 0;
+        }
+        .programme-box h4 {
+            margin-bottom: 10px;
+        }
+        .signature-section {
+            background: #fff;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 20px;
+        }
+        .signature-section h4 {
+            color: #666;
+            font-size: 0.9em;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 15px;
+        }
+        .checkbox-field {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            margin: 15px 0;
+            padding: 12px;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+        .checkbox-field input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            margin-top: 2px;
+            cursor: pointer;
+        }
+        .checkbox-field label {
+            font-size: 0.9em;
+            cursor: pointer;
+            color: #333;
+        }
+        .signature-input {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-family: 'Brush Script MT', cursive;
+            font-size: 1.5em;
+            text-align: center;
+            margin-bottom: 15px;
+        }
+        .signature-input:focus {
+            outline: none;
+            border-color: #4ECDC4;
+        }
+        .signature-canvas-container {
+            position: relative;
+            margin-bottom: 15px;
+        }
+        .signature-canvas {
+            width: 100%;
+            height: 100px;
+            border: 2px dashed #ccc;
+            border-radius: 8px;
+            background: #fafafa;
+            cursor: crosshair;
+        }
+        .clear-signature {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            background: #ff6b6b;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-size: 0.75em;
+            cursor: pointer;
+        }
+        .sign-btn {
+            width: 100%;
+            background: linear-gradient(135deg, #4ECDC4 0%, #44A08D 100%);
+            color: white;
+            border: none;
+            padding: 18px 40px;
+            border-radius: 12px;
+            font-size: 1.1em;
+            font-weight: 700;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .sign-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(78, 205, 196, 0.4);
+        }
+        .sign-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+        .sign-btn.success {
+            background: linear-gradient(135deg, #27ae60 0%, #2ecc71 100%);
+        }
+
+        /* ============================================
+           MOBILE RESPONSIVE STYLES
+           ============================================ */
+        @media (max-width: 600px) {
+            body {
+                padding: 15px 10px;
+            }
+            .container {
+                padding: 0 5px;
+            }
+
+            /* Header */
+            .header h1 {
+                font-size: 1.5em;
+            }
+            .header .subtitle {
+                font-size: 0.85em;
+            }
+            .header .welcome {
+                font-size: 0.95em;
+            }
+
+            /* Stats Bar - Stack vertically */
+            .stats-bar {
+                flex-direction: column;
+                gap: 15px;
+                padding: 15px;
+            }
+            .stat-item .stat-value {
+                font-size: 1.4em;
+            }
+            .stat-item .stat-label {
+                font-size: 0.8em;
+            }
+
+            /* Login Section */
+            .login-section {
+                padding: 25px 20px;
+                margin: 30px auto;
+            }
+            .login-section h2 {
+                font-size: 1.3em;
+            }
+
+            /* Tool Cards */
+            .tool-card {
+                padding: 18px;
+            }
+            .tool-card .tool-icon {
+                font-size: 2em;
+            }
+            .tool-card .tool-title {
+                font-size: 1em;
+            }
+            .tool-card .tool-description {
+                font-size: 0.85em;
+            }
+            .tool-card .tool-btn {
+                padding: 10px 16px;
+                font-size: 0.85em;
+            }
+
+            /* Journey Steps */
+            .journey-steps {
+                flex-wrap: wrap;
+                gap: 8px;
+            }
+            .journey-step {
+                flex: 1 1 45%;
+                min-width: 120px;
+                padding: 10px;
+            }
+            .journey-step .icon {
+                font-size: 1.3em;
+            }
+            .journey-step .label {
+                font-size: 0.75em;
+            }
+
+            /* Transformation Flow */
+            .step-card {
+                padding: 15px;
+            }
+            .step-card h4 {
+                font-size: 0.95em;
+            }
+            .step-card p {
+                font-size: 0.8em;
+            }
+
+            /* Section Headers */
+            .tools-section-header {
+                font-size: 1em;
+            }
+
+            /* Agreement Section */
+            .agreement-content {
+                padding: 20px 15px;
+            }
+            .agreement-content h2 {
+                font-size: 1.3em;
+            }
+            .agreement-content h3 {
+                font-size: 1.1em;
+            }
+            .agreement-content p,
+            .agreement-content li {
+                font-size: 0.9em;
+            }
+
+            /* Signature Area */
+            .signature-canvas {
+                height: 120px;
+            }
+            .sign-btn {
+                padding: 14px;
+                font-size: 1em;
+            }
+        }
+
+        /* Extra small devices */
+        @media (max-width: 400px) {
+            body {
+                padding: 10px 5px;
+            }
+            .header h1 {
+                font-size: 1.3em;
+            }
+            .journey-step {
+                flex: 1 1 100%;
+            }
+            .tool-card {
+                padding: 15px;
+            }
+            .stats-bar {
+                padding: 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+
+        <!-- Testimonial Agreement Section (shown for testimonial-access clients) -->
+        <div class="agreement-section" id="testimonialAgreementSection">
+            <h2>📋 Testimonial Access Agreement</h2>
+            <p class="intro">Welcome, <span id="testimonialClientName"></span>! In exchange for a testimonial, you're getting access to the Spark Your Potential career portal tools. Please review and sign the agreement below.</p>
+
+            <div class="agreement-content">
+                <h3>1. Purpose of This Agreement</h3>
+                <p>You have previously completed the proprietary AI questionnaire and are being granted <strong>complimentary access</strong> to the Spark Your Potential career portal tools. In exchange, you agree to provide a testimonial about your experience.</p>
+
+                <div class="programme-box" style="background: linear-gradient(135deg, #28a745 0%, #20c997 100%);">
+                    <h4>What You're Getting Access To:</h4>
+                    <ul>
+                        <li>Interactive CV Builder with your questionnaire insights</li>
+                        <li>Career Blueprint document</li>
+                        <li>Decision-Making Framework</li>
+                        <li>AI Prompt Library for career support</li>
+                        <li>Blueprint to CV/LinkedIn Mapping Guide</li>
+                    </ul>
+                </div>
+
+                <h3>2. Testimonial Requirements</h3>
+                <p>In exchange for portal access, you agree to:</p>
+                <ul>
+                    <li>Provide a written or video testimonial about your experience</li>
+                    <li>Allow the testimonial to be used on the Harness the Spark website, social media, and marketing materials</li>
+                    <li>Allow your first name (or full name if agreed) to be associated with the testimonial</li>
+                    <li>Provide the testimonial within 30 days of gaining portal access</li>
+                </ul>
+
+                <h3>3. Intellectual Property Protection</h3>
+                <p><strong>This section is critical.</strong> The AI questionnaire tool, methodology, frameworks, portal structure, and all associated materials are the proprietary intellectual property of Lisa Gills / Harness the Spark.</p>
+
+                <div class="programme-box" style="background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);">
+                    <h4>⚠️ Strictly Prohibited Actions:</h4>
+                    <ul>
+                        <li><strong>Copying or reproducing</strong> the questionnaire structure, questions, or methodology</li>
+                        <li><strong>Recreating or reverse-engineering</strong> any aspect of the AI tool or framework</li>
+                        <li><strong>Sharing screenshots, exports, or descriptions</strong> of the tool structure with third parties</li>
+                        <li><strong>Using the methodology</strong> to create competing products or services</li>
+                        <li><strong>Discussing the technical implementation</strong> with recruitment companies, employers, or competitors</li>
+                        <li><strong>Presenting the methodology as your own</strong> in any professional context</li>
+                    </ul>
+                </div>
+
+                <h3>4. Recruitment Company Disclosure Warning</h3>
+                <p style="background: #fff3cd; padding: 15px; border-radius: 8px; border-left: 4px solid #ffc107;">
+                    <strong>⚠️ Important:</strong> You acknowledge you may be in discussions with recruitment companies. You expressly agree NOT to disclose the structure, methodology, or approach of the questionnaire to any recruitment company, or suggest/recommend/facilitate the recreation of similar tools by any third party.
+                </p>
+
+                <h3>5. What You CAN Use</h3>
+                <p>You ARE permitted to:</p>
+                <ul>
+                    <li>Use your personal career insights and outputs for your own job search</li>
+                    <li>Reference the Career Blueprint content in applications and interviews</li>
+                    <li>Use the CV content generated for your professional purposes</li>
+                    <li>Mention that you used a career coaching tool (without describing how it works)</li>
+                    <li>Recommend the service to others (directing them to Harness the Spark)</li>
+                </ul>
+
+                <h3>6. Non-Compete Acknowledgement</h3>
+                <p>You agree:</p>
+                <ul>
+                    <li><strong>Not to develop, assist in developing, or advise on</strong> any similar career assessment or AI questionnaire tool for a period of <strong>2 years</strong> from the date of this agreement</li>
+                    <li><strong>Not to work on or consult for</strong> any project that seeks to replicate or compete with this methodology</li>
+                    <li>To notify Lisa Gills immediately if approached to assist with any such project</li>
+                </ul>
+
+                <h3>7. Confidentiality</h3>
+                <p>You agree to treat all aspects of the tool's methodology, question structure, AI prompts, and framework design as <strong>strictly confidential</strong>. This confidentiality obligation survives indefinitely.</p>
+
+                <h3>8. Breach of Agreement</h3>
+                <p>If you breach any intellectual property or confidentiality terms:</p>
+                <ul>
+                    <li>Portal access will be <strong>immediately revoked</strong></li>
+                    <li>Lisa Gills reserves the right to pursue <strong>legal remedies</strong> including injunctive relief and damages</li>
+                    <li>You may be liable for <strong>any losses</strong> arising from the breach</li>
+                </ul>
+
+                <h3>9. Duration of Access</h3>
+                <p>Portal access is granted for <strong>6 months</strong> from the date of this agreement.</p>
+            </div>
+
+            <div class="signature-section">
+                <h4>Your Signature</h4>
+
+                <div class="checkbox-field" style="border: 2px solid #dc3545; background: #fff5f5;">
+                    <input type="checkbox" id="agreeIPTestimonial">
+                    <label for="agreeIPTestimonial"><strong>I understand and agree</strong> that the questionnaire methodology, tool structure, and frameworks are proprietary intellectual property that I must not copy, reproduce, share, or disclose to any third party including recruitment companies.</label>
+                </div>
+
+                <div class="checkbox-field" style="border: 2px solid #dc3545; background: #fff5f5;">
+                    <input type="checkbox" id="agreeNonCompeteTestimonial">
+                    <label for="agreeNonCompeteTestimonial"><strong>I agree</strong> not to develop, assist in developing, or advise on any similar career assessment tool for 2 years, and to notify Lisa Gills if approached to do so.</label>
+                </div>
+
+                <div class="checkbox-field">
+                    <input type="checkbox" id="agreeTestimonialProvide">
+                    <label for="agreeTestimonialProvide">I agree to provide a testimonial within 30 days and allow it to be used for marketing purposes.</label>
+                </div>
+
+                <div class="checkbox-field">
+                    <input type="checkbox" id="agreeTestimonialTerms">
+                    <label for="agreeTestimonialTerms">I have read and agree to all terms of this Testimonial Access Agreement.</label>
+                </div>
+
+                <p style="font-size: 0.85em; color: #666; margin-bottom: 10px;">Type your name and draw your signature below:</p>
+                <input type="text" class="signature-input" id="testimonialSignatureInput" placeholder="Type your full name">
+
+                <div class="signature-canvas-container">
+                    <canvas id="testimonialSignatureCanvas" class="signature-canvas"></canvas>
+                    <button type="button" class="clear-signature" onclick="clearTestimonialSignature()">Clear</button>
+                </div>
+
+                <button class="sign-btn" id="testimonialSignBtn" onclick="submitTestimonialAgreement()" disabled>
+                    ✍️ Sign & Continue to Toolkit
+                </button>
+            </div>
+        </div>
+
+        <!-- Agreement Section (shown if not signed) -->
+        <div class="agreement-section" id="agreementSection">
+            <h2>📋 Coaching Agreement</h2>
+            <p class="intro">Welcome, <span id="agreementClientName"></span>! Before we begin your Career Booster journey, please review and sign the coaching agreement below.</p>
+
+            <div class="agreement-content">
+                <h3>1. What Coaching Is (And Isn't)</h3>
+                <p>Coaching is a collaborative process designed to help you develop insight, build strategies, and make meaningful change. I'll ask questions, share tools, and offer structure — but ultimately, you're responsible for what you take from it and how you use it.</p>
+                <p><strong>This is not therapy or medical advice.</strong> I don't diagnose or treat mental health conditions. If you feel you need therapeutic or clinical support, I'll help signpost you to it — but it's outside the scope of this coaching.</p>
+
+                <h3>2. Programme & Services</h3>
+                <div class="programme-box">
+                    <h4>4-Week Career Booster Programme - £400 ex VAT (£480 inc VAT)</h4>
+                    <ul>
+                        <li>4 x 1-hour sessions over 4 weeks</li>
+                        <li>Focus on the AI tool, report, and core narrative</li>
+                        <li>Key deliverables: report, CV content framework, positioning statement</li>
+                        <li>Email support between sessions (response within 48 hours on working days)</li>
+                        <li>Access to proprietary AI questionnaire tool</li>
+                    </ul>
+                </div>
+                <p>Sessions will take place online (Zoom) at mutually agreed times.</p>
+
+                <h3>3. Cancellation & Rescheduling</h3>
+                <ul>
+                    <li>If you're more than 15 minutes late or miss a session without 24 hours' notice, the session may be forfeited unless it's an emergency</li>
+                    <li>I'll always do my best to be flexible where possible</li>
+                    <li>If I need to reschedule, I'll give as much notice as I can (ideally 24 hours)</li>
+                </ul>
+
+                <h3>4. Payment Terms</h3>
+                <p>The full fee is <strong>£480 inc VAT (£400 ex VAT)</strong>. Payment is required prior to the first session.</p>
+
+                <h3>5. Confidentiality</h3>
+                <p>Everything shared in sessions is confidential. I operate within the spirit of the ICF Code of Ethics.</p>
+                <p><strong>Exceptions:</strong> If I'm concerned about your safety or someone else's, or if you give permission for me to discuss something (e.g., with Access to Work or an employer).</p>
+
+                <h3>6. Intellectual Property</h3>
+                <p>The AI questionnaire tool, methodology, frameworks, and materials remain my intellectual property. The content you create (your career narrative, CV content, etc.) is yours to use as you wish.</p>
+
+                <h3>7. Liability</h3>
+                <p>You're responsible for your own actions, choices, and results from coaching. I'm not liable for any outcomes, decisions, or impacts of the coaching process.</p>
+            </div>
+
+            <div class="signature-section">
+                <h4>Your Signature</h4>
+
+                <div class="checkbox-field">
+                    <input type="checkbox" id="agreeTerms">
+                    <label for="agreeTerms">I have read and agree to the terms of this Coaching Agreement</label>
+                </div>
+
+                <div class="checkbox-field">
+                    <input type="checkbox" id="agreeRecording">
+                    <label for="agreeRecording">I consent to sessions being recorded for training/accreditation purposes (optional)</label>
+                </div>
+
+                <p style="font-size: 0.85em; color: #666; margin-bottom: 10px;">Type your name and draw your signature below:</p>
+                <input type="text" class="signature-input" id="signatureInput" placeholder="Type your full name">
+
+                <div class="signature-canvas-container">
+                    <canvas id="signatureCanvas" class="signature-canvas"></canvas>
+                    <button type="button" class="clear-signature" onclick="clearSignature()">Clear</button>
+                </div>
+
+                <button class="sign-btn" id="signBtn" onclick="submitAgreement()" disabled>
+                    ✍️ Sign & Continue to Toolkit
+                </button>
+            </div>
+        </div>
+
+        <!-- Portal Content -->
+        <div class="portal-content" id="portalContent">
+            <!-- Top Bar -->
+            <div class="top-bar">
+                <p>Need help? Contact Lisa: <a href="mailto:lisa@harnessthespark.com">lisa@harnessthespark.com</a></p>
+                <p class="logout-link" onclick="logout()">Log Out</p>
+            </div>
+
+            <!-- Header -->
+            <div class="header">
+                <h1><span>⚡</span> <span id="portalTitle">Your Career Toolkit</span></h1>
+                <p class="subtitle">Spark Your Potential</p>
+                <p class="welcome">Welcome, <span id="clientName"></span></p>
+            </div>
+
+            <!-- Notification Banner (shown when new content available) -->
+            <div class="notification-banner" id="notificationBanner" style="display: none;">
+                <div class="notification-content">
+                    <span class="notification-icon">✨</span>
+                    <div class="notification-text">
+                        <strong id="notificationTitle">New Content Ready!</strong>
+                        <p id="notificationMessage">You have new homework waiting.</p>
+                    </div>
+                    <a href="#" id="notificationLink" class="notification-btn">View Now</a>
+                    <button class="notification-dismiss" onclick="dismissNotification()" title="Dismiss">✕</button>
+                </div>
+            </div>
+
+            <!-- Stats Bar -->
+            <div class="stats-bar">
+                <div class="stat-item">
+                    <div class="stat-value" id="statBlueprints">0</div>
+                    <div class="stat-label">Blueprints</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="statTools">0/6</div>
+                    <div class="stat-label">Tools Used</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="statDate">-</div>
+                    <div class="stat-label">Last Updated</div>
+                </div>
+            </div>
+
+            <!-- Journey Timeline -->
+            <div class="journey-section">
+                <h3>📅 Your Journey</h3>
+                <div class="journey-steps" id="journeySteps"></div>
+            </div>
+
+            <!-- Transformation Journey - 3-Step Flow -->
+            <div class="transformation-section">
+                <div class="transformation-header">
+                    <h2>🚀 Your Transformation Journey</h2>
+                    <p>Three steps from self-discovery to career clarity</p>
+                </div>
+                <div class="transformation-flow" id="transformationFlow">
+                    <!-- Populated by JavaScript -->
+                </div>
+            </div>
+
+            <!-- Weekly Homework Section -->
+            <div class="homework-section">
+                <div class="homework-header">
+                    <h2>📋 This Week's Focus</h2>
+                    <span class="week-badge" id="currentWeekBadge">Week 1</span>
+                </div>
+
+                <!-- Blueprint Progress -->
+                <div class="blueprint-progress">
+                    <div class="blueprint-progress-header">
+                        <h4>📘 Blueprint Progress</h4>
+                        <span class="progress-text" id="blueprintProgressText">0% Complete</span>
+                    </div>
+                    <div class="blueprint-progress-bar">
+                        <div class="blueprint-progress-bar-fill" id="blueprintProgressBar" style="width: 0%"></div>
+                    </div>
+                </div>
+
+                <!-- Personalised Prompt from Lisa -->
+                <div class="personalised-prompt" id="personalisedPrompt">
+                    <div class="personalised-prompt-header">
+                        <span class="icon">💬</span>
+                        <h4>Lisa's Focus for You</h4>
+                    </div>
+                    <p id="personalisedPromptText">No personalised prompt yet - check back after your session!</p>
+                </div>
+
+                <!-- Week Tabs -->
+                <div class="week-tabs" id="weekTabs">
+                    <!-- Populated by JavaScript -->
+                </div>
+
+                <!-- Homework List -->
+                <div class="homework-list" id="homeworkList">
+                    <!-- Populated by JavaScript -->
+                </div>
+
+                <!-- Week Summary -->
+                <div class="week-summary">
+                    <span class="week-summary-text"><strong id="homeworkCompleteCount">0</strong> of <span id="homeworkTotalCount">0</span> tasks completed</span>
+                </div>
+            </div>
+
+            <!-- Resources from Coach -->
+            <div class="resources-section" id="resourcesSection" style="display: none;">
+                <h3 class="resources-header">📚 Resources from Lisa</h3>
+                <p class="resources-intro">Documents and examples to help guide your journey</p>
+                <div class="resources-grid" id="resourcesGrid">
+                    <!-- Populated by JavaScript -->
+                </div>
+            </div>
+
+            <!-- Supporting Tools -->
+            <div class="tools-section">
+                <h3 class="tools-section-header">🧰 Your Career Tools</h3>
+                <div class="tools-grid" id="toolsGrid"></div>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        // Client data with specific file paths
+        const CLIENTS = {
+            'sarah.mitchell@demo.com': {
+                name: 'Sarah Mitchell',
+                email: 'sarah.mitchell@demo.com',
+                isDemo: true,  // Demo account - uses SparkHub backend auth
+                folder: 'sarah_mitchell_demo_client',
+                status: 'complete',
+                isDemo: true,
+                agreementSigned: true,
+                files: {
+                    questionnaire: 'sarah_mitchell_demo_client/Sarah_Mitchell_Questionnaire.html',
+                    insights: 'sarah_mitchell_demo_client/Sarah_Mitchell_Career_Insights_Report.html',
+                    blueprint: 'sarah_mitchell_demo_client/Sarah_Mitchell_Blueprint.html',
+                    cvBuilder: 'sarah_mitchell_demo_client/Sarah_Mitchell_CV_Builder.html',
+                    mappingGuide: 'sarah_mitchell_demo_client/Sarah_Mitchell_Mapping_Guide.html',
+                    decisionFramework: 'sarah_mitchell_demo_client/Sarah_Mitchell_Decision_Framework.html'
+                },
+                prompts: {
+                    week1: "Your responses show you're a Creative Catalyst who unlocks potential in teams. Document 3 belief moments that prove this.",
+                    week2: "Let's explore what 'creative transformation at scale' looks like for you. What are the non-negotiables?",
+                    week3: "Time to craft your story. How do you introduce yourself as a Creative Catalyst?",
+                    week4: "Final push! Does your CV and LinkedIn reflect your unique thread of connecting creativity with commercial reality?"
+                },
+                blueprintProgress: 100
+            },
+            'donaldpirie111@hotmail.co.uk': {
+                name: 'Donald Pirie',
+                email: 'donaldpirie111@hotmail.co.uk',
+                folder: 'Donald_Pirie',
+                status: 'complete',
+                agreementSigned: true,
+                files: {
+                    agreement: 'Donald_Pirie/Donald_Pirie_Coaching_Agreement.html',
+                    questionnaire: 'Donald_Pirie/Donald_Pirie_Questionnaire_Responses.html',
+                    insights: 'Donald_Pirie/Donald_Pirie_Career_Insights_Report.html',
+                    blueprint: 'Donald_Pirie/Donald_Pirie_Career_Blueprint_LIVE.html',
+                    cvBuilder: 'Donald_Pirie/Donald_Interactive_CV_Builder.html',
+                    mappingGuide: 'Donald_Pirie/Donald_Blueprint_CV_LinkedIn_Mapping_Guide.html',
+                    decisionFramework: 'Donald_Pirie/Donald_Decision_Framework_Updated.html'
+                },
+                prompts: {
+                    week1: "Your responses show you're a natural problem solver who thrives on complex challenges. Document 3 belief moments that prove this.",
+                    week2: "Let's explore what 'sustainable success' looks like for you. What are the non-negotiables for your next role?",
+                    week3: "Time to craft your story. How do you want to introduce yourself in 30 seconds?",
+                    week4: "Final push! Review your CV and LinkedIn - does every line reflect your unique thread?"
+                },
+                blueprintProgress: 100
+            },
+            'rs@rajsamuel.net': {
+                name: 'Raj Samuel',
+                email: 'rs@rajsamuel.net',
+                folder: 'Raj_Samuel',
+                status: 'week-3',  // Updated after Week 2 homework complete (8 Jan 2026)
+                programmeType: 'career',
+                agreementSigned: true,
+                files: {
+                    questionnaireResponses: 'Raj_Samuel/Raj_Samuel_Questionnaire_Responses.html',
+                    insights: 'Raj_Samuel/Raj_Samuel_Career_Insights_Report.html',
+                    blueprint: 'Raj_Samuel/Raj_Samuel_Career_Blueprint.html',
+                    programmeOutline: 'Raj_Samuel/Raj_Samuel_Programme_Outline.html',
+                    decisionFramework: 'Raj_Samuel/Raj_Samuel_Decision_Framework.html',
+                    week2Homework: 'Raj_Samuel/Raj_Samuel_Week2_Homework.html',
+                    week3Homework: 'Raj_Samuel/Raj_Samuel_Week3_Homework.html'
+                },
+                prompts: {
+                    week1: "",
+                    week2: "",
+                    week3: "",
+                    week4: ""
+                }
+                // blueprintProgress removed - now auto-calculated
+            },
+            'simon@boothlucking.com': {
+                name: 'Simon Booth-Lucking',
+                email: 'simon@boothlucking.com',
+                folder: 'Simon_Booth_Lucking',
+                status: 'complete',  // Full access - self-service testimonial client
+                agreementSigned: false,
+                programmeType: 'testimonial-access',
+                files: {
+                    // Only list files that actually exist
+                    agreement: 'Simon_Booth_Lucking/Simon_Booth_Lucking_Testimonial_Agreement.html',
+                    questionnaire: 'Simon_Booth_Lucking/Simon_Booth_Lucking_Discovery_Questionnaire.html',
+                    cvBuilder: 'Simon_Booth_Lucking/Simon_Booth_Lucking_CV_Builder.html',
+                    mappingGuide: 'Simon_Booth_Lucking/Simon_Booth_Lucking_Mapping_Guide.html',
+                    decisionFramework: 'Simon_Booth_Lucking/Simon_Booth_Lucking_Decision_Framework.html'
+                    // insights: 'Simon_Booth_Lucking/Simon_Booth_Lucking_Career_Insights_Report.html',  // Add when created
+                    // blueprint: 'Simon_Booth_Lucking/Simon_Booth_Lucking_Blueprint.html',              // Add when created
+                },
+                prompts: {
+                    week1: "",
+                    week2: "",
+                    week3: "",
+                    week4: ""
+                },
+                isTestimonialClient: true  // Flag for different UI treatment if needed
+                // blueprintProgress removed - now auto-calculated
+            },
+            'chloe@thisiscal.com': {
+                name: 'Chloe Cal',
+                email: 'chloe@thisiscal.com',
+                folder: 'Chloe_Cal',
+                status: 'pre-programme',
+                agreementSigned: false,
+                programmeType: 'audhd',
+                files: {
+                    // Files that exist
+                    agreement: 'Chloe_Cal/Chloe_Cal_Spark_Coaching_Agreement.html',
+                    insights: 'Chloe_Cal/Chloe_Cal_Career_Insights_Report.html',
+                    blueprint: 'Chloe_Cal/Chloe_Cal_Career_Blueprint.html',
+                    cvBuilder: 'Chloe_Cal/Chloe_Cal_CV_Builder.html',
+                    mappingGuide: 'Chloe_Cal/Chloe_Cal_Mapping_Guide.html',
+                    decisionFramework: 'Chloe_Cal/Chloe_Cal_Decision_Framework.html'
+                },
+                prompts: {
+                    week1: "",
+                    week2: "",
+                    week3: "",
+                    week4: ""
+                }
+                // blueprintProgress removed - now auto-calculated
+            },
+            'deborah_armstrong@hotmail.com': {
+                name: 'Deb Briggs',
+                email: 'deborah_armstrong@hotmail.com',
+                folder: 'Deb_Briggs',
+                status: 'pre-programme',
+                agreementSigned: false,
+                programmeType: 'audhd',
+                files: {
+                    // Only files that exist - add more as created
+                    agreement: 'Deb_Briggs/Deb_Briggs_Spark_Coaching_Agreement.html'
+                },
+                prompts: {
+                    week1: "",
+                    week2: "",
+                    week3: "",
+                    week4: ""
+                }
+                // blueprintProgress removed - now auto-calculated
+            },
+            'george.jones@demo.sparkhub.io': {
+                name: 'George Jones',
+                email: 'george.jones@demo.sparkhub.io',
+                folder: 'George_Jones',
+                status: 'week-4',
+                agreementSigned: true,
+                isDemo: true,
+                programmeType: 'career',
+                files: {
+                    blueprint: 'George_Jones/George_Jones_Blueprint.html',
+                    cvBuilder: 'George_Jones/George_Jones_CV_Builder.html',
+                    decisionFramework: 'George_Jones/George_Jones_Decision_Framework.html'
+                },
+                prompts: {
+                    week1: "Your evidence shows you build infrastructure that enables others to succeed. Document 3 'making complexity invisible' moments.",
+                    week2: "Let's explore what 'platform engineering leadership' looks like for you. What are your non-negotiables for VP/CTO roles?",
+                    week3: "Time to craft your story. How do you introduce yourself as someone who builds foundations for velocity?",
+                    week4: "Final push! Does your CV and LinkedIn reflect your thread of enabling others through reliable infrastructure?"
+                }
+            },
+            // Lisa's test account - clean slate for testing
+            'lisa.gills@icloud.com': {
+                name: 'Lisa (Test)',
+                email: 'lisa.gills@icloud.com',
+                folder: 'Lisa_Test',
+                status: 'pre-programme',
+                agreementSigned: true,
+                isDemo: true,
+                programmeType: 'career',
+                files: {
+                    // Empty files - uses default questionnaire
+                },
+                prompts: {
+                    week1: '',
+                    week2: '',
+                    week3: '',
+                    week4: ''
+                }
+            },
+            // Peter Morgan - Blended Programme Beta Tester (Gratis)
+            'pete_morgan69@hotmail.com': {
+                name: 'Peter Morgan',
+                email: 'pete_morgan69@hotmail.com',
+                folder: 'Peter_Morgan',
+                status: 'pre-programme',
+                agreementSigned: true,  // Signed 4 Jan 2026
+                programmeType: 'blended',
+                files: {
+                    agreement: 'Peter_Morgan/Peter_Morgan_Coaching_Agreement.html',
+                    questionnaire: 'Peter_Morgan/Peter_Morgan_Discovery_Questionnaire.html',
+                    exampleResponses: 'George_Jones/George_Jones_Questionnaire_Example_PDF.html'
+                },
+                prompts: {
+                    week1: '',
+                    week2: '',
+                    week3: '',
+                    week4: ''
+                }
+            }
+        };
+
+        const STAGES = [
+            { id: 'pre-programme', label: 'Pre-Programme', icon: '📋' },
+            { id: 'week-1', label: 'Week 1', icon: '🌱' },
+            { id: 'week-2', label: 'Week 2', icon: '🧭' },
+            { id: 'week-3', label: 'Week 3', icon: '🎯' },
+            { id: 'week-4', label: 'Week 4', icon: '🚀' },
+            { id: 'complete', label: 'Complete', icon: '🏆' }
+        ];
+
+        // SYP API base URL
+        const SYP_API = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+            ? 'http://localhost:3001'
+            : 'https://potential.harnessthespark.com';
+
+        // Current notification ID for dismissal
+        let currentNotificationId = null;
+
+        // Track login for nudge system
+        async function trackClientLogin(email) {
+            try {
+                await fetch(`${SYP_API}/api/track-login`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ client_email: email })
+                });
+                console.log('📊 Login tracked for:', email);
+            } catch (e) {
+                console.log('Could not track login:', e.message);
+            }
+        }
+
+        // Load and display notifications
+        async function loadNotifications(email) {
+            try {
+                const response = await fetch(`${SYP_API}/api/notifications/${encodeURIComponent(email)}`);
+                const data = await response.json();
+
+                if (data.success && data.notifications && data.notifications.length > 0) {
+                    // Show the most recent unread notification
+                    const notification = data.notifications[0];
+                    currentNotificationId = notification.id;
+
+                    document.getElementById('notificationTitle').textContent = notification.subject || 'New Content Ready!';
+                    document.getElementById('notificationMessage').textContent = notification.message || 'You have new content waiting.';
+
+                    const linkBtn = document.getElementById('notificationLink');
+                    if (notification.link) {
+                        linkBtn.href = notification.link;
+                        linkBtn.textContent = notification.link_text || 'View Now';
+                        linkBtn.style.display = 'inline-block';
+                    } else {
+                        linkBtn.style.display = 'none';
+                    }
+
+                    document.getElementById('notificationBanner').style.display = 'block';
+                    console.log('🔔 Showing notification:', notification.subject);
+                }
+            } catch (e) {
+                console.log('Could not load notifications:', e.message);
+            }
+        }
+
+        // Dismiss notification
+        async function dismissNotification() {
+            document.getElementById('notificationBanner').style.display = 'none';
+
+            if (currentNotificationId && currentClient) {
+                try {
+                    await fetch(`${SYP_API}/api/notifications/${encodeURIComponent(currentClient.email)}/${currentNotificationId}`, {
+                        method: 'PATCH'
+                    });
+                    console.log('✓ Notification dismissed');
+                } catch (e) {
+                    console.log('Could not mark notification read:', e.message);
+                }
+            }
+        }
+
+        // Weekly homework tasks - builds progressively towards complete toolkit
+        const WEEKLY_HOMEWORK = {
+            'week-1': {
+                title: 'Foundation',
+                subtitle: 'Discovery & Patterns',
+                tasks: [
+                    {
+                        id: 'w1-example',
+                        title: 'View Example Responses',
+                        description: 'See how another professional answered the questionnaire - great for inspiration',
+                        linkText: 'View Example (PDF-ready)',
+                        linkKey: 'exampleResponses'
+                    },
+                    {
+                        id: 'w1-questionnaire',
+                        title: 'Complete Discovery Questionnaire',
+                        description: 'Deep reflection on your patterns, superpowers, and career journey',
+                        linkText: 'Open Questionnaire',
+                        linkKey: 'questionnaire'
+                    },
+                    {
+                        id: 'w1-review-insights',
+                        title: 'Review Your Career Insights Report',
+                        description: 'Lisa will create this after your session - your patterns and unique thread revealed',
+                        linkText: 'View Report',
+                        linkKey: 'insights'
+                    }
+                ]
+            },
+            'week-2': {
+                title: 'Career Direction',
+                subtitle: 'Opportunities & Confidence',
+                tasks: [
+                    {
+                        id: 'w2-homework',
+                        title: '📝 Complete Week 2 Homework',
+                        description: 'Answer key questions and complete homework tasks - saves automatically to your profile',
+                        linkText: 'Open Homework Sheet',
+                        linkKey: 'homework'
+                    },
+                    {
+                        id: 'w2-vision',
+                        title: 'Define Your Ideal Role Vision',
+                        description: 'What does your dream role look like? Environment, culture, responsibilities'
+                    },
+                    {
+                        id: 'w2-red-flags',
+                        title: 'Identify Your Red Flags',
+                        description: 'What are the deal-breakers? Things you won\'t tolerate in your next role'
+                    },
+                    {
+                        id: 'w2-green-flags',
+                        title: 'Identify Your Green Flags',
+                        description: 'What makes you thrive? The must-haves for sustainable success'
+                    },
+                    {
+                        id: 'w2-decision-framework',
+                        title: 'Start Your Decision Framework',
+                        description: 'Begin scoring criteria based on your red/green flags',
+                        linkText: 'Open Framework',
+                        linkKey: 'decisionFramework'
+                    }
+                ]
+            },
+            'week-3': {
+                title: 'Positioning & Voice',
+                subtitle: 'Crafting Your Narrative',
+                tasks: [
+                    {
+                        id: 'w3-homework',
+                        title: '📝 Complete Week 3 Homework',
+                        description: 'The Crystal Ball Pitch - craft your positioning and narrative with building blocks from our sessions',
+                        linkText: 'Open Homework Sheet',
+                        linkKey: 'week3Homework'
+                    },
+                    {
+                        id: 'w3-one-sentence',
+                        title: 'Write Your One-Sentence Intro',
+                        description: 'Who you help and how - your positioning statement'
+                    },
+                    {
+                        id: 'w3-elevator-30s',
+                        title: 'Draft 30-Second Elevator Pitch',
+                        description: 'Quick intro for networking events and chance encounters'
+                    },
+                    {
+                        id: 'w3-elevator-60s',
+                        title: 'Draft 60-Second Elevator Pitch',
+                        description: 'Expanded version with a belief moment example'
+                    },
+                    {
+                        id: 'w3-elevator-2min',
+                        title: 'Draft 2-Minute Story',
+                        description: 'Full narrative for interviews and deep conversations'
+                    },
+                    {
+                        id: 'w3-blueprint-sections',
+                        title: 'Review Blueprint Sections',
+                        description: 'Check your Blueprint is capturing everything from sessions',
+                        linkText: 'View Blueprint',
+                        linkKey: 'blueprint'
+                    }
+                ]
+            },
+            'week-4': {
+                title: 'Implementation',
+                subtitle: 'Polish & Launch Ready',
+                tasks: [
+                    {
+                        id: 'w4-cv-complete',
+                        title: 'Complete Your CV',
+                        description: 'Use the CV Builder with content from your Blueprint',
+                        linkText: 'Open CV Builder',
+                        linkFile: 'cv-builder.html'
+                    },
+                    {
+                        id: 'w4-linkedin-headline',
+                        title: 'Update LinkedIn Headline & Summary',
+                        description: 'Apply your positioning using the Mapping Guide',
+                        linkText: 'View Mapping Guide',
+                        linkKey: 'mappingGuide'
+                    },
+                    {
+                        id: 'w4-linkedin-experience',
+                        title: 'Update LinkedIn Experience Section',
+                        description: 'Rewrite using your unique thread and belief moments'
+                    },
+                    {
+                        id: 'w4-interview-prep',
+                        title: 'Prepare 5 Interview Answers',
+                        description: 'Common questions answered using your positioning and evidence'
+                    },
+                    {
+                        id: 'w4-action-plan',
+                        title: 'Create 30-Day Action Plan',
+                        description: 'Your launch plan - applications, networking, next steps'
+                    }
+                ]
+            }
+        };
+
+        let currentClient = null;
+        let selectedWeek = null;
+
+        // Check for saved session (requires previous password login)
+        // Supports both login methods:
+        // - syp_client_email: set by client-portal.html direct login
+        // - syp_user: set by login.html (central login hub) which redirects here
+        window.onload = function() {
+            // FIRST: Check if user needs to change their password (applies to ALL login methods)
+            const savedUser = localStorage.getItem('syp_user');
+            if (savedUser) {
+                try {
+                    const user = JSON.parse(savedUser);
+                    if (user.must_change_password) {
+                        localStorage.setItem('syp_pending_password_change', user.email);
+                        window.location.href = 'change-password.html';
+                        return;
+                    }
+                } catch (e) {
+                    console.error('Error parsing saved user:', e);
+                }
+            }
+
+            // Check for direct client portal login
+            const savedEmail = localStorage.getItem('syp_client_email');
+            if (savedEmail && CLIENTS[savedEmail.toLowerCase()]) {
+                showPortal(CLIENTS[savedEmail.toLowerCase()]);
+                return;
+            }
+
+            // Check for login.html redirect (stores user object with email)
+            if (savedUser) {
+                try {
+                    const user = JSON.parse(savedUser);
+                    const email = user.email?.toLowerCase();
+                    if (email) {
+                        // User is authenticated - show portal
+                        localStorage.setItem('syp_client_email', email);
+                        if (CLIENTS[email]) {
+                            // Merge CLIENTS data with user data (for client_tools)
+                            const mergedClient = {
+                                ...CLIENTS[email],
+                                client_tools: user.client_tools || CLIENTS[email].client_tools || null
+                            };
+                            showPortal(mergedClient);
+                        } else {
+                            // Create dynamic client from user data
+                            showPortal({
+                                name: user.name || email.split('@')[0],
+                                email: email,
+                                programmeType: user.programme_access || 'career',
+                                status: user.programme_status || 'enrolled',
+                                client_tools: user.client_tools || null,
+                                folder: (user.name || email.split('@')[0]).replace(/\s+/g, '_')
+                            });
+                        }
+                        return;
+                    }
+                } catch (e) {
+                    console.error('Error parsing saved user:', e);
+                }
+            }
+
+            // NO SESSION - Redirect to central login
+            console.log('🔐 No session found - redirecting to login.html');
+            window.location.href = 'login.html';
+        };
+
+        // SYP Express API - single backend for auth and client data
+        const SPARKHUB_API = 'https://api.harnessthespark.ai';  // CRM fallback only
+
+        // NOTE: clientLogin() removed - all login now via central login.html
+
+        // Show portal (async to check agreement status from PostgreSQL)
+        async function showPortal(client) {
+            console.log('🚀 showPortal called with client:', client?.name, client?.email);
+
+            // FIRST: Check if user needs to change password (catches ALL code paths)
+            const savedUser = localStorage.getItem('syp_user');
+            if (savedUser) {
+                try {
+                    const user = JSON.parse(savedUser);
+                    if (user.must_change_password === true) {
+                        localStorage.setItem('syp_pending_password_change', user.email || client.email);
+                        window.location.href = 'change-password.html';
+                        return;
+                    }
+                } catch (e) {
+                    console.error('Error checking password status:', e);
+                }
+            }
+
+            currentClient = client;
+
+            // Check if agreement is signed (async - checks PostgreSQL first for cross-device persistence)
+            console.log('🔍 Checking agreement status...');
+            let agreementSigned = false;
+            try {
+                agreementSigned = await hasSignedAgreement(client);
+            } catch (e) {
+                console.error('Agreement check failed:', e);
+                // Default to checking client.agreementSigned as fallback
+                agreementSigned = client?.agreementSigned || false;
+            }
+            console.log('📋 Agreement signed:', agreementSigned);
+
+            if (!agreementSigned) {
+                // Check if this is a testimonial-access client
+                if (client.programmeType === 'testimonial-access') {
+                    // Show testimonial agreement section
+                    document.getElementById('testimonialAgreementSection').classList.add('visible');
+                    document.getElementById('agreementSection').classList.remove('visible');
+                    document.getElementById('portalContent').classList.remove('visible');
+
+                    // Set client name in testimonial agreement
+                    document.getElementById('testimonialClientName').textContent = client.name;
+
+                    // Setup testimonial agreement form
+                    setupTestimonialAgreementForm();
+                    return;
+                }
+
+                // Check if client has a custom agreement file - redirect to their specific agreement
+                // (Works for any programme type: audhd, blended, career, etc.)
+                if (client.files && client.files.agreement) {
+                    window.location.href = client.files.agreement;
+                    return;
+                }
+
+                // Regular coaching agreement (Career Booster)
+                document.getElementById('agreementSection').classList.add('visible');
+                document.getElementById('testimonialAgreementSection').classList.remove('visible');
+                document.getElementById('portalContent').classList.remove('visible');
+
+                // Set client name in agreement
+                document.getElementById('agreementClientName').textContent = client.name;
+
+                // Setup agreement form
+                setupAgreementForm();
+                return;
+            }
+
+            // Agreement signed - show toolkit
+            console.log('✅ Agreement check passed - showing portal for:', client.name);
+
+            // Track login for nudge system (fire and forget)
+            trackClientLogin(client.email);
+
+            // Load notifications (fire and forget - will show banner if any)
+            loadNotifications(client.email);
+
+            try {
+                document.getElementById('agreementSection').classList.remove('visible');
+                document.getElementById('testimonialAgreementSection').classList.remove('visible');
+                document.getElementById('portalContent').classList.add('visible');
+
+                // Update header
+                document.getElementById('clientName').textContent = client.name ? client.name.split(' ')[0] : 'Client';
+
+                // Update portal title based on programme type
+                const isSparkClient = client.programmeType === 'audhd';
+                const isBlendedClient = client.programmeType === 'blended';
+                let portalTitle = 'Your Career Toolkit';
+                if (isSparkClient) portalTitle = 'Your Spark Toolkit';
+                if (isBlendedClient) portalTitle = 'Your Complete Toolkit';
+                document.getElementById('portalTitle').textContent = portalTitle;
+
+                // Calculate stats
+                const stageIndex = STAGES.findIndex(s => s.id === client.status);
+                const toolsUnlocked = getToolsUnlocked(stageIndex);
+
+                document.getElementById('statBlueprints').textContent = stageIndex >= 2 ? '1' : '0';
+                document.getElementById('statTools').textContent = `${toolsUnlocked}/6`;
+                document.getElementById('statDate').textContent = new Date().toLocaleDateString('en-GB');
+            } catch (e) {
+                console.error('Error setting up portal header:', e);
+            }
+
+            // Render journey (wrapped in try-catch)
+            try {
+                renderJourney(client);
+            } catch (e) {
+                console.error('Error rendering journey:', e);
+            }
+
+            // Render transformation flow (3-step journey)
+            try {
+                renderTransformationJourney(client);
+            } catch (e) {
+                console.error('Error rendering transformation journey:', e);
+            }
+
+            // Render homework section
+            renderHomeworkSection(client);
+
+            // Render supporting tools
+            renderTools(client);
+
+            // Render coach resources
+            renderCoachResources(client);
+        }
+
+        // Fetch and render documents uploaded by coach
+        async function renderCoachResources(client) {
+            const resourcesSection = document.getElementById('resourcesSection');
+            const resourcesGrid = document.getElementById('resourcesGrid');
+
+            // Get local client config for static files
+            const localConfig = CLIENTS[client.email.toLowerCase()] || {};
+            const files = localConfig.files || client.files || {};
+
+            let documents = [];
+
+            // First, try to fetch from API
+            try {
+                const authToken = localStorage.getItem('syp_token') || localStorage.getItem('token');
+                if (authToken) {
+                    const API_BASE = 'https://api.harnessthespark.ai';
+                    const response = await fetch(`${API_BASE}/api/crm/syp/coach/client-documents/?client_email=${encodeURIComponent(client.email)}`, {
+                        headers: {
+                            'Authorization': `Token ${authToken}`,
+                            'Content-Type': 'application/json'
+                        }
+                    });
+
+                    if (response.ok) {
+                        const data = await response.json();
+                        documents = data.documents || data || [];
+                    }
+                }
+            } catch (error) {
+                console.log('📚 API fetch failed, using static files:', error);
+            }
+
+            // Add static example files from client config
+            if (files.exampleResponses) {
+                documents.push({
+                    document_type: 'example',
+                    description: 'Example Questionnaire Responses',
+                    file_path: files.exampleResponses,
+                    created_at: new Date().toISOString()
+                });
+            }
+
+            if (!documents.length) {
+                console.log('📚 No coach resources found');
+                return;
+            }
+
+            try {
+                // Document type icons and descriptions
+                const docTypeInfo = {
+                    'example': { icon: '📋', label: 'Example', desc: 'Reference example to guide your work' },
+                    'questionnaire': { icon: '📝', label: 'Questionnaire', desc: 'Discovery questionnaire' },
+                    'blueprint': { icon: '📘', label: 'Blueprint', desc: 'Your career blueprint' },
+                    'agreement': { icon: '📄', label: 'Agreement', desc: 'Coaching agreement' },
+                    'notes': { icon: '🗒️', label: 'Session Notes', desc: 'Notes from your sessions' },
+                    'cv': { icon: '📑', label: 'CV Builder', desc: 'Interactive CV builder' },
+                    'other': { icon: '📎', label: 'Document', desc: 'Uploaded resource' }
+                };
+
+                // Render resource cards
+                resourcesGrid.innerHTML = documents.map(doc => {
+                    const typeInfo = docTypeInfo[doc.document_type] || docTypeInfo['other'];
+                    const uploadDate = doc.created_at ? new Date(doc.created_at).toLocaleDateString('en-GB') : '';
+
+                    // Determine the link - use file_path if available, otherwise construct from stored_filename
+                    let docUrl = doc.file_path || doc.stored_filename || '#';
+
+                    return `
+                        <a href="${docUrl}" target="_blank" class="resource-card">
+                            <div class="icon">${typeInfo.icon}</div>
+                            <div class="title">${doc.description || doc.original_filename || typeInfo.label}</div>
+                            <div class="description">${typeInfo.desc}</div>
+                            <div class="meta">
+                                <span>📅 ${uploadDate}</span>
+                            </div>
+                        </a>
+                    `;
+                }).join('');
+
+                // Show the section
+                resourcesSection.style.display = 'block';
+                console.log('📚 Rendered', documents.length, 'coach resources');
+
+            } catch (error) {
+                console.error('📚 Error fetching coach resources:', error);
+            }
+        }
+
+        function getToolsUnlocked(stageIndex) {
+            if (stageIndex >= 5) return 6; // complete
+            if (stageIndex >= 3) return 6; // week-3+
+            if (stageIndex >= 2) return 4; // week-2
+            if (stageIndex >= 1) return 3; // week-1
+            return 2; // pre-programme
+        }
+
+        // Render journey timeline
+        function renderJourney(client) {
+            const container = document.getElementById('journeySteps');
+            const currentIndex = STAGES.findIndex(s => s.id === client.status);
+
+            container.innerHTML = STAGES.map((stage, index) => {
+                let className = 'journey-step';
+                let icon = stage.icon;
+
+                if (index < currentIndex || client.status === 'complete') {
+                    className += ' completed';
+                    icon = '✅';
+                } else if (index === currentIndex) {
+                    className += ' current';
+                } else {
+                    className += ' locked';
+                }
+
+                return `
+                    <div class="${className}">
+                        <div class="icon">${icon}</div>
+                        <div class="label">${stage.label}</div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // Render transformation journey (3-step flow)
+        function renderTransformationJourney(client) {
+            const container = document.getElementById('transformationFlow');
+            const stageIndex = STAGES.findIndex(s => s.id === client.status);
+            const folder = client.folder;
+            const nameUnderscored = client.name.replace(/\s+/g, '_');
+            const files = client.files || {};
+
+            // Determine step states based on programme stage
+            // Step 1 (Questionnaire): Available from pre-programme
+            // Step 2 (Insights): Available from week-1
+            // Step 3 (Blueprint): Available from week-1, built through sessions
+
+            const steps = [
+                {
+                    num: 1,
+                    label: 'Step 1',
+                    title: 'Discovery',
+                    subtitle: 'Questionnaire',
+                    icon: '🔍',
+                    description: 'Deep reflection on your patterns, superpowers, and career journey. Your answers fuel everything that follows.',
+                    file: files.questionnaire || 'ability-recognition-visual.html',
+                    btnText: stageIndex >= 1 ? 'View Responses' : 'Start Questionnaire',
+                    unlockStage: 0
+                },
+                {
+                    num: 2,
+                    label: 'Step 2',
+                    title: 'Insights',
+                    subtitle: 'Career Report',
+                    icon: '💡',
+                    description: "Lisa's expert analysis of your responses. Uncover your core pattern, unique thread, and career direction.",
+                    file: files.insights || `${folder}/${nameUnderscored}_Career_Insights_Report.html`,
+                    btnText: 'View Report',
+                    unlockStage: 1
+                },
+                {
+                    num: 3,
+                    label: 'Step 3',
+                    title: 'Blueprint',
+                    subtitle: 'Your Positioning',
+                    icon: '🎯',
+                    description: 'Your complete positioning document built through coaching. Evidence, belief moments, and your unique thread.',
+                    file: files.blueprint || `${folder}/${nameUnderscored}_Blueprint.html`,
+                    btnText: 'View Blueprint',
+                    unlockStage: 1
+                }
+            ];
+
+            container.innerHTML = steps.map((step, index) => {
+                const isUnlocked = stageIndex >= step.unlockStage || client.status === 'complete';
+                const isComplete = stageIndex > step.unlockStage || client.status === 'complete';
+                const isCurrent = stageIndex === step.unlockStage && !isComplete;
+
+                let cardClass = `step-card step-${step.num}`;
+                if (isComplete) cardClass += ' completed';
+                else if (isCurrent) cardClass += ' current';
+                else if (!isUnlocked) cardClass += ' locked';
+
+                const arrow = index < steps.length - 1 ? `
+                    <div class="step-arrow ${isComplete ? 'active' : ''}">→</div>
+                ` : '';
+
+                return `
+                    <div class="${cardClass}">
+                        <div class="step-number">${isComplete ? '✓' : step.num}</div>
+                        <div class="step-icon">${step.icon}</div>
+                        <div class="step-label">${step.label}</div>
+                        <div class="step-title">${step.title}</div>
+                        <div class="step-description">${step.description}</div>
+                        <a href="${isUnlocked ? step.file : '#'}" class="step-btn" ${!isUnlocked ? 'onclick="return false;"' : ''}>${step.btnText}</a>
+                    </div>
+                    ${arrow}
+                `;
+            }).join('');
+        }
+
+        // Render supporting tools grid (excludes the 3 main transformation steps)
+        function renderTools(client) {
+            const container = document.getElementById('toolsGrid');
+            const stageIndex = STAGES.findIndex(s => s.id === client.status);
+            const folder = client.folder;
+            const nameUnderscored = client.name.replace(/\s+/g, '_');
+
+            // Use client-specific file paths if available, otherwise fall back to generated names
+            const files = client.files || {};
+
+            // Get client_tools configuration (for filtering)
+            const clientTools = client.client_tools || client.clientTools || null;
+            const enabledToolIds = clientTools?.enabled || null; // null = all enabled
+            const customTools = clientTools?.custom || [];
+
+            // Helper function to check if a tool is enabled
+            function isToolEnabled(toolId) {
+                if (enabledToolIds === null) return true; // All enabled by default
+                return enabledToolIds.includes(toolId);
+            }
+
+            // Check if Spark client, Blended client, or All-access (testing)
+            const isAllAccess = client.programmeType === 'all';
+            const isSparkClient = client.programmeType === 'audhd';
+            const isBlendedClient = client.programmeType === 'blended' || isAllAccess;
+
+            // Spark tools (for Spark-only and Blended clients)
+            const sparkTools = [
+                {
+                    id: 'brainDump',
+                    icon: '📦',
+                    title: 'Brain Dump Box',
+                    description: 'Overwhelmed? Get everything out of your head fast. Sort into: Do Now, Do Later, Delegate, Delete.',
+                    file: 'audhd-braindump.html',
+                    btnText: 'Empty My Head →',
+                    alwaysUnlocked: true,
+                    statusWhenComplete: 'ready',
+                    badge: '☁️ Syncs'
+                },
+                {
+                    id: 'energyTracker',
+                    icon: '⚡',
+                    title: 'Fuelling Your Spark',
+                    description: 'Plan your day around energy costs. Track what drains vs fuels you. Don\'t stack drains!',
+                    file: 'audhd-energy.html',
+                    btnText: 'Open Planner',
+                    alwaysUnlocked: true,
+                    statusWhenComplete: 'ready',
+                    badge: '☁️ Syncs'
+                },
+                {
+                    id: 'todaysPlan',
+                    icon: '📅',
+                    title: "Today's Plan",
+                    description: 'Daily planning with energy awareness. Map your tasks to your energy levels.',
+                    file: 'todays-plan.html',
+                    btnText: 'Plan My Day →',
+                    alwaysUnlocked: true,
+                    statusWhenComplete: 'ready'
+                },
+                {
+                    id: 'sparkCollector',
+                    icon: '✨',
+                    title: 'Spark Collector',
+                    description: 'Capture daily wins (even tiny ones!) and plan tomorrow\'s first step. Build evidence of your capability.',
+                    file: 'spark-collector.html',
+                    btnText: 'Collect Sparks →',
+                    alwaysUnlocked: true,
+                    statusWhenComplete: 'ready',
+                    badge: '☁️ Syncs'
+                },
+                {
+                    id: 'foundations',
+                    icon: '🏗️',
+                    title: 'Laying the Foundations',
+                    description: 'Define your rules, plan for flexibility, and protect time for what matters across 8 life categories.',
+                    file: 'audhd-foundations.html',
+                    btnText: 'Open Worksheet',
+                    alwaysUnlocked: true,
+                    statusWhenComplete: 'ready',
+                    badge: '☁️ Syncs'
+                },
+                {
+                    id: 'sessionNotes',
+                    icon: '📝',
+                    title: 'Session Notes',
+                    description: 'Notes and reflections from your coaching sessions.',
+                    file: 'audhd-session-notes.html',
+                    btnText: 'View Notes',
+                    alwaysUnlocked: true,
+                    statusWhenComplete: 'reference'
+                },
+                {
+                    id: 'sparkIgnition',
+                    icon: '🔥',
+                    title: 'Spark Ignition',
+                    description: 'Your Spark first aid kit. Identify your nervous system state and access tailored interventions.',
+                    file: 'spark-ignition.html',
+                    btnText: 'Open First Aid Kit',
+                    alwaysUnlocked: true,
+                    statusWhenComplete: 'ready'
+                },
+                {
+                    id: 'relationships',
+                    icon: '🤝',
+                    title: 'Boundaries & Communication',
+                    description: 'Define your values, set boundaries, and get scripts for tricky conversations. Navigate relationships as your authentic self.',
+                    file: 'audhd-relationships.html',
+                    btnText: 'Open Toolkit',
+                    alwaysUnlocked: true,
+                    statusWhenComplete: 'ready'
+                }
+            ];
+
+            // Spark clients get Spark tools only
+            if (isSparkClient) {
+                const audhdTools = [
+                    {
+                        id: 'bookSession',
+                        icon: '📅',
+                        title: 'Book a Session',
+                        description: 'Schedule your next coaching session with Lisa. Choose a time that works for you.',
+                        file: 'https://calendar.app.google/N1dg9FiqxASyDXQV8',
+                        btnText: 'Book Session →',
+                        alwaysUnlocked: true,
+                        statusWhenComplete: 'ready',
+                        isExternal: true,
+                        badge: '📆 Calendar'
+                    },
+                    {
+                        id: 'agreement',
+                        icon: '📋',
+                        title: 'Coaching Agreement',
+                        description: 'Your signed coaching agreement with programme details and terms.',
+                        file: files.agreement || `${folder}/${nameUnderscored}_Spark_Coaching_Agreement.html`,
+                        btnText: 'View Agreement',
+                        alwaysUnlocked: true,
+                        statusWhenComplete: 'signed'
+                    },
+                    {
+                        id: 'brainDump',
+                        icon: '📦',
+                        title: 'Brain Dump Box',
+                        description: 'Overwhelmed? Get everything out of your head fast. Sort into: Do Now, Do Later, Delegate, Delete.',
+                        file: 'audhd-braindump.html',
+                        btnText: 'Empty My Head →',
+                        alwaysUnlocked: true,
+                        statusWhenComplete: 'ready',
+                        badge: '☁️ Syncs'
+                    },
+                    {
+                        id: 'energyTracker',
+                        icon: '⚡',
+                        title: 'Fuelling Your Spark',
+                        description: 'Plan your day around energy costs. Track what drains vs fuels you. Don\'t stack drains!',
+                        file: 'audhd-energy.html',
+                        btnText: 'Open Planner',
+                        alwaysUnlocked: true,
+                        statusWhenComplete: 'ready',
+                        badge: '☁️ Syncs'
+                    },
+                    {
+                        id: 'todaysPlan',
+                        icon: '📅',
+                        title: "Today's Plan",
+                        description: 'Daily planning with energy awareness. Map your tasks to your energy levels.',
+                        file: 'todays-plan.html',
+                        btnText: 'Plan My Day →',
+                        alwaysUnlocked: true,
+                        statusWhenComplete: 'ready'
+                    },
+                    {
+                        id: 'sparkCollector',
+                        icon: '✨',
+                        title: 'Spark Collector',
+                        description: 'Capture daily wins (even tiny ones!) and plan tomorrow\'s first step. Build evidence of your capability.',
+                        file: 'spark-collector.html',
+                        btnText: 'Collect Sparks →',
+                        alwaysUnlocked: true,
+                        statusWhenComplete: 'ready',
+                        badge: '☁️ Syncs'
+                    },
+                    {
+                        id: 'foundations',
+                        icon: '🏗️',
+                        title: 'Laying the Foundations',
+                        description: 'Define your rules, plan for flexibility, and protect time for what matters across 8 life categories.',
+                        file: 'audhd-foundations.html',
+                        btnText: 'Open Worksheet',
+                        alwaysUnlocked: true,
+                        statusWhenComplete: 'ready',
+                        badge: '☁️ Syncs'
+                    },
+                    {
+                        id: 'sessionNotes',
+                        icon: '📝',
+                        title: 'Session Notes',
+                        description: 'Notes and reflections from your coaching sessions.',
+                        file: 'audhd-session-notes.html',
+                        btnText: 'View Notes',
+                        alwaysUnlocked: true,
+                        statusWhenComplete: 'reference'
+                    },
+                    {
+                        id: 'decisionFramework',
+                        icon: '⚖️',
+                        title: 'Decision Framework',
+                        description: 'Make decisions that honour how your brain works best.',
+                        file: files.decisionFramework || 'audhd-decision-framework.html',
+                        btnText: 'Open Framework',
+                        alwaysUnlocked: true,
+                        statusWhenComplete: 'ready'
+                    },
+                    {
+                        id: 'sparkIgnition',
+                        icon: '🔥',
+                        title: 'Spark Ignition',
+                        description: 'Your Spark first aid kit. Identify your nervous system state and access tailored interventions.',
+                        file: 'spark-ignition.html',
+                        btnText: 'Open First Aid Kit',
+                        alwaysUnlocked: true,
+                        statusWhenComplete: 'ready'
+                    },
+                    {
+                        id: 'relationships',
+                        icon: '🤝',
+                        title: 'Boundaries & Communication',
+                        description: 'Define your values, set boundaries, and get scripts for tricky conversations. Navigate relationships as your authentic self.',
+                        file: 'audhd-relationships.html',
+                        btnText: 'Open Toolkit',
+                        alwaysUnlocked: true,
+                        statusWhenComplete: 'ready'
+                    }
+                ];
+
+                // Filter audhd tools based on client_tools config
+                const filteredAudhdTools = audhdTools.filter(tool => isToolEnabled(tool.id));
+
+                // Add custom tools
+                const allAudhdTools = [...filteredAudhdTools, ...customTools.map(ct => ({
+                    id: ct.id,
+                    icon: ct.icon || '📄',
+                    title: ct.title,
+                    description: ct.description,
+                    file: ct.file,
+                    btnText: 'Open',
+                    alwaysUnlocked: ct.alwaysUnlocked !== false,
+                    statusWhenComplete: 'ready',
+                    badge: ct.badge || ''
+                }))];
+
+                container.innerHTML = allAudhdTools.map(tool => {
+                    return `
+                        <div class="tool-card">
+                            <div class="tool-icon">${tool.icon}</div>
+                            <h3>${tool.title}</h3>
+                            <span class="status-badge status-ready">${tool.badge || 'Ready'}</span>
+                            <p>${tool.description}</p>
+                            <a href="${tool.file}" class="tool-btn" ${tool.isExternal ? 'target="_blank" rel="noopener"' : ''}>${tool.btnText}</a>
+                        </div>
+                    `;
+                }).join('');
+                return;
+            }
+
+            // Career clients - original tools
+            const isTestimonialClient = client.programmeType === 'testimonial-access';
+            const agreementTitle = isTestimonialClient ? 'Testimonial Agreement' : 'Coaching Agreement';
+            const agreementDesc = isTestimonialClient
+                ? 'Your signed testimonial access agreement with terms and conditions.'
+                : 'Your signed coaching agreement with programme details and terms.';
+            const agreementFile = files.agreement || (isTestimonialClient
+                ? `${folder}/${nameUnderscored}_Testimonial_Agreement.html`
+                : `${folder}/${nameUnderscored}_Coaching_Agreement.html`);
+
+            const tools = [
+                {
+                    id: 'bookSession',
+                    icon: '📅',
+                    title: 'Book a Session',
+                    description: 'Schedule your next coaching session with Lisa. Choose a time that works for you.',
+                    file: 'https://calendar.app.google/N1dg9FiqxASyDXQV8',
+                    btnText: 'Book Session →',
+                    alwaysUnlocked: true,
+                    statusWhenComplete: 'ready',
+                    isExternal: true,
+                    badge: '📆 Calendar'
+                },
+                {
+                    id: 'agreement',
+                    icon: '📋',
+                    title: agreementTitle,
+                    description: agreementDesc,
+                    file: agreementFile,
+                    btnText: 'View Agreement',
+                    unlockStage: 0,
+                    statusWhenComplete: 'signed',
+                    alwaysUnlocked: true
+                },
+                {
+                    id: 'cvBuilder',
+                    icon: '📄',
+                    title: 'CV Builder',
+                    description: 'Build your CV with fields pre-filled from your Blueprint. Create multiple versions and export to Word.',
+                    file: files.cvBuilder || `${folder}/${nameUnderscored}_CV_Builder.html`,
+                    btnText: 'Open Builder',
+                    secondaryBtn: 'Export Word',
+                    unlockStage: 3,
+                    statusWhenComplete: 'ready'
+                },
+                {
+                    id: 'mappingGuide',
+                    icon: '🗺️',
+                    title: 'Mapping Guide',
+                    description: 'A visual guide showing where your Blueprint content goes across LinkedIn, CV, and interviews.',
+                    file: files.mappingGuide || `${folder}/${nameUnderscored}_Mapping_Guide.html`,
+                    btnText: 'View Guide',
+                    unlockStage: 3,
+                    statusWhenComplete: 'reference'
+                },
+                {
+                    id: 'decisionFramework',
+                    icon: '⚖️',
+                    title: 'Decision Framework',
+                    description: 'Evaluate opportunities against your red flags and green flags. Score roles objectively.',
+                    file: files.decisionFramework || `${folder}/${nameUnderscored}_Decision_Framework.html`,
+                    btnText: 'Open Scorecard',
+                    unlockStage: 2,
+                    statusWhenComplete: 'ready'
+                }
+            ];
+
+            // BLENDED CLIENTS: Show Career tools + Spark tools together
+            if (isBlendedClient) {
+                // Filter tools based on client_tools config
+                const filteredCareerTools = tools.filter(tool => isToolEnabled(tool.id));
+                const filteredSparkTools = sparkTools.filter(tool => isToolEnabled(tool.id));
+
+                // Build combined tools array with section headers
+                let blendedHTML = '';
+
+                // Career Section Header (only show if there are career tools)
+                if (filteredCareerTools.length > 0) {
+                    blendedHTML += `
+                        <div class="tools-section-header" style="grid-column: 1 / -1; margin: 20px 0 10px 0; padding-bottom: 10px; border-bottom: 2px solid var(--primary-gold);">
+                            <h3 style="color: var(--primary-gold); margin: 0; font-size: 1.1rem;">💼 Career Tools</h3>
+                        </div>
+                    `;
+
+                    // Career tools
+                    blendedHTML += filteredCareerTools.map(tool => {
+                        const isUnlocked = tool.alwaysUnlocked || stageIndex >= tool.unlockStage || client.status === 'complete';
+                        let cardClass = 'tool-card';
+                        let statusClass = 'status-ready';
+                        let statusText = tool.badge || 'Ready';
+
+                        if (!isUnlocked) {
+                            cardClass += ' locked';
+                            statusClass = 'status-locked';
+                            statusText = '🔒 Locked';
+                        }
+
+                        const externalAttr = tool.isExternal ? 'target="_blank" rel="noopener"' : '';
+                        return `
+                            <div class="${cardClass}">
+                                <div class="tool-icon">${tool.icon}</div>
+                                <h3>${tool.title}</h3>
+                                <span class="status-badge ${statusClass}">${statusText}</span>
+                                <p>${tool.description}</p>
+                                <a href="${isUnlocked ? tool.file : '#'}" class="tool-btn" ${!isUnlocked ? 'onclick="return false;"' : ''} ${externalAttr}>${tool.btnText}</a>
+                            </div>
+                        `;
+                    }).join('');
+                }
+
+                // Mind Management Section Header (only show if there are spark tools)
+                if (filteredSparkTools.length > 0) {
+                    blendedHTML += `
+                        <div class="tools-section-header" style="grid-column: 1 / -1; margin: 30px 0 10px 0; padding-bottom: 10px; border-bottom: 2px solid var(--accent-purple, #8B5CF6);">
+                            <h3 style="color: var(--accent-purple, #8B5CF6); margin: 0; font-size: 1.1rem;">✨ Mind Management Tools</h3>
+                        </div>
+                    `;
+
+                    // Spark tools (all unlocked for blended clients)
+                    blendedHTML += filteredSparkTools.map(tool => {
+                        const externalAttr = tool.isExternal ? 'target="_blank" rel="noopener"' : '';
+                        return `
+                            <div class="tool-card">
+                                <div class="tool-icon">${tool.icon}</div>
+                                <h3>${tool.title}</h3>
+                                <span class="status-badge status-ready">${tool.badge || 'Ready'}</span>
+                                <p>${tool.description}</p>
+                                <a href="${tool.file}" class="tool-btn" ${externalAttr}>${tool.btnText}</a>
+                            </div>
+                        `;
+                    }).join('');
+                }
+
+                // Custom tools section
+                if (customTools.length > 0) {
+                    blendedHTML += `
+                        <div class="tools-section-header" style="grid-column: 1 / -1; margin: 30px 0 10px 0; padding-bottom: 10px; border-bottom: 2px solid #10B981;">
+                            <h3 style="color: #10B981; margin: 0; font-size: 1.1rem;">🎯 Your Custom Tools</h3>
+                        </div>
+                    `;
+
+                    blendedHTML += customTools.map(tool => {
+                        return `
+                            <div class="tool-card">
+                                <div class="tool-icon">${tool.icon || '📄'}</div>
+                                <h3>${tool.title}</h3>
+                                <span class="status-badge status-ready">${tool.badge || 'Ready'}</span>
+                                <p>${tool.description}</p>
+                                <a href="${tool.file}" class="tool-btn">Open</a>
+                            </div>
+                        `;
+                    }).join('');
+                }
+
+                container.innerHTML = blendedHTML;
+                return;
+            }
+
+            // CAREER CLIENTS: Filter tools based on client_tools config
+            const filteredTools = tools.filter(tool => isToolEnabled(tool.id));
+
+            let careerHTML = filteredTools.map(tool => {
+                const isUnlocked = tool.alwaysUnlocked || stageIndex >= tool.unlockStage || client.status === 'complete';
+                const isComplete = stageIndex > tool.unlockStage || client.status === 'complete';
+
+                let cardClass = 'tool-card';
+                let statusClass = 'status-locked';
+                let statusText = '🔒 Locked';
+
+                if (!isUnlocked) {
+                    cardClass += ' locked';
+                } else if (tool.statusWhenComplete === 'signed') {
+                    // Special handling for signed documents
+                    cardClass += ' completed';
+                    statusClass = 'status-completed';
+                    statusText = '✓ Signed';
+                } else if (isComplete) {
+                    cardClass += ' completed';
+                    if (tool.statusWhenComplete === 'completed') {
+                        statusClass = 'status-completed';
+                        statusText = '✓ Completed';
+                    } else if (tool.statusWhenComplete === 'ready') {
+                        statusClass = 'status-ready';
+                        statusText = 'Ready';
+                    } else {
+                        statusClass = 'status-reference';
+                        statusText = 'Reference';
+                    }
+                } else {
+                    statusClass = 'status-ready';
+                    statusText = 'Ready';
+                }
+
+                const externalAttr = tool.isExternal ? 'target="_blank" rel="noopener"' : '';
+                return `
+                    <div class="${cardClass}">
+                        <div class="tool-icon">${tool.icon}</div>
+                        <h3>${tool.title}</h3>
+                        <span class="status-badge ${statusClass}">${statusText}</span>
+                        <p>${tool.description}</p>
+                        <a href="${isUnlocked ? tool.file : '#'}" class="tool-btn" ${!isUnlocked ? 'onclick="return false;"' : ''} ${externalAttr}>${tool.btnText}</a>
+                        ${tool.secondaryBtn && isUnlocked ? `<button class="tool-btn secondary">${tool.secondaryBtn}</button>` : ''}
+                    </div>
+                `;
+            }).join('');
+
+            // Add custom tools for career clients
+            if (customTools.length > 0) {
+                careerHTML += `
+                    <div class="tools-section-header" style="grid-column: 1 / -1; margin: 30px 0 10px 0; padding-bottom: 10px; border-bottom: 2px solid #10B981;">
+                        <h3 style="color: #10B981; margin: 0; font-size: 1.1rem;">🎯 Your Custom Tools</h3>
+                    </div>
+                `;
+
+                careerHTML += customTools.map(tool => {
+                    return `
+                        <div class="tool-card">
+                            <div class="tool-icon">${tool.icon || '📄'}</div>
+                            <h3>${tool.title}</h3>
+                            <span class="status-badge status-ready">${tool.badge || 'Ready'}</span>
+                            <p>${tool.description}</p>
+                            <a href="${tool.file}" class="tool-btn">Open</a>
+                        </div>
+                    `;
+                }).join('');
+            }
+
+            container.innerHTML = careerHTML;
+        }
+
+        // =============================================
+        // HOMEWORK SYSTEM - POSTGRESQL FIRST
+        // =============================================
+
+        const SYP_HOMEWORK_API = '';  // Same origin - uses current domain
+        let homeworkCache = {};  // Cache for homework completion
+
+        // Get homework completion - PostgreSQL first, localStorage fallback
+        async function getHomeworkCompletion(clientEmail) {
+            // Return from cache if available
+            if (homeworkCache[clientEmail]) {
+                return homeworkCache[clientEmail];
+            }
+
+            // Try PostgreSQL first
+            try {
+                const response = await fetch(`${SYP_HOMEWORK_API}/api/homework/${clientEmail}/checklist`);
+                if (response.ok) {
+                    const data = await response.json();
+                    if (data.success && data.homework && data.homework.responses) {
+                        const completion = typeof data.homework.responses === 'string'
+                            ? JSON.parse(data.homework.responses)
+                            : data.homework.responses;
+                        homeworkCache[clientEmail] = completion;
+                        console.log('✅ Loaded homework completion from PostgreSQL');
+                        return completion;
+                    }
+                }
+            } catch (error) {
+                console.warn('⚠️ PostgreSQL homework load failed:', error.message);
+            }
+
+            // Fallback to localStorage
+            const key = `syp_homework_${clientEmail}`;
+            const stored = localStorage.getItem(key);
+            const completion = stored ? JSON.parse(stored) : {};
+            homeworkCache[clientEmail] = completion;
+            return completion;
+        }
+
+        // Save homework completion - PostgreSQL first, localStorage fallback
+        async function saveHomeworkCompletion(clientEmail, taskId, completed) {
+            // Update cache immediately (optimistic UI)
+            if (!homeworkCache[clientEmail]) {
+                homeworkCache[clientEmail] = {};
+            }
+            homeworkCache[clientEmail][taskId] = completed;
+
+            const completionData = homeworkCache[clientEmail];
+
+            // Save to PostgreSQL
+            try {
+                const response = await fetch(`${SYP_HOMEWORK_API}/api/homework`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        client_email: clientEmail,
+                        homework_type: 'checklist',
+                        responses: completionData
+                    })
+                });
+
+                if (response.ok) {
+                    console.log('✅ Saved homework completion to PostgreSQL');
+                } else {
+                    throw new Error('API error');
+                }
+            } catch (error) {
+                console.warn('⚠️ PostgreSQL save failed, using localStorage:', error.message);
+                // Fallback to localStorage
+                const key = `syp_homework_${clientEmail}`;
+                localStorage.setItem(key, JSON.stringify(completionData));
+            }
+        }
+
+        // Toggle homework item
+        async function toggleHomework(taskId) {
+            if (!currentClient) return;
+            const completion = await getHomeworkCompletion(currentClient.email);
+            const newState = !completion[taskId];
+            await saveHomeworkCompletion(currentClient.email, taskId, newState);
+            renderHomework(currentClient, selectedWeek);
+        }
+
+        // Get current week based on status
+        function getCurrentWeek(status) {
+            if (status === 'pre-programme') return 'week-1';
+            if (status === 'complete') return 'week-4';
+            return status;
+        }
+
+        // Check if week is unlocked
+        function isWeekUnlocked(weekId, clientStatus) {
+            const weekOrder = ['week-1', 'week-2', 'week-3', 'week-4'];
+            const currentWeekIndex = weekOrder.indexOf(getCurrentWeek(clientStatus));
+            const targetWeekIndex = weekOrder.indexOf(weekId);
+            return targetWeekIndex <= currentWeekIndex || clientStatus === 'complete';
+        }
+
+        // Check if week is completed
+        function isWeekCompleted(weekId, clientStatus) {
+            const weekOrder = ['week-1', 'week-2', 'week-3', 'week-4'];
+            const currentWeekIndex = weekOrder.indexOf(getCurrentWeek(clientStatus));
+            const targetWeekIndex = weekOrder.indexOf(weekId);
+            return targetWeekIndex < currentWeekIndex || clientStatus === 'complete';
+        }
+
+        // Calculate Blueprint Progress automatically based on actual progress
+        async function calculateBlueprintProgress(client) {
+            let progress = 0;
+            const status = client.status || 'pre-programme';
+            const files = client.files || {};
+            const folder = client.folder;
+            const nameUnderscored = client.name?.replace(/\s+/g, '_') || '';
+
+            // Base progress from programme stage (max 60%)
+            const stageProgress = {
+                'pre-programme': 5,    // Just signed up
+                'week-1': 15,          // Started week 1
+                'week-2': 35,          // Questionnaire done, in week 2
+                'week-3': 50,          // Building positioning
+                'week-4': 70,          // Implementation phase
+                'complete': 85         // Programme finished
+            };
+            progress += stageProgress[status] || 0;
+
+            // Bonus for key files existing (max 15%)
+            // Check if questionnaire responses exist
+            if (files.questionnaireResponses || files.questionnaire) {
+                progress += 5;
+            }
+
+            // Check if insights report exists
+            if (files.insights) {
+                progress += 5;
+            }
+
+            // Check if blueprint exists
+            if (files.blueprint) {
+                progress += 5;
+            }
+
+            // Bonus for homework completion (max 25%)
+            const completion = await getHomeworkCompletion(client.email);
+            const allTasks = [];
+            Object.values(WEEKLY_HOMEWORK).forEach(week => {
+                week.tasks.forEach(task => allTasks.push(task.id));
+            });
+
+            const completedTasks = allTasks.filter(taskId => completion[taskId]).length;
+            const homeworkProgress = Math.round((completedTasks / allTasks.length) * 25);
+            progress += homeworkProgress;
+
+            // Cap at 100%
+            return Math.min(progress, 100);
+        }
+
+        // Render week tabs
+        function renderWeekTabs(client) {
+            const container = document.getElementById('weekTabs');
+            const weeks = ['week-1', 'week-2', 'week-3', 'week-4'];
+            const weekLabels = {
+                'week-1': '🌱 Week 1',
+                'week-2': '🧭 Week 2',
+                'week-3': '🎯 Week 3',
+                'week-4': '🚀 Week 4'
+            };
+
+            container.innerHTML = weeks.map(weekId => {
+                const isUnlocked = isWeekUnlocked(weekId, client.status);
+                const isCompleted = isWeekCompleted(weekId, client.status);
+                const isActive = weekId === selectedWeek;
+
+                let tabClass = 'week-tab';
+                if (isCompleted) tabClass += ' completed';
+                if (isActive) tabClass += ' active';
+                if (!isUnlocked && !isCompleted) tabClass += ' locked';
+
+                return `
+                    <div class="${tabClass}" onclick="${isUnlocked ? `selectWeek('${weekId}')` : ''}">
+                        ${weekLabels[weekId]}
+                        ${isCompleted ? ' ✓' : ''}
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // Select a week
+        function selectWeek(weekId) {
+            selectedWeek = weekId;
+            renderWeekTabs(currentClient);
+            renderHomework(currentClient, weekId);
+        }
+
+        // Render homework section
+        async function renderHomework(client, weekId) {
+            const weekData = WEEKLY_HOMEWORK[weekId];
+            if (!weekData) return;
+
+            const completion = await getHomeworkCompletion(client.email);
+
+            // ALWAYS get files from CLIENTS constant (the source of truth for file paths)
+            const localClientConfig = CLIENTS[client.email.toLowerCase()] || {};
+            const files = localClientConfig.files || client.files || {};
+
+            console.log('📋 Rendering homework for', client.email, ':', {
+                weekId,
+                status: client.status,
+                hasFiles: Object.keys(files),
+                hasHomework: !!files.homework
+            });
+
+            const isUnlocked = isWeekUnlocked(weekId, client.status);
+            const isCompleted = isWeekCompleted(weekId, client.status);
+
+            // Update week badge
+            const weekNum = weekId.replace('week-', '');
+            document.getElementById('currentWeekBadge').textContent = `Week ${weekNum}: ${weekData.title}`;
+
+            // Update blueprint progress (auto-calculated based on actual progress)
+            const progress = await calculateBlueprintProgress(client);
+            document.getElementById('blueprintProgressText').textContent = `${progress}% Complete`;
+            document.getElementById('blueprintProgressBar').style.width = `${progress}%`;
+
+            // Update personalised prompt
+            const promptKey = weekId.replace('-', '');
+            const prompt = client.prompts?.[promptKey] || '';
+            const promptEl = document.getElementById('personalisedPrompt');
+            const promptTextEl = document.getElementById('personalisedPromptText');
+
+            if (prompt) {
+                promptEl.classList.remove('empty');
+                promptTextEl.textContent = `"${prompt}"`;
+            } else {
+                promptEl.classList.add('empty');
+                promptTextEl.textContent = 'No personalised prompt yet - check back after your session with Lisa!';
+            }
+
+            // Render homework list
+            const listContainer = document.getElementById('homeworkList');
+            let completedCount = 0;
+
+            listContainer.innerHTML = weekData.tasks.map(task => {
+                const isChecked = completion[task.id] || false;
+                if (isChecked) completedCount++;
+
+                const itemClass = `homework-item${!isUnlocked ? ' locked' : ''}`;
+                const checkboxClass = `homework-checkbox${isChecked ? ' checked' : ''}`;
+
+                let linkHtml = '';
+                if (task.linkFile) {
+                    linkHtml = `<a href="${task.linkFile}" target="_blank" class="homework-link">${task.linkText} →</a>`;
+                } else if (task.linkKey) {
+                    // Handle questionnaire key - fallback to questionnaireResponses
+                    let fileUrl = files[task.linkKey];
+                    if (!fileUrl && task.linkKey === 'questionnaire') {
+                        fileUrl = files.questionnaireResponses;
+                    }
+                    console.log('🔗 Task link:', task.id, 'linkKey:', task.linkKey, 'fileUrl:', fileUrl);
+                    if (fileUrl) {
+                        linkHtml = `<a href="${fileUrl}" target="_blank" class="homework-link">${task.linkText} →</a>`;
+                    }
+                }
+
+                return `
+                    <div class="${itemClass}">
+                        <div class="${checkboxClass}" onclick="${isUnlocked ? `toggleHomework('${task.id}')` : ''}">
+                            ${isChecked ? '✓' : ''}
+                        </div>
+                        <div class="homework-content">
+                            <div class="homework-title">${task.title}</div>
+                            <div class="homework-description">${task.description}</div>
+                            ${linkHtml}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            // Update summary
+            document.getElementById('homeworkCompleteCount').textContent = completedCount;
+            document.getElementById('homeworkTotalCount').textContent = weekData.tasks.length;
+        }
+
+        // Render full homework section
+        function renderHomeworkSection(client) {
+            selectedWeek = getCurrentWeek(client.status);
+            renderWeekTabs(client);
+            renderHomework(client, selectedWeek);
+        }
+
+        // Logout
+        function logout() {
+            localStorage.removeItem('syp_client_email');
+            localStorage.removeItem('syp_user');
+            currentClient = null;
+            selectedWeek = null;
+            // Redirect to central login page
+            window.location.href = 'login.html';
+        }
+
+        // =============================================
+        // AGREEMENT SIGNING FUNCTIONALITY
+        // =============================================
+
+        let signatureCanvas = null;
+        let signatureCtx = null;
+        let isDrawing = false;
+        let hasDrawnSignature = false;
+
+        // Initialize signature canvas
+        function initSignatureCanvas() {
+            signatureCanvas = document.getElementById('signatureCanvas');
+            if (!signatureCanvas) return;
+
+            signatureCtx = signatureCanvas.getContext('2d');
+
+            // Set canvas size to match display size
+            const rect = signatureCanvas.getBoundingClientRect();
+            signatureCanvas.width = rect.width;
+            signatureCanvas.height = rect.height;
+
+            // Canvas styling
+            signatureCtx.strokeStyle = '#1a1a2e';
+            signatureCtx.lineWidth = 2;
+            signatureCtx.lineCap = 'round';
+            signatureCtx.lineJoin = 'round';
+
+            // Mouse events
+            signatureCanvas.addEventListener('mousedown', startDrawing);
+            signatureCanvas.addEventListener('mousemove', draw);
+            signatureCanvas.addEventListener('mouseup', stopDrawing);
+            signatureCanvas.addEventListener('mouseout', stopDrawing);
+
+            // Touch events for mobile
+            signatureCanvas.addEventListener('touchstart', handleTouchStart);
+            signatureCanvas.addEventListener('touchmove', handleTouchMove);
+            signatureCanvas.addEventListener('touchend', stopDrawing);
+        }
+
+        function startDrawing(e) {
+            isDrawing = true;
+            const rect = signatureCanvas.getBoundingClientRect();
+            signatureCtx.beginPath();
+            signatureCtx.moveTo(e.clientX - rect.left, e.clientY - rect.top);
+        }
+
+        function draw(e) {
+            if (!isDrawing) return;
+            const rect = signatureCanvas.getBoundingClientRect();
+            signatureCtx.lineTo(e.clientX - rect.left, e.clientY - rect.top);
+            signatureCtx.stroke();
+            hasDrawnSignature = true;
+            validateForm();
+        }
+
+        function stopDrawing() {
+            isDrawing = false;
+        }
+
+        function handleTouchStart(e) {
+            e.preventDefault();
+            const touch = e.touches[0];
+            const rect = signatureCanvas.getBoundingClientRect();
+            isDrawing = true;
+            signatureCtx.beginPath();
+            signatureCtx.moveTo(touch.clientX - rect.left, touch.clientY - rect.top);
+        }
+
+        function handleTouchMove(e) {
+            e.preventDefault();
+            if (!isDrawing) return;
+            const touch = e.touches[0];
+            const rect = signatureCanvas.getBoundingClientRect();
+            signatureCtx.lineTo(touch.clientX - rect.left, touch.clientY - rect.top);
+            signatureCtx.stroke();
+            hasDrawnSignature = true;
+            validateForm();
+        }
+
+        function clearSignature() {
+            if (!signatureCanvas || !signatureCtx) return;
+            signatureCtx.clearRect(0, 0, signatureCanvas.width, signatureCanvas.height);
+            hasDrawnSignature = false;
+            validateForm();
+        }
+
+        // Form validation
+        function validateForm() {
+            const agreeTerms = document.getElementById('agreeTerms').checked;
+            const signatureInput = document.getElementById('signatureInput').value.trim();
+            const signBtn = document.getElementById('signBtn');
+
+            // Must agree to terms AND have BOTH typed name AND drawn signature
+            const hasSignature = signatureInput.length > 0 && hasDrawnSignature;
+            const isValid = agreeTerms && hasSignature;
+
+            signBtn.disabled = !isValid;
+        }
+
+        // Submit agreement to PostgreSQL API
+        async function submitAgreement() {
+            const signBtn = document.getElementById('signBtn');
+            signBtn.disabled = true;
+            signBtn.textContent = '⏳ Submitting...';
+
+            const signatureInput = document.getElementById('signatureInput').value.trim();
+            const agreeTerms = document.getElementById('agreeTerms').checked;
+            const agreeRecording = document.getElementById('agreeRecording').checked;
+
+            // Get signature data (prefer drawn, fallback to typed)
+            let signatureData = signatureInput;
+            let signatureType = 'typed';
+
+            if (hasDrawnSignature && signatureCanvas) {
+                signatureData = signatureCanvas.toDataURL('image/png');
+                signatureType = 'drawn';
+            }
+
+            const agreementData = {
+                client_email: currentClient.email,
+                client_full_name: currentClient.name,
+                document_type: 'coaching_agreement',
+                programme_type: 'career_booster_4_week',
+                client_signature: signatureData,
+                signature_type: signatureType,
+                signed_date: new Date().toISOString(),
+                agreed_to_terms: agreeTerms,
+                consent_to_recording: agreeRecording,
+                document_html: document.querySelector('.agreement-content').innerHTML
+            };
+
+            try {
+                // Submit to PostgreSQL API
+                const response = await fetch('https://api.harnessthespark.ai/api/crm/syp/public/sign-agreement/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(agreementData)
+                });
+
+                if (!response.ok) {
+                    throw new Error(`API error: ${response.status}`);
+                }
+
+                const result = await response.json();
+                console.log('Agreement saved to PostgreSQL:', result);
+
+                // Mark client as having signed (update local state)
+                currentClient.agreementSigned = true;
+
+                // Save to localStorage as backup
+                localStorage.setItem(`syp_agreement_${currentClient.email}`, JSON.stringify({
+                    signed: true,
+                    signedDate: new Date().toISOString(),
+                    signatureType: signatureType
+                }));
+
+                // Show success and proceed to toolkit
+                signBtn.classList.add('success');
+                signBtn.textContent = '✅ Agreement Signed!';
+
+                setTimeout(() => {
+                    // Hide agreement, show toolkit
+                    document.getElementById('agreementSection').classList.remove('visible');
+                    document.getElementById('portalContent').classList.add('visible');
+
+                    // Render the portal content
+                    document.getElementById('clientName').textContent = currentClient.name.split(' ')[0];
+                    const stageIndex = STAGES.findIndex(s => s.id === currentClient.status);
+                    const toolsUnlocked = getToolsUnlocked(stageIndex);
+                    document.getElementById('statBlueprints').textContent = stageIndex >= 2 ? '1' : '0';
+                    document.getElementById('statTools').textContent = `${toolsUnlocked}/6`;
+                    document.getElementById('statDate').textContent = new Date().toLocaleDateString('en-GB');
+                    renderJourney(currentClient);
+                    renderTools(currentClient);
+                }, 1500);
+
+            } catch (error) {
+                console.error('Failed to submit agreement:', error);
+
+                // Fallback: save to localStorage
+                localStorage.setItem(`syp_agreement_${currentClient.email}`, JSON.stringify({
+                    signed: true,
+                    signedDate: new Date().toISOString(),
+                    signatureType: signatureType,
+                    agreementData: agreementData
+                }));
+
+                // Still proceed (will sync later)
+                signBtn.classList.add('success');
+                signBtn.textContent = '✅ Agreement Saved!';
+
+                setTimeout(() => {
+                    document.getElementById('agreementSection').classList.remove('visible');
+                    document.getElementById('portalContent').classList.add('visible');
+                    document.getElementById('clientName').textContent = currentClient.name.split(' ')[0];
+                    const stageIndex = STAGES.findIndex(s => s.id === currentClient.status);
+                    const toolsUnlocked = getToolsUnlocked(stageIndex);
+                    document.getElementById('statBlueprints').textContent = stageIndex >= 2 ? '1' : '0';
+                    document.getElementById('statTools').textContent = `${toolsUnlocked}/6`;
+                    document.getElementById('statDate').textContent = new Date().toLocaleDateString('en-GB');
+                    renderJourney(currentClient);
+                    renderTools(currentClient);
+                }, 1500);
+            }
+        }
+
+        // Check if client has already signed agreement (async version - checks PostgreSQL first)
+        async function checkAgreementFromAPI(email) {
+            // Try SYP Express API first (where personalized agreements are stored)
+            try {
+                const response = await fetch(`${SYP_HOMEWORK_API}/api/agreement/${encodeURIComponent(email)}`);
+                if (response.ok) {
+                    const data = await response.json();
+                    if (data.success && data.agreement && data.agreement.signature) {
+                        // Cache the result in localStorage for offline access
+                        localStorage.setItem(`syp_agreement_${email}`, JSON.stringify({
+                            signed: true,
+                            signedDate: data.agreement.signed_date,
+                            clientName: data.agreement.client_name
+                        }));
+                        console.log(`✅ Agreement signed (SYP PostgreSQL): ${email}`);
+                        return true;
+                    }
+                }
+            } catch (error) {
+                console.log('SYP API check failed:', error.message);
+            }
+
+            // Fallback to SparkHub Django API (for inline agreements)
+            try {
+                const response = await fetch(`${SPARKHUB_API}/api/crm/syp/public/check-agreement/?email=${encodeURIComponent(email)}`);
+                if (response.ok) {
+                    const data = await response.json();
+                    if (data.signed) {
+                        localStorage.setItem(`syp_agreement_${email}`, JSON.stringify({
+                            signed: true,
+                            signedDate: data.signed_date,
+                            clientName: data.client_name
+                        }));
+                        console.log(`✅ Agreement signed (Django PostgreSQL): ${email}`);
+                        return true;
+                    }
+                }
+            } catch (error) {
+                console.log('Django API check failed, falling back to localStorage:', error.message);
+            }
+            return false;
+        }
+
+        // Check if client has already signed agreement (sync fallback for localStorage)
+        function hasSignedAgreementLocal(client) {
+            // Check localStorage
+            const localSigned = localStorage.getItem(`syp_agreement_${client.email}`);
+            if (localSigned) {
+                try {
+                    const data = JSON.parse(localSigned);
+                    if (data.signed) return true;
+                } catch (e) {}
+            }
+
+            // Check Spark-specific agreement keys
+            if (client.programmeType === 'audhd') {
+                // Check for Deb's specific agreement key
+                if (client.email === 'deborah_armstrong@hotmail.com') {
+                    const debAgreement = localStorage.getItem('deb_audhd_agreement');
+                    if (debAgreement) return true;
+                }
+                // Check for Chloe's specific agreement key
+                if (client.email === 'chloe@example.com') {
+                    const chloeAgreement = localStorage.getItem('chloe_audhd_agreement');
+                    if (chloeAgreement) return true;
+                }
+            }
+
+            // Check client data from API response
+            if (client.agreementSigned) return true;
+
+            return false;
+        }
+
+        // Main agreement check - PostgreSQL first, then localStorage fallback
+        async function hasSignedAgreement(client) {
+            // 1. Check PostgreSQL first (cross-device persistence)
+            const apiSigned = await checkAgreementFromAPI(client.email);
+            if (apiSigned) return true;
+
+            // 2. Fall back to localStorage (device-specific)
+            return hasSignedAgreementLocal(client);
+        }
+
+        // Setup form event listeners
+        function setupAgreementForm() {
+            const agreeTerms = document.getElementById('agreeTerms');
+            const signatureInput = document.getElementById('signatureInput');
+
+            if (agreeTerms) {
+                agreeTerms.addEventListener('change', validateForm);
+            }
+            if (signatureInput) {
+                signatureInput.addEventListener('input', validateForm);
+            }
+
+            initSignatureCanvas();
+        }
+
+        // ============================================================
+        // TESTIMONIAL AGREEMENT FUNCTIONS
+        // ============================================================
+
+        let testimonialSignatureCanvas = null;
+        let testimonialCtx = null;
+        let testimonialHasDrawnSignature = false;
+
+        function setupTestimonialAgreementForm() {
+            const agreeIP = document.getElementById('agreeIPTestimonial');
+            const agreeNonCompete = document.getElementById('agreeNonCompeteTestimonial');
+            const agreeProvide = document.getElementById('agreeTestimonialProvide');
+            const agreeTerms = document.getElementById('agreeTestimonialTerms');
+            const signatureInput = document.getElementById('testimonialSignatureInput');
+
+            [agreeIP, agreeNonCompete, agreeProvide, agreeTerms].forEach(el => {
+                if (el) el.addEventListener('change', validateTestimonialForm);
+            });
+
+            if (signatureInput) {
+                signatureInput.addEventListener('input', validateTestimonialForm);
+            }
+
+            initTestimonialSignatureCanvas();
+        }
+
+        function validateTestimonialForm() {
+            const agreeIP = document.getElementById('agreeIPTestimonial').checked;
+            const agreeNonCompete = document.getElementById('agreeNonCompeteTestimonial').checked;
+            const agreeProvide = document.getElementById('agreeTestimonialProvide').checked;
+            const agreeTerms = document.getElementById('agreeTestimonialTerms').checked;
+            const signatureInput = document.getElementById('testimonialSignatureInput').value.trim();
+
+            const hasSignature = signatureInput || testimonialHasDrawnSignature;
+            const allChecked = agreeIP && agreeNonCompete && agreeProvide && agreeTerms;
+
+            document.getElementById('testimonialSignBtn').disabled = !(hasSignature && allChecked);
+        }
+
+        function initTestimonialSignatureCanvas() {
+            testimonialSignatureCanvas = document.getElementById('testimonialSignatureCanvas');
+            if (!testimonialSignatureCanvas) return;
+
+            testimonialCtx = testimonialSignatureCanvas.getContext('2d');
+
+            // Set canvas size
+            const rect = testimonialSignatureCanvas.getBoundingClientRect();
+            testimonialSignatureCanvas.width = rect.width;
+            testimonialSignatureCanvas.height = rect.height;
+
+            testimonialCtx.strokeStyle = '#333';
+            testimonialCtx.lineWidth = 2;
+            testimonialCtx.lineCap = 'round';
+
+            let isDrawing = false;
+
+            testimonialSignatureCanvas.addEventListener('mousedown', (e) => {
+                isDrawing = true;
+                testimonialCtx.beginPath();
+                testimonialCtx.moveTo(e.offsetX, e.offsetY);
+            });
+
+            testimonialSignatureCanvas.addEventListener('mousemove', (e) => {
+                if (!isDrawing) return;
+                testimonialCtx.lineTo(e.offsetX, e.offsetY);
+                testimonialCtx.stroke();
+                testimonialHasDrawnSignature = true;
+                validateTestimonialForm();
+            });
+
+            testimonialSignatureCanvas.addEventListener('mouseup', () => { isDrawing = false; });
+            testimonialSignatureCanvas.addEventListener('mouseout', () => { isDrawing = false; });
+
+            // Touch support
+            testimonialSignatureCanvas.addEventListener('touchstart', (e) => {
+                e.preventDefault();
+                const touch = e.touches[0];
+                const rect = testimonialSignatureCanvas.getBoundingClientRect();
+                isDrawing = true;
+                testimonialCtx.beginPath();
+                testimonialCtx.moveTo(touch.clientX - rect.left, touch.clientY - rect.top);
+            });
+
+            testimonialSignatureCanvas.addEventListener('touchmove', (e) => {
+                if (!isDrawing) return;
+                e.preventDefault();
+                const touch = e.touches[0];
+                const rect = testimonialSignatureCanvas.getBoundingClientRect();
+                testimonialCtx.lineTo(touch.clientX - rect.left, touch.clientY - rect.top);
+                testimonialCtx.stroke();
+                testimonialHasDrawnSignature = true;
+                validateTestimonialForm();
+            });
+
+            testimonialSignatureCanvas.addEventListener('touchend', () => { isDrawing = false; });
+        }
+
+        function clearTestimonialSignature() {
+            if (testimonialCtx && testimonialSignatureCanvas) {
+                testimonialCtx.clearRect(0, 0, testimonialSignatureCanvas.width, testimonialSignatureCanvas.height);
+                testimonialHasDrawnSignature = false;
+                validateTestimonialForm();
+            }
+        }
+
+        async function submitTestimonialAgreement() {
+            const signBtn = document.getElementById('testimonialSignBtn');
+            signBtn.disabled = true;
+            signBtn.textContent = '⏳ Submitting...';
+
+            const signatureInput = document.getElementById('testimonialSignatureInput').value.trim();
+            const agreeIP = document.getElementById('agreeIPTestimonial').checked;
+            const agreeNonCompete = document.getElementById('agreeNonCompeteTestimonial').checked;
+            const agreeProvide = document.getElementById('agreeTestimonialProvide').checked;
+            const agreeTerms = document.getElementById('agreeTestimonialTerms').checked;
+
+            // Get signature data
+            let signatureData = signatureInput;
+            let signatureType = 'typed';
+
+            if (testimonialHasDrawnSignature && testimonialSignatureCanvas) {
+                signatureData = testimonialSignatureCanvas.toDataURL('image/png');
+                signatureType = 'drawn';
+            }
+
+            const agreementData = {
+                client_email: currentClient.email,
+                client_full_name: currentClient.name,
+                document_type: 'testimonial_access_agreement',
+                programme_type: 'testimonial_access',
+                client_signature: signatureData,
+                signature_type: signatureType,
+                signed_date: new Date().toISOString(),
+                agreed_to_ip_protection: agreeIP,
+                agreed_to_non_compete: agreeNonCompete,
+                agreed_to_testimonial: agreeProvide,
+                agreed_to_terms: agreeTerms,
+                document_html: document.querySelector('#testimonialAgreementSection .agreement-content').innerHTML
+            };
+
+            try {
+                // Submit to PostgreSQL API
+                const response = await fetch('https://api.harnessthespark.ai/api/crm/syp/public/sign-agreement/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(agreementData)
+                });
+
+                if (!response.ok) {
+                    throw new Error(`API error: ${response.status}`);
+                }
+
+                const result = await response.json();
+                console.log('Testimonial agreement saved to PostgreSQL:', result);
+
+                // Mark client as having signed
+                currentClient.agreementSigned = true;
+
+                // Save to localStorage
+                const signedAgreements = JSON.parse(localStorage.getItem('syp_signed_agreements') || '{}');
+                signedAgreements[currentClient.email] = {
+                    signedAt: new Date().toISOString(),
+                    documentType: 'testimonial_access_agreement',
+                    agreedToIP: agreeIP,
+                    agreedToNonCompete: agreeNonCompete,
+                    agreedToTestimonial: agreeProvide
+                };
+                localStorage.setItem('syp_signed_agreements', JSON.stringify(signedAgreements));
+
+                // Success UI
+                signBtn.textContent = '✓ Agreement Signed!';
+                signBtn.classList.add('success');
+
+                // Redirect to toolkit
+                setTimeout(() => {
+                    document.getElementById('testimonialAgreementSection').classList.remove('visible');
+                    showPortal(currentClient);
+                }, 1500);
+
+            } catch (error) {
+                console.error('Error submitting testimonial agreement:', error);
+
+                // Save locally as backup
+                const signedAgreements = JSON.parse(localStorage.getItem('syp_signed_agreements') || '{}');
+                signedAgreements[currentClient.email] = {
+                    signedAt: new Date().toISOString(),
+                    documentType: 'testimonial_access_agreement',
+                    savedLocally: true,
+                    agreedToIP: agreeIP,
+                    agreedToNonCompete: agreeNonCompete,
+                    agreedToTestimonial: agreeProvide
+                };
+                localStorage.setItem('syp_signed_agreements', JSON.stringify(signedAgreements));
+
+                currentClient.agreementSigned = true;
+                signBtn.textContent = '✓ Agreement Signed (Saved Locally)';
+                signBtn.classList.add('success');
+
+                setTimeout(() => {
+                    document.getElementById('testimonialAgreementSection').classList.remove('visible');
+                    showPortal(currentClient);
+                }, 1500);
+            }
+        }
+    </script>
+</body>
+</html>
+<!-- Deployment timestamp: Wed  7 Jan 2026 19:01:25 GMT -->

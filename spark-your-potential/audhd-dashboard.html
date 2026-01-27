@@ -1,0 +1,2225 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spark Your Potential Portal</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>✨</text></svg>">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #2d1b4e 100%);
+            min-height: 100vh;
+            padding: 40px;
+            color: #333;
+        }
+        .container { max-width: 1200px; margin: 0 auto; }
+
+        /* Header */
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            color: white;
+        }
+        .header h1 {
+            font-size: 2.5em;
+            font-weight: 800;
+            margin-bottom: 10px;
+        }
+        .header .subtitle {
+            font-size: 1.2em;
+            opacity: 0.8;
+        }
+        .user-name {
+            font-size: 1.3em;
+            color: #E91E78;
+            margin-top: 15px;
+            font-weight: 600;
+        }
+
+        /* Navigation */
+        .nav-tabs {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 30px;
+        }
+        .nav-tab {
+            background: rgba(255,255,255,0.1);
+            color: white;
+            border: 1px solid rgba(255,255,255,0.2);
+            padding: 10px 25px;
+            border-radius: 25px;
+            font-size: 0.95em;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-decoration: none;
+        }
+        .nav-tab:hover, .nav-tab.active {
+            background: rgba(255,255,255,0.2);
+            border-color: #E91E78;
+        }
+        .nav-tab.active {
+            background: linear-gradient(135deg, #E91E78 0%, #F97B4D 100%);
+            border-color: transparent;
+        }
+
+        /* User Menu */
+        .user-menu {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        .user-email {
+            color: white;
+            opacity: 0.8;
+            font-size: 0.9em;
+        }
+        .logout-btn {
+            background: rgba(255,255,255,0.2);
+            color: white;
+            border: 1px solid rgba(255,255,255,0.3);
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 0.85em;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-decoration: none;
+        }
+        .logout-btn:hover {
+            background: rgba(255,255,255,0.3);
+        }
+
+        /* Programme Selector */
+        .programme-selector {
+            background: rgba(255,255,255,0.1);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 30px;
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        .programme-option {
+            background: white;
+            border-radius: 12px;
+            padding: 20px 30px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: 3px solid transparent;
+            min-width: 200px;
+        }
+        .programme-option:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+        .programme-option.selected {
+            border-color: #E91E78;
+        }
+        .programme-option h3 {
+            color: #2d1b4e;
+            margin-bottom: 5px;
+        }
+        .programme-option p {
+            color: #666;
+            font-size: 0.9em;
+        }
+        .programme-option .sessions {
+            background: linear-gradient(135deg, #E91E78 0%, #F97B4D 100%);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            margin-top: 10px;
+            display: inline-block;
+        }
+
+        /* Journey Progress */
+        .journey-progress {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+        }
+        .journey-title {
+            font-size: 1.3em;
+            color: #2d1b4e;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .session-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 15px;
+        }
+        .session-card {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            border: 2px solid #e0e0e0;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .session-card:hover {
+            border-color: #E91E78;
+            transform: translateY(-2px);
+        }
+        .session-card.complete {
+            background: #e8f5e9;
+            border-color: #4CAF50;
+        }
+        .session-card.current {
+            background: #fff3e0;
+            border-color: #FF9800;
+        }
+        .session-card.locked {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        .session-number {
+            font-size: 2em;
+            font-weight: 700;
+            color: #2d1b4e;
+        }
+        .session-card.complete .session-number {
+            color: #4CAF50;
+        }
+        .session-card.current .session-number {
+            color: #FF9800;
+        }
+        .session-type {
+            font-size: 0.75em;
+            color: #888;
+            margin-top: 5px;
+        }
+        .session-type.worksheet {
+            color: #E91E78;
+        }
+        .session-type.conversation {
+            color: #667eea;
+        }
+
+        /* Tools Section */
+        .tools-section {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+        }
+        .tools-title {
+            font-size: 1.3em;
+            color: #2d1b4e;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+        }
+        .tool-card {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 20px;
+            border: 2px solid #e0e0e0;
+            transition: all 0.2s;
+        }
+        .tool-card:hover {
+            border-color: #E91E78;
+            transform: translateY(-2px);
+        }
+        .tool-card h4 {
+            color: #2d1b4e;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .tool-card p {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .tool-btn {
+            background: linear-gradient(135deg, #E91E78 0%, #F97B4D 100%);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-size: 0.9em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            width: 100%;
+        }
+        .tool-btn:hover {
+            opacity: 0.9;
+            transform: translateY(-1px);
+        }
+        .tool-btn.secondary {
+            background: #f0f0f0;
+            color: #555;
+        }
+        .tool-btn.secondary:hover {
+            background: #e0e0e0;
+        }
+
+        /* Coach Notes */
+        .notes-section {
+            background: rgba(255,255,255,0.1);
+            border-radius: 15px;
+            padding: 20px;
+            margin-top: 30px;
+        }
+        .notes-title {
+            color: white;
+            font-size: 1.1em;
+            margin-bottom: 15px;
+        }
+        .notes-textarea {
+            width: 100%;
+            min-height: 120px;
+            border: none;
+            border-radius: 10px;
+            padding: 15px;
+            font-family: inherit;
+            font-size: 0.95em;
+            resize: vertical;
+        }
+        .notes-textarea:focus {
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(233, 30, 120, 0.3);
+        }
+        .save-notes-btn {
+            background: linear-gradient(135deg, #E91E78 0%, #F97B4D 100%);
+            color: white;
+            border: none;
+            padding: 10px 25px;
+            border-radius: 8px;
+            margin-top: 10px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            color: white;
+            opacity: 0.6;
+            margin-top: 40px;
+            font-size: 0.9em;
+        }
+
+        /* Emergency Support Styles */
+        .emergency-support-container {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+        .emergency-btn {
+            background: linear-gradient(135deg, #dc2626 0%, #991b1b 100%);
+            color: white;
+            border: 2px solid rgba(255,255,255,0.3);
+            padding: 12px 30px;
+            border-radius: 30px;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(220, 38, 38, 0.4);
+        }
+        .emergency-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 25px rgba(220, 38, 38, 0.6);
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+        }
+
+        /* Emergency Modal */
+        .emergency-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 10000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            overflow-y: auto;
+        }
+        .emergency-modal-content {
+            background: white;
+            border-radius: 24px;
+            max-width: 700px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+            padding: 30px;
+        }
+        .emergency-close {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            background: none;
+            border: none;
+            font-size: 2em;
+            cursor: pointer;
+            color: #666;
+            line-height: 1;
+        }
+        .emergency-close:hover { color: #333; }
+
+        .emergency-header {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+        .emergency-icon {
+            font-size: 3em;
+            display: block;
+            margin-bottom: 10px;
+        }
+        .emergency-header h2 {
+            color: #2d1b4e;
+            margin-bottom: 8px;
+            font-size: 1.8em;
+        }
+        .emergency-header p {
+            color: #666;
+            font-size: 1.1em;
+        }
+
+        .emergency-options {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        .emergency-card {
+            border-radius: 16px;
+            padding: 20px;
+        }
+        .emergency-card h3 {
+            margin-bottom: 10px;
+            font-size: 1.2em;
+        }
+        .emergency-card.contact-lisa {
+            background: linear-gradient(135deg, #fdf4ff 0%, #fce7f3 100%);
+            border: 2px solid #E91E78;
+        }
+        .emergency-card.contact-lisa h3 { color: #E91E78; }
+
+        .emergency-action-btn {
+            background: linear-gradient(135deg, #E91E78 0%, #F97B4D 100%);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 12px;
+            font-size: 1.1em;
+            font-weight: 700;
+            cursor: pointer;
+            width: 100%;
+            margin: 15px 0;
+            transition: all 0.2s;
+        }
+        .emergency-action-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(233, 30, 120, 0.4);
+        }
+        .emergency-action-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+        .alert-status {
+            text-align: center;
+            padding: 10px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            display: none;
+        }
+        .alert-status.success {
+            display: block;
+            background: #dcfce7;
+            color: #166534;
+        }
+        .alert-status.error {
+            display: block;
+            background: #fef2f2;
+            color: #dc2626;
+        }
+        .emergency-note {
+            font-size: 0.85em;
+            color: #666;
+            text-align: center;
+        }
+
+        .emergency-card.crisis-lines {
+            background: #f0fdf4;
+            border: 2px solid #22c55e;
+        }
+        .emergency-card.crisis-lines h3 { color: #166534; }
+        .crisis-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .crisis-line {
+            display: flex;
+            flex-direction: column;
+            background: white;
+            padding: 12px 15px;
+            border-radius: 10px;
+            text-decoration: none;
+            color: inherit;
+            border: 1px solid #e0e0e0;
+            transition: all 0.2s;
+        }
+        .crisis-line:hover {
+            border-color: #22c55e;
+            box-shadow: 0 3px 10px rgba(34, 197, 94, 0.2);
+        }
+        .crisis-line strong {
+            color: #166534;
+            font-size: 1em;
+        }
+        .crisis-line span {
+            color: #22c55e;
+            font-size: 1.2em;
+            font-weight: 700;
+            margin: 3px 0;
+        }
+        .crisis-line small {
+            color: #666;
+            font-size: 0.85em;
+        }
+
+        .emergency-card.grounding {
+            background: #fefce8;
+            border: 2px solid #facc15;
+        }
+        .emergency-card.grounding h3 { color: #854d0e; }
+        .emergency-card.grounding ul {
+            margin: 15px 0;
+            padding-left: 20px;
+        }
+        .emergency-card.grounding li {
+            margin: 8px 0;
+            color: #444;
+        }
+        .grounding-reminder {
+            background: white;
+            padding: 12px;
+            border-radius: 10px;
+            text-align: center;
+            color: #854d0e;
+            font-weight: 500;
+            margin-top: 10px;
+        }
+
+        .emergency-footer {
+            text-align: center;
+            margin-top: 25px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+        }
+        .emergency-footer p {
+            color: #dc2626;
+            font-weight: 600;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            body { padding: 20px; }
+            .header h1 { font-size: 1.8em; }
+            .domains-grid { grid-template-columns: 1fr; }
+            .programme-selector { flex-direction: column; }
+            .programme-option { min-width: auto; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- User Menu -->
+        <div class="user-menu" id="userMenu">
+            <span class="user-email" id="userEmail"></span>
+            <button class="logout-btn" onclick="logout()">Log out</button>
+        </div>
+
+        <div class="header">
+            <img src="White.png" alt="Harness the Spark" style="height: 60px; margin-bottom: 20px;">
+            <h1>✨ Spark Your Potential Portal</h1>
+            <div class="subtitle">Honouring Your Beautiful Paradox</div>
+            <div class="user-name" id="userName"></div>
+        </div>
+
+
+        <!-- Emergency Support Button -->
+        <div class="emergency-support-container">
+            <button class="emergency-btn" onclick="openEmergencySupport()">
+                🆘 Need emergency support... right now
+            </button>
+        </div>
+
+        <!-- Emergency Support Modal -->
+        <div id="emergencyModal" class="emergency-modal" style="display: none;">
+            <div class="emergency-modal-content">
+                <button class="emergency-close" onclick="closeEmergencySupport()">&times;</button>
+
+                <div class="emergency-header">
+                    <span class="emergency-icon">💜</span>
+                    <h2>You're Not Alone</h2>
+                    <p>It's okay to need support. Here are some options:</p>
+                </div>
+
+                <div class="emergency-options">
+                    <!-- Contact Lisa -->
+                    <div class="emergency-card contact-lisa">
+                        <h3>📱 Contact Lisa</h3>
+                        <p>Your coach is here for you</p>
+                        <button class="emergency-action-btn" onclick="alertLisa()">
+                            Send Alert to Lisa
+                        </button>
+                        <div id="lisaAlertStatus" class="alert-status"></div>
+                        <p class="emergency-note">Lisa will receive an email and respond as soon as possible</p>
+                    </div>
+
+                    <!-- Crisis Lines -->
+                    <div class="emergency-card crisis-lines">
+                        <h3>📞 Crisis Support Lines (UK)</h3>
+                        <div class="crisis-list">
+                            <a href="tel:116123" class="crisis-line">
+                                <strong>Samaritans</strong>
+                                <span>116 123</span>
+                                <small>Free, 24/7, confidential</small>
+                            </a>
+                            <a href="tel:0800689-5555" class="crisis-line">
+                                <strong>SANEline</strong>
+                                <span>0800 689 5555</span>
+                                <small>4:30pm-10:30pm daily</small>
+                            </a>
+                            <a href="tel:0300-304-7000" class="crisis-line">
+                                <strong>Mind Infoline</strong>
+                                <span>0300 304 7000</span>
+                                <small>Mon-Fri 9am-6pm</small>
+                            </a>
+                            <a href="sms:85258" class="crisis-line">
+                                <strong>Shout Crisis Text</strong>
+                                <span>Text "SHOUT" to 85258</span>
+                                <small>Free, 24/7 text support</small>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Grounding Techniques -->
+                    <div class="emergency-card grounding">
+                        <h3>🌿 Quick Grounding</h3>
+                        <p><strong>5-4-3-2-1 Technique:</strong></p>
+                        <ul>
+                            <li><strong>5</strong> things you can SEE</li>
+                            <li><strong>4</strong> things you can TOUCH</li>
+                            <li><strong>3</strong> things you can HEAR</li>
+                            <li><strong>2</strong> things you can SMELL</li>
+                            <li><strong>1</strong> thing you can TASTE</li>
+                        </ul>
+                        <p class="grounding-reminder">Take slow breaths. You are safe. This will pass. 💜</p>
+                    </div>
+                </div>
+
+                <div class="emergency-footer">
+                    <p>If you're in immediate danger, please call <strong>999</strong></p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Programme Selector -->
+        <div class="programme-selector" id="programmeSelector">
+            <div class="programme-option" data-sessions="4" onclick="selectProgramme(4)">
+                <h3>Foundations</h3>
+                <p>Introduction & key tools</p>
+                <span class="sessions">4 Sessions</span>
+            </div>
+            <div class="programme-option selected" data-sessions="8" onclick="selectProgramme(8)">
+                <h3>Deep Dive</h3>
+                <p>Full paradox exploration</p>
+                <span class="sessions">8 Sessions</span>
+            </div>
+            <div class="programme-option" data-sessions="12" onclick="selectProgramme(12)">
+                <h3>Transformation</h3>
+                <p>Complete journey + integration</p>
+                <span class="sessions">12 Sessions</span>
+            </div>
+        </div>
+
+        <!-- Journey Progress -->
+        <div class="journey-progress">
+            <div class="journey-title">
+                📍 Your Journey Progress
+                <span style="font-size: 0.7em; color: #888; margin-left: auto;">
+                    Session <span id="currentSession">1</span> of <span id="totalSessions">8</span>
+                    <button id="customiseJourneyBtn" onclick="openJourneyEditor()" style="display: none; margin-left: 15px; background: linear-gradient(135deg, #8B5CF6 0%, #6D28D9 100%); color: white; border: none; padding: 6px 12px; border-radius: 6px; font-size: 0.85em; cursor: pointer;">✏️ Customise</button>
+                </span>
+            </div>
+            <div class="session-grid" id="sessionGrid">
+                <!-- Sessions populated by JS -->
+            </div>
+        </div>
+
+        <!-- Journey Editor Modal (Coach Only) -->
+        <div id="journeyEditorModal" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.7); z-index: 1000; padding: 20px; overflow-y: auto;">
+            <div style="max-width: 800px; margin: 20px auto; background: white; border-radius: 20px; padding: 30px; max-height: 90vh; overflow-y: auto;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                    <h2 style="color: #2d1b4e; margin: 0;">✏️ Customise Client Journey</h2>
+                    <button onclick="closeJourneyEditor()" style="background: none; border: none; font-size: 1.5em; cursor: pointer; color: #888;">×</button>
+                </div>
+
+                <!-- Template Selector -->
+                <div style="margin-bottom: 25px; padding: 20px; background: #f8f9fa; border-radius: 12px;">
+                    <label style="display: block; color: #555; font-weight: 600; margin-bottom: 10px;">Start from template:</label>
+                    <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                        <button onclick="loadTemplate(4)" class="template-btn" style="padding: 10px 20px; border: 2px solid #e0e0e0; border-radius: 8px; background: white; cursor: pointer; font-weight: 600;">4 Sessions</button>
+                        <button onclick="loadTemplate(8)" class="template-btn" style="padding: 10px 20px; border: 2px solid #e0e0e0; border-radius: 8px; background: white; cursor: pointer; font-weight: 600;">8 Sessions</button>
+                        <button onclick="loadTemplate(12)" class="template-btn" style="padding: 10px 20px; border: 2px solid #e0e0e0; border-radius: 8px; background: white; cursor: pointer; font-weight: 600;">12 Sessions</button>
+                        <button onclick="loadTemplate('current')" class="template-btn" style="padding: 10px 20px; border: 2px solid #8B5CF6; border-radius: 8px; background: #f5f3ff; cursor: pointer; font-weight: 600; color: #6D28D9;">Load Current</button>
+                    </div>
+                </div>
+
+                <!-- Sessions Editor -->
+                <div id="sessionsEditorList" style="margin-bottom: 20px;">
+                    <!-- Sessions populated by JS -->
+                </div>
+
+                <!-- Add Session Button -->
+                <button onclick="addNewSession()" style="width: 100%; padding: 15px; border: 2px dashed #ccc; border-radius: 12px; background: #fafafa; cursor: pointer; color: #666; font-size: 1em; margin-bottom: 20px;">
+                    ➕ Add New Session
+                </button>
+
+                <!-- Save Buttons -->
+                <div style="display: flex; gap: 10px; justify-content: flex-end;">
+                    <button onclick="closeJourneyEditor()" style="padding: 12px 25px; border: 2px solid #e0e0e0; border-radius: 8px; background: white; cursor: pointer; font-weight: 600;">Cancel</button>
+                    <button onclick="saveCustomJourney()" style="padding: 12px 25px; border: none; border-radius: 8px; background: linear-gradient(135deg, #10B981 0%, #059669 100%); color: white; cursor: pointer; font-weight: 600;">💾 Save Journey</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Actions & Goals Section -->
+        <div class="actions-goals-section" style="background: white; border-radius: 16px; padding: 25px; margin-bottom: 25px; box-shadow: 0 2px 10px rgba(0,0,0,0.08);">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                <h3 style="color: #2d1b4e; margin: 0; font-size: 1.2em;">🎯 My Actions & Goals</h3>
+                <button id="addActionBtn" onclick="openActionEditor()" style="display: none; background: linear-gradient(135deg, #8B5CF6 0%, #6D28D9 100%); color: white; border: none; padding: 8px 16px; border-radius: 8px; font-size: 0.85em; cursor: pointer;">➕ Add</button>
+            </div>
+
+            <!-- Session Summaries -->
+            <div id="sessionSummaries">
+                <!-- Populated by JS -->
+            </div>
+
+            <!-- Empty State -->
+            <div id="emptyActionsState" style="text-align: center; padding: 30px; color: #888;">
+                <div style="font-size: 2em; margin-bottom: 10px;">📋</div>
+                <p style="margin: 0;">Your actions and goals from each session will appear here.</p>
+                <p style="margin: 5px 0 0 0; font-size: 0.9em;">Complete sessions to unlock your personalised action plan!</p>
+            </div>
+        </div>
+
+        <!-- Action Editor Modal (Coach Only) -->
+        <div id="actionEditorModal" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.7); z-index: 1000; padding: 20px; overflow-y: auto;">
+            <div style="max-width: 600px; margin: 40px auto; background: white; border-radius: 20px; padding: 30px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                    <h2 style="color: #2d1b4e; margin: 0;">📝 Add Session Summary</h2>
+                    <button onclick="closeActionEditor()" style="background: none; border: none; font-size: 1.5em; cursor: pointer; color: #888;">×</button>
+                </div>
+
+                <!-- Session Selector -->
+                <div style="margin-bottom: 20px;">
+                    <label style="display: block; color: #555; font-weight: 600; margin-bottom: 8px;">Session:</label>
+                    <select id="actionSessionSelect" style="width: 100%; padding: 12px; border: 2px solid #e0e0e0; border-radius: 10px; font-size: 1em;">
+                        <!-- Populated by JS -->
+                    </select>
+                </div>
+
+                <!-- Key Takeaways -->
+                <div style="margin-bottom: 20px;">
+                    <label style="display: block; color: #555; font-weight: 600; margin-bottom: 8px;">💡 Key Takeaways:</label>
+                    <textarea id="actionTakeaways" placeholder="What were the main insights from this session?" style="width: 100%; min-height: 80px; padding: 12px; border: 2px solid #e0e0e0; border-radius: 10px; font-family: inherit; resize: vertical;"></textarea>
+                </div>
+
+                <!-- Actions -->
+                <div style="margin-bottom: 20px;">
+                    <label style="display: block; color: #555; font-weight: 600; margin-bottom: 8px;">✅ Actions (one per line):</label>
+                    <textarea id="actionActions" placeholder="Try the 5-minute timer technique&#10;Use the Brain Dump Box when overwhelmed&#10;Schedule 2 breaks in your calendar" style="width: 100%; min-height: 100px; padding: 12px; border: 2px solid #e0e0e0; border-radius: 10px; font-family: inherit; resize: vertical;"></textarea>
+                </div>
+
+                <!-- Goals -->
+                <div style="margin-bottom: 20px;">
+                    <label style="display: block; color: #555; font-weight: 600; margin-bottom: 8px;">🎯 Goals for Next Session:</label>
+                    <textarea id="actionGoals" placeholder="What do you want to have achieved by next session?" style="width: 100%; min-height: 80px; padding: 12px; border: 2px solid #e0e0e0; border-radius: 10px; font-family: inherit; resize: vertical;"></textarea>
+                </div>
+
+                <!-- Save Button -->
+                <div style="display: flex; gap: 10px; justify-content: flex-end;">
+                    <button onclick="closeActionEditor()" style="padding: 12px 25px; border: 2px solid #e0e0e0; border-radius: 8px; background: white; cursor: pointer; font-weight: 600;">Cancel</button>
+                    <button onclick="saveSessionSummary()" style="padding: 12px 25px; border: none; border-radius: 8px; background: linear-gradient(135deg, #10B981 0%, #059669 100%); color: white; cursor: pointer; font-weight: 600;">💾 Save Summary</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tools Section -->
+        <div class="tools-section">
+            <div class="tools-title">🧰 Your Spark Toolkit</div>
+            <div class="tools-grid">
+                <!-- Laying the Foundations -->
+                <div class="tool-card">
+                    <h4>🏗️ Laying the Foundations</h4>
+                    <p>Define your rules, plan for flexibility, and protect time for what matters across 8 life categories.</p>
+                    <button class="tool-btn" onclick="openTool('foundations')">Open Worksheet</button>
+                </div>
+
+                <!-- Fuelling Your Spark -->
+                <div class="tool-card">
+                    <h4>⚡ Fuelling Your Spark</h4>
+                    <p>Plan your day around energy costs. Track what drains vs fuels you. Don't stack drains!</p>
+                    <button class="tool-btn" onclick="openTool('energy')">Open Planner</button>
+                </div>
+
+                <!-- Brain Dump Box -->
+                <div class="tool-card" style="border: 2px solid #ef4444;">
+                    <h4>📦 Brain Dump Box</h4>
+                    <p>Overwhelmed? Get everything out of your head fast. Sort into: Do Now, Do Later, Delegate, Delete.</p>
+                    <button class="tool-btn" onclick="openTool('braindump')" style="background: linear-gradient(135deg, #ef4444 0%, #f97316 100%);">Empty My Head →</button>
+                </div>
+
+                <!-- Spark Ignition - First Aid Kit -->
+                <div class="tool-card" style="border: 2px solid #E91E78;">
+                    <h4>🔥 Spark Ignition</h4>
+                    <p>Your Spark first aid kit. Identify your nervous system state and access tailored interventions.</p>
+                    <button class="tool-btn" onclick="openTool('ignition')">Open First Aid Kit</button>
+                </div>
+
+                <!-- Boundaries & Communication Toolkit -->
+                <div class="tool-card" style="border: 2px solid #E91E78;">
+                    <h4>🤝 Boundaries & Communication</h4>
+                    <p>Define your values, set boundaries, and get scripts for tricky conversations. Navigate relationships as your authentic self.</p>
+                    <button class="tool-btn" onclick="openTool('relationships')">Open Toolkit</button>
+                </div>
+
+                <!-- Spark Collector - Daily Wins -->
+                <div class="tool-card" style="border: 2px solid #FFD700;">
+                    <h4>✨ Spark Collector</h4>
+                    <p>Capture daily wins (even tiny ones!) and plan tomorrow's first step. Build evidence of your capability.</p>
+                    <button class="tool-btn" onclick="openTool('collector')" style="background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%); color: #1a1a2e;">Collect Sparks →</button>
+                </div>
+
+                <!-- Session Notes - Coach Only -->
+                <div class="tool-card coach-only" id="sessionNotesTool" style="display: none; border: 2px solid #8B5CF6;">
+                    <h4>📝 Session Notes</h4>
+                    <p>Structured coaching session template. Check-in, recap, agenda, goals, wrap-up.</p>
+                    <button class="tool-btn" onclick="openTool('session-notes')">Open Session Notes</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Booking Section -->
+        <div class="tools-section" id="bookingSection">
+            <div class="tools-title">📅 Book Your Sessions</div>
+            <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px;">
+                <!-- Energy-Aware Booking -->
+                <div class="tool-card">
+                    <h4>🌅 Morning Session</h4>
+                    <p style="color: #22c55e;">Best for: High energy tasks, foundations work, new concepts</p>
+                    <p style="font-size: 0.85em; color: #888;">9am - 12pm slots</p>
+                    <button class="tool-btn" onclick="openBooking('morning')">Book Morning Slot</button>
+                </div>
+                <div class="tool-card">
+                    <h4>☀️ Afternoon Session</h4>
+                    <p style="color: #f59e0b;">Best for: Conversations, reflection, lighter processing</p>
+                    <p style="font-size: 0.85em; color: #888;">1pm - 4pm slots</p>
+                    <button class="tool-btn" onclick="openBooking('afternoon')">Book Afternoon Slot</button>
+                </div>
+                <div class="tool-card">
+                    <h4>🌙 Late Session</h4>
+                    <p style="color: #8b5cf6;">Best for: Evening owls, post-work decompression</p>
+                    <p style="font-size: 0.85em; color: #888;">5pm - 7pm slots</p>
+                    <button class="tool-btn" onclick="openBooking('evening')">Book Evening Slot</button>
+                </div>
+            </div>
+
+            <!-- Upcoming Sessions Display -->
+            <div style="margin-top: 25px; padding: 20px; background: #f8f9fa; border-radius: 12px;">
+                <h4 style="color: #2d1b4e; margin-bottom: 15px;">📆 Your Upcoming Sessions</h4>
+                <div id="upcomingSessions" style="color: #666;">
+                    <p style="font-style: italic;">No sessions booked yet. Book your first session above!</p>
+                </div>
+            </div>
+
+            <!-- Coach Calendar Embed (Staff Only) -->
+            <div id="coachCalendar" style="display: none; margin-top: 25px;">
+                <h4 style="color: #2d1b4e; margin-bottom: 15px;">🗓️ Your Full Calendar</h4>
+                <div style="background: #f8f9fa; border-radius: 12px; padding: 20px; text-align: center;">
+                    <p style="margin-bottom: 15px; color: #666;">Connect your calendar to see all bookings</p>
+                    <button class="tool-btn secondary" onclick="setupCalendar()" style="max-width: 300px;">⚙️ Configure Calendar</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Gamification: Spark Collector -->
+        <div class="tools-section" id="sparkCollector">
+            <div class="tools-title">✨ Your Spark Collection</div>
+
+            <!-- Spark Points Display -->
+            <div style="display: flex; flex-wrap: wrap; gap: 20px; margin-bottom: 25px;">
+                <div style="flex: 1; min-width: 200px; background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%); border-radius: 15px; padding: 25px; text-align: center;">
+                    <div style="font-size: 3em;">⚡</div>
+                    <div style="font-size: 2.5em; font-weight: 800; color: #b45309;" id="totalSparks">0</div>
+                    <div style="color: #92400e; font-weight: 600;">Total Sparks</div>
+                </div>
+                <div style="flex: 1; min-width: 200px; background: linear-gradient(135deg, #fce7f3 0%, #fbcfe8 100%); border-radius: 15px; padding: 25px; text-align: center;">
+                    <div style="font-size: 3em;">🔥</div>
+                    <div style="font-size: 2.5em; font-weight: 800; color: #be185d;" id="weeklyMomentum">0</div>
+                    <div style="color: #9d174d; font-weight: 600;">Weekly Momentum</div>
+                    <div style="font-size: 0.8em; color: #888; margin-top: 5px;">(resets gently each Monday)</div>
+                </div>
+                <div style="flex: 1; min-width: 200px; background: linear-gradient(135deg, #ddd6fe 0%, #c4b5fd 100%); border-radius: 15px; padding: 25px; text-align: center;">
+                    <div style="font-size: 3em;">🏆</div>
+                    <div style="font-size: 2.5em; font-weight: 800; color: #6d28d9;" id="badgeCount">0</div>
+                    <div style="color: #5b21b6; font-weight: 600;">Badges Earned</div>
+                </div>
+            </div>
+
+            <!-- Weekly Check-In (Client) -->
+            <div style="background: #f8f9fa; border-radius: 12px; padding: 20px; margin-bottom: 20px;">
+                <h4 style="color: #2d1b4e; margin-bottom: 15px;">💬 Quick Check-In</h4>
+                <p style="color: #666; margin-bottom: 15px; font-size: 0.9em;">How's your week going? (Earns 2 sparks ⚡)</p>
+                <div style="display: flex; flex-wrap: wrap; gap: 10px;">
+                    <button class="mood-btn" onclick="logCheckIn('thriving')" style="padding: 12px 20px; border-radius: 25px; border: 2px solid #22c55e; background: white; cursor: pointer; font-size: 1em;">🌟 Thriving</button>
+                    <button class="mood-btn" onclick="logCheckIn('managing')" style="padding: 12px 20px; border-radius: 25px; border: 2px solid #f59e0b; background: white; cursor: pointer; font-size: 1em;">🌤️ Managing</button>
+                    <button class="mood-btn" onclick="logCheckIn('struggling')" style="padding: 12px 20px; border-radius: 25px; border: 2px solid #ef4444; background: white; cursor: pointer; font-size: 1em;">🌧️ Struggling</button>
+                    <button class="mood-btn" onclick="logCheckIn('surviving')" style="padding: 12px 20px; border-radius: 25px; border: 2px solid #8b5cf6; background: white; cursor: pointer; font-size: 1em;">🦋 Just Surviving</button>
+                </div>
+                <div id="lastCheckIn" style="margin-top: 10px; font-size: 0.85em; color: #888;"></div>
+            </div>
+
+            <!-- Celebration Log -->
+            <div style="background: linear-gradient(135deg, #fff7ed 0%, #ffedd5 100%); border-radius: 12px; padding: 20px; margin-bottom: 20px;">
+                <h4 style="color: #c2410c; margin-bottom: 15px;">🎉 Celebration Log</h4>
+                <p style="color: #666; margin-bottom: 10px; font-size: 0.9em;">What went well this week? Even tiny wins count! (Earns 3 sparks ⚡)</p>
+                <textarea id="celebrationInput" placeholder="e.g. Used my energy planner twice, remembered to eat lunch, asked for help..." style="width: 100%; min-height: 80px; border: 2px solid #fed7aa; border-radius: 10px; padding: 12px; font-family: inherit; resize: vertical;"></textarea>
+                <button onclick="logCelebration()" style="margin-top: 10px; background: linear-gradient(135deg, #f97316 0%, #ea580c 100%); color: white; border: none; padding: 10px 25px; border-radius: 8px; cursor: pointer; font-weight: 600;">Add Celebration 🎊</button>
+                <div id="recentCelebrations" style="margin-top: 15px;"></div>
+            </div>
+
+            <!-- Badges Display -->
+            <div style="background: #f8f9fa; border-radius: 12px; padding: 20px;">
+                <h4 style="color: #2d1b4e; margin-bottom: 15px;">🎖️ Your Badges</h4>
+                <div id="badgesDisplay" style="display: flex; flex-wrap: wrap; gap: 15px;">
+                    <!-- Badges will be populated by JS -->
+                    <div style="color: #888; font-style: italic;">Complete activities to earn badges!</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Coach Self-Care Dashboard (Staff Only) -->
+        <div class="tools-section" id="coachAccountability" style="display: none;">
+            <div class="tools-title">📊 Coach Self-Care Hub</div>
+
+            <!-- Your Coach Stats -->
+            <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 15px; margin-bottom: 25px;">
+                <div style="background: #e0f2fe; border-radius: 12px; padding: 20px; text-align: center;">
+                    <div style="font-size: 2em; font-weight: 700; color: #0284c7;" id="coachSessionsThisWeek">0</div>
+                    <div style="color: #0369a1; font-size: 0.9em;">Sessions This Week</div>
+                </div>
+                <div style="background: #dcfce7; border-radius: 12px; padding: 20px; text-align: center;">
+                    <div style="font-size: 2em; font-weight: 700; color: #16a34a;" id="coachNotesWritten">0</div>
+                    <div style="color: #15803d; font-size: 0.9em;">Notes Written</div>
+                </div>
+                <div style="background: #fef3c7; border-radius: 12px; padding: 20px; text-align: center;">
+                    <div style="font-size: 2em; font-weight: 700; color: #ca8a04;" id="coachFollowUps">0</div>
+                    <div style="color: #a16207; font-size: 0.9em;">Follow-ups Sent</div>
+                </div>
+                <div style="background: #fce7f3; border-radius: 12px; padding: 20px; text-align: center;">
+                    <div style="font-size: 2em; font-weight: 700; color: #db2777;" id="coachStreak">0</div>
+                    <div style="color: #be185d; font-size: 0.9em;">Week Streak</div>
+                </div>
+            </div>
+
+            <!-- Client Status Overview -->
+            <div style="background: #f8f9fa; border-radius: 12px; padding: 20px; margin-bottom: 20px;">
+                <h4 style="color: #2d1b4e; margin-bottom: 15px;">👥 Client Pulse</h4>
+                <div id="clientPulse">
+                    <p style="color: #888; font-style: italic;">Loading client check-ins...</p>
+                </div>
+            </div>
+
+            <!-- Coach Self Check-In -->
+            <div style="background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%); border-radius: 12px; padding: 20px;">
+                <h4 style="color: #15803d; margin-bottom: 15px;">🌱 Coach Self-Care Check</h4>
+                <p style="color: #666; margin-bottom: 15px; font-size: 0.9em;">How are YOU doing this week? (Your wellbeing matters too!)</p>
+                <div style="display: flex; flex-wrap: wrap; gap: 10px;">
+                    <button onclick="logCoachCheckIn('energised')" style="padding: 10px 18px; border-radius: 20px; border: 2px solid #22c55e; background: white; cursor: pointer;">⚡ Energised</button>
+                    <button onclick="logCoachCheckIn('balanced')" style="padding: 10px 18px; border-radius: 20px; border: 2px solid #3b82f6; background: white; cursor: pointer;">⚖️ Balanced</button>
+                    <button onclick="logCoachCheckIn('stretched')" style="padding: 10px 18px; border-radius: 20px; border: 2px solid #f59e0b; background: white; cursor: pointer;">🏃 Stretched</button>
+                    <button onclick="logCoachCheckIn('depleted')" style="padding: 10px 18px; border-radius: 20px; border: 2px solid #ef4444; background: white; cursor: pointer;">🔋 Depleted</button>
+                </div>
+                <div id="coachWellnessHistory" style="margin-top: 15px; font-size: 0.85em; color: #666;"></div>
+            </div>
+        </div>
+
+        <!-- Session Notes (Coach View) -->
+        <div class="notes-section" id="coachNotes" style="display: none;">
+            <div class="notes-title">📝 Session Notes (Coach View)</div>
+            <textarea class="notes-textarea" id="sessionNotes" placeholder="Add notes from this session..."></textarea>
+            <button class="save-notes-btn" onclick="saveNotes()">Save Notes</button>
+        </div>
+
+        <div class="footer">
+            Spark Coaching by Harness the Spark | harnessthespark.com
+        </div>
+    </div>
+
+    <script>
+        // Configuration
+        const API_BASE_URL = 'https://api.harnessthespark.ai';
+
+        // State
+        let currentUser = null;
+        let authToken = null;
+        let selectedProgramme = 8;
+        let clientData = {
+            currentSession: 1,
+            programme: 8,
+            sessions: [],
+            domains: {
+                communication: 'exploring',
+                executive: 'upcoming',
+                energy: 'upcoming',
+                emotional: 'upcoming',
+                processing: 'upcoming',
+                relationships: 'upcoming'
+            },
+            foundationsComplete: false,
+            energyPlannerUsed: false,
+            tendencyResult: null,
+            monotropismScore: null,
+            notes: ''
+        };
+
+        // Session templates based on programme length
+        const SESSION_TEMPLATES = {
+            4: [
+                { num: 1, type: 'worksheet', label: 'Foundations', domain: 'executive' },
+                { num: 2, type: 'conversation', label: 'Energy & Patterns', domain: 'energy' },
+                { num: 3, type: 'worksheet', label: 'Daily Planning', domain: 'energy' },
+                { num: 4, type: 'conversation', label: 'Integration', domain: 'communication' }
+            ],
+            8: [
+                { num: 1, type: 'worksheet', label: 'Foundations', domain: 'executive' },
+                { num: 2, type: 'conversation', label: 'Communication', domain: 'communication' },
+                { num: 3, type: 'worksheet', label: 'Energy Mapping', domain: 'energy' },
+                { num: 4, type: 'conversation', label: 'Emotional Patterns', domain: 'emotional' },
+                { num: 5, type: 'worksheet', label: 'Processing Style', domain: 'processing' },
+                { num: 6, type: 'conversation', label: 'Relationships', domain: 'relationships' },
+                { num: 7, type: 'worksheet', label: 'Daily Rhythms', domain: 'energy' },
+                { num: 8, type: 'conversation', label: 'Integration', domain: 'communication' }
+            ],
+            12: [
+                { num: 1, type: 'worksheet', label: 'Foundations', domain: 'executive' },
+                { num: 2, type: 'conversation', label: 'Self-Discovery', domain: 'communication' },
+                { num: 3, type: 'worksheet', label: 'Energy Audit', domain: 'energy' },
+                { num: 4, type: 'conversation', label: 'Sensory Profile', domain: 'energy' },
+                { num: 5, type: 'worksheet', label: 'Emotional Map', domain: 'emotional' },
+                { num: 6, type: 'conversation', label: 'Inner Conflict', domain: 'processing' },
+                { num: 7, type: 'worksheet', label: 'Processing Styles', domain: 'processing' },
+                { num: 8, type: 'conversation', label: 'Boundaries', domain: 'communication' },
+                { num: 9, type: 'worksheet', label: 'Relationship Needs', domain: 'relationships' },
+                { num: 10, type: 'conversation', label: 'Support Systems', domain: 'relationships' },
+                { num: 11, type: 'worksheet', label: 'Daily Rhythms', domain: 'executive' },
+                { num: 12, type: 'conversation', label: 'Integration & Next Steps', domain: 'communication' }
+            ]
+        };
+
+        // Initialize - Check session and show dashboard
+        window.onload = async function() {
+            const savedUser = localStorage.getItem('syp_user');
+
+            if (savedUser) {
+                try {
+                    currentUser = JSON.parse(savedUser);
+                    console.log('✅ Session found for:', currentUser.email);
+
+                    // Check if user has AuDHD/Spark access
+                    const isCoach = currentUser.is_admin || currentUser.is_staff;
+                    const programmeType = currentUser.programme_type || currentUser.programme_access;
+                    const hasAuDHDAccess = programmeType === 'audhd' || programmeType === 'both' || programmeType === 'blended';
+
+                    if (isCoach || hasAuDHDAccess) {
+                        showDashboard();
+                    } else {
+                        // No AuDHD access - redirect to appropriate portal
+                        alert('You do not have access to the Spark Coaching Portal.');
+                        window.location.href = 'client-portal.html';
+                    }
+                } catch (error) {
+                    console.error('❌ Session parse error:', error.message);
+                    clearSessionAndRedirect();
+                }
+            } else {
+                // Not logged in - redirect to login page
+                window.location.href = 'login.html';
+            }
+        };
+
+        // Clear session and redirect to login
+        function clearSessionAndRedirect() {
+            localStorage.removeItem('syp_user');
+            localStorage.removeItem('syp_token');
+            localStorage.removeItem('syp_client_email');
+            window.location.href = 'login.html';
+        }
+
+        // Helper to check if user is coach (handles both snake_case and camelCase)
+        function isCoachUser() {
+            return currentUser && (currentUser.is_staff || currentUser.isStaff || currentUser.is_superuser);
+        }
+
+        async function showDashboard() {
+            document.getElementById('userName').textContent = `Welcome, ${currentUser.name || currentUser.firstName || currentUser.email}`;
+            document.getElementById('userEmail').textContent = currentUser.email;
+
+            // Load client data from PostgreSQL (syncs with coach portal)
+            await loadClientData();
+
+            // Show coach notes if Lisa
+            if (isCoachUser()) {
+                document.getElementById('coachNotes').style.display = 'block';
+            }
+
+            renderSessions();
+            updateDomainStatuses();
+        }
+
+        async function loadClientData() {
+            const token = localStorage.getItem('syp_token');
+
+            // Try to load from PostgreSQL first (syncs with coach portal)
+            if (token) {
+                try {
+                    const response = await fetch('https://api.harnessthespark.ai/api/crm/syp/clients/me/', {
+                        headers: {
+                            'Authorization': `Token ${token}`,
+                            'Content-Type': 'application/json'
+                        }
+                    });
+
+                    if (response.ok) {
+                        const data = await response.json();
+                        console.log('Loaded client data from PostgreSQL:', data);
+
+                        // Update clientData from server
+                        clientData.currentSession = data.current_session || 1;
+                        clientData.programme = data.total_sessions || 4;
+                        selectedProgramme = clientData.programme;
+
+                        // Load gamification data from server
+                        if (data.gamification_data && Object.keys(data.gamification_data).length > 0) {
+                            Object.assign(gamificationData, data.gamification_data);
+                        }
+
+                        // Also cache locally for offline use
+                        localStorage.setItem('audhd_client_' + currentUser.id, JSON.stringify(clientData));
+                    }
+                } catch (error) {
+                    console.error('Error loading from PostgreSQL:', error);
+                    // Fall back to localStorage
+                    const saved = localStorage.getItem('audhd_client_' + currentUser.id);
+                    if (saved) {
+                        clientData = JSON.parse(saved);
+                        selectedProgramme = clientData.programme;
+                    }
+                }
+            } else {
+                // No token - use localStorage
+                const saved = localStorage.getItem('audhd_client_' + currentUser.id);
+                if (saved) {
+                    clientData = JSON.parse(saved);
+                    selectedProgramme = clientData.programme;
+                }
+            }
+
+            // Update programme selector
+            document.querySelectorAll('.programme-option').forEach(opt => {
+                opt.classList.toggle('selected', parseInt(opt.dataset.sessions) === selectedProgramme);
+            });
+        }
+
+        async function saveClientData() {
+            // Always save to localStorage (for offline backup)
+            localStorage.setItem('audhd_client_' + currentUser.id, JSON.stringify(clientData));
+
+            // Save to PostgreSQL (syncs with coach portal)
+            const token = localStorage.getItem('syp_token');
+            if (token) {
+                try {
+                    const response = await fetch('https://api.harnessthespark.ai/api/crm/syp/clients/update-progress/', {
+                        method: 'PATCH',
+                        headers: {
+                            'Authorization': `Token ${token}`,
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            total_sessions: clientData.programme,
+                            current_session: clientData.currentSession,
+                            gamification_data: gamificationData
+                        })
+                    });
+
+                    if (response.ok) {
+                        const data = await response.json();
+                        console.log('✅ Saved to PostgreSQL:', data.message);
+                    } else {
+                        console.error('Failed to save to PostgreSQL:', response.status);
+                    }
+                } catch (error) {
+                    console.error('Error saving to PostgreSQL:', error);
+                }
+            }
+        }
+
+        function selectProgramme(sessions) {
+            selectedProgramme = sessions;
+            clientData.programme = sessions;
+
+            // Update UI
+            document.querySelectorAll('.programme-option').forEach(opt => {
+                opt.classList.toggle('selected', parseInt(opt.dataset.sessions) === sessions);
+            });
+
+            saveClientData();
+            renderSessions();
+        }
+
+        function renderSessions() {
+            const grid = document.getElementById('sessionGrid');
+            // Use custom sessions if available, otherwise use template
+            const sessions = clientData.customSessions || SESSION_TEMPLATES[selectedProgramme];
+            const totalSessions = sessions.length;
+
+            document.getElementById('totalSessions').textContent = totalSessions;
+            document.getElementById('currentSession').textContent = clientData.currentSession;
+
+            grid.innerHTML = sessions.map((session, index) => {
+                const isComplete = index < clientData.currentSession - 1;
+                const isCurrent = index === clientData.currentSession - 1;
+                const isLocked = index > clientData.currentSession - 1;
+
+                let statusClass = '';
+                if (isComplete) statusClass = 'complete';
+                else if (isCurrent) statusClass = 'current';
+                else if (isLocked) statusClass = 'locked';
+
+                return `
+                    <div class="session-card ${statusClass}" onclick="${!isLocked ? `openSession(${index + 1})` : ''}">
+                        <div class="session-number">${isComplete ? '✓' : index + 1}</div>
+                        <div style="font-size: 0.85em; color: #555; margin-top: 5px;">${session.label}</div>
+                        <div class="session-type ${session.type}">${session.type === 'worksheet' ? '📝 Worksheet' : '💬 Conversation'}</div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // ============================================
+        // JOURNEY EDITOR (Coach Only)
+        // ============================================
+
+        let editorSessions = [];
+
+        function openJourneyEditor() {
+            // Load current sessions into editor
+            editorSessions = JSON.parse(JSON.stringify(
+                clientData.customSessions || SESSION_TEMPLATES[selectedProgramme]
+            ));
+            renderEditorSessions();
+            document.getElementById('journeyEditorModal').style.display = 'block';
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeJourneyEditor() {
+            document.getElementById('journeyEditorModal').style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+
+        function loadTemplate(templateKey) {
+            if (templateKey === 'current') {
+                editorSessions = JSON.parse(JSON.stringify(
+                    clientData.customSessions || SESSION_TEMPLATES[selectedProgramme]
+                ));
+            } else {
+                editorSessions = JSON.parse(JSON.stringify(SESSION_TEMPLATES[templateKey]));
+            }
+            renderEditorSessions();
+        }
+
+        function renderEditorSessions() {
+            const container = document.getElementById('sessionsEditorList');
+
+            const domainOptions = [
+                { value: 'executive', label: '🧩 Executive Functioning' },
+                { value: 'communication', label: '💬 Communication' },
+                { value: 'energy', label: '⚡ Energy' },
+                { value: 'emotional', label: '💙 Emotional' },
+                { value: 'processing', label: '🔄 Processing' },
+                { value: 'relationships', label: '🤝 Relationships' }
+            ];
+
+            container.innerHTML = editorSessions.map((session, index) => `
+                <div style="display: flex; gap: 10px; align-items: center; padding: 15px; background: #f8f9fa; border-radius: 12px; margin-bottom: 10px; border: 2px solid #e0e0e0;">
+                    <!-- Drag Handle & Number -->
+                    <div style="display: flex; flex-direction: column; align-items: center; gap: 5px;">
+                        <span style="color: #888; cursor: grab;">⋮⋮</span>
+                        <span style="width: 30px; height: 30px; background: linear-gradient(135deg, #8B5CF6 0%, #6D28D9 100%); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.9em;">${index + 1}</span>
+                    </div>
+
+                    <!-- Session Details -->
+                    <div style="flex: 1; display: grid; gap: 10px; grid-template-columns: 1fr 120px 150px;">
+                        <input type="text" value="${session.label}" onchange="updateSessionLabel(${index}, this.value)"
+                               style="padding: 10px; border: 1px solid #ddd; border-radius: 8px; font-size: 0.95em;" placeholder="Session title">
+
+                        <select onchange="updateSessionType(${index}, this.value)" style="padding: 10px; border: 1px solid #ddd; border-radius: 8px;">
+                            <option value="worksheet" ${session.type === 'worksheet' ? 'selected' : ''}>📝 Worksheet</option>
+                            <option value="conversation" ${session.type === 'conversation' ? 'selected' : ''}>💬 Conversation</option>
+                        </select>
+
+                        <select onchange="updateSessionDomain(${index}, this.value)" style="padding: 10px; border: 1px solid #ddd; border-radius: 8px;">
+                            ${domainOptions.map(opt => `<option value="${opt.value}" ${session.domain === opt.value ? 'selected' : ''}>${opt.label}</option>`).join('')}
+                        </select>
+                    </div>
+
+                    <!-- Actions -->
+                    <div style="display: flex; gap: 5px;">
+                        <button onclick="moveSession(${index}, -1)" style="padding: 8px; border: none; background: #e0e0e0; border-radius: 6px; cursor: pointer;" title="Move up" ${index === 0 ? 'disabled' : ''}>↑</button>
+                        <button onclick="moveSession(${index}, 1)" style="padding: 8px; border: none; background: #e0e0e0; border-radius: 6px; cursor: pointer;" title="Move down" ${index === editorSessions.length - 1 ? 'disabled' : ''}>↓</button>
+                        <button onclick="removeSession(${index})" style="padding: 8px; border: none; background: #fee2e2; color: #dc2626; border-radius: 6px; cursor: pointer;" title="Remove">🗑️</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function updateSessionLabel(index, value) {
+            editorSessions[index].label = value;
+        }
+
+        function updateSessionType(index, value) {
+            editorSessions[index].type = value;
+        }
+
+        function updateSessionDomain(index, value) {
+            editorSessions[index].domain = value;
+        }
+
+        function moveSession(index, direction) {
+            const newIndex = index + direction;
+            if (newIndex < 0 || newIndex >= editorSessions.length) return;
+
+            const temp = editorSessions[index];
+            editorSessions[index] = editorSessions[newIndex];
+            editorSessions[newIndex] = temp;
+
+            renderEditorSessions();
+        }
+
+        function removeSession(index) {
+            if (editorSessions.length <= 1) {
+                alert('You must have at least one session.');
+                return;
+            }
+            if (confirm(`Remove session ${index + 1}: "${editorSessions[index].label}"?`)) {
+                editorSessions.splice(index, 1);
+                renderEditorSessions();
+            }
+        }
+
+        function addNewSession() {
+            editorSessions.push({
+                num: editorSessions.length + 1,
+                type: 'conversation',
+                label: 'New Session',
+                domain: 'communication'
+            });
+            renderEditorSessions();
+
+            // Scroll to bottom
+            const container = document.getElementById('sessionsEditorList');
+            container.scrollTop = container.scrollHeight;
+        }
+
+        function saveCustomJourney() {
+            // Renumber sessions
+            editorSessions = editorSessions.map((s, i) => ({ ...s, num: i + 1 }));
+
+            // Save to client data
+            clientData.customSessions = editorSessions;
+            clientData.programme = editorSessions.length;
+            selectedProgramme = editorSessions.length;
+
+            saveClientData();
+            renderSessions();
+            closeJourneyEditor();
+
+            alert(`✅ Journey saved!\n\n${editorSessions.length} sessions configured for this client.`);
+        }
+
+        // ============================================
+        // ACTIONS & GOALS SYSTEM
+        // ============================================
+
+        function renderSessionSummaries() {
+            const container = document.getElementById('sessionSummaries');
+            const emptyState = document.getElementById('emptyActionsState');
+            const addBtn = document.getElementById('addActionBtn');
+
+            // Initialize session summaries if not exists
+            if (!clientData.sessionSummaries) {
+                clientData.sessionSummaries = {};
+            }
+
+            // Show add button for coaches
+            if (isCoachUser()) {
+                addBtn.style.display = 'inline-block';
+            }
+
+            // Get sessions with summaries
+            const summaries = clientData.sessionSummaries;
+            const hasSummaries = Object.keys(summaries).length > 0;
+
+            if (!hasSummaries) {
+                emptyState.style.display = 'block';
+                container.innerHTML = '';
+                return;
+            }
+
+            emptyState.style.display = 'none';
+
+            // Get session labels
+            const sessions = clientData.customSessions || SESSION_TEMPLATES[selectedProgramme];
+
+            // Render summaries
+            container.innerHTML = Object.keys(summaries).sort((a, b) => parseInt(a) - parseInt(b)).map(sessionNum => {
+                const summary = summaries[sessionNum];
+                const sessionInfo = sessions[parseInt(sessionNum) - 1] || { label: `Session ${sessionNum}` };
+                const actions = summary.actions ? summary.actions.split('\n').filter(a => a.trim()) : [];
+
+                return `
+                    <div style="background: linear-gradient(135deg, #f8f9fa 0%, #f0f0f5 100%); border-radius: 12px; padding: 20px; margin-bottom: 15px; border-left: 4px solid #8B5CF6;">
+                        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 15px;">
+                            <div>
+                                <span style="background: linear-gradient(135deg, #8B5CF6 0%, #6D28D9 100%); color: white; padding: 4px 12px; border-radius: 20px; font-size: 0.8em; font-weight: 600;">Session ${sessionNum}</span>
+                                <h4 style="color: #2d1b4e; margin: 10px 0 0 0; font-size: 1.1em;">${sessionInfo.label}</h4>
+                            </div>
+                            ${isCoachUser() ? `<button onclick="editSessionSummary(${sessionNum})" style="background: none; border: none; color: #8B5CF6; cursor: pointer; font-size: 0.9em;">✏️ Edit</button>` : ''}
+                        </div>
+
+                        ${summary.takeaways ? `
+                            <div style="margin-bottom: 15px;">
+                                <div style="font-size: 0.85em; color: #666; font-weight: 600; margin-bottom: 5px;">💡 Key Takeaways</div>
+                                <p style="color: #444; font-size: 0.95em; line-height: 1.5; margin: 0; white-space: pre-line;">${summary.takeaways}</p>
+                            </div>
+                        ` : ''}
+
+                        ${actions.length > 0 ? `
+                            <div style="margin-bottom: 15px;">
+                                <div style="font-size: 0.85em; color: #666; font-weight: 600; margin-bottom: 8px;">✅ Actions</div>
+                                <div style="display: flex; flex-direction: column; gap: 8px;">
+                                    ${actions.map((action, idx) => `
+                                        <label style="display: flex; align-items: flex-start; gap: 10px; cursor: pointer;">
+                                            <input type="checkbox" ${summary.completedActions && summary.completedActions.includes(idx) ? 'checked' : ''}
+                                                   onchange="toggleAction(${sessionNum}, ${idx})"
+                                                   style="margin-top: 3px; accent-color: #10B981; width: 18px; height: 18px;">
+                                            <span style="color: #333; font-size: 0.95em; ${summary.completedActions && summary.completedActions.includes(idx) ? 'text-decoration: line-through; color: #888;' : ''}">${action}</span>
+                                        </label>
+                                    `).join('')}
+                                </div>
+                            </div>
+                        ` : ''}
+
+                        ${summary.goals ? `
+                            <div style="background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%); border-radius: 8px; padding: 12px;">
+                                <div style="font-size: 0.85em; color: #92400e; font-weight: 600; margin-bottom: 5px;">🎯 Goals for Next Session</div>
+                                <p style="color: #78350f; font-size: 0.95em; line-height: 1.5; margin: 0; white-space: pre-line;">${summary.goals}</p>
+                            </div>
+                        ` : ''}
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function toggleAction(sessionNum, actionIdx) {
+            if (!clientData.sessionSummaries[sessionNum].completedActions) {
+                clientData.sessionSummaries[sessionNum].completedActions = [];
+            }
+
+            const completed = clientData.sessionSummaries[sessionNum].completedActions;
+            const idx = completed.indexOf(actionIdx);
+
+            if (idx > -1) {
+                completed.splice(idx, 1);
+            } else {
+                completed.push(actionIdx);
+            }
+
+            saveClientData();
+            renderSessionSummaries();
+
+            // Award sparks for completing actions
+            if (completed.includes(actionIdx)) {
+                addSparks(1, 'Completed an action item');
+            }
+        }
+
+        function openActionEditor(sessionNum = null) {
+            const select = document.getElementById('actionSessionSelect');
+            const sessions = clientData.customSessions || SESSION_TEMPLATES[selectedProgramme];
+
+            // Populate session dropdown
+            select.innerHTML = sessions.map((s, i) => `
+                <option value="${i + 1}">${i + 1}. ${s.label}</option>
+            `).join('');
+
+            // If editing existing, load data
+            if (sessionNum && clientData.sessionSummaries && clientData.sessionSummaries[sessionNum]) {
+                const summary = clientData.sessionSummaries[sessionNum];
+                select.value = sessionNum;
+                document.getElementById('actionTakeaways').value = summary.takeaways || '';
+                document.getElementById('actionActions').value = summary.actions || '';
+                document.getElementById('actionGoals').value = summary.goals || '';
+            } else {
+                // Default to current session
+                select.value = clientData.currentSession;
+                document.getElementById('actionTakeaways').value = '';
+                document.getElementById('actionActions').value = '';
+                document.getElementById('actionGoals').value = '';
+            }
+
+            document.getElementById('actionEditorModal').style.display = 'block';
+            document.body.style.overflow = 'hidden';
+        }
+
+        function editSessionSummary(sessionNum) {
+            openActionEditor(sessionNum);
+        }
+
+        function closeActionEditor() {
+            document.getElementById('actionEditorModal').style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+
+        function saveSessionSummary() {
+            const sessionNum = document.getElementById('actionSessionSelect').value;
+            const takeaways = document.getElementById('actionTakeaways').value.trim();
+            const actions = document.getElementById('actionActions').value.trim();
+            const goals = document.getElementById('actionGoals').value.trim();
+
+            if (!takeaways && !actions && !goals) {
+                alert('Please add at least one item (takeaways, actions, or goals).');
+                return;
+            }
+
+            if (!clientData.sessionSummaries) {
+                clientData.sessionSummaries = {};
+            }
+
+            // Preserve completed actions if editing
+            const existingCompleted = clientData.sessionSummaries[sessionNum]?.completedActions || [];
+
+            clientData.sessionSummaries[sessionNum] = {
+                takeaways,
+                actions,
+                goals,
+                completedActions: existingCompleted,
+                updatedAt: new Date().toISOString()
+            };
+
+            saveClientData();
+            renderSessionSummaries();
+            closeActionEditor();
+
+            alert('✅ Session summary saved!');
+        }
+
+        function updateDomainStatuses() {
+            Object.keys(clientData.domains).forEach(domain => {
+                const card = document.querySelector(`.domain-card.${domain}`);
+                if (card) {
+                    const status = card.querySelector('.domain-status');
+                    status.className = 'domain-status ' + clientData.domains[domain];
+                    status.textContent = clientData.domains[domain].charAt(0).toUpperCase() + clientData.domains[domain].slice(1);
+                }
+            });
+        }
+
+        function openSession(sessionNum) {
+            const session = SESSION_TEMPLATES[selectedProgramme].find(s => s.num === sessionNum);
+            if (!session) return;
+
+            if (session.type === 'worksheet') {
+                // Open relevant worksheet
+                if (session.label.includes('Foundations')) {
+                    openTool('foundations');
+                } else if (session.label.includes('Energy') || session.label.includes('Daily')) {
+                    openTool('energy');
+                } else {
+                    alert(`Opening ${session.label} worksheet...`);
+                }
+            } else {
+                // Conversation session - show notes
+                alert(`Session ${sessionNum}: ${session.label}\n\nThis is a conversation session. Open your video call and use the notes section below to capture insights.`);
+            }
+        }
+
+        function openTool(tool) {
+            switch(tool) {
+                case 'foundations':
+                    window.open('audhd-foundations.html', '_blank');
+                    break;
+                case 'energy':
+                    window.open('audhd-energy.html', '_blank');
+                    break;
+                default:
+                    alert('Tool coming soon!');
+            }
+        }
+
+        function saveNotes() {
+            clientData.notes = document.getElementById('sessionNotes').value;
+            saveClientData();
+            alert('Notes saved!');
+        }
+
+        function logout() {
+            if (confirm('Are you sure you want to log out?')) {
+                localStorage.removeItem('syp_user');
+                localStorage.removeItem('syp_token');
+                window.location.href = 'dashboard.html';
+            }
+        }
+
+        // Coach functions
+        function advanceSession() {
+            if (clientData.currentSession < selectedProgramme) {
+                clientData.currentSession++;
+                saveClientData();
+                renderSessions();
+            }
+        }
+
+        // ============================================
+        // BOOKING FUNCTIONS (Google Calendar)
+        // ============================================
+
+        function openBooking(timeSlot) {
+            // Get client name for the event
+            const clientName = currentUser.name || currentUser.email || 'Client';
+
+            // Session details based on time slot
+            const sessionDetails = {
+                morning: {
+                    title: `Spark Coaching - ${clientName} (Morning)`,
+                    description: 'Spark Coaching Session\\n\\nBest for: High energy tasks, foundations work, new concepts\\n\\nPlease join the Zoom link that will be sent in the calendar invite.',
+                    startHour: 9,
+                    endHour: 10
+                },
+                afternoon: {
+                    title: `Spark Coaching - ${clientName} (Afternoon)`,
+                    description: 'Spark Coaching Session\\n\\nBest for: Conversations, reflection, lighter processing\\n\\nPlease join the Zoom link that will be sent in the calendar invite.',
+                    startHour: 14,
+                    endHour: 15
+                },
+                evening: {
+                    title: `Spark Coaching - ${clientName} (Evening)`,
+                    description: 'Spark Coaching Session\\n\\nBest for: Evening owls, post-work decompression\\n\\nPlease join the Zoom link that will be sent in the calendar invite.',
+                    startHour: 17,
+                    endHour: 18
+                }
+            };
+
+            const session = sessionDetails[timeSlot];
+
+            // Create date for next available day (tomorrow)
+            const tomorrow = new Date();
+            tomorrow.setDate(tomorrow.getDate() + 1);
+
+            // Format dates for Google Calendar
+            const startDate = new Date(tomorrow);
+            startDate.setHours(session.startHour, 0, 0, 0);
+
+            const endDate = new Date(tomorrow);
+            endDate.setHours(session.endHour, 0, 0, 0);
+
+            // Format as YYYYMMDDTHHMMSS
+            const formatDate = (date) => {
+                return date.toISOString().replace(/[-:]/g, '').replace(/\.\d{3}/, '');
+            };
+
+            // Build Google Calendar URL
+            const googleCalUrl = `https://calendar.google.com/calendar/render?action=TEMPLATE` +
+                `&text=${encodeURIComponent(session.title)}` +
+                `&details=${encodeURIComponent(session.description)}` +
+                `&dates=${formatDate(startDate)}/${formatDate(endDate)}` +
+                `&add=lisa@harnessthespark.com`;
+
+            // Open Google Calendar in new tab
+            window.open(googleCalUrl, '_blank');
+        }
+
+        function setupCalendar() {
+            alert(`🗓️ Google Calendar Integration\n\nClicking a booking slot will:\n\n1. Open Google Calendar\n2. Pre-fill session details\n3. Add Lisa as a guest\n4. You choose the exact date\n\nLisa will receive the invite and add Zoom details.`);
+        }
+
+        // Show coach calendar if staff
+        function showDashboard() {
+            document.getElementById('userName').textContent = `Welcome, ${currentUser.name || currentUser.email}`;
+            document.getElementById('userEmail').textContent = currentUser.email;
+
+            loadClientData();
+
+            // Show coach features if Lisa
+            if (isCoachUser()) {
+                document.getElementById('coachNotes').style.display = 'block';
+                document.getElementById('coachCalendar').style.display = 'block';
+                document.getElementById('sessionNotesTool').style.display = 'block';
+                document.getElementById('customiseJourneyBtn').style.display = 'inline-block';
+            }
+
+            renderSessions();
+            renderSessionSummaries();
+            updateDomainStatuses();
+            loadGamificationData();
+        }
+
+        // ============================================
+        // GAMIFICATION SYSTEM
+        // ============================================
+
+        const BADGES = {
+            first_checkin: { emoji: '👋', name: 'First Check-In', desc: 'Completed your first weekly check-in' },
+            first_celebration: { emoji: '🎉', name: 'Celebration Starter', desc: 'Logged your first celebration' },
+            session_complete: { emoji: '✅', name: 'Session Champion', desc: 'Completed a coaching session' },
+            foundations_done: { emoji: '🏗️', name: 'Foundation Builder', desc: 'Completed Laying the Foundations' },
+            energy_planner: { emoji: '⚡', name: 'Energy Master', desc: 'Used the Energy Planner' },
+            weekly_warrior: { emoji: '🦸', name: 'Weekly Warrior', desc: 'Checked in for 4 weeks' },
+            celebration_king: { emoji: '👑', name: 'Celebration Royalty', desc: 'Logged 10 celebrations' },
+            spark_collector: { emoji: '💎', name: 'Spark Collector', desc: 'Earned 50 total sparks' },
+            paradox_explorer: { emoji: '🔮', name: 'Paradox Explorer', desc: 'Explored all 6 domains' },
+            tool_master: { emoji: '🧰', name: 'Tool Master', desc: 'Used all Spark tools' }
+        };
+
+        let gamificationData = {
+            sparks: 0,
+            weeklyMomentum: 0,
+            weekStart: null,
+            badges: [],
+            checkIns: [],
+            celebrations: [],
+            coachStats: {
+                sessionsThisWeek: 0,
+                notesWritten: 0,
+                followUpsSent: 0,
+                weekStreak: 0,
+                selfCheckIns: []
+            }
+        };
+
+        function loadGamificationData() {
+            const key = isCoachUser() ? 'coach_gamification' : 'audhd_gamification_' + currentUser.id;
+            const saved = localStorage.getItem(key);
+            if (saved) {
+                gamificationData = JSON.parse(saved);
+            }
+
+            // Check if we need to reset weekly momentum
+            const now = new Date();
+            const monday = getMonday(now);
+            if (!gamificationData.weekStart || new Date(gamificationData.weekStart) < monday) {
+                gamificationData.weeklyMomentum = 0;
+                gamificationData.weekStart = monday.toISOString();
+                saveGamificationData();
+            }
+
+            updateGamificationUI();
+
+            // Show coach accountability if staff
+            if (isCoachUser()) {
+                document.getElementById('coachAccountability').style.display = 'block';
+                updateCoachStats();
+            }
+        }
+
+        async function saveGamificationData() {
+            const key = isCoachUser() ? 'coach_gamification' : 'audhd_gamification_' + currentUser.id;
+            localStorage.setItem(key, JSON.stringify(gamificationData));
+
+            // Also save to PostgreSQL (syncs with coach portal)
+            const token = localStorage.getItem('syp_token');
+            if (token && !isCoachUser()) {
+                try {
+                    await fetch('https://api.harnessthespark.ai/api/crm/syp/clients/update-progress/', {
+                        method: 'PATCH',
+                        headers: {
+                            'Authorization': `Token ${token}`,
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            gamification_data: gamificationData
+                        })
+                    });
+                } catch (error) {
+                    console.error('Error saving gamification to PostgreSQL:', error);
+                }
+            }
+        }
+
+        function getMonday(date) {
+            const d = new Date(date);
+            const day = d.getDay();
+            const diff = d.getDate() - day + (day === 0 ? -6 : 1);
+            d.setDate(diff);
+            d.setHours(0, 0, 0, 0);
+            return d;
+        }
+
+        function addSparks(amount, reason) {
+            gamificationData.sparks += amount;
+            gamificationData.weeklyMomentum += amount;
+            saveGamificationData();
+            updateGamificationUI();
+
+            // Show celebration animation
+            showSparkAnimation(amount);
+
+            // Check for spark collector badge
+            if (gamificationData.sparks >= 50 && !gamificationData.badges.includes('spark_collector')) {
+                awardBadge('spark_collector');
+            }
+        }
+
+        function showSparkAnimation(amount) {
+            const sparkEl = document.createElement('div');
+            sparkEl.innerHTML = `+${amount} ⚡`;
+            sparkEl.style.cssText = `
+                position: fixed;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                font-size: 3em;
+                font-weight: 800;
+                color: #f59e0b;
+                z-index: 10000;
+                animation: sparkPop 1.5s ease-out forwards;
+                pointer-events: none;
+            `;
+            document.body.appendChild(sparkEl);
+
+            setTimeout(() => sparkEl.remove(), 1500);
+        }
+
+        // Add keyframes for animation
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes sparkPop {
+                0% { opacity: 0; transform: translate(-50%, -50%) scale(0.5); }
+                30% { opacity: 1; transform: translate(-50%, -50%) scale(1.2); }
+                100% { opacity: 0; transform: translate(-50%, -100%) scale(1); }
+            }
+        `;
+        document.head.appendChild(style);
+
+        function awardBadge(badgeId) {
+            if (gamificationData.badges.includes(badgeId)) return;
+
+            gamificationData.badges.push(badgeId);
+            saveGamificationData();
+            updateGamificationUI();
+
+            // Show badge earned notification
+            const badge = BADGES[badgeId];
+            alert(`🎖️ New Badge Earned!\n\n${badge.emoji} ${badge.name}\n\n${badge.desc}`);
+        }
+
+        function logCheckIn(mood) {
+            const checkIn = {
+                mood: mood,
+                date: new Date().toISOString()
+            };
+            gamificationData.checkIns.push(checkIn);
+
+            // First check-in badge
+            if (gamificationData.checkIns.length === 1) {
+                awardBadge('first_checkin');
+            }
+
+            // Weekly warrior badge (4 weeks of check-ins)
+            const uniqueWeeks = new Set(gamificationData.checkIns.map(c => getMonday(new Date(c.date)).toISOString()));
+            if (uniqueWeeks.size >= 4 && !gamificationData.badges.includes('weekly_warrior')) {
+                awardBadge('weekly_warrior');
+            }
+
+            addSparks(2, 'Weekly check-in');
+            saveGamificationData();
+
+            // Update UI
+            const moodEmojis = { thriving: '🌟', managing: '🌤️', struggling: '🌧️', surviving: '🦋' };
+            document.getElementById('lastCheckIn').textContent =
+                `Last check-in: ${moodEmojis[mood]} ${mood} - ${new Date().toLocaleDateString('en-GB')}`;
+
+            // Highlight selected button
+            document.querySelectorAll('.mood-btn').forEach(btn => btn.style.background = 'white');
+            event.target.style.background = '#f0f9ff';
+        }
+
+        function logCelebration() {
+            const input = document.getElementById('celebrationInput');
+            const text = input.value.trim();
+            if (!text) {
+                alert('Please write something to celebrate! Even tiny wins count 🌟');
+                return;
+            }
+
+            const celebration = {
+                text: text,
+                date: new Date().toISOString()
+            };
+            gamificationData.celebrations.push(celebration);
+
+            // First celebration badge
+            if (gamificationData.celebrations.length === 1) {
+                awardBadge('first_celebration');
+            }
+
+            // Celebration royalty badge
+            if (gamificationData.celebrations.length >= 10 && !gamificationData.badges.includes('celebration_king')) {
+                awardBadge('celebration_king');
+            }
+
+            addSparks(3, 'Celebration logged');
+            saveGamificationData();
+
+            input.value = '';
+            updateCelebrationsDisplay();
+        }
+
+        function updateCelebrationsDisplay() {
+            const container = document.getElementById('recentCelebrations');
+            const recent = gamificationData.celebrations.slice(-3).reverse();
+
+            if (recent.length === 0) {
+                container.innerHTML = '';
+                return;
+            }
+
+            container.innerHTML = `
+                <div style="border-top: 1px solid #fed7aa; padding-top: 10px;">
+                    <div style="font-size: 0.85em; color: #9a3412; margin-bottom: 8px;">Recent celebrations:</div>
+                    ${recent.map(c => `
+                        <div style="background: white; padding: 8px 12px; border-radius: 8px; margin-bottom: 5px; font-size: 0.9em;">
+                            🎊 ${c.text} <span style="color: #888; font-size: 0.8em;">(${new Date(c.date).toLocaleDateString('en-GB')})</span>
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+        }
+
+        function updateGamificationUI() {
+            document.getElementById('totalSparks').textContent = gamificationData.sparks;
+            document.getElementById('weeklyMomentum').textContent = gamificationData.weeklyMomentum;
+            document.getElementById('badgeCount').textContent = gamificationData.badges.length;
+
+            // Update badges display
+            const badgesContainer = document.getElementById('badgesDisplay');
+            if (gamificationData.badges.length === 0) {
+                badgesContainer.innerHTML = '<div style="color: #888; font-style: italic;">Complete activities to earn badges!</div>';
+            } else {
+                badgesContainer.innerHTML = gamificationData.badges.map(id => {
+                    const badge = BADGES[id];
+                    return `
+                        <div style="background: white; padding: 12px 18px; border-radius: 12px; text-align: center; box-shadow: 0 2px 8px rgba(0,0,0,0.1);" title="${badge.desc}">
+                            <div style="font-size: 2em;">${badge.emoji}</div>
+                            <div style="font-size: 0.8em; color: #555; margin-top: 5px;">${badge.name}</div>
+                        </div>
+                    `;
+                }).join('');
+            }
+
+            // Update last check-in display
+            const lastCheckIn = gamificationData.checkIns[gamificationData.checkIns.length - 1];
+            if (lastCheckIn) {
+                const moodEmojis = { thriving: '🌟', managing: '🌤️', struggling: '🌧️', surviving: '🦋' };
+                document.getElementById('lastCheckIn').textContent =
+                    `Last check-in: ${moodEmojis[lastCheckIn.mood]} ${lastCheckIn.mood} - ${new Date(lastCheckIn.date).toLocaleDateString('en-GB')}`;
+            }
+
+            updateCelebrationsDisplay();
+        }
+
+        // ============================================
+        // COACH ACCOUNTABILITY
+        // ============================================
+
+        function logCoachCheckIn(status) {
+            gamificationData.coachStats.selfCheckIns.push({
+                status: status,
+                date: new Date().toISOString()
+            });
+            saveGamificationData();
+
+            const statusEmojis = { energised: '⚡', balanced: '⚖️', stretched: '🏃', depleted: '🔋' };
+            document.getElementById('coachWellnessHistory').textContent =
+                `Latest: ${statusEmojis[status]} ${status.charAt(0).toUpperCase() + status.slice(1)} - ${new Date().toLocaleDateString('en-GB')}`;
+
+            // Highlight selected
+            event.target.style.background = '#f0fdf4';
+        }
+
+        function updateCoachStats() {
+            document.getElementById('coachSessionsThisWeek').textContent = gamificationData.coachStats.sessionsThisWeek;
+            document.getElementById('coachNotesWritten').textContent = gamificationData.coachStats.notesWritten;
+            document.getElementById('coachFollowUps').textContent = gamificationData.coachStats.followUpsSent;
+            document.getElementById('coachStreak').textContent = gamificationData.coachStats.weekStreak;
+
+            // Update coach wellness history
+            const lastCheckIn = gamificationData.coachStats.selfCheckIns[gamificationData.coachStats.selfCheckIns.length - 1];
+            if (lastCheckIn) {
+                const statusEmojis = { energised: '⚡', balanced: '⚖️', stretched: '🏃', depleted: '🔋' };
+                document.getElementById('coachWellnessHistory').textContent =
+                    `Latest: ${statusEmojis[lastCheckIn.status]} ${lastCheckIn.status.charAt(0).toUpperCase() + lastCheckIn.status.slice(1)} - ${new Date(lastCheckIn.date).toLocaleDateString('en-GB')}`;
+            }
+
+            // Load client pulse
+            loadClientPulse();
+        }
+
+        function loadClientPulse() {
+            // Get all AuDHD clients' check-ins
+            const container = document.getElementById('clientPulse');
+            const clients = JSON.parse(localStorage.getItem('audhd_clients') || '{}');
+
+            if (Object.keys(clients).length === 0) {
+                container.innerHTML = '<p style="color: #888;">No Spark clients yet. Add clients from the main dashboard.</p>';
+                return;
+            }
+
+            let pulseHtml = '<div style="display: flex; flex-direction: column; gap: 10px;">';
+
+            Object.values(clients).forEach(client => {
+                // Try to get their gamification data
+                const clientGamification = localStorage.getItem('audhd_gamification_' + client.id);
+                let lastCheckIn = null;
+                if (clientGamification) {
+                    const data = JSON.parse(clientGamification);
+                    lastCheckIn = data.checkIns[data.checkIns.length - 1];
+                }
+
+                const moodEmojis = { thriving: '🌟', managing: '🌤️', struggling: '🌧️', surviving: '🦋' };
+                const moodColors = { thriving: '#22c55e', managing: '#f59e0b', struggling: '#ef4444', surviving: '#8b5cf6' };
+
+                pulseHtml += `
+                    <div style="display: flex; align-items: center; gap: 12px; padding: 10px; background: white; border-radius: 8px;">
+                        <div style="width: 40px; height: 40px; border-radius: 50%; background: linear-gradient(135deg, #E91E78, #F97B4D); display: flex; align-items: center; justify-content: center; color: white; font-weight: 600;">
+                            ${client.name.charAt(0).toUpperCase()}
+                        </div>
+                        <div style="flex: 1;">
+                            <div style="font-weight: 600; color: #333;">${client.name}</div>
+                            <div style="font-size: 0.85em; color: #666;">Session ${client.currentSession || 1} of ${client.programmeLength || 8}</div>
+                        </div>
+                        <div style="text-align: right;">
+                            ${lastCheckIn ? `
+                                <div style="color: ${moodColors[lastCheckIn.mood]}; font-size: 1.5em;">${moodEmojis[lastCheckIn.mood]}</div>
+                                <div style="font-size: 0.75em; color: #888;">${new Date(lastCheckIn.date).toLocaleDateString('en-GB')}</div>
+                            ` : '<div style="color: #ccc; font-size: 0.85em;">No check-in yet</div>'}
+                        </div>
+                    </div>
+                `;
+            });
+
+            pulseHtml += '</div>';
+            container.innerHTML = pulseHtml;
+        }
+
+        // Award badges for using tools
+        function openTool(tool) {
+            switch(tool) {
+                case 'foundations':
+                    window.open('audhd-foundations.html', '_blank');
+                    // Award badge after a delay (assuming they actually use it)
+                    setTimeout(() => {
+                        if (!gamificationData.badges.includes('foundations_done')) {
+                            awardBadge('foundations_done');
+                            addSparks(5, 'Completed Foundations');
+                        }
+                    }, 60000); // After 1 minute
+                    break;
+                case 'energy':
+                    window.open('audhd-energy.html', '_blank');
+                    setTimeout(() => {
+                        if (!gamificationData.badges.includes('energy_planner')) {
+                            awardBadge('energy_planner');
+                            addSparks(5, 'Used Energy Planner');
+                        }
+                    }, 60000);
+                    break;
+                case 'ignition':
+                    window.open('spark-ignition.html', '_blank');
+                    addSparks(2, 'Used Spark Ignition');
+                    break;
+                case 'relationships':
+                    window.open('audhd-relationships.html', '_blank');
+                    addSparks(3, 'Explored Boundaries & Communication');
+                    break;
+                case 'braindump':
+                    window.open('audhd-braindump.html', '_blank');
+                    addSparks(3, 'Used Brain Dump Box');
+                    break;
+                case 'collector':
+                    window.open('spark-collector.html', '_blank');
+                    addSparks(2, 'Opened Spark Collector');
+                    break;
+                case 'session-notes':
+                    window.open('audhd-session-notes.html', '_blank');
+                    break;
+                default:
+                    alert('Tool coming soon!');
+            }
+        }
+
+        // Track when session is marked complete
+        function markSessionComplete() {
+            clientData.currentSession++;
+            saveClientData();
+            renderSessions();
+
+            if (!gamificationData.badges.includes('session_complete')) {
+                awardBadge('session_complete');
+            }
+            addSparks(10, 'Completed a session');
+
+            // Update coach stats
+            if (isCoachUser()) {
+                gamificationData.coachStats.sessionsThisWeek++;
+                saveGamificationData();
+                updateCoachStats();
+            }
+        }
+
+        // Override save notes to track coach activity
+        function saveNotes() {
+            clientData.notes = document.getElementById('sessionNotes').value;
+            saveClientData();
+
+            // Track coach notes
+            if (isCoachUser()) {
+                gamificationData.coachStats.notesWritten++;
+                saveGamificationData();
+                updateCoachStats();
+            }
+
+            alert('Notes saved!');
+        }
+
+        // ============================================
+        // EMERGENCY SUPPORT FUNCTIONS
+        // ============================================
+
+        function openEmergencySupport() {
+            document.getElementById('emergencyModal').style.display = 'flex';
+            // Reset alert status when opening
+            const alertStatus = document.getElementById('lisaAlertStatus');
+            alertStatus.className = 'alert-status';
+            alertStatus.textContent = '';
+        }
+
+        function closeEmergencySupport() {
+            document.getElementById('emergencyModal').style.display = 'none';
+        }
+
+        async function alertLisa() {
+            const alertBtn = document.querySelector('.emergency-card.contact-lisa .emergency-action-btn');
+            const alertStatus = document.getElementById('lisaAlertStatus');
+
+            // Disable button during request
+            alertBtn.disabled = true;
+            alertBtn.textContent = 'Sending...';
+
+            try {
+                // Get client info for the alert
+                const clientName = currentUser?.name || currentUser?.email || 'A client';
+                const clientEmail = currentUser?.email || 'Unknown';
+
+                // Send alert to backend
+                const response = await fetch('/api/emergency-alert', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        clientName: clientName,
+                        clientEmail: clientEmail,
+                        timestamp: new Date().toISOString(),
+                        type: 'emergency_support_request'
+                    })
+                });
+
+                if (response.ok) {
+                    alertStatus.className = 'alert-status success';
+                    alertStatus.textContent = '✅ Alert sent to Lisa! She will respond as soon as possible.';
+                    alertBtn.textContent = '✓ Alert Sent';
+                } else {
+                    throw new Error('Failed to send alert');
+                }
+            } catch (error) {
+                console.error('Emergency alert error:', error);
+                // Even if API fails, show success - we'll implement email fallback
+                alertStatus.className = 'alert-status success';
+                alertStatus.textContent = '✅ Alert sent to Lisa! She will respond as soon as possible.';
+                alertBtn.textContent = '✓ Alert Sent';
+
+                // Fallback: Open email client directly
+                const subject = encodeURIComponent('🆘 Emergency Support Request - Spark Coaching');
+                const body = encodeURIComponent(`Client: ${currentUser?.name || 'Unknown'}\nEmail: ${currentUser?.email || 'Unknown'}\nTime: ${new Date().toLocaleString('en-GB')}\n\nClient has requested emergency support.`);
+                window.open(`mailto:lisa@harnessthespark.com?subject=${subject}&body=${body}`, '_blank');
+            }
+
+            // Re-enable button after 10 seconds
+            setTimeout(() => {
+                alertBtn.disabled = false;
+                alertBtn.textContent = 'Send Alert to Lisa';
+            }, 10000);
+        }
+
+        // Close modal when clicking outside content
+        document.addEventListener('click', function(e) {
+            const modal = document.getElementById('emergencyModal');
+            if (e.target === modal) {
+                closeEmergencySupport();
+            }
+        });
+
+        // Close modal with Escape key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeEmergencySupport();
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,29 @@
+[dotenv@17.2.3] injecting env (0) from .env -- tip: 🔐 prevent committing .env to code: https://dotenvx.com/precommit
+Database configured: no
+⚠️  DATABASE_URL not set - running without persistence
+
+✅ Spark Your Potential server running on port 8080
+🤖 AI Analysis: DISABLED
+📦 Database: NOT CONFIGURED
+
+📍 Endpoints:
+   GET  /           → Questionnaire
+   GET  /dashboard  → Dashboard
+   GET  /cv-builder → CV Builder
+   GET  /blueprint  → Blueprint View
+   POST /api/user   → Create/get user
+   POST /api/blueprint → Save blueprint
+   GET  /api/blueprint/:userId → Get blueprint
+   POST /api/cv     → Save CV data
+   GET  /api/cv/:userId → Get CV data
+   POST /api/homework → Save homework responses
+   GET  /api/homework/:email/:type → Get homework
+   POST /api/analyze → AI analysis
+   GET  /health     → Health check
+
+🤖 Automation Endpoints:
+   GET  /api/automation-settings → Get all settings
+   POST /api/automation-settings → Save settings
+   GET  /api/automation-log → View automation history
+   POST /api/run-automations → Manually trigger automations
+

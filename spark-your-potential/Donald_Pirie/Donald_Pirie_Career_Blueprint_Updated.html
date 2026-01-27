@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Donald Pirie - Career Blueprint (Building Together)</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            line-height: 1.6;
+            color: #2c3e50;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 40px 20px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 60px 40px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.8em;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .header .subtitle {
+            font-size: 1.3em;
+            opacity: 0.9;
+            font-weight: 300;
+        }
+
+        .progress-tracker {
+            background: white;
+            padding: 30px 40px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        .progress-tracker h3 {
+            color: #667eea;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .progress-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+        }
+
+        .progress-item {
+            text-align: center;
+            padding: 15px;
+            border-radius: 10px;
+            border: 2px solid #e0e0e0;
+        }
+
+        .progress-item.complete {
+            background: linear-gradient(135deg, #4caf5015 0%, #8bc34a15 100%);
+            border-color: #4caf50;
+        }
+
+        .progress-item.in-progress {
+            background: linear-gradient(135deg, #ffc10715 0%, #ff980015 100%);
+            border-color: #ffc107;
+        }
+
+        .progress-item.upcoming {
+            background: #f8f9fa;
+            border-color: #e0e0e0;
+        }
+
+        .progress-icon {
+            font-size: 2em;
+            margin-bottom: 8px;
+        }
+
+        .progress-label {
+            font-size: 0.9em;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+
+        .progress-status {
+            font-size: 0.8em;
+            margin-top: 5px;
+            opacity: 0.7;
+        }
+
+        .content {
+            padding: 50px 40px;
+        }
+
+        .section {
+            margin-bottom: 50px;
+            page-break-inside: avoid;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .section-title {
+            font-size: 1.8em;
+            font-weight: 700;
+            color: #667eea;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .week-badge {
+            background: #667eea;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.6em;
+            font-weight: 600;
+        }
+
+        .week-badge.complete {
+            background: #4caf50;
+        }
+
+        .week-badge.in-progress {
+            background: #ffc107;
+            color: #2c3e50;
+        }
+
+        .week-badge.upcoming {
+            background: #e0e0e0;
+            color: #7f8c8d;
+        }
+
+        .section-divider {
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 10px;
+            margin-bottom: 25px;
+        }
+
+        .locked-section {
+            opacity: 0.5;
+            position: relative;
+        }
+
+        .locked-overlay {
+            background: linear-gradient(135deg, #66778815 0%, #764ba215 100%);
+            padding: 30px;
+            border-radius: 15px;
+            border: 2px dashed #667eea;
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .locked-overlay h4 {
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+
+        .insight-box {
+            background: linear-gradient(135deg, #667eea15 0%, #764ba215 100%);
+            padding: 30px;
+            border-radius: 15px;
+            border-left: 5px solid #667eea;
+            margin: 20px 0;
+        }
+
+        .outcome {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            border-left: 4px solid #667eea;
+        }
+
+        .outcome-title {
+            font-weight: 600;
+            color: #667eea;
+            margin-bottom: 8px;
+        }
+
+        @media (max-width: 768px) {
+            .progress-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .content {
+                padding: 30px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Career Blueprint</h1>
+            <div class="subtitle">Donald Pirie | Building Together Over 4 Weeks</div>
+            <div style="font-size: 0.9em; margin-top: 15px; opacity: 0.8;">Career Booster Programme with Lisa Gills</div>
+        </div>
+
+        <!-- PROGRESS TRACKER -->
+        <div class="progress-tracker">
+            <h3>📍 Your Progress</h3>
+            <div class="progress-grid">
+                <div class="progress-item complete">
+                    <div class="progress-icon">✅</div>
+                    <div class="progress-label">Week 1</div>
+                    <div class="progress-status">Foundation Complete</div>
+                </div>
+                <div class="progress-item complete">
+                    <div class="progress-icon">✅</div>
+                    <div class="progress-label">Week 2</div>
+                    <div class="progress-status">Complete</div>
+                </div>
+                <div class="progress-item in-progress">
+                    <div class="progress-icon">🔄</div>
+                    <div class="progress-label">Week 3</div>
+                    <div class="progress-status">In Progress</div>
+                </div>
+                <div class="progress-item upcoming">
+                    <div class="progress-icon">🔒</div>
+                    <div class="progress-label">Week 4</div>
+                    <div class="progress-status">Coming Soon</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="content">
+            <!-- INTRODUCTION -->
+            <div style="background: linear-gradient(135deg, #667eea15 0%, #764ba215 100%); padding: 30px; border-radius: 15px; margin-bottom: 50px;">
+                <h3 style="color: #667eea; margin-bottom: 15px;">About Your Blueprint</h3>
+                <p>This is your living Career Blueprint—we're building it together over 4 weeks. Each session adds a new section as we move from foundation (understanding your patterns) to implementation (tools to execute your career strategy).</p>
+                <p style="margin-top: 15px;"><strong>How it works:</strong> Sections unlock after each session. By Week 4, you'll have your complete Career Blueprint—a comprehensive guide for your next career move and beyond.</p>
+            </div>
+
+            <!-- WEEK 1: FOUNDATION (COMPLETE) -->
+            <div class="section">
+                <div class="section-header">
+                    <div class="section-title">
+                        <span>Week 1: Foundation</span>
+                        <span class="week-badge complete">Complete</span>
+                    </div>
+                </div>
+                <div class="section-divider"></div>
+
+                <h3 style="color: #764ba2; margin-bottom: 15px;">Your Core Pattern</h3>
+                <div class="insight-box">
+                    <p style="font-size: 1.2em; font-weight: 600; margin-bottom: 15px;">You don't fix strategies. You restore belief systems.</p>
+                    <p>Across every transformation you've led—UBS, UPS, AMD, Effies—you turn confusion into conviction. Teams arrive stuck and paralyzed, you find the human truth beneath the noise, and they don't just get a strategy—they get belief back.</p>
+                    <p style="margin-top: 15px; font-weight: 600;">This is belief transformation, not problem-solving.</p>
+                </div>
+
+                <h3 style="color: #764ba2; margin: 25px 0 15px 0;">Your Evidence Collection</h3>
+                <p style="margin-bottom: 15px; color: #7f8c8d;">Five transformations that reveal your unique pattern of impact:</p>
+
+                <div class="outcome">
+                    <div class="outcome-title">Outcome #1: Effies Excellence</div>
+                    <p>Helped 3 major agencies create more effective Effies papers, drawing a clear line between comms activities and business effects. Built stronger, tighter, more compelling stories that increased their chances of winning.</p>
+                </div>
+
+                <div class="outcome">
+                    <div class="outcome-title">Outcome #2: UBS Digital Transformation</div>
+                    <p>Enabled a digital brand journey, content magnets and campaign structure which increased both familiarity (brand team's goal) and leads (wealth management's goal), building new client relationships.</p>
+                </div>
+
+                <div class="outcome">
+                    <div class="outcome-title">Outcome #3: UBS.com Repositioning</div>
+                    <p>Transformed UBS.com into the brand's flagship for a new generation of HNWIs. Created new purpose, audience strategy, and connected journeys. Impact: Increased leads and client revenue, proving technology can deliver trust and growth.</p>
+                </div>
+
+                <div class="outcome">
+                    <div class="outcome-title">Outcome #4: UPS "United Problem Solvers"</div>
+                    <p>Redefined UPS as problem solvers (not just logistics). Built world-first UPS × TED platform for employees to share solutions. Impact: +12% revenue, increased consideration, employee pride for 400,000 staff worldwide.</p>
+                </div>
+
+                <div class="outcome">
+                    <div class="outcome-title">Outcome #5: AMD Strategic Elevation</div>
+                    <p>Elevated AMD from specs-driven competitor to visionary leader. Shifted from promoting specs to shaping progress. Platform: AMD Together We Advance. Impact: Global repositioning lift, multi-audience impact.</p>
+                </div>
+
+                <h3 style="color: #764ba2; margin: 25px 0 15px 0;">Your Thread</h3>
+                <div class="insight-box">
+                    <p style="font-weight: 600; margin-bottom: 10px;">"My ability to see a bigger story than the one I've been asked to tell— to tell it, then build the teams and capabilities to make it real."</p>
+                    <p style="margin-top: 15px;"><strong>Your thread is: connecting insight, ideas, infrastructure and people.</strong> You go deep, find what's true but unseen, and then make it come to life.</p>
+                    <p style="margin-top: 15px; font-style: italic;">"I think what makes it work is that I don't stop at the idea. I stay until it's embedded, and delivering real impact for business and people."</p>
+                </div>
+
+                <h3 style="color: #764ba2; margin: 25px 0 15px 0;">Your Recognition</h3>
+                <div class="insight-box">
+                    <p><strong>The ability I've been underestimating:</strong> How powerfully I can shift belief—not just thinking. I don't just clarify; I change how people feel about the work, each other, and what's possible.</p>
+
+                    <p style="margin-top: 15px;"><strong>The pattern I now see:</strong> Transformation through clarity—taking something complex, fragmented, or forgotten and giving it focus, humanity, and momentum.</p>
+
+                    <p style="margin-top: 15px;"><strong>The transformation I enable:</strong> I help people move from confusion to conviction. They leave clearer, more confident, reconnected to purpose—able to see not just what to do next, but why it matters.</p>
+                </div>
+            </div>
+
+            <!-- WEEK 2: CAREER DIRECTION (COMPLETE) -->
+            <div class="section">
+                <div class="section-header">
+                    <div class="section-title">
+                        <span>Week 2: Career Direction</span>
+                        <span class="week-badge complete">Complete</span>
+                    </div>
+                </div>
+                <div class="section-divider"></div>
+
+                <h3 style="color: #764ba2; margin-bottom: 15px;">The Engine of Donald</h3>
+                <div class="insight-box">
+                    <p style="font-size: 1.1em; font-weight: 600; margin-bottom: 15px;">Your core capabilities that form your professional DNA:</p>
+                    <ul style="margin-left: 20px; line-height: 1.8;">
+                        <li><strong>Reading the room</strong> — sensing what's unsaid and what's needed</li>
+                        <li><strong>Unlocking the thinking</strong> — helping teams see possibilities they couldn't before</li>
+                        <li><strong>Connecting creativity to commercial</strong> — translating creative work into boardroom language</li>
+                    </ul>
+                    <p style="margin-top: 15px; font-style: italic;">Your focus: the <strong>"long game"</strong> and <strong>"building"</strong> brand platforms, not the immediate "making" of ads.</p>
+                </div>
+
+                <h3 style="color: #764ba2; margin: 25px 0 15px 0;">Your Positioning: Transformational Strategy</h3>
+                <div class="insight-box">
+                    <p>You're not a traditional strategist. You're a <strong>transformational strategist</strong> who derives satisfaction from making changes and enabling transformation—not just from specific tasks.</p>
+                    <p style="margin-top: 15px;">Your value comes from helping organisations and people move from confusion to conviction, reconnecting them to purpose, and proving that creativity can move business forward.</p>
+                </div>
+
+                <h3 style="color: #764ba2; margin: 25px 0 15px 0;">What Charges vs Drains You</h3>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 25px;">
+                    <div style="background: linear-gradient(135deg, #4caf5015 0%, #8bc34a15 100%); border: 2px solid #4caf50; border-radius: 10px; padding: 20px;">
+                        <h4 style="color: #4caf50; margin-bottom: 10px;">⚡ Charges You Up</h4>
+                        <ul style="margin-left: 20px; line-height: 1.8; font-size: 0.95em;">
+                            <li>Going deep with clients—asking questions, listening, discovering</li>
+                            <li>Permission to connect the dots into one coherent system</li>
+                            <li>Leading multidisciplinary teams through belief transformation</li>
+                            <li>Environments with creative conviction + data fluency + intellectual curiosity</li>
+                            <li>Work that feels energising, where you leave meetings having moved something forward</li>
+                        </ul>
+                    </div>
+                    <div style="background: linear-gradient(135deg, #ff980015 0%, #ff572215 100%); border: 2px solid #ff5722; border-radius: 10px; padding: 20px;">
+                        <h4 style="color: #ff5722; margin-bottom: 10px;">🔋 Drains Your Energy</h4>
+                        <ul style="margin-left: 20px; line-height: 1.8; font-size: 0.95em;">
+                            <li>The "ad factory" environment—deck-and-done, no time for depth</li>
+                            <li>Environments where charisma is valued over intelligence</li>
+                            <li>Having to play a role; feeling inauthentic</li>
+                            <li>Surface-level work without transformation embedded</li>
+                            <li>Internal politics without genuine strategic purpose</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <h3 style="color: #764ba2; margin: 25px 0 15px 0;">Three Moments When You Restored Belief</h3>
+                <p style="margin-bottom: 15px; color: #7f8c8d;">Not just delivered strategy—but actually restored belief in teams and organisations:</p>
+
+                <div class="outcome">
+                    <div class="outcome-title">1. UBS – "Banking is our Craft"</div>
+                    <p><strong>The Challenge:</strong> UBS was losing confidence in its brand's meaning after years of regulatory pressure and fragmentation.</p>
+                    <p style="margin-top: 10px;"><strong>Your Impact:</strong> You helped redefine the story around craft—elevating the human intelligence and care behind the business. You became ambassador for it within the organisation, restoring belief not just in the marketing team, but in the bankers themselves.</p>
+                    <p style="margin-top: 10px; font-style: italic;">"Like lighting a fire again—pride, ownership, and humanity returned to a global brand that had become defensive."</p>
+                </div>
+
+                <div class="outcome">
+                    <div class="outcome-title">2. UPS – "United Problem Solvers"</div>
+                    <p><strong>The Challenge:</strong> UPS had slipped into functional, logistics-speak and lost its emotional connection.</p>
+                    <p style="margin-top: 10px;"><strong>Your Impact:</strong> Working across Ogilvy and the client C-suite, you reframed the brand as a creative problem-solving partner for business growth—not just a delivery company.</p>
+                    <p style="margin-top: 10px; font-style: italic;">"Like turning a machine back into a movement. Watching engineers, marketers and salespeople suddenly use the same language again was electric."</p>
+                </div>
+
+                <div class="outcome">
+                    <div class="outcome-title">3. Juniper Networks – "The Now Way to Network"</div>
+                    <p><strong>The Challenge:</strong> The brand was invisible next to Cisco—internally people had lost faith they could win creatively or commercially.</p>
+                    <p style="margin-top: 10px;"><strong>Your Impact:</strong> You rebuilt confidence through a simple but powerful narrative and proof system that connected emotion with commercial growth.</p>
+                    <p style="margin-top: 10px; font-style: italic;">"Pride mixed with relief—seeing an engineering-driven organisation rediscover its voice and outperform its own expectations."</p>
+                </div>
+
+                <div class="insight-box" style="margin-top: 20px;">
+                    <p style="font-weight: 600;">Golden Thread Through All Three:</p>
+                    <p style="margin-top: 10px;">Each time, the "strategy" wasn't the hard part—<strong>belief was</strong>. Restoring belief meant helping people remember what they stand for, reconnecting data to purpose, and proving creativity can move the business forward.</p>
+                    <p style="margin-top: 10px; font-style: italic;">"It felt less like writing decks and more like rekindling collective confidence."</p>
+                </div>
+
+                <h3 style="color: #764ba2; margin: 25px 0 15px 0;">Your 10/10 Authentic Role</h3>
+                <div class="insight-box">
+                    <p style="font-weight: 600; margin-bottom: 15px;">What a fully authentic role looks like for you:</p>
+                    
+                    <p style="margin-top: 15px;"><strong>Purpose:</strong> A role where you're not just selling ideas—but shaping what brands and people stand for and how they behave. Helping organisations rediscover conviction in their story, prove the commercial power of creativity, and build brands that work beautifully across channels.</p>
+                    
+                    <p style="margin-top: 15px;"><strong>Environment:</strong> You're at your best when you can go deep with clients, have permission to connect the dots into one coherent system, and can stretch thinking from crafting narratives to measuring impact.</p>
+                    
+                    <p style="margin-top: 15px;"><strong>Shape of Work:</strong> Leading multidisciplinary teams through diagnosis, belief, activation, and measurement. Turning complex systems into coherent narratives. Translating creativity into boardroom language: effectiveness, margin, market share, brand value.</p>
+                    
+                    <p style="margin-top: 15px;"><strong>Culture You Need:</strong> Creative conviction, data fluency, intellectual curiosity, humility and humour—where people care about ideas, not ego.</p>
+                    
+                    <p style="margin-top: 15px; font-style: italic;">"Energising, not exhausting. I leave meetings feeling like I moved something forward. I'm seen not just as 'smart' but as the person who helps others believe again."</p>
+                </div>
+
+                <h3 style="color: #764ba2; margin: 25px 0 15px 0;">Current Opportunities Evaluation</h3>
+                
+                <div class="outcome">
+                    <div class="outcome-title">Edelman (B2B Agency) – Authenticity Score: 8/10</div>
+                    <p><strong>Why It Appeals:</strong> Chance to "build a bigger strategic offering over time"—a more transformational role. Edelman is expanding from PR into brand campaigns and B2B strategy, which aligns with your desire to build platforms.</p>
+                    <p style="margin-top: 10px;"><strong>Status:</strong> Gaining momentum. Exploring freelance route to get in quicker. Seeking "warts and all" view from Emma Dela Foss (former CCO at Edelman).</p>
+                    <p style="margin-top: 10px;"><strong>Your Questions:</strong> Is this a brand platform environment or another ad factory? Will you be valued for belief transformation or just creative output? Can you stay until transformation is embedded?</p>
+                </div>
+
+                <div class="outcome">
+                    <div class="outcome-title">Royal Academy – Director of Brand and Growth</div>
+                    <p><strong>Why It Appeals:</strong> "Really interesting" opportunity. Genuine love for the arts. The RA is making efforts to modernize and become more relevant.</p>
+                    <p style="margin-top: 10px;"><strong>Status:</strong> Applied. New opportunity to evaluate using your framework.</p>
+                    <p style="margin-top: 10px;"><strong>Note:</strong> This represents the kind of "non-ad organisation" that could offer meaning, transformation, and the building piece that fulfills you.</p>
+                </div>
+
+                <div style="background: linear-gradient(135deg, #ff980015 0%, #ff572215 100%); border: 2px solid #ff9800; border-radius: 10px; padding: 20px; margin-top: 20px;">
+                    <h4 style="color: #ff9800; margin-bottom: 10px;">⚠️ Smart Energy Opportunity – No Longer Available</h4>
+                    <p style="font-size: 0.95em;">Required more sustainability experience. Framework still valuable for future opportunities.</p>
+                </div>
+
+                <h3 style="color: #764ba2; margin: 25px 0 15px 0;">Your Non-Negotiables</h3>
+                <div style="background: linear-gradient(135deg, #667eea15 0%, #764ba215 100%); padding: 25px; border-radius: 10px; margin-bottom: 25px;">
+                    <p style="font-weight: 600; margin-bottom: 15px; font-size: 1.1em;">Your "Real Needs and Absolute Nos"</p>
+                    
+                    <p style="margin-top: 15px;"><strong>Green Lights (Deal-Makers):</strong></p>
+                    <ul style="margin-left: 20px; margin-top: 10px; line-height: 1.8;">
+                        <li>Meaning and transformation—not just tasks</li>
+                        <li>Permission to build and embed, not just deck-and-done</li>
+                        <li>Authenticity—being valued for who you are</li>
+                        <li>Purpose fulfillment—work that matters</li>
+                        <li>Environments that value measured wisdom over loud performance</li>
+                    </ul>
+                    
+                    <p style="margin-top: 15px;"><strong>Red Flags (Deal-Breakers):</strong></p>
+                    <ul style="margin-left: 20px; margin-top: 10px; line-height: 1.8;">
+                        <li>The "ad factory" model without strategic depth</li>
+                        <li>Environments where you have to "play a role"</li>
+                        <li>Being tangled in internal politics without purpose</li>
+                        <li>Surface-level work that doesn't allow for transformation</li>
+                        <li>Places where creativity is disconnected from commercial impact</li>
+                    </ul>
+                </div>
+
+                <h3 style="color: #764ba2; margin: 25px 0 15px 0;">Your Career Direction</h3>
+                <div class="insight-box">
+                    <p style="font-weight: 600; font-size: 1.2em; margin-bottom: 15px;">Moving Toward: Client-Side / Fractional / Transformational Roles</p>
+                    <p>You're leaning away from traditional agency work and toward roles that offer:</p>
+                    <ul style="margin-left: 20px; margin-top: 10px; line-height: 1.8;">
+                        <li><strong>Variety and autonomy</strong> — fractional work allows you to "run your show" as a consultant</li>
+                        <li><strong>Client-side opportunities</strong> — where you can go deep and embed transformation</li>
+                        <li><strong>Organisations with genuine need</strong> — nonprofits, cultural institutions, consultancies beyond the ad world</li>
+                    </ul>
+                    <p style="margin-top: 15px; font-style: italic;">"If neither of these opportunities was right, I'd walk from both and seek out non-ad organisations, nonprofits, or consultancies with a genuine need for my skills—rejecting the 'ad factory thing.'"</p>
+                </div>
+
+                <h3 style="color: #764ba2; margin: 25px 0 15px 0;">Career Arc Insights</h3>
+                <div class="insight-box">
+                    <p><strong>UBS Lesson:</strong> The importance of environments that value intelligence, depth, and transformation over short-term output.</p>
+                    <p style="margin-top: 10px;"><strong>VML Confirmation:</strong> Three-day-a-week role during "early recovery" worked well because of reduced workload, but the account felt "inauthentic"—confirming that authenticity and meaning matter more than convenience.</p>
+                    <p style="margin-top: 15px; font-weight: 600;">The discussions have brought things you already knew about yourself to the forefront—helping you appreciate that you have more to offer than you realise.</p>
+                </div>
+            </div>
+
+            <!-- WEEK 3: POSITIONING & NARRATIVE (IN PROGRESS) -->
+            <div class="section">
+                <div class="section-header">
+                    <div class="section-title">
+                        <span>Week 3: Positioning & Narrative</span>
+                        <span class="week-badge in-progress">In Progress</span>
+                    </div>
+                </div>
+                <div class="section-divider" style="border-color: #e0e0e0;"></div>
+
+                <div class="locked-overlay">
+                    <h4>🔄 We're Building This Section Together in Session 3</h4>
+                    <p style="color: #7f8c8d; margin-top: 10px;">We'll craft your NEW positioning statement, career narrative, and core themes based on your transformational strategy focus.</p>
+                </div>
+
+                <h3 style="color: #764ba2; margin: 25px 0 15px 0;">What We'll Add:</h3>
+                <ul style="margin-left: 20px; color: #7f8c8d;">
+                    <li>Personal positioning statement (OLD vs NEW)</li>
+                    <li>Career narrative framework (how to talk about your story)</li>
+                    <li>Core themes (your unique value propositions)</li>
+                    <li>LinkedIn headline & elevator pitch options</li>
+                </ul>
+            </div>
+
+            <!-- WEEK 4: IMPLEMENTATION TOOLS (LOCKED) -->
+            <div class="section locked-section">
+                <div class="section-header">
+                    <div class="section-title">
+                        <span>Week 4: Implementation Tools</span>
+                        <span class="week-badge upcoming">Unlocks After Session 3</span>
+                    </div>
+                </div>
+                <div class="section-divider" style="border-color: #e0e0e0;"></div>
+
+                <div class="locked-overlay">
+                    <h4>🔒 Unlocks in Week 4</h4>
+                    <p style="color: #7f8c8d; margin-top: 10px;">We'll create your CV framework, LinkedIn guide, and all the tools you need to execute your career strategy.</p>
+                </div>
+
+                <h3 style="color: #764ba2; margin: 25px 0 15px 0;">What We'll Add:</h3>
+                <ul style="margin-left: 20px; color: #7f8c8d;">
+                    <li>CV content framework & template</li>
+                    <li>LinkedIn profile optimization guide</li>
+                    <li>Case study portfolio (formatted outcomes)</li>
+                    <li>Interview questions to ask</li>
+                    <li>AI prompt library for ongoing support</li>
+                    <li>90-day action plan</li>
+                </ul>
+            </div>
+
+            <!-- FINAL NOTE -->
+            <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 40px; border-radius: 15px; margin-top: 50px; text-align: center;">
+                <h3 style="margin-bottom: 15px;">Your Complete Blueprint Will Include:</h3>
+                <p style="opacity: 0.9; line-height: 1.8;">
+                    ✓ Your transformation evidence & patterns<br>
+                    ✓ Strategic career direction & decision framework<br>
+                    ✓ Professional positioning & narrative<br>
+                    ✓ Implementation tools (CV, LinkedIn, action plan)<br>
+                    ✓ Ongoing AI support for your career journey
+                </p>
+                <p style="margin-top: 20px; font-weight: 600; font-size: 1.1em;">By Week 4, you'll have everything you need to move forward with clarity and confidence.</p>
+            </div>
+        </div>
+
+        <div style="text-align: center; padding: 30px; background: #f8f9fa; color: #7f8c8d; font-size: 0.9em;">
+            <p>Career Booster Programme | 4-Week Journey</p>
+            <p style="margin-top: 5px;">Last Updated: After Session 2 (Nov 7, 2025)</p>
+        </div>
+    </div>
+</body>
+</html>

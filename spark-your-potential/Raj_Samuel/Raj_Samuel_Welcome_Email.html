@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome to Your Career Booster Programme - Raj Samuel</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #f8f9fa;
+            color: #333;
+            line-height: 1.7;
+        }
+        .email-container {
+            max-width: 650px;
+            margin: 40px auto;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 4px 30px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        .header {
+            background: linear-gradient(135deg, #FF6B6B 0%, #FF8E53 100%);
+            padding: 40px;
+            text-align: center;
+            color: white;
+        }
+        .logo {
+            font-size: 1.4em;
+            font-weight: 700;
+            margin-bottom: 15px;
+        }
+        .logo span { color: #FFE66D; }
+        .header h1 {
+            font-size: 1.8em;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+        .header .subtitle {
+            font-size: 1em;
+            opacity: 0.9;
+        }
+        .content {
+            padding: 40px;
+        }
+        .greeting {
+            font-size: 1.2em;
+            color: #333;
+            margin-bottom: 20px;
+        }
+        p {
+            margin-bottom: 18px;
+            color: #555;
+        }
+        .highlight-box {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 12px;
+            margin: 25px 0;
+        }
+        .highlight-box h3 {
+            font-size: 1.1em;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .highlight-box p {
+            color: rgba(255,255,255,0.9);
+            margin-bottom: 0;
+        }
+        .cta-button {
+            display: inline-block;
+            background: white;
+            color: #667eea;
+            padding: 12px 30px;
+            border-radius: 8px;
+            font-weight: 600;
+            text-decoration: none;
+            margin-top: 15px;
+            transition: transform 0.2s;
+        }
+        .cta-button:hover {
+            transform: translateY(-2px);
+        }
+        .steps-section {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 25px;
+            margin: 25px 0;
+        }
+        .steps-section h3 {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 1.1em;
+        }
+        .step {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            align-items: flex-start;
+        }
+        .step:last-child { margin-bottom: 0; }
+        .step-number {
+            background: linear-gradient(135deg, #4ECDC4 0%, #44A08D 100%);
+            color: white;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.9em;
+            flex-shrink: 0;
+        }
+        .step-content h4 {
+            color: #333;
+            font-size: 1em;
+            margin-bottom: 5px;
+        }
+        .step-content p {
+            margin-bottom: 0;
+            font-size: 0.95em;
+        }
+        .login-box {
+            background: #fff3cd;
+            border: 2px solid #ffc107;
+            border-radius: 12px;
+            padding: 25px;
+            margin: 25px 0;
+        }
+        .login-box h3 {
+            color: #856404;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .login-details {
+            background: white;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+        }
+        .login-details p {
+            margin-bottom: 8px;
+            font-family: monospace;
+            font-size: 0.95em;
+        }
+        .login-details p:last-child { margin-bottom: 0; }
+        .login-details strong {
+            color: #333;
+        }
+        .programme-overview {
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            padding: 25px;
+            margin: 25px 0;
+        }
+        .programme-overview h3 {
+            color: #667eea;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #667eea;
+        }
+        .session-item {
+            margin-bottom: 20px;
+            padding-left: 15px;
+            border-left: 3px solid #4ECDC4;
+        }
+        .session-item:last-child { margin-bottom: 0; }
+        .session-item h4 {
+            color: #333;
+            font-size: 1em;
+            margin-bottom: 8px;
+        }
+        .session-item p {
+            font-size: 0.9em;
+            margin-bottom: 0;
+        }
+        .deliverables {
+            background: #e8f5e9;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        .deliverables h4 {
+            color: #2e7d32;
+            margin-bottom: 12px;
+        }
+        .deliverables ul {
+            margin: 0;
+            padding-left: 20px;
+        }
+        .deliverables li {
+            margin-bottom: 8px;
+            color: #555;
+        }
+        .call-booking {
+            background: linear-gradient(135deg, #4ECDC4 0%, #44A08D 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 12px;
+            text-align: center;
+            margin: 25px 0;
+        }
+        .call-booking h3 {
+            margin-bottom: 10px;
+        }
+        .call-booking p {
+            color: rgba(255,255,255,0.9);
+            margin-bottom: 20px;
+        }
+        .call-booking .cta-button {
+            background: white;
+            color: #44A08D;
+        }
+        .attachments {
+            background: #f0f0f0;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 25px 0;
+        }
+        .attachments h4 {
+            color: #333;
+            margin-bottom: 15px;
+        }
+        .attachment-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px;
+            background: white;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            text-decoration: none;
+            color: #333;
+            transition: transform 0.2s;
+        }
+        .attachment-item:last-child { margin-bottom: 0; }
+        .attachment-item:hover {
+            transform: translateX(5px);
+        }
+        .attachment-icon {
+            font-size: 1.5em;
+        }
+        .attachment-info h5 {
+            font-size: 0.95em;
+            margin-bottom: 3px;
+        }
+        .attachment-info p {
+            font-size: 0.8em;
+            color: #888;
+            margin: 0;
+        }
+        .footer {
+            background: #333;
+            color: white;
+            padding: 30px 40px;
+            text-align: center;
+        }
+        .footer p {
+            margin-bottom: 5px;
+            opacity: 0.9;
+            color: white;
+        }
+        .footer a {
+            color: #4ECDC4;
+            text-decoration: none;
+        }
+        .signature {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #e0e0e0;
+        }
+        .signature p {
+            margin-bottom: 5px;
+        }
+        @media (max-width: 600px) {
+            .content { padding: 25px; }
+            .header { padding: 30px 20px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="email-container">
+        <div class="header">
+            <div class="logo">Harness the <span>Spark</span> ⚡</div>
+            <h1>Welcome, Raj!</h1>
+            <p class="subtitle">Your Career Booster Programme Awaits</p>
+        </div>
+
+        <div class="content">
+            <p class="greeting">Hi Raj,</p>
+
+            <p>I'm really looking forward to working with you on your career transformation! Here's everything you need to get started.</p>
+
+            <div class="highlight-box" style="background: linear-gradient(135deg, #4ECDC4 0%, #44A08D 100%);">
+                <h3>✅ Let's Get You Started</h3>
+                <p>Great that you're ready to go! Here are your next steps to kick things off.</p>
+            </div>
+
+            <div class="steps-section">
+                <h3>🚀 Your 3 Steps to Get Started</h3>
+
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <div class="step-content">
+                        <h4>Sign the Coaching Agreement</h4>
+                        <p>Review and sign digitally — takes just 2 minutes. <a href="Raj_Samuel_Coaching_Agreement.html" style="color: #667eea; font-weight: 600;">Sign Agreement →</a></p>
+                    </div>
+                </div>
+
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <div class="step-content">
+                        <h4>Complete Payment</h4>
+                        <p>£480 inc VAT. I'll send payment details once you've signed, or let me know if you'd prefer an invoice.</p>
+                    </div>
+                </div>
+
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <div class="step-content">
+                        <h4>Onboarding Call</h4>
+                        <p>We'll have a brief call so I can learn more about you and your goals. This helps me personalise your questionnaire.</p>
+                    </div>
+                </div>
+
+                <div class="step">
+                    <div class="step-number">4</div>
+                    <div class="step-content">
+                        <h4>Complete Your Personalised Questionnaire</h4>
+                        <p>After our call, I'll send you a tailored questionnaire (30-45 mins). Your responses power the AI-generated insights report we'll explore together.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="programme-overview">
+                <h3>📋 Your 4-Week Journey</h3>
+
+                <div class="session-item">
+                    <h4>Session 1: Career Story Discovery & Initial Insights</h4>
+                    <p>Review your questionnaire responses together, identify patterns and themes emerging from your career story, and discuss what you need to thrive.</p>
+                </div>
+
+                <div class="session-item">
+                    <h4>Session 2: Deep Pattern Analysis</h4>
+                    <p>Walk through your AI-generated career report, explore patterns and strengths in detail, and begin building your decision-making framework.</p>
+                </div>
+
+                <div class="session-item">
+                    <h4>Session 3: Craft Your Narrative & Positioning</h4>
+                    <p>Develop your unique positioning statement, create authentic framing for your career transitions, and build compelling narrative themes.</p>
+                </div>
+
+                <div class="session-item">
+                    <h4>Session 4: Practical Application - CV & LinkedIn</h4>
+                    <p>Review CV template structure, LinkedIn headline optimisation, and how to position yourself based on insights from the programme.</p>
+                </div>
+            </div>
+
+            <div class="deliverables">
+                <h4>✨ What You'll Receive</h4>
+                <ul>
+                    <li>4 x 1-hour coaching sessions</li>
+                    <li>AI-generated career insights report</li>
+                    <li>Decision-making framework for evaluating opportunities</li>
+                    <li>CV content framework and template</li>
+                    <li>LinkedIn positioning guidance</li>
+                    <li>Personal positioning statement</li>
+                    <li>Email support between sessions (48-hour response)</li>
+                </ul>
+            </div>
+
+            <div class="highlight-box">
+                <h3>💷 Investment</h3>
+                <p><strong>4-Week Career Booster Programme:</strong> £400 + VAT (£480 total)</p>
+                <p style="margin-top: 10px; font-size: 0.9em;">Payment is required before the first session. At the end of Phase 1, you have the option to continue to Phase 2 (4 additional sessions for £400 + VAT) — entirely optional.</p>
+            </div>
+
+            <div class="attachments">
+                <h4>📎 Your Documents</h4>
+
+                <a href="Raj_Samuel_Coaching_Agreement.html" class="attachment-item">
+                    <span class="attachment-icon">📝</span>
+                    <div class="attachment-info">
+                        <h5>Coaching Agreement</h5>
+                        <p>Review and sign digitally when ready</p>
+                    </div>
+                </a>
+
+                <a href="Raj_Samuel_Programme_Outline.html" class="attachment-item">
+                    <span class="attachment-icon">📋</span>
+                    <div class="attachment-info">
+                        <h5>Programme Outline</h5>
+                        <p>Detailed overview of what you'll receive</p>
+                    </div>
+                </a>
+            </div>
+
+            <p>Take your time to review everything. If you have any questions at all, just reply to this email or book a call — I'm here to help.</p>
+
+            <p>Looking forward to helping you find clarity and confidence in your career direction!</p>
+
+            <div class="signature">
+                <p><strong>Lisa Gills</strong></p>
+                <p>Harness the Spark</p>
+                <p><a href="mailto:lisa@harnessthespark.com" style="color: #667eea;">lisa@harnessthespark.com</a></p>
+                <p><a href="https://www.harnessthespark.com" style="color: #667eea;">www.harnessthespark.com</a></p>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p><strong>Harness the Spark</strong></p>
+            <p>Career Transformation Coaching</p>
+            <p><a href="https://www.harnessthespark.com">www.harnessthespark.com</a></p>
+        </div>
+    </div>
+</body>
+</html>

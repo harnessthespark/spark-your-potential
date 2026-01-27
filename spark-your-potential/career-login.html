@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Career Coaching Login - Harness the Spark</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 20px;
+            color: white;
+        }
+
+        .logo { margin-bottom: 20px; }
+        .logo img { height: 70px; }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        .header .badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+            color: #1a1a2e;
+            padding: 8px 20px;
+            border-radius: 25px;
+            font-size: 0.85em;
+            font-weight: 700;
+            margin-bottom: 15px;
+        }
+        .header h1 {
+            font-size: 2.2em;
+            font-weight: 800;
+            margin-bottom: 10px;
+            color: #fff;
+        }
+        .header h1 span { color: #FFD700; }
+        .header .subtitle {
+            font-size: 1.1em;
+            opacity: 0.7;
+            color: #ccc;
+        }
+
+        .login-card {
+            background: white;
+            border-radius: 24px;
+            padding: 40px;
+            width: 100%;
+            max-width: 420px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+        }
+
+        .login-card h2 {
+            color: #1a1a2e;
+            font-size: 1.4em;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+        .login-card .intro {
+            color: #666;
+            font-size: 0.9em;
+            text-align: center;
+            margin-bottom: 30px;
+            line-height: 1.5;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+        .form-group label {
+            display: block;
+            color: #444;
+            font-size: 0.9em;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+        .form-group input {
+            width: 100%;
+            padding: 15px 18px;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            font-size: 1em;
+            font-family: inherit;
+            transition: all 0.2s;
+        }
+        .form-group input:focus {
+            outline: none;
+            border-color: #FFD700;
+            box-shadow: 0 0 0 4px rgba(255, 215, 0, 0.15);
+        }
+
+        .login-btn {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+            color: #1a1a2e;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.1em;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+            margin-top: 10px;
+        }
+        .login-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(255, 215, 0, 0.3);
+        }
+        .login-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .error-message {
+            background: #fef2f2;
+            border: 1px solid #fecaca;
+            color: #dc2626;
+            padding: 12px 15px;
+            border-radius: 10px;
+            font-size: 0.9em;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .success-message {
+            background: #f0fdf4;
+            border: 1px solid #bbf7d0;
+            color: #16a34a;
+            padding: 12px 15px;
+            border-radius: 10px;
+            font-size: 0.9em;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .help-text {
+            text-align: center;
+            margin-top: 25px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+        }
+        .help-text p {
+            color: #888;
+            font-size: 0.85em;
+            margin-bottom: 10px;
+        }
+        .help-text a {
+            color: #FFA500;
+            text-decoration: none;
+            font-weight: 600;
+        }
+        .help-text a:hover { text-decoration: underline; }
+
+        .spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(0,0,0,0.2);
+            border-radius: 50%;
+            border-top-color: #1a1a2e;
+            animation: spin 0.8s ease-in-out infinite;
+            margin-right: 10px;
+            vertical-align: middle;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        @media (max-width: 480px) {
+            .login-card { padding: 30px 25px; }
+            .header h1 { font-size: 1.8em; }
+        }
+    </style>
+</head>
+<body>
+    <div class="logo">
+        <img src="White.png" alt="Harness the Spark" onerror="this.style.display='none'">
+    </div>
+
+    <div class="header">
+        <div class="badge">⚡ Career Coaching</div>
+        <h1>Spark Your <span>Potential</span></h1>
+        <div class="subtitle">Career Booster Programme</div>
+    </div>
+
+    <div class="login-card">
+        <h2>Welcome Back</h2>
+        <p class="intro">Log in to access your Career Coaching toolkit.</p>
+
+        <div class="error-message" id="errorMessage"></div>
+        <div class="success-message" id="successMessage"></div>
+
+        <form id="loginForm" onsubmit="handleLogin(event)">
+            <div class="form-group">
+                <label for="email">Username</label>
+                <input type="text" id="email" name="email" placeholder="Enter your username" required autocomplete="username">
+            </div>
+
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" placeholder="Enter your password" required autocomplete="current-password">
+            </div>
+
+            <button type="submit" class="login-btn" id="loginBtn">Log In</button>
+        </form>
+
+        <div class="help-text">
+            <p>New client? Lisa will set up your account.</p>
+            <p>Forgot password? <a href="mailto:lisa@harnessthespark.com">Contact Lisa</a></p>
+        </div>
+    </div>
+
+    <script>
+        // Configuration - Use SparkHub backend for authentication
+        const API_SERVER = 'https://api.harnessthespark.ai';
+        const REDIRECT_TO = 'client-portal.html';
+
+        // Redirect to client-portal which has its own login
+        window.onload = function() {
+            window.location.href = 'client-portal.html';
+        };
+
+        async function handleLogin(event) {
+            event.preventDefault();
+
+            const email = document.getElementById('email').value.trim();
+            const password = document.getElementById('password').value;
+            const loginBtn = document.getElementById('loginBtn');
+            const errorDiv = document.getElementById('errorMessage');
+            const successDiv = document.getElementById('successMessage');
+
+            errorDiv.style.display = 'none';
+            successDiv.style.display = 'none';
+
+            loginBtn.disabled = true;
+            loginBtn.innerHTML = '<span class="spinner"></span> Logging in...';
+
+            try {
+                // Use SparkHub backend for authentication
+                const response = await fetch(`${API_SERVER}/api/accounts/login/`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        username: email,  // Can be username OR email
+                        password: password
+                    })
+                });
+
+                const data = await response.json();
+
+                if (response.ok && data.token) {
+                    // Success - store user data
+                    const userData = {
+                        id: data.user?.id || 1,
+                        email: data.user?.email || email,
+                        name: data.user?.first_name || data.user?.username || email.split('@')[0],
+                        isStaff: data.user?.is_staff || false,
+                        programme_access: 'career'
+                    };
+
+                    localStorage.setItem('syp_user', JSON.stringify(userData));
+                    localStorage.setItem('syp_token', data.token);
+
+                    successDiv.textContent = 'Login successful!';
+                    successDiv.style.display = 'block';
+
+                    setTimeout(() => {
+                        window.location.href = REDIRECT_TO;
+                    }, 500);
+
+                } else {
+                    throw new Error(data.detail || data.error || 'Invalid username or password');
+                }
+
+            } catch (error) {
+                console.error('Login error:', error);
+                errorDiv.textContent = error.message || 'Unable to log in. Please check your credentials.';
+                errorDiv.style.display = 'block';
+
+                loginBtn.disabled = false;
+                loginBtn.innerHTML = 'Log In';
+            }
+        }
+    </script>
+</body>
+</html>

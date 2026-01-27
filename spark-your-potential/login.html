@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Client Login - Harness the Spark</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>✨</text></svg>">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #2d1b4e 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 20px;
+            color: white;
+        }
+
+        .logo {
+            margin-bottom: 20px;
+        }
+        .logo img {
+            height: 70px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        .header h1 {
+            font-size: 2.2em;
+            font-weight: 800;
+            margin-bottom: 10px;
+            background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .header .subtitle {
+            font-size: 1.1em;
+            opacity: 0.7;
+            color: #ccc;
+        }
+
+        .login-card {
+            background: white;
+            border-radius: 24px;
+            padding: 40px;
+            width: 100%;
+            max-width: 420px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+        }
+
+        .login-card h2 {
+            color: #2d1b4e;
+            font-size: 1.4em;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+        .login-card .intro {
+            color: #666;
+            font-size: 0.9em;
+            text-align: center;
+            margin-bottom: 30px;
+            line-height: 1.5;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+        .form-group label {
+            display: block;
+            color: #444;
+            font-size: 0.9em;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+        .form-group input {
+            width: 100%;
+            padding: 15px 18px;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            font-size: 1em;
+            font-family: inherit;
+            transition: all 0.2s;
+        }
+        .form-group input:focus {
+            outline: none;
+            border-color: #FFD700;
+            box-shadow: 0 0 0 4px rgba(255, 215, 0, 0.15);
+        }
+        .form-group input::placeholder {
+            color: #aaa;
+        }
+        .password-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+        .password-wrapper input {
+            flex: 1;
+            padding-right: 45px;
+        }
+        .toggle-password {
+            position: absolute;
+            right: 12px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 5px;
+            font-size: 1.1em;
+            opacity: 0.6;
+            transition: opacity 0.2s;
+        }
+        .toggle-password:hover {
+            opacity: 1;
+        }
+        .forgot-link {
+            display: block;
+            text-align: right;
+            margin-top: 8px;
+            font-size: 0.85em;
+            color: #8B5CF6;
+            text-decoration: none;
+        }
+        .forgot-link:hover {
+            color: #A855F7;
+            text-decoration: underline;
+        }
+
+        .login-btn {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+            color: #1a1a2e;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.1em;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+            margin-top: 10px;
+        }
+        .login-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(255, 215, 0, 0.3);
+        }
+        .login-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .error-message {
+            background: #fef2f2;
+            border: 1px solid #fecaca;
+            color: #dc2626;
+            padding: 12px 15px;
+            border-radius: 10px;
+            font-size: 0.9em;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .success-message {
+            background: #f0fdf4;
+            border: 1px solid #bbf7d0;
+            color: #16a34a;
+            padding: 12px 15px;
+            border-radius: 10px;
+            font-size: 0.9em;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        /* Programme Selection (shown after login if user has both) */
+        .programme-choice {
+            display: none;
+        }
+        .programme-choice h3 {
+            color: #2d1b4e;
+            font-size: 1.2em;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .programme-options {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        .programme-btn {
+            padding: 20px;
+            border: 2px solid #e0e0e0;
+            border-radius: 16px;
+            background: white;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-align: left;
+        }
+        .programme-btn:hover {
+            border-color: #FFD700;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+        }
+        .programme-btn .emoji {
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+        .programme-btn .title {
+            color: #2d1b4e;
+            font-size: 1.1em;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+        .programme-btn .desc {
+            color: #666;
+            font-size: 0.85em;
+        }
+
+        .help-text {
+            text-align: center;
+            margin-top: 25px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+        }
+        .help-text p {
+            color: #888;
+            font-size: 0.85em;
+            margin-bottom: 10px;
+        }
+        .help-text a {
+            color: #FFD700;
+            text-decoration: none;
+            font-weight: 600;
+        }
+        .help-text a:hover {
+            text-decoration: underline;
+        }
+
+        /* Loading spinner */
+        .spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(0,0,0,0.2);
+            border-radius: 50%;
+            border-top-color: #1a1a2e;
+            animation: spin 0.8s ease-in-out infinite;
+            margin-right: 10px;
+            vertical-align: middle;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Crisis Support */
+        .crisis-support {
+            margin-top: 40px;
+            text-align: center;
+        }
+        .crisis-support > p {
+            color: #888;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .crisis-links {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        .crisis-link {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 15px 20px;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 12px;
+            color: white;
+            text-decoration: none;
+            min-width: 120px;
+            transition: all 0.2s;
+        }
+        .crisis-link:hover {
+            background: rgba(255, 255, 255, 0.15);
+            transform: translateY(-3px);
+        }
+        .crisis-link.samaritans:hover { border-color: #4ade80; }
+        .crisis-link.mind:hover { border-color: #22c55e; }
+        .crisis-link.nhs:hover { border-color: #3b82f6; }
+        .crisis-link.shout:hover { border-color: #a855f7; }
+
+        .crisis-icon {
+            font-size: 1.5em;
+            margin-bottom: 5px;
+        }
+        .crisis-name {
+            font-weight: 600;
+            font-size: 0.9em;
+        }
+        .crisis-detail {
+            font-size: 0.75em;
+            opacity: 0.7;
+            margin-top: 3px;
+        }
+
+        /* Responsive */
+        @media (max-width: 480px) {
+            .login-card { padding: 30px 25px; }
+            .header h1 { font-size: 1.8em; }
+            .crisis-links { gap: 8px; }
+            .crisis-link { min-width: 100px; padding: 12px 15px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="logo">
+        <img src="White.png" alt="Harness the Spark" onerror="this.style.display='none'">
+    </div>
+
+    <div class="header">
+        <h1>✨ Client Portal</h1>
+        <div class="subtitle">Harness the Spark Coaching</div>
+    </div>
+
+    <div class="login-card">
+        <!-- Login Form -->
+        <div id="loginSection">
+            <h2>Welcome Back</h2>
+            <p class="intro">Log in to access your coaching portal and tools.</p>
+
+            <div class="error-message" id="errorMessage"></div>
+            <div class="success-message" id="successMessage"></div>
+
+            <form id="loginForm" onsubmit="handleLogin(event)">
+                <div class="form-group">
+                    <label for="email">Email Address</label>
+                    <input
+                        type="email"
+                        id="email"
+                        name="email"
+                        placeholder="your@email.com"
+                        required
+                        autocomplete="email"
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <div class="password-wrapper">
+                        <input
+                            type="password"
+                            id="password"
+                            name="password"
+                            placeholder="Enter your password"
+                            required
+                            autocomplete="current-password"
+                        >
+                        <button type="button" class="toggle-password" onclick="togglePassword()" aria-label="Show password">
+                            <span id="eyeIcon">👁️</span>
+                        </button>
+                    </div>
+                    <a href="forgot-password.html" class="forgot-link">Forgot password?</a>
+                </div>
+
+                <button type="submit" class="login-btn" id="loginBtn">
+                    Log In
+                </button>
+            </form>
+
+            <div class="help-text">
+                <p>New client? Lisa will set up your account.</p>
+            </div>
+        </div>
+
+        <!-- Programme Selection (shown if user has access to multiple programmes) -->
+        <div id="programmeChoice" class="programme-choice">
+            <h3>Choose Your Portal</h3>
+            <p class="intro">You have access to multiple programmes. Which would you like to open?</p>
+
+            <div class="programme-options">
+                <button class="programme-btn" onclick="goToPortal('career')">
+                    <div class="emoji">💼</div>
+                    <div class="title">Career Booster</div>
+                    <div class="desc">CV Builder, Blueprint, Decision Framework</div>
+                </button>
+
+                <button class="programme-btn" onclick="goToPortal('audhd')">
+                    <div class="emoji">🧠</div>
+                    <div class="title">Spark Your Potential Coaching</div>
+                    <div class="desc">Energy tracking, Paradox tools, Session notes</div>
+                </button>
+
+                <button class="programme-btn" onclick="goToPortal('audhd-career')" style="border: 2px solid #E91E78;">
+                    <div class="emoji">🧠💼</div>
+                    <div class="title">Neurodivergent Executive Career</div>
+                    <div class="desc">Paradox-powered career tools for senior executives</div>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Toggle password visibility
+        function togglePassword() {
+            const passwordInput = document.getElementById('password');
+            const eyeIcon = document.getElementById('eyeIcon');
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                eyeIcon.textContent = '🙈';
+            } else {
+                passwordInput.type = 'password';
+                eyeIcon.textContent = '👁️';
+            }
+        }
+
+        // Configuration - SYP Express backend ONLY (single backend)
+        // All auth and data in one place - PostgreSQL via Express
+        const API_SERVER = '';  // Same origin - no cross-origin needed
+
+        // Check if already logged in
+        window.onload = async function() {
+            const savedUser = localStorage.getItem('syp_user');
+
+            if (savedUser) {
+                try {
+                    const user = JSON.parse(savedUser);
+                    console.log('✅ Found saved session, redirecting...');
+
+                    if (user.is_admin) {
+                        window.location.href = 'coach-hub.html';
+                    } else {
+                        redirectBasedOnAccess(user.programme_access || 'career');
+                    }
+                } catch (error) {
+                    console.error('❌ Invalid saved session:', error.message);
+                    clearSession();
+                }
+            }
+        };
+
+        // Clear all session data
+        function clearSession() {
+            localStorage.removeItem('syp_user');
+            localStorage.removeItem('syp_client_email');
+            console.log('🧹 Session cleared - showing login form');
+        }
+
+        async function handleLogin(event) {
+            event.preventDefault();
+
+            const email = document.getElementById('email').value.trim().toLowerCase();
+            const password = document.getElementById('password').value;
+            const loginBtn = document.getElementById('loginBtn');
+            const errorDiv = document.getElementById('errorMessage');
+            const successDiv = document.getElementById('successMessage');
+
+            // Reset messages
+            errorDiv.style.display = 'none';
+            successDiv.style.display = 'none';
+
+            // Show loading state
+            loginBtn.disabled = true;
+            loginBtn.innerHTML = '<span class="spinner"></span> Logging in...';
+
+            try {
+                // Use SYP Express backend for authentication
+                const response = await fetch('/api/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ email, password })
+                });
+
+                const data = await response.json();
+
+                if (data.success && data.user) {
+                    // Success - store user data
+                    const userData = {
+                        id: data.user.id,
+                        email: data.user.email,
+                        name: data.user.name || data.user.full_name || email.split('@')[0],
+                        is_admin: data.user.is_admin || false,
+                        programme_access: data.user.programme_access || 'career',
+                        programme_status: data.user.programme_status || 'enrolled',
+                        must_change_password: data.user.must_change_password || false,
+                        client_tools: data.user.client_tools || null
+                    };
+
+                    localStorage.setItem('syp_user', JSON.stringify(userData));
+                    localStorage.setItem('syp_client_email', email);
+
+                    // Check if user needs to change their password (first login with temp password)
+                    if (data.user.must_change_password) {
+                        localStorage.setItem('syp_pending_password_change', email);
+                        successDiv.textContent = 'Please set your password...';
+                        successDiv.style.display = 'block';
+                        setTimeout(() => {
+                            window.location.href = 'change-password.html';
+                        }, 500);
+                        return;
+                    }
+
+                    // Show success
+                    successDiv.textContent = 'Login successful!';
+                    successDiv.style.display = 'block';
+
+                    // Redirect - admin go to coach hub, clients go to their portal
+                    setTimeout(() => {
+                        if (userData.is_admin) {
+                            window.location.href = 'coach-hub.html';
+                        } else {
+                            redirectBasedOnAccess(userData.programme_access);
+                        }
+                    }, 500);
+
+                } else {
+                    throw new Error(data.error || 'Invalid email or password');
+                }
+
+            } catch (error) {
+                console.error('Login error:', error);
+                errorDiv.textContent = error.message || 'Unable to log in. Please check your credentials.';
+                errorDiv.style.display = 'block';
+
+                // Reset button
+                loginBtn.disabled = false;
+                loginBtn.innerHTML = 'Log In';
+            }
+        }
+
+        function redirectBasedOnAccess(access) {
+            if (access === 'both' || access === 'all') {
+                // Show programme choice
+                document.getElementById('loginSection').style.display = 'none';
+                document.getElementById('programmeChoice').style.display = 'block';
+            } else if (access === 'audhd-career') {
+                // Go to AuDHD Executive Career portal (NEW TRACK)
+                window.location.href = 'audhd-career-portal.html';
+            } else if (access === 'audhd') {
+                // Go to AuDHD Life Coaching portal
+                window.location.href = 'audhd-dashboard.html';
+            } else if (access === 'blended' || access === 'career') {
+                // Blended (Career + Mind) and Career Booster go to client portal
+                // Blended clients see both Career tools AND Mind Management tools
+                window.location.href = 'client-portal.html';
+            } else {
+                // Default: client portal
+                window.location.href = 'client-portal.html';
+            }
+        }
+
+        function goToPortal(portal) {
+            if (portal === 'audhd-career') {
+                window.location.href = 'audhd-career-portal.html';
+            } else if (portal === 'audhd') {
+                window.location.href = 'audhd-dashboard.html';
+            } else {
+                window.location.href = 'client-portal.html';
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,1299 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Brain Dump Box - Empty Your Head</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📦</text></svg>">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/mobile-mind-tools.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #2d1b4e 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #333;
+        }
+        .container { max-width: 1400px; margin: 0 auto; }
+
+        /* Header */
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            color: white;
+        }
+        .header h1 {
+            font-size: 2.2em;
+            font-weight: 800;
+            margin-bottom: 10px;
+        }
+        .header .subtitle {
+            font-size: 1.1em;
+            opacity: 0.8;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Quick Dump Area */
+        .dump-input-section {
+            background: white;
+            border-radius: 20px;
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+        }
+        .dump-input-section h2 {
+            color: #ef4444;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+        }
+        .dump-textarea {
+            width: 100%;
+            min-height: 120px;
+            border: 3px solid #fecaca;
+            border-radius: 15px;
+            padding: 15px;
+            font-family: inherit;
+            font-size: 1.1em;
+            resize: vertical;
+            transition: border-color 0.2s;
+        }
+        .dump-textarea:focus {
+            outline: none;
+            border-color: #ef4444;
+        }
+        .dump-textarea::placeholder {
+            color: #999;
+        }
+
+        /* Expand button */
+        .textarea-wrapper {
+            position: relative;
+        }
+        .expand-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: rgba(239, 68, 68, 0.1);
+            border: none;
+            padding: 8px 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.85em;
+            color: #ef4444;
+            font-weight: 600;
+            transition: all 0.2s;
+            z-index: 10;
+        }
+        .expand-btn:hover {
+            background: rgba(239, 68, 68, 0.2);
+        }
+
+        /* Fullscreen textarea overlay */
+        .fullscreen-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: #1a1a2e;
+            z-index: 9999;
+            padding: 20px;
+            padding-top: env(safe-area-inset-top, 20px);
+            padding-bottom: env(safe-area-inset-bottom, 20px);
+        }
+        .fullscreen-overlay.active {
+            display: flex;
+            flex-direction: column;
+        }
+        .fullscreen-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            color: white;
+        }
+        .fullscreen-header h3 {
+            font-size: 1.2em;
+        }
+        .fullscreen-close {
+            background: #ef4444;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 1em;
+        }
+        .fullscreen-textarea {
+            flex: 1;
+            width: 100%;
+            border: none;
+            border-radius: 15px;
+            padding: 20px;
+            font-family: inherit;
+            font-size: 18px;
+            line-height: 1.6;
+            resize: none;
+            background: white;
+        }
+        .fullscreen-textarea:focus {
+            outline: none;
+        }
+        .fullscreen-hint {
+            color: rgba(255,255,255,0.7);
+            font-size: 0.9em;
+            margin-top: 15px;
+            text-align: center;
+        }
+        .fullscreen-add-btn {
+            background: linear-gradient(135deg, #ef4444 0%, #f97316 100%);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 12px;
+            font-size: 1.1em;
+            font-weight: 700;
+            cursor: pointer;
+            margin-top: 15px;
+            width: 100%;
+        }
+
+        .dump-hint {
+            color: #666;
+            font-size: 0.9em;
+            margin-top: 10px;
+            font-style: italic;
+        }
+        .add-btn {
+            background: linear-gradient(135deg, #ef4444 0%, #f97316 100%);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 12px;
+            font-size: 1.1em;
+            font-weight: 700;
+            cursor: pointer;
+            margin-top: 15px;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .add-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(239, 68, 68, 0.4);
+        }
+
+        /* Four Boxes Grid */
+        .boxes-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            margin-bottom: 25px;
+        }
+        @media (max-width: 768px) {
+            .boxes-grid { grid-template-columns: 1fr; }
+        }
+
+        .box {
+            background: white;
+            border-radius: 16px;
+            padding: 20px;
+            min-height: 300px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+            transition: transform 0.2s;
+        }
+        .box:hover {
+            transform: translateY(-3px);
+        }
+
+        .box-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
+            padding-bottom: 12px;
+            border-bottom: 3px solid;
+        }
+        .box-icon { font-size: 1.8em; }
+        .box-title { font-size: 1.2em; font-weight: 700; }
+        .box-count {
+            margin-left: auto;
+            background: #f0f0f0;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: 600;
+        }
+
+        /* Box Themes */
+        .box.do-now .box-header { border-color: #ef4444; }
+        .box.do-now .box-title { color: #ef4444; }
+        .box.do-now .box-count { background: #fef2f2; color: #ef4444; }
+
+        .box.do-later .box-header { border-color: #f59e0b; }
+        .box.do-later .box-title { color: #f59e0b; }
+        .box.do-later .box-count { background: #fffbeb; color: #f59e0b; }
+
+        .box.delegate .box-header { border-color: #3b82f6; }
+        .box.delegate .box-title { color: #3b82f6; }
+        .box.delegate .box-count { background: #eff6ff; color: #3b82f6; }
+
+        .box.delete .box-header { border-color: #6b7280; }
+        .box.delete .box-title { color: #6b7280; }
+        .box.delete .box-count { background: #f3f4f6; color: #6b7280; }
+
+        /* Items */
+        .items-list {
+            min-height: 200px;
+        }
+        .item {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 12px 15px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: grab;
+            transition: all 0.2s;
+            border: 2px solid transparent;
+        }
+        .item:hover {
+            background: #f0f0f0;
+        }
+        .item.dragging {
+            opacity: 0.5;
+            transform: rotate(2deg);
+        }
+        .item-text {
+            flex: 1;
+            font-size: 0.95em;
+        }
+        .item-actions {
+            display: flex;
+            gap: 5px;
+        }
+        .item-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 1.1em;
+            padding: 5px;
+            border-radius: 5px;
+            transition: background 0.2s;
+        }
+        .item-btn:hover {
+            background: rgba(0,0,0,0.1);
+        }
+        .item-btn.delete-btn:hover {
+            background: #fef2f2;
+        }
+
+        /* Drop Zone Highlight */
+        .box.drag-over {
+            background: #fefce8;
+            border: 3px dashed #facc15;
+        }
+
+        /* Unsorted Items */
+        .unsorted-section {
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 25px;
+        }
+        .unsorted-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        .unsorted-header h3 {
+            color: #92400e;
+            font-size: 1.2em;
+        }
+        .unsorted-hint {
+            color: #a16207;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .unsorted-items {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .unsorted-item {
+            background: white;
+            border: 2px solid #fcd34d;
+            border-radius: 10px;
+            padding: 10px 15px;
+            cursor: grab;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.2s;
+        }
+        .unsorted-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        .sort-btns {
+            display: flex;
+            gap: 5px;
+        }
+        .sort-btn {
+            width: 28px;
+            height: 28px;
+            border-radius: 6px;
+            border: none;
+            cursor: pointer;
+            font-size: 0.9em;
+            transition: transform 0.2s;
+        }
+        .sort-btn:hover {
+            transform: scale(1.1);
+        }
+        .sort-btn.now { background: #fef2f2; }
+        .sort-btn.later { background: #fffbeb; }
+        .sort-btn.delegate { background: #eff6ff; }
+        .sort-btn.delete { background: #f3f4f6; }
+
+        /* Actions Bar */
+        .actions-bar {
+            background: white;
+            border-radius: 16px;
+            padding: 20px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            justify-content: center;
+            margin-bottom: 25px;
+        }
+        .action-btn {
+            padding: 12px 25px;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: 2px solid;
+        }
+        .action-btn.save {
+            background: #22c55e;
+            color: white;
+            border-color: #22c55e;
+        }
+        .action-btn.save:hover {
+            background: #16a34a;
+        }
+        .action-btn.clear {
+            background: white;
+            color: #ef4444;
+            border-color: #ef4444;
+        }
+        .action-btn.clear:hover {
+            background: #fef2f2;
+        }
+        .action-btn.export {
+            background: white;
+            color: #3b82f6;
+            border-color: #3b82f6;
+        }
+        .action-btn.export:hover {
+            background: #eff6ff;
+        }
+
+        /* Breathing Reminder */
+        .breathing-reminder {
+            background: linear-gradient(135deg, #ddd6fe 0%, #c4b5fd 100%);
+            border-radius: 16px;
+            padding: 25px;
+            text-align: center;
+            margin-bottom: 25px;
+        }
+        .breathing-reminder h3 {
+            color: #5b21b6;
+            margin-bottom: 10px;
+        }
+        .breathing-reminder p {
+            color: #6d28d9;
+            font-size: 1.1em;
+        }
+        .breath-animation {
+            width: 80px;
+            height: 80px;
+            background: rgba(255,255,255,0.5);
+            border-radius: 50%;
+            margin: 20px auto;
+            animation: breathe 4s ease-in-out infinite;
+        }
+        @keyframes breathe {
+            0%, 100% { transform: scale(1); opacity: 0.5; }
+            50% { transform: scale(1.3); opacity: 1; }
+        }
+
+        /* Stats */
+        .stats-bar {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            color: white;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        .stat {
+            text-align: center;
+        }
+        .stat-number {
+            font-size: 2em;
+            font-weight: 800;
+        }
+        .stat-label {
+            font-size: 0.85em;
+            opacity: 0.8;
+        }
+
+        /* Back Button */
+        .back-btn {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: rgba(255,255,255,0.2);
+            color: white;
+            border: 1px solid rgba(255,255,255,0.3);
+            padding: 10px 20px;
+            border-radius: 10px;
+            cursor: pointer;
+            text-decoration: none;
+            font-weight: 500;
+            transition: background 0.2s;
+        }
+        /* Mobile fix for back button */
+        @media (max-width: 600px) {
+            .back-btn {
+                position: relative;
+                top: auto;
+                left: auto;
+                display: block;
+                margin: 10px auto 20px;
+                text-align: center;
+                width: fit-content;
+            }
+        }
+
+        .back-btn:hover {
+            background: rgba(255,255,255,0.3);
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: #999;
+        }
+        .empty-state-icon {
+            font-size: 3em;
+            margin-bottom: 10px;
+        }
+
+        /* Sync Status Indicator */
+        .sync-status {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        .sync-status.synced {
+            background: rgba(34, 197, 94, 0.2);
+            color: #4ade80;
+        }
+        .sync-status.local-only {
+            background: rgba(251, 191, 36, 0.2);
+            color: #fbbf24;
+        }
+        .sync-status.checking {
+            background: rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.7);
+        }
+        .sync-status.error {
+            background: rgba(239, 68, 68, 0.2);
+            color: #f87171;
+        }
+
+        /* SparkHub Link Button */
+        .sparkhub-link {
+            text-align: center;
+        }
+        .sparkhub-btn {
+            display: inline-block;
+            background: linear-gradient(135deg, #8B5CF6 0%, #A855F7 100%);
+            color: white;
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-size: 0.9em;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+        .sparkhub-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(139, 92, 246, 0.4);
+            background: linear-gradient(135deg, #7C3AED 0%, #9333EA 100%);
+        }
+    </style>
+</head>
+<body>
+    <button class="back-btn" onclick="goBackToPortal()">← Back to Portal</button>
+    <script>
+        function goBackToPortal() {
+            const savedUser = localStorage.getItem('syp_user');
+            if (savedUser) {
+                try {
+                    const user = JSON.parse(savedUser);
+                    const access = user.programme_access || user.programme_type || 'career';
+                    if (access === 'blended' || access === 'career') {
+                        window.location.href = 'client-portal.html';
+                    } else {
+                        window.location.href = 'audhd-dashboard.html';
+                    }
+                    return;
+                } catch(e) {}
+            }
+            window.location.href = 'client-portal.html';
+        }
+    </script>
+
+    <div class="container">
+        <div class="header">
+            <h1>📦 Brain Dump Box</h1>
+            <div class="subtitle">Get everything out of your head. No judgement, no filtering. Just dump it all here, then we'll sort it together.</div>
+
+            <!-- Sync Status Indicator -->
+            <div id="syncStatus" class="sync-status" style="margin-top: 15px;">
+                <span id="syncIcon">⏳</span>
+                <span id="syncText">Checking connection...</span>
+            </div>
+
+            <!-- Link to SparkHub Brain Dump -->
+            <div class="sparkhub-link" style="margin-top: 10px;">
+                <a href="https://sparkhub-fe-28mmd.ondigitalocean.app/brain-dump" target="_blank" class="sparkhub-btn">
+                    ✨ Try SparkHub Brain Dump <span style="opacity: 0.7;">(more features)</span>
+                </a>
+            </div>
+        </div>
+
+        <!-- Stats -->
+        <div class="stats-bar">
+            <div class="stat">
+                <div class="stat-number" id="totalItems">0</div>
+                <div class="stat-label">Total Items</div>
+            </div>
+            <div class="stat">
+                <div class="stat-number" id="sortedItems">0</div>
+                <div class="stat-label">Sorted</div>
+            </div>
+            <div class="stat">
+                <div class="stat-number" id="unsortedItems">0</div>
+                <div class="stat-label">To Sort</div>
+            </div>
+        </div>
+
+        <!-- Quick Dump Input -->
+        <div class="dump-input-section">
+            <h2>🧠 Step 1: Empty Your Head</h2>
+            <div class="textarea-wrapper">
+                <button class="expand-btn" onclick="openFullscreen()">⛶ Expand</button>
+                <textarea class="dump-textarea" id="dumpInput" placeholder="Type or paste everything swirling in your head...&#10;&#10;- That email I need to send&#10;- Buy milk&#10;- Call mum back&#10;- The thing from last week&#10;- Why did I say that thing?&#10;- Project deadline&#10;&#10;Press Enter after each thought, or paste a whole list!"></textarea>
+            </div>
+            <p class="dump-hint">Tip: Don't think, just write. You can sort it all afterwards. Each line becomes one item.</p>
+            <button class="add-btn" onclick="addDumpItems()">📥 Add to Unsorted Pile</button>
+        </div>
+
+        <!-- Fullscreen Textarea Overlay -->
+        <div class="fullscreen-overlay" id="fullscreenOverlay">
+            <div class="fullscreen-header">
+                <h3>🧠 Empty Your Head</h3>
+                <button class="fullscreen-close" onclick="closeFullscreen()">✓ Done</button>
+            </div>
+            <textarea class="fullscreen-textarea" id="fullscreenInput" placeholder="Just let it all out...&#10;&#10;One thought per line.&#10;Don't filter, don't judge.&#10;Your brain will thank you."></textarea>
+            <p class="fullscreen-hint">Each line becomes one item. Press Done when you're ready to sort.</p>
+            <button class="fullscreen-add-btn" onclick="addFromFullscreen()">📥 Add to Unsorted Pile</button>
+        </div>
+
+        <!-- Breathing Reminder -->
+        <div class="breathing-reminder">
+            <h3>💜 Pause Point</h3>
+            <div class="breath-animation"></div>
+            <p>You've got it all out. That's the hard part done. Take a breath before sorting.</p>
+        </div>
+
+        <!-- Unsorted Items -->
+        <div class="unsorted-section" id="unsortedSection">
+            <div class="unsorted-header">
+                <span style="font-size: 1.5em;">📋</span>
+                <h3>Step 2: Sort Your Pile</h3>
+            </div>
+            <p class="unsorted-hint">Click the coloured buttons to sort each item, or drag them to a box below.</p>
+            <div class="unsorted-items" id="unsortedList">
+                <!-- Unsorted items appear here -->
+            </div>
+        </div>
+
+        <!-- Four Boxes -->
+        <div class="boxes-grid">
+            <!-- Do Now -->
+            <div class="box do-now" data-box="doNow" ondrop="dropItem(event)" ondragover="allowDrop(event)" ondragleave="dragLeave(event)">
+                <div class="box-header">
+                    <span class="box-icon">🔥</span>
+                    <span class="box-title">Do Now</span>
+                    <span class="box-count" id="doNowCount">0</span>
+                </div>
+                <p style="color: #666; font-size: 0.85em; margin-bottom: 15px;">Urgent AND important. Do these first.</p>
+                <div class="items-list" id="doNowList"></div>
+            </div>
+
+            <!-- Do Later -->
+            <div class="box do-later" data-box="doLater" ondrop="dropItem(event)" ondragover="allowDrop(event)" ondragleave="dragLeave(event)">
+                <div class="box-header">
+                    <span class="box-icon">📅</span>
+                    <span class="box-title">Do Later</span>
+                    <span class="box-count" id="doLaterCount">0</span>
+                </div>
+                <p style="color: #666; font-size: 0.85em; margin-bottom: 15px;">Important but not urgent. Schedule these.</p>
+                <div class="items-list" id="doLaterList"></div>
+            </div>
+
+            <!-- Delegate -->
+            <div class="box delegate" data-box="delegate" ondrop="dropItem(event)" ondragover="allowDrop(event)" ondragleave="dragLeave(event)">
+                <div class="box-header">
+                    <span class="box-icon">🤝</span>
+                    <span class="box-title">Delegate / Ask</span>
+                    <span class="box-count" id="delegateCount">0</span>
+                </div>
+                <p style="color: #666; font-size: 0.85em; margin-bottom: 15px;">Someone else can help with these.</p>
+                <div class="items-list" id="delegateList"></div>
+            </div>
+
+            <!-- Delete -->
+            <div class="box delete" data-box="delete" ondrop="dropItem(event)" ondragover="allowDrop(event)" ondragleave="dragLeave(event)">
+                <div class="box-header">
+                    <span class="box-icon">🗑️</span>
+                    <span class="box-title">Delete / Release</span>
+                    <span class="box-count" id="deleteCount">0</span>
+                </div>
+                <p style="color: #666; font-size: 0.85em; margin-bottom: 15px;">Not important. Let these go.</p>
+                <div class="items-list" id="deleteList"></div>
+            </div>
+        </div>
+
+        <!-- Actions -->
+        <div class="actions-bar">
+            <button class="action-btn save" onclick="saveData()">💾 Save Progress</button>
+            <button class="action-btn export" onclick="exportList()">📋 Copy Do Now List</button>
+            <button class="action-btn clear" onclick="clearAll()">🗑️ Clear Everything</button>
+        </div>
+    </div>
+
+    <script>
+        // API Configuration
+        const API_BASE = 'https://api.harnessthespark.ai';
+
+        // Sync status tracking
+        let isCloudConnected = false;
+        let lastSyncTime = null;
+
+        // Data structure
+        let data = {
+            unsorted: [],
+            doNow: [],
+            doLater: [],
+            delegate: [],
+            delete: []
+        };
+
+        // Get auth token from localStorage
+        function getAuthToken() {
+            return localStorage.getItem('syp_token');
+        }
+
+        // Update sync status indicator
+        function updateSyncStatus(status, message) {
+            const statusEl = document.getElementById('syncStatus');
+            const iconEl = document.getElementById('syncIcon');
+            const textEl = document.getElementById('syncText');
+
+            // Remove all status classes
+            statusEl.classList.remove('synced', 'local-only', 'checking', 'error');
+
+            switch(status) {
+                case 'synced':
+                    statusEl.classList.add('synced');
+                    iconEl.textContent = '☁️';
+                    textEl.textContent = message || 'Synced to cloud';
+                    isCloudConnected = true;
+                    lastSyncTime = new Date();
+                    break;
+                case 'local-only':
+                    statusEl.classList.add('local-only');
+                    iconEl.textContent = '📱';
+                    textEl.textContent = message || 'Saved locally only';
+                    isCloudConnected = false;
+                    break;
+                case 'checking':
+                    statusEl.classList.add('checking');
+                    iconEl.textContent = '⏳';
+                    textEl.textContent = message || 'Checking connection...';
+                    break;
+                case 'error':
+                    statusEl.classList.add('error');
+                    iconEl.textContent = '⚠️';
+                    textEl.textContent = message || 'Sync error';
+                    isCloudConnected = false;
+                    break;
+            }
+        }
+
+        // Load saved data from PostgreSQL (with localStorage fallback)
+        async function loadData() {
+            const token = getAuthToken();
+
+            updateSyncStatus('checking', 'Connecting to cloud...');
+
+            // Try PostgreSQL first
+            if (token) {
+                try {
+                    const response = await fetch(`${API_BASE}/api/crm/syp/braindump/`, {
+                        method: 'GET',
+                        headers: {
+                            'Authorization': `Token ${token}`,
+                            'Content-Type': 'application/json'
+                        }
+                    });
+
+                    if (response.ok) {
+                        const result = await response.json();
+                        // Map snake_case from API to camelCase for frontend
+                        data = {
+                            unsorted: result.unsorted || [],
+                            doNow: result.do_now || [],
+                            doLater: result.do_later || [],
+                            delegate: result.delegate || [],
+                            delete: result.delete || []
+                        };
+                        // Update localStorage cache
+                        localStorage.setItem('audhd_braindump', JSON.stringify(data));
+                        console.log('✅ Brain dump loaded from PostgreSQL');
+                        updateSyncStatus('synced', 'Connected to DigitalOcean');
+                        renderAll();
+                        return;
+                    } else {
+                        console.log('⚠️ PostgreSQL returned error:', response.status);
+                        updateSyncStatus('local-only', 'Using local storage (login to sync)');
+                    }
+                } catch (error) {
+                    console.log('⚠️ PostgreSQL unavailable, using localStorage:', error.message);
+                    updateSyncStatus('local-only', 'Offline mode - saved locally');
+                }
+            } else {
+                updateSyncStatus('local-only', 'Login to sync to cloud');
+            }
+
+            // Fallback to localStorage
+            const saved = localStorage.getItem('audhd_braindump');
+            if (saved) {
+                data = JSON.parse(saved);
+                console.log('📦 Brain dump loaded from localStorage cache');
+                renderAll();
+            }
+        }
+
+        // Save data to PostgreSQL (with localStorage backup)
+        async function saveData() {
+            // Always save to localStorage first (instant, reliable)
+            localStorage.setItem('audhd_braindump', JSON.stringify(data));
+
+            const token = getAuthToken();
+            if (token) {
+                try {
+                    const response = await fetch(`${API_BASE}/api/crm/syp/braindump/`, {
+                        method: 'POST',
+                        headers: {
+                            'Authorization': `Token ${token}`,
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            unsorted: data.unsorted,
+                            doNow: data.doNow,
+                            doLater: data.doLater,
+                            delegate: data.delegate,
+                            delete: data.delete
+                        })
+                    });
+
+                    if (response.ok) {
+                        console.log('✅ Brain dump saved to PostgreSQL');
+                        updateSyncStatus('synced', 'Synced to DigitalOcean');
+                        showSaveConfirmation('☁️ Synced to cloud!', true);
+                        return;
+                    } else {
+                        console.log('⚠️ PostgreSQL save returned error:', response.status);
+                        updateSyncStatus('local-only', 'Saved locally (sync failed)');
+                        showSaveConfirmation('📱 Saved locally', false);
+                    }
+                } catch (error) {
+                    console.log('⚠️ PostgreSQL save failed, data cached locally:', error.message);
+                    updateSyncStatus('local-only', 'Saved locally (offline)');
+                    showSaveConfirmation('📱 Saved locally', false);
+                }
+            } else {
+                // No token - local save only
+                updateSyncStatus('local-only', 'Login to sync to cloud');
+                showSaveConfirmation('📱 Saved locally', false);
+            }
+        }
+
+        function showSaveConfirmation(message = '✅ Saved!', isCloudSave = false) {
+            const btn = document.querySelector('.action-btn.save');
+            const originalText = btn.innerHTML;
+            btn.innerHTML = message;
+
+            if (isCloudSave) {
+                // Cloud save - green with cloud icon effect
+                btn.style.background = 'linear-gradient(135deg, #16a34a 0%, #22c55e 100%)';
+            } else {
+                // Local save - amber warning colour
+                btn.style.background = 'linear-gradient(135deg, #d97706 0%, #f59e0b 100%)';
+            }
+
+            setTimeout(() => {
+                btn.innerHTML = originalText;
+                btn.style.background = '#22c55e';
+            }, 2500);
+        }
+
+        // Add items from dump textarea
+        function addDumpItems() {
+            const textarea = document.getElementById('dumpInput');
+            const text = textarea.value.trim();
+            if (!text) return;
+
+            // Split by newlines, filter empty
+            const items = text.split('\n')
+                .map(line => line.replace(/^[-*•]\s*/, '').trim())
+                .filter(line => line.length > 0);
+
+            items.forEach(item => {
+                data.unsorted.push({
+                    id: Date.now() + Math.random(),
+                    text: item
+                });
+            });
+
+            textarea.value = '';
+            renderAll();
+            saveData();
+        }
+
+        // ========== FULLSCREEN TEXTAREA MODE ==========
+        function openFullscreen() {
+            const mainTextarea = document.getElementById('dumpInput');
+            const fullscreenTextarea = document.getElementById('fullscreenInput');
+            const overlay = document.getElementById('fullscreenOverlay');
+
+            // Copy content from main to fullscreen
+            fullscreenTextarea.value = mainTextarea.value;
+
+            // Show overlay
+            overlay.classList.add('active');
+
+            // Prevent body scroll
+            document.body.style.overflow = 'hidden';
+
+            // Focus the textarea
+            setTimeout(() => fullscreenTextarea.focus(), 100);
+        }
+
+        function closeFullscreen() {
+            const mainTextarea = document.getElementById('dumpInput');
+            const fullscreenTextarea = document.getElementById('fullscreenInput');
+            const overlay = document.getElementById('fullscreenOverlay');
+
+            // Copy content back to main
+            mainTextarea.value = fullscreenTextarea.value;
+
+            // Hide overlay
+            overlay.classList.remove('active');
+
+            // Restore body scroll
+            document.body.style.overflow = '';
+        }
+
+        function addFromFullscreen() {
+            const fullscreenTextarea = document.getElementById('fullscreenInput');
+            const text = fullscreenTextarea.value.trim();
+
+            if (!text) {
+                closeFullscreen();
+                return;
+            }
+
+            // Split by newlines, filter empty
+            const items = text.split('\n')
+                .map(line => line.replace(/^[-*•]\s*/, '').trim())
+                .filter(line => line.length > 0);
+
+            items.forEach(item => {
+                data.unsorted.push({
+                    id: Date.now() + Math.random(),
+                    text: item
+                });
+            });
+
+            // Clear both textareas
+            fullscreenTextarea.value = '';
+            document.getElementById('dumpInput').value = '';
+
+            // Close fullscreen
+            closeFullscreen();
+
+            // Update UI
+            renderAll();
+            saveData();
+        }
+
+        // Render all sections
+        function renderAll() {
+            renderUnsorted();
+            renderBox('doNow');
+            renderBox('doLater');
+            renderBox('delegate');
+            renderBox('delete');
+            updateStats();
+        }
+
+        // Render unsorted items
+        function renderUnsorted() {
+            const container = document.getElementById('unsortedList');
+
+            if (data.unsorted.length === 0) {
+                container.innerHTML = '<div class="empty-state"><div class="empty-state-icon">✨</div><p>All sorted! Or add more thoughts above.</p></div>';
+                return;
+            }
+
+            container.innerHTML = data.unsorted.map(item => `
+                <div class="unsorted-item" draggable="true" ondragstart="dragStart(event)" data-id="${item.id}" data-source="unsorted">
+                    <span>${item.text}</span>
+                    <div class="sort-btns">
+                        <button class="sort-btn now" onclick="sortItem(${item.id}, 'doNow')" title="Do Now">🔥</button>
+                        <button class="sort-btn later" onclick="sortItem(${item.id}, 'doLater')" title="Do Later">📅</button>
+                        <button class="sort-btn delegate" onclick="sortItem(${item.id}, 'delegate')" title="Delegate">🤝</button>
+                        <button class="sort-btn delete" onclick="sortItem(${item.id}, 'delete')" title="Delete">🗑️</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Render a box
+        function renderBox(boxName) {
+            const container = document.getElementById(boxName + 'List');
+            const countEl = document.getElementById(boxName + 'Count');
+
+            countEl.textContent = data[boxName].length;
+
+            if (data[boxName].length === 0) {
+                container.innerHTML = '<div class="empty-state"><div class="empty-state-icon">📭</div><p>Drop items here</p></div>';
+                return;
+            }
+
+            container.innerHTML = data[boxName].map(item => `
+                <div class="item" draggable="true" ondragstart="dragStart(event)" data-id="${item.id}" data-source="${boxName}">
+                    <span class="item-text">${item.text}</span>
+                    <div class="item-actions">
+                        <button class="item-btn" onclick="moveToUnsorted(${item.id}, '${boxName}')" title="Back to unsorted">↩️</button>
+                        <button class="item-btn delete-btn" onclick="deleteItem(${item.id}, '${boxName}')" title="Remove">✕</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Update stats
+        function updateStats() {
+            const total = data.unsorted.length + data.doNow.length + data.doLater.length + data.delegate.length + data.delete.length;
+            const sorted = data.doNow.length + data.doLater.length + data.delegate.length + data.delete.length;
+
+            document.getElementById('totalItems').textContent = total;
+            document.getElementById('sortedItems').textContent = sorted;
+            document.getElementById('unsortedItems').textContent = data.unsorted.length;
+        }
+
+        // Sort item from unsorted to a box
+        function sortItem(itemId, targetBox) {
+            const itemIndex = data.unsorted.findIndex(i => i.id === itemId);
+            if (itemIndex === -1) return;
+
+            const item = data.unsorted.splice(itemIndex, 1)[0];
+            data[targetBox].push(item);
+
+            renderAll();
+            saveData();
+        }
+
+        // Move item back to unsorted
+        function moveToUnsorted(itemId, sourceBox) {
+            const itemIndex = data[sourceBox].findIndex(i => i.id === itemId);
+            if (itemIndex === -1) return;
+
+            const item = data[sourceBox].splice(itemIndex, 1)[0];
+            data.unsorted.push(item);
+
+            renderAll();
+            saveData();
+        }
+
+        // Delete item completely
+        function deleteItem(itemId, sourceBox) {
+            data[sourceBox] = data[sourceBox].filter(i => i.id !== itemId);
+            renderAll();
+            saveData();
+        }
+
+        // Drag and drop (Desktop)
+        let draggedItem = null;
+        let draggedSource = null;
+
+        function dragStart(event) {
+            draggedItem = event.target.dataset.id;
+            draggedSource = event.target.dataset.source;
+            event.target.classList.add('dragging');
+        }
+
+        function allowDrop(event) {
+            event.preventDefault();
+            event.currentTarget.classList.add('drag-over');
+        }
+
+        function dragLeave(event) {
+            event.currentTarget.classList.remove('drag-over');
+        }
+
+        function dropItem(event) {
+            event.preventDefault();
+            event.currentTarget.classList.remove('drag-over');
+
+            const targetBox = event.currentTarget.dataset.box;
+            if (!draggedItem || !draggedSource || draggedSource === targetBox) return;
+
+            // Find and move item
+            const itemIndex = data[draggedSource].findIndex(i => i.id == draggedItem);
+            if (itemIndex === -1) return;
+
+            const item = data[draggedSource].splice(itemIndex, 1)[0];
+            data[targetBox].push(item);
+
+            renderAll();
+            saveData();
+
+            draggedItem = null;
+            draggedSource = null;
+        }
+
+        // ========== TOUCH DRAG AND DROP (Mobile) ==========
+        let touchDragElement = null;
+        let touchDragClone = null;
+        let touchDragSource = null;
+        let touchDragId = null;
+        let touchStartX = 0;
+        let touchStartY = 0;
+        let isDragging = false;
+
+        // Attach touch handlers to all draggable items
+        function attachTouchHandlers() {
+            document.querySelectorAll('[draggable="true"]').forEach(el => {
+                el.addEventListener('touchstart', handleTouchStart, { passive: false });
+                el.addEventListener('touchmove', handleTouchMove, { passive: false });
+                el.addEventListener('touchend', handleTouchEnd, { passive: false });
+            });
+        }
+
+        function handleTouchStart(e) {
+            // Only start drag after a brief hold (150ms) to distinguish from scroll
+            const touch = e.touches[0];
+            touchStartX = touch.clientX;
+            touchStartY = touch.clientY;
+            touchDragElement = e.currentTarget;
+            touchDragId = touchDragElement.dataset.id;
+            touchDragSource = touchDragElement.dataset.source;
+            isDragging = false;
+        }
+
+        function handleTouchMove(e) {
+            if (!touchDragElement) return;
+
+            const touch = e.touches[0];
+            const deltaX = Math.abs(touch.clientX - touchStartX);
+            const deltaY = Math.abs(touch.clientY - touchStartY);
+
+            // Start drag after moving 10px (prevents accidental drags)
+            if (!isDragging && (deltaX > 10 || deltaY > 10)) {
+                isDragging = true;
+                createTouchClone(touch);
+                touchDragElement.style.opacity = '0.3';
+            }
+
+            if (isDragging) {
+                e.preventDefault(); // Prevent scrolling while dragging
+                moveTouchClone(touch);
+                highlightDropZone(touch);
+            }
+        }
+
+        function handleTouchEnd(e) {
+            if (isDragging && touchDragClone) {
+                const touch = e.changedTouches[0];
+                const dropTarget = getDropTarget(touch);
+
+                if (dropTarget && dropTarget !== touchDragSource) {
+                    // Move item to new box
+                    const itemIndex = data[touchDragSource].findIndex(i => i.id == touchDragId);
+                    if (itemIndex !== -1) {
+                        const item = data[touchDragSource].splice(itemIndex, 1)[0];
+                        data[dropTarget].push(item);
+                        renderAll();
+                        saveData();
+                    }
+                }
+
+                // Cleanup
+                removeTouchClone();
+                clearAllHighlights();
+            }
+
+            if (touchDragElement) {
+                touchDragElement.style.opacity = '1';
+            }
+
+            touchDragElement = null;
+            touchDragId = null;
+            touchDragSource = null;
+            isDragging = false;
+        }
+
+        function createTouchClone(touch) {
+            touchDragClone = touchDragElement.cloneNode(true);
+            touchDragClone.style.cssText = `
+                position: fixed;
+                z-index: 10000;
+                pointer-events: none;
+                opacity: 0.9;
+                transform: rotate(3deg) scale(1.05);
+                box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+                max-width: 280px;
+                background: white;
+                border-radius: 10px;
+                padding: 12px 15px;
+            `;
+            document.body.appendChild(touchDragClone);
+            moveTouchClone(touch);
+        }
+
+        function moveTouchClone(touch) {
+            if (!touchDragClone) return;
+            touchDragClone.style.left = (touch.clientX - 100) + 'px';
+            touchDragClone.style.top = (touch.clientY - 30) + 'px';
+        }
+
+        function removeTouchClone() {
+            if (touchDragClone && touchDragClone.parentNode) {
+                touchDragClone.parentNode.removeChild(touchDragClone);
+            }
+            touchDragClone = null;
+        }
+
+        function highlightDropZone(touch) {
+            clearAllHighlights();
+            const target = getDropTarget(touch);
+            if (target) {
+                const box = document.querySelector(`[data-box="${target}"]`);
+                if (box) box.classList.add('drag-over');
+            }
+        }
+
+        function clearAllHighlights() {
+            document.querySelectorAll('.box').forEach(box => {
+                box.classList.remove('drag-over');
+            });
+        }
+
+        function getDropTarget(touch) {
+            const boxes = document.querySelectorAll('.box[data-box]');
+            for (const box of boxes) {
+                const rect = box.getBoundingClientRect();
+                if (touch.clientX >= rect.left && touch.clientX <= rect.right &&
+                    touch.clientY >= rect.top && touch.clientY <= rect.bottom) {
+                    return box.dataset.box;
+                }
+            }
+            return null;
+        }
+
+        // Re-attach touch handlers after render
+        const originalRenderAll = renderAll;
+        renderAll = function() {
+            originalRenderAll();
+            setTimeout(attachTouchHandlers, 50);
+        };
+
+        // Export Do Now list
+        function exportList() {
+            if (data.doNow.length === 0) {
+                alert('No items in Do Now list yet!');
+                return;
+            }
+
+            const text = 'DO NOW:\n' + data.doNow.map((item, i) => `${i + 1}. ${item.text}`).join('\n');
+
+            navigator.clipboard.writeText(text).then(() => {
+                const btn = document.querySelector('.action-btn.export');
+                const originalText = btn.innerHTML;
+                btn.innerHTML = '✅ Copied!';
+                setTimeout(() => {
+                    btn.innerHTML = originalText;
+                }, 2000);
+            });
+        }
+
+        // Clear all
+        function clearAll() {
+            if (!confirm('Clear everything? This cannot be undone.')) return;
+
+            data = {
+                unsorted: [],
+                doNow: [],
+                doLater: [],
+                delegate: [],
+                delete: []
+            };
+
+            renderAll();
+            saveData();
+        }
+
+        // Keyboard shortcut: Enter to add items
+        document.getElementById('dumpInput').addEventListener('keydown', function(e) {
+            if (e.key === 'Enter' && e.ctrlKey) {
+                addDumpItems();
+            }
+        });
+
+        // Initialize
+        loadData();
+    </script>
+</body>
+</html>

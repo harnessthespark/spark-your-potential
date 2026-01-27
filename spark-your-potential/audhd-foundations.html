@@ -1,0 +1,1131 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Laying the Foundations - Spark Your Potential</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏗️</text></svg>">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/mobile-mind-tools.css">
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #FEF0F5 0%, #FFF5F0 100%);
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* Back link */
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: #E91E78;
+            text-decoration: none;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Header */
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        h1 {
+            color: #333;
+            margin: 0 0 10px 0;
+            font-size: 32px;
+        }
+
+        h1 span {
+            background: linear-gradient(90deg, #E91E78, #F97B4D);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .subtitle {
+            color: #666;
+            font-size: 16px;
+            max-width: 700px;
+            margin: 0 auto 20px;
+            line-height: 1.6;
+        }
+
+        /* Action buttons */
+        .header-actions {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .btn {
+            padding: 10px 25px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            transition: all 0.2s;
+        }
+
+        .btn-primary {
+            background: linear-gradient(90deg, #E91E78, #F97B4D);
+            color: white;
+        }
+        .btn-primary:hover { opacity: 0.9; }
+
+        .btn-secondary {
+            background: #10B981;
+            color: white;
+        }
+        .btn-secondary:hover { background: #059669; }
+
+        .save-status {
+            font-size: 0.9em;
+            color: #10B981;
+            margin-left: 10px;
+        }
+
+        /* Main Table */
+        .foundations-table {
+            background: white;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .table-header {
+            display: grid;
+            grid-template-columns: 60px 120px 1fr 1fr 200px;
+            background: linear-gradient(90deg, #E91E78, #F97B4D);
+            color: white;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .table-header > div {
+            padding: 15px;
+            text-align: center;
+        }
+
+        .table-header > div:nth-child(3),
+        .table-header > div:nth-child(4),
+        .table-header > div:nth-child(5) {
+            text-align: left;
+        }
+
+        .table-header .header-hint {
+            font-size: 11px;
+            font-weight: 400;
+            opacity: 0.9;
+            display: block;
+            margin-top: 3px;
+        }
+
+        /* Category Rows */
+        .category-row {
+            display: grid;
+            grid-template-columns: 60px 120px 1fr 1fr 200px;
+            border-bottom: 1px solid #e0e0e0;
+            align-items: stretch;
+        }
+
+        .category-row:last-child {
+            border-bottom: none;
+        }
+
+        .category-row:nth-child(odd) {
+            background: #fef7f9;
+        }
+
+        .category-row:nth-child(even) {
+            background: #fff9f7;
+        }
+
+        /* Colour Picker */
+        .colour-cell {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 10px;
+        }
+
+        .colour-picker {
+            width: 40px;
+            height: 40px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            padding: 0;
+        }
+
+        .colour-picker::-webkit-color-swatch-wrapper {
+            padding: 0;
+        }
+
+        .colour-picker::-webkit-color-swatch {
+            border: 2px solid #ddd;
+            border-radius: 6px;
+        }
+
+        /* Category Name */
+        .category-name {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 15px;
+            font-weight: 700;
+            font-size: 15px;
+        }
+
+        .category-name.sleep { color: #6366F1; }
+        .category-name.work { color: #EF4444; }
+        .category-name.social { color: #F59E0B; }
+        .category-name.food { color: #10B981; }
+        .category-name.exercise { color: #3B82F6; }
+        .category-name.selfcare { color: #EC4899; }
+        .category-name.interests { color: #8B5CF6; }
+        .category-name.misc { color: #6B7280; }
+
+        /* Text Cells */
+        .text-cell {
+            padding: 10px;
+        }
+
+        .text-cell textarea {
+            width: 100%;
+            min-height: 80px;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 12px;
+            font-size: 13px;
+            font-family: inherit;
+            resize: vertical;
+            line-height: 1.5;
+        }
+
+        .text-cell textarea:focus {
+            outline: none;
+            border-color: #E91E78;
+            box-shadow: 0 0 0 3px rgba(233, 30, 120, 0.1);
+        }
+
+        .text-cell textarea::placeholder {
+            color: #aaa;
+        }
+
+        /* Protected Time Cell */
+        .protected-cell {
+            padding: 10px;
+        }
+
+        .protected-cell input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 13px;
+            text-align: center;
+        }
+
+        .protected-cell input:focus {
+            outline: none;
+            border-color: #E91E78;
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            color: #888;
+            margin-top: 30px;
+            font-size: 0.9em;
+        }
+
+        .footer a {
+            color: #E91E78;
+        }
+
+        /* Tips */
+        .tips-section {
+            background: white;
+            border-radius: 16px;
+            padding: 25px;
+            margin-top: 25px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .tips-section h3 {
+            color: #E91E78;
+            margin: 0 0 15px 0;
+        }
+
+        .tips-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+        }
+
+        .tip {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 15px;
+            border-left: 3px solid #E91E78;
+        }
+
+        .tip h4 {
+            color: #333;
+            margin: 0 0 8px 0;
+            font-size: 14px;
+        }
+
+        .tip p {
+            color: #666;
+            font-size: 13px;
+            margin: 0;
+            line-height: 1.5;
+        }
+
+        /* Responsive - Tablet */
+        @media (max-width: 1024px) {
+            .table-header,
+            .category-row {
+                grid-template-columns: 50px 100px 1fr 1fr 150px;
+            }
+
+            .text-cell textarea {
+                min-height: 70px;
+                font-size: 12px;
+            }
+
+            .protected-cell input {
+                font-size: 12px;
+            }
+        }
+
+        /* Responsive - Mobile: Card-based layout */
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+                padding-bottom: 80px; /* Space for sticky footer */
+            }
+
+            h1 { font-size: 22px; }
+
+            .subtitle {
+                font-size: 14px;
+                padding: 0 10px;
+            }
+
+            /* Hide table header on mobile */
+            .table-header {
+                display: none;
+            }
+
+            /* Card layout for categories */
+            .foundations-table {
+                background: transparent;
+                box-shadow: none;
+                display: flex;
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .category-row {
+                display: block;
+                background: white;
+                border-radius: 16px;
+                padding: 0;
+                box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+                border: none;
+                overflow: hidden;
+            }
+
+            .category-row:nth-child(odd),
+            .category-row:nth-child(even) {
+                background: white;
+            }
+
+            /* Category header with colour and name */
+            .colour-cell {
+                display: none;
+            }
+
+            .category-name {
+                display: flex;
+                align-items: center;
+                justify-content: flex-start;
+                padding: 15px 20px;
+                font-size: 18px;
+                font-weight: 700;
+                border-bottom: 2px solid #f0f0f0;
+            }
+
+            .category-name::before {
+                content: '';
+                width: 16px;
+                height: 16px;
+                border-radius: 4px;
+                margin-right: 12px;
+                flex-shrink: 0;
+            }
+
+            /* Colour indicators for each category */
+            .category-name.sleep::before { background: #6366F1; }
+            .category-name.work::before { background: #EF4444; }
+            .category-name.social::before { background: #F59E0B; }
+            .category-name.food::before { background: #10B981; }
+            .category-name.exercise::before { background: #3B82F6; }
+            .category-name.selfcare::before { background: #EC4899; }
+            .category-name.interests::before { background: #8B5CF6; }
+            .category-name.misc::before { background: #6B7280; }
+
+            /* Form fields */
+            .text-cell,
+            .protected-cell {
+                padding: 12px 15px;
+                border-bottom: 1px solid #f5f5f5;
+            }
+
+            .text-cell:last-child,
+            .protected-cell:last-child {
+                border-bottom: none;
+            }
+
+            /* Field labels for mobile */
+            .text-cell::before,
+            .protected-cell::before {
+                display: block;
+                font-size: 11px;
+                font-weight: 600;
+                text-transform: uppercase;
+                letter-spacing: 0.5px;
+                color: #888;
+                margin-bottom: 6px;
+            }
+
+            .category-row .text-cell:nth-of-type(1)::before { content: '📋 Your Rules'; }
+            .category-row .text-cell:nth-of-type(2)::before { content: '🔄 Exceptions'; }
+            .category-row .protected-cell::before { content: '🛡️ Protected Time'; }
+
+            .text-cell textarea {
+                min-height: 80px;
+                font-size: 16px; /* Prevent iOS zoom */
+                padding: 12px;
+                border-radius: 10px;
+                border: 1px solid #e0e0e0;
+                background: #fafafa;
+            }
+
+            .text-cell textarea:focus {
+                background: white;
+                border-color: #E91E78;
+            }
+
+            .protected-cell input {
+                font-size: 16px; /* Prevent iOS zoom */
+                padding: 12px;
+                border-radius: 10px;
+                border: 1px solid #e0e0e0;
+                background: #fafafa;
+                text-align: left;
+            }
+
+            .protected-cell input:focus {
+                background: white;
+                border-color: #E91E78;
+            }
+
+            /* Sticky header actions */
+            .header-actions {
+                position: fixed;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                background: white;
+                padding: 12px 15px;
+                box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+                z-index: 100;
+                flex-direction: row;
+                justify-content: center;
+                gap: 10px;
+                margin-top: 0;
+            }
+
+            .header-actions .btn {
+                flex: 1;
+                max-width: 160px;
+                padding: 12px 15px;
+                font-size: 14px;
+            }
+
+            .save-status {
+                position: fixed;
+                bottom: 70px;
+                left: 50%;
+                transform: translateX(-50%);
+                background: white;
+                padding: 6px 12px;
+                border-radius: 20px;
+                box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+                font-size: 12px;
+                z-index: 101;
+            }
+
+            /* Tips section mobile */
+            .tips-section {
+                padding: 20px 15px;
+                margin-top: 15px;
+                margin-bottom: 80px;
+            }
+
+            .tips-section h3 {
+                font-size: 16px;
+            }
+
+            .tips-grid {
+                grid-template-columns: 1fr;
+                gap: 10px;
+            }
+
+            .tip {
+                padding: 12px;
+            }
+
+            .tip h4 {
+                font-size: 13px;
+            }
+
+            .tip p {
+                font-size: 12px;
+            }
+
+            /* Back link */
+            .back-link {
+                margin-bottom: 10px;
+                font-size: 14px;
+            }
+
+            /* Footer */
+            .footer {
+                margin-bottom: 80px;
+            }
+        }
+
+        /* Extra small screens */
+        @media (max-width: 380px) {
+            h1 { font-size: 20px; }
+
+            .category-name {
+                font-size: 16px;
+                padding: 12px 15px;
+            }
+
+            .text-cell textarea,
+            .protected-cell input {
+                font-size: 16px;
+                padding: 10px;
+            }
+
+            .header-actions .btn {
+                padding: 10px 12px;
+                font-size: 13px;
+            }
+        }
+
+        /* Collapsible categories on mobile */
+        @media (max-width: 768px) {
+            .category-name {
+                cursor: pointer;
+                position: relative;
+            }
+
+            .category-name::after {
+                content: '▼';
+                position: absolute;
+                right: 15px;
+                font-size: 12px;
+                color: #888;
+                transition: transform 0.2s;
+            }
+
+            .category-row.collapsed .category-name::after {
+                transform: rotate(-90deg);
+            }
+
+            .category-row.collapsed .text-cell,
+            .category-row.collapsed .protected-cell {
+                display: none;
+            }
+
+            .expand-all-btn {
+                display: block;
+                width: 100%;
+                padding: 12px;
+                background: #f8f9fa;
+                border: 1px dashed #ddd;
+                border-radius: 10px;
+                color: #666;
+                font-size: 14px;
+                cursor: pointer;
+                margin-bottom: 15px;
+            }
+
+            .expand-all-btn:hover {
+                background: #f0f0f0;
+                border-color: #E91E78;
+                color: #E91E78;
+            }
+        }
+
+        @media (min-width: 769px) {
+            .expand-all-btn {
+                display: none;
+            }
+        }
+
+        /* Print styles */
+        @media print {
+            body {
+                background: white;
+                padding: 0;
+            }
+
+            .back-link, .header-actions, .tips-section {
+                display: none;
+            }
+
+            .foundations-table {
+                box-shadow: none;
+                border: 1px solid #ddd;
+            }
+
+            .category-row {
+                page-break-inside: avoid;
+            }
+        }
+    </style>
+</head>
+<body>
+    <script>
+        function goBackToPortal() {
+            const savedUser = localStorage.getItem('syp_user');
+            if (savedUser) {
+                try {
+                    const user = JSON.parse(savedUser);
+                    const access = user.programme_access || user.programme_type || 'career';
+                    if (access === 'blended' || access === 'career') {
+                        window.location.href = 'client-portal.html';
+                    } else {
+                        window.location.href = 'audhd-dashboard.html';
+                    }
+                    return;
+                } catch(e) {}
+            }
+            window.location.href = 'client-portal.html';
+        }
+    </script>
+    <div class="container">
+        <button class="back-link" onclick="goBackToPortal()" style="background: none; border: none; cursor: pointer; font: inherit; color: inherit; padding: 0;">← Back to Portal</button>
+
+        <header>
+            <h1><span>Laying the Foundations</span> 🏗️</h1>
+            <p class="subtitle">
+                What do you need to get balance on in order to harness your spark? Define your default
+                'rules', plan for flexibility, and protect time for what matters. Use the colour column to
+                create a colour-coding system you can apply to your diary or calendar app!
+            </p>
+            <div class="header-actions">
+                <button class="btn btn-secondary" onclick="saveFoundations()">💾 Save Progress</button>
+                <button class="btn btn-primary" onclick="window.print()">🖨️ Print / Export PDF</button>
+                <span class="save-status" id="saveStatus"></span>
+            </div>
+        </header>
+
+        <!-- Expand/Collapse All Button (mobile only) -->
+        <button class="expand-all-btn" id="expandAllBtn" onclick="toggleAllCategories()">
+            📋 Expand All Categories
+        </button>
+
+        <!-- Foundations Table -->
+        <div class="foundations-table">
+            <div class="table-header">
+                <div>Colour</div>
+                <div>Category</div>
+                <div>
+                    Your rules
+                    <span class="header-hint">(default choices)</span>
+                </div>
+                <div>
+                    Your exceptions
+                    <span class="header-hint">(flexibility factors)</span>
+                </div>
+                <div>
+                    Protected time
+                    <span class="header-hint">(when?)</span>
+                </div>
+            </div>
+
+            <!-- Sleep -->
+            <div class="category-row">
+                <div class="colour-cell">
+                    <input type="color" class="colour-picker" id="colour-sleep" value="#6366F1">
+                </div>
+                <div class="category-name sleep">Sleep</div>
+                <div class="text-cell">
+                    <textarea id="rules-sleep" placeholder="e.g. Put phone in sleep mode from 10pm"></textarea>
+                </div>
+                <div class="text-cell">
+                    <textarea id="exceptions-sleep" placeholder="e.g. Unless it's the weekend"></textarea>
+                </div>
+                <div class="protected-cell">
+                    <input type="text" id="protected-sleep" placeholder="e.g. In bed by 12, up by 8am">
+                </div>
+            </div>
+
+            <!-- Work -->
+            <div class="category-row">
+                <div class="colour-cell">
+                    <input type="color" class="colour-picker" id="colour-work" value="#EF4444">
+                </div>
+                <div class="category-name work">Work</div>
+                <div class="text-cell">
+                    <textarea id="rules-work" placeholder="e.g. No meetings before 10am&#10;Deep work in mornings"></textarea>
+                </div>
+                <div class="text-cell">
+                    <textarea id="exceptions-work" placeholder="e.g. Urgent client calls&#10;Monthly all-hands"></textarea>
+                </div>
+                <div class="protected-cell">
+                    <input type="text" id="protected-work" placeholder="e.g. Focus time 9-12">
+                </div>
+            </div>
+
+            <!-- Social -->
+            <div class="category-row">
+                <div class="colour-cell">
+                    <input type="color" class="colour-picker" id="colour-social" value="#F59E0B">
+                </div>
+                <div class="category-name social">Social</div>
+                <div class="text-cell">
+                    <textarea id="rules-social" placeholder="e.g. Max 2 social events per week&#10;Recovery day after big events"></textarea>
+                </div>
+                <div class="text-cell">
+                    <textarea id="exceptions-social" placeholder="e.g. Family birthdays&#10;Close friend emergencies"></textarea>
+                </div>
+                <div class="protected-cell">
+                    <input type="text" id="protected-social" placeholder="e.g. Sundays = quiet day">
+                </div>
+            </div>
+
+            <!-- Food -->
+            <div class="category-row">
+                <div class="colour-cell">
+                    <input type="color" class="colour-picker" id="colour-food" value="#10B981">
+                </div>
+                <div class="category-name food">Food</div>
+                <div class="text-cell">
+                    <textarea id="rules-food" placeholder="e.g. Meal prep on Sundays&#10;Keep safe foods stocked"></textarea>
+                </div>
+                <div class="text-cell">
+                    <textarea id="exceptions-food" placeholder="e.g. Eating out with friends&#10;Holidays"></textarea>
+                </div>
+                <div class="protected-cell">
+                    <input type="text" id="protected-food" placeholder="e.g. Lunch 12-1pm">
+                </div>
+            </div>
+
+            <!-- Exercise -->
+            <div class="category-row">
+                <div class="colour-cell">
+                    <input type="color" class="colour-picker" id="colour-exercise" value="#3B82F6">
+                </div>
+                <div class="category-name exercise">Exercise</div>
+                <div class="text-cell">
+                    <textarea id="rules-exercise" placeholder="e.g. Walk every morning&#10;Gym 3x per week"></textarea>
+                </div>
+                <div class="text-cell">
+                    <textarea id="exceptions-exercise" placeholder="e.g. Rest when energy < 3&#10;Weather extremes"></textarea>
+                </div>
+                <div class="protected-cell">
+                    <input type="text" id="protected-exercise" placeholder="e.g. 7am daily walk">
+                </div>
+            </div>
+
+            <!-- Self-care -->
+            <div class="category-row">
+                <div class="colour-cell">
+                    <input type="color" class="colour-picker" id="colour-selfcare" value="#EC4899">
+                </div>
+                <div class="category-name selfcare">Self-care</div>
+                <div class="text-cell">
+                    <textarea id="rules-selfcare" placeholder="e.g. Weekly bath night&#10;10 mins quiet time daily"></textarea>
+                </div>
+                <div class="text-cell">
+                    <textarea id="exceptions-selfcare" placeholder="e.g. Skip if truly exhausted&#10;Shorten don't skip"></textarea>
+                </div>
+                <div class="protected-cell">
+                    <input type="text" id="protected-selfcare" placeholder="e.g. Friday evening">
+                </div>
+            </div>
+
+            <!-- Interests -->
+            <div class="category-row">
+                <div class="colour-cell">
+                    <input type="color" class="colour-picker" id="colour-interests" value="#8B5CF6">
+                </div>
+                <div class="category-name interests">Interests</div>
+                <div class="text-cell">
+                    <textarea id="rules-interests" placeholder="e.g. 1 hour gaming allowed daily&#10;Craft time on weekends"></textarea>
+                </div>
+                <div class="text-cell">
+                    <textarea id="exceptions-interests" placeholder="e.g. Hyperfocus okay on weekends&#10;New game releases"></textarea>
+                </div>
+                <div class="protected-cell">
+                    <input type="text" id="protected-interests" placeholder="e.g. Sat afternoon">
+                </div>
+            </div>
+
+            <!-- Misc -->
+            <div class="category-row">
+                <div class="colour-cell">
+                    <input type="color" class="colour-picker" id="colour-misc" value="#6B7280">
+                </div>
+                <div class="category-name misc">Misc</div>
+                <div class="text-cell">
+                    <textarea id="rules-misc" placeholder="e.g. Admin tasks batched Mondays&#10;Laundry every Wednesday"></textarea>
+                </div>
+                <div class="text-cell">
+                    <textarea id="exceptions-misc" placeholder="e.g. Urgent household issues&#10;Visitors coming"></textarea>
+                </div>
+                <div class="protected-cell">
+                    <input type="text" id="protected-misc" placeholder="e.g. Mon 2-4pm">
+                </div>
+            </div>
+        </div>
+
+        <!-- Tips Section -->
+        <div class="tips-section">
+            <h3>💡 Tips for Your Foundations</h3>
+            <div class="tips-grid">
+                <div class="tip">
+                    <h4>Rules provide structure</h4>
+                    <p>Your autistic brain loves knowing what to expect. Rules reduce daily decision fatigue.</p>
+                </div>
+                <div class="tip">
+                    <h4>Exceptions provide flexibility</h4>
+                    <p>Your ADHD brain needs room to breathe. Pre-planned exceptions prevent guilt when life happens.</p>
+                </div>
+                <div class="tip">
+                    <h4>Protected time is sacred</h4>
+                    <p>Block these times in your calendar. They're appointments with yourself that can't be cancelled.</p>
+                </div>
+                <div class="tip">
+                    <h4>Colours sync to your calendar</h4>
+                    <p>Use these same colours in Google Calendar, Outlook, or your planner for visual consistency.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>© Harness the Spark Ltd | <a href="https://harnessthespark.co.uk">harnessthespark.co.uk</a></p>
+        </div>
+    </div>
+
+    <script>
+        // API URL - PostgreSQL backend
+        const API_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+            ? 'http://localhost:8080'
+            : 'https://potential.harnessthespark.com';
+
+        // Categories
+        const categories = ['sleep', 'work', 'social', 'food', 'exercise', 'selfcare', 'interests', 'misc'];
+
+        // Track if data came from PostgreSQL or cache
+        let isLiveData = false;
+
+        // Get user email for API calls
+        function getUserEmail() {
+            const user = localStorage.getItem('syp_user');
+            if (user) {
+                const parsed = JSON.parse(user);
+                return parsed.email || null;
+            }
+            return null;
+        }
+
+        // Get user ID for localStorage key
+        function getUserId() {
+            const user = localStorage.getItem('syp_user');
+            if (user) {
+                return JSON.parse(user).id || 'anonymous';
+            }
+            return 'anonymous';
+        }
+
+        // Populate form with data
+        function populateForm(data) {
+            categories.forEach(cat => {
+                if (data[cat]) {
+                    if (data[cat].colour) document.getElementById('colour-' + cat).value = data[cat].colour;
+                    if (data[cat].rules) document.getElementById('rules-' + cat).value = data[cat].rules;
+                    if (data[cat].exceptions) document.getElementById('exceptions-' + cat).value = data[cat].exceptions;
+                    if (data[cat].protected) document.getElementById('protected-' + cat).value = data[cat].protected;
+                }
+            });
+        }
+
+        // Load saved data - PostgreSQL FIRST, localStorage fallback
+        // If PostgreSQL empty but localStorage has data, SYNC UP to PostgreSQL
+        async function loadFoundations() {
+            const email = getUserEmail();
+            const status = document.getElementById('saveStatus');
+
+            // Try PostgreSQL first
+            if (email) {
+                try {
+                    const response = await fetch(`${API_URL}/api/foundations/${encodeURIComponent(email)}`);
+                    if (response.ok) {
+                        const result = await response.json();
+                        if (result.success && result.data && result.data.data) {
+                            populateForm(result.data.data);
+                            isLiveData = true;
+                            status.textContent = '☁️ Synced';
+                            status.style.color = '#10B981';
+                            console.log('✅ Foundations loaded from PostgreSQL');
+
+                            // Update localStorage cache
+                            localStorage.setItem('foundations_' + getUserId(), JSON.stringify(result.data.data));
+                            return;
+                        } else {
+                            // PostgreSQL has NO data - check if localStorage has data to sync UP
+                            const localData = localStorage.getItem('foundations_' + getUserId());
+                            if (localData) {
+                                const data = JSON.parse(localData);
+                                populateForm(data);
+                                console.log('📤 PostgreSQL empty but localStorage has data - syncing UP...');
+                                status.textContent = '⬆️ Syncing...';
+                                status.style.color = '#3B82F6';
+
+                                // Push localStorage data UP to PostgreSQL
+                                try {
+                                    const syncResponse = await fetch(`${API_URL}/api/foundations`, {
+                                        method: 'POST',
+                                        headers: { 'Content-Type': 'application/json' },
+                                        body: JSON.stringify({
+                                            client_email: email,
+                                            data: data
+                                        })
+                                    });
+
+                                    if (syncResponse.ok) {
+                                        isLiveData = true;
+                                        status.textContent = '☁️ Synced';
+                                        status.style.color = '#10B981';
+                                        console.log('✅ localStorage data synced UP to PostgreSQL');
+                                    } else {
+                                        isLiveData = false;
+                                        status.textContent = '💾 Cached';
+                                        status.style.color = '#F59E0B';
+                                    }
+                                } catch (syncError) {
+                                    console.log('⚠️ Could not sync up:', syncError.message);
+                                    isLiveData = false;
+                                    status.textContent = '💾 Cached';
+                                    status.style.color = '#F59E0B';
+                                }
+                                return;
+                            }
+                        }
+                    }
+                } catch (error) {
+                    console.log('⚠️ Could not load from API, using localStorage:', error.message);
+                }
+            }
+
+            // Fallback to localStorage (no email or API failed)
+            const saved = localStorage.getItem('foundations_' + getUserId());
+            if (saved) {
+                const data = JSON.parse(saved);
+                populateForm(data);
+                isLiveData = false;
+                status.textContent = '💾 Cached';
+                status.style.color = '#F59E0B';
+                console.log('📦 Foundations loaded from localStorage cache');
+            }
+        }
+
+        // Collect form data
+        function collectFormData() {
+            const data = {
+                savedAt: new Date().toISOString()
+            };
+
+            categories.forEach(cat => {
+                data[cat] = {
+                    colour: document.getElementById('colour-' + cat).value,
+                    rules: document.getElementById('rules-' + cat).value,
+                    exceptions: document.getElementById('exceptions-' + cat).value,
+                    protected: document.getElementById('protected-' + cat).value
+                };
+            });
+
+            return data;
+        }
+
+        // Save data - PostgreSQL FIRST, localStorage as cache
+        async function saveFoundations() {
+            const data = collectFormData();
+            const email = getUserEmail();
+            const status = document.getElementById('saveStatus');
+
+            // Always save to localStorage as cache
+            localStorage.setItem('foundations_' + getUserId(), JSON.stringify(data));
+
+            // Try to save to PostgreSQL
+            if (email) {
+                try {
+                    const response = await fetch(`${API_URL}/api/foundations`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            client_email: email,
+                            data: data
+                        })
+                    });
+
+                    if (response.ok) {
+                        isLiveData = true;
+                        status.textContent = '✓ Saved to cloud!';
+                        status.style.color = '#10B981';
+                        console.log('✅ Foundations saved to PostgreSQL');
+                        setTimeout(() => { status.textContent = '☁️ Synced'; }, 2000);
+                        return;
+                    }
+                } catch (error) {
+                    console.log('⚠️ Could not save to API:', error.message);
+                }
+            }
+
+            // API failed or no email - show localStorage save
+            isLiveData = false;
+            status.textContent = '✓ Saved locally';
+            status.style.color = '#F59E0B';
+            setTimeout(() => { status.textContent = '💾 Cached'; }, 2000);
+        }
+
+        // Auto-save with debounce
+        function autoSave() {
+            clearTimeout(window.autoSaveTimeout);
+            window.autoSaveTimeout = setTimeout(saveFoundations, 2000);
+        }
+
+        // Check auth on load
+        function checkAuth() {
+            const savedUser = localStorage.getItem('syp_user');
+            if (!savedUser) {
+                window.location.href = 'login.html';
+                return false;
+            }
+            return true;
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            if (!checkAuth()) return;
+
+            loadFoundations();
+
+            // Add auto-save listeners
+            document.querySelectorAll('textarea, input').forEach(el => {
+                el.addEventListener('input', autoSave);
+                el.addEventListener('change', autoSave);
+            });
+
+            // Setup collapsible categories on mobile
+            setupCollapsibleCategories();
+        });
+
+        // ========== COLLAPSIBLE CATEGORIES FOR MOBILE ==========
+        let allExpanded = true;
+
+        function setupCollapsibleCategories() {
+            // Only setup on mobile
+            if (window.innerWidth > 768) return;
+
+            const categoryNames = document.querySelectorAll('.category-name');
+            categoryNames.forEach(name => {
+                name.addEventListener('click', function(e) {
+                    // Don't collapse if clicking inside an input
+                    if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+
+                    const row = this.closest('.category-row');
+                    row.classList.toggle('collapsed');
+                    updateExpandAllButton();
+                });
+            });
+
+            // Start with all collapsed except first
+            const rows = document.querySelectorAll('.category-row');
+            rows.forEach((row, index) => {
+                if (index > 0) row.classList.add('collapsed');
+            });
+            allExpanded = false;
+            updateExpandAllButton();
+        }
+
+        function toggleAllCategories() {
+            const rows = document.querySelectorAll('.category-row');
+
+            if (allExpanded) {
+                // Collapse all
+                rows.forEach(row => row.classList.add('collapsed'));
+                allExpanded = false;
+            } else {
+                // Expand all
+                rows.forEach(row => row.classList.remove('collapsed'));
+                allExpanded = true;
+            }
+
+            updateExpandAllButton();
+        }
+
+        function updateExpandAllButton() {
+            const btn = document.getElementById('expandAllBtn');
+            const rows = document.querySelectorAll('.category-row');
+            const collapsedCount = document.querySelectorAll('.category-row.collapsed').length;
+
+            allExpanded = collapsedCount === 0;
+
+            if (allExpanded) {
+                btn.textContent = '📋 Collapse All Categories';
+            } else {
+                btn.textContent = '📋 Expand All Categories';
+            }
+        }
+
+        // Re-check on resize
+        window.addEventListener('resize', function() {
+            if (window.innerWidth > 768) {
+                // Remove collapsed states on desktop
+                document.querySelectorAll('.category-row').forEach(row => {
+                    row.classList.remove('collapsed');
+                });
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sarah Mitchell - Discovery Questionnaire Responses</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #1e293b;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container { max-width: 900px; margin: 0 auto; }
+
+        .header {
+            background: linear-gradient(135deg, #7c3aed 0%, #a855f7 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+            border-radius: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(124, 58, 237, 0.3);
+        }
+        .header h1 { font-size: 2em; margin-bottom: 10px; }
+        .header .subtitle { opacity: 0.9; font-size: 1.1em; }
+        .completion-badge {
+            display: inline-block;
+            background: #22c55e;
+            color: white;
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-weight: 600;
+            margin-top: 15px;
+        }
+        .demo-badge {
+            display: inline-block;
+            background: #f59e0b;
+            color: white;
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-weight: 600;
+            margin-left: 10px;
+            font-size: 0.85em;
+        }
+        .timestamp {
+            margin-top: 10px;
+            font-size: 0.85em;
+            opacity: 0.8;
+        }
+
+        .back-link {
+            display: inline-block;
+            color: #a855f7;
+            text-decoration: none;
+            margin-bottom: 20px;
+            font-weight: 500;
+        }
+        .back-link:hover { text-decoration: underline; }
+
+        .section {
+            background: white;
+            border-radius: 16px;
+            padding: 30px;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #e2e8f0;
+        }
+        .section-icon { font-size: 1.5em; }
+        .section-title {
+            font-size: 1.3em;
+            font-weight: 700;
+            color: #1e293b;
+        }
+        .section-status {
+            margin-left: auto;
+            background: #dcfce7;
+            color: #16a34a;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 0.85em;
+            font-weight: 600;
+        }
+
+        .response-card {
+            background: #f8fafc;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 15px;
+            border-left: 4px solid #7c3aed;
+        }
+        .response-label {
+            font-size: 0.85em;
+            color: #64748b;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+        .response-text {
+            color: #1e293b;
+            line-height: 1.7;
+            font-size: 1em;
+            white-space: pre-line;
+        }
+
+        .outcome-grid {
+            display: grid;
+            gap: 15px;
+        }
+        .outcome-item {
+            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+            border-radius: 12px;
+            padding: 20px;
+            border-left: 4px solid #0ea5e9;
+        }
+        .outcome-title {
+            font-weight: 700;
+            color: #0369a1;
+            margin-bottom: 10px;
+        }
+
+        .insight-box {
+            background: linear-gradient(135deg, #faf5ff 0%, #f3e8ff 100%);
+            border-radius: 12px;
+            padding: 25px;
+            border: 2px solid #c084fc;
+            margin: 20px 0;
+        }
+        .insight-box p {
+            font-size: 1.05em;
+            line-height: 1.7;
+            color: #581c87;
+        }
+
+        .thread-box {
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+            border-radius: 12px;
+            padding: 25px;
+            border: 2px solid #f59e0b;
+            margin: 20px 0;
+        }
+        .thread-box p {
+            font-size: 1.05em;
+            line-height: 1.8;
+            color: #92400e;
+        }
+
+        .unlock-box {
+            background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%);
+            border-radius: 12px;
+            padding: 25px;
+            border: 2px solid #10b981;
+            margin: 20px 0;
+        }
+        .unlock-box p {
+            font-size: 1.05em;
+            line-height: 1.8;
+            color: #065f46;
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-top: 20px;
+        }
+        .before-box {
+            background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%);
+            border: 2px solid #ef4444;
+            border-radius: 12px;
+            padding: 20px;
+        }
+        .before-box h4 { color: #dc2626; margin-bottom: 12px; }
+        .after-box {
+            background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+            border: 2px solid #22c55e;
+            border-radius: 12px;
+            padding: 20px;
+        }
+        .after-box h4 { color: #16a34a; margin-bottom: 12px; }
+
+        ul { margin-left: 20px; line-height: 1.8; }
+        li { margin-bottom: 8px; }
+
+        @media (max-width: 768px) {
+            .grid-2 { grid-template-columns: 1fr; }
+            .header { padding: 25px; }
+            .section { padding: 20px; }
+        }
+
+        @media print {
+            body { background: white; padding: 0; }
+            .section { box-shadow: none; border: 1px solid #e2e8f0; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="/dashboard" class="back-link">← Back to Dashboard</a>
+
+        <div class="header">
+            <h1>Discovery Questionnaire</h1>
+            <div class="subtitle">Sarah Mitchell | Career Booster Programme</div>
+            <div class="completion-badge">✓ 100% Completed</div>
+            <span class="demo-badge">Demo Client</span>
+            <div class="timestamp">Submitted: 15 October 2024, 14:30</div>
+        </div>
+
+        <!-- Section 1: Evidence Collection -->
+        <div class="section">
+            <div class="section-header">
+                <span class="section-icon">📊</span>
+                <span class="section-title">The Evidence Collection</span>
+                <span class="section-status">✓ Complete</span>
+            </div>
+            <p style="color: #64748b; margin-bottom: 20px;">Five transformations that reveal your unique pattern of impact:</p>
+
+            <div class="outcome-grid">
+                <div class="outcome-item">
+                    <div class="outcome-title">Outcome #1: Nike EMEA Creative Transformation</div>
+                    <p class="response-text">At Nike EMEA, I transformed 'safe' regional campaigns into award-winning work. The team went from just executing briefs to actually creating. We saw +40% engagement and won three industry awards that year. The creative director said he'd 'given up on this team' before I arrived.
+
+<strong>Impact:</strong> +40% engagement | 3 industry awards | Complete team mindset shift</p>
+                </div>
+
+                <div class="outcome-item">
+                    <div class="outcome-title">Outcome #2: Spotify Team Resurrection</div>
+                    <p class="response-text">At Spotify, I rebuilt the in-house team's confidence after a brutal restructure. Half the team had been laid off, and the survivors were paralysed. I didn't just fix process — I rebuilt belief. We created a new brand platform from scratch that became the global template.
+
+<strong>Impact:</strong> Team retention went up 60% | Platform became global template | Team went from paralysed to pioneering</p>
+                </div>
+
+                <div class="outcome-item">
+                    <div class="outcome-title">Outcome #3: Barclays 12-Market Unification</div>
+                    <p class="response-text">Led the Barclays rebrand across 12 markets. Everyone said it couldn't be done — 12 markets, 12 opinions, zero alignment. I found the thread that connected all of them while making each market feel heard. It was their first joined-up campaign in 5 years.
+
+<strong>Challenge:</strong> 12 markets, 12 opinions, zero alignment
+<strong>Impact:</strong> First joined-up campaign in 5 years | All markets aligned without feeling homogenised</p>
+                </div>
+
+                <div class="outcome-item">
+                    <div class="outcome-title">Outcome #4: The 48-Hour Pitch Rescue</div>
+                    <p class="response-text">Rescued a failing pitch for a major automotive client. The team had lost confidence after two rounds of bad feedback. I came in with 48 hours to go, helped them find the story they'd buried, and we won the account.
+
+<strong>Impact:</strong> £4M annual revenue won | Team confidence restored | Story they already had, finally seen</p>
+                </div>
+
+                <div class="outcome-item">
+                    <div class="outcome-title">Outcome #5: The Creative Development Programme</div>
+                    <p class="response-text">Built a creative development programme at my last agency that's still running three years later. Started because I noticed junior creatives losing their spark within 18 months. Now it's their main retention tool.
+
+<strong>Impact:</strong> Programme still running 3 years later | Now the agency's main retention tool | Sparked a culture shift in how they nurture talent</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 2: The Thread -->
+        <div class="section">
+            <div class="section-header">
+                <span class="section-icon">🧵</span>
+                <span class="section-title">The Thread</span>
+                <span class="section-status">✓ Complete</span>
+            </div>
+
+            <div class="thread-box">
+                <p><strong>"Connecting creativity with commercial reality — I see the spark in teams that others have written off, and I know how to fan it into something that actually ships."</strong></p>
+
+                <p style="margin-top: 20px;">I think what makes it work is that I genuinely believe in people's potential before they do. I've always been drawn to the underdog projects, the 'difficult' teams, the briefs everyone else passed on. And somehow, those are the ones that end up winning awards.</p>
+
+                <p style="margin-top: 20px;"><strong>My thread is unlocking belief.</strong> I go deep, find the creative truth that's been buried, and then rally the team to bring it to life. I don't stop at the idea. I stay until it's embedded, and the team believes in it as much as I do.</p>
+
+                <p style="margin-top: 20px; font-style: italic;">"I don't just run campaigns. I unlock creative potential in clients and internal teams that have forgotten what they're capable of."</p>
+            </div>
+        </div>
+
+        <!-- Section 3: The Unlock Moment -->
+        <div class="section">
+            <div class="section-header">
+                <span class="section-icon">🔓</span>
+                <span class="section-title">The Unlock Moment</span>
+                <span class="section-status">✓ Complete</span>
+            </div>
+
+            <div class="unlock-box">
+                <p><strong>The Nike Creative Director Story:</strong></p>
+
+                <p style="margin-top: 15px;">The EMEA team had been stuck for 18 months — producing work they weren't proud of, feeling disconnected from the brand's soul. They'd become an 'adaptation market,' just localising global work.</p>
+
+                <p style="margin-top: 15px;">I spent the first month just listening. Not fixing, not suggesting — listening. I asked: 'When was the last time you made something you were genuinely proud of?' The room went quiet.</p>
+
+                <p style="margin-top: 15px;"><strong>Then came the shift.</strong> It wasn't dramatic. It was quiet. Someone finally said what they'd been afraid to say: "We've forgotten who we are."</p>
+
+                <p style="margin-top: 15px;">After 6 months working together, their Creative Director said: <em>"You didn't just fix our process — you reminded us who we are."</em></p>
+
+                <p style="margin-top: 15px; font-style: italic;">That's when I knew my work isn't about strategy. <strong>It's about belief.</strong></p>
+            </div>
+        </div>
+
+        <!-- Section 4: Instinct Radar -->
+        <div class="section">
+            <div class="section-header">
+                <span class="section-icon">🎯</span>
+                <span class="section-title">The Instinct Radar</span>
+                <span class="section-status">✓ Complete</span>
+            </div>
+
+            <div class="response-card">
+                <div class="response-label">When You Knew Before You Knew</div>
+                <p class="response-text">I can walk into a room and know within 5 minutes whether a team believes in what they're pitching. It's not about the slides or the words — it's something in the energy. And I can usually tell who's the one holding the real idea, even if they're not talking.</p>
+            </div>
+
+            <div class="response-card">
+                <div class="response-label">What You Notice That Others Miss</div>
+                <p class="response-text">Body language shifts when people talk about work they actually care about. The moment someone's eyes light up versus when they're just performing enthusiasm. Who's protecting whom in the room. The idea that got mentioned once and then buried.</p>
+            </div>
+
+            <div class="response-card">
+                <div class="response-label">Questions Only You Ask</div>
+                <p class="response-text">1. What would you make if no one was watching?
+2. What's the version of this you're secretly proud of but afraid to show?
+3. When was the last time this team surprised themselves?</p>
+            </div>
+        </div>
+
+        <!-- Section 5: Effortless Abilities -->
+        <div class="section">
+            <div class="section-header">
+                <span class="section-icon">⚡</span>
+                <span class="section-title">The Effortless Ability</span>
+                <span class="section-status">✓ Complete</span>
+            </div>
+
+            <div class="response-card">
+                <div class="response-label">What Feels Easy</div>
+                <p class="response-text"><strong>Reading a room</strong>
+Knowing what's really going on beneath the surface. Sensing the energy, the politics, the buried potential.
+
+<strong>Getting people to share the idea they were afraid to mention</strong>
+Creating safety for vulnerability. People tell me things they wouldn't say in the room.
+
+<strong>Finding the thread that connects seemingly unrelated projects</strong>
+Pattern recognition across chaos. I see the story before others do.
+
+<strong>Turning a scattered brainstorm into a clear story in real time</strong>
+Synthesising on the fly. I can take a messy room and give it shape before anyone's left.</p>
+            </div>
+
+            <div class="response-card">
+                <div class="response-label">"Of Course" Moments</div>
+                <p class="response-text"><strong>"Of course — it's not about the campaign, it's about the team's belief in themselves."</strong>
+Every stuck creative team I've worked with wasn't missing ideas. They were missing permission to believe in their ideas.
+
+<strong>"Of course — the best ideas are always hiding in plain sight, someone just needs to notice them."</strong>
+The breakthrough is usually already in the room. My job is to hear it when no one else does.
+
+<strong>"Of course — you can't unlock creativity without first unlocking trust."</strong>
+Trust precedes creativity. Every time. No trust, no risk. No risk, no magic.</p>
+            </div>
+        </div>
+
+        <!-- Section 6: Transformation Mirror -->
+        <div class="section">
+            <div class="section-header">
+                <span class="section-icon">🔄</span>
+                <span class="section-title">The Transformation Mirror</span>
+                <span class="section-status">✓ Complete</span>
+            </div>
+
+            <p style="color: #64748b; margin-bottom: 15px;">The transformation I enable in teams:</p>
+
+            <div class="grid-2">
+                <div class="before-box">
+                    <h4>❌ Client Before</h4>
+                    <p class="response-text" style="color: #991b1b;">Stuck teams that have lost confidence.
+
+Brilliant people producing mediocre work because they've forgotten what they're capable of.
+
+Creative departments that have become execution factories.
+
+Organisations where politics has strangled the craft.
+
+Teams saying: "We've tried everything."</p>
+                </div>
+                <div class="after-box">
+                    <h4>✅ Client After</h4>
+                    <p class="response-text" style="color: #166534;">Teams that surprise themselves with what they can produce.
+
+Creative confidence that sticks — not just for one project, but permanently.
+
+Award-winning work from people who'd been written off.
+
+Retention rates that make HR actually smile.
+
+Teams saying: "We didn't know we could do that."</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 7: What Finds You -->
+        <div class="section">
+            <div class="section-header">
+                <span class="section-icon">🧲</span>
+                <span class="section-title">What Finds You</span>
+                <span class="section-status">✓ Complete</span>
+            </div>
+
+            <div class="response-card">
+                <div class="response-label">Problem Magnet</div>
+                <p class="response-text">I attract the 'difficult' briefs — the ones with political complexity, the teams everyone else has given up on, the turnaround situations. People bring me in when they've tried everything else and nothing's worked.
+
+Usually turns out the problem isn't the team at all.
+
+<strong>The Problems They Bring:</strong>
+• Creative paralysis: "We've lost our edge — everything we make feels safe."
+• Team disconnection: "The creatives and the strategists aren't speaking the same language."
+• Ambition gap: "We know we can do better but we can't articulate what 'better' looks like."
+• Execution fatigue: "We're just making stuff, not making things we're proud of."
+
+They may call it a process problem or a brief problem, but what they're really bringing me is a <strong>belief problem</strong>.</p>
+            </div>
+
+            <div class="response-card">
+                <div class="response-label">How Others See You</div>
+                <p class="response-text">The person who sees potential others miss. Calm in chaos. Someone who makes people feel capable again.
+
+Annoyingly optimistic about 'impossible' situations, and annoyingly often right.
+
+People say I have this ability to make them feel like they can do things they thought were beyond them. I don't tell them they're great — I help them remember they already were.</p>
+            </div>
+        </div>
+
+        <!-- Section 8: Recognition -->
+        <div class="section">
+            <div class="section-header">
+                <span class="section-icon">✨</span>
+                <span class="section-title">The Recognition</span>
+                <span class="section-status">✓ Complete</span>
+            </div>
+
+            <div class="insight-box">
+                <p><strong>Underestimated Ability:</strong> How quickly I can build trust with sceptical people. I think others see the outcomes but not how fast the shift happens. The Nike team went from hostile to collaborative in 3 weeks. That's not process — that's something else.</p>
+
+                <p style="margin-top: 20px;"><strong>Pattern Recognised:</strong> Creative Catalyst — I don't just run campaigns, I unlock creative potential in clients and internal teams that have forgotten what they're capable of.</p>
+
+                <p style="margin-top: 20px;"><strong>Transformation I Enable:</strong> From stuck to surprising themselves. From executing to creating. From political to collaborative. From 'we've tried everything' to 'we didn't know we could do that'.</p>
+
+                <p style="margin-top: 20px;"><strong>Permission I'm Giving Myself:</strong> I'm giving myself permission to stop hiding behind 'strategy' and own that what I actually do is unlock belief. I'm a creative catalyst, not a process person with creative tendencies.</p>
+            </div>
+        </div>
+
+        <!-- Summary Box -->
+        <div class="section" style="background: linear-gradient(135deg, #7c3aed 0%, #a855f7 100%); color: white;">
+            <h3 style="margin-bottom: 20px; font-size: 1.3em;">✨ Core Pattern Discovered</h3>
+            <p style="font-size: 1.2em; line-height: 1.8; font-weight: 600;">
+                "You don't run campaigns. You unlock creative potential in teams that have forgotten what they're capable of."
+            </p>
+            <p style="font-size: 1.05em; line-height: 1.8; margin-top: 15px;">
+                Across every transformation you've led — Nike, Spotify, Barclays — you don't fix processes. You restore belief. Teams arrive stuck and paralysed; you find the creative truth that's been buried, and they don't just get a campaign — they get their spark back.
+            </p>
+            <p style="font-size: 1.05em; line-height: 1.8; margin-top: 15px; font-style: italic;">
+                This is creative catalysis, not campaign management.
+            </p>
+        </div>
+
+        <div style="text-align: center; padding: 30px; color: #94a3b8; font-size: 0.9em;">
+            <p>Discovery Questionnaire | Spark Your Potential</p>
+            <p style="margin-top: 5px;">harnessthespark.com</p>
+        </div>
+    </div>
+</body>
+</html>

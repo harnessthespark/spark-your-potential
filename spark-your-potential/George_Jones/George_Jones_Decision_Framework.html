@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Decision Framework - George Jones</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%); min-height: 100vh; padding: 40px; color: #333; }
+        .container { max-width: 900px; margin: 0 auto; }
+
+        .header { text-align: center; margin-bottom: 40px; color: white; }
+        .header h1 { font-size: 2.5em; font-weight: 800; margin-bottom: 10px; }
+        .header .subtitle { font-size: 1.2em; opacity: 0.8; }
+        .header .name { font-size: 1.5em; color: #FFB627; margin-top: 15px; font-weight: 600; }
+        .header .demo-badge { display: inline-block; background: #667eea; color: white; padding: 5px 15px; border-radius: 20px; font-size: 0.9em; margin-top: 10px; }
+
+        .section { background: white; border-radius: 20px; padding: 35px; margin-bottom: 25px; box-shadow: 0 10px 40px rgba(0,0,0,0.2); }
+        .section-icon { font-size: 2em; margin-bottom: 15px; }
+        .section-title { font-size: 1.4em; font-weight: 700; color: #667eea; margin-bottom: 20px; padding-bottom: 15px; border-bottom: 3px solid #667eea; }
+
+        .thread-reminder { background: linear-gradient(135deg, #FF6B3515 0%, #FFB62715 100%); border-left: 5px solid #FF6B35; padding: 20px; border-radius: 0 15px 15px 0; margin-bottom: 30px; }
+        .thread-label { font-size: 0.85em; font-weight: 700; color: #FF6B35; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
+        .thread-text { font-size: 1.1em; line-height: 1.6; color: #2c3e50; }
+
+        .decision-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; margin-bottom: 30px; }
+        .decision-card { padding: 20px; border-radius: 15px; border: 2px solid #e0e0e0; }
+        .decision-card.green { background: #e5ffe5; border-color: #4CAF50; }
+        .decision-card.red { background: #ffe5e5; border-color: #E63946; }
+        .decision-icon { font-size: 2em; margin-bottom: 10px; }
+        .decision-title { font-weight: 700; font-size: 1.1em; margin-bottom: 8px; }
+        .decision-card.green .decision-title { color: #4CAF50; }
+        .decision-card.red .decision-title { color: #E63946; }
+        .decision-desc { font-size: 0.95em; color: #555; line-height: 1.6; }
+
+        .scoring-table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        .scoring-table th { background: #667eea; color: white; padding: 15px; text-align: left; font-weight: 600; }
+        .scoring-table td { padding: 15px; border-bottom: 1px solid #eee; }
+        .scoring-table tr:last-child td { border-bottom: none; }
+        .scoring-table .criteria { font-weight: 600; color: #2c3e50; }
+        .scoring-table .weight { color: #667eea; font-weight: 600; text-align: center; }
+        .score-input { width: 60px; padding: 8px; border: 2px solid #e0e0e0; border-radius: 8px; text-align: center; font-size: 1em; font-weight: 600; }
+        .score-input:focus { outline: none; border-color: #667eea; }
+
+        .opportunity-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; margin-top: 25px; }
+        .opportunity-card { background: #f8f9fa; border-radius: 15px; padding: 25px; border: 2px solid #e0e0e0; position: relative; }
+        .opportunity-card.exploring { border-color: #FFB627; }
+        .opportunity-card.strong { border-color: #4CAF50; }
+        .opportunity-status { position: absolute; top: 15px; right: 15px; padding: 5px 12px; border-radius: 20px; font-size: 0.8em; font-weight: 600; }
+        .opportunity-status.exploring { background: #fff3e0; color: #d4a006; }
+        .opportunity-status.strong { background: #e8f5e9; color: #4CAF50; }
+        .opportunity-title { font-weight: 700; font-size: 1.2em; color: #2c3e50; margin-bottom: 5px; }
+        .opportunity-company { color: #667eea; font-weight: 600; margin-bottom: 15px; }
+        .opportunity-scores { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 15px; }
+        .score-item { text-align: center; padding: 12px; background: white; border-radius: 10px; }
+        .score-value { font-size: 1.5em; font-weight: 700; color: #667eea; }
+        .score-label { font-size: 0.75em; color: #666; text-transform: uppercase; letter-spacing: 0.5px; }
+        .opportunity-notes { margin-top: 15px; padding-top: 15px; border-top: 1px solid #e0e0e0; }
+        .notes-title { font-size: 0.85em; font-weight: 600; color: #667eea; margin-bottom: 8px; }
+        .notes-text { font-size: 0.9em; color: #555; line-height: 1.6; }
+
+        .questions-list { margin-top: 20px; }
+        .question-item { display: flex; align-items: flex-start; gap: 15px; padding: 15px; background: #f8f9fa; border-radius: 10px; margin-bottom: 10px; }
+        .question-number { width: 30px; height: 30px; background: #667eea; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; flex-shrink: 0; }
+        .question-text { font-size: 0.95em; color: #2c3e50; line-height: 1.6; }
+
+        .footer { text-align: center; color: white; opacity: 0.6; margin-top: 40px; font-size: 0.9em; }
+
+        @media (max-width: 768px) {
+            .decision-grid { grid-template-columns: 1fr; }
+            .opportunity-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Decision Framework</h1>
+            <div class="subtitle">Evaluating opportunities through your lens</div>
+            <div class="name">George Jones</div>
+            <div class="demo-badge">Demo Client</div>
+        </div>
+
+        <!-- Thread Reminder -->
+        <div class="section">
+            <div class="section-icon">&#128231;</div>
+            <div class="section-title">Your Decision Filter</div>
+            <div class="thread-reminder">
+                <div class="thread-label">Remember Your Thread</div>
+                <div class="thread-text">
+                    I build <strong>infrastructure that enables others to succeed</strong> - reliable, scalable systems that become the foundation teams depend on.
+                </div>
+            </div>
+            <p style="color: #666; line-height: 1.7;">
+                Use this framework when evaluating any opportunity. The best roles will score highly across all criteria - if something scores low on multiple dimensions, that's valuable information.
+            </p>
+        </div>
+
+        <!-- Green/Red Flags Quick Check -->
+        <div class="section">
+            <div class="section-icon">&#128678;</div>
+            <div class="section-title">Quick Flag Check</div>
+            <div class="decision-grid">
+                <div class="decision-card green">
+                    <div class="decision-icon">&#9989;</div>
+                    <div class="decision-title">Green Flags</div>
+                    <div class="decision-desc">
+                        <strong>Platform engineering investment</strong> - building for developers<br>
+                        <strong>Blameless postmortems</strong> - learning from incidents<br>
+                        <strong>Infrastructure as product</strong> - internal customers matter<br>
+                        <strong>SRE practices</strong> - error budgets, SLOs, observability<br>
+                        <strong>Team leadership</strong> - building and growing engineers
+                    </div>
+                </div>
+                <div class="decision-card red">
+                    <div class="decision-icon">&#10060;</div>
+                    <div class="decision-title">Red Flags</div>
+                    <div class="decision-desc">
+                        <strong>"Keep the lights on" only</strong> - no investment in improvement<br>
+                        <strong>Blame culture</strong> - outages become witch hunts<br>
+                        <strong>No automation budget</strong> - manual toil forever<br>
+                        <strong>Shadow IT everywhere</strong> - no platform strategy<br>
+                        <strong>Cost centre mindset</strong> - infra seen as expense not enabler
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Scoring Framework -->
+        <div class="section">
+            <div class="section-icon">&#128200;</div>
+            <div class="section-title">Opportunity Scoring</div>
+            <p style="margin-bottom: 20px; color: #666;">Score each opportunity 1-10 on these criteria. Weight indicates importance based on your thread and patterns.</p>
+            <table class="scoring-table">
+                <thead>
+                    <tr>
+                        <th>Criteria</th>
+                        <th style="width: 100px; text-align: center;">Weight</th>
+                        <th style="width: 100px; text-align: center;">Score (1-10)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="criteria">Platform Investment<br><span style="font-weight: normal; color: #666; font-size: 0.85em;">Is there budget and exec support for platform engineering?</span></td>
+                        <td class="weight">3x</td>
+                        <td><input type="number" class="score-input" min="1" max="10" placeholder="-"></td>
+                    </tr>
+                    <tr>
+                        <td class="criteria">Team Leadership<br><span style="font-weight: normal; color: #666; font-size: 0.85em;">Can I build, lead, and grow a team of infrastructure engineers?</span></td>
+                        <td class="weight">3x</td>
+                        <td><input type="number" class="score-input" min="1" max="10" placeholder="-"></td>
+                    </tr>
+                    <tr>
+                        <td class="criteria">Modern Practices<br><span style="font-weight: normal; color: #666; font-size: 0.85em;">Is there appetite for SRE, IaC, and cloud-native approaches?</span></td>
+                        <td class="weight">2x</td>
+                        <td><input type="number" class="score-input" min="1" max="10" placeholder="-"></td>
+                    </tr>
+                    <tr>
+                        <td class="criteria">Engineering Culture<br><span style="font-weight: normal; color: #666; font-size: 0.85em;">Blameless postmortems or blame culture? Learning or punishing?</span></td>
+                        <td class="weight">2x</td>
+                        <td><input type="number" class="score-input" min="1" max="10" placeholder="-"></td>
+                    </tr>
+                    <tr>
+                        <td class="criteria">Technical Challenge<br><span style="font-weight: normal; color: #666; font-size: 0.85em;">Scale, complexity, modern technology stack?</span></td>
+                        <td class="weight">2x</td>
+                        <td><input type="number" class="score-input" min="1" max="10" placeholder="-"></td>
+                    </tr>
+                    <tr>
+                        <td class="criteria">On-Call Balance<br><span style="font-weight: normal; color: #666; font-size: 0.85em;">Reasonable rotation or always firefighting?</span></td>
+                        <td class="weight">2x</td>
+                        <td><input type="number" class="score-input" min="1" max="10" placeholder="-"></td>
+                    </tr>
+                    <tr>
+                        <td class="criteria">Compensation &amp; Growth<br><span style="font-weight: normal; color: #666; font-size: 0.85em;">Fair package, training budget, career progression?</span></td>
+                        <td class="weight">1x</td>
+                        <td><input type="number" class="score-input" min="1" max="10" placeholder="-"></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Current Opportunities -->
+        <div class="section">
+            <div class="section-icon">&#128161;</div>
+            <div class="section-title">Current Opportunities Under Review</div>
+            <div class="opportunity-grid">
+                <div class="opportunity-card exploring">
+                    <div class="opportunity-status exploring">Exploring</div>
+                    <div class="opportunity-title">Head of Platform Engineering</div>
+                    <div class="opportunity-company">FinTech Scale-Up</div>
+                    <div class="opportunity-scores">
+                        <div class="score-item">
+                            <div class="score-value">9</div>
+                            <div class="score-label">Platform</div>
+                        </div>
+                        <div class="score-item">
+                            <div class="score-value">8</div>
+                            <div class="score-label">Team</div>
+                        </div>
+                        <div class="score-item">
+                            <div class="score-value">7</div>
+                            <div class="score-label">Culture</div>
+                        </div>
+                    </div>
+                    <div class="opportunity-notes">
+                        <div class="notes-title">What excites me</div>
+                        <div class="notes-text">Building platform team from scratch. Greenfield Kubernetes. Direct line to CTO. Series B funding means real investment.</div>
+                    </div>
+                    <div class="opportunity-notes">
+                        <div class="notes-title">What concerns me</div>
+                        <div class="notes-text">Small team - will I be doing too much hands-on at first? On-call expectations unclear. Startup pace could mean cutting corners.</div>
+                    </div>
+                </div>
+
+                <div class="opportunity-card strong">
+                    <div class="opportunity-status strong">Strong Fit</div>
+                    <div class="opportunity-title">Director of Infrastructure</div>
+                    <div class="opportunity-company">Global E-Commerce Company</div>
+                    <div class="opportunity-scores">
+                        <div class="score-item">
+                            <div class="score-value">8</div>
+                            <div class="score-label">Platform</div>
+                        </div>
+                        <div class="score-item">
+                            <div class="score-value">10</div>
+                            <div class="score-label">Team</div>
+                        </div>
+                        <div class="score-item">
+                            <div class="score-value">9</div>
+                            <div class="score-label">Culture</div>
+                        </div>
+                    </div>
+                    <div class="opportunity-notes">
+                        <div class="notes-title">What excites me</div>
+                        <div class="notes-text">Team of 25 across 3 time zones. Mature SRE practices. Proper error budgets. Known for great engineering culture. Multi-cloud at scale.</div>
+                    </div>
+                    <div class="opportunity-notes">
+                        <div class="notes-title">What concerns me</div>
+                        <div class="notes-text">Less greenfield - inheriting existing systems. Will there be room to make my mark? Bureaucracy at larger company?</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Key Questions -->
+        <div class="section">
+            <div class="section-icon">&#10067;</div>
+            <div class="section-title">Key Questions to Ask</div>
+            <p style="margin-bottom: 20px; color: #666;">Ask these in every interview to uncover red flags and green flags:</p>
+            <div class="questions-list">
+                <div class="question-item">
+                    <div class="question-number">1</div>
+                    <div class="question-text"><strong>What happened in your last major outage?</strong> Listen for blameless postmortems or finger-pointing. This reveals culture better than any values statement.</div>
+                </div>
+                <div class="question-item">
+                    <div class="question-number">2</div>
+                    <div class="question-text"><strong>What's your on-call setup and rotation?</strong> Sustainable or always firefighting? Do people get properly compensated? This reveals operational maturity.</div>
+                </div>
+                <div class="question-item">
+                    <div class="question-number">3</div>
+                    <div class="question-text"><strong>How do developers deploy to production?</strong> Self-service platform or tickets to ops? This reveals platform engineering investment.</div>
+                </div>
+                <div class="question-item">
+                    <div class="question-number">4</div>
+                    <div class="question-text"><strong>What's your infrastructure automation story?</strong> Terraform everywhere or click-ops? This reveals technical maturity.</div>
+                </div>
+                <div class="question-item">
+                    <div class="question-number">5</div>
+                    <div class="question-text"><strong>What happened to the last person in this role?</strong> Promoted, burned out, or left frustrated? This reveals the reality of the role.</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>Decision Framework by Harness the Spark | harnessthespark.co.uk</p>
+            <p style="margin-top: 5px;">Demo Client - Session 2 of 4</p>
+        </div>
+    </div>
+<script src="../shared/back-button.js"></script>
+</body>
+</html>

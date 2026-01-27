@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>[CLIENT_NAME] - Career Blueprint</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; line-height: 1.6; color: #2c3e50; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 40px 20px; }
+        .container { max-width: 1000px; margin: 0 auto; background: white; border-radius: 20px; box-shadow: 0 20px 60px rgba(0,0,0,0.3); overflow: hidden; }
+        .header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 60px 40px; text-align: center; }
+        .header h1 { font-size: 2.8em; font-weight: 700; margin-bottom: 10px; }
+        .header .subtitle { font-size: 1.3em; opacity: 0.9; font-weight: 300; }
+        .progress-tracker { background: white; padding: 30px 40px; border-bottom: 2px solid #f0f0f0; }
+        .progress-tracker h3 { color: #667eea; margin-bottom: 20px; text-align: center; }
+        .progress-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; }
+        .progress-item { text-align: center; padding: 15px; border-radius: 10px; border: 2px solid #e0e0e0; }
+        .progress-item.complete { background: linear-gradient(135deg, #4caf5015 0%, #8bc34a15 100%); border-color: #4caf50; }
+        .progress-item.in-progress { background: linear-gradient(135deg, #ffc10715 0%, #ff980015 100%); border-color: #ffc107; }
+        .progress-item.locked { opacity: 0.5; }
+        .progress-icon { font-size: 2em; margin-bottom: 8px; }
+        .progress-label { font-size: 0.9em; font-weight: 600; color: #2c3e50; }
+        .progress-status { font-size: 0.8em; margin-top: 5px; opacity: 0.7; }
+        .content { padding: 50px 40px; }
+        .section { margin-bottom: 50px; page-break-inside: avoid; }
+        .section-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
+        .section-title { font-size: 1.8em; font-weight: 700; color: #667eea; display: flex; align-items: center; gap: 10px; }
+        .week-badge { background: #667eea; color: white; padding: 5px 15px; border-radius: 20px; font-size: 0.6em; font-weight: 600; }
+        .week-badge.complete { background: #4caf50; }
+        .week-badge.locked { background: #999; }
+        .section-divider { border-bottom: 3px solid #667eea; padding-bottom: 10px; margin-bottom: 25px; }
+        .insight-box { background: linear-gradient(135deg, #667eea15 0%, #764ba215 100%); padding: 30px; border-radius: 15px; border-left: 5px solid #667eea; margin: 20px 0; }
+        .outcome { background: #f8f9fa; padding: 20px; border-radius: 10px; margin-bottom: 15px; border-left: 4px solid #667eea; }
+        .outcome-title { font-weight: 600; color: #667eea; margin-bottom: 8px; }
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 25px; }
+        .green-box { background: linear-gradient(135deg, #4caf5015 0%, #8bc34a15 100%); border: 2px solid #4caf50; border-radius: 10px; padding: 20px; }
+        .red-box { background: linear-gradient(135deg, #ff980015 0%, #ff572215 100%); border: 2px solid #ff5722; border-radius: 10px; padding: 20px; }
+        .editable { border: 2px dashed #667eea; padding: 15px; border-radius: 8px; min-height: 100px; background: #fafafa; }
+        .editable:hover { background: #f0f0ff; }
+        .editable:focus { outline: none; background: white; border-style: solid; }
+        .placeholder { color: #999; font-style: italic; }
+        @media (max-width: 768px) { .progress-grid { grid-template-columns: repeat(2, 1fr); } .grid-2 { grid-template-columns: 1fr; } .content { padding: 30px 20px; } }
+        @media print { body { background: white; padding: 0; } .container { box-shadow: none; } .editable { border: 1px solid #ddd; } }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Career Blueprint</h1>
+            <div class="subtitle">[CLIENT_NAME] | 4-Week Programme</div>
+            <div style="font-size: 0.9em; margin-top: 15px; opacity: 0.8;">Career Booster Programme with Lisa Gills</div>
+        </div>
+
+        <!-- PROGRESS TRACKER -->
+        <div class="progress-tracker">
+            <h3>Your Progress</h3>
+            <div class="progress-grid">
+                <div class="progress-item in-progress" id="week1-progress">
+                    <div class="progress-icon">🌱</div>
+                    <div class="progress-label">Week 1</div>
+                    <div class="progress-status">Foundation</div>
+                </div>
+                <div class="progress-item locked" id="week2-progress">
+                    <div class="progress-icon">🔒</div>
+                    <div class="progress-label">Week 2</div>
+                    <div class="progress-status">Direction</div>
+                </div>
+                <div class="progress-item locked" id="week3-progress">
+                    <div class="progress-icon">🔒</div>
+                    <div class="progress-label">Week 3</div>
+                    <div class="progress-status">Positioning</div>
+                </div>
+                <div class="progress-item locked" id="week4-progress">
+                    <div class="progress-icon">🔒</div>
+                    <div class="progress-label">Week 4</div>
+                    <div class="progress-status">Implementation</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="content">
+            <!-- INTRO BOX -->
+            <div style="background: linear-gradient(135deg, #667eea15 0%, #764ba215 100%); padding: 30px; border-radius: 15px; margin-bottom: 50px;">
+                <h3 style="color: #667eea; margin-bottom: 15px;">Your Career Blueprint</h3>
+                <p>This document will capture everything we discover together over 4 weeks. By the end, you'll have your complete reference guide for career decisions, CV updates, interview preparation, and ongoing career development.</p>
+                <p style="margin-top: 15px;"><strong>Use it to:</strong> Evaluate opportunities against your patterns, craft positioning for specific roles, and remind yourself what you actually bring to the table.</p>
+            </div>
+
+            <!-- WEEK 1: FOUNDATION -->
+            <div class="section" id="week1-section">
+                <div class="section-header">
+                    <div class="section-title">
+                        <span>Week 1: Foundation</span>
+                        <span class="week-badge" id="week1-badge">In Progress</span>
+                    </div>
+                </div>
+                <div class="section-divider"></div>
+
+                <h3 style="color: #764ba2; margin-bottom: 15px;">Your Core Pattern</h3>
+                <div class="insight-box">
+                    <div class="editable" contenteditable="true" id="core-pattern">
+                        <span class="placeholder">What's the pattern that emerges across your career? What do you consistently do that creates impact?</span>
+                    </div>
+                </div>
+
+                <h3 style="color: #764ba2; margin: 25px 0 15px 0;">Your Evidence Collection</h3>
+                <p style="margin-bottom: 15px; color: #7f8c8d;">Five transformations that reveal your unique pattern of impact:</p>
+
+                <div class="outcome">
+                    <div class="outcome-title">Outcome #1</div>
+                    <div class="editable" contenteditable="true" id="outcome-1">
+                        <span class="placeholder">Describe a key achievement - what was the challenge, what did you do, what was the result?</span>
+                    </div>
+                </div>
+
+                <div class="outcome">
+                    <div class="outcome-title">Outcome #2</div>
+                    <div class="editable" contenteditable="true" id="outcome-2">
+                        <span class="placeholder">Another key achievement...</span>
+                    </div>
+                </div>
+
+                <div class="outcome">
+                    <div class="outcome-title">Outcome #3</div>
+                    <div class="editable" contenteditable="true" id="outcome-3">
+                        <span class="placeholder">Another key achievement...</span>
+                    </div>
+                </div>
+
+                <div class="outcome">
+                    <div class="outcome-title">Outcome #4</div>
+                    <div class="editable" contenteditable="true" id="outcome-4">
+                        <span class="placeholder">Another key achievement...</span>
+                    </div>
+                </div>
+
+                <div class="outcome">
+                    <div class="outcome-title">Outcome #5</div>
+                    <div class="editable" contenteditable="true" id="outcome-5">
+                        <span class="placeholder">Another key achievement...</span>
+                    </div>
+                </div>
+
+                <h3 style="color: #764ba2; margin: 25px 0 15px 0;">Your Thread</h3>
+                <div class="insight-box">
+                    <div class="editable" contenteditable="true" id="thread">
+                        <span class="placeholder">What's the common thread that connects all your outcomes? What ability have you been underestimating?</span>
+                    </div>
+                </div>
+
+                <h3 style="color: #764ba2; margin: 25px 0 15px 0;">Your Recognition</h3>
+                <div class="insight-box">
+                    <p><strong>The ability I've been underestimating:</strong></p>
+                    <div class="editable" contenteditable="true" id="ability" style="margin: 10px 0;">
+                        <span class="placeholder">What do you do so naturally you don't even see it as special?</span>
+                    </div>
+                    <p style="margin-top: 15px;"><strong>The pattern I now see:</strong></p>
+                    <div class="editable" contenteditable="true" id="pattern-recognition" style="margin: 10px 0;">
+                        <span class="placeholder">Looking across your evidence, what's the consistent pattern?</span>
+                    </div>
+                    <p style="margin-top: 15px;"><strong>The transformation I enable:</strong></p>
+                    <div class="editable" contenteditable="true" id="transformation" style="margin: 10px 0;">
+                        <span class="placeholder">How do people/situations change after working with you?</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- WEEK 2: CAREER DIRECTION -->
+            <div class="section" id="week2-section" style="opacity: 0.5;">
+                <div class="section-header">
+                    <div class="section-title">
+                        <span>Week 2: Career Direction</span>
+                        <span class="week-badge locked" id="week2-badge">🔒 Locked</span>
+                    </div>
+                </div>
+                <div class="section-divider"></div>
+
+                <h3 style="color: #764ba2; margin-bottom: 15px;">The Engine of [CLIENT_NAME]</h3>
+                <div class="insight-box">
+                    <p style="font-size: 1.1em; font-weight: 600; margin-bottom: 15px;">Your core capabilities that form your professional DNA:</p>
+                    <div class="editable" contenteditable="true" id="engine">
+                        <span class="placeholder">List your 3-5 core capabilities - the things you naturally do well that drive your success.</span>
+                    </div>
+                </div>
+
+                <h3 style="color: #764ba2; margin: 25px 0 15px 0;">What Charges vs Drains You</h3>
+                <div class="grid-2">
+                    <div class="green-box">
+                        <h4 style="color: #4caf50; margin-bottom: 10px;">Charges You Up</h4>
+                        <div class="editable" contenteditable="true" id="charges">
+                            <span class="placeholder">What work energises you? What conditions help you thrive?</span>
+                        </div>
+                    </div>
+                    <div class="red-box">
+                        <h4 style="color: #ff5722; margin-bottom: 10px;">Drains Your Energy</h4>
+                        <div class="editable" contenteditable="true" id="drains">
+                            <span class="placeholder">What depletes you? What environments should you avoid?</span>
+                        </div>
+                    </div>
+                </div>
+
+                <h3 style="color: #764ba2; margin: 25px 0 15px 0;">Non-Negotiables</h3>
+                <div class="insight-box">
+                    <div class="editable" contenteditable="true" id="non-negotiables">
+                        <span class="placeholder">What must be true for you to be happy in a role? What are your red lines?</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- WEEK 3: POSITIONING -->
+            <div class="section" id="week3-section" style="opacity: 0.5;">
+                <div class="section-header">
+                    <div class="section-title">
+                        <span>Week 3: Positioning</span>
+                        <span class="week-badge locked" id="week3-badge">🔒 Locked</span>
+                    </div>
+                </div>
+                <div class="section-divider"></div>
+
+                <h3 style="color: #764ba2; margin-bottom: 15px;">Your Proposition</h3>
+                <div style="background: linear-gradient(135deg, #FFD70015 0%, #FFA50015 100%); padding: 25px; border-radius: 15px; border: 2px solid #FFD700; margin: 20px 0;">
+                    <h4 style="color: #996600; margin-bottom: 15px;">One-Sentence Introduction</h4>
+                    <div class="editable" contenteditable="true" id="one-sentence">
+                        <span class="placeholder">I'm [name], I help [who] do [what] so they can [outcome].</span>
+                    </div>
+                </div>
+
+                <h3 style="color: #764ba2; margin: 25px 0 15px 0;">LinkedIn Headline Options</h3>
+                <div class="outcome">
+                    <div class="editable" contenteditable="true" id="linkedin-1">
+                        <span class="placeholder">Option 1: Focus on transformation you create...</span>
+                    </div>
+                </div>
+                <div class="outcome">
+                    <div class="editable" contenteditable="true" id="linkedin-2">
+                        <span class="placeholder">Option 2: Focus on who you help...</span>
+                    </div>
+                </div>
+                <div class="outcome">
+                    <div class="editable" contenteditable="true" id="linkedin-3">
+                        <span class="placeholder">Option 3: Focus on your unique approach...</span>
+                    </div>
+                </div>
+
+                <h3 style="color: #764ba2; margin: 25px 0 15px 0;">Elevator Pitches</h3>
+                <div class="insight-box">
+                    <h4>30-Second Version</h4>
+                    <div class="editable" contenteditable="true" id="elevator-30" style="margin: 15px 0;">
+                        <span class="placeholder">Quick intro for networking events...</span>
+                    </div>
+                    <h4>60-Second Version</h4>
+                    <div class="editable" contenteditable="true" id="elevator-60" style="margin: 15px 0;">
+                        <span class="placeholder">Expanded version with an example...</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- WEEK 4: IMPLEMENTATION -->
+            <div class="section" id="week4-section" style="opacity: 0.5;">
+                <div class="section-header">
+                    <div class="section-title">
+                        <span>Week 4: Implementation</span>
+                        <span class="week-badge locked" id="week4-badge">🔒 Locked</span>
+                    </div>
+                </div>
+                <div class="section-divider"></div>
+
+                <h3 style="color: #764ba2; margin-bottom: 15px;">Your Toolkit</h3>
+                <div style="background: #f8f9fa; border-radius: 12px; padding: 20px; margin-bottom: 15px; border-left: 4px solid #667eea;">
+                    <h4 style="color: #667eea; margin-bottom: 8px;">📝 CV Builder</h4>
+                    <p>Interactive tool to build your CV using your Blueprint content.</p>
+                    <a href="#" style="color: #667eea; font-weight: 600;">Open CV Builder →</a>
+                </div>
+                <div style="background: #f8f9fa; border-radius: 12px; padding: 20px; margin-bottom: 15px; border-left: 4px solid #667eea;">
+                    <h4 style="color: #667eea; margin-bottom: 8px;">🗺️ Mapping Guide</h4>
+                    <p>See where your Blueprint content goes across LinkedIn, CV, and interviews.</p>
+                    <a href="#" style="color: #667eea; font-weight: 600;">Open Mapping Guide →</a>
+                </div>
+                <div style="background: #f8f9fa; border-radius: 12px; padding: 20px; margin-bottom: 15px; border-left: 4px solid #667eea;">
+                    <h4 style="color: #667eea; margin-bottom: 8px;">🤖 AI Prompt Library</h4>
+                    <p>Ready-to-use prompts for cover letters, LinkedIn posts, and more.</p>
+                    <a href="AI_Prompt_Library.html" style="color: #667eea; font-weight: 600;">Open Prompt Library →</a>
+                </div>
+
+                <h3 style="color: #764ba2; margin: 25px 0 15px 0;">Interview Questions to Ask</h3>
+                <div class="insight-box">
+                    <div class="editable" contenteditable="true" id="interview-questions">
+                        <span class="placeholder">Questions based on your non-negotiables and what charges/drains you...</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Auto-save functionality
+        document.querySelectorAll('.editable').forEach(el => {
+            el.addEventListener('focus', function() {
+                const placeholder = this.querySelector('.placeholder');
+                if (placeholder) {
+                    placeholder.style.display = 'none';
+                }
+            });
+
+            el.addEventListener('blur', function() {
+                const placeholder = this.querySelector('.placeholder');
+                if (placeholder && this.innerText.trim() === '') {
+                    placeholder.style.display = 'block';
+                }
+                // Auto-save to localStorage
+                saveBlueprint();
+            });
+
+            el.addEventListener('input', function() {
+                const placeholder = this.querySelector('.placeholder');
+                if (placeholder) {
+                    placeholder.style.display = 'none';
+                }
+            });
+        });
+
+        // Save blueprint to localStorage
+        function saveBlueprint() {
+            const data = {};
+            document.querySelectorAll('.editable').forEach(el => {
+                data[el.id] = el.innerHTML;
+            });
+            localStorage.setItem('blueprint_[CLIENT_ID]', JSON.stringify(data));
+            console.log('Blueprint auto-saved');
+        }
+
+        // Load blueprint from localStorage
+        function loadBlueprint() {
+            const saved = localStorage.getItem('blueprint_[CLIENT_ID]');
+            if (saved) {
+                const data = JSON.parse(saved);
+                Object.keys(data).forEach(id => {
+                    const el = document.getElementById(id);
+                    if (el) {
+                        el.innerHTML = data[id];
+                    }
+                });
+            }
+        }
+
+        // Load on page load
+        loadBlueprint();
+
+        // Unlock week function (called by coach)
+        function unlockWeek(weekNum) {
+            const section = document.getElementById(`week${weekNum}-section`);
+            const progress = document.getElementById(`week${weekNum}-progress`);
+            const badge = document.getElementById(`week${weekNum}-badge`);
+
+            if (section) section.style.opacity = '1';
+            if (progress) {
+                progress.classList.remove('locked');
+                progress.classList.add('in-progress');
+                progress.querySelector('.progress-icon').textContent = '🔓';
+            }
+            if (badge) {
+                badge.classList.remove('locked');
+                badge.textContent = 'In Progress';
+            }
+        }
+
+        // Mark week complete
+        function completeWeek(weekNum) {
+            const progress = document.getElementById(`week${weekNum}-progress`);
+            const badge = document.getElementById(`week${weekNum}-badge`);
+
+            if (progress) {
+                progress.classList.remove('in-progress');
+                progress.classList.add('complete');
+                progress.querySelector('.progress-icon').textContent = '✅';
+            }
+            if (badge) {
+                badge.classList.add('complete');
+                badge.textContent = 'Complete';
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome Call Agenda - Peter Morgan - Harness the Spark</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #f8f9fa;
+            color: #333;
+            line-height: 1.7;
+        }
+        .container {
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+        .header {
+            background: linear-gradient(135deg, #8B5CF6 0%, #EC4899 100%);
+            border-radius: 16px 16px 0 0;
+            padding: 40px;
+            color: white;
+            text-align: center;
+        }
+        .logo {
+            font-size: 1.2em;
+            opacity: 0.9;
+            margin-bottom: 15px;
+        }
+        .header h1 {
+            font-size: 2em;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+        .header .subtitle {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+        .client-badge {
+            display: inline-block;
+            background: rgba(255,255,255,0.2);
+            padding: 8px 20px;
+            border-radius: 20px;
+            margin-top: 15px;
+            font-weight: 500;
+        }
+        .content {
+            background: white;
+            border-radius: 0 0 16px 16px;
+            padding: 40px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+        .call-info {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 30px;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            text-align: center;
+        }
+        .call-info-item label {
+            display: block;
+            font-size: 0.8em;
+            color: #888;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 5px;
+        }
+        .call-info-item span {
+            font-size: 1.1em;
+            font-weight: 600;
+            color: #333;
+        }
+        h2 {
+            color: #8B5CF6;
+            font-size: 1.3em;
+            margin: 30px 0 20px 0;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #EDE9FE;
+        }
+        h2:first-of-type { margin-top: 0; }
+        .agenda-item {
+            display: flex;
+            gap: 20px;
+            padding: 20px 0;
+            border-bottom: 1px solid #eee;
+        }
+        .agenda-item:last-child {
+            border-bottom: none;
+        }
+        .agenda-time {
+            background: linear-gradient(135deg, #8B5CF6 0%, #EC4899 100%);
+            color: white;
+            padding: 8px 15px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.9em;
+            height: fit-content;
+            min-width: 70px;
+            text-align: center;
+        }
+        .agenda-content h3 {
+            font-size: 1.1em;
+            color: #333;
+            margin-bottom: 8px;
+        }
+        .agenda-content p {
+            color: #666;
+            font-size: 0.95em;
+            margin-bottom: 10px;
+        }
+        .agenda-content ul {
+            margin-left: 20px;
+            color: #666;
+        }
+        .agenda-content li {
+            margin-bottom: 5px;
+        }
+        .talking-points {
+            background: #FEF3C7;
+            border-radius: 12px;
+            padding: 25px;
+            margin: 30px 0;
+        }
+        .talking-points h3 {
+            color: #D97706;
+            margin-bottom: 15px;
+            font-size: 1.1em;
+        }
+        .talking-points ul {
+            margin-left: 20px;
+        }
+        .talking-points li {
+            margin-bottom: 10px;
+            color: #92400E;
+        }
+        .peter-context {
+            background: #EDE9FE;
+            border-radius: 12px;
+            padding: 25px;
+            margin: 30px 0;
+        }
+        .peter-context h3 {
+            color: #7C3AED;
+            margin-bottom: 15px;
+            font-size: 1.1em;
+        }
+        .peter-context p {
+            color: #5B21B6;
+            margin-bottom: 10px;
+        }
+        .first-actions {
+            background: #D1FAE5;
+            border-radius: 12px;
+            padding: 25px;
+            margin: 30px 0;
+        }
+        .first-actions h3 {
+            color: #047857;
+            margin-bottom: 15px;
+            font-size: 1.1em;
+        }
+        .action-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 12px 0;
+            border-bottom: 1px solid rgba(4, 120, 87, 0.2);
+        }
+        .action-item:last-child {
+            border-bottom: none;
+        }
+        .action-checkbox {
+            width: 22px;
+            height: 22px;
+            border: 2px solid #047857;
+            border-radius: 4px;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+        .action-text {
+            color: #065F46;
+        }
+        .action-text strong {
+            display: block;
+            margin-bottom: 3px;
+        }
+        .action-text span {
+            font-size: 0.9em;
+            opacity: 0.8;
+        }
+        .notes-section {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 25px;
+            margin-top: 30px;
+        }
+        .notes-section h3 {
+            color: #666;
+            margin-bottom: 15px;
+            font-size: 1em;
+        }
+        .notes-area {
+            width: 100%;
+            min-height: 150px;
+            border: 2px dashed #ddd;
+            border-radius: 8px;
+            padding: 15px;
+            font-family: inherit;
+            font-size: 0.95em;
+            resize: vertical;
+        }
+        .notes-area:focus {
+            outline: none;
+            border-color: #8B5CF6;
+        }
+        .footer {
+            text-align: center;
+            padding: 30px;
+            color: #888;
+            font-size: 0.9em;
+        }
+        @media (max-width: 600px) {
+            .call-info {
+                grid-template-columns: 1fr;
+            }
+            .agenda-item {
+                flex-direction: column;
+                gap: 10px;
+            }
+            .agenda-time {
+                width: fit-content;
+            }
+        }
+        @media print {
+            body { background: white; }
+            .container { margin: 0; max-width: 100%; }
+            .header { border-radius: 0; }
+            .content { box-shadow: none; border-radius: 0; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo">Harness the Spark ✨</div>
+            <h1>Welcome Call Agenda</h1>
+            <p class="subtitle">Blended Programme — Career + Mind Management</p>
+            <div class="client-badge">👤 Peter Morgan</div>
+        </div>
+
+        <div class="content">
+            <div class="call-info">
+                <div class="call-info-item">
+                    <label>Duration</label>
+                    <span>30-45 mins</span>
+                </div>
+                <div class="call-info-item">
+                    <label>Call Type</label>
+                    <span>Zoom</span>
+                </div>
+                <div class="call-info-item">
+                    <label>Date</label>
+                    <span id="callDate">TBC</span>
+                </div>
+            </div>
+
+            <div class="peter-context">
+                <h3>🎯 Peter's Context (Coach Notes)</h3>
+                <p><strong>Programme:</strong> Blended (Career Discovery + Mind Management) — Beta Tester (Gratis)</p>
+                <p><strong>Current Role:</strong> Systems Engineer at Kyndryl, on the Lloyds Bank account</p>
+                <p><strong>Career Challenge:</strong> Needs to pivot to stay relevant — exploring how AI fits into his role</p>
+                <p><strong>Personal Challenge:</strong> OCD traits, struggles with getting started</p>
+                <p><strong>Approach:</strong> Build momentum with quick wins before deep career work</p>
+                <p><strong>Note:</strong> Technical mindset — may appreciate systems thinking, frameworks, and logical structure. Different from marketing clients (Raj/Donald) — focus on technical transferable skills and AI augmentation.</p>
+            </div>
+
+            <h2>📋 Call Agenda</h2>
+
+            <div class="agenda-item">
+                <div class="agenda-time">5 mins</div>
+                <div class="agenda-content">
+                    <h3>Welcome & Check-in</h3>
+                    <p>Warm welcome, quick check on how he's feeling about starting.</p>
+                    <ul>
+                        <li>Thanks for being a beta tester</li>
+                        <li>Brief reminder: gratis in exchange for honest feedback</li>
+                        <li>This call is about getting set up and reducing overwhelm</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="agenda-item">
+                <div class="agenda-time">5 mins</div>
+                <div class="agenda-content">
+                    <h3>What to Expect — The Blended Approach</h3>
+                    <p>Explain why we're doing career + mind management together.</p>
+                    <ul>
+                        <li>Most programmes assume you can "just do" the work</li>
+                        <li>We're building the muscle to start alongside career clarity</li>
+                        <li>Quick wins first → self-awareness → then deep career work</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="agenda-item">
+                <div class="agenda-time">10 mins</div>
+                <div class="agenda-content">
+                    <h3>Portal Tour — Your Complete Toolkit</h3>
+                    <p>Screen share and walk through the portal together.</p>
+                    <ul>
+                        <li>Login process</li>
+                        <li><strong>Career Tools:</strong> CV Builder, Blueprint, Decision Framework (explain these come later)</li>
+                        <li><strong>Mind Tools:</strong> Brain Dump, Energy Tracker, Spark Collector, Foundations</li>
+                        <li>Show how tools sync to the cloud</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="agenda-item">
+                <div class="agenda-time">5 mins</div>
+                <div class="agenda-content">
+                    <h3>Demo: Spark Collector</h3>
+                    <p>Show how simple it is to capture a win.</p>
+                    <ul>
+                        <li>Add one win together right now ("Showed up for this call")</li>
+                        <li>Explain the "First Step for Tomorrow" feature</li>
+                        <li>Daily wins compound into momentum</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="agenda-item">
+                <div class="agenda-time">5 mins</div>
+                <div class="agenda-content">
+                    <h3>Demo: Energy Tracker</h3>
+                    <p>Quick overview of tracking energy.</p>
+                    <ul>
+                        <li>Log current energy level together</li>
+                        <li>Explain we'll use this to find best times for questionnaire</li>
+                        <li>No pressure — just notice and log</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="agenda-item">
+                <div class="agenda-time">5 mins</div>
+                <div class="agenda-content">
+                    <h3>This Week's Focus</h3>
+                    <p>Set clear, small expectations for between now and next session.</p>
+                    <ul>
+                        <li>Use Spark Collector once a day (capture 1 win minimum)</li>
+                        <li>Log energy 2-3 times a day when you remember</li>
+                        <li>Brain Dump anything that's swirling — get it out of your head</li>
+                        <li>No career work yet — that comes after we've built rhythm</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="agenda-item">
+                <div class="agenda-time">5 mins</div>
+                <div class="agenda-content">
+                    <h3>Questions & Next Steps</h3>
+                    <p>Open floor for questions, then schedule next session.</p>
+                    <ul>
+                        <li>Any questions about the tools or process?</li>
+                        <li>Schedule Session 2 (Foundations discussion) — ideally 4-5 days away</li>
+                        <li>Reminder: email me anytime if stuck</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="talking-points">
+                <h3>💡 Key Messages to Land</h3>
+                <ul>
+                    <li><strong>Small is powerful:</strong> One win a day beats zero. Start tiny.</li>
+                    <li><strong>We're building the muscle:</strong> Getting started is a skill. We're training it.</li>
+                    <li><strong>No rush on career stuff:</strong> The questionnaire can wait until you have momentum.</li>
+                    <li><strong>Feedback welcome:</strong> As a beta tester, tell me what works and what doesn't.</li>
+                    <li><strong>You're not behind:</strong> There's no "should" here. We move at your pace.</li>
+                </ul>
+            </div>
+
+            <div class="first-actions">
+                <h3>✅ Peter's First Actions (This Week)</h3>
+                <div class="action-item">
+                    <div class="action-checkbox"></div>
+                    <div class="action-text">
+                        <strong>Daily: Log 1 win in Spark Collector</strong>
+                        <span>Can be tiny — "made coffee", "opened laptop", "went outside"</span>
+                    </div>
+                </div>
+                <div class="action-item">
+                    <div class="action-checkbox"></div>
+                    <div class="action-text">
+                        <strong>Daily: Set tomorrow's First Step</strong>
+                        <span>One small action. Not a to-do list — just the first domino.</span>
+                    </div>
+                </div>
+                <div class="action-item">
+                    <div class="action-checkbox"></div>
+                    <div class="action-text">
+                        <strong>2-3x daily: Log energy level</strong>
+                        <span>Morning, afternoon, evening — just notice and record.</span>
+                    </div>
+                </div>
+                <div class="action-item">
+                    <div class="action-checkbox"></div>
+                    <div class="action-text">
+                        <strong>As needed: Brain Dump anything swirling</strong>
+                        <span>Get thoughts out of your head and into the tool.</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="notes-section">
+                <h3>📝 Session Notes</h3>
+                <textarea class="notes-area" placeholder="Add notes from the call here..."></textarea>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p><strong>Harness the Spark</strong> — Lisa Gills</p>
+            <p>lisa@harnessthespark.com · www.harnessthespark.com</p>
+        </div>
+    </div>
+
+    <script>
+        // Auto-save notes to localStorage
+        const notesArea = document.querySelector('.notes-area');
+        const storageKey = 'peter_morgan_welcome_notes';
+
+        // Load saved notes
+        const savedNotes = localStorage.getItem(storageKey);
+        if (savedNotes) {
+            notesArea.value = savedNotes;
+        }
+
+        // Save on input
+        notesArea.addEventListener('input', function() {
+            localStorage.setItem(storageKey, this.value);
+        });
+
+        // Set today's date if no date set
+        const callDateEl = document.getElementById('callDate');
+        if (callDateEl.textContent === 'TBC') {
+            // Leave as TBC - coach will update
+        }
+    </script>
+</body>
+</html>

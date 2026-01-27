@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Raj Samuel - Career Insights Report | Week 1</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            line-height: 1.6;
+            color: #2c3e50;
+            background: linear-gradient(135deg, #7c3aed 0%, #a855f7 100%);
+            padding: 40px 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #7c3aed 0%, #a855f7 100%);
+            color: white;
+            padding: 60px 40px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .header .subtitle {
+            font-size: 1.2em;
+            opacity: 0.9;
+            font-weight: 300;
+        }
+
+        .content {
+            padding: 50px 40px;
+        }
+
+        .section {
+            margin-bottom: 50px;
+            page-break-inside: avoid;
+        }
+
+        .section-title {
+            font-size: 1.8em;
+            font-weight: 700;
+            color: #7c3aed;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #7c3aed;
+        }
+
+        .subsection-title {
+            font-size: 1.3em;
+            font-weight: 600;
+            color: #a855f7;
+            margin: 25px 0 15px 0;
+        }
+
+        .insight-box {
+            background: linear-gradient(135deg, #7c3aed15 0%, #a855f715 100%);
+            padding: 30px;
+            border-radius: 15px;
+            border-left: 5px solid #7c3aed;
+            margin: 20px 0;
+            color: #1e293b;
+        }
+
+        .insight-box h4 {
+            color: #7c3aed;
+            font-size: 1.2em;
+            margin-bottom: 15px;
+        }
+
+        .insight-box p {
+            line-height: 1.8;
+            margin-bottom: 10px;
+            color: #334155;
+        }
+
+        .highlight {
+            background: #fff3cd;
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 4px solid #ffc107;
+            margin: 20px 0;
+        }
+
+        .highlight strong {
+            color: #856404;
+        }
+
+        .connection-box {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border: 2px solid #7c3aed;
+        }
+
+        .connection-box h4 {
+            color: #7c3aed;
+            margin-bottom: 12px;
+        }
+
+        .two-column {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .column-box {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+        }
+
+        .column-box h4 {
+            color: #a855f7;
+            margin-bottom: 12px;
+            font-size: 1.1em;
+        }
+
+        .column-box.drains {
+            background: #ffe0e0;
+        }
+
+        .column-box.drains h4 {
+            color: #c0392b;
+        }
+
+        .column-box.charges {
+            background: #e0ffe0;
+        }
+
+        .column-box.charges h4 {
+            color: #27ae60;
+        }
+
+        ul, ol {
+            margin-left: 20px;
+            margin-top: 10px;
+        }
+
+        li {
+            margin-bottom: 8px;
+        }
+
+        .key-question {
+            background: linear-gradient(to right, #f093fb15, #f5576c15);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 15px 0;
+            border-left: 4px solid #f5576c;
+        }
+
+        .key-question strong {
+            color: #f5576c;
+            font-size: 1.1em;
+        }
+
+        .raj-quote {
+            background: #f0fdf4;
+            border-left: 4px solid #22c55e;
+            padding: 15px 20px;
+            margin: 15px 0;
+            border-radius: 0 8px 8px 0;
+            font-style: italic;
+            color: #166534;
+        }
+
+        .quote {
+            font-style: italic;
+            color: #7f8c8d;
+            border-left: 3px solid #a855f7;
+            padding-left: 15px;
+            margin: 15px 0;
+        }
+
+        @media print {
+            body {
+                background: white;
+                padding: 0;
+            }
+            .container {
+                box-shadow: none;
+                max-width: 100%;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .two-column {
+                grid-template-columns: 1fr;
+            }
+            .content {
+                padding: 30px 20px;
+            }
+            .header {
+                padding: 40px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Raj Samuel</h1>
+            <div class="subtitle">Career Insights Report - Week 1</div>
+            <div class="subtitle" style="font-size: 0.9em; margin-top: 10px;">Pattern Analysis & Career Direction Framework</div>
+        </div>
+
+        <div class="content">
+            <!-- EXECUTIVE SUMMARY -->
+            <div class="section">
+                <h2 class="section-title">📊 Executive Summary</h2>
+                <div class="insight-box">
+                    <h4>Your Core Pattern</h4>
+                    <p style="font-size: 1.1em; font-weight: 600; margin-bottom: 15px;">Raj shifts thinking away from the obvious and has a unique knack for turning the ordinary into extraordinary by bringing cultural reference to the forefront of strategy and beyond.</p>
+                    <p>Being able to take digital strategy and articulate that it's a vehicle to carry messaging. He reframes context in cultural familiarity.</p>
+                </div>
+
+                <div class="highlight">
+                    <strong>What This Means For His Career:</strong>
+                    <p style="margin-top: 10px;">Space to teach and educate. Freedom to create and explore.</p>
+                </div>
+            </div>
+
+            <!-- KEY INSIGHTS FROM YOUR RESPONSES -->
+            <div class="section">
+                <h2 class="section-title">💡 Key Insights From Your Responses</h2>
+
+                <h3 class="subsection-title">1. Your Unique Thread</h3>
+                <div class="insight-box">
+                    <p class="quote">"I spot the cultural-emotional truth hiding beneath the business problem - the thing people sense but can't articulate yet. Then I make that truth tangible. Sometimes through strategic reframing, sometimes through research that reveals invisible patterns, sometimes through creating proof that builds belief."</p>
+
+                    <p style="margin-top: 15px;">He's digging in the places others aren't. He's uncovering human truths in unconventional ways, he's not afraid to be curious and go down rabbit holes.</p>
+
+                    <p style="margin-top: 15px;"><strong>The thread is:</strong> Ahead of the curve, he makes the invisible visible - spotting where culture has already moved before brands catch up.</p>
+                </div>
+
+                <div class="connection-box">
+                    <h4>🔗 Connection to His Current Situation:</h4>
+                    <p>Very important he is somewhere where they recognise importance of culture above all else.</p>
+                </div>
+
+                <h3 class="subsection-title">2. Your Effortless Superpowers</h3>
+                <div class="two-column">
+                    <div class="column-box">
+                        <h4 style="color: #7c3aed;">What Feels Easy</h4>
+                        <p>"I'm not forcing anything. I'm spotting what's already there - the cultural truth hiding in plain sight - and finding the simplest way to make it visible."</p>
+                    </div>
+                    <div class="column-box">
+                        <h4 style="color: #7c3aed;">What You Notice First</h4>
+                        <p>"I see the mismatches early. The thing people are saying out loud vs. the emotional truth underneath. The place where culture's already gone that the brand hasn't caught up to yet."</p>
+                    </div>
+                </div>
+
+                <div class="two-column">
+                    <div class="column-box">
+                        <h4 style="color: #7c3aed;">Questions Only You Ask</h4>
+                        <p>"I'm always asking about culture, emotion, play, and fun - looking for opportunities to leverage these that others don't see."</p>
+                    </div>
+                    <div class="column-box">
+                        <h4 style="color: #7c3aed;">"Of Course" Moments</h4>
+                        <p>"I show people something that was already there but they couldn't articulate yet. Once they see it, they can't unsee it. It feels obvious in hindsight - but only because I made it visible first."</p>
+                    </div>
+                </div>
+
+                <div class="connection-box">
+                    <h4>🔗 How Others See You:</h4>
+                    <p>"Call Raj when you're culturally stuck and don't know why. He makes complex stuff simple. He gives you permission to try the scary thing. He spots the pattern we were all missing. Operates between big brand credibility and underground experiential instincts; strategic but not stuffy."</p>
+                </div>
+            </div>
+
+            <!-- YOUR UNDERESTIMATED ABILITY -->
+            <div class="section">
+                <h2 class="section-title">✨ Your Underestimated Ability</h2>
+                <div class="insight-box">
+                    <h4>Pattern Recognised</h4>
+                    <p class="quote">"My ability to bridge external and internal culture - spotting where culture's already moved outside, then transforming how organisations operate inside to match it. I've been underselling cultural transformation as strategy delivery."</p>
+
+                    <h4 style="margin-top: 20px;">Transformation You Enable</h4>
+                    <p class="quote">"I help people and organisations see the cultural truth they couldn't articulate, then give them permission to act on it with confidence. It's not just delivering insights - it's creating belief and making the scary thing feel doable."</p>
+
+                    <h4 style="margin-top: 20px;">Permission You're Giving Yourself</h4>
+                    <p class="quote">"I don't just do strategy - I create transformation. I'm a cultural translator who spots where culture's already gone and makes the path visible so brands can get there."</p>
+                </div>
+
+                <div class="highlight">
+                    <strong>The Reframe:</strong>
+                    <p style="margin-top: 10px;">Beyond the Strategist, Raj encapsulates 'hindsight' before it's even happened.</p>
+                </div>
+            </div>
+
+            <!-- CONNECTING TO HIS CURRENT CROSSROADS -->
+            <div class="section">
+                <h2 class="section-title">🔄 Connecting to Your Current Crossroads</h2>
+
+                <div class="insight-box">
+                    <h4>Your Superpower Stack:</h4>
+                    <p><strong>Rich Awareness</strong> → <strong>Unique Perspective</strong> → <strong>Detail Detection</strong> → <strong>Pattern Spotting</strong></p>
+                    <p style="margin-top: 10px;">Awareness feeds perspective, which sharpens detection, which enables pattern spotting. This is how you process - and why you see what others miss.</p>
+                </div>
+
+                <h3 class="subsection-title">The Core Tension</h3>
+                <p style="margin-bottom: 15px; color: #666; font-style: italic;">These are starter thoughts based on your questionnaire responses - your homework is to validate, refine, add or remove based on what feels true.</p>
+                <div class="two-column">
+                    <div class="column-box drains">
+                        <h4>What Drains You (Starter Thoughts)</h4>
+                        <p style="font-style: italic; color: #666; margin-bottom: 10px;">Review and refine - what resonates?</p>
+                        <ul>
+                            <li>Brands culturally stuck and resistant to seeing it</li>
+                            <li>Solving the wrong problem (when people won't shift)</li>
+                            <li>Passive, TV-only thinking - no interactivity</li>
+                            <li>Being boxed into "digital strategist"</li>
+                        </ul>
+                    </div>
+                    <div class="column-box charges">
+                        <h4>What Charges You (Starter Thoughts)</h4>
+                        <p style="font-style: italic; color: #666; margin-bottom: 10px;">Review and refine - what resonates?</p>
+                        <ul>
+                            <li>The "Of Course" moment - when people finally see it</li>
+                            <li>Revealing what was there all along</li>
+                            <li>Adding play, interactivity, participation</li>
+                            <li>Giving people permission to be brave</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="highlight">
+                    <strong>The Question You're Really Asking:</strong>
+                    <p style="margin-top: 10px;">How do I get recognised for cultural and organisational transformation - not just strategy delivery? Where can I do this work at the scale it deserves?</p>
+                </div>
+            </div>
+
+            <!-- KEY QUESTIONS FOR SESSION -->
+            <div class="section">
+                <h2 class="section-title">❓ Key Questions For This Session</h2>
+                <p style="margin-bottom: 20px;">We'll explore these together to build clarity:</p>
+
+                <div class="key-question">
+                    <strong>1.</strong> What does "recognised for cultural transformation" actually look like for you? In-house? Consultancy? Something else?
+                </div>
+
+                <div class="key-question">
+                    <strong>2.</strong> What environments have let you thrive vs. frustrated you? What's the pattern?
+                </div>
+
+                <div class="key-question">
+                    <strong>3.</strong> If you could design your ideal role, what would you be doing day-to-day?
+                </div>
+
+                <div class="key-question">
+                    <strong>4. The Bigger Question:</strong> What's the transformation you want to be known for enabling?
+                </div>
+            </div>
+
+            <!-- HOMEWORK FOR SESSION 2 -->
+            <div class="section">
+                <h2 class="section-title">📝 Homework Before Session 2</h2>
+                <div class="insight-box">
+                    <h4>1. Validate the Drains & Charges</h4>
+                    <p>Review the "What Drains You / What Charges You" section. Add, remove, or refine based on what feels true.</p>
+
+                    <h4 style="margin-top: 20px;">2. List 3-5 Dream Companies</h4>
+                    <p>Organisations where your cultural transformation abilities would be valued. Don't filter - include the ambitious ones.</p>
+
+                    <h4 style="margin-top: 20px;">3. The "Hell Yes" Criteria</h4>
+                    <p>What would make an opportunity feel like an absolute yes? What are your non-negotiables?</p>
+
+                    <h4 style="margin-top: 20px;">4. Environments & Direction</h4>
+                    <p>What environments have let you thrive vs frustrated you - what's the pattern? And what does "recognised for cultural transformation" actually look like for you - in-house, consultancy, your own thing?</p>
+                </div>
+            </div>
+
+            <!-- WHAT'S NEXT -->
+            <div class="section">
+                <h2 class="section-title">🚀 What's Next</h2>
+                <div class="connection-box">
+                    <h4>In Session 2 We'll:</h4>
+                    <ol>
+                        <li><strong>Review this report together</strong> - What resonates? What surprises you?</li>
+                        <li><strong>Walk through your homework</strong> - Explore your reflections</li>
+                        <li><strong>Build your positioning</strong> - How to articulate your unique value</li>
+                        <li><strong>Identify your deal-breakers</strong> - What's non-negotiable?</li>
+                        <li><strong>Map the path forward</strong> - Concrete next steps</li>
+                    </ol>
+
+                    <p style="margin-top: 20px; font-weight: 600;">By the end of Session 2, you'll have clarity on your positioning and a direction you feel excited about.</p>
+                </div>
+            </div>
+        </div>
+
+        <div style="text-align: center; padding: 30px; background: #f8f9fa; color: #7f8c8d; font-size: 0.9em;">
+            <p>Career Booster Programme with Lisa Gills | Harness the Spark</p>
+            <p style="margin-top: 5px;">Week 1 Insights Document</p>
+        </div>
+    </div>
+<script src="../shared/back-button.js"></script>
+</body>
+</html>

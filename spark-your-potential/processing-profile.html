@@ -1,0 +1,917 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Processing Profile - Spark Your Potential</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧠</text></svg>">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #2d1b4e 100%);
+            min-height: 100vh;
+            padding: 40px 20px;
+            color: #333;
+        }
+        .container { max-width: 800px; margin: 0 auto; }
+
+        /* Header */
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            color: white;
+        }
+        .header img { height: 50px; margin-bottom: 15px; }
+        .header h1 { font-size: 2em; font-weight: 800; margin-bottom: 8px; }
+        .header p { opacity: 0.8; font-size: 1.1em; }
+
+        /* Card */
+        .card {
+            background: rgba(255,255,255,0.95);
+            border-radius: 20px;
+            padding: 35px;
+            margin-bottom: 25px;
+        }
+        .card h2 {
+            font-size: 1.3em;
+            margin-bottom: 8px;
+            color: #1a1a2e;
+        }
+        .card .subtitle {
+            color: #666;
+            margin-bottom: 25px;
+            font-size: 0.95em;
+        }
+
+        /* Questions */
+        .question {
+            margin-bottom: 30px;
+            padding-bottom: 25px;
+            border-bottom: 1px solid #eee;
+        }
+        .question:last-child { border-bottom: none; margin-bottom: 0; }
+        .question-text {
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: #1a1a2e;
+        }
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .option {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .option:hover { border-color: #8B5CF6; background: #faf8ff; }
+        .option.selected { border-color: #8B5CF6; background: #f3e8ff; }
+        .option input { display: none; }
+        .option-circle {
+            width: 22px;
+            height: 22px;
+            border: 2px solid #ccc;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+        .option.selected .option-circle {
+            border-color: #8B5CF6;
+            background: #8B5CF6;
+        }
+        .option.selected .option-circle::after {
+            content: '✓';
+            color: white;
+            font-size: 12px;
+        }
+        .option-text { flex: 1; }
+        .option-label { font-weight: 500; color: #1a1a2e; }
+        .option-desc { font-size: 0.85em; color: #666; margin-top: 3px; }
+
+        /* Slider Questions */
+        .slider-question { margin-bottom: 35px; }
+        .slider-labels {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            font-size: 0.9em;
+        }
+        .slider-labels span { max-width: 45%; }
+        .slider-labels .left { color: #E91E78; text-align: left; }
+        .slider-labels .right { color: #8B5CF6; text-align: right; }
+        .slider-container { position: relative; padding: 10px 0; }
+        input[type="range"] {
+            width: 100%;
+            height: 8px;
+            border-radius: 4px;
+            background: linear-gradient(90deg, #E91E78 0%, #8B5CF6 100%);
+            outline: none;
+            -webkit-appearance: none;
+        }
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: white;
+            border: 3px solid #8B5CF6;
+            cursor: pointer;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+        }
+        .slider-value {
+            text-align: center;
+            margin-top: 8px;
+            font-size: 0.85em;
+            color: #666;
+        }
+
+        /* Buttons */
+        .btn {
+            background: linear-gradient(135deg, #8B5CF6 0%, #E91E78 100%);
+            color: white;
+            border: none;
+            padding: 15px 35px;
+            border-radius: 12px;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        .btn:hover { transform: translateY(-2px); }
+        .btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+        .btn-secondary {
+            background: #e0e0e0;
+            color: #333;
+        }
+
+        /* Results */
+        .results { display: none; }
+        .results.visible { display: block; }
+        .profile-visual {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        @media (max-width: 600px) {
+            .profile-visual { grid-template-columns: 1fr; }
+        }
+        .profile-item {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 20px;
+        }
+        .profile-item h4 {
+            font-size: 0.9em;
+            color: #666;
+            margin-bottom: 10px;
+        }
+        .profile-bar {
+            height: 12px;
+            background: #e0e0e0;
+            border-radius: 6px;
+            overflow: hidden;
+            margin-bottom: 8px;
+        }
+        .profile-bar-fill {
+            height: 100%;
+            border-radius: 6px;
+            transition: width 0.5s ease;
+        }
+        .profile-bar-fill.pink { background: linear-gradient(90deg, #E91E78, #f472b6); }
+        .profile-bar-fill.purple { background: linear-gradient(90deg, #8B5CF6, #a78bfa); }
+        .profile-bar-fill.teal { background: linear-gradient(90deg, #4ECDC4, #6ee7b7); }
+        .profile-bar-fill.amber { background: linear-gradient(90deg, #f59e0b, #fbbf24); }
+        .profile-result {
+            font-weight: 600;
+            color: #1a1a2e;
+        }
+
+        /* Processing Style Tags */
+        .style-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 25px;
+        }
+        .style-tag {
+            padding: 10px 18px;
+            border-radius: 25px;
+            font-size: 0.9em;
+            font-weight: 600;
+        }
+        .style-tag.primary {
+            background: linear-gradient(135deg, #8B5CF6 0%, #E91E78 100%);
+            color: white;
+        }
+        .style-tag.secondary {
+            background: #f3e8ff;
+            color: #8B5CF6;
+        }
+
+        /* Insights */
+        .insight-box {
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+            border-radius: 12px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+        .insight-box h4 {
+            color: #92400e;
+            margin-bottom: 10px;
+        }
+        .insight-box p {
+            color: #78350f;
+            font-size: 0.95em;
+            line-height: 1.6;
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            margin-top: 40px;
+            color: rgba(255,255,255,0.6);
+            font-size: 0.85em;
+        }
+
+        .back-link {
+            color: white;
+            text-decoration: none;
+            font-size: 0.9em;
+            opacity: 0.8;
+            display: inline-block;
+            margin-bottom: 20px;
+        }
+        .back-link:hover { opacity: 1; }
+
+        /* Data Source Indicator */
+        .data-source {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.75em;
+            font-weight: 600;
+            margin-top: 10px;
+        }
+        .data-source.live {
+            background: rgba(34, 197, 94, 0.2);
+            color: #22c55e;
+        }
+        .data-source.cached {
+            background: rgba(251, 191, 36, 0.2);
+            color: #fbbf24;
+        }
+
+        /* Enhanced Mobile Responsive */
+        @media (max-width: 768px) {
+            body { padding: 20px 10px; }
+            .container { max-width: 100%; }
+
+            .header h1 { font-size: 1.6em; }
+            .header p { font-size: 0.95em; }
+
+            .card { padding: 20px 15px; border-radius: 16px; }
+            .card h2 { font-size: 1.15em; }
+
+            .slider-labels {
+                flex-direction: column;
+                gap: 5px;
+                text-align: center;
+            }
+            .slider-labels span { max-width: 100%; text-align: center; }
+
+            .option { padding: 12px; }
+            .option-label { font-size: 0.95em; }
+            .option-desc { font-size: 0.8em; }
+
+            .profile-visual { grid-template-columns: 1fr; }
+
+            .btn { width: 100%; margin-bottom: 10px; }
+
+            /* Prevent iOS zoom on inputs */
+            input[type="range"] { font-size: 16px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="#" onclick="goBackToPortal(); return false;" class="back-link">← Back to Toolkit</a>
+
+        <div class="header">
+            <img src="White.png" alt="Harness the Spark">
+            <h1>🧠 My Processing Profile</h1>
+            <p>Discover how your brain likes to work</p>
+            <div class="data-source cached" id="dataSource">
+                <span>💾</span> <span id="dataSourceText">Cached</span>
+            </div>
+        </div>
+
+        <!-- SECTION 1: Processing Paradoxes -->
+        <div class="card" id="section1">
+            <h2>Part 1: Your Processing Paradoxes</h2>
+            <p class="subtitle">Where do you sit on these spectrums? There's no right answer - just your truth.</p>
+
+            <div class="slider-question">
+                <div class="question-text">Learning vs Forgetting</div>
+                <div class="slider-labels">
+                    <span class="left">I absorb everything deeply, remember details</span>
+                    <span class="right">I learn fast but information slips away</span>
+                </div>
+                <div class="slider-container">
+                    <input type="range" id="q1" min="0" max="100" value="50">
+                </div>
+                <div class="slider-value" id="q1-value">Balanced</div>
+            </div>
+
+            <div class="slider-question">
+                <div class="question-text">Processing Speed</div>
+                <div class="slider-labels">
+                    <span class="left">Quick thinker, fast decisions</span>
+                    <span class="right">Need time to process, brain buffering</span>
+                </div>
+                <div class="slider-container">
+                    <input type="range" id="q2" min="0" max="100" value="50">
+                </div>
+                <div class="slider-value" id="q2-value">Balanced</div>
+            </div>
+
+            <div class="slider-question">
+                <div class="question-text">Big Picture vs Detail</div>
+                <div class="slider-labels">
+                    <span class="left">See the whole picture first</span>
+                    <span class="right">Start with details, build up</span>
+                </div>
+                <div class="slider-container">
+                    <input type="range" id="q3" min="0" max="100" value="50">
+                </div>
+                <div class="slider-value" id="q3-value">Balanced</div>
+            </div>
+
+            <div class="slider-question">
+                <div class="question-text">Task Difficulty</div>
+                <div class="slider-labels">
+                    <span class="left">Complex tasks energise me</span>
+                    <span class="right">"Simple" tasks feel surprisingly hard</span>
+                </div>
+                <div class="slider-container">
+                    <input type="range" id="q4" min="0" max="100" value="50">
+                </div>
+                <div class="slider-value" id="q4-value">Balanced</div>
+            </div>
+
+            <div class="slider-question">
+                <div class="question-text">Interest-Based Attention</div>
+                <div class="slider-labels">
+                    <span class="left">Can focus on anything when needed</span>
+                    <span class="right">Attention follows interest/urgency</span>
+                </div>
+                <div class="slider-container">
+                    <input type="range" id="q5" min="0" max="100" value="50">
+                </div>
+                <div class="slider-value" id="q5-value">Balanced</div>
+            </div>
+
+            <div style="text-align: center; margin-top: 30px;">
+                <button class="btn" onclick="showSection2()">Continue →</button>
+            </div>
+        </div>
+
+        <!-- SECTION 2: Processing Styles -->
+        <div class="card" id="section2" style="display: none;">
+            <h2>Part 2: Your Processing Style</h2>
+            <p class="subtitle">How do you naturally take in and work with information?</p>
+
+            <div class="question">
+                <div class="question-text">When learning something new, I prefer to...</div>
+                <div class="options">
+                    <label class="option" onclick="selectOption(this, 'learn', 'topdown')">
+                        <input type="radio" name="learn" value="topdown">
+                        <div class="option-circle"></div>
+                        <div class="option-text">
+                            <div class="option-label">Get the big picture first</div>
+                            <div class="option-desc">Show me the overview, then fill in details</div>
+                        </div>
+                    </label>
+                    <label class="option" onclick="selectOption(this, 'learn', 'bottomup')">
+                        <input type="radio" name="learn" value="bottomup">
+                        <div class="option-circle"></div>
+                        <div class="option-text">
+                            <div class="option-label">Build up from details</div>
+                            <div class="option-desc">Give me the pieces, I'll construct the whole</div>
+                        </div>
+                    </label>
+                    <label class="option" onclick="selectOption(this, 'learn', 'creative')">
+                        <input type="radio" name="learn" value="creative">
+                        <div class="option-circle"></div>
+                        <div class="option-text">
+                            <div class="option-label">Make something with it</div>
+                            <div class="option-desc">I learn by creating and experimenting</div>
+                        </div>
+                    </label>
+                    <label class="option" onclick="selectOption(this, 'learn', 'verbal')">
+                        <input type="radio" name="learn" value="verbal">
+                        <div class="option-circle"></div>
+                        <div class="option-text">
+                            <div class="option-label">Talk it through</div>
+                            <div class="option-desc">Discussion and conversation helps me process</div>
+                        </div>
+                    </label>
+                </div>
+            </div>
+
+            <div class="question">
+                <div class="question-text">When solving a problem, I naturally...</div>
+                <div class="options">
+                    <label class="option" onclick="selectOption(this, 'solve', 'analytical')">
+                        <input type="radio" name="solve" value="analytical">
+                        <div class="option-circle"></div>
+                        <div class="option-text">
+                            <div class="option-label">Look for patterns and logic</div>
+                            <div class="option-desc">Break it down systematically</div>
+                        </div>
+                    </label>
+                    <label class="option" onclick="selectOption(this, 'solve', 'creative')">
+                        <input type="radio" name="solve" value="creative">
+                        <div class="option-circle"></div>
+                        <div class="option-text">
+                            <div class="option-label">Try unconventional approaches</div>
+                            <div class="option-desc">What if we did it completely differently?</div>
+                        </div>
+                    </label>
+                    <label class="option" onclick="selectOption(this, 'solve', 'sensory')">
+                        <input type="radio" name="solve" value="sensory">
+                        <div class="option-circle"></div>
+                        <div class="option-text">
+                            <div class="option-label">Feel my way through</div>
+                            <div class="option-desc">Trust gut instinct and body signals</div>
+                        </div>
+                    </label>
+                    <label class="option" onclick="selectOption(this, 'solve', 'verbal')">
+                        <input type="radio" name="solve" value="verbal">
+                        <div class="option-circle"></div>
+                        <div class="option-text">
+                            <div class="option-label">Think out loud</div>
+                            <div class="option-desc">Talking helps me find the answer</div>
+                        </div>
+                    </label>
+                </div>
+            </div>
+
+            <div class="question">
+                <div class="question-text">I remember information best when...</div>
+                <div class="options">
+                    <label class="option" onclick="selectOption(this, 'remember', 'visual')">
+                        <input type="radio" name="remember" value="visual">
+                        <div class="option-circle"></div>
+                        <div class="option-text">
+                            <div class="option-label">I can see it</div>
+                            <div class="option-desc">Diagrams, colours, spatial layouts</div>
+                        </div>
+                    </label>
+                    <label class="option" onclick="selectOption(this, 'remember', 'verbal')">
+                        <input type="radio" name="remember" value="verbal">
+                        <div class="option-circle"></div>
+                        <div class="option-text">
+                            <div class="option-label">I hear it or say it</div>
+                            <div class="option-desc">Words, stories, discussions</div>
+                        </div>
+                    </label>
+                    <label class="option" onclick="selectOption(this, 'remember', 'kinesthetic')">
+                        <input type="radio" name="remember" value="kinesthetic">
+                        <div class="option-circle"></div>
+                        <div class="option-text">
+                            <div class="option-label">I do it or move with it</div>
+                            <div class="option-desc">Hands-on, physical engagement</div>
+                        </div>
+                    </label>
+                    <label class="option" onclick="selectOption(this, 'remember', 'emotional')">
+                        <input type="radio" name="remember" value="emotional">
+                        <div class="option-circle"></div>
+                        <div class="option-text">
+                            <div class="option-label">It connects emotionally</div>
+                            <div class="option-desc">Meaning and feeling make it stick</div>
+                        </div>
+                    </label>
+                </div>
+            </div>
+
+            <div style="text-align: center; margin-top: 30px;">
+                <button class="btn btn-secondary" onclick="showSection1()" style="margin-right: 10px;">← Back</button>
+                <button class="btn" onclick="generateResults()">See My Profile →</button>
+            </div>
+        </div>
+
+        <!-- RESULTS -->
+        <div class="card results" id="results">
+            <h2>🎯 Your Processing Profile</h2>
+            <p class="subtitle">Here's how your brain likes to work</p>
+
+            <div class="style-tags" id="styleTags">
+                <!-- Generated by JS -->
+            </div>
+
+            <div class="profile-visual" id="profileVisual">
+                <!-- Generated by JS -->
+            </div>
+
+            <div class="insight-box">
+                <h4>💡 What This Means For You</h4>
+                <p id="insightText">Your profile insights will appear here...</p>
+            </div>
+
+            <div style="text-align: center; margin-top: 30px; display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;">
+                <button class="btn btn-secondary" onclick="resetProfile()">Start Again</button>
+                <button class="btn" onclick="saveProfile()">💾 Save My Profile</button>
+                <button class="btn" onclick="printProfile()" style="background: #4ECDC4;">🖨️ Print</button>
+            </div>
+        </div>
+
+        <div class="footer">
+            Spark Your Potential by Harness the Spark | harnessthespark.com
+        </div>
+    </div>
+
+    <script>
+        // API Configuration - PostgreSQL-first sync
+        const API_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+            ? 'http://localhost:8080'
+            : 'https://potential.harnessthespark.com';
+
+        // Get current user
+        const currentUser = JSON.parse(localStorage.getItem('syp_user') || '{}');
+        const STORAGE_KEY = 'syp_processing_profile_' + (currentUser.id || 'anonymous');
+
+        let answers = {
+            paradoxes: {},
+            styles: {}
+        };
+
+        // Smart back navigation based on programme type
+        function goBackToPortal() {
+            const savedUser = localStorage.getItem('syp_user');
+            if (savedUser) {
+                try {
+                    const user = JSON.parse(savedUser);
+                    const access = user.programme_access || user.programme_type || 'career';
+                    if (access === 'blended' || access === 'career') {
+                        window.location.href = 'client-portal.html';
+                    } else {
+                        window.location.href = 'audhd-dashboard.html';
+                    }
+                    return;
+                } catch(e) {}
+            }
+            window.location.href = 'client-portal.html';
+        }
+
+        // Data source indicator
+        function updateDataSource(isLive) {
+            const indicator = document.getElementById('dataSource');
+            if (isLive) {
+                indicator.className = 'data-source live';
+                indicator.innerHTML = '<span>☁️</span> <span id="dataSourceText">Synced</span>';
+            } else {
+                indicator.className = 'data-source cached';
+                indicator.innerHTML = '<span>💾</span> <span id="dataSourceText">Cached</span>';
+            }
+        }
+
+        // Get user email for API calls
+        function getUserEmail() {
+            if (currentUser) {
+                return currentUser.email || currentUser.username;
+            }
+            return null;
+        }
+
+        // Load profile from PostgreSQL first
+        async function loadProfileData() {
+            const email = getUserEmail();
+            if (!email) return;
+
+            try {
+                const response = await fetch(`${API_URL}/api/homework/${encodeURIComponent(email)}/processing-profile`);
+                if (response.ok) {
+                    const data = await response.json();
+                    if (data && data.responses) {
+                        // Load saved answers
+                        if (data.responses.paradoxes) {
+                            answers.paradoxes = data.responses.paradoxes;
+                            // Update sliders to match saved values
+                            Object.keys(data.responses.paradoxes).forEach(key => {
+                                const slider = document.getElementById(key);
+                                if (slider) {
+                                    slider.value = data.responses.paradoxes[key];
+                                    updateSliderValue(key, data.responses.paradoxes[key]);
+                                }
+                            });
+                        }
+                        if (data.responses.styles) {
+                            answers.styles = data.responses.styles;
+                            // Update radio buttons to match saved values
+                            Object.keys(data.responses.styles).forEach(group => {
+                                const value = data.responses.styles[group];
+                                const radio = document.querySelector(`input[name="${group}"][value="${value}"]`);
+                                if (radio) {
+                                    radio.checked = true;
+                                    radio.closest('.option').classList.add('selected');
+                                }
+                            });
+                        }
+                        // Update localStorage cache
+                        localStorage.setItem(STORAGE_KEY, JSON.stringify(data.responses));
+                        updateDataSource(true);
+                        console.log('✅ Processing profile loaded from PostgreSQL');
+                        return;
+                    }
+                }
+            } catch (error) {
+                console.log('⚠️ PostgreSQL unavailable, using localStorage cache');
+            }
+
+            // Fallback to localStorage
+            const saved = localStorage.getItem(STORAGE_KEY);
+            if (saved) {
+                try {
+                    const data = JSON.parse(saved);
+                    if (data.paradoxes) {
+                        answers.paradoxes = data.paradoxes;
+                        Object.keys(data.paradoxes).forEach(key => {
+                            const slider = document.getElementById(key);
+                            if (slider) {
+                                slider.value = data.paradoxes[key];
+                                updateSliderValue(key, data.paradoxes[key]);
+                            }
+                        });
+                    }
+                    if (data.styles) {
+                        answers.styles = data.styles;
+                        Object.keys(data.styles).forEach(group => {
+                            const value = data.styles[group];
+                            const radio = document.querySelector(`input[name="${group}"][value="${value}"]`);
+                            if (radio) {
+                                radio.checked = true;
+                                radio.closest('.option').classList.add('selected');
+                            }
+                        });
+                    }
+                    updateDataSource(false);
+                    console.log('📦 Processing profile loaded from localStorage');
+                } catch (e) {
+                    console.error('Error loading saved data:', e);
+                }
+            }
+        }
+
+        // Save profile to PostgreSQL
+        async function saveProfileData() {
+            const email = getUserEmail();
+
+            const profileData = {
+                date: new Date().toISOString(),
+                paradoxes: answers.paradoxes,
+                styles: answers.styles
+            };
+
+            // Always save to localStorage first (instant)
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(profileData));
+
+            if (!email) {
+                updateDataSource(false);
+                return;
+            }
+
+            // Then sync to PostgreSQL
+            try {
+                const response = await fetch(`${API_URL}/api/homework`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        email: email,
+                        type: 'processing-profile',
+                        responses: profileData
+                    })
+                });
+
+                if (response.ok) {
+                    updateDataSource(true);
+                    console.log('✅ Processing profile synced to PostgreSQL');
+                } else {
+                    updateDataSource(false);
+                }
+            } catch (error) {
+                console.log('⚠️ PostgreSQL sync failed, data cached locally');
+                updateDataSource(false);
+            }
+        }
+
+        // Slider value labels
+        const sliderLabels = {
+            q1: { low: 'Deep Absorber', mid: 'Balanced', high: 'Fast Learner (Quick Forget)' },
+            q2: { low: 'Quick Processor', mid: 'Balanced', high: 'Deep Processor (Buffering)' },
+            q3: { low: 'Big Picture First', mid: 'Balanced', high: 'Detail Builder' },
+            q4: { low: 'Complexity Lover', mid: 'Balanced', high: 'Simple = Hard' },
+            q5: { low: 'Steady Focus', mid: 'Balanced', high: 'Interest-Driven' }
+        };
+
+        // Initialize sliders
+        document.querySelectorAll('input[type="range"]').forEach(slider => {
+            slider.addEventListener('input', function() {
+                updateSliderValue(this.id, this.value);
+                answers.paradoxes[this.id] = parseInt(this.value);
+            });
+            // Set initial value
+            answers.paradoxes[slider.id] = 50;
+        });
+
+        function updateSliderValue(id, value) {
+            const labels = sliderLabels[id];
+            let text = labels.mid;
+            if (value < 35) text = labels.low;
+            else if (value > 65) text = labels.high;
+            document.getElementById(id + '-value').textContent = text;
+        }
+
+        function selectOption(element, group, value) {
+            // Remove selected from siblings
+            element.parentElement.querySelectorAll('.option').forEach(opt => {
+                opt.classList.remove('selected');
+            });
+            element.classList.add('selected');
+            element.querySelector('input').checked = true;
+            answers.styles[group] = value;
+        }
+
+        function showSection1() {
+            document.getElementById('section1').style.display = 'block';
+            document.getElementById('section2').style.display = 'none';
+        }
+
+        function showSection2() {
+            document.getElementById('section1').style.display = 'none';
+            document.getElementById('section2').style.display = 'block';
+        }
+
+        function generateResults() {
+            // Hide questions, show results
+            document.getElementById('section1').style.display = 'none';
+            document.getElementById('section2').style.display = 'none';
+            document.getElementById('results').classList.add('visible');
+
+            // Generate style tags
+            const tagsDiv = document.getElementById('styleTags');
+            const primaryStyles = [];
+            const secondaryStyles = [];
+
+            // Determine primary styles from paradoxes
+            if (answers.paradoxes.q2 > 60) primaryStyles.push('Deep Processor');
+            if (answers.paradoxes.q2 < 40) primaryStyles.push('Quick Thinker');
+            if (answers.paradoxes.q3 < 40) primaryStyles.push('Big Picture');
+            if (answers.paradoxes.q3 > 60) primaryStyles.push('Detail-Oriented');
+            if (answers.paradoxes.q5 > 60) primaryStyles.push('Interest-Driven');
+            if (answers.paradoxes.q4 > 60) primaryStyles.push('Complexity Seeker');
+
+            // Add from style questions
+            if (answers.styles.learn) {
+                const styleMap = {
+                    topdown: 'Top-Down Thinker',
+                    bottomup: 'Bottom-Up Thinker',
+                    creative: 'Creative Learner',
+                    verbal: 'Verbal Processor'
+                };
+                if (styleMap[answers.styles.learn]) secondaryStyles.push(styleMap[answers.styles.learn]);
+            }
+
+            if (answers.styles.solve) {
+                const solveMap = {
+                    analytical: 'Analytical',
+                    creative: 'Creative Problem-Solver',
+                    sensory: 'Intuitive',
+                    verbal: 'Verbal Reasoner'
+                };
+                if (solveMap[answers.styles.solve] && !secondaryStyles.includes(solveMap[answers.styles.solve])) {
+                    secondaryStyles.push(solveMap[answers.styles.solve]);
+                }
+            }
+
+            if (answers.styles.remember) {
+                const rememberMap = {
+                    visual: 'Visual',
+                    verbal: 'Auditory',
+                    kinesthetic: 'Kinesthetic',
+                    emotional: 'Emotional Memory'
+                };
+                if (rememberMap[answers.styles.remember]) secondaryStyles.push(rememberMap[answers.styles.remember]);
+            }
+
+            tagsDiv.innerHTML = '';
+            primaryStyles.slice(0, 3).forEach(style => {
+                tagsDiv.innerHTML += `<span class="style-tag primary">${style}</span>`;
+            });
+            secondaryStyles.slice(0, 3).forEach(style => {
+                tagsDiv.innerHTML += `<span class="style-tag secondary">${style}</span>`;
+            });
+
+            // Generate visual bars
+            const visualDiv = document.getElementById('profileVisual');
+            visualDiv.innerHTML = `
+                <div class="profile-item">
+                    <h4>Learning Style</h4>
+                    <div class="profile-bar">
+                        <div class="profile-bar-fill pink" style="width: ${100 - answers.paradoxes.q1}%"></div>
+                    </div>
+                    <div class="profile-result">${answers.paradoxes.q1 < 50 ? 'Deep Absorber' : 'Fast Learner'}</div>
+                </div>
+                <div class="profile-item">
+                    <h4>Processing Speed</h4>
+                    <div class="profile-bar">
+                        <div class="profile-bar-fill purple" style="width: ${answers.paradoxes.q2}%"></div>
+                    </div>
+                    <div class="profile-result">${answers.paradoxes.q2 > 50 ? 'Needs Processing Time' : 'Quick Processor'}</div>
+                </div>
+                <div class="profile-item">
+                    <h4>Perspective</h4>
+                    <div class="profile-bar">
+                        <div class="profile-bar-fill teal" style="width: ${100 - answers.paradoxes.q3}%"></div>
+                    </div>
+                    <div class="profile-result">${answers.paradoxes.q3 < 50 ? 'Big Picture First' : 'Detail Builder'}</div>
+                </div>
+                <div class="profile-item">
+                    <h4>Attention Driver</h4>
+                    <div class="profile-bar">
+                        <div class="profile-bar-fill amber" style="width: ${answers.paradoxes.q5}%"></div>
+                    </div>
+                    <div class="profile-result">${answers.paradoxes.q5 > 50 ? 'Interest-Based' : 'Steady Focus'}</div>
+                </div>
+            `;
+
+            // Generate insight text
+            let insights = [];
+
+            if (answers.paradoxes.q2 > 60) {
+                insights.push("You benefit from processing time - don't rush decisions. Build in 'buffer time' after meetings.");
+            }
+            if (answers.paradoxes.q5 > 60) {
+                insights.push("Your attention follows interest. Connect tasks to what matters to you, or create urgency when needed.");
+            }
+            if (answers.paradoxes.q4 > 60) {
+                insights.push("'Simple' tasks may feel harder than complex ones. Try bundling boring tasks or adding complexity to make them engaging.");
+            }
+            if (answers.paradoxes.q3 < 40) {
+                insights.push("You need the big picture first. Ask 'what are we trying to achieve?' before diving into details.");
+            }
+            if (answers.paradoxes.q3 > 60) {
+                insights.push("You build understanding from details up. Take notes, create lists, work methodically.");
+            }
+
+            if (insights.length === 0) {
+                insights.push("You have a balanced processing profile. You can adapt your approach based on the situation.");
+            }
+
+            document.getElementById('insightText').innerHTML = insights.join('<br><br>');
+
+            // Save to PostgreSQL
+            saveProfileData();
+        }
+
+        async function saveProfile() {
+            await saveProfileData();
+            alert('Profile saved! You can access it on any device.');
+        }
+
+        function printProfile() {
+            window.print();
+        }
+
+        function resetProfile() {
+            answers = { paradoxes: {}, styles: {} };
+            document.querySelectorAll('input[type="range"]').forEach(slider => {
+                slider.value = 50;
+                updateSliderValue(slider.id, 50);
+                answers.paradoxes[slider.id] = 50;
+            });
+            document.querySelectorAll('.option').forEach(opt => opt.classList.remove('selected'));
+            document.querySelectorAll('input[type="radio"]').forEach(radio => radio.checked = false);
+            document.getElementById('results').classList.remove('visible');
+            document.getElementById('section1').style.display = 'block';
+        }
+
+        // Load saved profile on page load - PostgreSQL first
+        window.onload = async function() {
+            await loadProfileData();
+        };
+    </script>
+</body>
+</html>

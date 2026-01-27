@@ -1,0 +1,680 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weekly Check-in - Spark Your Potential</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>✅</text></svg>">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #2d1b4e 100%);
+            min-height: 100vh;
+            padding: 40px 20px;
+            color: #333;
+        }
+        .container { max-width: 700px; margin: 0 auto; }
+
+        .back-link {
+            color: white;
+            text-decoration: none;
+            font-size: 0.9em;
+            opacity: 0.8;
+            display: inline-block;
+            margin-bottom: 20px;
+        }
+        .back-link:hover { opacity: 1; }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            color: white;
+        }
+        .header img { height: 50px; margin-bottom: 15px; }
+        .header h1 { font-size: 1.8em; font-weight: 800; margin-bottom: 8px; }
+        .header p { opacity: 0.8; }
+        .header .week-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #4ECDC4 0%, #44A08D 100%);
+            color: white;
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: 600;
+            margin-top: 10px;
+        }
+
+        .card {
+            background: rgba(255,255,255,0.95);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 20px;
+        }
+        .card h2 {
+            font-size: 1.2em;
+            margin-bottom: 20px;
+            color: #1a1a2e;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* Form Elements */
+        .form-group { margin-bottom: 25px; }
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: #1a1a2e;
+        }
+        .form-group .hint {
+            font-size: 0.85em;
+            color: #666;
+            margin-bottom: 10px;
+        }
+        textarea {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            font-family: inherit;
+            font-size: 1em;
+            resize: vertical;
+            min-height: 100px;
+        }
+        textarea:focus { outline: none; border-color: #8B5CF6; }
+
+        /* Energy Rating */
+        .energy-scale {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        .energy-btn {
+            padding: 12px 20px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            background: white;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 1.1em;
+        }
+        .energy-btn:hover { border-color: #8B5CF6; }
+        .energy-btn.selected {
+            border-color: #8B5CF6;
+            background: #f3e8ff;
+        }
+
+        /* Quick Wins */
+        .wins-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .win-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 15px;
+            background: #f8f9fa;
+            border-radius: 10px;
+        }
+        .win-item input {
+            flex: 1;
+            border: none;
+            background: transparent;
+            font-size: 1em;
+            font-family: inherit;
+        }
+        .win-item input:focus { outline: none; }
+        .win-item .win-icon { font-size: 1.2em; }
+        .add-win-btn {
+            padding: 12px;
+            border: 2px dashed #ddd;
+            border-radius: 10px;
+            background: transparent;
+            cursor: pointer;
+            color: #888;
+            font-size: 0.9em;
+        }
+        .add-win-btn:hover { border-color: #8B5CF6; color: #8B5CF6; }
+
+        /* Commitments */
+        .commitment-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 15px;
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+            border-radius: 12px;
+            margin-bottom: 10px;
+        }
+        .commitment-item input {
+            flex: 1;
+            border: none;
+            background: transparent;
+            font-size: 1em;
+            font-family: inherit;
+        }
+        .commitment-item input:focus { outline: none; }
+
+        /* Buttons */
+        .btn {
+            background: linear-gradient(135deg, #8B5CF6 0%, #E91E78 100%);
+            color: white;
+            border: none;
+            padding: 15px 35px;
+            border-radius: 12px;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        .btn:hover { transform: translateY(-2px); }
+        .btn-secondary {
+            background: #e0e0e0;
+            color: #333;
+        }
+
+        /* History */
+        .history-section { margin-top: 30px; }
+        .history-item {
+            background: rgba(255,255,255,0.1);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 15px;
+            color: white;
+        }
+        .history-item h4 {
+            font-size: 0.9em;
+            opacity: 0.8;
+            margin-bottom: 10px;
+        }
+        .history-item .summary {
+            font-size: 0.95em;
+            line-height: 1.5;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 40px;
+            color: rgba(255,255,255,0.6);
+            font-size: 0.85em;
+        }
+
+        /* Data Source Indicator */
+        .data-source {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.75em;
+            font-weight: 600;
+            margin-top: 10px;
+        }
+        .data-source.live {
+            background: rgba(34, 197, 94, 0.2);
+            color: #22c55e;
+        }
+        .data-source.cached {
+            background: rgba(251, 191, 36, 0.2);
+            color: #fbbf24;
+        }
+
+        /* Mobile Responsive Styles */
+        @media (max-width: 768px) {
+            body { padding: 15px 10px; }
+            .container { max-width: 100%; }
+
+            .header h1 { font-size: 1.4em; }
+            .header p { font-size: 0.9em; }
+
+            .card {
+                padding: 20px 15px;
+                border-radius: 16px;
+                margin-bottom: 15px;
+            }
+            .card h2 { font-size: 1.1em; }
+
+            /* Energy buttons as 2-column grid on mobile */
+            .energy-scale {
+                display: grid;
+                grid-template-columns: repeat(3, 1fr);
+                gap: 8px;
+            }
+            .energy-btn {
+                padding: 15px 10px;
+                font-size: 1.3em;
+            }
+            .energy-btn small { font-size: 0.65em; }
+
+            /* Win items full width */
+            .win-item {
+                padding: 15px;
+            }
+            .win-item input {
+                font-size: 16px; /* Prevent iOS zoom */
+            }
+
+            /* Textareas */
+            textarea {
+                font-size: 16px; /* Prevent iOS zoom */
+                min-height: 120px;
+            }
+
+            /* Commitment item */
+            .commitment-item {
+                padding: 15px;
+            }
+            .commitment-item input {
+                font-size: 16px; /* Prevent iOS zoom */
+            }
+
+            /* Submit button sticky at bottom */
+            .submit-section {
+                position: fixed;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                background: linear-gradient(135deg, #1a1a2e 0%, #2d1b4e 100%);
+                padding: 15px 20px;
+                margin: 0;
+                box-shadow: 0 -4px 20px rgba(0,0,0,0.3);
+                z-index: 100;
+            }
+            .submit-section .btn {
+                width: 100%;
+                padding: 18px;
+                font-size: 1.1em;
+            }
+
+            /* Add padding at bottom for sticky button */
+            .history-section { padding-bottom: 100px; }
+
+            /* History items more compact */
+            .history-item {
+                padding: 15px;
+            }
+            .history-item h4 { font-size: 0.85em; }
+            .history-item .summary { font-size: 0.9em; }
+
+            .back-link {
+                font-size: 0.85em;
+                margin-bottom: 15px;
+            }
+        }
+
+        /* Streak Counter */
+        .streak-banner {
+            background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+            color: #78350f;
+            padding: 15px 20px;
+            border-radius: 12px;
+            text-align: center;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+        .streak-banner .streak-number {
+            font-size: 1.5em;
+            font-weight: 800;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="portal.html" class="back-link">← Back to Toolkit</a>
+
+        <div class="header">
+            <img src="White.png" alt="Harness the Spark">
+            <h1>✅ Weekly Check-in</h1>
+            <p>A few minutes to reflect and set intentions</p>
+            <div class="week-badge" id="weekBadge">Week of Dec 9, 2024</div>
+            <div id="dataSource" class="data-source cached">
+                <span>💾</span> Checking...
+            </div>
+        </div>
+
+        <div class="streak-banner" id="streakBanner" style="display: none;">
+            🔥 <span class="streak-number" id="streakCount">0</span> week streak!
+        </div>
+
+        <!-- Energy Check -->
+        <div class="card">
+            <h2>⚡ Energy This Week</h2>
+            <p class="hint" style="margin-bottom: 15px;">How has your overall energy been?</p>
+            <div class="energy-scale">
+                <button class="energy-btn" onclick="selectEnergy(this, 1)">😴<br><small>Drained</small></button>
+                <button class="energy-btn" onclick="selectEnergy(this, 2)">😕<br><small>Low</small></button>
+                <button class="energy-btn" onclick="selectEnergy(this, 3)">😐<br><small>Okay</small></button>
+                <button class="energy-btn" onclick="selectEnergy(this, 4)">🙂<br><small>Good</small></button>
+                <button class="energy-btn" onclick="selectEnergy(this, 5)">😊<br><small>Great</small></button>
+            </div>
+        </div>
+
+        <!-- Wins -->
+        <div class="card">
+            <h2>🏆 Wins This Week</h2>
+            <p class="hint">What went well? Even small wins count.</p>
+            <div class="wins-list" id="winsList">
+                <div class="win-item">
+                    <span class="win-icon">⭐</span>
+                    <input type="text" placeholder="Something I'm proud of..." onchange="saveProgress()">
+                </div>
+                <div class="win-item">
+                    <span class="win-icon">⭐</span>
+                    <input type="text" placeholder="Another win..." onchange="saveProgress()">
+                </div>
+                <div class="win-item">
+                    <span class="win-icon">⭐</span>
+                    <input type="text" placeholder="And another..." onchange="saveProgress()">
+                </div>
+            </div>
+            <button class="add-win-btn" onclick="addWin()">+ Add another win</button>
+        </div>
+
+        <!-- Challenges -->
+        <div class="card">
+            <h2>🌊 Challenges & Learning</h2>
+            <div class="form-group">
+                <label>What was hard this week?</label>
+                <textarea id="challenges" placeholder="Any struggles, blockers, or difficult moments..." onchange="saveProgress()"></textarea>
+            </div>
+            <div class="form-group">
+                <label>What did you learn from it?</label>
+                <textarea id="learning" placeholder="Insights, patterns you noticed, things to try differently..." onchange="saveProgress()"></textarea>
+            </div>
+        </div>
+
+        <!-- Next Week -->
+        <div class="card">
+            <h2>🎯 Next Week Intentions</h2>
+            <p class="hint">What's ONE thing you'll focus on? (Just one - keep it achievable)</p>
+            <div class="commitment-item">
+                <span style="font-size: 1.3em;">🎯</span>
+                <input type="text" id="mainGoal" placeholder="My focus for next week is..." onchange="saveProgress()">
+            </div>
+            <div class="form-group" style="margin-top: 20px;">
+                <label>What support do you need?</label>
+                <textarea id="support" placeholder="From Lisa, from yourself, from others..." onchange="saveProgress()"></textarea>
+            </div>
+        </div>
+
+        <!-- Submit -->
+        <div class="submit-section" style="text-align: center; margin: 30px 0;">
+            <button class="btn" onclick="submitCheckin()">Submit Check-in ✓</button>
+        </div>
+
+        <!-- History -->
+        <div class="history-section" id="historySection">
+            <h3 style="color: white; margin-bottom: 15px; font-size: 1.1em;">📜 Previous Check-ins</h3>
+            <div id="historyList">
+                <!-- Populated by JS -->
+            </div>
+        </div>
+
+        <div class="footer">
+            Spark Your Potential by Harness the Spark | harnessthespark.com
+        </div>
+    </div>
+
+    <script>
+        // API Configuration
+        const API_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+            ? 'http://localhost:8080'
+            : 'https://potential.harnessthespark.com';
+
+        let checkinData = {
+            energy: null,
+            wins: [],
+            challenges: '',
+            learning: '',
+            mainGoal: '',
+            support: ''
+        };
+        let isLiveData = false;
+
+        // Get user email from localStorage
+        function getUserEmail() {
+            const savedUser = localStorage.getItem('syp_user');
+            if (savedUser) {
+                try {
+                    const user = JSON.parse(savedUser);
+                    return user.email;
+                } catch(e) {}
+            }
+            return null;
+        }
+
+        // Update data source indicator
+        function updateDataSource(live) {
+            isLiveData = live;
+            const el = document.getElementById('dataSource');
+            el.className = `data-source ${live ? 'live' : 'cached'}`;
+            el.innerHTML = live ? '<span>☁️</span> Synced' : '<span>💾</span> Cached';
+        }
+
+        // Set current week
+        function setWeekBadge() {
+            const now = new Date();
+            const options = { month: 'short', day: 'numeric', year: 'numeric' };
+            document.getElementById('weekBadge').textContent = 'Week of ' + now.toLocaleDateString('en-GB', options);
+        }
+        setWeekBadge();
+
+        function selectEnergy(btn, level) {
+            document.querySelectorAll('.energy-btn').forEach(b => b.classList.remove('selected'));
+            btn.classList.add('selected');
+            checkinData.energy = level;
+            saveProgress();
+        }
+
+        function addWin() {
+            const list = document.getElementById('winsList');
+            const item = document.createElement('div');
+            item.className = 'win-item';
+            item.innerHTML = `
+                <span class="win-icon">⭐</span>
+                <input type="text" placeholder="Another win..." onchange="saveProgress()">
+            `;
+            list.appendChild(item);
+        }
+
+        function saveProgress() {
+            // Gather wins
+            checkinData.wins = [];
+            document.querySelectorAll('#winsList input').forEach(input => {
+                if (input.value.trim()) checkinData.wins.push(input.value.trim());
+            });
+
+            // Gather text fields
+            checkinData.challenges = document.getElementById('challenges').value;
+            checkinData.learning = document.getElementById('learning').value;
+            checkinData.mainGoal = document.getElementById('mainGoal').value;
+            checkinData.support = document.getElementById('support').value;
+
+            // Save draft
+            localStorage.setItem('syp_checkin_draft', JSON.stringify(checkinData));
+        }
+
+        async function submitCheckin() {
+            saveProgress();
+
+            if (!checkinData.energy) {
+                alert('Please select your energy level for this week.');
+                return;
+            }
+
+            if (checkinData.wins.length === 0) {
+                alert('Add at least one win - even a small one counts!');
+                return;
+            }
+
+            // Create entry
+            const entry = {
+                date: new Date().toISOString(),
+                week: document.getElementById('weekBadge').textContent,
+                ...checkinData
+            };
+
+            // Try to save to PostgreSQL first
+            const email = getUserEmail();
+            if (email) {
+                try {
+                    const response = await fetch(`${API_URL}/api/weekly-checkins/${encodeURIComponent(email)}`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ data: entry })
+                    });
+                    if (response.ok) {
+                        console.log('✅ Check-in saved to PostgreSQL');
+                        updateDataSource(true);
+                    } else {
+                        throw new Error('API error');
+                    }
+                } catch (error) {
+                    console.log('⚠️ Could not save to API, using localStorage:', error.message);
+                    updateDataSource(false);
+                }
+            }
+
+            // Always also save to localStorage as cache
+            const history = JSON.parse(localStorage.getItem('syp_checkin_history') || '[]');
+            history.unshift(entry);
+            localStorage.setItem('syp_checkin_history', JSON.stringify(history));
+
+            // Update streak
+            updateStreak();
+
+            // Clear draft
+            localStorage.removeItem('syp_checkin_draft');
+
+            // Show confirmation
+            alert('Check-in submitted! 🎉 Great job reflecting on your week.');
+
+            // Reset form
+            resetForm();
+
+            // Refresh history
+            loadHistory();
+        }
+
+        function resetForm() {
+            checkinData = {
+                energy: null,
+                wins: [],
+                challenges: '',
+                learning: '',
+                mainGoal: '',
+                support: ''
+            };
+            document.querySelectorAll('.energy-btn').forEach(b => b.classList.remove('selected'));
+            document.querySelectorAll('#winsList input').forEach(input => input.value = '');
+            document.getElementById('challenges').value = '';
+            document.getElementById('learning').value = '';
+            document.getElementById('mainGoal').value = '';
+            document.getElementById('support').value = '';
+        }
+
+        function loadDraft() {
+            const draft = localStorage.getItem('syp_checkin_draft');
+            if (draft) {
+                const data = JSON.parse(draft);
+                checkinData = data;
+
+                // Restore energy
+                if (data.energy) {
+                    document.querySelectorAll('.energy-btn')[data.energy - 1]?.classList.add('selected');
+                }
+
+                // Restore wins
+                const inputs = document.querySelectorAll('#winsList input');
+                data.wins.forEach((win, i) => {
+                    if (inputs[i]) inputs[i].value = win;
+                });
+
+                // Restore text
+                document.getElementById('challenges').value = data.challenges || '';
+                document.getElementById('learning').value = data.learning || '';
+                document.getElementById('mainGoal').value = data.mainGoal || '';
+                document.getElementById('support').value = data.support || '';
+            }
+        }
+
+        async function loadHistory() {
+            const container = document.getElementById('historyList');
+            let history = [];
+
+            // Try to load from PostgreSQL first
+            const email = getUserEmail();
+            if (email) {
+                try {
+                    const response = await fetch(`${API_URL}/api/weekly-checkins/${encodeURIComponent(email)}`);
+                    if (response.ok) {
+                        const result = await response.json();
+                        if (result.success && result.data && Array.isArray(result.data)) {
+                            history = result.data;
+                            // Update localStorage cache
+                            localStorage.setItem('syp_checkin_history', JSON.stringify(history));
+                            updateDataSource(true);
+                            console.log('✅ Loaded', history.length, 'check-ins from PostgreSQL');
+                        }
+                    }
+                } catch (error) {
+                    console.log('⚠️ Could not load from API, using localStorage:', error.message);
+                }
+            }
+
+            // Fallback to localStorage if no API data
+            if (history.length === 0) {
+                history = JSON.parse(localStorage.getItem('syp_checkin_history') || '[]');
+                if (history.length > 0) {
+                    updateDataSource(false);
+                }
+            }
+
+            if (history.length === 0) {
+                container.innerHTML = '<p style="color: rgba(255,255,255,0.5); font-style: italic;">No previous check-ins yet.</p>';
+                updateDataSource(false);
+                return;
+            }
+
+            container.innerHTML = history.slice(0, 5).map(entry => {
+                const energyEmoji = ['😴', '😕', '😐', '🙂', '😊'][entry.energy - 1] || '❓';
+                return `
+                    <div class="history-item">
+                        <h4>${entry.week} ${energyEmoji}</h4>
+                        <div class="summary">
+                            <strong>Wins:</strong> ${entry.wins ? entry.wins.slice(0, 2).join(', ') : 'None recorded'}<br>
+                            <strong>Focus:</strong> ${entry.mainGoal || 'Not set'}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function updateStreak() {
+            const history = JSON.parse(localStorage.getItem('syp_checkin_history') || '[]');
+            let streak = 0;
+
+            // Simple streak: count consecutive weeks
+            // For now, just count total check-ins
+            streak = history.length;
+
+            if (streak > 1) {
+                document.getElementById('streakCount').textContent = streak;
+                document.getElementById('streakBanner').style.display = 'block';
+            }
+        }
+
+        // Initialize
+        window.onload = function() {
+            loadDraft();
+            loadHistory();
+            updateStreak();
+        };
+    </script>
+</body>
+</html>

@@ -1,0 +1,1493 @@
+<!DOCTYPE html>
+<html lang="en-GB" data-theme="night">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spark Collector - Daily Wins & First Steps</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>✨</text></svg>">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/global.css">
+    <!-- Tailwind CSS + DaisyUI for polished components -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@4.4.24/dist/full.min.css" rel="stylesheet" type="text/css" />
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        spark: {
+                            red: '#EF4444',
+                            orange: '#F97316',
+                            yellow: '#EAB308',
+                            gold: '#F59E0B',
+                            purple: '#7C3AED',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <link rel="stylesheet" href="css/mobile-mind-tools.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #2d1b4e 100%);
+            min-height: 100vh;
+            color: white;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            padding: 30px 0;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            font-weight: 800;
+            margin-bottom: 10px;
+            background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .header .subtitle {
+            color: #ccc;
+            font-size: 1.1em;
+        }
+
+        .back-btn {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: rgba(255,255,255,0.1);
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 0.9em;
+            transition: all 0.2s;
+        }
+        /* Mobile fix for back button */
+        @media (max-width: 600px) {
+            .back-btn {
+                position: relative;
+                top: auto;
+                left: auto;
+                display: block;
+                margin: 10px auto 20px;
+                text-align: center;
+                width: fit-content;
+            }
+        }
+
+        .back-btn:hover {
+            background: rgba(255,255,255,0.2);
+        }
+
+        /* Date Navigation */
+        .date-nav {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        .date-nav button {
+            background: rgba(255,255,255,0.1);
+            border: none;
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.2em;
+            transition: all 0.2s;
+        }
+        .date-nav button:hover {
+            background: rgba(255,255,255,0.2);
+        }
+        .date-nav button:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+        }
+        .current-date {
+            font-size: 1.3em;
+            font-weight: 600;
+            min-width: 200px;
+            text-align: center;
+        }
+
+        /* Cards */
+        .card {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 25px;
+            color: #333;
+        }
+
+        .card h2 {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.4em;
+            margin-bottom: 20px;
+            color: #2d1b4e;
+        }
+
+        .card h2 .emoji {
+            font-size: 1.3em;
+        }
+
+        /* Wins Section */
+        .wins-list {
+            list-style: none;
+        }
+
+        .win-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 15px;
+            background: #f8f5ff;
+            border-radius: 12px;
+            margin-bottom: 10px;
+            animation: slideIn 0.3s ease;
+            cursor: grab;
+            touch-action: none;
+            transition: transform 0.2s, box-shadow 0.2s, opacity 0.2s;
+        }
+        .win-item:active {
+            cursor: grabbing;
+        }
+        .win-item.dragging {
+            opacity: 0.4;
+            transform: scale(0.98);
+        }
+        .win-item.drag-over {
+            border: 2px dashed #FFD700;
+            background: #fffbeb;
+        }
+        .drag-handle {
+            color: #ccc;
+            cursor: grab;
+            padding: 5px;
+            font-size: 1.2em;
+        }
+        .drag-handle:hover {
+            color: #888;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(-20px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        .win-item .win-icon {
+            font-size: 1.5em;
+        }
+
+        .win-item .win-text {
+            flex: 1;
+            font-size: 1em;
+        }
+
+        .win-item .win-time {
+            font-size: 0.8em;
+            color: #888;
+        }
+
+        .win-item .delete-btn {
+            background: none;
+            border: none;
+            color: #ccc;
+            cursor: pointer;
+            font-size: 1.2em;
+            padding: 5px;
+            transition: color 0.2s;
+        }
+        .win-item .delete-btn:hover {
+            color: #ef4444;
+        }
+
+        /* Share Button & Dropdown */
+        .share-dropdown {
+            position: relative;
+            display: inline-block;
+        }
+        .share-btn {
+            background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+            color: #333;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .share-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 15px rgba(255, 215, 0, 0.4);
+        }
+        .share-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        .share-menu {
+            display: none;
+            position: absolute;
+            right: 0;
+            top: 100%;
+            margin-top: 8px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+            min-width: 160px;
+            z-index: 100;
+            overflow: hidden;
+        }
+        .share-menu.show {
+            display: block;
+            animation: fadeIn 0.2s ease;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .share-menu button {
+            display: block;
+            width: 100%;
+            padding: 12px 16px;
+            border: none;
+            background: none;
+            text-align: left;
+            cursor: pointer;
+            font-size: 0.9em;
+            color: #333;
+            transition: background 0.2s;
+        }
+        .share-menu button:hover {
+            background: #f8f5ff;
+        }
+        .share-menu button .period-icon {
+            margin-right: 8px;
+        }
+
+        /* Toast notification */
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #333;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 30px;
+            font-size: 0.95em;
+            z-index: 1000;
+            animation: toastIn 0.3s ease;
+        }
+        @keyframes toastIn {
+            from { opacity: 0; transform: translateX(-50%) translateY(20px); }
+            to { opacity: 1; transform: translateX(-50%) translateY(0); }
+        }
+
+        .add-win-form {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .add-win-form input {
+            flex: 1;
+            padding: 15px 20px;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            font-size: 1em;
+            font-family: inherit;
+            transition: border-color 0.2s;
+        }
+
+        .add-win-form input:focus {
+            outline: none;
+            border-color: #FFD700;
+        }
+
+        .add-win-form button {
+            background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+            border: none;
+            color: #1a1a2e;
+            padding: 15px 25px;
+            border-radius: 12px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .add-win-form button:hover {
+            transform: scale(1.05);
+        }
+
+        /* Quick Wins */
+        .quick-wins {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid #eee;
+        }
+
+        .quick-win-btn {
+            background: #f0f0f0;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.85em;
+            transition: all 0.2s;
+        }
+
+        .quick-win-btn:hover {
+            background: #FFD700;
+            transform: scale(1.05);
+        }
+
+        /* First Step Section */
+        .first-step-card {
+            background: linear-gradient(135deg, #10B981 0%, #059669 100%);
+            color: white;
+        }
+
+        .first-step-card h2 {
+            color: white;
+        }
+
+        .first-step-input {
+            width: 100%;
+            padding: 20px;
+            border: 2px solid rgba(255,255,255,0.3);
+            border-radius: 12px;
+            font-size: 1.1em;
+            font-family: inherit;
+            background: rgba(255,255,255,0.1);
+            color: white;
+            transition: all 0.2s;
+        }
+
+        .first-step-input::placeholder {
+            color: rgba(255,255,255,0.6);
+        }
+
+        .first-step-input:focus {
+            outline: none;
+            border-color: white;
+            background: rgba(255,255,255,0.2);
+        }
+
+        .first-step-tip {
+            margin-top: 15px;
+            padding: 15px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 10px;
+            font-size: 0.9em;
+            line-height: 1.5;
+        }
+
+        .first-step-tip strong {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        /* Stats Section */
+        .stats-card {
+            background: linear-gradient(135deg, #8B5CF6 0%, #6D28D9 100%);
+            color: white;
+        }
+
+        .stats-card h2 {
+            color: white;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            text-align: center;
+        }
+
+        .stat-item {
+            padding: 20px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 15px;
+        }
+
+        .stat-number {
+            font-size: 2.5em;
+            font-weight: 800;
+            display: block;
+        }
+
+        .stat-label {
+            font-size: 0.85em;
+            opacity: 0.8;
+            margin-top: 5px;
+        }
+
+        /* Streak */
+        .streak-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 40px;
+            color: #888;
+        }
+
+        .empty-state .emoji {
+            font-size: 3em;
+            margin-bottom: 15px;
+        }
+
+        /* Celebration */
+        .celebration {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .celebration-content {
+            text-align: center;
+            animation: bounceIn 0.5s ease;
+        }
+
+        @keyframes bounceIn {
+            0% { transform: scale(0.5); opacity: 0; }
+            70% { transform: scale(1.1); }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        .celebration-emoji {
+            font-size: 5em;
+            margin-bottom: 20px;
+        }
+
+        .celebration-text {
+            font-size: 1.5em;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .celebration-subtext {
+            color: #ccc;
+            margin-bottom: 20px;
+        }
+
+        /* Responsive */
+        @media (max-width: 600px) {
+            .header h1 { font-size: 1.8em; }
+            .stats-grid { grid-template-columns: 1fr; gap: 10px; }
+            .add-win-form { flex-direction: column; }
+            .back-btn { position: static; margin-bottom: 20px; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Back Button + Theme Toggle -->
+    <div class="fixed top-4 left-4 right-4 z-50 flex justify-between items-center max-sm:relative max-sm:top-0 max-sm:mb-4">
+        <button class="btn btn-ghost btn-sm gap-2" onclick="goBackToPortal()">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" /></svg>
+            Back to Portal
+        </button>
+        <!-- Theme Toggle -->
+        <label class="swap swap-rotate btn btn-ghost btn-circle">
+            <input type="checkbox" id="themeToggle" onchange="toggleTheme()" />
+            <!-- Sun icon (light mode) -->
+            <svg class="swap-on fill-current w-6 h-6" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M5.64,17l-.71.71a1,1,0,0,0,0,1.41,1,1,0,0,0,1.41,0l.71-.71A1,1,0,0,0,5.64,17ZM5,12a1,1,0,0,0-1-1H3a1,1,0,0,0,0,2H4A1,1,0,0,0,5,12Zm7-7a1,1,0,0,0,1-1V3a1,1,0,0,0-2,0V4A1,1,0,0,0,12,5ZM5.64,7.05a1,1,0,0,0,.7.29,1,1,0,0,0,.71-.29,1,1,0,0,0,0-1.41l-.71-.71A1,1,0,0,0,4.93,6.34Zm12,.29a1,1,0,0,0,.7-.29l.71-.71a1,1,0,1,0-1.41-1.41L17,5.64a1,1,0,0,0,0,1.41A1,1,0,0,0,17.66,7.34ZM21,11H20a1,1,0,0,0,0,2h1a1,1,0,0,0,0-2Zm-9,8a1,1,0,0,0-1,1v1a1,1,0,0,0,2,0V20A1,1,0,0,0,12,19ZM18.36,17A1,1,0,0,0,17,18.36l.71.71a1,1,0,0,0,1.41,0,1,1,0,0,0,0-1.41ZM12,6.5A5.5,5.5,0,1,0,17.5,12,5.51,5.51,0,0,0,12,6.5Zm0,9A3.5,3.5,0,1,1,15.5,12,3.5,3.5,0,0,1,12,15.5Z"/></svg>
+            <!-- Moon icon (dark mode) -->
+            <svg class="swap-off fill-current w-6 h-6" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21.64,13a1,1,0,0,0-1.05-.14,8.05,8.05,0,0,1-3.37.73A8.15,8.15,0,0,1,9.08,5.49a8.59,8.59,0,0,1,.25-2A1,1,0,0,0,8,2.36,10.14,10.14,0,1,0,22,14.05,1,1,0,0,0,21.64,13Zm-9.5,6.69A8.14,8.14,0,0,1,7.08,5.22v.27A10.15,10.15,0,0,0,17.22,15.63a9.79,9.79,0,0,0,2.1-.22A8.11,8.11,0,0,1,12.14,19.73Z"/></svg>
+        </label>
+    </div>
+    <script>
+        // Theme toggle functionality
+        function toggleTheme() {
+            const html = document.documentElement;
+            const toggle = document.getElementById('themeToggle');
+            const currentTheme = html.getAttribute('data-theme');
+            const newTheme = currentTheme === 'night' ? 'light' : 'night';
+
+            html.setAttribute('data-theme', newTheme);
+            localStorage.setItem('spark_theme', newTheme);
+
+            // Update toggle state
+            toggle.checked = newTheme === 'light';
+
+            // Update body background for smooth transition
+            document.body.style.background = newTheme === 'night'
+                ? 'linear-gradient(135deg, #1a1a2e 0%, #2d1b4e 100%)'
+                : 'linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%)';
+        }
+
+        // Load saved theme on page load
+        function loadSavedTheme() {
+            const savedTheme = localStorage.getItem('spark_theme') || 'night';
+            const html = document.documentElement;
+            const toggle = document.getElementById('themeToggle');
+
+            html.setAttribute('data-theme', savedTheme);
+            if (toggle) toggle.checked = savedTheme === 'light';
+
+            // Set body background
+            document.body.style.background = savedTheme === 'night'
+                ? 'linear-gradient(135deg, #1a1a2e 0%, #2d1b4e 100%)'
+                : 'linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%)';
+        }
+
+        // Initialize theme
+        document.addEventListener('DOMContentLoaded', loadSavedTheme);
+
+        function goBackToPortal() {
+            const savedUser = localStorage.getItem('syp_user');
+            if (savedUser) {
+                try {
+                    const user = JSON.parse(savedUser);
+                    const access = user.programme_access || user.programme_type || 'career';
+                    if (access === 'blended' || access === 'career') {
+                        window.location.href = 'client-portal.html';
+                    } else {
+                        window.location.href = 'audhd-dashboard.html';
+                    }
+                    return;
+                } catch(e) {}
+            }
+            window.location.href = 'client-portal.html';
+        }
+    </script>
+
+    <div class="container mx-auto max-w-3xl px-4 py-8">
+        <!-- Header -->
+        <div class="text-center mb-8">
+            <h1 class="text-4xl font-extrabold mb-2 bg-gradient-to-r from-yellow-400 to-orange-500 bg-clip-text text-transparent">✨ Spark Collector</h1>
+            <p class="text-base-content/70">Capture your wins. Plan your first step.</p>
+        </div>
+
+        <!-- Date Navigation -->
+        <div class="flex items-center justify-center gap-4 mb-6">
+            <button class="btn btn-circle btn-ghost" onclick="changeDate(-1)" id="prevBtn">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" /></svg>
+            </button>
+            <span class="text-xl font-semibold min-w-[150px] text-center" id="currentDate">Today</span>
+            <button class="btn btn-circle btn-ghost" onclick="changeDate(1)" id="nextBtn" disabled>
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
+            </button>
+        </div>
+
+        <!-- Streak Badge -->
+        <div class="flex justify-center mb-6">
+            <div class="badge badge-warning badge-lg gap-2 py-4 px-6 text-lg font-bold" id="streakBadge" style="display: none;">
+                🔥 <span id="streakCount">0</span> Day Streak!
+            </div>
+        </div>
+
+        <!-- Today's Wins Card -->
+        <div class="card bg-base-100 shadow-xl mb-6">
+            <div class="card-body">
+                <div class="flex justify-between items-center mb-4">
+                    <h2 class="card-title text-2xl">
+                        <span class="text-3xl">🏆</span> Today's Wins
+                    </h2>
+
+                    <!-- Share Dropdown -->
+                    <div class="dropdown dropdown-end">
+                        <label tabindex="0" class="btn btn-warning btn-sm gap-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" /></svg>
+                            Share
+                        </label>
+                        <ul tabindex="0" class="dropdown-content z-[1] menu p-2 shadow-lg bg-base-100 rounded-box w-52 mt-2">
+                            <li><a onclick="shareWins('day')">📅 Today</a></li>
+                            <li><a onclick="shareWins('week')">📆 This Week</a></li>
+                            <li><a onclick="shareWins('month')">🗓️ This Month</a></li>
+                            <li><a onclick="shareWins('all')">🌟 All Time</a></li>
+                            <li class="divider"></li>
+                            <li><a onclick="shareToWhatsApp()">💬 WhatsApp</a></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Wins List -->
+                <ul class="wins-list space-y-2" id="winsList">
+                    <!-- Wins populated by JS -->
+                </ul>
+
+                <!-- Empty State -->
+                <div class="empty-state text-center py-8 text-base-content/60" id="emptyState">
+                    <div class="text-5xl mb-4">✨</div>
+                    <p>No wins logged yet today.<br>Even tiny wins count!</p>
+                </div>
+
+                <!-- Add Win Form -->
+                <form class="join w-full mt-4" onsubmit="addWin(event)">
+                    <input type="text" id="winInput" placeholder="What went well today?" autocomplete="off" class="input input-bordered join-item flex-1 bg-base-200">
+                    <button type="submit" class="btn btn-warning join-item">Add Win ✨</button>
+                </form>
+
+                <!-- Quick Add Buttons -->
+                <div class="mt-4">
+                    <span class="text-sm text-base-content/60 mr-2">Quick add:</span>
+                    <div class="flex flex-wrap gap-2 mt-2">
+                        <button type="button" class="btn btn-xs btn-outline btn-ghost" onclick="addQuickWin('Got out of bed')">Got out of bed</button>
+                        <button type="button" class="btn btn-xs btn-outline btn-ghost" onclick="addQuickWin('Ate a meal')">Ate a meal</button>
+                        <button type="button" class="btn btn-xs btn-outline btn-ghost" onclick="addQuickWin('Replied to a message')">Replied to a message</button>
+                        <button type="button" class="btn btn-xs btn-outline btn-ghost" onclick="addQuickWin('Asked for help')">Asked for help</button>
+                        <button type="button" class="btn btn-xs btn-outline btn-ghost" onclick="addQuickWin('Took a break')">Took a break</button>
+                        <button type="button" class="btn btn-xs btn-outline btn-ghost" onclick="addQuickWin('Said no')">Said no</button>
+                        <button type="button" class="btn btn-xs btn-outline btn-ghost" onclick="addQuickWin('Completed a task')">Completed a task</button>
+                        <button type="button" class="btn btn-xs btn-outline btn-ghost" onclick="addQuickWin('Showed up')">Showed up</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tomorrow's First Step Card -->
+        <div class="card bg-gradient-to-br from-emerald-600 to-teal-700 text-white shadow-xl mb-6">
+            <div class="card-body">
+                <h2 class="card-title text-2xl mb-2">
+                    <span class="text-3xl">🚀</span> Tomorrow's First Step
+                </h2>
+                <p class="opacity-90 mb-4">What's the tiniest possible action to start your day?</p>
+
+                <input type="text"
+                       class="input input-bordered w-full bg-white/20 border-white/30 placeholder-white/60 text-white"
+                       id="firstStepInput"
+                       placeholder="e.g. Open laptop and look at inbox"
+                       onkeypress="if(event.key==='Enter') saveFirstStep()">
+
+                <div class="flex items-center gap-3 mt-4">
+                    <button type="button" onclick="saveFirstStep()" class="btn btn-white text-emerald-700">
+                        🚀 Set First Step
+                    </button>
+                    <span id="firstStepStatus" class="text-sm opacity-90"></span>
+                </div>
+
+                <div class="alert bg-white/10 border-0 mt-4">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="stroke-current shrink-0 w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                    <div>
+                        <div class="font-bold">💡 First Step Magic</div>
+                        <div class="text-sm opacity-90">Make it so small it feels almost silly. "Start the report" → "Open the document". The hardest part is starting.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Stats Card -->
+        <div class="card bg-base-100 shadow-xl">
+            <div class="card-body">
+                <h2 class="card-title text-2xl mb-4">
+                    <span class="text-3xl">📊</span> Your Spark Stats
+                </h2>
+                <div class="stats stats-vertical lg:stats-horizontal shadow bg-base-200 w-full">
+                    <div class="stat">
+                        <div class="stat-figure text-warning">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="inline-block w-8 h-8 stroke-current"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                        </div>
+                        <div class="stat-title">Total Wins</div>
+                        <div class="stat-value text-warning" id="totalWins">0</div>
+                        <div class="stat-desc">All time</div>
+                    </div>
+
+                    <div class="stat">
+                        <div class="stat-figure text-success">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="inline-block w-8 h-8 stroke-current"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"></path></svg>
+                        </div>
+                        <div class="stat-title">This Week</div>
+                        <div class="stat-value text-success" id="thisWeek">0</div>
+                        <div class="stat-desc">Keep going!</div>
+                    </div>
+
+                    <div class="stat">
+                        <div class="stat-figure text-error">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="inline-block w-8 h-8 stroke-current"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 18.657A8 8 0 016.343 7.343S7 9 9 10c0-2 .5-5 2.986-7C14 5 16.09 5.777 17.656 7.343A7.975 7.975 0 0120 13a7.975 7.975 0 01-2.343 5.657z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.879 16.121A3 3 0 1012.015 11L11 14H9c0 .768.293 1.536.879 2.121z"></path></svg>
+                        </div>
+                        <div class="stat-title">Best Streak</div>
+                        <div class="stat-value text-error" id="bestStreak">0</div>
+                        <div class="stat-desc">🔥 days</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Celebration Modal -->
+    <dialog id="celebrationModal" class="modal">
+        <div class="modal-box text-center bg-gradient-to-br from-purple-600 to-pink-600 text-white">
+            <div class="text-6xl mb-4" id="celebrationEmoji">🎉</div>
+            <h3 class="font-bold text-2xl" id="celebrationText">Amazing!</h3>
+            <p class="py-4" id="celebrationSubtext">You're building momentum!</p>
+            <div class="modal-action justify-center">
+                <form method="dialog">
+                    <button class="btn btn-white">Keep Going! ✨</button>
+                </form>
+            </div>
+        </div>
+        <form method="dialog" class="modal-backdrop">
+            <button>close</button>
+        </form>
+    </dialog>
+
+    <!-- Legacy celebration div for JS compatibility -->
+    <div class="celebration hidden" id="celebration" style="display: none;" onclick="closeCelebration()">
+        <div class="celebration-content">
+            <div class="celebration-emoji" id="celebrationEmojiLegacy">🎉</div>
+            <div class="celebration-text" id="celebrationTextLegacy">Amazing!</div>
+            <div class="celebration-subtext" id="celebrationSubtextLegacy">You're building momentum!</div>
+        </div>
+    </div>
+
+    <script>
+        // Data structure
+        let sparkData = {
+            wins: {}, // { "2025-12-28": [{text, time, id}] }
+            firstSteps: {}, // { "2025-12-28": "Open laptop" }
+            stats: {
+                totalWins: 0,
+                bestStreak: 0,
+                currentStreak: 0
+            }
+        };
+
+        let currentUser = null;
+        let viewingDate = new Date();
+
+        // Initialize
+        window.onload = async function() {
+            const savedUser = localStorage.getItem('syp_user');
+
+            if (!savedUser) {
+                window.location.href = 'login.html';
+                return;
+            }
+
+            currentUser = JSON.parse(savedUser);
+            await loadData();
+            renderDate();
+            renderWins();
+            renderFirstStep();
+            updateStats();
+            checkStreak();
+        };
+
+        // Date helpers
+        function formatDate(date) {
+            return date.toISOString().split('T')[0];
+        }
+
+        function formatDisplayDate(date) {
+            const today = new Date();
+            const yesterday = new Date(today);
+            yesterday.setDate(yesterday.getDate() - 1);
+            const tomorrow = new Date(today);
+            tomorrow.setDate(tomorrow.getDate() + 1);
+
+            if (formatDate(date) === formatDate(today)) return 'Today';
+            if (formatDate(date) === formatDate(yesterday)) return 'Yesterday';
+            if (formatDate(date) === formatDate(tomorrow)) return 'Tomorrow';
+
+            return date.toLocaleDateString('en-GB', {
+                weekday: 'short',
+                day: 'numeric',
+                month: 'short'
+            });
+        }
+
+        function changeDate(delta) {
+            viewingDate.setDate(viewingDate.getDate() + delta);
+
+            // Don't allow future dates for wins
+            const today = new Date();
+            if (viewingDate > today) {
+                viewingDate = new Date(today);
+            }
+
+            renderDate();
+            renderWins();
+            renderFirstStep();
+        }
+
+        function renderDate() {
+            document.getElementById('currentDate').textContent = formatDisplayDate(viewingDate);
+
+            // Disable next if viewing today
+            const today = new Date();
+            document.getElementById('nextBtn').disabled = formatDate(viewingDate) === formatDate(today);
+        }
+
+        // Data management - PostgreSQL first, localStorage fallback
+        async function loadData() {
+            try {
+                // Try PostgreSQL first
+                console.log('📡 Loading from PostgreSQL for:', currentUser.email);
+                const response = await fetch(`/api/spark-collector/${encodeURIComponent(currentUser.email)}`);
+                const result = await response.json();
+
+                if (result.success && result.data) {
+                    sparkData = {
+                        wins: result.data.wins || {},
+                        firstSteps: result.data.firstSteps || {},
+                        stats: result.data.stats || { totalWins: 0, bestStreak: 0, currentStreak: 0 }
+                    };
+                    console.log('✅ Loaded from PostgreSQL:', sparkData.stats.totalWins, 'total wins');
+
+                    // Cache locally
+                    localStorage.setItem('spark_collector_' + currentUser.id, JSON.stringify(sparkData));
+                    return;
+                }
+            } catch (error) {
+                console.warn('⚠️ PostgreSQL load failed, using localStorage:', error.message);
+            }
+
+            // Fallback to localStorage
+            const saved = localStorage.getItem('spark_collector_' + currentUser.id);
+            if (saved) {
+                sparkData = JSON.parse(saved);
+                console.log('📦 Loaded from localStorage');
+            }
+        }
+
+        async function saveData() {
+            // Always save to localStorage (for offline backup)
+            localStorage.setItem('spark_collector_' + currentUser.id, JSON.stringify(sparkData));
+
+            // Save to PostgreSQL
+            try {
+                showSyncStatus('saving');
+                const response = await fetch('/api/spark-collector', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        client_email: currentUser.email,
+                        data: sparkData
+                    })
+                });
+
+                const result = await response.json();
+                if (result.success) {
+                    console.log('✅ Saved to PostgreSQL');
+                    showSyncStatus('synced');
+                } else {
+                    console.warn('⚠️ PostgreSQL save failed:', result.error);
+                    showSyncStatus('offline');
+                }
+            } catch (error) {
+                console.warn('⚠️ PostgreSQL save failed:', error.message);
+                showSyncStatus('offline');
+            }
+        }
+
+        function showSyncStatus(status) {
+            let indicator = document.getElementById('syncIndicator');
+            if (!indicator) {
+                indicator = document.createElement('div');
+                indicator.id = 'syncIndicator';
+                indicator.style.cssText = 'position: fixed; bottom: 20px; left: 20px; padding: 8px 16px; border-radius: 20px; font-size: 0.85em; font-weight: 500; z-index: 1000; transition: all 0.3s ease;';
+                document.body.appendChild(indicator);
+            }
+
+            if (status === 'saving') {
+                indicator.innerHTML = '☁️ Saving...';
+                indicator.style.background = 'rgba(255, 215, 0, 0.9)';
+                indicator.style.color = '#333';
+            } else if (status === 'synced') {
+                indicator.innerHTML = '☁️ Synced to cloud';
+                indicator.style.background = 'rgba(34, 197, 94, 0.9)';
+                indicator.style.color = '#fff';
+                setTimeout(() => { indicator.style.opacity = '0'; }, 2000);
+                setTimeout(() => { indicator.style.opacity = '1'; indicator.innerHTML = '☁️ Cloud sync active'; indicator.style.background = 'rgba(255,255,255,0.1)'; indicator.style.color = '#aaa'; }, 2500);
+            } else if (status === 'offline') {
+                indicator.innerHTML = '📱 Saved locally';
+                indicator.style.background = 'rgba(239, 68, 68, 0.9)';
+                indicator.style.color = '#fff';
+            }
+        }
+
+        // Wins
+        function renderWins() {
+            const dateKey = formatDate(viewingDate);
+            const wins = sparkData.wins[dateKey] || [];
+            const list = document.getElementById('winsList');
+            const emptyState = document.getElementById('emptyState');
+
+            if (wins.length === 0) {
+                list.innerHTML = '';
+                emptyState.style.display = 'block';
+                return;
+            }
+
+            emptyState.style.display = 'none';
+            list.innerHTML = wins.map((win, index) => `
+                <li class="flex items-center gap-3 p-3 bg-base-200 rounded-lg mb-2 group hover:bg-base-300 transition-all cursor-grab" draggable="true" data-index="${index}">
+                    <span class="text-base-content/30 cursor-grab" title="Drag to reorder">⋮⋮</span>
+                    <span class="text-xl">✨</span>
+                    <span class="flex-1">${escapeHtml(win.text)}</span>
+                    <span class="badge badge-ghost badge-sm">${win.time}</span>
+                    <button class="btn btn-ghost btn-xs opacity-0 group-hover:opacity-100 transition-opacity" onclick="deleteWin(${index})" title="Remove">✕</button>
+                </li>
+            `).join('');
+
+            // Attach drag handlers after render
+            attachDragHandlers();
+        }
+
+        function addWin(event) {
+            event.preventDefault();
+            const input = document.getElementById('winInput');
+            const text = input.value.trim();
+
+            if (!text) return;
+
+            const dateKey = formatDate(viewingDate);
+            if (!sparkData.wins[dateKey]) {
+                sparkData.wins[dateKey] = [];
+            }
+
+            const win = {
+                text: text,
+                time: new Date().toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' }),
+                id: Date.now()
+            };
+
+            sparkData.wins[dateKey].push(win);
+            sparkData.stats.totalWins++;
+
+            saveData();
+            renderWins();
+            updateStats();
+            checkStreak();
+
+            input.value = '';
+
+            // Celebrate milestones
+            const todayWins = sparkData.wins[dateKey].length;
+            if (todayWins === 1) {
+                celebrate('First win today! 🌟', 'You\'re off to a great start!');
+            } else if (todayWins === 3) {
+                celebrate('Three wins! 🎯', 'You\'re on a roll!');
+            } else if (todayWins === 5) {
+                celebrate('Five wins! 🔥', 'Unstoppable!');
+            } else if (todayWins === 10) {
+                celebrate('TEN WINS! 🏆', 'Legendary day!');
+            }
+        }
+
+        function addQuickWin(text) {
+            document.getElementById('winInput').value = text;
+            addWin(new Event('submit'));
+        }
+
+        function deleteWin(index) {
+            const dateKey = formatDate(viewingDate);
+            if (sparkData.wins[dateKey]) {
+                sparkData.wins[dateKey].splice(index, 1);
+                sparkData.stats.totalWins = Math.max(0, sparkData.stats.totalWins - 1);
+                saveData();
+                renderWins();
+                updateStats();
+            }
+        }
+
+        // First Step
+        function renderFirstStep() {
+            // First step is always for tomorrow relative to viewing date
+            const tomorrow = new Date(viewingDate);
+            tomorrow.setDate(tomorrow.getDate() + 1);
+            const dateKey = formatDate(tomorrow);
+
+            document.getElementById('firstStepInput').value = sparkData.firstSteps[dateKey] || '';
+        }
+
+        function saveFirstStep() {
+            const tomorrow = new Date(viewingDate);
+            tomorrow.setDate(tomorrow.getDate() + 1);
+            const dateKey = formatDate(tomorrow);
+
+            const text = document.getElementById('firstStepInput').value.trim();
+            const status = document.getElementById('firstStepStatus');
+
+            if (text) {
+                sparkData.firstSteps[dateKey] = text;
+                status.textContent = '✓ First step set!';
+                status.style.color = '#ffffff';
+            } else {
+                delete sparkData.firstSteps[dateKey];
+                status.textContent = '✓ Cleared';
+                status.style.color = 'rgba(255,255,255,0.7)';
+            }
+
+            saveData();
+
+            // Clear status after 3 seconds
+            setTimeout(() => { status.textContent = ''; }, 3000);
+        }
+
+        // Stats
+        function updateStats() {
+            document.getElementById('totalWins').textContent = sparkData.stats.totalWins;
+            document.getElementById('bestStreak').textContent = sparkData.stats.bestStreak;
+
+            // Calculate this week
+            const today = new Date();
+            const weekStart = new Date(today);
+            weekStart.setDate(today.getDate() - today.getDay());
+
+            let weekWins = 0;
+            for (let i = 0; i < 7; i++) {
+                const date = new Date(weekStart);
+                date.setDate(weekStart.getDate() + i);
+                const dateKey = formatDate(date);
+                weekWins += (sparkData.wins[dateKey] || []).length;
+            }
+            document.getElementById('thisWeek').textContent = weekWins;
+        }
+
+        function checkStreak() {
+            let streak = 0;
+            const today = new Date();
+            let checkDate = new Date(today);
+
+            while (true) {
+                const dateKey = formatDate(checkDate);
+                const wins = sparkData.wins[dateKey] || [];
+
+                if (wins.length > 0) {
+                    streak++;
+                    checkDate.setDate(checkDate.getDate() - 1);
+                } else {
+                    break;
+                }
+            }
+
+            sparkData.stats.currentStreak = streak;
+            if (streak > sparkData.stats.bestStreak) {
+                sparkData.stats.bestStreak = streak;
+            }
+
+            const badge = document.getElementById('streakBadge');
+            if (streak >= 2) {
+                badge.style.display = 'inline-flex';
+                document.getElementById('streakCount').textContent = streak;
+            } else {
+                badge.style.display = 'none';
+            }
+
+            saveData();
+        }
+
+        // Celebration with DaisyUI Modal
+        function celebrate(text, subtext) {
+            const emojis = ['🎉', '🌟', '✨', '🔥', '💫', '🏆', '⭐', '🎊'];
+            document.getElementById('celebrationEmoji').textContent = emojis[Math.floor(Math.random() * emojis.length)];
+            document.getElementById('celebrationText').textContent = text;
+            document.getElementById('celebrationSubtext').textContent = subtext;
+            document.getElementById('celebrationModal').showModal();
+
+            setTimeout(closeCelebration, 3000);
+        }
+
+        function closeCelebration() {
+            document.getElementById('celebrationModal').close();
+        }
+
+        // DaisyUI handles dropdown automatically - no toggle needed
+
+        // Get wins for a period
+        function getWinsForPeriod(period) {
+            const allWins = [];
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+
+            // Get start date based on period
+            let startDate = new Date(today);
+            if (period === 'day') {
+                startDate = new Date(viewingDate);
+            } else if (period === 'week') {
+                // Start of current week (Monday)
+                const dayOfWeek = today.getDay();
+                const daysToMonday = dayOfWeek === 0 ? 6 : dayOfWeek - 1;
+                startDate.setDate(today.getDate() - daysToMonday);
+            } else if (period === 'month') {
+                // Start of current month
+                startDate = new Date(today.getFullYear(), today.getMonth(), 1);
+            } else {
+                // All time - set to a very old date
+                startDate = new Date(2020, 0, 1);
+            }
+
+            // Collect wins from all days in range
+            for (const dateKey in sparkData.wins) {
+                const dateParts = dateKey.split('-');
+                const winDate = new Date(dateParts[0], dateParts[1] - 1, dateParts[2]);
+
+                if (winDate >= startDate && winDate <= today) {
+                    const dayWins = sparkData.wins[dateKey] || [];
+                    dayWins.forEach(win => {
+                        allWins.push({
+                            ...win,
+                            date: dateKey,
+                            displayDate: formatDisplayDate(winDate)
+                        });
+                    });
+                }
+            }
+
+            return allWins;
+        }
+
+        // Share wins
+        async function shareWins(period = 'day') {
+            // Close DaisyUI dropdown by removing focus
+            document.activeElement.blur();
+
+            const wins = getWinsForPeriod(period);
+
+            if (wins.length === 0) {
+                showToast('No wins to share for this period! Add some wins first ✨');
+                return;
+            }
+
+            // Format the wins nicely based on period
+            let title, shareText;
+            const periodLabels = {
+                day: 'Today',
+                week: 'This Week',
+                month: 'This Month',
+                all: 'All Time'
+            };
+
+            if (period === 'day') {
+                const dateStr = formatDisplayDate(viewingDate);
+                const winsList = wins.map(w => `✨ ${w.text}`).join('\n');
+                title = `My Wins - ${dateStr}`;
+                shareText = `🏆 My Wins for ${dateStr}\n\n${winsList}\n\n#SparkYourPotential #DailyWins`;
+            } else {
+                // Group wins by date for week/month/all
+                const winsByDate = {};
+                wins.forEach(w => {
+                    if (!winsByDate[w.displayDate]) winsByDate[w.displayDate] = [];
+                    winsByDate[w.displayDate].push(w.text);
+                });
+
+                let winsList = '';
+                for (const date in winsByDate) {
+                    winsList += `\n📅 ${date}\n`;
+                    winsByDate[date].forEach(text => {
+                        winsList += `  ✨ ${text}\n`;
+                    });
+                }
+
+                title = `My Wins - ${periodLabels[period]}`;
+                shareText = `🏆 My Wins (${periodLabels[period]})\n${winsList}\n${wins.length} total wins! 🎉\n\n#SparkYourPotential #Wins`;
+            }
+
+            // Try native share first (mobile)
+            if (navigator.share) {
+                try {
+                    await navigator.share({
+                        title: title,
+                        text: shareText
+                    });
+                    showToast('Shared successfully! 🎉');
+                } catch (err) {
+                    if (err.name !== 'AbortError') {
+                        copyToClipboard(shareText);
+                    }
+                }
+            } else {
+                copyToClipboard(shareText);
+            }
+        }
+
+        // Share directly to WhatsApp
+        function shareToWhatsApp() {
+            // Close DaisyUI dropdown
+            document.activeElement.blur();
+
+            const wins = getWinsForPeriod('day');
+            if (wins.length === 0) {
+                showToast('No wins to share yet! Add some wins first ✨');
+                return;
+            }
+
+            const dateStr = formatDisplayDate(viewingDate);
+            const winsList = wins.map(w => `✨ ${w.text}`).join('\n');
+            const shareText = `🏆 My Wins for ${dateStr}\n\n${winsList}\n\n#SparkYourPotential`;
+
+            // WhatsApp URL scheme
+            const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(shareText)}`;
+            window.open(whatsappUrl, '_blank');
+            showToast('Opening WhatsApp... 💬');
+        }
+
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(text).then(() => {
+                showToast('Copied to clipboard! 📋');
+            }).catch(() => {
+                // Fallback for older browsers
+                const textarea = document.createElement('textarea');
+                textarea.value = text;
+                document.body.appendChild(textarea);
+                textarea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textarea);
+                showToast('Copied to clipboard! 📋');
+            });
+        }
+
+        function showToast(message) {
+            // Remove existing toast
+            const existing = document.querySelector('.toast-container');
+            if (existing) existing.remove();
+
+            const toast = document.createElement('div');
+            toast.className = 'toast-container toast toast-end toast-bottom z-50';
+            toast.innerHTML = `
+                <div class="alert alert-success shadow-lg">
+                    <span>${message}</span>
+                </div>
+            `;
+            document.body.appendChild(toast);
+
+            setTimeout(() => toast.remove(), 3000);
+        }
+
+        // Utility
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        // ========== DRAG AND DROP (Desktop + Mobile) ==========
+        let draggedIndex = null;
+
+        function attachDragHandlers() {
+            const items = document.querySelectorAll('.win-item');
+
+            items.forEach(item => {
+                // Desktop drag events
+                item.addEventListener('dragstart', handleDragStart);
+                item.addEventListener('dragend', handleDragEnd);
+                item.addEventListener('dragover', handleDragOver);
+                item.addEventListener('dragleave', handleDragLeave);
+                item.addEventListener('drop', handleDrop);
+
+                // Mobile touch events
+                item.addEventListener('touchstart', handleTouchStart, { passive: false });
+                item.addEventListener('touchmove', handleTouchMove, { passive: false });
+                item.addEventListener('touchend', handleTouchEnd, { passive: false });
+            });
+        }
+
+        // Desktop drag handlers
+        function handleDragStart(e) {
+            draggedIndex = parseInt(e.currentTarget.dataset.index);
+            e.currentTarget.classList.add('dragging');
+            e.dataTransfer.effectAllowed = 'move';
+        }
+
+        function handleDragEnd(e) {
+            e.currentTarget.classList.remove('dragging');
+            document.querySelectorAll('.win-item').forEach(item => {
+                item.classList.remove('drag-over');
+            });
+            draggedIndex = null;
+        }
+
+        function handleDragOver(e) {
+            e.preventDefault();
+            const targetIndex = parseInt(e.currentTarget.dataset.index);
+            if (targetIndex !== draggedIndex) {
+                e.currentTarget.classList.add('drag-over');
+            }
+        }
+
+        function handleDragLeave(e) {
+            e.currentTarget.classList.remove('drag-over');
+        }
+
+        function handleDrop(e) {
+            e.preventDefault();
+            const targetIndex = parseInt(e.currentTarget.dataset.index);
+            e.currentTarget.classList.remove('drag-over');
+
+            if (draggedIndex !== null && draggedIndex !== targetIndex) {
+                reorderWins(draggedIndex, targetIndex);
+            }
+        }
+
+        // Mobile touch handlers
+        let touchDragElement = null;
+        let touchDragClone = null;
+        let touchStartY = 0;
+        let touchDragIndex = null;
+        let isDragging = false;
+
+        function handleTouchStart(e) {
+            // Check if touch started on drag handle or the item itself
+            const touch = e.touches[0];
+            touchStartY = touch.clientY;
+            touchDragElement = e.currentTarget;
+            touchDragIndex = parseInt(touchDragElement.dataset.index);
+            isDragging = false;
+        }
+
+        function handleTouchMove(e) {
+            if (!touchDragElement) return;
+
+            const touch = e.touches[0];
+            const deltaY = Math.abs(touch.clientY - touchStartY);
+
+            // Start drag after moving 15px vertically
+            if (!isDragging && deltaY > 15) {
+                isDragging = true;
+                createTouchClone(touch);
+                touchDragElement.classList.add('dragging');
+            }
+
+            if (isDragging) {
+                e.preventDefault();
+                moveTouchClone(touch);
+                highlightDropTarget(touch);
+            }
+        }
+
+        function handleTouchEnd(e) {
+            if (isDragging && touchDragClone) {
+                const touch = e.changedTouches[0];
+                const targetItem = getItemAtPosition(touch);
+
+                if (targetItem && targetItem !== touchDragElement) {
+                    const targetIndex = parseInt(targetItem.dataset.index);
+                    reorderWins(touchDragIndex, targetIndex);
+                }
+
+                removeTouchClone();
+                clearAllHighlights();
+            }
+
+            if (touchDragElement) {
+                touchDragElement.classList.remove('dragging');
+            }
+
+            touchDragElement = null;
+            touchDragIndex = null;
+            isDragging = false;
+        }
+
+        function createTouchClone(touch) {
+            touchDragClone = touchDragElement.cloneNode(true);
+            touchDragClone.style.cssText = `
+                position: fixed;
+                z-index: 10000;
+                pointer-events: none;
+                opacity: 0.9;
+                transform: rotate(2deg) scale(1.02);
+                box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+                width: ${touchDragElement.offsetWidth}px;
+                background: #f8f5ff;
+                border-radius: 12px;
+                padding: 15px;
+                display: flex;
+                align-items: center;
+                gap: 12px;
+            `;
+            document.body.appendChild(touchDragClone);
+            moveTouchClone(touch);
+        }
+
+        function moveTouchClone(touch) {
+            if (!touchDragClone) return;
+            touchDragClone.style.left = '20px';
+            touchDragClone.style.top = (touch.clientY - 30) + 'px';
+        }
+
+        function removeTouchClone() {
+            if (touchDragClone && touchDragClone.parentNode) {
+                touchDragClone.parentNode.removeChild(touchDragClone);
+            }
+            touchDragClone = null;
+        }
+
+        function highlightDropTarget(touch) {
+            clearAllHighlights();
+            const target = getItemAtPosition(touch);
+            if (target && target !== touchDragElement) {
+                target.classList.add('drag-over');
+            }
+        }
+
+        function clearAllHighlights() {
+            document.querySelectorAll('.win-item').forEach(item => {
+                item.classList.remove('drag-over');
+            });
+        }
+
+        function getItemAtPosition(touch) {
+            const items = document.querySelectorAll('.win-item');
+            for (const item of items) {
+                const rect = item.getBoundingClientRect();
+                if (touch.clientY >= rect.top && touch.clientY <= rect.bottom) {
+                    return item;
+                }
+            }
+            return null;
+        }
+
+        // Reorder wins array
+        function reorderWins(fromIndex, toIndex) {
+            const dateKey = formatDate(viewingDate);
+            const wins = sparkData.wins[dateKey];
+
+            if (!wins || fromIndex < 0 || toIndex < 0) return;
+
+            // Remove from old position and insert at new position
+            const [moved] = wins.splice(fromIndex, 1);
+            wins.splice(toIndex, 0, moved);
+
+            saveData();
+            renderWins();
+        }
+    </script>
+</body>
+</html>

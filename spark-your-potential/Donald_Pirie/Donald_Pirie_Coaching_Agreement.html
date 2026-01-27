@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Coaching Agreement - Donald Pirie - Harness the Spark</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #f8f9fa;
+            color: #333;
+            line-height: 1.6;
+        }
+        .document-container {
+            max-width: 800px;
+            margin: 40px auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        .header {
+            background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+            padding: 40px;
+            text-align: center;
+            color: #1a1a2e;
+        }
+        .logo {
+            font-size: 1.5em;
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+        .logo span { color: #1a1a2e; }
+        .header h1 {
+            font-size: 2em;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+        .header .subtitle {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+        .content {
+            padding: 40px;
+        }
+        .signed-banner {
+            background: linear-gradient(135deg, #10B981 0%, #059669 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .signed-banner h3 {
+            font-size: 1.3em;
+            margin-bottom: 5px;
+        }
+        .signed-banner p {
+            opacity: 0.9;
+            margin: 0;
+        }
+        .client-info {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 25px;
+            margin-bottom: 30px;
+        }
+        .client-info-row {
+            display: flex;
+            margin-bottom: 12px;
+        }
+        .client-info-row:last-child { margin-bottom: 0; }
+        .client-info-label {
+            font-weight: 600;
+            color: #666;
+            width: 140px;
+            flex-shrink: 0;
+        }
+        .client-info-value {
+            color: #333;
+            font-weight: 500;
+        }
+        h2 {
+            color: #FFD700;
+            font-size: 1.3em;
+            margin: 30px 0 15px 0;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #FFD700;
+        }
+        h2:first-of-type { margin-top: 0; }
+        p { margin-bottom: 15px; }
+        .highlight {
+            background: #FFF3CD;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: 600;
+        }
+        ul {
+            margin: 15px 0 15px 25px;
+        }
+        li {
+            margin-bottom: 10px;
+        }
+        .programme-box {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        .programme-box h3 {
+            font-size: 1.2em;
+            margin-bottom: 15px;
+            color: #FFD700;
+        }
+        .programme-box ul {
+            margin-left: 20px;
+        }
+        .programme-box li {
+            margin-bottom: 8px;
+        }
+        .signature-section {
+            background: #f0fdf4;
+            border: 2px solid #10B981;
+            border-radius: 10px;
+            padding: 30px;
+            margin-top: 40px;
+        }
+        .signature-section h2 {
+            color: #10B981;
+            border-color: #10B981;
+            margin-top: 0;
+        }
+        .signature-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            margin-top: 25px;
+        }
+        .signature-box {
+            background: white;
+            border: 2px solid #10B981;
+            border-radius: 10px;
+            padding: 25px;
+        }
+        .signature-box h4 {
+            color: #666;
+            font-size: 0.9em;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 20px;
+        }
+        .signature-display {
+            margin-bottom: 15px;
+        }
+        .signature-display label {
+            display: block;
+            font-size: 0.85em;
+            color: #888;
+            margin-bottom: 5px;
+        }
+        .signature-display .value {
+            font-size: 1.1em;
+            font-weight: 600;
+            color: #333;
+            padding: 10px;
+            background: #f8f9fa;
+            border-radius: 6px;
+        }
+        .signature-display .signature-text {
+            font-family: 'Brush Script MT', cursive;
+            font-size: 1.8em;
+            color: #1a1a2e;
+        }
+        .completion-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: #10B981;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            margin: 20px 40px;
+            color: #666;
+            text-decoration: none;
+            font-size: 0.9em;
+        }
+        .back-link:hover {
+            color: #333;
+        }
+        @media (max-width: 600px) {
+            .signature-grid {
+                grid-template-columns: 1fr;
+            }
+            .client-info-row {
+                flex-direction: column;
+            }
+            .client-info-label {
+                width: auto;
+                margin-bottom: 4px;
+            }
+        }
+        @media print {
+            body { background: white; }
+            .document-container { box-shadow: none; margin: 0; }
+            .back-link { display: none; }
+        }
+    </style>
+</head>
+<body>
+    <a href="client-portal.html" class="back-link">&larr; Back to Portal</a>
+
+    <div class="document-container">
+        <div class="header">
+            <div class="logo">Harness the <span>Spark</span> ⚡</div>
+            <h1>Coaching Agreement</h1>
+            <div class="subtitle">Career Booster Programme</div>
+        </div>
+
+        <div class="content">
+            <div class="signed-banner">
+                <h3>✓ Agreement Signed & Programme Complete</h3>
+                <p>This agreement was signed in October 2024. Programme successfully completed November 2024.</p>
+            </div>
+
+            <div class="client-info">
+                <div class="client-info-row">
+                    <span class="client-info-label">Client:</span>
+                    <span class="client-info-value">Donald Pirie</span>
+                </div>
+                <div class="client-info-row">
+                    <span class="client-info-label">Email:</span>
+                    <span class="client-info-value">donaldpirie111@hotmail.co.uk</span>
+                </div>
+                <div class="client-info-row">
+                    <span class="client-info-label">Programme:</span>
+                    <span class="client-info-value">4-Week Career Booster</span>
+                </div>
+                <div class="client-info-row">
+                    <span class="client-info-label">Status:</span>
+                    <span class="client-info-value"><span class="completion-badge">✓ Complete</span></span>
+                </div>
+            </div>
+
+            <h2>Programme Details</h2>
+            <div class="programme-box">
+                <h3>4-Week Career Booster Programme</h3>
+                <ul>
+                    <li>4 x 1-hour coaching sessions via Zoom</li>
+                    <li>Career Blueprint (source of truth document)</li>
+                    <li>Interactive CV Builder</li>
+                    <li>Blueprint to CV/LinkedIn Mapping Guide</li>
+                    <li>Decision Framework</li>
+                    <li>AI Prompt Library</li>
+                    <li>Email support (48-hour response on working days)</li>
+                </ul>
+            </div>
+
+            <h2>Programme Investment</h2>
+            <p><span class="highlight">£400 + VAT (£480 total)</span></p>
+            <p>Payment received in full prior to programme commencement.</p>
+
+            <h2>Confidentiality</h2>
+            <p>All information shared during our coaching sessions is treated as strictly confidential. Your personal information, career details, and any materials produced will not be shared with third parties without your explicit consent.</p>
+
+            <h2>Intellectual Property</h2>
+            <p>All tools, frameworks, and methodologies used in this programme are the intellectual property of Harness the Spark. Materials provided are for your personal use only and may not be distributed or reproduced without written permission.</p>
+
+            <h2>Code of Ethics</h2>
+            <p>As your coach, I adhere to the ICF (International Coaching Federation) Code of Ethics, ensuring professional standards, respect, and integrity throughout our engagement.</p>
+
+            <div class="signature-section">
+                <h2>✓ Signatures</h2>
+                <div class="signature-grid">
+                    <div class="signature-box">
+                        <h4>Client</h4>
+                        <div class="signature-display">
+                            <label>Signature</label>
+                            <div class="value signature-text">Donald Pirie</div>
+                        </div>
+                        <div class="signature-display">
+                            <label>Name</label>
+                            <div class="value">Donald Pirie</div>
+                        </div>
+                        <div class="signature-display">
+                            <label>Date</label>
+                            <div class="value">October 2024</div>
+                        </div>
+                    </div>
+                    <div class="signature-box">
+                        <h4>Coach</h4>
+                        <div class="signature-display">
+                            <label>Signature</label>
+                            <div class="value signature-text">Lisa Gills</div>
+                        </div>
+                        <div class="signature-display">
+                            <label>Name</label>
+                            <div class="value">Lisa Gills</div>
+                        </div>
+                        <div class="signature-display">
+                            <label>Date</label>
+                            <div class="value">October 2024</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

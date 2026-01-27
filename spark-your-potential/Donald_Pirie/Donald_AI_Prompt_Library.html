@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Donald Pirie - AI Prompt Library</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; line-height: 1.6; color: #2c3e50; background: #f5f5f5; padding: 40px 20px; }
+        .container { max-width: 900px; margin: 0 auto; background: white; border-radius: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.1); overflow: hidden; }
+        .header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 50px 40px; text-align: center; }
+        .header h1 { font-size: 2em; margin-bottom: 10px; }
+        .content { padding: 40px; }
+        .intro { background: #667eea15; padding: 25px; border-radius: 15px; margin-bottom: 40px; border-left: 5px solid #667eea; }
+        .section { margin-bottom: 40px; }
+        .section-title { font-size: 1.3em; font-weight: 700; color: #667eea; margin-bottom: 20px; padding-bottom: 10px; border-bottom: 2px solid #667eea; }
+        .prompt-card { background: #f8f9fa; border-radius: 12px; padding: 20px; margin-bottom: 20px; border-left: 4px solid #764ba2; }
+        .prompt-card h4 { color: #764ba2; margin-bottom: 8px; }
+        .use-case { font-size: 0.85em; color: #666; margin-bottom: 12px; font-style: italic; }
+        .prompt-box { background: #2c3e50; color: #e8e8e8; padding: 15px; border-radius: 8px; font-size: 0.85em; line-height: 1.6; white-space: pre-wrap; }
+        .variable { color: #ffd700; }
+        .copy-btn { background: #667eea; color: white; border: none; padding: 8px 15px; border-radius: 5px; font-size: 0.8em; cursor: pointer; margin-top: 10px; }
+        .tip-box { background: #fff3cd; padding: 15px; border-radius: 8px; margin: 20px 0; border-left: 4px solid #ffc107; }
+        .footer { text-align: center; padding: 30px; background: #f8f9fa; color: #666; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🤖 AI Prompt Library</h1>
+            <p>Custom prompts for Donald Pirie's ongoing career support</p>
+        </div>
+
+        <div class="content">
+            <div class="intro">
+                <h3 style="margin-bottom: 10px;">How to Use</h3>
+                <p>Copy these prompts into ChatGPT or Claude. Replace <span style="color: #B8860B; font-weight: bold;">[BRACKETED TEXT]</span> with your details. Your positioning is pre-loaded.</p>
+            </div>
+
+            <div class="section">
+                <div class="section-title">📄 CV & Applications</div>
+
+                <div class="prompt-card">
+                    <h4>Tailor CV for a Role</h4>
+                    <div class="use-case">When applying for a new opportunity</div>
+                    <div class="prompt-box">I'm a Transformational Strategist who restores belief and builds brand platforms. Evidence:
+• UBS: $2.5m incremental revenue through .com transformation
+• UPS: +20% EMEA penetration with "United Problem Solvers"
+• AMD: "Together We Advance" global platform
+
+Job description: <span class="variable">[PASTE JOB DESCRIPTION]</span>
+
+Help me: 1) Identify most relevant experience 2) Reframe achievements for this role 3) Draft 3 tailored bullet points</div>
+                    <button class="copy-btn" onclick="copyPrompt(this)">📋 Copy</button>
+                </div>
+
+                <div class="prompt-card">
+                    <h4>Write a Cover Letter</h4>
+                    <div class="use-case">When you need a compelling letter</div>
+                    <div class="prompt-box">Write a cover letter for <span class="variable">[JOB TITLE]</span> at <span class="variable">[COMPANY]</span>
+
+About me: Transformational Strategist—I restore belief systems, not just fix strategies. I connect insight, ideas, infrastructure and people, staying until transformation is embedded. Key wins: UBS, UPS, AMD. Seeking roles where I can build something meaningful.
+
+Job details: <span class="variable">[PASTE KEY DETAILS]</span>
+
+Professional but warm. Under 300 words. Focus on what I can transform for them.</div>
+                    <button class="copy-btn" onclick="copyPrompt(this)">📋 Copy</button>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-title">🎤 Interview Prep</div>
+
+                <div class="prompt-card">
+                    <h4>"Tell Me About Yourself"</h4>
+                    <div class="use-case">Prepare your 90-second pitch</div>
+                    <div class="prompt-box">Help me prepare "tell me about yourself" for <span class="variable">[ROLE & COMPANY]</span>
+
+My positioning: Transformational Strategist who restores belief and builds brand platforms. I connect insight, ideas, infrastructure and people—staying until embedded. Evidence: UBS, UPS, AMD transformations.
+
+Create 90-second answer: 1) Open with core value 2) Give 1-2 examples 3) Connect to this role 4) End with forward momentum</div>
+                    <button class="copy-btn" onclick="copyPrompt(this)">📋 Copy</button>
+                </div>
+
+                <div class="prompt-card">
+                    <h4>Prepare STAR Stories</h4>
+                    <div class="use-case">Structure case studies for interviews</div>
+                    <div class="prompt-box">Structure this as a STAR story for interviews:
+
+Experience: <span class="variable">[DESCRIBE THE PROJECT]</span>
+
+Format: Situation (1-2 sentences) → Task (what I was asked to do) → Action (MY contribution) → Result (measurable + belief transformation)
+
+Keep under 2 minutes spoken. End with learning.</div>
+                    <button class="copy-btn" onclick="copyPrompt(this)">📋 Copy</button>
+                </div>
+
+                <div class="prompt-card">
+                    <h4>Questions to Ask Them</h4>
+                    <div class="use-case">Evaluate if opportunity fits your needs</div>
+                    <div class="prompt-box">Generate interview questions for <span class="variable">[COMPANY]</span>, <span class="variable">[ROLE]</span>
+
+My non-negotiables to evaluate:
+• Brand platform work or "ad factory"?
+• Can I stay until transformation embedded?
+• Measured wisdom valued over loud performance?
+• Sustainable pace?
+• Marketing = growth engine or cost centre?
+
+Give 5 questions that sound curious (not interrogating) and reveal fit.</div>
+                    <button class="copy-btn" onclick="copyPrompt(this)">📋 Copy</button>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-title">⚖️ Evaluating Opportunities</div>
+
+                <div class="prompt-card">
+                    <h4>Evaluate a New Opportunity</h4>
+                    <div class="use-case">Assess any role against your criteria</div>
+                    <div class="prompt-box">Evaluate this opportunity against my criteria:
+
+Role: <span class="variable">[PASTE JOB DESCRIPTION]</span>
+
+My four tests:
+1. BELIEF TRANSFORMATION: Can I solve clarity problems? Stay until embedded?
+2. AUTHENTICITY: Can I be myself? Measured wisdom valued?
+3. SUSTAINABILITY: Pace sustainable? Marketing = growth engine?
+4. GROWTH & IMPACT: Lasting change? Proud in 2-3 years?
+
+Green lights: meaning, permission to build, authenticity, private company
+Red flags: ad factory, playing a role, holding company pressure
+
+Score /10 on each test. Overall assessment + questions to investigate.</div>
+                    <button class="copy-btn" onclick="copyPrompt(this)">📋 Copy</button>
+                </div>
+
+                <div class="prompt-card">
+                    <h4>Research a Company</h4>
+                    <div class="use-case">Before applying or interviewing</div>
+                    <div class="prompt-box">Research <span class="variable">[COMPANY NAME]</span> for a Transformational Strategist considering a role there.
+
+Find: 1) Ownership structure (private/holding company/public) 2) Recent news & direction 3) Culture signals 4) Key leaders 5) Red flags for someone valuing depth over "ad factory"
+
+Summarise what I should know before interviewing.</div>
+                    <button class="copy-btn" onclick="copyPrompt(this)">📋 Copy</button>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-title">💼 LinkedIn & Networking</div>
+
+                <div class="prompt-card">
+                    <h4>Write a LinkedIn Post</h4>
+                    <div class="use-case">Share thought leadership</div>
+                    <div class="prompt-box">Write a LinkedIn post about: <span class="variable">[TOPIC]</span>
+
+My voice: Transformational Strategist. Believe in restoring belief, not just fixing strategies. Connect creativity to commercial outcomes.
+
+Style: Thoughtful not preachy. Specific example. End with insight or question. 150-200 words. Max 3 hashtags.</div>
+                    <button class="copy-btn" onclick="copyPrompt(this)">📋 Copy</button>
+                </div>
+
+                <div class="prompt-card">
+                    <h4>Networking Message</h4>
+                    <div class="use-case">Reach out for conversations</div>
+                    <div class="prompt-box">Write LinkedIn message to <span class="variable">[PERSON & ROLE]</span> at <span class="variable">[COMPANY]</span>
+
+Context: <span class="variable">[HOW YOU KNOW THEM / WHY REACHING OUT]</span>
+About me: 20+ years strategy, UBS/UPS/AMD transformations
+Goal: <span class="variable">[COFFEE CHAT / ADVICE / ETC]</span>
+
+Under 100 words. Warm but professional. Specific about why them. Easy to say yes.</div>
+                    <button class="copy-btn" onclick="copyPrompt(this)">📋 Copy</button>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-title">🔄 Ongoing Support</div>
+
+                <div class="prompt-card">
+                    <h4>Debrief After Interview</h4>
+                    <div class="use-case">Process and prepare for next round</div>
+                    <div class="prompt-box">Help me debrief this interview:
+
+Role: <span class="variable">[ROLE & COMPANY]</span>
+Who I met: <span class="variable">[NAMES & ROLES]</span>
+What went well: <span class="variable">[YOUR THOUGHTS]</span>
+Struggled with: <span class="variable">[TRICKY QUESTIONS]</span>
+
+Help me: 1) Identify culture fit signals 2) Prepare better answers 3) What to clarify next round 4) Assess against my four tests</div>
+                    <button class="copy-btn" onclick="copyPrompt(this)">📋 Copy</button>
+                </div>
+
+                <div class="prompt-card">
+                    <h4>Weekly Check-In</h4>
+                    <div class="use-case">Stay on track with regular reflection</div>
+                    <div class="prompt-box">Be my career coach for a weekly check-in.
+
+This week: <span class="variable">[WHAT YOU DID]</span>
+Feeling: <span class="variable">[YOUR ENERGY ABOUT THE SEARCH]</span>
+Stuck on: <span class="variable">[BLOCKERS]</span>
+
+I'm a Transformational Strategist who restores belief. Help me: 1) Celebrate wins 2) Solve blockers 3) Set 3 priorities for next week 4) Check I'm staying true to non-negotiables</div>
+                    <button class="copy-btn" onclick="copyPrompt(this)">📋 Copy</button>
+                </div>
+
+                <div class="prompt-card">
+                    <h4>Negotiate an Offer</h4>
+                    <div class="use-case">When you receive an offer</div>
+                    <div class="prompt-box">Help me think through this offer:
+
+Role: <span class="variable">[TITLE]</span> at <span class="variable">[COMPANY]</span>
+Offered: <span class="variable">[SALARY & TERMS]</span>
+My concerns: <span class="variable">[WHAT YOU NEED]</span>
+
+Help me: 1) Identify what's negotiable 2) Draft appreciative response that opens negotiation 3) What to prioritise 4) Prepare for pushback</div>
+                    <button class="copy-btn" onclick="copyPrompt(this)">📋 Copy</button>
+                </div>
+            </div>
+
+            <div class="tip-box">
+                <strong>💡 Tips:</strong> Always paste your Blueprint positioning for context • Ask for multiple options • Say "make it sound more like me" if generic • Save good outputs to build your own library
+            </div>
+        </div>
+
+        <div class="footer">
+            <p><strong>Spark Your Potential</strong> | Career Booster Programme | November 2025</p>
+        </div>
+    </div>
+
+    <script>
+        function copyPrompt(btn) {
+            const text = btn.previousElementSibling.innerText;
+            navigator.clipboard.writeText(text).then(() => {
+                btn.textContent = '✓ Copied!';
+                setTimeout(() => btn.textContent = '📋 Copy', 2000);
+            });
+        }
+    </script>
+<script src="../shared/back-button.js"></script>
+</body>
+</html>

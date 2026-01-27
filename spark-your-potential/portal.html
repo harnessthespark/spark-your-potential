@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Toolkit - Spark Your Potential</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            min-height: 100vh;
+            padding: 40px 20px;
+            color: #fff;
+        }
+        .container { max-width: 1000px; margin: 0 auto; }
+
+        /* Header */
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        .header img { height: 50px; margin-bottom: 15px; }
+        .header h1 {
+            font-size: 2em;
+            font-weight: 800;
+            margin-bottom: 8px;
+        }
+        .header h1 span { color: #FFB627; }
+        .header .welcome {
+            font-size: 1.1em;
+            color: #4ECDC4;
+            font-weight: 600;
+        }
+
+        /* User Menu */
+        .user-menu {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+        }
+        .logout-btn {
+            background: rgba(255,255,255,0.1);
+            color: white;
+            border: 1px solid rgba(255,255,255,0.2);
+            padding: 8px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.85em;
+        }
+        .logout-btn:hover { background: rgba(255,255,255,0.2); }
+
+        /* Login Section */
+        .login-section {
+            background: rgba(255,255,255,0.95);
+            border-radius: 20px;
+            padding: 40px;
+            text-align: center;
+            max-width: 400px;
+            margin: 60px auto;
+        }
+        .login-section h2 { color: #1a1a2e; margin-bottom: 10px; }
+        .login-section p { color: #666; margin-bottom: 25px; }
+        .email-input {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 1em;
+            margin-bottom: 15px;
+        }
+        .email-input:focus { outline: none; border-color: #4ECDC4; }
+        .login-btn {
+            width: 100%;
+            background: linear-gradient(135deg, #4ECDC4 0%, #44A08D 100%);
+            color: white;
+            border: none;
+            padding: 15px;
+            border-radius: 10px;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        .login-btn:hover { transform: translateY(-2px); }
+        .login-error {
+            background: #ffe0e0;
+            color: #c00;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            display: none;
+        }
+
+        /* Toolkit Grid */
+        .toolkit { display: none; }
+        .toolkit.visible { display: block; }
+        .toolkit-title {
+            font-size: 1.3em;
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: #fff;
+        }
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+        }
+        .tool-card {
+            background: rgba(255,255,255,0.95);
+            border-radius: 16px;
+            padding: 25px;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .tool-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+        }
+        .tool-card h3 {
+            color: #1a1a2e;
+            font-size: 1.1em;
+            margin-bottom: 10px;
+        }
+        .tool-card p {
+            color: #666;
+            font-size: 0.9em;
+            line-height: 1.5;
+            margin-bottom: 15px;
+        }
+        .tool-btn {
+            background: linear-gradient(135deg, #4ECDC4 0%, #44A08D 100%);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+        }
+        .tool-btn:hover { opacity: 0.9; }
+        .tool-btn.locked {
+            background: #ddd;
+            color: #999;
+            cursor: not-allowed;
+        }
+
+        /* Tool Categories (visual only, subtle) */
+        .tool-card.energy { border-left: 4px solid #f59e0b; }
+        .tool-card.career { border-left: 4px solid #4ECDC4; }
+        .tool-card.support { border-left: 4px solid #8b5cf6; }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            margin-top: 50px;
+            padding-top: 30px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            color: #666;
+            font-size: 0.85em;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="user-menu" id="userMenu" style="display: none;">
+            <button class="logout-btn" onclick="logout()">Log out</button>
+        </div>
+
+        <div class="header">
+            <img src="White.png" alt="Harness the Spark">
+            <h1>Spark Your <span>Potential</span></h1>
+            <div class="welcome" id="welcomeMsg"></div>
+        </div>
+
+        <!-- Login -->
+        <div class="login-section" id="loginSection">
+            <h2>Welcome</h2>
+            <p>Enter your email to access your toolkit</p>
+            <div class="login-error" id="loginError"></div>
+            <form onsubmit="handleLogin(event)">
+                <input type="email" class="email-input" id="emailInput" placeholder="your@email.com" required>
+                <input type="password" class="email-input" id="passwordInput" placeholder="Password">
+                <button type="submit" class="login-btn">Access My Toolkit</button>
+            </form>
+        </div>
+
+        <!-- Toolkit (shown after login) -->
+        <div class="toolkit" id="toolkit">
+            <div class="toolkit-title">Your Toolkit</div>
+            <div class="tools-grid" id="toolsGrid">
+                <!-- Tools rendered by JavaScript -->
+            </div>
+        </div>
+
+        <div class="footer">
+            Spark Your Potential by Harness the Spark | harnessthespark.com
+        </div>
+    </div>
+
+    <script>
+        const API_SERVER = 'https://api.harnessthespark.ai';
+
+        // ALL AVAILABLE TOOLS - each client gets assigned which ones they can access
+        const ALL_TOOLS = {
+            // Career Tools
+            questionnaire: {
+                id: 'questionnaire',
+                name: 'Discovery Questionnaire',
+                icon: '📋',
+                desc: 'Deep reflection on your patterns, superpowers, and career journey.',
+                category: 'career'
+            },
+            insights: {
+                id: 'insights',
+                name: 'Career Insights Report',
+                icon: '💡',
+                desc: 'Your patterns and unique thread revealed.',
+                category: 'career'
+            },
+            blueprint: {
+                id: 'blueprint',
+                name: 'Career Blueprint',
+                icon: '🗺️',
+                desc: 'Your source of truth document - who you are and where you\'re going.',
+                category: 'career'
+            },
+            cvBuilder: {
+                id: 'cvBuilder',
+                name: 'CV Builder',
+                icon: '📄',
+                desc: 'Interactive CV that reflects your unique thread.',
+                category: 'career'
+            },
+            mappingGuide: {
+                id: 'mappingGuide',
+                name: 'Blueprint to CV Mapping',
+                icon: '🔗',
+                desc: 'Connect your blueprint insights to your CV and LinkedIn.',
+                category: 'career'
+            },
+            decisionFramework: {
+                id: 'decisionFramework',
+                name: 'Decision Framework',
+                icon: '⚖️',
+                desc: 'Score opportunities against what matters to you.',
+                category: 'career'
+            },
+            // Energy & Wellbeing Tools
+            foundations: {
+                id: 'foundations',
+                name: 'Laying the Foundations',
+                icon: '🏗️',
+                desc: 'Define your rules, plan for flexibility, protect time for what matters.',
+                category: 'energy'
+            },
+            energy: {
+                id: 'energy',
+                name: 'Energy Planner',
+                icon: '⚡',
+                desc: 'Plan your day around energy costs. Track what drains vs fuels you.',
+                category: 'energy'
+            },
+            braindump: {
+                id: 'braindump',
+                name: 'Brain Dump Box',
+                icon: '📦',
+                desc: 'Overwhelmed? Get everything out of your head. Sort: Do Now, Later, Delegate, Delete.',
+                category: 'energy'
+            },
+            ignition: {
+                id: 'ignition',
+                name: 'Spark Ignition',
+                icon: '🔥',
+                desc: 'Your first aid kit. Identify your state and access tailored support.',
+                category: 'support'
+            },
+            paradox: {
+                id: 'paradox',
+                name: 'Paradox Navigator',
+                icon: '🎭',
+                desc: 'Explore and honour your internal push-pull dynamics.',
+                category: 'support'
+            },
+            // Self-Discovery Tools
+            processingProfile: {
+                id: 'processingProfile',
+                name: 'My Processing Profile',
+                icon: '🧠',
+                desc: 'Discover how your brain works - processing speed, style, and paradoxes.',
+                category: 'discovery'
+            },
+            weeklyCheckin: {
+                id: 'weeklyCheckin',
+                name: 'Weekly Check-in',
+                icon: '✅',
+                desc: 'Quick reflection on your week - wins, challenges, and next steps.',
+                category: 'accountability'
+            }
+        };
+
+        // CLIENT DATA - tools assigned per client
+        const CLIENTS = {
+            'sarah@demo.com': {
+                name: 'Sarah Mitchell',
+                tools: ['questionnaire', 'insights', 'blueprint', 'cvBuilder', 'mappingGuide', 'decisionFramework'],
+                files: {
+                    questionnaire: 'sarah_mitchell_demo_client/Sarah_Mitchell_Discovery_Questionnaire.html',
+                    insights: 'sarah_mitchell_demo_client/Sarah_Mitchell_Career_Insights_Report.html',
+                    blueprint: 'sarah_mitchell_demo_client/Sarah_Mitchell_Blueprint.html',
+                    cvBuilder: 'sarah_mitchell_demo_client/Sarah_Mitchell_CV_Builder.html',
+                    mappingGuide: 'sarah_mitchell_demo_client/Sarah_Mitchell_Mapping_Guide.html',
+                    decisionFramework: 'sarah_mitchell_demo_client/Sarah_Mitchell_Decision_Framework.html'
+                }
+            },
+            'donaldpirie111@hotmail.co.uk': {
+                name: 'Donald Pirie',
+                tools: ['questionnaire', 'insights', 'blueprint', 'cvBuilder', 'mappingGuide', 'decisionFramework'],
+                files: {
+                    questionnaire: 'Donald/donald-questionnaire-responses.html',
+                    insights: 'Donald/Donald_Pirie_Career_Insights_Report.html',
+                    blueprint: 'Donald/Donald_Pirie_Career_Blueprint_LIVE.html',
+                    cvBuilder: 'Donald/Donald_Interactive_CV_Builder.html',
+                    mappingGuide: 'Donald/Donald_Blueprint_CV_LinkedIn_Mapping_Guide.html',
+                    decisionFramework: 'Donald/Donald_Decision_Framework_Updated.html'
+                }
+            },
+            'rs@rajsamuel.net': {
+                name: 'Raj Samuel',
+                tools: ['questionnaire', 'insights', 'blueprint', 'cvBuilder', 'mappingGuide', 'decisionFramework'],
+                files: {
+                    questionnaire: 'Raj_Samuel/Raj_Samuel_Discovery_Questionnaire.html',
+                    insights: 'Raj_Samuel/Raj_Samuel_Career_Insights_Report.html',
+                    blueprint: 'Raj_Samuel/Raj_Samuel_Blueprint.html',
+                    cvBuilder: 'Raj_Samuel/Raj_Samuel_CV_Builder.html',
+                    mappingGuide: 'Raj_Samuel/Raj_Samuel_Mapping_Guide.html',
+                    decisionFramework: 'Raj_Samuel/Raj_Samuel_Decision_Framework.html'
+                }
+            },
+            'chloe@thisiscal.com': {
+                name: 'Chloe Cal',
+                tools: ['processingProfile', 'weeklyCheckin', 'questionnaire', 'foundations', 'energy', 'braindump', 'ignition', 'paradox'],
+                files: {
+                    processingProfile: 'processing-profile.html',
+                    weeklyCheckin: 'weekly-checkin.html',
+                    questionnaire: 'Chloe_Cal/Chloe_Cal_Discovery_Questionnaire.html',
+                    foundations: 'audhd-foundations.html',
+                    energy: 'audhd-energy.html',
+                    braindump: 'audhd-braindump.html',
+                    ignition: 'audhd-ignition.html',
+                    paradox: 'audhd-paradox.html'
+                }
+            },
+            'deborah_armstrong@hotmail.com': {
+                name: 'Deb Briggs',
+                tools: ['processingProfile', 'weeklyCheckin', 'questionnaire', 'foundations', 'energy', 'braindump', 'ignition', 'paradox'],
+                files: {
+                    processingProfile: 'processing-profile.html',
+                    weeklyCheckin: 'weekly-checkin.html',
+                    questionnaire: 'Deb_Briggs/Deb_Briggs_Discovery_Questionnaire.html',
+                    foundations: 'audhd-foundations.html',
+                    energy: 'audhd-energy.html',
+                    braindump: 'audhd-braindump.html',
+                    ignition: 'audhd-ignition.html',
+                    paradox: 'audhd-paradox.html'
+                }
+            },
+            'lisa.gills@icloud.com': {
+                name: 'Lisa Gills',
+                tools: ['processingProfile', 'weeklyCheckin', 'questionnaire', 'foundations', 'energy', 'braindump', 'ignition', 'paradox', 'blueprint', 'cvBuilder', 'decisionFramework'],
+                files: {
+                    processingProfile: 'processing-profile.html',
+                    weeklyCheckin: 'weekly-checkin.html',
+                    questionnaire: 'processing-profile.html',
+                    foundations: 'audhd-foundations.html',
+                    energy: 'audhd-energy.html',
+                    braindump: 'audhd-braindump.html',
+                    ignition: 'audhd-ignition.html',
+                    paradox: 'audhd-paradox.html',
+                    blueprint: 'processing-profile.html',
+                    cvBuilder: 'processing-profile.html',
+                    decisionFramework: 'processing-profile.html'
+                }
+            }
+        };
+
+        let currentUser = null;
+
+        // Check if already logged in
+        window.onload = function() {
+            const saved = localStorage.getItem('syp_user') || localStorage.getItem('syp_client_email');
+            if (saved) {
+                try {
+                    const user = JSON.parse(saved);
+                    if (user.email && CLIENTS[user.email]) {
+                        loginUser(user.email);
+                    } else if (typeof saved === 'string' && CLIENTS[saved]) {
+                        loginUser(saved);
+                    }
+                } catch(e) {
+                    if (CLIENTS[saved]) {
+                        loginUser(saved);
+                    }
+                }
+            }
+        };
+
+        async function handleLogin(event) {
+            event.preventDefault();
+            const email = document.getElementById('emailInput').value.trim().toLowerCase();
+            const password = document.getElementById('passwordInput').value;
+            const errorDiv = document.getElementById('loginError');
+
+            errorDiv.style.display = 'none';
+
+            // Always require password authentication via API
+            try {
+                const response = await fetch(`${API_SERVER}/api/accounts/login/`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, password })
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    localStorage.setItem('syp_user', JSON.stringify(data));
+                    localStorage.setItem('syp_token', data.token);
+
+                    // If staff, redirect to coach hub
+                    if (data.is_staff) {
+                        window.location.href = 'coach-hub.html';
+                        return;
+                    }
+
+                    // Otherwise try to find client toolkit
+                    if (CLIENTS[email]) {
+                        loginUser(email);
+                    } else {
+                        errorDiv.textContent = 'Account found but no toolkit assigned yet. Contact Lisa.';
+                        errorDiv.style.display = 'block';
+                    }
+                } else {
+                    errorDiv.textContent = 'Invalid email or password. Please try again.';
+                    errorDiv.style.display = 'block';
+                }
+            } catch (err) {
+                // Network error
+                errorDiv.textContent = 'Unable to connect. Please check your internet connection.';
+                errorDiv.style.display = 'block';
+            }
+        }
+
+        function loginUser(email) {
+            currentUser = CLIENTS[email];
+            currentUser.email = email;
+
+            localStorage.setItem('syp_client_email', email);
+
+            document.getElementById('loginSection').style.display = 'none';
+            document.getElementById('toolkit').classList.add('visible');
+            document.getElementById('userMenu').style.display = 'block';
+            document.getElementById('welcomeMsg').textContent = `Welcome back, ${currentUser.name}`;
+
+            renderTools();
+        }
+
+        function renderTools() {
+            const grid = document.getElementById('toolsGrid');
+            grid.innerHTML = '';
+
+            currentUser.tools.forEach(toolId => {
+                const tool = ALL_TOOLS[toolId];
+                if (!tool) return;
+
+                const card = document.createElement('div');
+                card.className = `tool-card ${tool.category}`;
+
+                const hasFile = currentUser.files && currentUser.files[toolId];
+
+                card.innerHTML = `
+                    <h3>${tool.icon} ${tool.name}</h3>
+                    <p>${tool.desc}</p>
+                    <button class="tool-btn ${hasFile ? '' : 'locked'}"
+                            onclick="${hasFile ? `openTool('${toolId}')` : ''}"
+                            ${hasFile ? '' : 'disabled'}>
+                        ${hasFile ? 'Open' : 'Coming Soon'}
+                    </button>
+                `;
+
+                grid.appendChild(card);
+            });
+        }
+
+        function openTool(toolId) {
+            const file = currentUser.files[toolId];
+            if (file) {
+                window.open(file, '_blank');
+            }
+        }
+
+        function logout() {
+            localStorage.removeItem('syp_user');
+            localStorage.removeItem('syp_client_email');
+            localStorage.removeItem('syp_token');
+            currentUser = null;
+            document.getElementById('loginSection').style.display = 'block';
+            document.getElementById('toolkit').classList.remove('visible');
+            document.getElementById('userMenu').style.display = 'none';
+            document.getElementById('welcomeMsg').textContent = '';
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Career Booster Tools - How They Connect</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background: #f5f5f5; padding: 40px; }
+        
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+        
+        .page-title {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        .page-title h1 { font-size: 2em; color: #2c3e50; margin-bottom: 10px; }
+        .page-title p { color: #666; font-size: 1.1em; }
+        
+        /* Step Section */
+        .step {
+            display: flex;
+            gap: 30px;
+            margin-bottom: 30px;
+            align-items: stretch;
+        }
+        
+        .step-number {
+            width: 60px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .step-badge {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 1.3em;
+            color: white;
+        }
+        .step-1 .step-badge { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+        .step-2 .step-badge { background: linear-gradient(135deg, #FF6B35 0%, #FFB627 100%); }
+        .step-3 .step-badge { background: linear-gradient(135deg, #4CAF50 0%, #8BC34A 100%); }
+        
+        .step-line {
+            flex: 1;
+            width: 3px;
+            background: #ddd;
+            margin: 10px auto;
+        }
+        
+        .step-content {
+            flex: 1;
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+        }
+        
+        .step-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        .step-icon { font-size: 1.8em; }
+        .step-title { font-size: 1.3em; font-weight: 700; color: #2c3e50; }
+        .step-subtitle { font-size: 0.95em; color: #666; margin-top: 3px; }
+        
+        /* Blueprint specific */
+        .blueprint-box {
+            background: linear-gradient(135deg, #667eea10 0%, #764ba210 100%);
+            border-left: 4px solid #667eea;
+            padding: 20px;
+            border-radius: 10px;
+        }
+        .blueprint-label { color: #667eea; font-weight: 600; font-size: 0.9em; margin-bottom: 8px; }
+        .blueprint-text { font-size: 1.2em; line-height: 1.5; color: #2c3e50; }
+        .highlight { background: #FFB627; padding: 2px 6px; border-radius: 4px; }
+        
+        /* Mapping specific */
+        .mapping-visual {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .mapping-row {
+            display: flex;
+            align-items: center;
+            background: #f8f9fa;
+            padding: 12px 15px;
+            border-radius: 8px;
+        }
+        .mapping-from {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 6px 12px;
+            border-radius: 5px;
+            font-size: 0.85em;
+            font-weight: 600;
+        }
+        .mapping-arrow { 
+            padding: 0 15px; 
+            color: #FFB627; 
+            font-size: 1.2em;
+            font-weight: bold;
+        }
+        .mapping-to {
+            color: #2c3e50;
+            font-weight: 500;
+        }
+        .mapping-example {
+            color: #888;
+            font-size: 0.85em;
+            margin-left: auto;
+            font-style: italic;
+        }
+        
+        /* Output specific */
+        .output-preview {
+            border: 2px solid #4CAF50;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        .output-header {
+            background: #4CAF50;
+            color: white;
+            padding: 8px 15px;
+            font-size: 0.8em;
+            font-weight: 600;
+        }
+        .output-content {
+            padding: 20px;
+        }
+        .cv-name { font-size: 1.5em; font-weight: 700; color: #2c3e50; text-transform: uppercase; }
+        .cv-headline { color: #667eea; font-style: italic; margin: 8px 0 15px 0; padding-bottom: 15px; border-bottom: 1px solid #e0e0e0; }
+        .cv-section { font-size: 0.75em; font-weight: 700; color: #888; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
+        .cv-profile { color: #444; line-height: 1.6; }
+        
+        /* Before/After */
+        .transformation {
+            background: #1a1a2e;
+            border-radius: 15px;
+            padding: 30px;
+            margin-top: 30px;
+        }
+        .transformation h3 {
+            color: white;
+            text-align: center;
+            margin-bottom: 25px;
+            font-size: 1.4em;
+        }
+        .comparison {
+            display: flex;
+            gap: 20px;
+        }
+        .before, .after {
+            flex: 1;
+            padding: 20px;
+            border-radius: 10px;
+        }
+        .before {
+            background: rgba(255,107,107,0.15);
+            border: 2px solid #FF6B6B;
+        }
+        .after {
+            background: rgba(78,205,196,0.15);
+            border: 2px solid #4ECDC4;
+        }
+        .comparison-label {
+            font-size: 0.8em;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 10px;
+        }
+        .before .comparison-label { color: #FF6B6B; }
+        .after .comparison-label { color: #4ECDC4; }
+        .comparison-text {
+            color: white;
+            font-size: 1.05em;
+            line-height: 1.5;
+        }
+        
+        .callout {
+            background: #fff3cd;
+            border-left: 4px solid #FFB627;
+            padding: 15px 20px;
+            margin-top: 15px;
+            border-radius: 0 8px 8px 0;
+            font-size: 0.9em;
+            color: #856404;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        
+        <div class="page-title">
+            <h1>⚡ How the Career Booster Tools Work Together</h1>
+            <p>From discovery to ready-to-use CV in 3 steps</p>
+        </div>
+
+        <!-- STEP 1: BLUEPRINT -->
+        <div class="step step-1">
+            <div class="step-number">
+                <div class="step-badge">1</div>
+                <div class="step-line"></div>
+            </div>
+            <div class="step-content">
+                <div class="step-header">
+                    <div class="step-icon">📘</div>
+                    <div>
+                        <div class="step-title">Career Blueprint</div>
+                        <div class="step-subtitle">We discover your core pattern together</div>
+                    </div>
+                </div>
+                <div class="blueprint-box">
+                    <div class="blueprint-label">YOUR CORE PATTERN</div>
+                    <div class="blueprint-text">
+                        You don't just create campaigns. You <span class="highlight">unlock creative potential</span> in clients and internal teams that have forgotten what they're capable of.
+                    </div>
+                </div>
+                <div class="callout">
+                    💡 This is the insight most people can't see about themselves — it becomes the foundation for everything.
+                </div>
+            </div>
+        </div>
+
+        <!-- STEP 2: MAPPING -->
+        <div class="step step-2">
+            <div class="step-number">
+                <div class="step-badge">2</div>
+                <div class="step-line"></div>
+            </div>
+            <div class="step-content">
+                <div class="step-header">
+                    <div class="step-icon">🗺️</div>
+                    <div>
+                        <div class="step-title">Mapping Guide</div>
+                        <div class="step-subtitle">Shows exactly where your Blueprint content goes</div>
+                    </div>
+                </div>
+                <div class="mapping-visual">
+                    <div class="mapping-row">
+                        <div class="mapping-from">Core Pattern</div>
+                        <div class="mapping-arrow">→</div>
+                        <div class="mapping-to">CV Profile & LinkedIn About</div>
+                        <div class="mapping-example">"I unlock creative potential..."</div>
+                    </div>
+                    <div class="mapping-row">
+                        <div class="mapping-from">Your Thread</div>
+                        <div class="mapping-arrow">→</div>
+                        <div class="mapping-to">LinkedIn Headline</div>
+                        <div class="mapping-example">"Creative Catalyst"</div>
+                    </div>
+                    <div class="mapping-row">
+                        <div class="mapping-from">Evidence</div>
+                        <div class="mapping-arrow">→</div>
+                        <div class="mapping-to">CV Key Achievements</div>
+                        <div class="mapping-example">"Nike, Spotify, Barclays"</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- STEP 3: OUTPUT -->
+        <div class="step step-3">
+            <div class="step-number">
+                <div class="step-badge">3</div>
+            </div>
+            <div class="step-content">
+                <div class="step-header">
+                    <div class="step-icon">📝</div>
+                    <div>
+                        <div class="step-title">CV Builder</div>
+                        <div class="step-subtitle">Your Blueprint content, ready to use</div>
+                    </div>
+                </div>
+                <div class="output-preview">
+                    <div class="output-header">PREVIEW: CV OUTPUT</div>
+                    <div class="output-content">
+                        <div class="cv-name">Sarah Mitchell</div>
+                        <div class="cv-headline">Creative Catalyst | Unlocking potential in clients and teams that have forgotten what they're capable of</div>
+                        <div class="cv-section">Profile</div>
+                        <div class="cv-profile">I unlock creative potential in clients and internal teams that have forgotten what they're capable of. From Nike to Spotify to Barclays, I've helped organisations rediscover their creative edge and deliver work that moves the needle.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- BEFORE/AFTER -->
+        <div class="transformation">
+            <h3>✨ The Result</h3>
+            <div class="comparison">
+                <div class="before">
+                    <div class="comparison-label">❌ Before</div>
+                    <div class="comparison-text">"Senior Strategist with 15 years experience in advertising and marketing across multiple sectors."</div>
+                </div>
+                <div class="after">
+                    <div class="comparison-label">✓ After</div>
+                    <div class="comparison-text">"I unlock creative potential in clients and internal teams that have forgotten what they're capable of."</div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</body>
+</html>

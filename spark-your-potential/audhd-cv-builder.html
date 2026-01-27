@@ -1,0 +1,1037 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Paradox CV Builder - Neurodivergent Executive Career</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧠</text></svg>">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #2d1b4e 100%);
+            min-height: 100vh;
+            padding: 40px 20px;
+            color: #333;
+        }
+
+        .container { max-width: 1200px; margin: 0 auto; }
+
+        /* Navigation */
+        .nav-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+        .back-link {
+            color: #f472b6;
+            text-decoration: none;
+            font-size: 0.95em;
+        }
+        .back-link:hover { text-decoration: underline; }
+        .nav-actions {
+            display: flex;
+            gap: 10px;
+        }
+        .nav-btn {
+            background: rgba(255,255,255,0.2);
+            color: white;
+            border: 1px solid rgba(255,255,255,0.3);
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 0.85em;
+            cursor: pointer;
+            text-decoration: none;
+        }
+        .nav-btn:hover { background: rgba(255,255,255,0.3); }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            color: white;
+        }
+        .header h1 {
+            font-size: 2.2em;
+            font-weight: 800;
+            margin-bottom: 10px;
+        }
+        .header h1 span {
+            background: linear-gradient(135deg, #E91E78 0%, #F97B4D 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .header .subtitle {
+            font-size: 1.1em;
+            opacity: 0.8;
+        }
+
+        /* View Toggle */
+        .view-toggle {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 30px;
+        }
+        .toggle-btn {
+            padding: 10px 25px;
+            border-radius: 25px;
+            border: 2px solid rgba(255,255,255,0.3);
+            background: transparent;
+            color: white;
+            font-size: 0.9em;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .toggle-btn.active {
+            background: linear-gradient(135deg, #E91E78 0%, #F97B4D 100%);
+            border-color: transparent;
+        }
+        .toggle-btn:hover:not(.active) {
+            background: rgba(255,255,255,0.1);
+        }
+
+        /* Builder Panel */
+        .builder-panel {
+            display: grid;
+            grid-template-columns: 350px 1fr;
+            gap: 30px;
+        }
+        @media (max-width: 900px) {
+            .builder-panel { grid-template-columns: 1fr; }
+        }
+
+        /* Sidebar */
+        .sidebar {
+            background: white;
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            height: fit-content;
+            position: sticky;
+            top: 20px;
+        }
+        .sidebar-title {
+            font-size: 1.1em;
+            font-weight: 700;
+            color: #2d1b4e;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #E91E78;
+        }
+
+        .sidebar-section {
+            margin-bottom: 20px;
+        }
+        .sidebar-section h4 {
+            font-size: 0.9em;
+            color: #888;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .input-group {
+            margin-bottom: 15px;
+        }
+        .input-label {
+            font-size: 0.85em;
+            font-weight: 600;
+            color: #555;
+            margin-bottom: 6px;
+            display: block;
+        }
+        .input-field {
+            width: 100%;
+            padding: 10px 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-family: inherit;
+            font-size: 0.95em;
+            transition: all 0.2s;
+        }
+        .input-field:focus {
+            outline: none;
+            border-color: #E91E78;
+            box-shadow: 0 0 0 3px rgba(233, 30, 120, 0.15);
+        }
+        textarea.input-field {
+            min-height: 80px;
+            resize: vertical;
+        }
+
+        .add-btn {
+            width: 100%;
+            padding: 10px;
+            background: linear-gradient(135deg, #E91E78 0%, #F97B4D 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .add-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 3px 10px rgba(233, 30, 120, 0.3);
+        }
+
+        /* Blueprint Import */
+        .blueprint-import {
+            background: linear-gradient(135deg, #fce7f3 0%, #e0e7ff 100%);
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+        .blueprint-import p {
+            font-size: 0.85em;
+            color: #666;
+            margin-bottom: 10px;
+        }
+        .import-btn {
+            width: 100%;
+            padding: 10px;
+            background: #8B5CF6;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        /* CV Preview */
+        .cv-preview {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            overflow: hidden;
+        }
+
+        /* CV Styles */
+        .cv-container {
+            padding: 50px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .cv-header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding-bottom: 30px;
+            border-bottom: 3px solid #E91E78;
+        }
+        .cv-name {
+            font-size: 2.5em;
+            font-weight: 800;
+            color: #2d1b4e;
+            margin-bottom: 10px;
+        }
+        .cv-title {
+            font-size: 1.3em;
+            color: #E91E78;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+        .cv-contact {
+            font-size: 0.9em;
+            color: #666;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+        .cv-contact span {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        /* Positioning Statement */
+        .cv-positioning {
+            background: linear-gradient(135deg, #fce7f3 0%, #e0e7ff 100%);
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 35px;
+            text-align: center;
+        }
+        .cv-positioning h3 {
+            font-size: 0.85em;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: #E91E78;
+            margin-bottom: 10px;
+        }
+        .cv-positioning p {
+            font-size: 1.1em;
+            color: #2d1b4e;
+            line-height: 1.6;
+            font-style: italic;
+        }
+
+        /* CV Section */
+        .cv-section {
+            margin-bottom: 35px;
+        }
+        .cv-section-title {
+            font-size: 1.1em;
+            font-weight: 700;
+            color: #2d1b4e;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #E91E78;
+        }
+
+        /* Paradox Strengths */
+        .paradox-strengths {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        @media (max-width: 600px) {
+            .paradox-strengths { grid-template-columns: 1fr; }
+        }
+        .strength-pill {
+            background: linear-gradient(135deg, #f0f0f0 0%, #e8e8e8 100%);
+            border-radius: 25px;
+            padding: 12px 20px;
+            text-align: center;
+            font-size: 0.9em;
+            font-weight: 500;
+            color: #555;
+            border-left: 4px solid;
+        }
+        .strength-pill.communication { border-color: #E91E78; }
+        .strength-pill.executive { border-color: #F97B4D; }
+        .strength-pill.energy { border-color: #FACC15; }
+        .strength-pill.emotional { border-color: #3B82F6; }
+        .strength-pill.processing { border-color: #8B5CF6; }
+        .strength-pill.relationships { border-color: #10B981; }
+
+        /* Experience Entry */
+        .experience-entry {
+            margin-bottom: 25px;
+            padding-bottom: 25px;
+            border-bottom: 1px solid #eee;
+        }
+        .experience-entry:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+        .exp-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 10px;
+        }
+        .exp-company {
+            font-size: 1.1em;
+            font-weight: 700;
+            color: #2d1b4e;
+        }
+        .exp-dates {
+            font-size: 0.9em;
+            color: #888;
+        }
+        .exp-role {
+            font-size: 1em;
+            color: #E91E78;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+        .exp-achievements {
+            list-style: none;
+            padding: 0;
+        }
+        .exp-achievements li {
+            padding: 8px 0 8px 25px;
+            position: relative;
+            font-size: 0.95em;
+            color: #555;
+            line-height: 1.5;
+        }
+        .exp-achievements li::before {
+            content: '→';
+            position: absolute;
+            left: 0;
+            color: #E91E78;
+            font-weight: bold;
+        }
+        .exp-paradox-tag {
+            display: inline-block;
+            font-size: 0.75em;
+            padding: 2px 8px;
+            border-radius: 10px;
+            background: #fce7f3;
+            color: #E91E78;
+            margin-left: 5px;
+        }
+
+        /* Skills Grid */
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 10px;
+        }
+        .skill-tag {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 10px 15px;
+            font-size: 0.9em;
+            text-align: center;
+            border: 1px solid #e0e0e0;
+        }
+
+        /* Education */
+        .education-entry {
+            margin-bottom: 15px;
+        }
+        .edu-degree {
+            font-weight: 600;
+            color: #2d1b4e;
+        }
+        .edu-institution {
+            color: #666;
+            font-size: 0.95em;
+        }
+        .edu-year {
+            color: #888;
+            font-size: 0.9em;
+        }
+
+        /* Print Styles */
+        @media print {
+            body {
+                background: white;
+                padding: 0;
+            }
+            .nav-bar, .view-toggle, .sidebar, .nav-actions {
+                display: none !important;
+            }
+            .builder-panel {
+                display: block;
+            }
+            .cv-preview {
+                box-shadow: none;
+                border-radius: 0;
+            }
+            .cv-container {
+                padding: 30px;
+            }
+            .cv-positioning {
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+            .strength-pill {
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+        }
+
+        /* Edit View Styles */
+        .edit-view { display: none; }
+        .edit-view.active { display: block; }
+        .preview-view { display: block; }
+        .preview-view.hidden { display: none; }
+
+        .footer {
+            text-align: center;
+            color: white;
+            opacity: 0.6;
+            margin-top: 40px;
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Navigation -->
+        <div class="nav-bar">
+            <a href="audhd-career-portal.html" class="back-link">← Back to Portal</a>
+            <div class="nav-actions">
+                <button class="nav-btn" onclick="saveCV()">💾 Save</button>
+                <button class="nav-btn" onclick="window.print()">📄 Export PDF</button>
+                <button class="nav-btn" onclick="logout()">Log out</button>
+            </div>
+        </div>
+
+        <div class="header">
+            <h1>📝 Paradox <span>CV Builder</span></h1>
+            <div class="subtitle">Executive CV That Honours Your AuDHD Brain</div>
+        </div>
+
+        <!-- View Toggle -->
+        <div class="view-toggle">
+            <button class="toggle-btn active" onclick="switchView('edit')">✏️ Edit</button>
+            <button class="toggle-btn" onclick="switchView('preview')">👁️ Preview</button>
+        </div>
+
+        <div class="builder-panel">
+            <!-- Sidebar (Edit Mode) -->
+            <div class="sidebar edit-view active" id="editSidebar">
+                <div class="sidebar-title">CV Builder</div>
+
+                <!-- Blueprint Import -->
+                <div class="blueprint-import">
+                    <p>Import your positioning and evidence from your Career Blueprint</p>
+                    <button class="import-btn" onclick="importFromBlueprint()">🔮 Import from Blueprint</button>
+                </div>
+
+                <!-- Personal Info -->
+                <div class="sidebar-section">
+                    <h4>Personal Information</h4>
+                    <div class="input-group">
+                        <label class="input-label">Full Name</label>
+                        <input type="text" class="input-field" id="cv-name" placeholder="Your Name">
+                    </div>
+                    <div class="input-group">
+                        <label class="input-label">Executive Title</label>
+                        <input type="text" class="input-field" id="cv-title" placeholder="e.g., Chief Operations Officer">
+                    </div>
+                    <div class="input-group">
+                        <label class="input-label">Email</label>
+                        <input type="email" class="input-field" id="cv-email" placeholder="your@email.com">
+                    </div>
+                    <div class="input-group">
+                        <label class="input-label">Phone</label>
+                        <input type="tel" class="input-field" id="cv-phone" placeholder="+44 7xxx xxx xxx">
+                    </div>
+                    <div class="input-group">
+                        <label class="input-label">LinkedIn</label>
+                        <input type="text" class="input-field" id="cv-linkedin" placeholder="linkedin.com/in/yourname">
+                    </div>
+                </div>
+
+                <!-- Positioning -->
+                <div class="sidebar-section">
+                    <h4>Executive Positioning</h4>
+                    <div class="input-group">
+                        <label class="input-label">Your Positioning Statement</label>
+                        <textarea class="input-field" id="cv-positioning" placeholder="The executive who..."></textarea>
+                    </div>
+                </div>
+
+                <!-- Paradox Strengths -->
+                <div class="sidebar-section">
+                    <h4>Paradox Strengths (Select 3)</h4>
+                    <div class="input-group">
+                        <div style="display: flex; flex-wrap: wrap; gap: 8px;">
+                            <label style="cursor: pointer;">
+                                <input type="checkbox" name="strength" value="Pattern Recognition" checked> Pattern Recognition
+                            </label>
+                            <label style="cursor: pointer;">
+                                <input type="checkbox" name="strength" value="Systems Design" checked> Systems Design
+                            </label>
+                            <label style="cursor: pointer;">
+                                <input type="checkbox" name="strength" value="Deep Focus" checked> Deep Focus
+                            </label>
+                            <label style="cursor: pointer;">
+                                <input type="checkbox" name="strength" value="Strategic Vision"> Strategic Vision
+                            </label>
+                            <label style="cursor: pointer;">
+                                <input type="checkbox" name="strength" value="Innovation"> Innovation
+                            </label>
+                            <label style="cursor: pointer;">
+                                <input type="checkbox" name="strength" value="Detail Precision"> Detail Precision
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Add Experience -->
+                <div class="sidebar-section">
+                    <h4>Add Experience</h4>
+                    <div class="input-group">
+                        <label class="input-label">Company</label>
+                        <input type="text" class="input-field" id="exp-company">
+                    </div>
+                    <div class="input-group">
+                        <label class="input-label">Role</label>
+                        <input type="text" class="input-field" id="exp-role">
+                    </div>
+                    <div class="input-group">
+                        <label class="input-label">Dates</label>
+                        <input type="text" class="input-field" id="exp-dates" placeholder="2020 - Present">
+                    </div>
+                    <div class="input-group">
+                        <label class="input-label">Key Achievements (one per line)</label>
+                        <textarea class="input-field" id="exp-achievements" placeholder="Led transformation resulting in £2M savings&#10;Built team from 5 to 25 people"></textarea>
+                    </div>
+                    <div class="input-group">
+                        <label class="input-label">Paradox Strength Used</label>
+                        <select class="input-field" id="exp-paradox">
+                            <option value="">None</option>
+                            <option value="processing">Pattern Recognition</option>
+                            <option value="executive">Systems Design</option>
+                            <option value="energy">Deep Focus</option>
+                            <option value="communication">Clear Communication</option>
+                            <option value="emotional">Emotional Intelligence</option>
+                            <option value="relationships">Authentic Connection</option>
+                        </select>
+                    </div>
+                    <button class="add-btn" onclick="addExperience()">+ Add Experience</button>
+                </div>
+
+                <!-- Skills -->
+                <div class="sidebar-section">
+                    <h4>Add Skills</h4>
+                    <div class="input-group">
+                        <label class="input-label">New Skill</label>
+                        <input type="text" class="input-field" id="new-skill" placeholder="e.g., Strategic Planning">
+                    </div>
+                    <button class="add-btn" onclick="addSkill()">+ Add Skill</button>
+                </div>
+
+                <!-- Education -->
+                <div class="sidebar-section">
+                    <h4>Add Education</h4>
+                    <div class="input-group">
+                        <label class="input-label">Degree/Qualification</label>
+                        <input type="text" class="input-field" id="edu-degree">
+                    </div>
+                    <div class="input-group">
+                        <label class="input-label">Institution</label>
+                        <input type="text" class="input-field" id="edu-institution">
+                    </div>
+                    <div class="input-group">
+                        <label class="input-label">Year</label>
+                        <input type="text" class="input-field" id="edu-year" placeholder="2010">
+                    </div>
+                    <button class="add-btn" onclick="addEducation()">+ Add Education</button>
+                </div>
+            </div>
+
+            <!-- CV Preview -->
+            <div class="cv-preview">
+                <div class="cv-container">
+                    <!-- Header -->
+                    <div class="cv-header">
+                        <div class="cv-name" id="preview-name">Your Name</div>
+                        <div class="cv-title" id="preview-title">Executive Title</div>
+                        <div class="cv-contact">
+                            <span id="preview-email">📧 your@email.com</span>
+                            <span id="preview-phone">📱 +44 7xxx xxx xxx</span>
+                            <span id="preview-linkedin">🔗 LinkedIn</span>
+                        </div>
+                    </div>
+
+                    <!-- Positioning Statement -->
+                    <div class="cv-positioning">
+                        <h3>Executive Profile</h3>
+                        <p id="preview-positioning">Your positioning statement will appear here — the executive who...</p>
+                    </div>
+
+                    <!-- Paradox Strengths -->
+                    <div class="cv-section">
+                        <div class="cv-section-title">Core Strengths</div>
+                        <div class="paradox-strengths" id="preview-strengths">
+                            <div class="strength-pill processing">Pattern Recognition</div>
+                            <div class="strength-pill executive">Systems Design</div>
+                            <div class="strength-pill energy">Deep Focus</div>
+                        </div>
+                    </div>
+
+                    <!-- Experience -->
+                    <div class="cv-section">
+                        <div class="cv-section-title">Executive Experience</div>
+                        <div id="preview-experience">
+                            <div class="experience-entry">
+                                <div class="exp-header">
+                                    <span class="exp-company">Company Name</span>
+                                    <span class="exp-dates">2020 - Present</span>
+                                </div>
+                                <div class="exp-role">Executive Role</div>
+                                <ul class="exp-achievements">
+                                    <li>Add your achievements using the sidebar</li>
+                                    <li>Each achievement can be tagged with a paradox strength</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Skills -->
+                    <div class="cv-section">
+                        <div class="cv-section-title">Skills & Expertise</div>
+                        <div class="skills-grid" id="preview-skills">
+                            <div class="skill-tag">Strategic Planning</div>
+                            <div class="skill-tag">Digital Transformation</div>
+                            <div class="skill-tag">Team Leadership</div>
+                            <div class="skill-tag">Change Management</div>
+                        </div>
+                    </div>
+
+                    <!-- Education -->
+                    <div class="cv-section">
+                        <div class="cv-section-title">Education</div>
+                        <div id="preview-education">
+                            <div class="education-entry">
+                                <div class="edu-degree">MBA / Degree</div>
+                                <div class="edu-institution">Institution Name</div>
+                                <div class="edu-year">Year</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            AuDHD Executive Career Coaching by Harness the Spark | harnessthespark.com
+        </div>
+    </div>
+
+    <script>
+        // State
+        let currentUser = null;
+        let cvData = {
+            name: '',
+            title: '',
+            email: '',
+            phone: '',
+            linkedin: '',
+            positioning: '',
+            strengths: ['Pattern Recognition', 'Systems Design', 'Deep Focus'],
+            experience: [],
+            skills: ['Strategic Planning', 'Digital Transformation', 'Team Leadership', 'Change Management'],
+            education: []
+        };
+
+        // Initialize
+        window.onload = function() {
+            const savedUser = localStorage.getItem('syp_user');
+            if (!savedUser) {
+                window.location.href = 'exec-login.html';
+                return;
+            }
+            currentUser = JSON.parse(savedUser);
+
+            // Check access
+            const hasAccess = currentUser.programme_access === 'audhd-career' ||
+                             currentUser.programme_access === 'all' ||
+                             currentUser.isStaff;
+
+            if (!hasAccess) {
+                alert('You do not have access to AuDHD Executive Career tools.');
+                window.location.href = 'index.html';
+                return;
+            }
+
+            // Load saved CV
+            loadCV();
+
+            // Setup live preview
+            setupLivePreview();
+        };
+
+        function loadCV() {
+            const saved = localStorage.getItem('audhd_cv_' + currentUser.id);
+            if (saved) {
+                cvData = JSON.parse(saved);
+            } else {
+                // Set defaults from user
+                cvData.name = currentUser.name || '';
+                cvData.email = currentUser.email || '';
+            }
+
+            populateForm();
+            updatePreview();
+        }
+
+        function populateForm() {
+            document.getElementById('cv-name').value = cvData.name;
+            document.getElementById('cv-title').value = cvData.title;
+            document.getElementById('cv-email').value = cvData.email;
+            document.getElementById('cv-phone').value = cvData.phone;
+            document.getElementById('cv-linkedin').value = cvData.linkedin;
+            document.getElementById('cv-positioning').value = cvData.positioning;
+
+            // Update strength checkboxes
+            document.querySelectorAll('input[name="strength"]').forEach(cb => {
+                cb.checked = cvData.strengths.includes(cb.value);
+            });
+        }
+
+        function setupLivePreview() {
+            // Personal info
+            const fields = ['cv-name', 'cv-title', 'cv-email', 'cv-phone', 'cv-linkedin', 'cv-positioning'];
+            fields.forEach(id => {
+                const el = document.getElementById(id);
+                if (el) {
+                    el.addEventListener('input', () => {
+                        const key = id.replace('cv-', '');
+                        cvData[key] = el.value;
+                        updatePreview();
+                        saveCV();
+                    });
+                }
+            });
+
+            // Strengths
+            document.querySelectorAll('input[name="strength"]').forEach(cb => {
+                cb.addEventListener('change', () => {
+                    cvData.strengths = Array.from(document.querySelectorAll('input[name="strength"]:checked'))
+                        .map(c => c.value);
+                    updatePreview();
+                    saveCV();
+                });
+            });
+        }
+
+        function updatePreview() {
+            // Header
+            document.getElementById('preview-name').textContent = cvData.name || 'Your Name';
+            document.getElementById('preview-title').textContent = cvData.title || 'Executive Title';
+            document.getElementById('preview-email').textContent = '📧 ' + (cvData.email || 'your@email.com');
+            document.getElementById('preview-phone').textContent = '📱 ' + (cvData.phone || '+44 7xxx xxx xxx');
+            document.getElementById('preview-linkedin').textContent = '🔗 ' + (cvData.linkedin || 'LinkedIn');
+
+            // Positioning
+            document.getElementById('preview-positioning').textContent =
+                cvData.positioning || 'Your positioning statement will appear here — the executive who...';
+
+            // Strengths
+            const strengthColors = {
+                'Pattern Recognition': 'processing',
+                'Systems Design': 'executive',
+                'Deep Focus': 'energy',
+                'Strategic Vision': 'emotional',
+                'Innovation': 'relationships',
+                'Detail Precision': 'communication'
+            };
+
+            const strengthsHtml = cvData.strengths.map(s => {
+                const colorClass = strengthColors[s] || 'processing';
+                return `<div class="strength-pill ${colorClass}">${s}</div>`;
+            }).join('');
+            document.getElementById('preview-strengths').innerHTML = strengthsHtml || '<div class="strength-pill">Select strengths</div>';
+
+            // Experience
+            if (cvData.experience.length > 0) {
+                const expHtml = cvData.experience.map((exp, index) => {
+                    const achievementsHtml = exp.achievements.map(a => {
+                        const paradoxTag = exp.paradox ?
+                            `<span class="exp-paradox-tag">${getParadoxLabel(exp.paradox)}</span>` : '';
+                        return `<li>${a}${paradoxTag}</li>`;
+                    }).join('');
+
+                    return `
+                        <div class="experience-entry">
+                            <div class="exp-header">
+                                <span class="exp-company">${exp.company}</span>
+                                <span class="exp-dates">${exp.dates}</span>
+                            </div>
+                            <div class="exp-role">${exp.role}</div>
+                            <ul class="exp-achievements">${achievementsHtml}</ul>
+                            <button onclick="removeExperience(${index})" style="font-size: 0.8em; color: #dc2626; background: none; border: none; cursor: pointer; margin-top: 5px;">Remove</button>
+                        </div>
+                    `;
+                }).join('');
+                document.getElementById('preview-experience').innerHTML = expHtml;
+            } else {
+                document.getElementById('preview-experience').innerHTML = `
+                    <div class="experience-entry" style="text-align: center; color: #888;">
+                        <p>Add experience using the sidebar</p>
+                    </div>
+                `;
+            }
+
+            // Skills
+            if (cvData.skills.length > 0) {
+                const skillsHtml = cvData.skills.map((s, i) =>
+                    `<div class="skill-tag">${s} <span onclick="removeSkill(${i})" style="color: #dc2626; cursor: pointer; margin-left: 5px;">×</span></div>`
+                ).join('');
+                document.getElementById('preview-skills').innerHTML = skillsHtml;
+            }
+
+            // Education
+            if (cvData.education.length > 0) {
+                const eduHtml = cvData.education.map((edu, index) => `
+                    <div class="education-entry">
+                        <div class="edu-degree">${edu.degree}</div>
+                        <div class="edu-institution">${edu.institution}</div>
+                        <div class="edu-year">${edu.year}
+                            <span onclick="removeEducation(${index})" style="color: #dc2626; cursor: pointer; margin-left: 10px; font-size: 0.9em;">Remove</span>
+                        </div>
+                    </div>
+                `).join('');
+                document.getElementById('preview-education').innerHTML = eduHtml;
+            } else {
+                document.getElementById('preview-education').innerHTML = `
+                    <div class="education-entry" style="text-align: center; color: #888;">
+                        <p>Add education using the sidebar</p>
+                    </div>
+                `;
+            }
+        }
+
+        function getParadoxLabel(paradox) {
+            const labels = {
+                processing: 'Pattern',
+                executive: 'Systems',
+                energy: 'Focus',
+                communication: 'Clarity',
+                emotional: 'EQ',
+                relationships: 'Connection'
+            };
+            return labels[paradox] || paradox;
+        }
+
+        function addExperience() {
+            const company = document.getElementById('exp-company').value;
+            const role = document.getElementById('exp-role').value;
+            const dates = document.getElementById('exp-dates').value;
+            const achievementsText = document.getElementById('exp-achievements').value;
+            const paradox = document.getElementById('exp-paradox').value;
+
+            if (!company || !role) {
+                alert('Please enter at least company and role.');
+                return;
+            }
+
+            const achievements = achievementsText.split('\n').filter(a => a.trim());
+
+            cvData.experience.push({
+                company,
+                role,
+                dates,
+                achievements,
+                paradox
+            });
+
+            // Clear form
+            document.getElementById('exp-company').value = '';
+            document.getElementById('exp-role').value = '';
+            document.getElementById('exp-dates').value = '';
+            document.getElementById('exp-achievements').value = '';
+            document.getElementById('exp-paradox').value = '';
+
+            updatePreview();
+            saveCV();
+        }
+
+        function removeExperience(index) {
+            if (confirm('Remove this experience?')) {
+                cvData.experience.splice(index, 1);
+                updatePreview();
+                saveCV();
+            }
+        }
+
+        function addSkill() {
+            const skill = document.getElementById('new-skill').value.trim();
+            if (!skill) return;
+
+            if (!cvData.skills.includes(skill)) {
+                cvData.skills.push(skill);
+                document.getElementById('new-skill').value = '';
+                updatePreview();
+                saveCV();
+            }
+        }
+
+        function removeSkill(index) {
+            cvData.skills.splice(index, 1);
+            updatePreview();
+            saveCV();
+        }
+
+        function addEducation() {
+            const degree = document.getElementById('edu-degree').value;
+            const institution = document.getElementById('edu-institution').value;
+            const year = document.getElementById('edu-year').value;
+
+            if (!degree || !institution) {
+                alert('Please enter at least degree and institution.');
+                return;
+            }
+
+            cvData.education.push({ degree, institution, year });
+
+            // Clear form
+            document.getElementById('edu-degree').value = '';
+            document.getElementById('edu-institution').value = '';
+            document.getElementById('edu-year').value = '';
+
+            updatePreview();
+            saveCV();
+        }
+
+        function removeEducation(index) {
+            if (confirm('Remove this education entry?')) {
+                cvData.education.splice(index, 1);
+                updatePreview();
+                saveCV();
+            }
+        }
+
+        function importFromBlueprint() {
+            const blueprint = localStorage.getItem('audhd_career_blueprint_' + currentUser.id);
+            if (!blueprint) {
+                alert('No Blueprint found. Complete your Paradox Career Blueprint first.');
+                return;
+            }
+
+            const data = JSON.parse(blueprint);
+
+            // Import positioning
+            if (data.positioningStatement) {
+                cvData.positioning = data.positioningStatement;
+                document.getElementById('cv-positioning').value = cvData.positioning;
+            }
+
+            // Import evidence as experience
+            if (data.evidence && data.evidence.length > 0) {
+                data.evidence.forEach(e => {
+                    if (!cvData.experience.some(exp => exp.company === e.company)) {
+                        cvData.experience.push({
+                            company: e.company || 'Achievement',
+                            role: '',
+                            dates: '',
+                            achievements: e.description ? [e.description + (e.result ? ' — ' + e.result : '')] : [],
+                            paradox: e.paradox || ''
+                        });
+                    }
+                });
+            }
+
+            updatePreview();
+            saveCV();
+            alert('Blueprint imported! Review and edit as needed.');
+        }
+
+        function switchView(view) {
+            const editBtn = document.querySelector('.toggle-btn:first-child');
+            const previewBtn = document.querySelector('.toggle-btn:last-child');
+            const sidebar = document.getElementById('editSidebar');
+
+            if (view === 'edit') {
+                editBtn.classList.add('active');
+                previewBtn.classList.remove('active');
+                sidebar.classList.add('active');
+            } else {
+                editBtn.classList.remove('active');
+                previewBtn.classList.add('active');
+                sidebar.classList.remove('active');
+            }
+        }
+
+        function saveCV() {
+            localStorage.setItem('audhd_cv_' + currentUser.id, JSON.stringify(cvData));
+            console.log('CV saved');
+        }
+
+        function logout() {
+            if (confirm('Are you sure you want to log out?')) {
+                localStorage.removeItem('syp_user');
+                localStorage.removeItem('syp_token');
+                window.location.href = 'index.html';
+            }
+        }
+    </script>
+</body>
+</html>

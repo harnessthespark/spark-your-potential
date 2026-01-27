@@ -1,0 +1,686 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Questionnaire Responses | Spark Your Potential</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #1e293b;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container { max-width: 900px; margin: 0 auto; }
+
+        .header {
+            background: linear-gradient(135deg, #7c3aed 0%, #a855f7 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+            border-radius: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(124, 58, 237, 0.3);
+        }
+        .header h1 { font-size: 2em; margin-bottom: 10px; }
+        .header .subtitle { opacity: 0.9; font-size: 1.1em; }
+        .client-name {
+            background: rgba(255,255,255,0.2);
+            display: inline-block;
+            padding: 8px 20px;
+            border-radius: 20px;
+            margin-top: 15px;
+            font-weight: 600;
+        }
+
+        .nav-bar {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        .back-link {
+            display: inline-block;
+            color: #a855f7;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 10px 20px;
+            background: rgba(168, 85, 247, 0.1);
+            border-radius: 10px;
+            transition: all 0.2s;
+        }
+        .back-link:hover {
+            background: rgba(168, 85, 247, 0.2);
+            text-decoration: none;
+        }
+        .save-status {
+            margin-left: auto;
+            padding: 10px 20px;
+            border-radius: 10px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .save-status.saving { background: #fef3c7; color: #d97706; }
+        .save-status.saved { background: #dcfce7; color: #16a34a; }
+        .save-status.error { background: #fee2e2; color: #dc2626; }
+
+        .section {
+            background: white;
+            border-radius: 16px;
+            padding: 30px;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #e2e8f0;
+        }
+        .section-icon { font-size: 1.5em; }
+        .section-title {
+            font-size: 1.3em;
+            font-weight: 700;
+            color: #1e293b;
+        }
+        .section-status {
+            margin-left: auto;
+            background: #dcfce7;
+            color: #16a34a;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 0.85em;
+            font-weight: 600;
+        }
+        .section-status.incomplete {
+            background: #fef3c7;
+            color: #d97706;
+        }
+
+        .field-group {
+            margin-bottom: 20px;
+        }
+        .field-label {
+            display: block;
+            font-size: 0.9em;
+            color: #64748b;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+        .field-hint {
+            font-size: 0.85em;
+            color: #94a3b8;
+            margin-bottom: 8px;
+            font-style: italic;
+        }
+        textarea {
+            width: 100%;
+            min-height: 120px;
+            padding: 15px;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            font-family: inherit;
+            font-size: 1em;
+            line-height: 1.6;
+            resize: vertical;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+        textarea:focus {
+            outline: none;
+            border-color: #7c3aed;
+            box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.1);
+        }
+        textarea.has-content {
+            border-color: #22c55e;
+        }
+
+        .outcome-number {
+            display: inline-block;
+            background: #7c3aed;
+            color: white;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 28px;
+            font-weight: 700;
+            margin-right: 10px;
+            font-size: 0.9em;
+        }
+
+        .summary-section {
+            background: linear-gradient(135deg, #faf5ff 0%, #f3e8ff 100%);
+            border: 2px solid #c4b5fd;
+        }
+        .summary-section .field-group textarea {
+            background: white;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 60px;
+            color: white;
+        }
+        .loading-spinner {
+            width: 50px;
+            height: 50px;
+            border: 4px solid rgba(168, 85, 247, 0.3);
+            border-top-color: #a855f7;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .error-message {
+            background: #fee2e2;
+            color: #dc2626;
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+        }
+
+        .actions {
+            display: flex;
+            gap: 15px;
+            justify-content: flex-end;
+            margin-top: 30px;
+        }
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 1em;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #7c3aed 0%, #a855f7 100%);
+            color: white;
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(124, 58, 237, 0.4);
+        }
+        .btn-secondary {
+            background: #f1f5f9;
+            color: #475569;
+        }
+        .btn-secondary:hover {
+            background: #e2e8f0;
+        }
+
+        @media print {
+            body { background: white; padding: 0; }
+            .nav-bar, .actions { display: none; }
+            .section { box-shadow: none; border: 1px solid #e2e8f0; }
+            textarea { border: none; background: #f8fafc; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="nav-bar">
+            <a href="dashboard.html" class="back-link">&larr; Back to Dashboard</a>
+            <div id="saveStatus" class="save-status saved">
+                <span class="status-icon">&#10003;</span>
+                <span class="status-text">All changes saved</span>
+            </div>
+        </div>
+
+        <div id="loadingState" class="loading">
+            <div class="loading-spinner"></div>
+            <p>Loading questionnaire responses...</p>
+        </div>
+
+        <div id="errorState" class="error-message" style="display: none;">
+            <p>Unable to load questionnaire. Please check client ID and try again.</p>
+        </div>
+
+        <div id="editorContent" style="display: none;">
+            <div class="header">
+                <h1>Edit Questionnaire Responses</h1>
+                <p class="subtitle">Discovery Questionnaire - Ability Recognition</p>
+                <div id="clientNameBadge" class="client-name">Loading...</div>
+            </div>
+
+            <!-- Section 1: Career Outcomes -->
+            <div class="section">
+                <div class="section-header">
+                    <span class="section-icon">&#127919;</span>
+                    <span class="section-title">Career Outcomes</span>
+                    <span id="section1Status" class="section-status">0 of 5</span>
+                </div>
+
+                <div class="field-group">
+                    <label class="field-label"><span class="outcome-number">1</span> Outcome #1</label>
+                    <div class="field-hint">What changed for them? What did you notice they couldn't see?</div>
+                    <textarea id="outcome_1_description" data-field="outcome_1_description"></textarea>
+                </div>
+
+                <div class="field-group">
+                    <label class="field-label"><span class="outcome-number">2</span> Outcome #2</label>
+                    <textarea id="outcome_2_description" data-field="outcome_2_description"></textarea>
+                </div>
+
+                <div class="field-group">
+                    <label class="field-label"><span class="outcome-number">3</span> Outcome #3</label>
+                    <textarea id="outcome_3_description" data-field="outcome_3_description"></textarea>
+                </div>
+
+                <div class="field-group">
+                    <label class="field-label"><span class="outcome-number">4</span> Outcome #4</label>
+                    <textarea id="outcome_4_description" data-field="outcome_4_description"></textarea>
+                </div>
+
+                <div class="field-group">
+                    <label class="field-label"><span class="outcome-number">5</span> Outcome #5</label>
+                    <textarea id="outcome_5_description" data-field="outcome_5_description"></textarea>
+                </div>
+
+                <div class="field-group">
+                    <label class="field-label">&#129525; The Thread</label>
+                    <div class="field-hint">What ability keeps showing up across all outcomes?</div>
+                    <textarea id="the_thread" data-field="the_thread"></textarea>
+                </div>
+            </div>
+
+            <!-- Section 2: Recognition Signals -->
+            <div class="section">
+                <div class="section-header">
+                    <span class="section-icon">&#10024;</span>
+                    <span class="section-title">Recognition Signals</span>
+                    <span id="section2Status" class="section-status incomplete">Incomplete</span>
+                </div>
+
+                <div class="field-group">
+                    <label class="field-label">When You Knew Before You Knew</label>
+                    <div class="field-hint">A time your gut feeling about a client was right</div>
+                    <textarea id="gut_feeling_example" data-field="gut_feeling_example"></textarea>
+                </div>
+
+                <div class="field-group">
+                    <label class="field-label">Questions Only You Ask</label>
+                    <div class="field-hint">Questions you ask that others don't think to ask</div>
+                    <textarea id="unique_questions" data-field="unique_questions"></textarea>
+                </div>
+
+                <div class="field-group">
+                    <label class="field-label">What You Notice First</label>
+                    <div class="field-hint">What do you notice that others seem to miss?</div>
+                    <textarea id="what_you_notice" data-field="what_you_notice"></textarea>
+                </div>
+
+                <div class="field-group">
+                    <label class="field-label">What Feels Easy</label>
+                    <div class="field-hint">Work that feels so natural you don't count it as a skill</div>
+                    <textarea id="natural_skill" data-field="natural_skill"></textarea>
+                </div>
+
+                <div class="field-group">
+                    <label class="field-label">"Of Course" Moments</label>
+                    <div class="field-hint">What makes clients say "of course" afterward - but they couldn't see it before?</div>
+                    <textarea id="of_course_moments" data-field="of_course_moments"></textarea>
+                </div>
+            </div>
+
+            <!-- Section 3: Client Transformation -->
+            <div class="section">
+                <div class="section-header">
+                    <span class="section-icon">&#128260;</span>
+                    <span class="section-title">Client Transformation</span>
+                    <span id="section3Status" class="section-status incomplete">Incomplete</span>
+                </div>
+
+                <div class="field-group">
+                    <label class="field-label">Client Before</label>
+                    <div class="field-hint">Who were they before? How did they think and act?</div>
+                    <textarea id="clients_before" data-field="clients_before"></textarea>
+                </div>
+
+                <div class="field-group">
+                    <label class="field-label">Client After</label>
+                    <div class="field-hint">Who are they now? What's different about how they operate?</div>
+                    <textarea id="clients_after" data-field="clients_after"></textarea>
+                </div>
+
+                <div class="field-group">
+                    <label class="field-label">The Unlock Moment</label>
+                    <div class="field-hint">When do breakthroughs happen? What do you do right before?</div>
+                    <textarea id="unlock_moment" data-field="unlock_moment"></textarea>
+                </div>
+            </div>
+
+            <!-- Section 4: How Others See You -->
+            <div class="section">
+                <div class="section-header">
+                    <span class="section-icon">&#128065;</span>
+                    <span class="section-title">How Others See You</span>
+                    <span id="section4Status" class="section-status incomplete">Incomplete</span>
+                </div>
+
+                <div class="field-group">
+                    <label class="field-label">Problem Magnet</label>
+                    <div class="field-hint">What problems do people bring you, even when it's not what you advertise?</div>
+                    <textarea id="problems_people_bring" data-field="problems_people_bring"></textarea>
+                </div>
+
+                <div class="field-group">
+                    <label class="field-label">How Others See You</label>
+                    <div class="field-hint">When people refer others to you, what words do they use?</div>
+                    <textarea id="referral_language" data-field="referral_language"></textarea>
+                </div>
+            </div>
+
+            <!-- Section 5: Summary (Session 2) -->
+            <div class="section summary-section">
+                <div class="section-header">
+                    <span class="section-icon">&#128640;</span>
+                    <span class="section-title">Transformation & Permission</span>
+                    <span id="section5Status" class="section-status incomplete">To explore in Session 2</span>
+                </div>
+
+                <div class="field-group">
+                    <label class="field-label">Pattern Recognised</label>
+                    <div class="field-hint">What capability have you been treating as smaller than it is?</div>
+                    <textarea id="hidden_ability" data-field="hidden_ability" style="min-height: 80px;"></textarea>
+                </div>
+
+                <div class="field-group">
+                    <label class="field-label">Transformation I Enable</label>
+                    <div class="field-hint">What consistent change do you create in people?</div>
+                    <textarea id="consistent_change" data-field="consistent_change" style="min-height: 80px;"></textarea>
+                </div>
+
+                <div class="field-group">
+                    <label class="field-label">Permission I'm Giving Myself</label>
+                    <div class="field-hint">What are you now willing to claim about what you can do?</div>
+                    <textarea id="claim_statement" data-field="claim_statement" style="min-height: 80px;"></textarea>
+                </div>
+            </div>
+
+            <div class="actions">
+                <button class="btn btn-secondary" onclick="window.print()">&#128438; Print</button>
+                <button class="btn btn-primary" onclick="saveAll()">&#128190; Save All Changes</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE = 'https://api.harnessthespark.ai';
+        let clientId = null;
+        let clientData = null;
+        let saveTimeout = null;
+        let pendingChanges = {};
+
+        // Get client ID from URL
+        function getClientId() {
+            const params = new URLSearchParams(window.location.search);
+            return params.get('client_id');
+        }
+
+        // Get auth token
+        function getToken() {
+            return localStorage.getItem('syp_token') || localStorage.getItem('jwt_token');
+        }
+
+        // Load questionnaire data
+        async function loadQuestionnaire() {
+            clientId = getClientId();
+            if (!clientId) {
+                showError('No client ID provided. Please access this page from the dashboard.');
+                return;
+            }
+
+            const token = getToken();
+            if (!token) {
+                showError('Not authenticated. Please log in to the dashboard first.');
+                return;
+            }
+
+            try {
+                const response = await fetch(`${API_BASE}/api/crm/syp/coach/ability-recognition/by-client/${clientId}/`, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                if (!response.ok) {
+                    if (response.status === 404) {
+                        // No questionnaire yet - show empty form
+                        clientData = {};
+                        showEditor();
+                        return;
+                    }
+                    throw new Error(`Failed to load: ${response.status}`);
+                }
+
+                clientData = await response.json();
+                showEditor();
+                populateForm(clientData);
+
+            } catch (error) {
+                console.error('Load error:', error);
+                showError('Unable to load questionnaire. Please check your connection and try again.');
+            }
+        }
+
+        // Show editor, hide loading
+        function showEditor() {
+            document.getElementById('loadingState').style.display = 'none';
+            document.getElementById('editorContent').style.display = 'block';
+
+            // Try to get client name from dashboard cache
+            const cachedClients = localStorage.getItem('syp_clients');
+            if (cachedClients) {
+                try {
+                    const clients = JSON.parse(cachedClients);
+                    const client = clients.find(c => c.id == clientId);
+                    if (client) {
+                        document.getElementById('clientNameBadge').textContent = client.full_name || client.name;
+                    }
+                } catch (e) {}
+            }
+        }
+
+        // Show error state
+        function showError(message) {
+            document.getElementById('loadingState').style.display = 'none';
+            document.getElementById('errorState').style.display = 'block';
+            document.getElementById('errorState').querySelector('p').textContent = message;
+        }
+
+        // Populate form with data
+        function populateForm(data) {
+            const fields = document.querySelectorAll('textarea[data-field]');
+            fields.forEach(field => {
+                const fieldName = field.dataset.field;
+                if (data[fieldName]) {
+                    field.value = data[fieldName];
+                    field.classList.add('has-content');
+                }
+            });
+            updateSectionStatuses();
+        }
+
+        // Update section completion statuses
+        function updateSectionStatuses() {
+            // Section 1: Outcomes
+            const outcomes = ['outcome_1_description', 'outcome_2_description', 'outcome_3_description',
+                             'outcome_4_description', 'outcome_5_description'];
+            const filledOutcomes = outcomes.filter(f => document.getElementById(f)?.value.trim()).length;
+            const section1Status = document.getElementById('section1Status');
+            section1Status.textContent = `${filledOutcomes} of 5`;
+            section1Status.classList.toggle('incomplete', filledOutcomes < 5);
+
+            // Section 2: Recognition
+            const recognition = ['gut_feeling_example', 'unique_questions', 'what_you_notice', 'natural_skill', 'of_course_moments'];
+            const filledRecognition = recognition.filter(f => document.getElementById(f)?.value.trim()).length;
+            const section2Status = document.getElementById('section2Status');
+            section2Status.textContent = filledRecognition === recognition.length ? 'Complete' : 'Incomplete';
+            section2Status.classList.toggle('incomplete', filledRecognition < recognition.length);
+
+            // Section 3: Transformation
+            const transformation = ['clients_before', 'clients_after', 'unlock_moment'];
+            const filledTransformation = transformation.filter(f => document.getElementById(f)?.value.trim()).length;
+            const section3Status = document.getElementById('section3Status');
+            section3Status.textContent = filledTransformation === transformation.length ? 'Complete' : 'Incomplete';
+            section3Status.classList.toggle('incomplete', filledTransformation < transformation.length);
+
+            // Section 4: How Others See You
+            const others = ['problems_people_bring', 'referral_language'];
+            const filledOthers = others.filter(f => document.getElementById(f)?.value.trim()).length;
+            const section4Status = document.getElementById('section4Status');
+            section4Status.textContent = filledOthers === others.length ? 'Complete' : 'Incomplete';
+            section4Status.classList.toggle('incomplete', filledOthers < others.length);
+
+            // Section 5: Summary
+            const summary = ['hidden_ability', 'consistent_change', 'claim_statement'];
+            const filledSummary = summary.filter(f => document.getElementById(f)?.value.trim()).length;
+            const section5Status = document.getElementById('section5Status');
+            if (filledSummary === 0) {
+                section5Status.textContent = 'To explore in Session 2';
+            } else if (filledSummary === summary.length) {
+                section5Status.textContent = 'Complete';
+                section5Status.classList.remove('incomplete');
+            } else {
+                section5Status.textContent = `${filledSummary} of 3`;
+            }
+            section5Status.classList.toggle('incomplete', filledSummary < summary.length);
+        }
+
+        // Save field to server
+        async function saveField(fieldName, value) {
+            const token = getToken();
+            if (!token || !clientId) return;
+
+            updateSaveStatus('saving');
+
+            try {
+                const response = await fetch(`${API_BASE}/api/crm/syp/coach/ability-recognition/by-client/${clientId}/`, {
+                    method: 'PATCH',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ [fieldName]: value })
+                });
+
+                if (!response.ok) {
+                    throw new Error('Save failed');
+                }
+
+                updateSaveStatus('saved');
+                updateSectionStatuses();
+
+            } catch (error) {
+                console.error('Save error:', error);
+                updateSaveStatus('error');
+            }
+        }
+
+        // Save all pending changes
+        async function saveAll() {
+            const token = getToken();
+            if (!token || !clientId) return;
+
+            updateSaveStatus('saving');
+
+            // Collect all field values
+            const data = {};
+            document.querySelectorAll('textarea[data-field]').forEach(field => {
+                data[field.dataset.field] = field.value;
+            });
+
+            try {
+                const response = await fetch(`${API_BASE}/api/crm/syp/coach/ability-recognition/by-client/${clientId}/`, {
+                    method: 'PATCH',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                });
+
+                if (!response.ok) {
+                    throw new Error('Save failed');
+                }
+
+                updateSaveStatus('saved');
+                updateSectionStatuses();
+
+            } catch (error) {
+                console.error('Save error:', error);
+                updateSaveStatus('error');
+            }
+        }
+
+        // Update save status indicator
+        function updateSaveStatus(status) {
+            const statusEl = document.getElementById('saveStatus');
+            const iconEl = statusEl.querySelector('.status-icon');
+            const textEl = statusEl.querySelector('.status-text');
+
+            statusEl.className = 'save-status ' + status;
+
+            switch (status) {
+                case 'saving':
+                    iconEl.innerHTML = '&#8634;';
+                    textEl.textContent = 'Saving...';
+                    break;
+                case 'saved':
+                    iconEl.innerHTML = '&#10003;';
+                    textEl.textContent = 'All changes saved';
+                    break;
+                case 'error':
+                    iconEl.innerHTML = '&#10007;';
+                    textEl.textContent = 'Save failed - try again';
+                    break;
+            }
+        }
+
+        // Debounced auto-save on input
+        function handleInput(event) {
+            const field = event.target;
+            const fieldName = field.dataset.field;
+            const value = field.value;
+
+            // Update has-content class
+            field.classList.toggle('has-content', value.trim().length > 0);
+
+            // Debounce save
+            clearTimeout(saveTimeout);
+            saveTimeout = setTimeout(() => {
+                saveField(fieldName, value);
+            }, 1000);
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            loadQuestionnaire();
+
+            // Add input listeners to all textareas
+            document.querySelectorAll('textarea[data-field]').forEach(textarea => {
+                textarea.addEventListener('input', handleInput);
+                textarea.addEventListener('blur', () => {
+                    // Immediate save on blur
+                    clearTimeout(saveTimeout);
+                    saveField(textarea.dataset.field, textarea.value);
+                });
+            });
+        });
+    </script>
+</body>
+</html>

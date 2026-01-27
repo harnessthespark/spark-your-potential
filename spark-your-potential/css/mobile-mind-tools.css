@@ -1,0 +1,405 @@
+/**
+ * Mobile Mind Tools - Shared Mobile Enhancements
+ * For: Spark Collector, Spark Ignition, Brain Dump, Energy, Foundations, Decision Framework
+ *
+ * Include in each tool: <link rel="stylesheet" href="css/mobile-mind-tools.css">
+ */
+
+/* ============================================
+   BASE MOBILE IMPROVEMENTS
+   ============================================ */
+
+/* Ensure proper viewport behavior */
+html {
+    -webkit-text-size-adjust: 100%;
+    -ms-text-size-adjust: 100%;
+}
+
+/* Touch-friendly tap targets (minimum 44px) */
+@media (max-width: 768px) {
+    button,
+    .btn,
+    input[type="submit"],
+    input[type="button"],
+    a.btn,
+    .action-btn,
+    .quick-action {
+        min-height: 48px !important;
+        min-width: 48px !important;
+        padding: 12px 20px !important;
+        font-size: 16px !important; /* Prevents iOS zoom on focus */
+    }
+
+    /* Larger form inputs */
+    input[type="text"],
+    input[type="email"],
+    input[type="number"],
+    input[type="tel"],
+    input[type="date"],
+    input[type="time"],
+    textarea,
+    select {
+        font-size: 16px !important; /* Prevents iOS zoom */
+        padding: 14px 16px !important;
+        min-height: 48px !important;
+        border-radius: 12px !important;
+    }
+
+    textarea {
+        min-height: 100px !important;
+    }
+
+    /* Better spacing for touch */
+    .form-group,
+    .input-group,
+    .field-group {
+        margin-bottom: 20px !important;
+    }
+
+    /* Labels above inputs on mobile */
+    label {
+        display: block !important;
+        margin-bottom: 8px !important;
+        font-weight: 600 !important;
+    }
+}
+
+/* ============================================
+   THUMB-ZONE NAVIGATION
+   ============================================ */
+
+@media (max-width: 768px) {
+    /* Fixed bottom action bar */
+    .mobile-action-bar {
+        position: fixed !important;
+        bottom: 0 !important;
+        left: 0 !important;
+        right: 0 !important;
+        background: rgba(26, 26, 46, 0.98) !important;
+        backdrop-filter: blur(10px) !important;
+        -webkit-backdrop-filter: blur(10px) !important;
+        padding: 12px 16px !important;
+        padding-bottom: calc(12px + env(safe-area-inset-bottom)) !important;
+        display: flex !important;
+        gap: 12px !important;
+        z-index: 1000 !important;
+        box-shadow: 0 -4px 20px rgba(0,0,0,0.3) !important;
+    }
+
+    .mobile-action-bar button,
+    .mobile-action-bar .btn {
+        flex: 1 !important;
+        justify-content: center !important;
+    }
+
+    /* Add padding to body so content isn't hidden behind action bar */
+    body.has-mobile-action-bar {
+        padding-bottom: 100px !important;
+    }
+
+    /* Back button - always visible, thumb-friendly position */
+    .back-btn,
+    .back-button {
+        position: fixed !important;
+        top: auto !important;
+        bottom: calc(80px + env(safe-area-inset-bottom)) !important;
+        left: 16px !important;
+        z-index: 999 !important;
+        background: rgba(255,255,255,0.95) !important;
+        color: #1a1a2e !important;
+        border-radius: 50px !important;
+        padding: 12px 20px !important;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.2) !important;
+        font-weight: 600 !important;
+    }
+}
+
+/* ============================================
+   QUICK ACTION BUTTONS
+   ============================================ */
+
+@media (max-width: 768px) {
+    /* Quick action grid for one-tap entries */
+    .quick-actions {
+        display: grid !important;
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 12px !important;
+        margin-bottom: 20px !important;
+    }
+
+    .quick-action {
+        background: linear-gradient(135deg, rgba(78,205,196,0.15) 0%, rgba(68,160,141,0.15) 100%) !important;
+        border: 2px solid rgba(78,205,196,0.3) !important;
+        border-radius: 16px !important;
+        padding: 16px !important;
+        text-align: center !important;
+        cursor: pointer !important;
+        transition: all 0.2s !important;
+    }
+
+    .quick-action:active {
+        transform: scale(0.95) !important;
+        background: linear-gradient(135deg, rgba(78,205,196,0.3) 0%, rgba(68,160,141,0.3) 100%) !important;
+    }
+
+    .quick-action .icon {
+        font-size: 2em !important;
+        display: block !important;
+        margin-bottom: 8px !important;
+    }
+
+    .quick-action .label {
+        font-size: 0.9em !important;
+        font-weight: 600 !important;
+        color: #1a1a2e !important;
+    }
+}
+
+/* ============================================
+   CARDS & CONTAINERS
+   ============================================ */
+
+@media (max-width: 768px) {
+    /* Full-width cards on mobile */
+    .card,
+    .panel,
+    .section-card,
+    .tool-card {
+        border-radius: 16px !important;
+        margin: 0 -8px 16px !important;
+        padding: 20px 16px !important;
+    }
+
+    /* Stack grids vertically */
+    .grid,
+    .stats-grid,
+    .cards-grid,
+    .tools-grid {
+        grid-template-columns: 1fr !important;
+        gap: 12px !important;
+    }
+
+    /* Container padding */
+    .container {
+        padding: 16px !important;
+        padding-bottom: 100px !important; /* Space for fixed action bar */
+    }
+}
+
+/* ============================================
+   TYPOGRAPHY FOR MOBILE
+   ============================================ */
+
+@media (max-width: 768px) {
+    h1 {
+        font-size: 1.75em !important;
+        line-height: 1.2 !important;
+    }
+
+    h2 {
+        font-size: 1.4em !important;
+    }
+
+    h3 {
+        font-size: 1.2em !important;
+    }
+
+    p, li {
+        font-size: 1em !important;
+        line-height: 1.6 !important;
+    }
+
+    /* Better readability */
+    .subtitle,
+    .description,
+    .help-text {
+        font-size: 0.95em !important;
+        line-height: 1.5 !important;
+    }
+}
+
+/* ============================================
+   SPECIFIC TOOL ENHANCEMENTS
+   ============================================ */
+
+/* Spark Collector - Mobile Win Entry */
+@media (max-width: 768px) {
+    .win-entry,
+    .achievement-entry {
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 12px !important;
+    }
+
+    .win-entry input,
+    .win-entry textarea {
+        width: 100% !important;
+    }
+
+    /* Swipe-friendly win cards */
+    .win-card,
+    .achievement-card {
+        padding: 16px !important;
+        border-radius: 16px !important;
+        margin-bottom: 12px !important;
+        touch-action: pan-x !important;
+    }
+}
+
+/* Energy Tracker - Mobile Slider */
+@media (max-width: 768px) {
+    .energy-slider,
+    input[type="range"] {
+        width: 100% !important;
+        height: 48px !important;
+        -webkit-appearance: none !important;
+        background: transparent !important;
+    }
+
+    input[type="range"]::-webkit-slider-thumb {
+        width: 48px !important;
+        height: 48px !important;
+        -webkit-appearance: none !important;
+        border-radius: 50% !important;
+        background: #4ECDC4 !important;
+        cursor: pointer !important;
+    }
+
+    /* Energy level buttons */
+    .energy-levels,
+    .level-buttons {
+        display: grid !important;
+        grid-template-columns: repeat(5, 1fr) !important;
+        gap: 8px !important;
+    }
+
+    .energy-level-btn,
+    .level-btn {
+        aspect-ratio: 1 !important;
+        border-radius: 12px !important;
+        font-size: 1.2em !important;
+    }
+}
+
+/* Brain Dump - Mobile Text Entry */
+@media (max-width: 768px) {
+    .brain-dump-input,
+    .dump-textarea {
+        min-height: 150px !important;
+        font-size: 18px !important;
+        line-height: 1.6 !important;
+    }
+
+    /* Thought tags */
+    .thought-tag,
+    .dump-tag {
+        padding: 10px 16px !important;
+        font-size: 0.95em !important;
+        border-radius: 20px !important;
+        margin: 4px !important;
+    }
+}
+
+/* Foundations - Mobile Sections */
+@media (max-width: 768px) {
+    .foundation-section {
+        margin-bottom: 24px !important;
+    }
+
+    .foundation-section textarea {
+        min-height: 120px !important;
+    }
+
+    /* Color picker */
+    .color-picker,
+    .section-color {
+        width: 48px !important;
+        height: 48px !important;
+        border-radius: 50% !important;
+    }
+}
+
+/* ============================================
+   VISUAL FEEDBACK
+   ============================================ */
+
+@media (max-width: 768px) {
+    /* Success animation */
+    @keyframes mobile-success {
+        0% { transform: scale(1); }
+        50% { transform: scale(1.05); background: rgba(78,205,196,0.2); }
+        100% { transform: scale(1); }
+    }
+
+    .save-success {
+        animation: mobile-success 0.3s ease !important;
+    }
+
+    /* Toast notifications - mobile position */
+    .toast,
+    .notification,
+    .save-indicator {
+        position: fixed !important;
+        bottom: calc(100px + env(safe-area-inset-bottom)) !important;
+        left: 50% !important;
+        transform: translateX(-50%) !important;
+        padding: 14px 24px !important;
+        border-radius: 50px !important;
+        font-size: 0.95em !important;
+        z-index: 1001 !important;
+    }
+}
+
+/* ============================================
+   SAFE AREA INSETS (iPhone notch/home indicator)
+   ============================================ */
+
+@supports (padding: env(safe-area-inset-bottom)) {
+    @media (max-width: 768px) {
+        body {
+            padding-left: env(safe-area-inset-left);
+            padding-right: env(safe-area-inset-right);
+        }
+
+        .mobile-action-bar {
+            padding-bottom: calc(12px + env(safe-area-inset-bottom)) !important;
+        }
+    }
+}
+
+/* ============================================
+   DARK MODE SUPPORT
+   ============================================ */
+
+@media (prefers-color-scheme: dark) and (max-width: 768px) {
+    .quick-action {
+        background: linear-gradient(135deg, rgba(78,205,196,0.2) 0%, rgba(68,160,141,0.2) 100%) !important;
+        border-color: rgba(78,205,196,0.4) !important;
+    }
+
+    .quick-action .label {
+        color: #fff !important;
+    }
+
+    .back-btn,
+    .back-button {
+        background: rgba(40,40,60,0.95) !important;
+        color: #fff !important;
+    }
+}
+
+/* ============================================
+   PRINT - HIDE MOBILE ELEMENTS
+   ============================================ */
+
+@media print {
+    .mobile-action-bar,
+    .back-btn,
+    .quick-actions {
+        display: none !important;
+    }
+
+    body.has-mobile-action-bar {
+        padding-bottom: 0 !important;
+    }
+}

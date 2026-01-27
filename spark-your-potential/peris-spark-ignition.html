@@ -1,0 +1,1677 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Soul Wings - Peri's Sanctuary</title>
+
+    <!-- PWA Meta Tags -->
+    <meta name="description" content="Peri's Soul Wings Sanctuary - spiritual wellness, grounding, and sacred practices for the intuitive soul">
+    <meta name="theme-color" content="#7B68EE">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Soul Wings">
+    <meta name="mobile-web-app-capable" content="yes">
+
+    <!-- Favicon -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🕊️</text></svg>">
+
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Quicksand:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            /* Soul Wings Mystical Palette */
+            --sw-violet: #7B68EE;
+            --sw-violet-light: #9D8FEE;
+            --sw-violet-glow: rgba(123, 104, 238, 0.5);
+            --sw-gold: #D4AF37;
+            --sw-gold-light: #F4D03F;
+            --sw-gold-glow: rgba(212, 175, 55, 0.5);
+            --sw-teal: #20B2AA;
+            --sw-teal-light: #48D1CC;
+            --sw-teal-glow: rgba(32, 178, 170, 0.5);
+            --sw-rose: #DB7093;
+            --sw-rose-light: #FFB6C1;
+            --sw-rose-glow: rgba(219, 112, 147, 0.5);
+            --sw-silver: #C0C0C0;
+            --sw-midnight: #191970;
+        }
+
+        body {
+            font-family: 'Quicksand', sans-serif;
+            background: linear-gradient(135deg, #0d0d2b 0%, #1a1a4e 25%, #2d1b4e 50%, #1a1a4e 75%, #0d0d2b 100%);
+            min-height: 100vh;
+            color: #fff;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Floating Birds Animation */
+        .birds-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            overflow: hidden;
+            z-index: 1;
+        }
+        .bird {
+            position: absolute;
+            font-size: 1.5em;
+            animation: birdFloat linear infinite;
+            opacity: 0.6;
+        }
+        @keyframes birdFloat {
+            0% { transform: translateX(-50px) translateY(0) rotate(-5deg); opacity: 0; }
+            10% { opacity: 0.6; }
+            90% { opacity: 0.6; }
+            100% { transform: translateX(calc(100vw + 50px)) translateY(-100px) rotate(5deg); opacity: 0; }
+        }
+
+        /* Mystical Orb */
+        .mystic-orb {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            font-size: 2.5em;
+            animation: orbPulse 3s ease-in-out infinite;
+            z-index: 100;
+            cursor: pointer;
+            filter: drop-shadow(0 0 20px var(--sw-violet-glow)) drop-shadow(0 0 40px var(--sw-gold-glow));
+        }
+        @keyframes orbPulse {
+            0%, 100% { transform: translateY(0) scale(1); filter: drop-shadow(0 0 20px var(--sw-violet-glow)); }
+            50% { transform: translateY(-8px) scale(1.1); filter: drop-shadow(0 0 40px var(--sw-gold-glow)); }
+        }
+
+        /* Stars Background */
+        .stars-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            overflow: hidden;
+            z-index: 0;
+        }
+        .star {
+            position: absolute;
+            width: 3px;
+            height: 3px;
+            background: #fff;
+            border-radius: 50%;
+            animation: starTwinkle ease-in-out infinite;
+        }
+        @keyframes starTwinkle {
+            0%, 100% { opacity: 0.3; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.3); }
+        }
+
+        /* Aurora Rays */
+        .aurora {
+            position: fixed;
+            top: -50%;
+            left: 50%;
+            width: 200%;
+            height: 200%;
+            background: conic-gradient(
+                from 0deg,
+                transparent 0deg,
+                rgba(123, 104, 238, 0.06) 15deg,
+                transparent 30deg,
+                rgba(212, 175, 55, 0.06) 45deg,
+                transparent 60deg,
+                rgba(32, 178, 170, 0.06) 75deg,
+                transparent 90deg
+            );
+            animation: auroraSpin 40s linear infinite;
+            pointer-events: none;
+            z-index: 0;
+        }
+        @keyframes auroraSpin {
+            from { transform: translate(-50%, -50%) rotate(0deg); }
+            to { transform: translate(-50%, -50%) rotate(360deg); }
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            min-height: 100vh;
+            position: relative;
+            z-index: 10;
+        }
+
+        /* Peri's Photo */
+        .peri-photo-container {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .peri-photo {
+            width: 100%;
+            max-width: 750px;
+            height: auto;
+            border-radius: 20px;
+            border: 4px solid var(--sw-gold);
+            box-shadow:
+                0 0 30px var(--sw-violet-glow),
+                0 0 60px var(--sw-gold-glow),
+                0 10px 40px rgba(0, 0, 0, 0.4);
+            animation: photoGlow 4s ease-in-out infinite;
+        }
+        @keyframes photoGlow {
+            0%, 100% {
+                box-shadow:
+                    0 0 30px var(--sw-violet-glow),
+                    0 0 60px var(--sw-gold-glow),
+                    0 10px 40px rgba(0, 0, 0, 0.4);
+            }
+            50% {
+                box-shadow:
+                    0 0 40px var(--sw-gold-glow),
+                    0 0 80px var(--sw-violet-glow),
+                    0 15px 50px rgba(0, 0, 0, 0.5);
+            }
+        }
+        @media (max-width: 600px) {
+            .peri-photo {
+                max-width: 100%;
+            }
+        }
+
+        /* Header */
+        .header {
+            text-align: center;
+            padding: 40px 0 30px;
+        }
+        .header .greeting {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.4em;
+            color: var(--sw-gold);
+            margin-bottom: 8px;
+            text-shadow: 0 0 20px var(--sw-gold-glow);
+            font-style: italic;
+        }
+        .header h1 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 2.8em;
+            font-weight: 600;
+            background: linear-gradient(135deg, var(--sw-violet), var(--sw-gold), var(--sw-teal), var(--sw-violet));
+            background-size: 300% 300%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: shimmer 4s ease-in-out infinite;
+            margin-bottom: 10px;
+            letter-spacing: 4px;
+        }
+        @keyframes shimmer {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+        .header .subtitle {
+            color: var(--sw-teal-light);
+            font-size: 1.1em;
+            font-weight: 300;
+            letter-spacing: 2px;
+        }
+        .header .tagline {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1em;
+            color: var(--sw-rose-light);
+            margin-top: 10px;
+            font-style: italic;
+        }
+
+        /* Main Card */
+        .main-card {
+            background: linear-gradient(135deg, rgba(13, 13, 43, 0.8) 0%, rgba(45, 27, 78, 0.8) 100%);
+            backdrop-filter: blur(20px);
+            border-radius: 30px;
+            padding: 35px;
+            box-shadow:
+                0 25px 80px rgba(0, 0, 0, 0.5),
+                0 0 60px var(--sw-violet-glow),
+                inset 0 1px 0 rgba(123, 104, 238, 0.2);
+            border: 2px solid rgba(123, 104, 238, 0.3);
+        }
+
+        /* Energy Check Question */
+        .energy-question {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .energy-question h2 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.7em;
+            color: var(--sw-gold);
+            margin-bottom: 10px;
+            text-shadow: 0 0 25px var(--sw-gold-glow);
+        }
+        .energy-question p {
+            color: var(--sw-teal-light);
+            font-size: 1em;
+        }
+
+        /* Energy State Grid */
+        .energy-grid {
+            display: grid;
+            gap: 15px;
+        }
+
+        .energy-option {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            padding: 22px;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            border: 3px solid transparent;
+            position: relative;
+            overflow: hidden;
+        }
+        .energy-option:hover {
+            transform: translateX(8px) scale(1.02);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+        }
+        .energy-option.selected {
+            border-color: var(--sw-gold);
+            transform: scale(1.03);
+            box-shadow: 0 0 30px var(--sw-gold-glow);
+        }
+
+        /* ENERGY STATES */
+        .energy-option.soaring {
+            background: linear-gradient(135deg, #7B68EE 0%, #6A5ACD 100%);
+        }
+        .energy-option.grounded {
+            background: linear-gradient(135deg, #20B2AA 0%, #008B8B 100%);
+        }
+        .energy-option.scattered {
+            background: linear-gradient(135deg, #DAA520 0%, #B8860B 100%);
+        }
+        .energy-option.drained {
+            background: linear-gradient(135deg, #DB7093 0%, #C71585 100%);
+        }
+        .energy-option.shielded {
+            background: linear-gradient(135deg, #4682B4 0%, #2F4F4F 100%);
+        }
+
+        .energy-icon {
+            font-size: 2.8em;
+            width: 65px;
+            text-align: center;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+        }
+        .energy-info h3 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.4em;
+            font-weight: 600;
+            margin-bottom: 6px;
+            color: #fff;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+        .energy-info p {
+            font-size: 0.95em;
+            color: rgba(255, 255, 255, 0.9);
+            text-shadow: 0 1px 2px rgba(0,0,0,0.2);
+        }
+
+        /* Continue Button */
+        .continue-btn {
+            display: block;
+            width: 100%;
+            padding: 20px;
+            margin-top: 28px;
+            background: linear-gradient(135deg, var(--sw-violet) 0%, var(--sw-gold) 50%, var(--sw-violet) 100%);
+            background-size: 200% 200%;
+            color: #0d0d2b;
+            border: 2px solid var(--sw-gold);
+            border-radius: 16px;
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.2em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            animation: buttonShimmer 4s ease-in-out infinite;
+            box-shadow: 0 0 20px var(--sw-violet-glow);
+        }
+        @keyframes buttonShimmer {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+        .continue-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 0 40px var(--sw-violet-glow), 0 15px 40px var(--sw-gold-glow);
+        }
+        .continue-btn:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+            transform: none;
+            animation: none;
+            box-shadow: none;
+        }
+
+        /* Sections */
+        .soul-section {
+            margin-top: 35px;
+            padding-top: 30px;
+            border-top: 2px solid var(--sw-violet);
+            box-shadow: 0 -1px 20px var(--sw-violet-glow);
+        }
+        .soul-section h3 {
+            font-family: 'Cormorant Garamond', serif;
+            color: var(--sw-gold);
+            margin-bottom: 12px;
+            font-size: 1.4em;
+            text-align: center;
+            text-shadow: 0 0 20px var(--sw-gold-glow);
+        }
+        .soul-section > p {
+            text-align: center;
+            color: var(--sw-teal-light);
+            margin-bottom: 22px;
+            font-size: 0.95em;
+        }
+
+        /* Practice Items */
+        .practice-list {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+        .practice-item {
+            background: rgba(255, 255, 255, 0.08);
+            border: 2px solid rgba(123, 104, 238, 0.3);
+            border-radius: 16px;
+            padding: 20px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .practice-item:hover {
+            border-color: var(--sw-violet);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px var(--sw-violet-glow);
+        }
+        .practice-item.expanded {
+            border-color: var(--sw-gold);
+            background: rgba(212, 175, 55, 0.1);
+        }
+        .practice-header h4 {
+            font-family: 'Cormorant Garamond', serif;
+            color: #fff;
+            font-size: 1.15em;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .practice-content {
+            display: none;
+            margin-top: 18px;
+            padding-top: 18px;
+            border-top: 1px solid rgba(255, 255, 255, 0.15);
+        }
+        .practice-item.expanded .practice-content {
+            display: block;
+        }
+        .practice-steps {
+            list-style: none;
+            counter-reset: step;
+        }
+        .practice-steps li {
+            counter-increment: step;
+            padding: 12px 0 12px 50px;
+            position: relative;
+            line-height: 1.6;
+            color: rgba(255, 255, 255, 0.9);
+        }
+        .practice-steps li::before {
+            content: counter(step);
+            position: absolute;
+            left: 0;
+            top: 10px;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--sw-violet) 0%, var(--sw-gold) 100%);
+            color: #0d0d2b;
+            font-weight: 700;
+            font-size: 0.9em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 0 15px var(--sw-violet-glow);
+        }
+        .practice-tip {
+            background: linear-gradient(135deg, rgba(212, 175, 55, 0.15) 0%, rgba(123, 104, 238, 0.15) 100%);
+            border-left: 4px solid var(--sw-gold);
+            padding: 15px 18px;
+            margin-top: 18px;
+            border-radius: 0 12px 12px 0;
+            font-size: 0.95em;
+            color: var(--sw-gold-light);
+            font-style: italic;
+        }
+
+        /* Chanting Section */
+        .chant-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+        @media (max-width: 600px) {
+            .chant-grid { grid-template-columns: 1fr; }
+        }
+        .chant-card {
+            border-radius: 16px;
+            padding: 20px;
+            cursor: pointer;
+            transition: all 0.4s;
+            border: 3px solid transparent;
+            text-align: center;
+        }
+        .chant-card:hover {
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+        }
+        .chant-card.selected {
+            border-color: var(--sw-gold);
+        }
+        .chant-card.peace { background: linear-gradient(135deg, #7B68EE 0%, #6A5ACD 100%); }
+        .chant-card.protection { background: linear-gradient(135deg, #4682B4 0%, #2F4F4F 100%); }
+        .chant-card.clarity { background: linear-gradient(135deg, #20B2AA 0%, #008B8B 100%); }
+        .chant-card.love { background: linear-gradient(135deg, #DB7093 0%, #C71585 100%); }
+        .chant-card-header {
+            margin-bottom: 10px;
+        }
+        .chant-card-header .icon { font-size: 2.2em; display: block; margin-bottom: 8px; }
+        .chant-card-header h4 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.1em;
+            font-weight: 600;
+            color: #fff;
+        }
+        .chant-card p { font-size: 0.85em; opacity: 0.9; color: rgba(255,255,255,0.9); }
+        .chant-detail {
+            display: none;
+            margin-top: 22px;
+            padding: 22px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            border: 2px solid rgba(212, 175, 55, 0.3);
+        }
+        .chant-detail.active { display: block; }
+        .chant-detail h4 {
+            font-family: 'Cormorant Garamond', serif;
+            color: var(--sw-gold);
+            margin-bottom: 15px;
+            font-size: 1.2em;
+        }
+        .chant-text {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.4em;
+            color: var(--sw-violet-light);
+            text-align: center;
+            padding: 20px;
+            background: rgba(123, 104, 238, 0.15);
+            border-radius: 12px;
+            margin: 15px 0;
+            letter-spacing: 2px;
+        }
+        .chant-detail p, .chant-detail li { color: rgba(255, 255, 255, 0.9); line-height: 1.7; }
+        .chant-detail ul { padding-left: 20px; margin-top: 10px; }
+
+        /* Bird Companion Section */
+        .bird-section {
+            background: linear-gradient(135deg, rgba(32, 178, 170, 0.15) 0%, rgba(123, 104, 238, 0.15) 100%);
+            border-radius: 20px;
+            padding: 25px;
+            margin-top: 25px;
+            border: 2px solid rgba(32, 178, 170, 0.3);
+        }
+        .bird-section h4 {
+            font-family: 'Cormorant Garamond', serif;
+            color: var(--sw-teal-light);
+            font-size: 1.2em;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        .bird-wisdom {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            text-align: center;
+        }
+        @media (max-width: 600px) {
+            .bird-wisdom { grid-template-columns: 1fr; }
+        }
+        .bird-message {
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .bird-message:hover {
+            background: rgba(212, 175, 55, 0.2);
+            transform: translateY(-3px);
+        }
+        .bird-message .bird-icon { font-size: 2em; margin-bottom: 8px; }
+        .bird-message p { font-size: 0.85em; color: rgba(255,255,255,0.8); }
+
+        /* Psychic Practice Section */
+        .reading-prep {
+            margin-top: 35px;
+            padding-top: 30px;
+            border-top: 2px solid var(--sw-teal);
+        }
+        .reading-prep h3 {
+            font-family: 'Cormorant Garamond', serif;
+            color: var(--sw-teal-light);
+            margin-bottom: 10px;
+            font-size: 1.4em;
+            text-align: center;
+            text-shadow: 0 0 15px var(--sw-teal-glow);
+        }
+        .prep-cards {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-top: 20px;
+        }
+        @media (max-width: 600px) { .prep-cards { grid-template-columns: 1fr; } }
+        .prep-card {
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(32, 178, 170, 0.3);
+            border-radius: 16px;
+            padding: 20px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .prep-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--sw-teal);
+            box-shadow: 0 10px 30px var(--sw-teal-glow);
+        }
+        .prep-card .icon { font-size: 2em; margin-bottom: 10px; text-align: center; display: block; }
+        .prep-card h4 {
+            font-family: 'Cormorant Garamond', serif;
+            color: #fff;
+            margin-bottom: 8px;
+            text-align: center;
+        }
+        .prep-card p { color: rgba(255, 255, 255, 0.7); font-size: 0.9em; text-align: center; }
+
+        /* Journal Section */
+        .journal-section {
+            margin-top: 30px;
+            padding-top: 28px;
+            border-top: 2px solid var(--sw-rose);
+        }
+        .journal-section h3 {
+            font-family: 'Cormorant Garamond', serif;
+            color: var(--sw-rose-light);
+            margin-bottom: 10px;
+            font-size: 1.4em;
+            text-align: center;
+        }
+        .prompt-chips {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+            margin-bottom: 18px;
+        }
+        .prompt-chip {
+            padding: 10px 16px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(219, 112, 147, 0.4);
+            border-radius: 25px;
+            font-size: 0.9em;
+            color: var(--sw-rose-light);
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .prompt-chip:hover {
+            background: rgba(219, 112, 147, 0.2);
+            transform: translateY(-3px);
+        }
+        .journal-textarea {
+            width: 100%;
+            min-height: 160px;
+            padding: 18px;
+            border: 2px solid rgba(219, 112, 147, 0.4);
+            border-radius: 16px;
+            font-family: 'Quicksand', sans-serif;
+            font-size: 1em;
+            resize: vertical;
+            background: rgba(0, 0, 0, 0.4);
+            color: #fff;
+            line-height: 1.7;
+        }
+        .journal-textarea::placeholder { color: rgba(219, 112, 147, 0.6); }
+        .journal-textarea:focus {
+            outline: none;
+            border-color: var(--sw-rose);
+            box-shadow: 0 0 20px var(--sw-rose-glow);
+        }
+        .journal-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 12px;
+        }
+        .journal-status { font-size: 0.9em; color: var(--sw-teal-light); }
+        .save-entry-btn {
+            padding: 10px 20px;
+            background: linear-gradient(135deg, var(--sw-violet) 0%, var(--sw-rose) 100%);
+            border: none;
+            border-radius: 10px;
+            font-size: 0.9em;
+            color: #fff;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .save-entry-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 25px var(--sw-rose-glow); }
+
+        /* Past Entries */
+        .past-entries { margin-top: 22px; }
+        .entries-toggle {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+            padding: 14px 18px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(212, 175, 55, 0.3);
+            border-radius: 12px;
+            cursor: pointer;
+            font-family: inherit;
+            font-size: 0.95em;
+            color: var(--sw-gold);
+        }
+        .entries-toggle:hover { background: rgba(212, 175, 55, 0.15); }
+        .entries-list { display: none; margin-top: 15px; }
+        .entries-list.open { display: block; }
+        .entry-card {
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 12px;
+            padding: 18px;
+            margin-bottom: 12px;
+            border-left: 4px solid var(--sw-violet);
+        }
+        .entry-date { font-size: 0.85em; color: rgba(255, 255, 255, 0.6); margin-bottom: 8px; }
+        .entry-text { font-size: 0.95em; color: rgba(255, 255, 255, 0.9); line-height: 1.6; white-space: pre-wrap; }
+        .entry-delete { float: right; background: none; border: none; color: rgba(255, 255, 255, 0.4); cursor: pointer; font-size: 1.2em; }
+        .entry-delete:hover { color: #ff6b6b; }
+
+        /* Support Section */
+        .support-section {
+            margin-top: 35px;
+            padding-top: 30px;
+            border-top: 2px solid var(--sw-gold);
+        }
+        .support-section h3 {
+            font-family: 'Cormorant Garamond', serif;
+            color: var(--sw-gold);
+            margin-bottom: 12px;
+            font-size: 1.4em;
+            text-align: center;
+            text-shadow: 0 0 15px var(--sw-gold-glow);
+        }
+        .support-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-top: 20px;
+        }
+        @media (max-width: 600px) { .support-grid { grid-template-columns: 1fr; } }
+        .support-card {
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(123, 104, 238, 0.3);
+            border-radius: 16px;
+            padding: 20px;
+            text-align: center;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+        .support-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--sw-violet);
+            box-shadow: 0 10px 30px var(--sw-violet-glow);
+        }
+        .support-card .icon { font-size: 2.5em; margin-bottom: 12px; }
+        .support-card h4 { color: #fff; margin-bottom: 8px; }
+        .support-card p { color: rgba(255, 255, 255, 0.7); font-size: 0.9em; }
+
+        /* History Section */
+        .history-section {
+            margin-top: 30px;
+            padding-top: 25px;
+            border-top: 2px solid rgba(255, 255, 255, 0.15);
+        }
+        .history-section h3 {
+            font-family: 'Cormorant Garamond', serif;
+            color: var(--sw-silver);
+            margin-bottom: 18px;
+            font-size: 1.15em;
+        }
+        .history-item {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 14px;
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 12px;
+            margin-bottom: 10px;
+            font-size: 0.95em;
+        }
+        .history-item .energy-badge {
+            padding: 6px 12px;
+            border-radius: 15px;
+            font-size: 0.85em;
+            font-weight: 600;
+            color: #fff;
+        }
+        .history-item .energy-badge.soaring { background: #7B68EE; }
+        .history-item .energy-badge.grounded { background: #20B2AA; }
+        .history-item .energy-badge.scattered { background: #DAA520; }
+        .history-item .energy-badge.drained { background: #DB7093; }
+        .history-item .energy-badge.shielded { background: #4682B4; }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 30px 20px;
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.9em;
+        }
+        .footer .brand {
+            font-family: 'Cormorant Garamond', serif;
+            color: var(--sw-violet-light);
+            text-shadow: 0 0 10px var(--sw-violet-glow);
+            font-size: 1.1em;
+            letter-spacing: 3px;
+        }
+
+        /* State Detail View */
+        .energy-detail { display: none; }
+        .energy-detail.active { display: block; }
+        .energy-header {
+            text-align: center;
+            padding: 28px;
+            border-radius: 20px;
+            margin-bottom: 28px;
+            color: #fff;
+        }
+        .energy-header.soaring { background: linear-gradient(135deg, #7B68EE 0%, #6A5ACD 100%); }
+        .energy-header.grounded { background: linear-gradient(135deg, #20B2AA 0%, #008B8B 100%); }
+        .energy-header.scattered { background: linear-gradient(135deg, #DAA520 0%, #B8860B 100%); }
+        .energy-header.drained { background: linear-gradient(135deg, #DB7093 0%, #C71585 100%); }
+        .energy-header.shielded { background: linear-gradient(135deg, #4682B4 0%, #2F4F4F 100%); }
+        .energy-header .icon { font-size: 3.5em; margin-bottom: 12px; }
+        .energy-header h2 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.8em;
+            margin-bottom: 6px;
+        }
+        .energy-header .zone { font-size: 0.95em; opacity: 0.9; }
+
+        /* Explanation Cards */
+        .explanation-card {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 22px;
+            margin-bottom: 18px;
+        }
+        .explanation-card h4 {
+            font-family: 'Cormorant Garamond', serif;
+            color: var(--sw-gold);
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.1em;
+        }
+        .explanation-card p { color: rgba(255, 255, 255, 0.9); line-height: 1.7; }
+        .explanation-card.spiritual {
+            background: linear-gradient(135deg, rgba(123, 104, 238, 0.2) 0%, rgba(212, 175, 55, 0.15) 100%);
+            border-left: 4px solid var(--sw-violet);
+        }
+        .explanation-card.grounding {
+            background: linear-gradient(135deg, rgba(32, 178, 170, 0.2) 0%, rgba(123, 104, 238, 0.15) 100%);
+            border-left: 4px solid var(--sw-teal);
+        }
+
+        /* Back Button */
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 22px;
+            background: rgba(255, 255, 255, 0.15);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 0.95em;
+            color: #fff;
+            margin-bottom: 22px;
+            transition: all 0.3s;
+            font-family: inherit;
+        }
+        .back-btn:hover { background: rgba(123, 104, 238, 0.2); border-color: var(--sw-violet); }
+
+        /* Category Tabs */
+        .practice-categories {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-bottom: 22px;
+        }
+        .category-tab {
+            padding: 12px 22px;
+            border-radius: 30px;
+            border: 2px solid rgba(123, 104, 238, 0.4);
+            background: rgba(255, 255, 255, 0.08);
+            cursor: pointer;
+            font-size: 0.95em;
+            font-weight: 600;
+            transition: all 0.3s;
+            color: var(--sw-violet-light);
+            font-family: inherit;
+        }
+        .category-tab:hover { border-color: var(--sw-gold); }
+        .category-tab.active {
+            background: linear-gradient(135deg, var(--sw-violet) 0%, var(--sw-gold) 100%);
+            color: #0d0d2b;
+            border-color: transparent;
+        }
+
+        /* Breathing Timer */
+        .breath-timer {
+            text-align: center;
+            padding: 30px;
+            background: rgba(123, 104, 238, 0.15);
+            border-radius: 20px;
+            margin: 20px 0;
+        }
+        .breath-circle {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--sw-violet) 0%, var(--sw-teal) 100%);
+            margin: 0 auto 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.3em;
+            color: #fff;
+            animation: breathe 8s ease-in-out infinite;
+            box-shadow: 0 0 30px var(--sw-violet-glow);
+        }
+        @keyframes breathe {
+            0%, 100% { transform: scale(1); }
+            25% { transform: scale(1.2); }
+            50% { transform: scale(1.2); }
+            75% { transform: scale(1); }
+        }
+        .breath-instruction {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.2em;
+            color: var(--sw-gold);
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(25px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .fade-in { animation: fadeIn 0.5s ease-out; }
+
+        /* Mobile Responsive */
+        @media (max-width: 600px) {
+            .container { padding: 15px; }
+            .main-card { padding: 22px; border-radius: 24px; }
+            .energy-option { padding: 18px; }
+            .energy-icon { font-size: 2.2em; width: 55px; }
+            .header h1 { font-size: 2.2em; }
+            .mystic-orb { font-size: 2em; top: 10px; right: 10px; }
+            .practice-categories { overflow-x: auto; flex-wrap: nowrap; padding-bottom: 10px; }
+            .category-tab { white-space: nowrap; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Mystic Orb -->
+    <div class="mystic-orb" onclick="createFeatherBurst(event)">🔮</div>
+
+    <!-- Aurora -->
+    <div class="aurora"></div>
+
+    <!-- Stars Container -->
+    <div class="stars-container" id="starsContainer"></div>
+
+    <!-- Birds Container -->
+    <div class="birds-container" id="birdsContainer"></div>
+
+    <div class="container">
+        <div class="header">
+            <div class="peri-photo-container">
+                <img src="peri-photo.png" alt="Peri" class="peri-photo">
+            </div>
+            <p class="greeting" id="greeting">Welcome, dear Peri</p>
+            <h1>SOUL WINGS</h1>
+            <div class="subtitle">Your Sacred Sanctuary</div>
+            <div class="tagline">"Where intuition takes flight"</div>
+        </div>
+
+        <div class="main-card">
+            <!-- Step 1: Energy Check -->
+            <div id="energySelector" class="fade-in">
+                <div class="energy-question">
+                    <h2>How does your energy feel right now?</h2>
+                    <p>Trust your first instinct. Your spirit always knows.</p>
+                </div>
+
+                <div class="energy-grid">
+                    <div class="energy-option soaring" onclick="selectEnergy('soaring')">
+                        <div class="energy-icon">🕊️</div>
+                        <div class="energy-info">
+                            <h3>Soaring</h3>
+                            <p>Connected, clear, and in divine flow</p>
+                        </div>
+                    </div>
+
+                    <div class="energy-option grounded" onclick="selectEnergy('grounded')">
+                        <div class="energy-icon">🌳</div>
+                        <div class="energy-info">
+                            <h3>Grounded</h3>
+                            <p>Centered, present, rooted in peace</p>
+                        </div>
+                    </div>
+
+                    <div class="energy-option scattered" onclick="selectEnergy('scattered')">
+                        <div class="energy-icon">🌪️</div>
+                        <div class="energy-info">
+                            <h3>Scattered</h3>
+                            <p>Mind racing, too many signals at once</p>
+                        </div>
+                    </div>
+
+                    <div class="energy-option drained" onclick="selectEnergy('drained')">
+                        <div class="energy-icon">🌙</div>
+                        <div class="energy-info">
+                            <h3>Drained</h3>
+                            <p>Energy depleted, need to restore</p>
+                        </div>
+                    </div>
+
+                    <div class="energy-option shielded" onclick="selectEnergy('shielded')">
+                        <div class="energy-icon">🛡️</div>
+                        <div class="energy-info">
+                            <h3>Need Shielding</h3>
+                            <p>Feeling too open, absorbing others' energy</p>
+                        </div>
+                    </div>
+                </div>
+
+                <button class="continue-btn" id="continueBtn" onclick="showEnergyDetail()" disabled>
+                    Receive Guidance
+                </button>
+
+                <!-- Sacred Chanting Section -->
+                <div class="soul-section">
+                    <h3>Sacred Chants & Mantras</h3>
+                    <p>Ancient vibrations to shift your energy and connect with the divine</p>
+
+                    <div class="chant-grid">
+                        <div class="chant-card peace" onclick="selectChant('peace')">
+                            <div class="chant-card-header">
+                                <span class="icon">☮️</span>
+                                <h4>Peace & Calm</h4>
+                            </div>
+                            <p>Settle the mind, find stillness</p>
+                        </div>
+
+                        <div class="chant-card protection" onclick="selectChant('protection')">
+                            <div class="chant-card-header">
+                                <span class="icon">🛡️</span>
+                                <h4>Protection</h4>
+                            </div>
+                            <p>Shield your energy field</p>
+                        </div>
+
+                        <div class="chant-card clarity" onclick="selectChant('clarity')">
+                            <div class="chant-card-header">
+                                <span class="icon">✨</span>
+                                <h4>Clarity</h4>
+                            </div>
+                            <p>Open your third eye</p>
+                        </div>
+
+                        <div class="chant-card love" onclick="selectChant('love')">
+                            <div class="chant-card-header">
+                                <span class="icon">💗</span>
+                                <h4>Unconditional Love</h4>
+                            </div>
+                            <p>Heart chakra activation</p>
+                        </div>
+                    </div>
+
+                    <div id="chantDetail" class="chant-detail"></div>
+                </div>
+
+                <!-- Bird Wisdom Section -->
+                <div class="bird-section">
+                    <h4>Messages from Your Feathered Friends</h4>
+                    <p style="text-align: center; color: rgba(255,255,255,0.7); margin-bottom: 15px; font-size: 0.9em;">Tap for a bird message from spirit</p>
+                    <div class="bird-wisdom">
+                        <div class="bird-message" onclick="showBirdMessage('cardinal')">
+                            <div class="bird-icon">🐦</div>
+                            <p>Cardinal</p>
+                        </div>
+                        <div class="bird-message" onclick="showBirdMessage('owl')">
+                            <div class="bird-icon">🦉</div>
+                            <p>Owl</p>
+                        </div>
+                        <div class="bird-message" onclick="showBirdMessage('dove')">
+                            <div class="bird-icon">🕊️</div>
+                            <p>Dove</p>
+                        </div>
+                    </div>
+                    <div id="birdMessage" style="margin-top: 15px; padding: 15px; background: rgba(212, 175, 55, 0.15); border-radius: 12px; display: none;">
+                        <p id="birdMessageText" style="font-family: 'Cormorant Garamond', serif; font-style: italic; color: var(--sw-gold-light); text-align: center;"></p>
+                    </div>
+                </div>
+
+                <!-- Psychic Practice Preparation -->
+                <div class="reading-prep">
+                    <h3>Prepare for Readings</h3>
+                    <p style="text-align: center; color: rgba(255,255,255,0.7); margin-bottom: 10px;">Sacred practices for before, during, and after your intuitive work</p>
+
+                    <div class="prep-cards">
+                        <div class="prep-card" onclick="togglePrepCard(this, 'before')">
+                            <span class="icon">🌅</span>
+                            <h4>Before a Reading</h4>
+                            <p>Ground & open your channel</p>
+                            <div class="prep-content" style="display: none; margin-top: 15px; text-align: left;">
+                                <ol style="padding-left: 20px; color: rgba(255,255,255,0.9); line-height: 1.8;">
+                                    <li>Clear your space with sage or sound</li>
+                                    <li>Ground through your feet into the earth</li>
+                                    <li>Call in your guides and protectors</li>
+                                    <li>Set your intention for highest good</li>
+                                    <li>Open your crown to receive</li>
+                                </ol>
+                            </div>
+                        </div>
+
+                        <div class="prep-card" onclick="togglePrepCard(this, 'after')">
+                            <span class="icon">🌙</span>
+                            <h4>After a Reading</h4>
+                            <p>Close & restore your energy</p>
+                            <div class="prep-content" style="display: none; margin-top: 15px; text-align: left;">
+                                <ol style="padding-left: 20px; color: rgba(255,255,255,0.9); line-height: 1.8;">
+                                    <li>Thank your guides for their assistance</li>
+                                    <li>Visualize closing your crown chakra</li>
+                                    <li>Wash hands with cool water</li>
+                                    <li>Ground again - eat something</li>
+                                    <li>Rest if you feel called to</li>
+                                </ol>
+                            </div>
+                        </div>
+
+                        <div class="prep-card" onclick="togglePrepCard(this, 'clearing')">
+                            <span class="icon">💨</span>
+                            <h4>Energy Clearing</h4>
+                            <p>Release what isn't yours</p>
+                            <div class="prep-content" style="display: none; margin-top: 15px; text-align: left;">
+                                <ol style="padding-left: 20px; color: rgba(255,255,255,0.9); line-height: 1.8;">
+                                    <li>Shake your hands vigorously</li>
+                                    <li>Sweep your aura head to toe</li>
+                                    <li>Visualize golden light washing through</li>
+                                    <li>Say: "I release all that is not mine"</li>
+                                    <li>Take three deep cleansing breaths</li>
+                                </ol>
+                            </div>
+                        </div>
+
+                        <div class="prep-card" onclick="togglePrepCard(this, 'protection')">
+                            <span class="icon">🔮</span>
+                            <h4>Daily Protection</h4>
+                            <p>Shield your sensitive soul</p>
+                            <div class="prep-content" style="display: none; margin-top: 15px; text-align: left;">
+                                <ol style="padding-left: 20px; color: rgba(255,255,255,0.9); line-height: 1.8;">
+                                    <li>Visualize a bubble of violet light</li>
+                                    <li>Expand it around your whole body</li>
+                                    <li>Affirm: "Only love may enter here"</li>
+                                    <li>Call on Archangel Michael if needed</li>
+                                    <li>Renew throughout the day as needed</li>
+                                </ol>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Breathing Practice -->
+                <div class="soul-section">
+                    <h3>Sacred Breath</h3>
+                    <p>Breathe with the circle to center your energy</p>
+
+                    <div class="breath-timer">
+                        <div class="breath-circle" id="breathCircle">
+                            Breathe
+                        </div>
+                        <p class="breath-instruction" id="breathInstruction">Inhale as it expands, exhale as it contracts</p>
+                    </div>
+                </div>
+
+                <!-- Soul Journal -->
+                <div class="journal-section">
+                    <h3>Soul Journal</h3>
+                    <p style="text-align: center; color: rgba(255,255,255,0.7); margin-bottom: 18px;">Record your visions, messages, and spiritual insights</p>
+
+                    <div class="prompt-chips">
+                        <span class="prompt-chip" onclick="insertPrompt('Spirit showed me...')">Spirit showed me...</span>
+                        <span class="prompt-chip" onclick="insertPrompt('I received a message that...')">I received a message...</span>
+                        <span class="prompt-chip" onclick="insertPrompt('Today my intuition told me...')">My intuition said...</span>
+                        <span class="prompt-chip" onclick="insertPrompt('I am grateful to spirit for...')">Grateful for...</span>
+                    </div>
+
+                    <textarea id="journalEntry" class="journal-textarea" placeholder="What messages are coming through, Peri?"></textarea>
+
+                    <div class="journal-actions">
+                        <span class="journal-status" id="journalStatus">Auto-saved to your device</span>
+                        <button class="save-entry-btn" onclick="saveJournalEntry()">Save Entry</button>
+                    </div>
+
+                    <div class="past-entries" id="pastEntries" style="display: none;">
+                        <button class="entries-toggle" onclick="togglePastEntries()">
+                            <span>View Past Entries</span>
+                            <span class="toggle-icon" id="entriesIcon">+</span>
+                        </button>
+                        <div class="entries-list" id="entriesList"></div>
+                    </div>
+                </div>
+
+                <!-- Support Section -->
+                <div class="support-section">
+                    <h3>Support & Resources</h3>
+                    <p style="text-align: center; color: rgba(255,255,255,0.7); margin-bottom: 10px;">You don't walk this path alone, dear one</p>
+
+                    <div class="support-grid">
+                        <div class="support-card" onclick="window.open('https://988lifeline.org/', '_blank')">
+                            <div class="icon">📞</div>
+                            <h4>988 Lifeline</h4>
+                            <p>24/7 support: Call or text 988</p>
+                        </div>
+                        <div class="support-card" onclick="window.open('https://www.nami.org/', '_blank')">
+                            <div class="icon">💜</div>
+                            <h4>NAMI</h4>
+                            <p>Mental health support & resources</p>
+                        </div>
+                        <div class="support-card" onclick="window.open('https://www.crisistextline.org/', '_blank')">
+                            <div class="icon">💬</div>
+                            <h4>Crisis Text Line</h4>
+                            <p>Text HOME to 741741</p>
+                        </div>
+                        <div class="support-card" onclick="window.open('https://foreverconscious.com/', '_blank')">
+                            <div class="icon">✨</div>
+                            <h4>Spiritual Resources</h4>
+                            <p>Intuitive development & growth</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- History -->
+                <div class="history-section" id="historySection" style="display: none;">
+                    <h3>Recent Energy Check-Ins</h3>
+                    <div id="historyList"></div>
+                </div>
+            </div>
+
+            <!-- Step 2: Energy Detail & Practices -->
+            <div id="energyDetail" class="energy-detail"></div>
+        </div>
+
+        <div class="footer">
+            <p class="brand">SOUL WINGS SANCTUARY</p>
+            <p style="margin-top: 8px;">Made with love for Peri | Your data stays on your device</p>
+        </div>
+    </div>
+
+    <script>
+        // ============================================
+        // VISUAL EFFECTS
+        // ============================================
+
+        function createStars() {
+            const container = document.getElementById('starsContainer');
+            for (let i = 0; i < 100; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+                star.style.left = Math.random() * 100 + '%';
+                star.style.top = Math.random() * 100 + '%';
+                star.style.animationDuration = (Math.random() * 3 + 2) + 's';
+                star.style.animationDelay = Math.random() * 3 + 's';
+                container.appendChild(star);
+            }
+        }
+
+        function createBirds() {
+            const container = document.getElementById('birdsContainer');
+            const birds = ['🕊️', '🦅', '🐦'];
+
+            setInterval(() => {
+                if (Math.random() > 0.7) {
+                    const bird = document.createElement('div');
+                    bird.className = 'bird';
+                    bird.textContent = birds[Math.floor(Math.random() * birds.length)];
+                    bird.style.top = (Math.random() * 60 + 10) + '%';
+                    bird.style.animationDuration = (Math.random() * 15 + 20) + 's';
+                    container.appendChild(bird);
+
+                    setTimeout(() => bird.remove(), 35000);
+                }
+            }, 3000);
+        }
+
+        function createFeatherBurst(event) {
+            const feathers = ['🪶', '✨', '💫', '⭐'];
+            for (let i = 0; i < 20; i++) {
+                const feather = document.createElement('div');
+                feather.style.cssText = `
+                    position: fixed;
+                    font-size: 1.5em;
+                    pointer-events: none;
+                    z-index: 1000;
+                    left: ${event.clientX}px;
+                    top: ${event.clientY}px;
+                `;
+                feather.textContent = feathers[Math.floor(Math.random() * feathers.length)];
+                document.body.appendChild(feather);
+
+                const angle = (Math.random() * 360) * (Math.PI / 180);
+                const velocity = Math.random() * 100 + 50;
+                const vx = Math.cos(angle) * velocity;
+                const vy = Math.sin(angle) * velocity;
+
+                let x = 0, y = 0, opacity = 1, rotation = 0;
+                const animate = () => {
+                    x += vx * 0.02;
+                    y += vy * 0.02 + 1;
+                    opacity -= 0.015;
+                    rotation += 5;
+                    feather.style.transform = `translate(${x}px, ${y}px) rotate(${rotation}deg)`;
+                    feather.style.opacity = opacity;
+                    if (opacity > 0) requestAnimationFrame(animate);
+                    else feather.remove();
+                };
+                requestAnimationFrame(animate);
+            }
+        }
+
+        createStars();
+        createBirds();
+
+        // ============================================
+        // DATA: Energy States and Practices
+        // ============================================
+
+        const ENERGY_STATES = {
+            'soaring': {
+                icon: '🕊️',
+                name: 'Soaring',
+                zone: "Your spirit is in beautiful alignment",
+                color: 'soaring',
+                experience: "You feel connected to Source, your intuition is clear, and energy flows freely through you. This is your natural state of being - cherish it.",
+                spiritual: "Your crown chakra is open, your third eye clear. You're in communion with the divine. Messages come easily, and you trust what you receive.",
+                guidance: "This is the perfect time to channel, do readings, or receive guidance for yourself. Your connection is strong. Use this window wisely, dear one.",
+                categories: [
+                    {
+                        id: 'channel',
+                        name: 'Channel',
+                        tools: [
+                            { id: 'automatic-writing', name: 'Automatic Writing', icon: '✍️', steps: ["Light a candle and set your intention to receive", "Hold your pen loosely, let your hand relax", "Ask your guides: 'What do you wish me to know?'", "Write without thinking - let spirit guide your hand", "When complete, read with gratitude and discernment"], tip: "Don't judge what comes through. Spirit speaks in mysterious ways." },
+                            { id: 'meditation-journey', name: 'Guided Journey', icon: '🌟', steps: ["Sit comfortably, close your eyes", "Visualize a golden staircase going up", "Climb the stairs, counting from 1 to 10", "At the top, a door appears - step through", "Observe what you see, hear, feel - this is your message"], tip: "Your guides meet you in this space. Trust what you perceive." }
+                        ]
+                    }
+                ]
+            },
+            'grounded': {
+                icon: '🌳',
+                name: 'Grounded',
+                zone: "Rooted and present in your body",
+                color: 'grounded',
+                experience: "You feel stable, centered, and fully present. Your feet are planted firmly on the earth while your spirit remains open to the sky.",
+                spiritual: "Your root chakra is balanced, creating a stable foundation. This grounded state allows for clear discernment between your energy and others'.",
+                guidance: "From this centered place, you can safely open to spirit without losing yourself. This is the ideal state for intuitive work.",
+                categories: [
+                    {
+                        id: 'deepen',
+                        name: 'Deepen',
+                        tools: [
+                            { id: 'earth-connection', name: 'Earth Connection', icon: '🌍', steps: ["Stand or sit with bare feet on the ground if possible", "Visualize roots growing from your feet deep into the earth", "Feel the stability of the earth supporting you", "Draw earth energy up through your roots into your body", "Thank the earth for its constant support"], tip: "The earth is always there to hold you. Trust in this support." },
+                            { id: 'gratitude-practice', name: 'Gratitude Offering', icon: '🙏', steps: ["Place your hands on your heart", "Think of three things you're grateful for today", "Send gratitude to your spirit guides", "Offer thanks to the birds who bring you messages", "Feel the warmth of gratitude expand in your chest"], tip: "Gratitude raises your vibration and strengthens your connection to spirit." }
+                        ]
+                    }
+                ]
+            },
+            'scattered': {
+                icon: '🌪️',
+                name: 'Scattered',
+                zone: "Too many signals, hard to focus",
+                color: 'scattered',
+                experience: "Your mind is racing with thoughts, images, or sensations. You may be picking up too much from the collective or from those around you. It's hard to know what's yours.",
+                spiritual: "Your intuitive channels may be too open without proper filtering. You're receiving but not processing. This is common for sensitive souls like you.",
+                guidance: "Before opening further, you need to center. Close some doors, ground your energy, and create sacred space around yourself.",
+                categories: [
+                    {
+                        id: 'center',
+                        name: 'Center',
+                        tools: [
+                            { id: 'grounding-cord', name: 'Grounding Cord', icon: '⚓', steps: ["Sit comfortably and close your eyes", "Visualize a cord of golden light from your root chakra", "Send it down through the floor, through the earth", "Anchor it to the center of the earth", "Feel yourself becoming stable and present"], tip: "This cord releases excess energy while keeping you connected to your power." },
+                            { id: 'centering-chant', name: 'Centering Chant', icon: '🕉️', steps: ["Take three deep breaths", "Chant 'LAM' (root chakra) three times", "Feel the vibration in your pelvis and legs", "Chant 'VAM' (sacral) to balance emotions", "End with three deep breaths"], tip: "Sound vibration instantly shifts energy. Your voice is a powerful tool." }
+                        ]
+                    }
+                ]
+            },
+            'drained': {
+                icon: '🌙',
+                name: 'Drained',
+                zone: "Energy depleted, need to restore",
+                color: 'drained',
+                experience: "You've given too much, absorbed too much, or both. Your energy reserves are low. You may feel tired, foggy, or disconnected from your gifts.",
+                spiritual: "Sensitives like you can easily over-give. Your compassionate heart wants to help everyone, but your vessel needs filling too.",
+                guidance: "This is not the time for readings or energy work. This is sacred rest time. Fill your own cup first, dear one.",
+                categories: [
+                    {
+                        id: 'restore',
+                        name: 'Restore',
+                        tools: [
+                            { id: 'energy-retrieval', name: 'Call Your Energy Back', icon: '💫', steps: ["Sit quietly and close your eyes", "Say: 'I call all of my energy back to me now'", "Visualize golden threads returning from everywhere you've given", "Feel your energy body filling back up", "Seal your aura with a golden light"], tip: "Your energy is yours. It's okay to call it back. This is self-care." },
+                            { id: 'salt-bath', name: 'Salt Water Cleanse', icon: '🛁', steps: ["Draw a warm bath with sea salt or epsom salt", "Add a few drops of lavender if available", "As you soak, visualize the salt drawing out heaviness", "See the water turning gray with released energy", "When you drain the tub, it all goes down the drain"], tip: "Water + salt is ancient spiritual cleansing. Trust this simple medicine." }
+                        ]
+                    }
+                ]
+            },
+            'shielded': {
+                icon: '🛡️',
+                name: 'Need Shielding',
+                zone: "Feeling too open, absorbing others' energy",
+                color: 'shielded',
+                experience: "You're picking up everyone else's emotions, thoughts, or physical sensations. You may not know where you end and others begin. This is overwhelming.",
+                spiritual: "Your natural empathic gifts are wide open. Without proper boundaries, you become a sponge for collective energy. This isn't sustainable.",
+                guidance: "You don't have to feel everything. Shields aren't walls - they're filters that let love through while protecting your peace.",
+                categories: [
+                    {
+                        id: 'protect',
+                        name: 'Protect',
+                        tools: [
+                            { id: 'violet-flame', name: 'Violet Flame Shield', icon: '💜', steps: ["Close your eyes and take three breaths", "Visualize a violet flame surrounding your entire body", "See it burning away any energy that isn't yours", "Expand it to arm's length around you", "Affirm: 'Only love may enter my field'"], tip: "The violet flame transmutes negative energy. It's both protection and clearing." },
+                            { id: 'mirror-shield', name: 'Mirror Shield', icon: '🪞', steps: ["Visualize yourself surrounded by mirrors facing outward", "Any negative energy sent to you reflects back to sender", "This isn't about harm - it's about not absorbing what isn't yours", "See the mirrors as loving boundaries", "Thank them for their protection"], tip: "This shield is especially good for dealing with difficult people." }
+                        ]
+                    }
+                ]
+            }
+        };
+
+        const CHANTS = {
+            peace: {
+                name: 'Om Shanti Shanti Shanti',
+                text: 'Om Shanti Shanti Shanti',
+                meaning: 'Peace in body, mind, and spirit',
+                practice: ['Sit comfortably with eyes closed', 'Take three deep breaths', 'Chant "Om" and feel it vibrate in your chest', 'Chant "Shanti" three times, each softer than the last', 'Sit in the silence that follows']
+            },
+            protection: {
+                name: 'Archangel Michael Invocation',
+                text: 'Michael before me, Michael behind me, Michael to my right, Michael to my left, Michael above me, Michael below me, Michael within me',
+                meaning: 'Calling the protection of Archangel Michael',
+                practice: ['Stand with feet shoulder-width apart', 'Face each direction as you speak', 'Visualize Michael\'s blue light surrounding you', 'Feel his sword cutting any cords of negativity', 'Thank him for his protection']
+            },
+            clarity: {
+                name: 'Om Namah Shivaya',
+                text: 'Om Namah Shivaya',
+                meaning: 'I bow to the divine within',
+                practice: ['Light a candle if available', 'Focus on your third eye area', 'Chant the mantra 108 times or for 10 minutes', 'Feel your intuition opening like a lotus', 'Sit in receptive silence afterward']
+            },
+            love: {
+                name: 'Lokah Samastah Sukhino Bhavantu',
+                text: 'Lokah Samastah Sukhino Bhavantu',
+                meaning: 'May all beings everywhere be happy and free',
+                practice: ['Place your hands on your heart', 'Think of someone you love easily', 'Extend that feeling to all beings', 'Chant the mantra with this feeling', 'Feel your heart chakra expand and glow']
+            }
+        };
+
+        const BIRD_MESSAGES = {
+            cardinal: [
+                "A loved one in spirit is near, sending you their love.",
+                "Trust your vitality - you have more energy than you realize.",
+                "Pay attention to what brings you joy today.",
+                "Someone from the other side wants you to know they're proud of you."
+            ],
+            owl: [
+                "Look beyond the surface - truth hides in the shadows.",
+                "Your intuition is especially strong right now. Trust it.",
+                "A secret will be revealed to you soon.",
+                "Wisdom comes through stillness. Be patient."
+            ],
+            dove: [
+                "Peace is coming. Release your worries to spirit.",
+                "A message of hope is on its way to you.",
+                "Love surrounds you, even when you can't feel it.",
+                "Your prayers have been heard. Trust the timing."
+            ]
+        };
+
+        // ============================================
+        // APP STATE
+        // ============================================
+
+        let selectedEnergy = null;
+        let history = JSON.parse(localStorage.getItem('peri_history') || '[]');
+        let journalEntries = JSON.parse(localStorage.getItem('peri_journal') || '[]');
+
+        // ============================================
+        // FUNCTIONS
+        // ============================================
+
+        function updateGreeting() {
+            const hour = new Date().getHours();
+            const greetingEl = document.getElementById('greeting');
+            let greeting = 'Hey Peri';
+            if (hour < 6) greeting = 'Hey Peri, night owl!';
+            else if (hour < 12) greeting = 'Hey Peri, good morning!';
+            else if (hour < 17) greeting = 'Hey Peri, good afternoon!';
+            else if (hour < 21) greeting = 'Hey Peri, good evening!';
+            else greeting = 'Hey Peri, good night!';
+            greetingEl.textContent = greeting;
+        }
+
+        function selectEnergy(energy) {
+            selectedEnergy = energy;
+            document.querySelectorAll('.energy-option').forEach(opt => opt.classList.remove('selected'));
+            document.querySelector(`.energy-option.${energy}`).classList.add('selected');
+            document.getElementById('continueBtn').disabled = false;
+        }
+
+        function showEnergyDetail() {
+            if (!selectedEnergy) return;
+            const state = ENERGY_STATES[selectedEnergy];
+            document.getElementById('energySelector').style.display = 'none';
+
+            const detailEl = document.getElementById('energyDetail');
+            detailEl.innerHTML = `
+                <button class="back-btn" onclick="goBack()">Back</button>
+                <div class="energy-header ${state.color}">
+                    <div class="icon">${state.icon}</div>
+                    <h2>${state.name}</h2>
+                    <div class="zone">${state.zone}</div>
+                </div>
+                <div class="explanation-card"><h4>What you're experiencing</h4><p>${state.experience}</p></div>
+                <div class="explanation-card spiritual"><h4>The spiritual perspective</h4><p>${state.spiritual}</p></div>
+                <div class="explanation-card grounding"><h4>Guidance for you now</h4><p>${state.guidance}</p></div>
+                <div class="soul-section" style="border-top: none; margin-top: 0; padding-top: 0;">
+                    <h3>Sacred Practices</h3>
+                    <div class="practice-categories">${state.categories.map((cat, i) => `<button class="category-tab ${i === 0 ? 'active' : ''}" onclick="showCategory('${cat.id}')">${cat.name}</button>`).join('')}</div>
+                    <div id="toolsList">${renderTools(state.categories[0].tools)}</div>
+                </div>
+            `;
+            detailEl.classList.add('active', 'fade-in');
+            addToHistory(selectedEnergy);
+        }
+
+        function renderTools(tools) {
+            return `<div class="practice-list">${tools.map(tool => `
+                <div class="practice-item" onclick="this.classList.toggle('expanded')">
+                    <div class="practice-header"><h4>${tool.icon} ${tool.name}</h4></div>
+                    <div class="practice-content">
+                        <ol class="practice-steps">${tool.steps.map(step => `<li>${step}</li>`).join('')}</ol>
+                        <div class="practice-tip">${tool.tip}</div>
+                    </div>
+                </div>
+            `).join('')}</div>`;
+        }
+
+        function showCategory(catId) {
+            const state = ENERGY_STATES[selectedEnergy];
+            const category = state.categories.find(c => c.id === catId);
+            document.querySelectorAll('.category-tab').forEach(tab => tab.classList.remove('active'));
+            event.target.classList.add('active');
+            document.getElementById('toolsList').innerHTML = renderTools(category.tools);
+        }
+
+        function goBack() {
+            document.getElementById('energyDetail').classList.remove('active');
+            document.getElementById('energyDetail').innerHTML = '';
+            document.getElementById('energySelector').style.display = 'block';
+            selectedEnergy = null;
+            document.querySelectorAll('.energy-option').forEach(opt => opt.classList.remove('selected'));
+            document.getElementById('continueBtn').disabled = true;
+        }
+
+        function selectChant(chantId) {
+            document.querySelectorAll('.chant-card').forEach(card => card.classList.remove('selected'));
+            document.querySelector(`.chant-card.${chantId}`).classList.add('selected');
+            const data = CHANTS[chantId];
+            document.getElementById('chantDetail').innerHTML = `
+                <h4>${data.name}</h4>
+                <div class="chant-text">${data.text}</div>
+                <p><em>"${data.meaning}"</em></p>
+                <p style="margin-top: 15px;"><strong>How to practice:</strong></p>
+                <ol style="padding-left: 20px; margin-top: 10px;">${data.practice.map(p => `<li style="margin-bottom: 8px; color: rgba(255,255,255,0.9);">${p}</li>`).join('')}</ol>
+            `;
+            document.getElementById('chantDetail').classList.add('active');
+        }
+
+        function showBirdMessage(bird) {
+            const messages = BIRD_MESSAGES[bird];
+            const message = messages[Math.floor(Math.random() * messages.length)];
+            const messageEl = document.getElementById('birdMessage');
+            const textEl = document.getElementById('birdMessageText');
+            textEl.textContent = `"${message}"`;
+            messageEl.style.display = 'block';
+        }
+
+        function togglePrepCard(element, type) {
+            const content = element.querySelector('.prep-content');
+            const isVisible = content.style.display === 'block';
+
+            // Close all other prep cards
+            document.querySelectorAll('.prep-content').forEach(c => c.style.display = 'none');
+
+            // Toggle this one
+            content.style.display = isVisible ? 'none' : 'block';
+        }
+
+        function addToHistory(energy) {
+            history.unshift({ energy: energy, timestamp: new Date().toISOString() });
+            if (history.length > 10) history = history.slice(0, 10);
+            localStorage.setItem('peri_history', JSON.stringify(history));
+            updateHistoryDisplay();
+        }
+
+        function updateHistoryDisplay() {
+            if (history.length === 0) return;
+            document.getElementById('historySection').style.display = 'block';
+            document.getElementById('historyList').innerHTML = history.slice(0, 5).map(entry => {
+                const state = ENERGY_STATES[entry.energy];
+                const date = new Date(entry.timestamp);
+                const timeStr = date.toLocaleString('en-US', { weekday: 'short', hour: '2-digit', minute: '2-digit' });
+                return `<div class="history-item"><span class="energy-badge ${entry.energy}">${state.icon} ${state.name}</span><span style="color: rgba(255,255,255,0.6);">${timeStr}</span></div>`;
+            }).join('');
+        }
+
+        // Journal Functions
+        const journalEl = document.getElementById('journalEntry');
+        journalEl.value = localStorage.getItem('peri_journal_draft') || '';
+        journalEl.addEventListener('input', () => localStorage.setItem('peri_journal_draft', journalEl.value));
+
+        function insertPrompt(prompt) {
+            journalEl.value = prompt + ' ';
+            journalEl.focus();
+        }
+
+        function saveJournalEntry() {
+            const text = journalEl.value.trim();
+            if (!text) return;
+            journalEntries.unshift({ text: text, timestamp: new Date().toISOString() });
+            localStorage.setItem('peri_journal', JSON.stringify(journalEntries));
+            journalEl.value = '';
+            localStorage.setItem('peri_journal_draft', '');
+            document.getElementById('journalStatus').textContent = 'Entry saved with love';
+            updateJournalDisplay();
+        }
+
+        function updateJournalDisplay() {
+            if (journalEntries.length === 0) return;
+            document.getElementById('pastEntries').style.display = 'block';
+            document.getElementById('entriesList').innerHTML = journalEntries.map((entry, i) => {
+                const date = new Date(entry.timestamp);
+                const dateStr = date.toLocaleString('en-US', { weekday: 'short', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
+                return `<div class="entry-card"><button class="entry-delete" onclick="deleteEntry(${i})">x</button><div class="entry-date">${dateStr}</div><div class="entry-text">${entry.text}</div></div>`;
+            }).join('');
+        }
+
+        function togglePastEntries() {
+            const list = document.getElementById('entriesList');
+            list.classList.toggle('open');
+            document.getElementById('entriesIcon').textContent = list.classList.contains('open') ? '-' : '+';
+        }
+
+        function deleteEntry(index) {
+            if (confirm('Delete this entry?')) {
+                journalEntries.splice(index, 1);
+                localStorage.setItem('peri_journal', JSON.stringify(journalEntries));
+                updateJournalDisplay();
+            }
+        }
+
+        // Breathing animation text
+        const breathCircle = document.getElementById('breathCircle');
+        const breathInstruction = document.getElementById('breathInstruction');
+        const breathPhases = ['Inhale...', 'Hold...', 'Exhale...', 'Rest...'];
+        let phaseIndex = 0;
+
+        setInterval(() => {
+            breathCircle.textContent = breathPhases[phaseIndex];
+            phaseIndex = (phaseIndex + 1) % breathPhases.length;
+        }, 2000);
+
+        // Initialize
+        updateGreeting();
+        updateHistoryDisplay();
+        updateJournalDisplay();
+    </script>
+</body>
+</html>

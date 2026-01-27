@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Before After - Gold Thursday</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background: #1a1a2e; 
+            padding: 40px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        
+        .post {
+            width: 1080px;
+            height: 1080px;
+            background: #0a0a0a;
+            border-radius: 20px;
+            overflow: hidden;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .header {
+            text-align: center;
+            padding: 50px 40px 35px;
+        }
+        
+        .header h1 {
+            color: white;
+            font-size: 2.8em;
+            font-weight: 900;
+            margin-bottom: 10px;
+        }
+        
+        .header p {
+            color: #888;
+            font-size: 1.2em;
+        }
+        
+        .comparison {
+            display: flex;
+            gap: 25px;
+            padding: 0 40px;
+            flex: 1;
+        }
+        
+        .before-box, .after-box {
+            flex: 1;
+            border-radius: 20px;
+            padding: 30px 25px;
+            position: relative;
+        }
+        
+        .before-box {
+            background: linear-gradient(180deg, #1a1515 0%, #0a0a0a 100%);
+            border: 2px solid #E63946;
+        }
+        
+        .after-box {
+            background: linear-gradient(180deg, #151a15 0%, #0a0a0a 100%);
+            border: 2px solid #4CAF50;
+        }
+        
+        .box-label {
+            position: absolute;
+            top: -15px;
+            left: 25px;
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-weight: 700;
+            font-size: 0.9em;
+            letter-spacing: 1px;
+        }
+        
+        .before-box .box-label { background: #E63946; color: white; }
+        .after-box .box-label { background: #4CAF50; color: white; }
+        
+        .before-content {
+            padding-top: 15px;
+        }
+        
+        .before-item {
+            padding: 18px 0;
+            border-bottom: 1px solid #222;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            color: #666;
+            font-size: 1.05em;
+        }
+        
+        .before-item:last-child { border-bottom: none; }
+        
+        .before-item .icon {
+            font-size: 1.4em;
+            opacity: 0.7;
+        }
+        
+        .after-content {
+            padding-top: 15px;
+        }
+        
+        .after-item {
+            background: rgba(76, 175, 80, 0.1);
+            border: 1px solid rgba(76, 175, 80, 0.3);
+            padding: 16px 18px;
+            border-radius: 12px;
+            margin-bottom: 12px;
+            color: #4CAF50;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 1.05em;
+        }
+        
+        .after-item:last-child { margin-bottom: 0; }
+        
+        .after-item .icon {
+            font-size: 1.3em;
+        }
+        
+        .cta-section {
+            background: linear-gradient(135deg, #E63946 0%, #D81B60 50%, #7B2CBF 100%);
+            padding: 30px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .cta-left {
+            color: white;
+        }
+        
+        .cta-left h3 {
+            font-size: 1.6em;
+            font-weight: 800;
+            margin-bottom: 5px;
+        }
+        
+        .cta-left p {
+            opacity: 0.9;
+            font-size: 1em;
+        }
+        
+        .cta-right {
+            background: white;
+            color: #E63946;
+            padding: 18px 35px;
+            border-radius: 50px;
+            font-weight: 800;
+            font-size: 1.2em;
+        }
+        
+        .logo {
+            position: absolute;
+            top: 20px;
+            right: 25px;
+            height: 60px;
+        }
+        
+        .logo img {
+            height: 100%;
+            width: auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="post">
+        
+        
+        <div class="header">
+            <h1>From chaos to clarity</h1>
+            <p>The toolkit I built for people like us</p>
+        </div>
+        
+        <div class="comparison">
+            <div class="before-box">
+                <div class="box-label">❌ BEFORE</div>
+                <div class="before-content">
+                    <div class="before-item"><span class="icon">📄</span> CV in 17 versions</div>
+                    <div class="before-item"><span class="icon">🤔</span> "So what do you do?"</div>
+                    <div class="before-item"><span class="icon">😰</span> Imposter syndrome</div>
+                    <div class="before-item"><span class="icon">🎲</span> Gut-feel decisions</div>
+                    <div class="before-item"><span class="icon">❓</span> "Am I selling out?"</div>
+                    <div class="before-item"><span class="icon">😵</span> Apply to everything</div>
+                </div>
+            </div>
+            
+            <div class="after-box">
+                <div class="box-label">✓ AFTER</div>
+                <div class="after-content">
+                    <div class="after-item"><span class="icon">📘</span> Clear core pattern</div>
+                    <div class="after-item"><span class="icon">🧵</span> Thread that connects it</div>
+                    <div class="after-item"><span class="icon">📝</span> CV that sounds like you</div>
+                    <div class="after-item"><span class="icon">⚖️</span> Framework for decisions</div>
+                    <div class="after-item"><span class="icon">🚩</span> Red/green flags defined</div>
+                    <div class="after-item"><span class="icon">🎯</span> Apply selectively</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="cta-section">
+            <div class="cta-left">
+                <h3>⚡ GOLD THURSDAY</h3>
+                <p>Thursday 28th Nov · 1pm · Free workshop</p>
+            </div>
+            <div class="cta-right">Comment "GOLD"</div>
+        </div>
+    </div>
+</body>
+</html>

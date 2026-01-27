@@ -1,0 +1,831 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Donald Pirie - Career Blueprint (Complete)</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; line-height: 1.6; color: #2c3e50; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 40px 20px; }
+        .container { max-width: 1000px; margin: 0 auto; background: white; border-radius: 20px; box-shadow: 0 20px 60px rgba(0,0,0,0.3); overflow: hidden; }
+        .header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 60px 40px; text-align: center; }
+        .header h1 { font-size: 2.8em; font-weight: 700; margin-bottom: 10px; }
+        .header .subtitle { font-size: 1.3em; opacity: 0.9; font-weight: 300; }
+        .progress-tracker { background: white; padding: 30px 40px; border-bottom: 2px solid #f0f0f0; }
+        .progress-tracker h3 { color: #667eea; margin-bottom: 20px; text-align: center; }
+        .progress-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; }
+        .progress-item { text-align: center; padding: 15px; border-radius: 10px; border: 2px solid #e0e0e0; }
+        .progress-item.complete { background: linear-gradient(135deg, #4caf5015 0%, #8bc34a15 100%); border-color: #4caf50; }
+        .progress-item.in-progress { background: linear-gradient(135deg, #ffc10715 0%, #ff980015 100%); border-color: #ffc107; }
+        .progress-icon { font-size: 2em; margin-bottom: 8px; }
+        .progress-label { font-size: 0.9em; font-weight: 600; color: #2c3e50; }
+        .progress-status { font-size: 0.8em; margin-top: 5px; opacity: 0.7; }
+        .content { padding: 50px 40px; }
+        .section { margin-bottom: 50px; page-break-inside: avoid; }
+        .section-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
+        .section-title { font-size: 1.8em; font-weight: 700; color: #667eea; display: flex; align-items: center; gap: 10px; }
+        .week-badge { background: #667eea; color: white; padding: 5px 15px; border-radius: 20px; font-size: 0.6em; font-weight: 600; }
+        .week-badge.complete { background: #4caf50; }
+        .section-divider { border-bottom: 3px solid #667eea; padding-bottom: 10px; margin-bottom: 25px; }
+        .insight-box { background: linear-gradient(135deg, #667eea15 0%, #764ba215 100%); padding: 30px; border-radius: 15px; border-left: 5px solid #667eea; margin: 20px 0; }
+        .outcome { background: #f8f9fa; padding: 20px; border-radius: 10px; margin-bottom: 15px; border-left: 4px solid #667eea; }
+        .outcome-title { font-weight: 600; color: #667eea; margin-bottom: 8px; }
+        .proposition-box { background: linear-gradient(135deg, #FFD70015 0%, #FFA50015 100%); padding: 25px; border-radius: 15px; border: 2px solid #FFD700; margin: 20px 0; }
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 25px; }
+        .green-box { background: linear-gradient(135deg, #4caf5015 0%, #8bc34a15 100%); border: 2px solid #4caf50; border-radius: 10px; padding: 20px; }
+        .red-box { background: linear-gradient(135deg, #ff980015 0%, #ff572215 100%); border: 2px solid #ff5722; border-radius: 10px; padding: 20px; }
+        .tool-card { background: #f8f9fa; border-radius: 12px; padding: 20px; margin-bottom: 15px; border-left: 4px solid #667eea; }
+        .tool-card h4 { color: #667eea; margin-bottom: 8px; }
+        .tool-card a { color: #667eea; text-decoration: none; font-weight: 600; }
+        .tool-card a:hover { text-decoration: underline; }
+        @media (max-width: 768px) { .progress-grid { grid-template-columns: repeat(2, 1fr); } .grid-2 { grid-template-columns: 1fr; } .content { padding: 30px 20px; } }
+        @media print { body { background: white; padding: 0; } .container { box-shadow: none; } }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Career Blueprint</h1>
+            <div class="subtitle">Donald Pirie | Complete 4-Week Programme</div>
+            <div style="font-size: 0.9em; margin-top: 15px; opacity: 0.8;">Career Booster Programme with Lisa Gills</div>
+        </div>
+
+        <!-- PROGRESS TRACKER -->
+        <div class="progress-tracker">
+            <h3>📍 Your Progress</h3>
+            <div class="progress-grid">
+                <div class="progress-item complete">
+                    <div class="progress-icon">✅</div>
+                    <div class="progress-label">Week 1</div>
+                    <div class="progress-status">Foundation Complete</div>
+                </div>
+                <div class="progress-item complete">
+                    <div class="progress-icon">✅</div>
+                    <div class="progress-label">Week 2</div>
+                    <div class="progress-status">Direction Complete</div>
+                </div>
+                <div class="progress-item complete">
+                    <div class="progress-icon">✅</div>
+                    <div class="progress-label">Week 3</div>
+                    <div class="progress-status">Positioning Complete</div>
+                </div>
+                <div class="progress-item complete">
+                    <div class="progress-icon">✅</div>
+                    <div class="progress-label">Week 4</div>
+                    <div class="progress-status">Implementation Complete</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="content">
+            <!-- INTRO BOX -->
+            <div style="background: linear-gradient(135deg, #667eea15 0%, #764ba215 100%); padding: 30px; border-radius: 15px; margin-bottom: 50px;">
+                <h3 style="color: #667eea; margin-bottom: 15px;">Your Career Blueprint</h3>
+                <p>This document captures everything we've discovered together over 3 weeks. By the end of Week 4, you'll have your complete reference guide for career decisions, CV updates, interview preparation, and ongoing career development.</p>
+                <p style="margin-top: 15px;"><strong>Use it to:</strong> Evaluate opportunities against your patterns, craft positioning for specific roles, and remind yourself what you actually bring to the table.</p>
+            </div>
+
+            <!-- WEEK 1: FOUNDATION (COMPLETE) -->
+            <div class="section">
+                <div class="section-header">
+                    <div class="section-title">
+                        <span>Week 1: Foundation</span>
+                        <span class="week-badge complete">Complete</span>
+                    </div>
+                </div>
+                <div class="section-divider"></div>
+
+                <h3 style="color: #764ba2; margin-bottom: 15px;">Your Core Pattern</h3>
+                <div class="insight-box">
+                    <p style="font-size: 1.2em; font-weight: 600; margin-bottom: 15px;">You don't fix strategies. You restore belief systems.</p>
+                    <p>Across every transformation you've led—UBS, UPS, AMD—you turn confusion into conviction. Teams arrive stuck and paralysed; you find the human truth beneath the noise, and they don't just get a strategy—they get belief back.</p>
+                    <p style="margin-top: 15px; font-weight: 600;">This is belief transformation, not problem-solving.</p>
+                </div>
+
+                <h3 style="color: #764ba2; margin: 25px 0 15px 0;">Your Evidence Collection</h3>
+                <p style="margin-bottom: 15px; color: #7f8c8d;">Five transformations that reveal your unique pattern of impact:</p>
+
+                <div class="outcome">
+                    <div class="outcome-title">Outcome #1: Effies Excellence</div>
+                    <p>Helped 3 major agencies create more effective Effies papers, drawing a clear line between comms activities and business effects. Built stronger, tighter, more compelling stories that increased their chances of winning.</p>
+                </div>
+
+                <div class="outcome">
+                    <div class="outcome-title">Outcome #2: UBS Digital Transformation</div>
+                    <p>Enabled a digital brand journey, content magnets and campaign structure which increased both familiarity (brand team's goal) and leads (wealth management's goal), building new client relationships.</p>
+                </div>
+
+                <div class="outcome">
+                    <div class="outcome-title">Outcome #3: UBS.com Repositioning</div>
+                    <p>Transformed UBS.com into the brand's flagship for a new generation of HNWIs. Created new purpose, audience strategy, and connected journeys. Impact: Increased leads and client revenue ($2.5m incremental revenue).</p>
+                </div>
+
+                <div class="outcome">
+                    <div class="outcome-title">Outcome #4: UPS "United Problem Solvers"</div>
+                    <p>Redefined UPS as problem solvers (not just logistics). Built world-first UPS × TED platform for employees to share solutions. Impact: +20% EMEA penetration, increased consideration, employee pride for 400,000 staff worldwide.</p>
+                </div>
+
+                <div class="outcome">
+                    <div class="outcome-title">Outcome #5: AMD Strategic Elevation</div>
+                    <p>Elevated AMD from specs-driven competitor to visionary leader. Shifted from promoting specs to shaping progress. Platform: AMD Together We Advance. Impact: Global repositioning, multi-audience impact.</p>
+                </div>
+
+                <h3 style="color: #764ba2; margin: 25px 0 15px 0;">Your Thread</h3>
+                <div class="insight-box">
+                    <p style="font-weight: 600; margin-bottom: 10px;">"My ability to see a bigger story than the one I've been asked to tell—to tell it, then build the teams and capabilities to make it real."</p>
+                    <p style="margin-top: 15px;"><strong>Your thread is: connecting insight, ideas, infrastructure and people.</strong> You go deep, find what's true but unseen, and then make it come to life.</p>
+                    <p style="margin-top: 15px; font-style: italic;">"I think what makes it work is that I don't stop at the idea. I stay until it's embedded, and delivering real impact for business and people."</p>
+                </div>
+
+                <h3 style="color: #764ba2; margin: 25px 0 15px 0;">Your Recognition</h3>
+                <div class="insight-box">
+                    <p><strong>The ability I've been underestimating:</strong> How powerfully I can shift belief—not just thinking. I don't just clarify; I change how people feel about the work, each other, and what's possible.</p>
+                    <p style="margin-top: 15px;"><strong>The pattern I now see:</strong> Transformation through clarity—taking something complex, fragmented, or forgotten and giving it focus, humanity, and momentum.</p>
+                    <p style="margin-top: 15px;"><strong>The transformation I enable:</strong> I help people move from confusion to conviction. They leave clearer, more confident, reconnected to purpose—able to see not just what to do next, but why it matters.</p>
+                </div>
+            </div>
+
+            <!-- WEEK 2: CAREER DIRECTION (COMPLETE) -->
+            <div class="section">
+                <div class="section-header">
+                    <div class="section-title">
+                        <span>Week 2: Career Direction</span>
+                        <span class="week-badge complete">Complete</span>
+                    </div>
+                </div>
+                <div class="section-divider"></div>
+
+                <h3 style="color: #764ba2; margin-bottom: 15px;">The Engine of Donald</h3>
+                <div class="insight-box">
+                    <p style="font-size: 1.1em; font-weight: 600; margin-bottom: 15px;">Your core capabilities that form your professional DNA:</p>
+                    <ul style="margin-left: 20px; line-height: 1.8;">
+                        <li><strong>Reading the room</strong> — sensing what's unsaid and what's needed</li>
+                        <li><strong>Unlocking the thinking</strong> — helping teams see possibilities they couldn't before</li>
+                        <li><strong>Connecting creativity to commercial</strong> — translating creative work into boardroom language</li>
+                    </ul>
+                    <p style="margin-top: 15px; font-style: italic;">Your focus: the <strong>"long game"</strong> and <strong>"building"</strong> brand platforms, not the immediate "making" of ads.</p>
+                </div>
+
+                <h3 style="color: #764ba2; margin: 25px 0 15px 0;">What Charges vs Drains You</h3>
+                <div class="grid-2">
+                    <div class="green-box">
+                        <h4 style="color: #4caf50; margin-bottom: 10px;">⚡ Charges You Up</h4>
+                        <ul style="margin-left: 20px; line-height: 1.8; font-size: 0.95em;">
+                            <li>Going deep with clients—asking questions, listening, discovering</li>
+                            <li>Permission to connect the dots into one coherent system</li>
+                            <li>Leading multidisciplinary teams through belief transformation</li>
+                            <li>Creative conviction + data fluency + intellectual curiosity</li>
+                            <li>Leaving meetings feeling like you moved something forward</li>
+                        </ul>
+                    </div>
+                    <div class="red-box">
+                        <h4 style="color: #ff5722; margin-bottom: 10px;">🔋 Drains Your Energy</h4>
+                        <ul style="margin-left: 20px; line-height: 1.8; font-size: 0.95em;">
+                            <li>The "ad factory" environment—deck-and-done, no time for depth</li>
+                            <li>Environments where charisma is valued over intelligence</li>
+                            <li>Having to play a role; feeling inauthentic</li>
+                            <li>Surface-level work without transformation embedded</li>
+                            <li>Internal politics without genuine strategic purpose</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <h3 style="color: #764ba2; margin: 25px 0 15px 0;">Three Belief Moments</h3>
+                <p style="margin-bottom: 15px; color: #7f8c8d;">Not just delivered strategy—but actually restored belief:</p>
+
+                <div class="outcome">
+                    <div class="outcome-title">1. UBS – "Banking is our Craft"</div>
+                    <p><strong>Challenge:</strong> UBS was losing confidence in its brand's meaning after regulatory pressure and fragmentation.</p>
+                    <p style="margin-top: 10px;"><strong>Your Impact:</strong> You helped redefine the story around craft—elevating the human intelligence and care behind the business. Restoring belief not just in marketing, but in the bankers themselves.</p>
+                    <p style="margin-top: 10px; font-style: italic;">"Like lighting a fire again—pride, ownership, and humanity returned to a global brand that had become defensive."</p>
+                </div>
+
+                <div class="outcome">
+                    <div class="outcome-title">2. UPS – "United Problem Solvers"</div>
+                    <p><strong>Challenge:</strong> UPS had slipped into functional, logistics-speak and lost its emotional connection.</p>
+                    <p style="margin-top: 10px;"><strong>Your Impact:</strong> Working across Ogilvy and the client C-suite, you reframed the brand as a creative problem-solving partner for business growth.</p>
+                    <p style="margin-top: 10px; font-style: italic;">"Like turning a machine back into a movement. Watching engineers, marketers and salespeople suddenly use the same language again was electric."</p>
+                </div>
+
+                <div class="outcome">
+                    <div class="outcome-title">3. Juniper Networks – "The Now Way to Network"</div>
+                    <p><strong>Challenge:</strong> The brand was invisible next to Cisco—internally people had lost faith they could win.</p>
+                    <p style="margin-top: 10px;"><strong>Your Impact:</strong> You rebuilt confidence through a simple but powerful narrative connecting emotion with commercial growth.</p>
+                    <p style="margin-top: 10px; font-style: italic;">"Pride mixed with relief—seeing an engineering-driven organisation rediscover its voice."</p>
+                </div>
+
+                <h3 style="color: #764ba2; margin: 25px 0 15px 0;">Your 10/10 Authentic Role</h3>
+                <div class="insight-box">
+                    <p style="font-weight: 600; margin-bottom: 15px;">What a fully authentic role looks like for you:</p>
+                    <p><strong>Purpose:</strong> A role where you're not just selling ideas—but shaping what brands and people stand for. Helping organisations rediscover conviction, prove the commercial power of creativity.</p>
+                    <p style="margin-top: 15px;"><strong>Environment:</strong> You're at your best when you can go deep, have permission to connect the dots, and can stretch from crafting narratives to measuring impact.</p>
+                    <p style="margin-top: 15px;"><strong>Shape of Work:</strong> Leading multidisciplinary teams through diagnosis, belief, activation, and measurement. Translating creativity into boardroom language: effectiveness, margin, market share.</p>
+                    <p style="margin-top: 15px;"><strong>Culture You Need:</strong> Creative conviction, data fluency, intellectual curiosity, humility and humour—where people care about ideas, not ego.</p>
+                </div>
+
+                <h3 style="color: #764ba2; margin: 25px 0 15px 0;">Your Non-Negotiables (Manifesto)</h3>
+                <div class="grid-2">
+                    <div class="green-box">
+                        <h4 style="color: #4caf50; margin-bottom: 10px;">✅ Green Lights (Deal-Makers)</h4>
+                        <ul style="margin-left: 20px; line-height: 1.8; font-size: 0.95em;">
+                            <li>Meaning and transformation—not just tasks</li>
+                            <li>Permission to build and embed, not deck-and-done</li>
+                            <li>Authenticity—being valued for who you are</li>
+                            <li>Environments that value measured wisdom over loud performance</li>
+                            <li>Private company structure (strategic vs reactive to quarterly pressures)</li>
+                        </ul>
+                    </div>
+                    <div class="red-box">
+                        <h4 style="color: #ff5722; margin-bottom: 10px;">🚩 Red Flags (Deal-Breakers)</h4>
+                        <ul style="margin-left: 20px; line-height: 1.8; font-size: 0.95em;">
+                            <li>The "ad factory" model without strategic depth</li>
+                            <li>Environments where you have to "play a role"</li>
+                            <li>Being tangled in internal politics without purpose</li>
+                            <li>Surface-level work that doesn't allow for transformation</li>
+                            <li>Holding company pressure—reactive to quarterly shareholders</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- WEEK 3: POSITIONING & NARRATIVE (COMPLETE) -->
+            <div class="section">
+                <div class="section-header">
+                    <div class="section-title">
+                        <span>Week 3: Positioning & Narrative</span>
+                        <span class="week-badge complete">Complete</span>
+                    </div>
+                </div>
+                <div class="section-divider"></div>
+
+                <h3 style="color: #764ba2; margin-bottom: 15px;">Your Proposition Formula</h3>
+                <div class="proposition-box">
+                    <p style="font-size: 0.9em; color: #666; margin-bottom: 15px;">Use this framework to craft positioning for any opportunity:</p>
+                    <p style="font-size: 1.05em; line-height: 1.8; color: #333;">
+                        <strong>"I'm a</strong> <span style="background: #E6394620; padding: 2px 6px; border-radius: 4px;">[role identity]</span> 
+                        <strong>who</strong> <span style="background: #7B2CBF20; padding: 2px 6px; border-radius: 4px;">[what you do]</span> 
+                        <strong>for</strong> <span style="background: #667eea20; padding: 2px 6px; border-radius: 4px;">[who you serve]</span>. 
+                        <strong>I</strong> <span style="background: #28a74520; padding: 2px 6px; border-radius: 4px;">[unique approach]</span>. 
+                        <strong>After</strong> <span style="background: #fd7e1420; padding: 2px 6px; border-radius: 4px;">[background]</span>, 
+                        <strong>I'm now</strong> <span style="background: #17a2b820; padding: 2px 6px; border-radius: 4px;">[where heading]</span>.<strong>"</strong>
+                    </p>
+                </div>
+
+                <h3 style="color: #764ba2; margin: 25px 0 15px 0;">Your Positioning Statement</h3>
+                <div class="insight-box">
+                    <p style="font-size: 1.1em; line-height: 1.7;"><strong>I'm a Transformational Strategist</strong> who helps organisations restore belief and build brand platforms that last for corporate organisations navigating complexity. I connect insight, ideas, infrastructure and people—staying until transformation is embedded. After 20+ years helping global brands like UBS, UPS and AMD rediscover what they stand for, I'm now seeking roles where I can build something meaningful and see the impact of my work.</p>
+                </div>
+
+                <h3 style="color: #764ba2; margin: 25px 0 15px 0;">The "I Am / I Am Not" Framework</h3>
+                <p style="margin-bottom: 15px; color: #7f8c8d;">From Session 3—forcing binary thinking to sharpen your narrative:</p>
+                <div class="grid-2">
+                    <div class="green-box">
+                        <h4 style="color: #4caf50; margin-bottom: 10px;">✅ I AM</h4>
+                        <ul style="margin-left: 20px; line-height: 1.8; font-size: 0.95em;">
+                            <li>A belief restorer, not just a strategy writer</li>
+                            <li>A builder of platforms, not a maker of ads</li>
+                            <li>The measured wisdom in the room</li>
+                            <li>Someone who stays until transformation is embedded</li>
+                            <li>A connector of insight, ideas, infrastructure and people</li>
+                            <li>Someone who stitches commerciality with creativity</li>
+                        </ul>
+                    </div>
+                    <div class="red-box">
+                        <h4 style="color: #ff5722; margin-bottom: 10px;">❌ I AM NOT</h4>
+                        <ul style="margin-left: 20px; line-height: 1.8; font-size: 0.95em;">
+                            <li>A deck-and-done consultant</li>
+                            <li>The loudest voice in the room</li>
+                            <li>Someone who thrives in "ad factory" environments</li>
+                            <li>A performer who plays a role to fit in</li>
+                            <li>Someone who stops at the idea</li>
+                            <li>Comfortable with surface-level work</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <h3 style="color: #764ba2; margin: 25px 0 15px 0;">Narrative Sharpening</h3>
+                <div class="insight-box">
+                    <p style="font-weight: 600; margin-bottom: 10px;">Key insight from Session 3:</p>
+                    <p>"My narrative is becoming sharper—I can now stitch together <strong>commerciality with creativity</strong> and think 360 degrees to extract what matters to an organisation."</p>
+                    <p style="margin-top: 15px;">Strategy is a good fit—but you now have the opportunity to be more discerning about the <strong>kind of strategy and environment</strong> you choose.</p>
+                </div>
+
+                <h3 style="color: #764ba2; margin: 25px 0 15px 0;">Company Ownership Insight</h3>
+                <div class="insight-box">
+                    <p><strong>Key learning:</strong> Company ownership structure matters significantly.</p>
+                    <p style="margin-top: 10px;"><strong>Private companies</strong> (like Edelman) can be more strategic and less reactive to quarterly shareholder pressures. They may move slower, but they're often better environments for transformation work.</p>
+                    <p style="margin-top: 10px;"><strong>Holding company agencies</strong> often have a different ethos—more reactive, quarterly-focused, which can conflict with your need for depth and embedding.</p>
+                </div>
+
+                <h3 style="color: #764ba2; margin: 25px 0 15px 0;">Current Opportunity: Edelman (Active)</h3>
+                <div class="outcome" style="border-left-color: #4caf50;">
+                    <div class="outcome-title" style="color: #4caf50;">Edelman – Freelance "Try Before You Buy" — Authenticity Score: 8/10</div>
+                    <p><strong>Status:</strong> Active opportunity. Freelance route to get in quicker, with potential for permanent role.</p>
+                    <p style="margin-top: 10px;"><strong>Why It Appeals:</strong> Chance to "build a bigger strategic offering over time." Edelman is expanding from PR into brand campaigns and B2B strategy. Private company structure = more strategic, less reactive.</p>
+                    <p style="margin-top: 10px;"><strong>Note:</strong> Things move slowly because they're private and undergoing reorganisation—but this is actually a positive sign for the kind of environment you need.</p>
+                    <p style="margin-top: 10px;"><strong>Next Step:</strong> Once in, consider presenting a 90-day plan on how you would transform a department/project—a way to cement your position and prove worth.</p>
+                </div>
+            </div>
+
+            <!-- WEEK 4: IMPLEMENTATION TOOLS -->
+            <div class="section">
+                <div class="section-header">
+                    <div class="section-title">
+                        <span>Week 4: Implementation Tools</span>
+                        <span class="week-badge complete">Complete</span>
+                    </div>
+                </div>
+                <div class="section-divider"></div>
+
+                <h3 style="color: #764ba2; margin-bottom: 15px;">Your Career Toolkit</h3>
+                <p style="margin-bottom: 20px;">You have three documents that work together:</p>
+
+                <div class="tool-card" style="border-left-color: #667eea;">
+                    <h4>📘 1. Career Blueprint (this document)</h4>
+                    <p><strong>What it is:</strong> Your master reference - everything we've discovered about your patterns, positioning, and what you need to thrive.</p>
+                    <p style="margin-top: 8px;"><strong>Use it:</strong> When you need to remind yourself who you are and what you bring. Reference it when evaluating opportunities or preparing for interviews.</p>
+                </div>
+
+                <div class="tool-card" style="border-left-color: #4caf50;">
+                    <h4>📝 2. Interactive CV Builder</h4>
+                    <p><strong>What it is:</strong> An editable CV template with your content pre-loaded. The sidebar lets you draft your proposition and toggle sections on/off.</p>
+                    <p style="margin-top: 8px;"><strong>Use it:</strong> To create tailored CVs for different opportunities. Edit text directly, toggle case studies, export as PDF when ready.</p>
+                </div>
+
+                <div class="tool-card" style="border-left-color: #ff9800;">
+                    <h4>🗺️ 3. Blueprint to CV/LinkedIn Mapping Guide</h4>
+                    <p><strong>What it is:</strong> Shows exactly where each piece of your Blueprint lands in your CV and LinkedIn profile.</p>
+                    <p style="margin-top: 8px;"><strong>Use it:</strong> When updating your CV or LinkedIn - it tells you which Blueprint insight goes where, with examples.</p>
+                </div>
+
+                <div style="background: #e8f4fd; padding: 20px; border-radius: 10px; margin-top: 20px; border-left: 4px solid #2196F3;">
+                    <h4 style="color: #1976D2; margin-bottom: 10px;">🔄 How They Work Together</h4>
+                    <p style="font-size: 0.95em; line-height: 1.7;">
+                        <strong>Blueprint</strong> = your source of truth (who you are)<br>
+                        <strong>Mapping Guide</strong> = your translation key (where it goes)<br>
+                        <strong>CV Builder</strong> = your output tool (how to create it)
+                    </p>
+                    <p style="margin-top: 12px; font-size: 0.95em;">When applying for a role: check your Blueprint for relevant evidence → use the Mapping Guide to see where it fits → build it in the CV Builder.</p>
+                </div>
+
+                <h3 style="color: #764ba2; margin: 25px 0 15px 0;">Interview Questions to Ask</h3>
+                <div class="outcome">
+                    <div class="outcome-title">About Transformation & Depth</div>
+                    <ul style="margin-left: 20px; line-height: 1.8;">
+                        <li>"How does this role balance delivering quick wins vs embedding lasting transformation?"</li>
+                        <li>"Is this a brand platform environment or more deck-and-done?"</li>
+                        <li>"What's the typical timeline from strategy to implementation? Do strategists stay involved?"</li>
+                    </ul>
+                </div>
+
+                <div class="outcome">
+                    <div class="outcome-title">About Culture & Authenticity</div>
+                    <ul style="margin-left: 20px; line-height: 1.8;">
+                        <li>"What's valued more—having the loudest voice or the clearest thinking?"</li>
+                        <li>"How does the company's ownership structure affect how decisions get made?"</li>
+                        <li>"Tell me about someone who's thrived here. What made them successful?"</li>
+                    </ul>
+                </div>
+
+                <div class="outcome">
+                    <div class="outcome-title">About Sustainability</div>
+                    <ul style="margin-left: 20px; line-height: 1.8;">
+                        <li>"How does the team manage pace and workload?"</li>
+                        <li>"Is marketing seen as a growth engine or a cost centre here?"</li>
+                        <li>"What autonomy does this role have to manage approach and energy?"</li>
+                    </ul>
+                </div>
+
+                <h3 style="color: #764ba2; margin: 25px 0 15px 0;">CV Strategy: Master + Child CVs</h3>
+                <div class="insight-box">
+                    <p><strong>Master CV ("Parent CV"):</strong> Contains everything—all experience, achievements, case studies. This is your complete record.</p>
+                    <p style="margin-top: 15px;"><strong>Child CVs:</strong> Tailored versions for specific opportunities:</p>
+                    <ul style="margin-left: 20px; margin-top: 10px; line-height: 1.8;">
+                        <li><strong>Agency version:</strong> Emphasise transformation within agency context, client roster</li>
+                        <li><strong>Client-side version:</strong> Emphasise in-house building, embedding, commercial outcomes</li>
+                        <li><strong>Consultancy version:</strong> Emphasise fractional/advisory, effectiveness expertise</li>
+                    </ul>
+                    <p style="margin-top: 15px;"><em>Use the Interactive CV Builder to toggle sections on/off for each version.</em></p>
+                </div>
+            </div>
+
+            <!-- FINAL SESSION PREP -->
+            <div class="section">
+                <div class="section-header">
+                    <div class="section-title">
+                        <span>Final Session: Spark Your Potential</span>
+                        <span class="week-badge" style="background: #E63946;">Next Meeting</span>
+                    </div>
+                </div>
+                <div class="section-divider" style="border-color: #E63946;"></div>
+
+                <div class="insight-box" style="border-left-color: #E63946;">
+                    <h4 style="color: #E63946; margin-bottom: 15px;">Agenda for In-Person Session (Earlsfield)</h4>
+                    <ul style="margin-left: 20px; line-height: 2;">
+                        <li>Use the <strong>"Spark Your Potential" tool</strong> for recognising strengths and moving forward</li>
+                        <li>Review and finalise <strong>positioning</strong> for Edelman and future opportunities</li>
+                        <li>Feedback on submitted materials</li>
+                        <li>Walk through <strong>CV template</strong> and how to populate it</li>
+                        <li><strong>LinkedIn</strong> headline and profile optimisation</li>
+                        <li>Clear direction for your <strong>next steps</strong></li>
+                    </ul>
+                </div>
+
+                <h3 style="color: #764ba2; margin: 25px 0 15px 0;">Preparation Checklist</h3>
+                <div style="background: #f8f9fa; padding: 25px; border-radius: 10px;">
+                    <p style="margin-bottom: 15px; font-weight: 600;">Before the final session:</p>
+                    <ul style="margin-left: 20px; line-height: 2;">
+                        <li>☐ Review this Blueprint—does it feel accurate and complete?</li>
+                        <li>☐ Draft your proposition using the Interactive CV Builder</li>
+                        <li>☐ Note any questions or gaps to discuss</li>
+                        <li>☐ Think about your 90-day Edelman plan—what would you propose?</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- FINAL NOTE -->
+            <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 40px; border-radius: 15px; margin-top: 50px; text-align: center;">
+                <h3 style="margin-bottom: 15px;">Your Complete Blueprint Contains:</h3>
+                <p style="opacity: 0.9; line-height: 1.8;">
+                    ✓ Your transformation evidence & patterns<br>
+                    ✓ Strategic career direction & decision framework<br>
+                    ✓ Professional positioning & narrative<br>
+                    ✓ Implementation tools (CV, LinkedIn, action plan)<br>
+                    ✓ Non-negotiables manifesto for evaluating opportunities
+                </p>
+                <p style="margin-top: 20px; font-weight: 600; font-size: 1.1em;">You now have everything you need to move forward with clarity and confidence.</p>
+            </div>
+        </div>
+
+        <!-- FEEDBACK SECTION -->
+        <div style="background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); padding: 50px 40px;">
+            <div style="max-width: 800px; margin: 0 auto;">
+                <h2 style="color: #667eea; text-align: center; margin-bottom: 10px;">📝 Your Feedback</h2>
+                <p style="text-align: center; color: #6c757d; margin-bottom: 30px;">Help me improve the Career Booster Programme for future clients</p>
+
+                <!-- Two Feedback Cards -->
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 25px; margin-bottom: 30px;">
+
+                    <!-- PART 1: Programme Experience (Active Now) -->
+                    <div id="part1Card" style="background: white; border-radius: 15px; box-shadow: 0 5px 20px rgba(0,0,0,0.1); overflow: hidden; cursor: pointer; transition: transform 0.2s, box-shadow 0.2s;" onclick="showForm('part1')" onmouseover="this.style.transform='translateY(-3px)'; this.style.boxShadow='0 8px 30px rgba(102, 126, 234, 0.3)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 5px 20px rgba(0,0,0,0.1)';">
+                        <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 20px; text-align: center;">
+                            <div style="font-size: 2.5em;">🎯</div>
+                        </div>
+                        <div style="padding: 25px;">
+                            <h3 style="color: #667eea; margin-bottom: 10px;">Part 1: Programme Experience</h3>
+                            <p style="color: #6c757d; font-size: 0.95em; margin-bottom: 15px;">Feedback on our coaching journey together - the sessions, insights, and materials.</p>
+                            <div style="display: inline-block; background: #667eea; color: white; padding: 8px 20px; border-radius: 20px; font-size: 0.9em; font-weight: 600;">
+                                ✨ Complete Now
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- PART 2: Implementation Results (Later) -->
+                    <div id="part2Card" style="background: white; border-radius: 15px; box-shadow: 0 5px 20px rgba(0,0,0,0.1); overflow: hidden; cursor: pointer; transition: transform 0.2s, box-shadow 0.2s;" onclick="showForm('part2')" onmouseover="this.style.transform='translateY(-3px)'; this.style.boxShadow='0 8px 30px rgba(76, 175, 80, 0.3)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 5px 20px rgba(0,0,0,0.1)';">
+                        <div style="background: linear-gradient(135deg, #4caf50 0%, #8bc34a 100%); padding: 20px; text-align: center;">
+                            <div style="font-size: 2.5em;">🚀</div>
+                        </div>
+                        <div style="padding: 25px;">
+                            <h3 style="color: #4caf50; margin-bottom: 10px;">Part 2: Implementation Results</h3>
+                            <p style="color: #6c757d; font-size: 0.95em; margin-bottom: 15px;">Feedback on outcomes after you've applied your Blueprint - interviews, opportunities, confidence.</p>
+                            <div style="display: inline-block; background: #e8f5e9; color: #4caf50; padding: 8px 20px; border-radius: 20px; font-size: 0.9em; font-weight: 600;">
+                                📅 Complete in 4-6 Weeks
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ============================================== -->
+                <!-- PART 1 FORM: Programme Experience -->
+                <!-- ============================================== -->
+                <div id="part1Form" style="display: none;">
+                    <form id="experienceForm" style="background: white; padding: 35px; border-radius: 15px; box-shadow: 0 5px 20px rgba(0,0,0,0.1);">
+                        <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 25px; padding-bottom: 20px; border-bottom: 2px solid #f0f0f0;">
+                            <div style="font-size: 2em;">🎯</div>
+                            <div>
+                                <h3 style="color: #667eea; margin: 0;">Part 1: Programme Experience</h3>
+                                <p style="color: #7f8c8d; margin: 5px 0 0 0; font-size: 0.9em;">Your feedback on our coaching journey</p>
+                            </div>
+                            <button type="button" onclick="hideForm('part1')" style="margin-left: auto; background: none; border: none; font-size: 1.5em; cursor: pointer; color: #aaa;">×</button>
+                        </div>
+
+                        <!-- Overall Rating -->
+                        <div style="margin-bottom: 25px;">
+                            <label style="display: block; font-weight: 600; color: #2c3e50; margin-bottom: 10px;">How would you rate the overall programme experience?</label>
+                            <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                                <label style="cursor: pointer;"><input type="radio" name="exp_rating" value="5" style="margin-right: 5px;"> ⭐⭐⭐⭐⭐ Exceptional</label>
+                                <label style="cursor: pointer;"><input type="radio" name="exp_rating" value="4" style="margin-right: 5px;"> ⭐⭐⭐⭐ Very Good</label>
+                                <label style="cursor: pointer;"><input type="radio" name="exp_rating" value="3" style="margin-right: 5px;"> ⭐⭐⭐ Good</label>
+                                <label style="cursor: pointer;"><input type="radio" name="exp_rating" value="2" style="margin-right: 5px;"> ⭐⭐ Fair</label>
+                                <label style="cursor: pointer;"><input type="radio" name="exp_rating" value="1" style="margin-right: 5px;"> ⭐ Poor</label>
+                            </div>
+                        </div>
+
+                        <!-- Most Valuable -->
+                        <div style="margin-bottom: 25px;">
+                            <label style="display: block; font-weight: 600; color: #2c3e50; margin-bottom: 10px;">What was the most valuable part of the programme?</label>
+                            <textarea name="exp_most_valuable" rows="3" style="width: 100%; padding: 12px; border: 2px solid #e0e0e0; border-radius: 8px; font-family: inherit; font-size: 1em; resize: vertical;" placeholder="e.g., Discovering my core pattern, the positioning work, the tools..."></textarea>
+                        </div>
+
+                        <!-- Session Quality -->
+                        <div style="margin-bottom: 25px;">
+                            <label style="display: block; font-weight: 600; color: #2c3e50; margin-bottom: 10px;">How did you find the coaching sessions?</label>
+                            <textarea name="exp_sessions" rows="3" style="width: 100%; padding: 12px; border: 2px solid #e0e0e0; border-radius: 8px; font-family: inherit; font-size: 1em; resize: vertical;" placeholder="Pace, depth, structure, the way we worked together..."></textarea>
+                        </div>
+
+                        <!-- Materials Quality -->
+                        <div style="margin-bottom: 25px;">
+                            <label style="display: block; font-weight: 600; color: #2c3e50; margin-bottom: 10px;">How useful are the materials (Blueprint, CV Builder, guides)?</label>
+                            <textarea name="exp_materials" rows="3" style="width: 100%; padding: 12px; border: 2px solid #e0e0e0; border-radius: 8px; font-family: inherit; font-size: 1em; resize: vertical;" placeholder="What works well? What could be improved?"></textarea>
+                        </div>
+
+                        <!-- Clarity Shift -->
+                        <div style="margin-bottom: 25px;">
+                            <label style="display: block; font-weight: 600; color: #2c3e50; margin-bottom: 10px;">How has your clarity about your career direction changed?</label>
+                            <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                                <label style="cursor: pointer; padding: 10px 15px; border: 2px solid #e0e0e0; border-radius: 8px;" class="clarity-option"><input type="radio" name="exp_clarity" value="5" style="display: none;"> Much clearer</label>
+                                <label style="cursor: pointer; padding: 10px 15px; border: 2px solid #e0e0e0; border-radius: 8px;" class="clarity-option"><input type="radio" name="exp_clarity" value="4" style="display: none;"> Clearer</label>
+                                <label style="cursor: pointer; padding: 10px 15px; border: 2px solid #e0e0e0; border-radius: 8px;" class="clarity-option"><input type="radio" name="exp_clarity" value="3" style="display: none;"> Somewhat clearer</label>
+                                <label style="cursor: pointer; padding: 10px 15px; border: 2px solid #e0e0e0; border-radius: 8px;" class="clarity-option"><input type="radio" name="exp_clarity" value="2" style="display: none;"> About the same</label>
+                                <label style="cursor: pointer; padding: 10px 15px; border: 2px solid #e0e0e0; border-radius: 8px;" class="clarity-option"><input type="radio" name="exp_clarity" value="1" style="display: none;"> Less clear</label>
+                            </div>
+                        </div>
+
+                        <!-- NPS -->
+                        <div style="margin-bottom: 25px;">
+                            <label style="display: block; font-weight: 600; color: #2c3e50; margin-bottom: 10px;">How likely are you to recommend this programme? (0-10)</label>
+                            <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                                <label style="cursor: pointer; padding: 8px 12px; border: 2px solid #e0e0e0; border-radius: 8px;" class="nps-option"><input type="radio" name="exp_nps" value="0" style="display: none;"> 0</label>
+                                <label style="cursor: pointer; padding: 8px 12px; border: 2px solid #e0e0e0; border-radius: 8px;" class="nps-option"><input type="radio" name="exp_nps" value="1" style="display: none;"> 1</label>
+                                <label style="cursor: pointer; padding: 8px 12px; border: 2px solid #e0e0e0; border-radius: 8px;" class="nps-option"><input type="radio" name="exp_nps" value="2" style="display: none;"> 2</label>
+                                <label style="cursor: pointer; padding: 8px 12px; border: 2px solid #e0e0e0; border-radius: 8px;" class="nps-option"><input type="radio" name="exp_nps" value="3" style="display: none;"> 3</label>
+                                <label style="cursor: pointer; padding: 8px 12px; border: 2px solid #e0e0e0; border-radius: 8px;" class="nps-option"><input type="radio" name="exp_nps" value="4" style="display: none;"> 4</label>
+                                <label style="cursor: pointer; padding: 8px 12px; border: 2px solid #e0e0e0; border-radius: 8px;" class="nps-option"><input type="radio" name="exp_nps" value="5" style="display: none;"> 5</label>
+                                <label style="cursor: pointer; padding: 8px 12px; border: 2px solid #e0e0e0; border-radius: 8px;" class="nps-option"><input type="radio" name="exp_nps" value="6" style="display: none;"> 6</label>
+                                <label style="cursor: pointer; padding: 8px 12px; border: 2px solid #e0e0e0; border-radius: 8px;" class="nps-option"><input type="radio" name="exp_nps" value="7" style="display: none;"> 7</label>
+                                <label style="cursor: pointer; padding: 8px 12px; border: 2px solid #e0e0e0; border-radius: 8px;" class="nps-option"><input type="radio" name="exp_nps" value="8" style="display: none;"> 8</label>
+                                <label style="cursor: pointer; padding: 8px 12px; border: 2px solid #e0e0e0; border-radius: 8px;" class="nps-option"><input type="radio" name="exp_nps" value="9" style="display: none;"> 9</label>
+                                <label style="cursor: pointer; padding: 8px 12px; border: 2px solid #e0e0e0; border-radius: 8px;" class="nps-option"><input type="radio" name="exp_nps" value="10" style="display: none;"> 10</label>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; margin-top: 5px; font-size: 0.85em; color: #7f8c8d;">
+                                <span>Not likely</span>
+                                <span>Extremely likely</span>
+                            </div>
+                        </div>
+
+                        <!-- Improvements -->
+                        <div style="margin-bottom: 25px;">
+                            <label style="display: block; font-weight: 600; color: #2c3e50; margin-bottom: 10px;">What could I improve for future clients?</label>
+                            <textarea name="exp_improvements" rows="3" style="width: 100%; padding: 12px; border: 2px solid #e0e0e0; border-radius: 8px; font-family: inherit; font-size: 1em; resize: vertical;" placeholder="Any suggestions for making the programme better..."></textarea>
+                        </div>
+
+                        <!-- Initial Testimonial -->
+                        <div style="margin-bottom: 25px; background: #f8f9fa; padding: 20px; border-radius: 10px;">
+                            <label style="display: block; font-weight: 600; color: #2c3e50; margin-bottom: 10px;">Would you share a testimonial about the programme experience? (Optional)</label>
+                            <textarea name="exp_testimonial" rows="3" style="width: 100%; padding: 12px; border: 2px solid #e0e0e0; border-radius: 8px; font-family: inherit; font-size: 1em; resize: vertical; background: white;" placeholder="A few sentences I could share with future clients..."></textarea>
+                            <div style="margin-top: 10px;">
+                                <label style="cursor: pointer; font-size: 0.95em;">
+                                    <input type="checkbox" name="exp_testimonial_permission" value="yes" style="margin-right: 8px;">
+                                    Yes, you may use this with my name
+                                </label>
+                            </div>
+                        </div>
+
+                        <button type="submit" style="width: 100%; padding: 15px 30px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; border-radius: 10px; font-size: 1.1em; font-weight: 600; cursor: pointer; transition: transform 0.2s, box-shadow 0.2s;" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 5px 20px rgba(102, 126, 234, 0.4)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none';">
+                            Submit Programme Feedback
+                        </button>
+                    </form>
+                </div>
+
+                <!-- ============================================== -->
+                <!-- PART 2 FORM: Implementation Results -->
+                <!-- ============================================== -->
+                <div id="part2Form" style="display: none;">
+                    <form id="resultsForm" style="background: white; padding: 35px; border-radius: 15px; box-shadow: 0 5px 20px rgba(0,0,0,0.1);">
+                        <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 25px; padding-bottom: 20px; border-bottom: 2px solid #f0f0f0;">
+                            <div style="font-size: 2em;">🚀</div>
+                            <div>
+                                <h3 style="color: #4caf50; margin: 0;">Part 2: Implementation Results</h3>
+                                <p style="color: #7f8c8d; margin: 5px 0 0 0; font-size: 0.9em;">Your outcomes after applying your Blueprint</p>
+                            </div>
+                            <button type="button" onclick="hideForm('part2')" style="margin-left: auto; background: none; border: none; font-size: 1.5em; cursor: pointer; color: #aaa;">×</button>
+                        </div>
+
+                        <div style="background: #e8f5e9; padding: 15px 20px; border-radius: 10px; margin-bottom: 25px; border-left: 4px solid #4caf50;">
+                            <p style="margin: 0; color: #2e7d32; font-size: 0.95em;">💡 <strong>Best completed 4-6 weeks after the programme</strong> when you've had time to apply your Blueprint to real opportunities.</p>
+                        </div>
+
+                        <!-- Blueprint Usage -->
+                        <div style="margin-bottom: 25px;">
+                            <label style="display: block; font-weight: 600; color: #2c3e50; margin-bottom: 10px;">How have you used your Blueprint since we finished?</label>
+                            <div style="display: flex; flex-direction: column; gap: 8px;">
+                                <label style="cursor: pointer;"><input type="checkbox" name="impl_usage" value="cv" style="margin-right: 8px;"> Updated my CV</label>
+                                <label style="cursor: pointer;"><input type="checkbox" name="impl_usage" value="linkedin" style="margin-right: 8px;"> Updated my LinkedIn</label>
+                                <label style="cursor: pointer;"><input type="checkbox" name="impl_usage" value="interviews" style="margin-right: 8px;"> Used in interviews</label>
+                                <label style="cursor: pointer;"><input type="checkbox" name="impl_usage" value="networking" style="margin-right: 8px;"> Used in networking conversations</label>
+                                <label style="cursor: pointer;"><input type="checkbox" name="impl_usage" value="decisions" style="margin-right: 8px;"> Helped evaluate opportunities</label>
+                                <label style="cursor: pointer;"><input type="checkbox" name="impl_usage" value="confidence" style="margin-right: 8px;"> Boosted my confidence</label>
+                            </div>
+                        </div>
+
+                        <!-- Opportunities -->
+                        <div style="margin-bottom: 25px;">
+                            <label style="display: block; font-weight: 600; color: #2c3e50; margin-bottom: 10px;">What opportunities have you pursued since completing the programme?</label>
+                            <textarea name="impl_opportunities" rows="3" style="width: 100%; padding: 12px; border: 2px solid #e0e0e0; border-radius: 8px; font-family: inherit; font-size: 1em; resize: vertical;" placeholder="Interviews, applications, conversations, freelance work..."></textarea>
+                        </div>
+
+                        <!-- Outcomes -->
+                        <div style="margin-bottom: 25px;">
+                            <label style="display: block; font-weight: 600; color: #2c3e50; margin-bottom: 10px;">What outcomes have you achieved? (Any wins, big or small)</label>
+                            <textarea name="impl_outcomes" rows="3" style="width: 100%; padding: 12px; border: 2px solid #e0e0e0; border-radius: 8px; font-family: inherit; font-size: 1em; resize: vertical;" placeholder="e.g., Got an interview, received positive feedback, landed a role, felt more confident..."></textarea>
+                        </div>
+
+                        <!-- Confidence Change -->
+                        <div style="margin-bottom: 25px;">
+                            <label style="display: block; font-weight: 600; color: #2c3e50; margin-bottom: 10px;">How has your confidence in career conversations changed?</label>
+                            <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                                <label style="cursor: pointer; padding: 10px 15px; border: 2px solid #e0e0e0; border-radius: 8px;" class="confidence-option"><input type="radio" name="impl_confidence" value="5" style="display: none;"> Much more confident</label>
+                                <label style="cursor: pointer; padding: 10px 15px; border: 2px solid #e0e0e0; border-radius: 8px;" class="confidence-option"><input type="radio" name="impl_confidence" value="4" style="display: none;"> More confident</label>
+                                <label style="cursor: pointer; padding: 10px 15px; border: 2px solid #e0e0e0; border-radius: 8px;" class="confidence-option"><input type="radio" name="impl_confidence" value="3" style="display: none;"> Somewhat more confident</label>
+                                <label style="cursor: pointer; padding: 10px 15px; border: 2px solid #e0e0e0; border-radius: 8px;" class="confidence-option"><input type="radio" name="impl_confidence" value="2" style="display: none;"> About the same</label>
+                                <label style="cursor: pointer; padding: 10px 15px; border: 2px solid #e0e0e0; border-radius: 8px;" class="confidence-option"><input type="radio" name="impl_confidence" value="1" style="display: none;"> Less confident</label>
+                            </div>
+                        </div>
+
+                        <!-- Blueprint Accuracy -->
+                        <div style="margin-bottom: 25px;">
+                            <label style="display: block; font-weight: 600; color: #2c3e50; margin-bottom: 10px;">How accurate does your Blueprint feel now you've tested it in the real world?</label>
+                            <textarea name="impl_accuracy" rows="3" style="width: 100%; padding: 12px; border: 2px solid #e0e0e0; border-radius: 8px; font-family: inherit; font-size: 1em; resize: vertical;" placeholder="Does it still resonate? Anything you'd refine?"></textarea>
+                        </div>
+
+                        <!-- Best Decision -->
+                        <div style="margin-bottom: 25px;">
+                            <label style="display: block; font-weight: 600; color: #2c3e50; margin-bottom: 10px;">What's the best decision you've made using your Blueprint insights?</label>
+                            <textarea name="impl_best_decision" rows="3" style="width: 100%; padding: 12px; border: 2px solid #e0e0e0; border-radius: 8px; font-family: inherit; font-size: 1em; resize: vertical;" placeholder="An opportunity you pursued, one you declined, how you positioned yourself..."></textarea>
+                        </div>
+
+                        <!-- Results Testimonial -->
+                        <div style="margin-bottom: 25px; background: #f8f9fa; padding: 20px; border-radius: 10px;">
+                            <label style="display: block; font-weight: 600; color: #2c3e50; margin-bottom: 10px;">Would you share a results testimonial? (Optional)</label>
+                            <p style="color: #7f8c8d; font-size: 0.9em; margin-bottom: 10px;">This is gold for helping others see what's possible!</p>
+                            <textarea name="impl_testimonial" rows="3" style="width: 100%; padding: 12px; border: 2px solid #e0e0e0; border-radius: 8px; font-family: inherit; font-size: 1em; resize: vertical; background: white;" placeholder="How the programme helped you achieve a specific outcome..."></textarea>
+                            <div style="margin-top: 10px;">
+                                <label style="cursor: pointer; font-size: 0.95em;">
+                                    <input type="checkbox" name="impl_testimonial_permission" value="yes" style="margin-right: 8px;">
+                                    Yes, you may use this with my name
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- Anything Else -->
+                        <div style="margin-bottom: 25px;">
+                            <label style="display: block; font-weight: 600; color: #2c3e50; margin-bottom: 10px;">Anything else you'd like to share about your journey?</label>
+                            <textarea name="impl_additional" rows="3" style="width: 100%; padding: 12px; border: 2px solid #e0e0e0; border-radius: 8px; font-family: inherit; font-size: 1em; resize: vertical;" placeholder="Reflections, surprises, ongoing challenges..."></textarea>
+                        </div>
+
+                        <button type="submit" style="width: 100%; padding: 15px 30px; background: linear-gradient(135deg, #4caf50 0%, #8bc34a 100%); color: white; border: none; border-radius: 10px; font-size: 1.1em; font-weight: 600; cursor: pointer; transition: transform 0.2s, box-shadow 0.2s;" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 5px 20px rgba(76, 175, 80, 0.4)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none';">
+                            Submit Results Feedback
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Success Messages -->
+                <div id="successMessage1" style="display: none; background: linear-gradient(135deg, #667eea15 0%, #764ba215 100%); border: 2px solid #667eea; padding: 30px; border-radius: 15px; text-align: center;">
+                    <div style="font-size: 3em; margin-bottom: 15px;">🎉</div>
+                    <h3 style="color: #667eea; margin-bottom: 10px;">Thank You!</h3>
+                    <p style="color: #2c3e50; margin-bottom: 15px;">Your programme feedback has been submitted. I really appreciate it!</p>
+                    <p style="color: #7f8c8d; font-size: 0.9em;">Remember to come back in 4-6 weeks to share your implementation results.</p>
+                </div>
+
+                <div id="successMessage2" style="display: none; background: linear-gradient(135deg, #4caf5015 0%, #8bc34a15 100%); border: 2px solid #4caf50; padding: 30px; border-radius: 15px; text-align: center;">
+                    <div style="font-size: 3em; margin-bottom: 15px;">🚀</div>
+                    <h3 style="color: #4caf50; margin-bottom: 10px;">Brilliant!</h3>
+                    <p style="color: #2c3e50; margin-bottom: 15px;">Your results feedback has been submitted. It's fantastic to hear about your progress!</p>
+                    <p style="color: #7f8c8d; font-size: 0.9em;">Wishing you continued success on your career journey.</p>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            // Show/Hide Forms
+            function showForm(part) {
+                document.getElementById('part1Form').style.display = 'none';
+                document.getElementById('part2Form').style.display = 'none';
+                document.getElementById('successMessage1').style.display = 'none';
+                document.getElementById('successMessage2').style.display = 'none';
+                document.getElementById(part + 'Form').style.display = 'block';
+                document.getElementById(part + 'Form').scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+
+            function hideForm(part) {
+                document.getElementById(part + 'Form').style.display = 'none';
+            }
+
+            // Option Selection Styling
+            function setupOptionStyling(selector, activeColor) {
+                document.querySelectorAll(selector).forEach(label => {
+                    const input = label.querySelector('input');
+                    if (input) {
+                        input.addEventListener('change', function() {
+                            document.querySelectorAll(selector).forEach(l => {
+                                l.style.background = 'white';
+                                l.style.borderColor = '#e0e0e0';
+                                l.style.color = '#2c3e50';
+                            });
+                            label.style.background = activeColor;
+                            label.style.borderColor = activeColor.includes('667eea') ? '#667eea' : '#4caf50';
+                            label.style.color = 'white';
+                        });
+                    }
+                });
+            }
+
+            setupOptionStyling('.nps-option', 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)');
+            setupOptionStyling('.clarity-option', 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)');
+            setupOptionStyling('.confidence-option', 'linear-gradient(135deg, #4caf50 0%, #8bc34a 100%)');
+
+            // Form Submissions
+            document.getElementById('experienceForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                const formData = new FormData(this);
+                const data = {};
+                formData.forEach((value, key) => {
+                    if (data[key]) {
+                        data[key] = Array.isArray(data[key]) ? [...data[key], value] : [data[key], value];
+                    } else {
+                        data[key] = value;
+                    }
+                });
+
+                const subject = encodeURIComponent('Career Booster - Programme Experience Feedback - Donald Pirie');
+                const body = encodeURIComponent(
+                    `PROGRAMME EXPERIENCE FEEDBACK\n` +
+                    `Client: Donald Pirie\n` +
+                    `Date: ${new Date().toLocaleDateString('en-GB')}\n\n` +
+                    `═══════════════════════════════════════\n\n` +
+                    `Overall Rating: ${data.exp_rating || 'Not provided'}/5 stars\n\n` +
+                    `Most Valuable Part:\n${data.exp_most_valuable || 'Not provided'}\n\n` +
+                    `Session Feedback:\n${data.exp_sessions || 'Not provided'}\n\n` +
+                    `Materials Feedback:\n${data.exp_materials || 'Not provided'}\n\n` +
+                    `Clarity Change: ${data.exp_clarity || 'Not provided'}/5\n\n` +
+                    `NPS Score: ${data.exp_nps || 'Not provided'}/10\n\n` +
+                    `Suggested Improvements:\n${data.exp_improvements || 'Not provided'}\n\n` +
+                    `═══════════════════════════════════════\n\n` +
+                    `TESTIMONIAL:\n${data.exp_testimonial || 'Not provided'}\n` +
+                    `Permission to use with name: ${data.exp_testimonial_permission || 'No'}`
+                );
+
+                window.location.href = `mailto:lisa@harnessthespark.com?subject=${subject}&body=${body}`;
+
+                document.getElementById('part1Form').style.display = 'none';
+                document.getElementById('successMessage1').style.display = 'block';
+            });
+
+            document.getElementById('resultsForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                const formData = new FormData(this);
+                const data = {};
+                formData.forEach((value, key) => {
+                    if (data[key]) {
+                        data[key] = Array.isArray(data[key]) ? [...data[key], value] : [data[key], value];
+                    } else {
+                        data[key] = value;
+                    }
+                });
+
+                const usageArray = Array.isArray(data.impl_usage) ? data.impl_usage : (data.impl_usage ? [data.impl_usage] : []);
+
+                const subject = encodeURIComponent('Career Booster - Implementation Results Feedback - Donald Pirie');
+                const body = encodeURIComponent(
+                    `IMPLEMENTATION RESULTS FEEDBACK\n` +
+                    `Client: Donald Pirie\n` +
+                    `Date: ${new Date().toLocaleDateString('en-GB')}\n\n` +
+                    `═══════════════════════════════════════\n\n` +
+                    `Blueprint Usage:\n${usageArray.join(', ') || 'Not provided'}\n\n` +
+                    `Opportunities Pursued:\n${data.impl_opportunities || 'Not provided'}\n\n` +
+                    `Outcomes Achieved:\n${data.impl_outcomes || 'Not provided'}\n\n` +
+                    `Confidence Change: ${data.impl_confidence || 'Not provided'}/5\n\n` +
+                    `Blueprint Accuracy:\n${data.impl_accuracy || 'Not provided'}\n\n` +
+                    `Best Decision Made:\n${data.impl_best_decision || 'Not provided'}\n\n` +
+                    `Additional Comments:\n${data.impl_additional || 'Not provided'}\n\n` +
+                    `═══════════════════════════════════════\n\n` +
+                    `RESULTS TESTIMONIAL:\n${data.impl_testimonial || 'Not provided'}\n` +
+                    `Permission to use with name: ${data.impl_testimonial_permission || 'No'}`
+                );
+
+                window.location.href = `mailto:lisa@harnessthespark.com?subject=${subject}&body=${body}`;
+
+                document.getElementById('part2Form').style.display = 'none';
+                document.getElementById('successMessage2').style.display = 'block';
+            });
+        </script>
+
+        <div style="text-align: center; padding: 30px; background: #f8f9fa; color: #7f8c8d; font-size: 0.9em;">
+            <p>Career Booster Programme | 4-Week Journey</p>
+            <p style="margin-top: 5px;">Last Updated: After Session 4 - Programme Complete (28 Nov 2025)</p>
+        </div>
+    </div>
+<script src="../shared/back-button.js"></script>
+</body>
+</html>

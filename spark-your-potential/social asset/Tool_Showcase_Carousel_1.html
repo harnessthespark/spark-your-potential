@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tool Showcase Carousel</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background: #1a1a2e; 
+            padding: 40px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        h2.slide-label {
+            color: #888;
+            font-size: 1em;
+            margin: 40px 0 15px 0;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+        
+        .slide {
+            width: 1080px;
+            height: 1080px;
+            border-radius: 20px;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        /* SLIDE 1: Hook */
+        .slide-1 {
+            background: #0a0a0a;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 80px;
+        }
+        
+        .slide-1 h1 {
+            color: white;
+            font-size: 3.5em;
+            font-weight: 900;
+            line-height: 1.2;
+            margin-bottom: 40px;
+        }
+        
+        .slide-1 h1 span {
+            color: #E63946;
+        }
+        
+        .slide-1 p {
+            color: #888;
+            font-size: 1.5em;
+        }
+        
+        .slide-1 .swipe {
+            position: absolute;
+            bottom: 50px;
+            right: 50px;
+            color: #FFB627;
+            font-size: 1.2em;
+            font-weight: 600;
+        }
+        
+        /* SLIDE 2: The Problem */
+        .slide-2 {
+            background: #0a0a0a;
+            display: flex;
+            flex-direction: column;
+            padding: 70px;
+        }
+        
+        .slide-2 h1 {
+            color: white;
+            font-size: 2.8em;
+            font-weight: 800;
+            margin-bottom: 50px;
+        }
+        
+        .slide-2 .problem-list {
+            flex: 1;
+        }
+        
+        .slide-2 .problem-item {
+            display: flex;
+            align-items: center;
+            gap: 25px;
+            padding: 25px 0;
+            border-bottom: 1px solid #222;
+            color: #888;
+            font-size: 1.4em;
+        }
+        
+        .slide-2 .problem-item .icon {
+            font-size: 1.5em;
+        }
+        
+        .slide-2 .bottom-text {
+            color: #E63946;
+            font-size: 1.5em;
+            font-weight: 700;
+            margin-top: 40px;
+        }
+        
+        /* SLIDE 3: The Solution */
+        .slide-3 {
+            background: #0a0a0a;
+            display: flex;
+            flex-direction: column;
+            padding: 70px;
+        }
+        
+        .slide-3 h1 {
+            color: white;
+            font-size: 2.8em;
+            font-weight: 800;
+            margin-bottom: 20px;
+        }
+        
+        .slide-3 .subtitle {
+            color: #888;
+            font-size: 1.3em;
+            margin-bottom: 50px;
+        }
+        
+        .slide-3 .solution-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 25px;
+            flex: 1;
+        }
+        
+        .slide-3 .solution-item {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid #333;
+            border-radius: 15px;
+            padding: 30px;
+        }
+        
+        .slide-3 .solution-item .icon {
+            font-size: 2em;
+            margin-bottom: 15px;
+        }
+        
+        .slide-3 .solution-item h3 {
+            color: white;
+            font-size: 1.3em;
+            margin-bottom: 10px;
+        }
+        
+        .slide-3 .solution-item p {
+            color: #888;
+            font-size: 1em;
+            line-height: 1.5;
+        }
+        
+        /* SLIDE 4: Tool 1 - Blueprint */
+        .slide-tool {
+            background: #0a0a0a;
+            display: flex;
+            flex-direction: column;
+            padding: 60px;
+        }
+        
+        .tool-header {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .tool-header .icon {
+            font-size: 2.5em;
+        }
+        
+        .tool-header h1 {
+            color: white;
+            font-size: 2.5em;
+            font-weight: 800;
+        }
+        
+        .tool-description {
+            color: #888;
+            font-size: 1.3em;
+            margin-bottom: 40px;
+            line-height: 1.6;
+        }
+        
+        .tool-preview {
+            flex: 1;
+            background: linear-gradient(180deg, #1a1a1a 0%, #0d0d0d 100%);
+            border: 2px solid #667eea;
+            border-radius: 20px;
+            padding: 35px;
+        }
+        
+        .tool-preview-header {
+            color: #667eea;
+            font-size: 1em;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 25px;
+        }
+        
+        .preview-item {
+            margin-bottom: 25px;
+        }
+        
+        .preview-item .label {
+            color: #888;
+            font-size: 0.9em;
+            margin-bottom: 8px;
+        }
+        
+        .preview-item .value {
+            color: white;
+            font-size: 1.2em;
+            background: rgba(102, 126, 234, 0.1);
+            padding: 15px 20px;
+            border-radius: 10px;
+            border-left: 4px solid #667eea;
+        }
+        
+        /* SLIDE 5: Tool 2 - CV Builder */
+        .slide-cv .tool-preview {
+            border-color: #4CAF50;
+        }
+        
+        .slide-cv .tool-preview-header {
+            color: #4CAF50;
+        }
+        
+        .slide-cv .preview-item .value {
+            background: rgba(76, 175, 80, 0.1);
+            border-left-color: #4CAF50;
+        }
+        
+        /* SLIDE 6: Tool 3 - Decision Framework */
+        .slide-decision .tool-preview {
+            border-color: #E63946;
+        }
+        
+        .slide-decision .tool-preview-header {
+            color: #E63946;
+        }
+        
+        .criteria-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 18px 0;
+            border-bottom: 1px solid #222;
+        }
+        
+        .criteria-row .name {
+            color: white;
+            font-size: 1.1em;
+        }
+        
+        .criteria-row .scores {
+            display: flex;
+            gap: 30px;
+        }
+        
+        .criteria-row .score {
+            width: 50px;
+            height: 50px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1.2em;
+        }
+        
+        .score.green { background: #4CAF50; color: white; }
+        .score.orange { background: #FF9800; color: white; }
+        .score.red { background: #E63946; color: white; }
+        
+        /* SLIDE 7: Why Coaching */
+        .slide-7 {
+            background: linear-gradient(135deg, #E63946 0%, #D81B60 50%, #7B2CBF 100%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 80px;
+        }
+        
+        .slide-7 h1 {
+            color: white;
+            font-size: 2.8em;
+            font-weight: 900;
+            margin-bottom: 50px;
+            line-height: 1.3;
+        }
+        
+        .slide-7 .reasons {
+            text-align: left;
+            max-width: 800px;
+        }
+        
+        .slide-7 .reason {
+            display: flex;
+            align-items: flex-start;
+            gap: 20px;
+            margin-bottom: 30px;
+            color: white;
+            font-size: 1.4em;
+        }
+        
+        .slide-7 .reason .icon {
+            font-size: 1.3em;
+        }
+        
+        /* SLIDE 8: CTA */
+        .slide-8 {
+            background: #0a0a0a;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 80px;
+        }
+        
+        .slide-8 h1 {
+            color: white;
+            font-size: 3em;
+            font-weight: 900;
+            margin-bottom: 50px;
+        }
+        
+        .slide-8 .pricing-summary {
+            background: rgba(255,255,255,0.03);
+            border: 2px solid #E63946;
+            border-radius: 20px;
+            padding: 40px 60px;
+            margin-bottom: 40px;
+        }
+        
+        .slide-8 .pricing-row {
+            display: flex;
+            justify-content: space-between;
+            gap: 80px;
+            padding: 15px 0;
+            border-bottom: 1px solid #222;
+            color: white;
+            font-size: 1.2em;
+        }
+        
+        .slide-8 .pricing-row:last-child {
+            border-bottom: none;
+        }
+        
+        .slide-8 .pricing-row.highlight {
+            color: #E63946;
+            font-weight: 700;
+            font-size: 1.4em;
+        }
+        
+        .slide-8 .pricing-row .was {
+            text-decoration: line-through;
+            color: #666;
+            margin-right: 10px;
+        }
+        
+        .slide-8 .deadline {
+            color: #FFB627;
+            font-size: 1.3em;
+            font-weight: 600;
+            margin-bottom: 30px;
+        }
+        
+        .slide-8 .cta {
+            background: linear-gradient(135deg, #E63946 0%, #D81B60 100%);
+            color: white;
+            padding: 25px 60px;
+            border-radius: 50px;
+            font-size: 1.4em;
+            font-weight: 700;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        
+        <h2 class="slide-label">Slide 1: Hook</h2>
+        <div class="slide slide-1">
+            <h1>You position brands<br>for a living.<br><span>But can you position yourself?</span></h1>
+            <p>I built a toolkit to fix that.</p>
+            <div class="swipe">Swipe →</div>
+        </div>
+        
+        <h2 class="slide-label">Slide 2: The Problem</h2>
+        <div class="slide slide-2">
+            <h1>The struggle is real</h1>
+            <div class="problem-list">
+                <div class="problem-item"><span class="icon">📄</span> CV in 17 different versions</div>
+                <div class="problem-item"><span class="icon">😬</span> "So... what do you actually do?"</div>
+                <div class="problem-item"><span class="icon">🎲</span> Gut-feel career decisions</div>
+                <div class="problem-item"><span class="icon">😰</span> Imposter syndrome on repeat</div>
+                <div class="problem-item"><span class="icon">🤷</span> Apply to everything, hope for the best</div>
+            </div>
+            <div class="bottom-text">You wouldn't do this for a client. Why do it to yourself?</div>
+        </div>
+        
+        <h2 class="slide-label">Slide 3: The Solution</h2>
+        <div class="slide slide-3">
+            <h1>Coaching + Tools</h1>
+            <div class="subtitle">Because insight without action is just a nice chat.</div>
+            <div class="solution-grid">
+                <div class="solution-item">
+                    <div class="icon">📘</div>
+                    <h3>Career Blueprint</h3>
+                    <p>Discover your core pattern, thread, and what makes you different</p>
+                </div>
+                <div class="solution-item">
+                    <div class="icon">📝</div>
+                    <h3>CV Builder</h3>
+                    <p>Pre-filled from your Blueprint. No more blank page.</p>
+                </div>
+                <div class="solution-item">
+                    <div class="icon">⚖️</div>
+                    <h3>Decision Framework</h3>
+                    <p>Score opportunities against your red/green flags</p>
+                </div>
+                <div class="solution-item">
+                    <div class="icon">🤖</div>
+                    <h3>AI Prompt Library</h3>
+                    <p>Ready-to-use prompts for cover letters, LinkedIn, interviews</p>
+                </div>
+            </div>
+        </div>
+        
+        <h2 class="slide-label">Slide 4: Blueprint Preview</h2>
+        <div class="slide slide-tool">
+            <div class="tool-header">
+                <span class="icon">📘</span>
+                <h1>Career Blueprint</h1>
+            </div>
+            <div class="tool-description">We uncover your core pattern — the thing you actually do that creates value. Not your job title. The thread that connects all your moves.</div>
+            <div class="tool-preview">
+                <div class="tool-preview-header">Sample Output</div>
+                <div class="preview-item">
+                    <div class="label">Core Pattern</div>
+                    <div class="value">"You unlock creative potential in clients and teams that have forgotten what they're capable of"</div>
+                </div>
+                <div class="preview-item">
+                    <div class="label">Thread</div>
+                    <div class="value">"Connecting creativity with commercial reality"</div>
+                </div>
+                <div class="preview-item">
+                    <div class="label">Role Identity</div>
+                    <div class="value">"Creative Catalyst"</div>
+                </div>
+            </div>
+        </div>
+        
+        <h2 class="slide-label">Slide 5: CV Builder Preview</h2>
+        <div class="slide slide-tool slide-cv">
+            <div class="tool-header">
+                <span class="icon">📝</span>
+                <h1>CV Builder</h1>
+            </div>
+            <div class="tool-description">Your Blueprint feeds directly into your CV. No more staring at a blank doc wondering how to describe yourself.</div>
+            <div class="tool-preview">
+                <div class="tool-preview-header">Before → After</div>
+                <div class="preview-item">
+                    <div class="label">Before</div>
+                    <div class="value" style="border-left-color: #E63946; background: rgba(230,57,70,0.1);">"Senior Strategist with 15 years experience across multiple sectors"</div>
+                </div>
+                <div class="preview-item">
+                    <div class="label">After</div>
+                    <div class="value">"Creative Catalyst | Unlocking potential in teams that have forgotten what they're capable of"</div>
+                </div>
+            </div>
+        </div>
+        
+        <h2 class="slide-label">Slide 6: Decision Framework Preview</h2>
+        <div class="slide slide-tool slide-decision">
+            <div class="tool-header">
+                <span class="icon">⚖️</span>
+                <h1>Decision Framework</h1>
+            </div>
+            <div class="tool-description">Your red flags and green flags become a scorecard. Evaluate opportunities objectively, not on gut feel.</div>
+            <div class="tool-preview">
+                <div class="tool-preview-header">Sample Scorecard</div>
+                <div class="criteria-row">
+                    <span class="name">Can I unlock potential here?</span>
+                    <div class="scores">
+                        <div class="score green">8</div>
+                        <div class="score orange">5</div>
+                    </div>
+                </div>
+                <div class="criteria-row">
+                    <span class="name">Transformation, not execution?</span>
+                    <div class="scores">
+                        <div class="score orange">6</div>
+                        <div class="score green">9</div>
+                    </div>
+                </div>
+                <div class="criteria-row">
+                    <span class="name">Direct stakeholder access?</span>
+                    <div class="scores">
+                        <div class="score red">3</div>
+                        <div class="score green">8</div>
+                    </div>
+                </div>
+                <div class="criteria-row">
+                    <span class="name">Can I be authentic?</span>
+                    <div class="scores">
+                        <div class="score green">8</div>
+                        <div class="score green">9</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <h2 class="slide-label">Slide 7: Why Coaching</h2>
+        <div class="slide slide-7">
+            <h1>Why coaching + tools?</h1>
+            <div class="reasons">
+                <div class="reason"><span class="icon">🔍</span> You can't see your own patterns — you need someone outside your head</div>
+                <div class="reason"><span class="icon">🛠️</span> Insight without tools is just a nice chat — you need something to use</div>
+                <div class="reason"><span class="icon">🎯</span> Tools without coaching are generic — you need them built for YOU</div>
+                <div class="reason"><span class="icon">⚡</span> This isn't therapy. It's strategy — applied to your career</div>
+            </div>
+        </div>
+        
+        <h2 class="slide-label">Slide 8: CTA</h2>
+        <div class="slide slide-8">
+            <h1>Go deeper</h1>
+            <div class="pricing-summary">
+                <div class="pricing-row">
+                    <span>Spark Session (1hr + insight report)</span>
+                    <span>£99</span>
+                </div>
+                <div class="pricing-row">
+                    <span>+ Transformation (CV + Mapping)</span>
+                    <span>+£100</span>
+                </div>
+                <div class="pricing-row">
+                    <span>+ Decision Framework</span>
+                    <span>+£100</span>
+                </div>
+                <div class="pricing-row">
+                    <span>+ AI Prompts</span>
+                    <span>+£100</span>
+                </div>
+                <div class="pricing-row highlight">
+                    <span>Full Programme (4 sessions + everything)</span>
+                    <span><span class="was">£500</span> £400</span>
+                </div>
+            </div>
+            <div class="deadline">Gold Thursday pricing ends Friday midnight</div>
+            <div class="cta">DM me to book</div>
+        </div>
+        
+    </div>
+</body>
+</html>
