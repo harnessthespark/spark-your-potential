@@ -6,6 +6,7 @@
     <title>Spark Collector - Daily Wins & First Steps</title>
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>✨</text></svg>">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="js/tool-utils.js"></script>
     <link rel="stylesheet" href="css/global.css">
     <!-- Tailwind CSS + DaisyUI for polished components -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -793,6 +794,12 @@
 
         // Initialize
         window.onload = async function() {
+            // Initialize preview mode (shows blank tool with download options)
+            if (typeof ToolUtils !== 'undefined' && ToolUtils.initPreviewMode()) {
+                console.log('📋 Preview mode active - data loading skipped');
+                return;
+            }
+
             const savedUser = localStorage.getItem('syp_user');
 
             if (!savedUser) {
