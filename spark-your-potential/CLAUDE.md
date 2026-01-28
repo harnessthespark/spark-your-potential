@@ -7,6 +7,9 @@ This document contains important context for Claude to remember across sessions 
 - This is Lisa Gills' coaching practice platform
 - Connected to SparkHub backend for PostgreSQL data storage
 
+## TODO / REMINDERS
+- [ ] **Deploy Raj's Career Blueprint on Coolify** - Session 4 insights have been pushed to GitHub but need deploying to career.harnessthespark.com (added 27 Jan 2026)
+
 ## Project Overview
 **Spark Your Potential (SYP)** - Lisa Gills' career coaching platform featuring the Career Booster Programme. Provides career transformation services for clients seeking clarity, positioning, and practical career tools.
 
