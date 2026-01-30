@@ -94,7 +94,7 @@
     <div id="documentContainer" style="display: none;"></div>
 
     <script>
-        const API_BASE = 'https://api.harnessthespark.ai';
+        const API_BASE = '';
 
         // Get params
         const params = new URLSearchParams(window.location.search);
@@ -126,9 +126,8 @@
 
             try {
                 // Fetch documents for this client
-                const response = await fetch(`${API_BASE}/api/crm/syp/coach/client-documents/by-client/${clientId}/`, {
+                const response = await fetch(`${API_BASE}/api/client-documents/${clientId}`, {
                     headers: {
-                        'Authorization': `Bearer ${token}`,
                         'Content-Type': 'application/json'
                     }
                 });

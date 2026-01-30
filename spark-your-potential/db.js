@@ -492,6 +492,21 @@ async function initDatabase() {
             )
         `);
 
+        // Client documents (for Coach Hub document viewer)
+        await client.query(`
+            CREATE TABLE IF NOT EXISTS client_documents (
+                id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+                user_id UUID REFERENCES users(id),
+                document_type VARCHAR(50) NOT NULL,
+                document_type_display VARCHAR(100),
+                file_content TEXT,
+                client_name VARCHAR(255),
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                UNIQUE(user_id, document_type)
+            )
+        `);
+
         // Create indexes
         await client.query(`
             CREATE INDEX IF NOT EXISTS idx_blueprints_user_id ON blueprints(user_id);
@@ -524,6 +539,7 @@ async function initDatabase() {
             CREATE INDEX IF NOT EXISTS idx_daily_energy_date ON daily_energy_budget(coach_email, date);
             CREATE INDEX IF NOT EXISTS idx_email_cache_email ON email_cache(coach_email);
             CREATE INDEX IF NOT EXISTS idx_email_cache_quadrant ON email_cache(quadrant);
+            CREATE INDEX IF NOT EXISTS idx_client_documents_user_id ON client_documents(user_id);
         `);
 
         console.log('✅ Database tables initialised');
@@ -2440,6 +2456,46 @@ async function updateEmailQuadrant(coachEmail, emailId, newQuadrant) {
     return result.rows[0];
 }
 
+/**
+ * Save or update a client document (upsert by user_id + document_type)
+ */
+async function saveClientDocument(clientId, docType, content, clientName, docTypeDisplay = null) {
+    const result = await pool.query(`
+        INSERT INTO client_documents (user_id, document_type, document_type_display, file_content, client_name, updated_at)
+        VALUES ($1, $2, $3, $4, $5, NOW())
+        ON CONFLICT (user_id, document_type) DO UPDATE SET
+            file_content = $4,
+            client_name = $5,
+            document_type_display = COALESCE($3, client_documents.document_type_display),
+            updated_at = NOW()
+        RETURNING *
+    `, [clientId, docType, docTypeDisplay || docType, content, clientName]);
+    return result.rows[0];
+}
+
+/**
+ * Get all documents for a client
+ */
+async function getClientDocuments(clientId) {
+    const result = await pool.query(`
+        SELECT * FROM client_documents
+        WHERE user_id = $1
+        ORDER BY updated_at DESC
+    `, [clientId]);
+    return result.rows;
+}
+
+/**
+ * Get a single document by client ID and document type
+ */
+async function getClientDocument(clientId, docType) {
+    const result = await pool.query(`
+        SELECT * FROM client_documents
+        WHERE user_id = $1 AND document_type = $2
+    `, [clientId, docType]);
+    return result.rows[0] || null;
+}
+
 module.exports = {
     pool,
     initDatabase,
@@ -2520,5 +2576,9 @@ module.exports = {
     getCachedEmailsByQuadrant,
     getCachedEmails: getCachedEmailsByQuadrant, // alias for backwards compatibility
     markEmailCompleted,
-    updateEmailQuadrant
+    updateEmailQuadrant,
+    // Client Documents
+    saveClientDocument,
+    getClientDocuments,
+    getClientDocument
 };

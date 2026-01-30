@@ -1941,6 +1941,67 @@ app.get('/api/agreement/:clientEmail', async (req, res) => {
 });
 
 // ============================================
+// CLIENT DOCUMENTS ENDPOINTS (for Coach Hub document viewer)
+// ============================================
+
+// Get all documents for a client (by user UUID)
+app.get('/api/client-documents/:clientId', async (req, res) => {
+    try {
+        const { clientId } = req.params;
+        const documents = await db.getClientDocuments(clientId);
+        res.json(documents);
+    } catch (error) {
+        console.error('Client documents fetch error:', error);
+        res.status(500).json({ success: false, error: error.message });
+    }
+});
+
+// Get single document by client ID and document type
+app.get('/api/client-documents/:clientId/:docType', async (req, res) => {
+    try {
+        const { clientId, docType } = req.params;
+        const document = await db.getClientDocument(clientId, docType);
+
+        if (!document) {
+            return res.status(404).json({ success: false, error: 'Document not found' });
+        }
+
+        res.json(document);
+    } catch (error) {
+        console.error('Client document fetch error:', error);
+        res.status(500).json({ success: false, error: error.message });
+    }
+});
+
+// Save/update a client document (upsert)
+app.post('/api/client-documents', async (req, res) => {
+    try {
+        const { client_id, document_type, file_content, client_name, document_type_display } = req.body;
+
+        if (!client_id || !document_type || !file_content) {
+            return res.status(400).json({
+                success: false,
+                error: 'client_id, document_type, and file_content are required'
+            });
+        }
+
+        const result = await db.saveClientDocument(
+            client_id,
+            document_type,
+            file_content,
+            client_name || '',
+            document_type_display || null
+        );
+
+        console.log(`📄 Document saved: ${document_type} for ${client_name || client_id}`);
+        res.json({ success: true, document: result });
+    } catch (error) {
+        console.error('Client document save error:', error);
+        res.status(500).json({ success: false, error: error.message });
+    }
+});
+
+// ============================================
 // EMERGENCY SUPPORT ENDPOINT
 // ============================================
 
